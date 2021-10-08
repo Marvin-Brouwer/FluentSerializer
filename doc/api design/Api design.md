@@ -16,7 +16,9 @@ public class SomeJsonProfile : JsonSerializerProfile {
 
     public override void Configure() {
 
-        For<TypeToSerialize>(CamelCaseNamingStrategy)
+        For<TypeToSerialize>(
+            defaultNamingStrategy: CamelCaseNamingStrategy
+        )
             .Member(t => t.Name)
             .Member(t => t.Age,
                 direction: Direction.Serialize,
@@ -30,7 +32,10 @@ public class SomeXmlProfile : XmlSerializerProfile {
 
     public override void Configure() {
 
-        For<TypeToSerialize>(PascalCaseNamingStrategy)
+        For<TypeToSerialize>(
+            rootNamingStrategy: CustomNamingStrategy("rootOverride"),
+            defaultNamingStrategy: PascalCaseNamingStrategy
+        )
             .Attribute(t => t.Name)
             .Attribute(t => t.Age, 
                 direction: Direction.Serialize,
