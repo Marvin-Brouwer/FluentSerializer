@@ -1,6 +1,5 @@
 using FluentAssertions;
-using FluentSerializer.Json.Stories.OpenAir.Models;
-using FluentSerializer.Json.Tests;
+using FluentSerializer.Xml.Stories.OpenAir.Models;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Services;
 using System.Collections.Generic;

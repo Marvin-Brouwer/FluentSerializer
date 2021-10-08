@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FluentSerializer.Json.Stories.OpenAir.Models
+namespace FluentSerializer.Xml.Stories.OpenAir.Models
 {
     internal class Request<TRequest>
     {

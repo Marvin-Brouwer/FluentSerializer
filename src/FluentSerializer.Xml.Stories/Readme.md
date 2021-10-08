@@ -1,4 +1,4 @@
-﻿# FluentSerializer.Json.Stories
+﻿# FluentSerializer.Xml.Stories
 
 This project contains some simulated real world examples to test the library against.
 Meaning that the models used may not be production code but it's validating against the actual output of an existing api.
