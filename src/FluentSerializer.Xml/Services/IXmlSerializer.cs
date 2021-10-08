@@ -1,5 +1,4 @@
 ﻿using FluentSerializer.Core;
-using System;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml
@@ -7,7 +6,7 @@ namespace FluentSerializer.Xml
     public interface IXmlSerializer : ISerializer
     {
         string Serialize(XObject dataObject);
-        XElement DeSerializeToElement(string dataObject);
-        XDocument DeSerializeToDocument(string dataObject);
+        XElement DeserializeToElement(string dataObject);
+        XDocument DeserializeToDocument(string dataObject);
     }
 }

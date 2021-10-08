@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluentSerializer.Json.Stories.Mavenlink
+﻿namespace FluentSerializer.Json.Stories.Mavenlink
 {
     internal interface IMavenlinkEntity
     {

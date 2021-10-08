@@ -1,27 +1,28 @@
 using FluentAssertions;
-using FluentSerializer.Json.Configuration;
-using FluentSerializer.Json.Services;
-using FluentSerializer.Json.Stories.Mavenlink.Models;
+using FluentSerializer.Json.Stories.OpenAir.Models;
+using FluentSerializer.Json.Tests;
+using FluentSerializer.Xml.Configuration;
+using FluentSerializer.Xml.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FluentSerializer.Json.Tests
+namespace FluentSerializer.Xml.Tests
 {
-    public partial class MavenlinkTests
+    public partial class OpenAirTests
     {
 
         [Fact]
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("./Serialize.json");
+            var expected = await File.ReadAllTextAsync("./Serialize.Xml");
             var example = new Request<Project>();
-            var profiles = new List<JsonSerializerProfile>
+            var profiles = new List<XmlSerializerProfile>
             {
             };
-            var sut = new FluentJsonSerializer(profiles);
+            var sut = new FluentXmlSerializer(profiles);
 
             // Act
             var result = sut.Serialize(example);
@@ -35,11 +36,11 @@ namespace FluentSerializer.Json.Tests
         {
             // Arrange
             var expected = new Response<Project>();
-            var example = await File.ReadAllTextAsync("./Deserialize.json");
-            var profiles = new List<JsonSerializerProfile>
+            var example = await File.ReadAllTextAsync("./Deserialize.Xml");
+            var profiles = new List<XmlSerializerProfile>
             {
             };
-            var sut = new FluentJsonSerializer(profiles);
+            var sut = new FluentXmlSerializer(profiles);
 
             // Act
             var result = sut.Deserialize<Project>(example);
