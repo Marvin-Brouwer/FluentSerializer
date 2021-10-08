@@ -5,18 +5,18 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal class NonWrappedListConverter : ICustomElementConverter
+    public class NonWrappedListConverter : ICustomElementConverter
     {
         public SerializerDirection Direction => SerializerDirection.Both;
 
         public bool CanConvert(PropertyInfo propertyInfo) => typeof(IEnumerable<>).IsAssignableFrom(propertyInfo.PropertyType);
 
-        public object Deserialize(object? currentValue, XElement elementToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        public object? Deserialize(object? currentValue, XElement elementToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        public XElement Serialize(XElement currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        public XElement? Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }

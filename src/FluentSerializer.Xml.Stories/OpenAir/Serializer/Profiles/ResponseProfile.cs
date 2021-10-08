@@ -2,13 +2,13 @@
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal sealed class ResponseProfile : OpenAirSerializerProfile
+    public sealed class ResponseProfile : OpenAirSerializerProfile
     {
         public override void Configure()
         {
             For<Response<IOpenAirEntity>>(
-                defaultNamingStrategy: SnakeCaseNamingStrategy,
-                rootNamingStrategy: PascalCaseNamingStrategy
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: LowerCaseNamingStrategy
             )
                 .Child(response => response.ReadResponses,
                     namingStrategy: CustomNamingStrategy("Read"),
@@ -24,8 +24,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
                     converter: NonWrappedListConverter);
 
             For<ResponseObject<IOpenAirEntity>>(
-                defaultNamingStrategy: SnakeCaseNamingStrategy,
-                rootNamingStrategy: PascalCaseNamingStrategy
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: PascalCaseNamingStrategy
             )
                 .Attribute(responseObject => responseObject.StatusCode,
                     namingStrategy: CustomNamingStrategy("status"))

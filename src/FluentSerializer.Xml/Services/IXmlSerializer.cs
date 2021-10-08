@@ -5,8 +5,8 @@ namespace FluentSerializer.Xml
 {
     public interface IXmlSerializer : ISerializer
     {
-        string Serialize(XObject dataObject);
-        XElement DeserializeToElement(string dataObject);
-        XDocument DeserializeToDocument(string dataObject);
+        TModel Deserialize<TModel>(XObject dataObject);
+        XElement SerializeToElement<TModel>(TModel dataObject);
+        XDocument SerializeToDocument<TModel>(TModel dataObject);
     }
 }

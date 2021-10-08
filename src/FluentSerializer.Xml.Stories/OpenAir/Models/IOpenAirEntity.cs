@@ -2,6 +2,6 @@
 {
     internal interface IOpenAirEntity
     {
-        int Id { get; }
+        string Id { get; }
     }
 }

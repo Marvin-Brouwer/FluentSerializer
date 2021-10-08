@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal class StringBitBooleanConverter : ICustomAttributeConverter, ICustomElementConverter
+    public class StringBitBooleanConverter : ICustomAttributeConverter, ICustomElementConverter
     {
         private readonly SerializerDirection _direction = SerializerDirection.Both;
         SerializerDirection ICustomAttributeConverter.Direction => _direction;
@@ -25,7 +25,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }
 
-        object ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object? ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
         {
             if (currentValue is bool existingBooleanValue)
                 return existingBooleanValue && ConvertToBool(attributeToDeserialize.Value);
@@ -33,38 +33,38 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return ConvertToBool(attributeToDeserialize.Value);
         }
 
-        object ICustomElementConverter.Deserialize(object? currentValue, XElement elementToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object? ICustomElementConverter.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
         {
             if (currentValue is bool existingBooleanValue)
-                return existingBooleanValue && ConvertToBool(elementToSerialize.Value);
+                return existingBooleanValue && ConvertToBool(elementToDeserialize.Value);
 
-            return ConvertToBool(elementToSerialize.Value);
+            return ConvertToBool(elementToDeserialize.Value);
         }
 
-        XAttribute ICustomAttributeConverter.Serialize(XAttribute currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        XAttribute? ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
         {
             var currentBoolean = true;
-            if (!string.IsNullOrWhiteSpace(currentValue.Value))
+            if (!string.IsNullOrWhiteSpace(currentValue?.Value))
                 currentBoolean = ConvertToBool(currentValue.Value);
 
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
-            currentValue.Value = ConvertToString(currentBoolean && objectBoolean);
-
-            return currentValue;
+            var attributeName = context.NamingStrategy.GetName(context.Property);
+            var attributeValue = ConvertToString(currentBoolean && objectBoolean);
+            return new XAttribute(attributeName, attributeValue);
         }
 
-        XElement ICustomElementConverter.Serialize(XElement currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        XElement? ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
         {
             var currentBoolean = true;
-            if (!string.IsNullOrWhiteSpace(currentValue.Value))
+            if (!string.IsNullOrWhiteSpace(currentValue?.Value))
                 currentBoolean = ConvertToBool(currentValue.Value);
 
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
-            currentValue.Value = ConvertToString(currentBoolean && objectBoolean);
-
-            return currentValue;
+            var elementName = context.NamingStrategy.GetName(context.Property);
+            var elementValue = ConvertToString(currentBoolean && objectBoolean);
+            return new XElement(elementName, elementValue);
         }
     }
 }

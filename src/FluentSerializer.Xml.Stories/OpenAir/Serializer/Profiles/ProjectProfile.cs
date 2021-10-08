@@ -2,13 +2,13 @@
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal sealed class ProjectProfile : OpenAirSerializerProfile
+    public sealed class ProjectProfile : OpenAirSerializerProfile
     {
         public override void Configure()
         {
             For<Project>(
-                defaultNamingStrategy: SnakeCaseNamingStrategy,
-                rootNamingStrategy: PascalCaseNamingStrategy
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: PascalCaseNamingStrategy
             )
                 .Child(project => project.Name)
                 .Child(project => project.LastUpdate,

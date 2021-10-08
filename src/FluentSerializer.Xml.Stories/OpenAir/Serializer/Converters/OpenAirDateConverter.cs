@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal class OpenAirDateConverter : ICustomAttributeConverter, ICustomElementConverter
+    public class OpenAirDateConverter : ICustomAttributeConverter, ICustomElementConverter
     {
         private readonly SerializerDirection _direction = SerializerDirection.Both;
         SerializerDirection ICustomAttributeConverter.Direction => _direction;
@@ -14,22 +14,22 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
         bool ICustomAttributeConverter.CanConvert(PropertyInfo property) => CanConvert(property);
         bool ICustomElementConverter.CanConvert(PropertyInfo property) => CanConvert(property);
 
-        object ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        object ICustomElementConverter.Deserialize(object? currentValue, XElement elementToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object ICustomElementConverter.Deserialize(object? currentValue, XElement elementToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        XAttribute ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        XAttribute ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        XElement ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        XElement ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
