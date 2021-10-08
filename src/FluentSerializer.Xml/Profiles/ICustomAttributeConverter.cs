@@ -7,7 +7,7 @@ namespace FluentSerializer.Xml.Profiles
     {
         bool CanConvert(PropertyInfo propertyInfo);
         SerializerDirection Direction { get;}
-        public XAttribute Serialize(XAttribute currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer);
-        public object Deserialize(object? currentValue, XAttribute attributeToDeserialize, PropertyInfo property, IXmlSerializer currentSerializer);
+        public XAttribute? Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context);
+        public object? Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context);
     }
 }

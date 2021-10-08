@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Xml.Profiles;
+using System;
 using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
@@ -26,24 +27,40 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
         bool ICustomAttributeConverter.CanConvert(PropertyInfo property) => CanConvert(property);
         bool ICustomElementConverter.CanConvert(PropertyInfo property) => CanConvert(property);
 
-        object ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        private string ConvertToString(DateTime currentValue) => currentValue.ToString(_format, _cultureInfo);
+        private DateTime ConvertToDateTime(string? currentValue)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrWhiteSpace(currentValue)) return default;
+
+            return DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
         }
 
-        object ICustomElementConverter.Deserialize(object? currentValue, XElement elementToDeserialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object? ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
         {
-            throw new System.NotImplementedException();
+            return ConvertToDateTime(attributeToDeserialize.Value);
         }
 
-        XAttribute ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        object? ICustomElementConverter.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
         {
-            throw new System.NotImplementedException();
+            return ConvertToDateTime(elementToDeserialize.Value);
         }
 
-        XElement ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, PropertyInfo property, IXmlSerializer currentSerializer)
+        XAttribute? ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
         {
-            throw new System.NotImplementedException();
+            if (objectToSerialize == null) return null;
+
+            var dateValue = (DateTime)objectToSerialize;
+            var attributeName = context.NamingStrategy.GetName(context.Property);
+            return new XAttribute(attributeName, ConvertToString(dateValue));
+        }
+
+        XElement? ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
+        {
+            if (objectToSerialize == null) return null;
+
+            var dateValue = (DateTime)objectToSerialize;
+            var elementName = context.NamingStrategy.GetName(context.Property);
+            return new XElement(elementName, ConvertToString(dateValue));
         }
     }
 }

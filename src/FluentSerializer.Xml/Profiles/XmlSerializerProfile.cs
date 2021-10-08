@@ -10,20 +10,23 @@ namespace FluentSerializer.Xml.Configuration
 
         // todo add namingstrategies
         protected CustomNamingStrategy CustomNamingStrategy(string nameOverride) => new CustomNamingStrategy(nameOverride);
+        protected readonly LowerCaseNamingStrategy LowerCaseNamingStrategy = new LowerCaseNamingStrategy();
+        protected readonly CamelCaseNamingStrategy CamelCaseNamingStrategy = new CamelCaseNamingStrategy();
         protected readonly PascalCaseNamingStrategy PascalCaseNamingStrategy = new PascalCaseNamingStrategy();
         protected readonly SnakeCaseNamingStrategy SnakeCaseNamingStrategy = new SnakeCaseNamingStrategy();
+        protected readonly KebabCaseNamingStrategy KebabCaseNamingStrategy = new KebabCaseNamingStrategy();
 
         protected DateByFormatConverter DateByFormatConverter(
             string format, CultureInfo? cultureInfo = null, DateTimeStyles? dateTimeStyle = null) => 
             new DateByFormatConverter(format, cultureInfo ?? CultureInfo.CurrentCulture, dateTimeStyle ?? DateTimeStyles.None);
 
         protected XmlProfileBuilder<TModel> For<TModel>(
-            INamingStrategy? rootNamingStrategy = null,
-            INamingStrategy? defaultNamingStrategy = null)
+            INamingStrategy? tagNamingStrategy = null,
+            INamingStrategy? attributeNamingStrategy = null)
             where TModel : new() =>
             new XmlProfileBuilder<TModel>(
-                rootNamingStrategy ?? PascalCaseNamingStrategy,
-                defaultNamingStrategy ?? PascalCaseNamingStrategy
+                tagNamingStrategy ?? PascalCaseNamingStrategy,
+                attributeNamingStrategy ?? CamelCaseNamingStrategy
             );
     }
 }

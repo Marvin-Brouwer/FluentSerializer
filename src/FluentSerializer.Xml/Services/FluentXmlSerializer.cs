@@ -11,27 +11,27 @@ namespace FluentSerializer.Xml.Services
         {
         }
 
+        public TModel Deserialize<TModel>(XObject dataObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public TData Deserialize<TData>(string stringData)
         {
             throw new NotImplementedException();
         }
 
-        public XDocument DeserializeToDocument(string dataObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        public XElement DeserializeToElement(string dataObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Serialize(XObject dataObject)
-        {
-            throw new NotImplementedException();
-        }
-
         public string Serialize<TData>(TData dataObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public XDocument SerializeToDocument<TModel>(TModel dataObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public XElement SerializeToElement<TModel>(TModel dataObject)
         {
             throw new NotImplementedException();
         }

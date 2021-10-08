@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal abstract class OpenAirSerializerProfile : XmlSerializerProfile
+    public abstract class OpenAirSerializerProfile : XmlSerializerProfile
     {
         protected static readonly CustomFieldNamingStrategy CustomFieldNamingStrategy = new CustomFieldNamingStrategy();
 

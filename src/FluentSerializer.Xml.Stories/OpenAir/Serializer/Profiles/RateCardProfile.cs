@@ -2,13 +2,13 @@
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
-    internal sealed class RateCardProfile : OpenAirSerializerProfile
+    public sealed class RateCardProfile : OpenAirSerializerProfile
     {
         public override void Configure()
         {
             For<RateCard>(
-                defaultNamingStrategy: SnakeCaseNamingStrategy,
-                rootNamingStrategy: CustomNamingStrategy("Ratecard")
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: CustomNamingStrategy("Ratecard")
             )
                 .Child(rateCard => rateCard.Name);
         }
