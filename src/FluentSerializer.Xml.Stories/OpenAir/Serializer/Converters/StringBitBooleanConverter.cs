@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
 {
-    public class StringBitBooleanConverter : ICustomAttributeConverter, ICustomElementConverter
+    public class StringBitBooleanConverter : IConverter<XAttribute>, IConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
         public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);

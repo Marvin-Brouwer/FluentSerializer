@@ -28,7 +28,7 @@ namespace FluentSerializer.Xml.Profiles
             foreach(var property in classType.GetProperties())
             {
                 // Todo support multiple mappers or just remove the currentValue?
-                var propertyMapping = classMap.PropertyMap[property].SingleOrDefault();
+                var propertyMapping = classMap.PropertyMapLookup[property].SingleOrDefault();
                 if (propertyMapping is null) continue;
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 

@@ -45,7 +45,6 @@ namespace FluentSerializer.Xml.Profiles
             _classMaps.Add(classType, new XmlClassMap(
                 classType, 
                 tagNamingStrategy ?? PascalCaseNamingStrategy,
-                null, 
                 propertymap
             ));
 

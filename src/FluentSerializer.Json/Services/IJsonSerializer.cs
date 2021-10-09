@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using FluentSerializer.Core.Services;
+using System.Text.Json;
 
 namespace FluentSerializer.Json.Services
 {

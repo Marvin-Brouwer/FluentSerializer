@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace FluentSerializer.Core.NamingStrategies
 {
@@ -12,5 +13,7 @@ namespace FluentSerializer.Core.NamingStrategies
         }
 
         public string GetName(PropertyInfo property) => _name;
+
+        public string GetName(Type classType) => _name;
     }
 }

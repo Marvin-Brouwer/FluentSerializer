@@ -6,9 +6,15 @@ using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public abstract class PropertyMap<TDestination> : IPropertyMap<TDestination> 
+    public abstract class PropertyMap<TDestination> : IPropertyMap 
         where TDestination : class
     {
+        public SerializerDirection Direction { get; }
+        public PropertyInfo Property { get; }
+        public INamingStrategy NamingStrategy { get; }
+        public IConverter? CustomConverter { get; }
+        public Type DestinationType { get; }
+
         public PropertyMap(
             SerializerDirection direction,
             PropertyInfo property,
@@ -21,10 +27,5 @@ namespace FluentSerializer.Xml.Profiles
             CustomConverter = customConverter;
             DestinationType = typeof(TDestination);
         }
-        public SerializerDirection Direction { get; }
-        public PropertyInfo Property { get; }
-        public INamingStrategy NamingStrategy { get; }
-        public IConverter? CustomConverter { get; }
-        public Type DestinationType { get; }
     }
 }

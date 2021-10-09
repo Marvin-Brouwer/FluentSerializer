@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public sealed class DateByFormatConverter : ICustomAttributeConverter, ICustomElementConverter
+    public sealed class DateByFormatConverter : IConverter<XAttribute>, IConverter<XElement>
     {
         private readonly string _format;
         private readonly CultureInfo _cultureInfo;
