@@ -1,6 +1,4 @@
-﻿using FluentSerializer.Xml.Stories.OpenAir;
-
-namespace FluentSerializer.Xml.Tests
+﻿namespace FluentSerializer.Xml.Stories.OpenAir.Models
 {
     internal sealed class RateCard : IOpenAirEntity
     {

@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Json.Stories.Mavenlink
+﻿namespace FluentSerializer.Json.Stories.Mavenlink.Models
 {
     internal interface IMavenlinkEntity
     {

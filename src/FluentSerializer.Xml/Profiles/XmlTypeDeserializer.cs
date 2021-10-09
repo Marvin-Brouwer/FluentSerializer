@@ -1,4 +1,6 @@
-﻿using FluentSerializer.Xml.Extensions;
+﻿using FluentSerializer.Core.Services;
+using FluentSerializer.Xml.Extensions;
+using FluentSerializer.Xml.Services;
 using System;
 using System.Collections;
 using System.Linq;

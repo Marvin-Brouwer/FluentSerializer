@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using FluentSerializer.Core.Services;
+using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Profiles
 {

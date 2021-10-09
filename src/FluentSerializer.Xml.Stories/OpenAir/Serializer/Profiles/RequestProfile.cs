@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Xml.Stories.OpenAir.Models;
+﻿using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
+using FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {

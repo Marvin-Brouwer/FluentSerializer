@@ -1,8 +1,7 @@
-﻿using FluentSerializer.Xml.Profiles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace FluentSerializer.Xml.Configuration
+namespace FluentSerializer.Xml.Profiles
 {
     public interface IXmlSerializerProfile
     {

@@ -1,9 +1,12 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Xml.Profiles;
+using FluentSerializer.Xml.Services;
 using System;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
+namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
 {
     /// <summary>
     /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.

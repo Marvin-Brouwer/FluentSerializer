@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Xml.Tests;
+﻿using FluentSerializer.Xml.Stories.OpenAir.Models;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {

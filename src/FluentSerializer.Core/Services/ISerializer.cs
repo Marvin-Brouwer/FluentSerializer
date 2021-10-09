@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Core
+﻿namespace FluentSerializer.Core.Services
 {
     public interface ISerializer
     {

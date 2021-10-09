@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FluentSerializer.Xml.Stories.OpenAir.Models
+namespace FluentSerializer.Xml.Stories.OpenAir.Models.Response
 {
     internal class Response<TResponse> where TResponse : IOpenAirEntity
     {

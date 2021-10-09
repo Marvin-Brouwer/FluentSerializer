@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Json.Configuration;
+﻿using FluentSerializer.Json.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;

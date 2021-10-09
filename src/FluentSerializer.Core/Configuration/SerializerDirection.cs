@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Xml.Profiles
+﻿namespace FluentSerializer.Core.Configuration
 {
     public enum SerializerDirection
     {

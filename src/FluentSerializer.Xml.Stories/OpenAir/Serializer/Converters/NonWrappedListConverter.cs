@@ -1,9 +1,11 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Xml.Profiles;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
+namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
 {
     public class NonWrappedListConverter : ICustomElementConverter
     {

@@ -1,7 +1,8 @@
-﻿using FluentSerializer.Core;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.Services
 {
     public interface IConverter<TDestination> : IConverter where TDestination : class
     {

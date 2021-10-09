@@ -1,5 +1,4 @@
 using FluentAssertions;
-using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Stories.Mavenlink.Models;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace FluentSerializer.Json.Tests
+namespace FluentSerializer.Json.Stories.Mavenlink
 {
     public partial class MavenlinkTests
     {

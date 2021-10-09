@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Core.Services;
+using FluentSerializer.Xml.Profiles;
+using FluentSerializer.Xml.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Extensions

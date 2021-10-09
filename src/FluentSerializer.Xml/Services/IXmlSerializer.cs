@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Core;
-using FluentSerializer.Core.Configuration;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Services;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml
+namespace FluentSerializer.Xml.Services
 {
     public interface IXmlSerializer : ISerializer
     {
