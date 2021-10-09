@@ -13,8 +13,10 @@ namespace FluentSerializer.Xml
                 DefaultConverters =
                 {
                     new IntegerConverter(),
-                    new BooleanConverter()
-                    // TODO add prmiitive converters, date converter, raw string converter and enumerable converter
+                    new BooleanConverter(),
+                    // TODO add prmiitive converters, date converter, raw string converter and enumerable converter,
+                    new DefaultDateConverter(),
+                    new StringConverter()
                 }
             };
         }

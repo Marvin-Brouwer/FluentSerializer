@@ -8,7 +8,8 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters
 {
-    public sealed class DateByFormatConverter : IConverter<XAttribute>, IConverter<XElement>
+
+    public class DateByFormatConverter : PrimitiveConverter<DateTime>
     {
         private readonly string _format;
         private readonly CultureInfo _cultureInfo;
@@ -21,43 +22,7 @@ namespace FluentSerializer.Xml.Converters
             _dateTimeStyle = dateTimeStyle;
         }
 
-        public SerializerDirection Direction => SerializerDirection.Both;
-        public bool CanConvert(PropertyInfo property) => typeof(DateTime).IsAssignableFrom(property.PropertyType);
-
-        private string ConvertToString(DateTime currentValue) => currentValue.ToString(_format, _cultureInfo);
-        private DateTime ConvertToDateTime(string? currentValue)
-        {
-            if (string.IsNullOrWhiteSpace(currentValue)) return default;
-
-            return DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
-        }
-
-        object? IConverter<XAttribute>.Deserialize(XAttribute attributeToDeserialize, ISerializerContext context)
-        {
-            return ConvertToDateTime(attributeToDeserialize.Value);
-        }
-
-        object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
-        {
-            return ConvertToDateTime(objectToDeserialize.Value);
-        }
-
-        XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
-        {
-            if (objectToSerialize == null) return null;
-
-            var dateValue = (DateTime)objectToSerialize;
-            var attributeName = context.NamingStrategy.GetName(context.Property);
-            return new XAttribute(attributeName, ConvertToString(dateValue));
-        }
-
-        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
-        {
-            if (objectToSerialize == null) return null;
-
-            var dateValue = (DateTime)objectToSerialize;
-            var elementName = context.NamingStrategy.GetName(context.Property);
-            return new XElement(elementName, ConvertToString(dateValue));
-        }
+        protected override DateTime ConvertToDataType(string value) => DateTime.ParseExact(value, _format, _cultureInfo, _dateTimeStyle);
+        protected override string ConvertToString(DateTime value) => value.ToString(_format, _cultureInfo);
     }
 }

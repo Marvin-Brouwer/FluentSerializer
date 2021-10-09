@@ -9,6 +9,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
+    // todo XText, Comment? CData?
     public class XmlTypeDeserializer
     {
         private readonly ILookup<Type, XmlClassMap> _mappings;

@@ -2,10 +2,7 @@
 {
     public sealed class IntegerConverter : PrimitiveConverter<int>
     {
-        public IntegerConverter() : base(ConvertToString, ConvertToInt) { }
-
-        private static int ConvertToInt(string value) => int.Parse(value);
-
-        private static string ConvertToString(int value) => value.ToString();
+        protected override int ConvertToDataType(string value) => int.Parse(value);
+        protected override string ConvertToString(int value) => value.ToString();
     }
 }
