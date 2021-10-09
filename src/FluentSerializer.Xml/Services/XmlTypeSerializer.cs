@@ -36,7 +36,7 @@ namespace FluentSerializer.Xml.Services
                 var propertyName = propertyMapping.NamingStrategy.GetName(property);
                 var serializerContext = new SerializerContext(property, classType, propertyMapping.NamingStrategy, currentSerializer);
 
-                if (typeof(XAttribute).IsAssignableFrom(propertyMapping.DestinationType))
+                if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
                 {
                     var attributeConverter = propertyMapping.GetMatchingConverter<XAttribute>(currentSerializer);
                     if (attributeConverter is null) throw new NotSupportedException("Todo custom exception");
@@ -46,7 +46,7 @@ namespace FluentSerializer.Xml.Services
                     newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(propertyValue, serializerContext));
                     continue;
                 }
-                if (typeof(XElement).IsAssignableFrom(propertyMapping.DestinationType))
+                if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
                 {
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;

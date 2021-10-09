@@ -37,9 +37,9 @@ namespace FluentSerializer.Xml.Converters
             return ConvertToDateTime(attributeToDeserialize.Value);
         }
 
-        object? IConverter<XElement>.Deserialize(XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToDateTime(elementToDeserialize.Value);
+            return ConvertToDateTime(objectToDeserialize.Value);
         }
 
         XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)

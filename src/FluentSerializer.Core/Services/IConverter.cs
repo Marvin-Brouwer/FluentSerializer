@@ -4,10 +4,10 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Services
 {
-    public interface IConverter<TDestination> : IConverter where TDestination : class
+    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : class
     {
-        public TDestination? Serialize(object objectToSerialize, ISerializerContext context);
-        public object? Deserialize(TDestination elementToDeserialize, ISerializerContext context);
+        public TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
+        public object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
     }
     public interface IConverter
     {
