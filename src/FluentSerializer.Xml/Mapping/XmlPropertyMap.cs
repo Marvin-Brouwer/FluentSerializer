@@ -1,10 +1,11 @@
 ﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Xml.Mapping
 {
     public sealed class XmlPropertyMap : PropertyMap<XObject>
     {

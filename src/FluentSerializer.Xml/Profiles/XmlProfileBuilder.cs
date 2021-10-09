@@ -1,6 +1,7 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
+using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

@@ -1,4 +1,6 @@
 ﻿using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Xml.Converters;
+using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

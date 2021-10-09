@@ -1,5 +1,4 @@
-﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Services;
+﻿using FluentSerializer.Core.Services;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services

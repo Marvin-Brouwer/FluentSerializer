@@ -1,9 +1,8 @@
-﻿using FluentSerializer.Core.Context;
-using FluentSerializer.Core.NamingStrategies;
+﻿using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.Context
 {
     public sealed class SerializerContext : ISerializerContext
     {
