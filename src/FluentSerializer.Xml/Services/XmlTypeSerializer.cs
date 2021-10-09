@@ -34,7 +34,7 @@ namespace FluentSerializer.Xml.Services
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
                 var propertyName = propertyMapping.NamingStrategy.GetName(property);
-                var serializerContext = new SerializerContext(property, propertyMapping.NamingStrategy, currentSerializer);
+                var serializerContext = new SerializerContext(property, classType, propertyMapping.NamingStrategy, currentSerializer);
 
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.DestinationType))
                 {
