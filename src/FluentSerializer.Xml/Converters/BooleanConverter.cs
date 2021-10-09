@@ -2,10 +2,7 @@
 {
     public sealed class BooleanConverter : PrimitiveConverter<bool>
     {
-        public BooleanConverter() : base(ConvertToString, ConvertToBool) { }
-
-        private static bool ConvertToBool(string value) => bool.Parse(value);
-
-        private static string ConvertToString(bool value) => value.ToString().ToLower();
+        protected override bool ConvertToDataType(string value) => bool.Parse(value);
+        protected override string ConvertToString(bool value) => value.ToString().ToLower();
     }
 }
