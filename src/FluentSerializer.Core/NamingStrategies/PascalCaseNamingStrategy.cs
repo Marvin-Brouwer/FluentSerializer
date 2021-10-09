@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Text.Json;
+﻿using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {

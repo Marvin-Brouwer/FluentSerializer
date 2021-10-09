@@ -20,7 +20,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             // We know this to be true because of RequestObject<TModel>
             var classType = objectToSerialize.GetType().GetGenericArguments()[0];
             var wrapperElement = context.CurrentSerializer.SerializeToElement(Activator.CreateInstance(classType));
-            var elementTypeString = wrapperElement.Name;
+            var elementTypeString = wrapperElement?.Name;
+            // todo check name for null and throw
 
             var attributeName = context.NamingStrategy.GetName(context.Property);
             return new XAttribute(attributeName, elementTypeString);

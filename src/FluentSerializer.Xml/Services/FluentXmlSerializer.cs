@@ -1,14 +1,20 @@
-﻿using FluentSerializer.Xml.Configuration;
+﻿using FluentSerializer.Xml.Profiles;
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
     public sealed class FluentXmlSerializer : IXmlSerializer
     {
-        public FluentXmlSerializer(List<XmlSerializerProfile> profiles)
+        private static readonly XDeclaration DefaultXmlDeclaration = new XDeclaration("v1.0", Encoding.UTF8.WebName, "true");
+
+        private readonly XmlTypeSerializer _serializer;
+
+        public FluentXmlSerializer(ILookup<Type, XmlClassMap> mappings)
         {
+            _serializer = new XmlTypeSerializer(mappings);
         }
 
         public TModel Deserialize<TModel>(XObject dataObject)
@@ -23,17 +29,21 @@ namespace FluentSerializer.Xml.Services
 
         public string Serialize<TData>(TData dataObject)
         {
-            throw new NotImplementedException();
+            return SerializeToDocument(dataObject).ToString();
         }
 
-        public XDocument SerializeToDocument<TModel>(TModel dataObject)
+        public XDocument SerializeToDocument<TModel>(TModel dataObject, XDeclaration? declaration = null)
         {
-            throw new NotImplementedException();
+            var rootElement = SerializeToElement(dataObject);
+            return new XDocument(
+                declaration ?? DefaultXmlDeclaration,
+                rootElement
+            );
         }
 
-        public XElement SerializeToElement<TModel>(TModel dataObject)
+        public XElement? SerializeToElement<TModel>(TModel dataObject)
         {
-            throw new NotImplementedException();
+           return _serializer.SerializeToElement(dataObject, this);
         }
     }
 }

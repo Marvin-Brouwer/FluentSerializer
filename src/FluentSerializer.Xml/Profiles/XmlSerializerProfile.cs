@@ -1,14 +1,25 @@
 ﻿using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace FluentSerializer.Xml.Configuration
 {
-    public abstract class XmlSerializerProfile
+    public abstract class XmlSerializerProfile : IXmlSerializerProfile
     {
+        private readonly Dictionary<Type, XmlClassMap> _classMaps = new Dictionary<Type, XmlClassMap>();
         public abstract void Configure();
 
-        // todo add namingstrategies
+        /// <remarks>
+        /// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
+        /// </remarks>
+        Dictionary<Type, XmlClassMap> IXmlSerializerProfile.Configure()
+        {
+            Configure();
+            return _classMaps;
+        }
+
         protected CustomNamingStrategy CustomNamingStrategy(string nameOverride) => new CustomNamingStrategy(nameOverride);
         protected readonly LowerCaseNamingStrategy LowerCaseNamingStrategy = new LowerCaseNamingStrategy();
         protected readonly CamelCaseNamingStrategy CamelCaseNamingStrategy = new CamelCaseNamingStrategy();
@@ -23,10 +34,23 @@ namespace FluentSerializer.Xml.Configuration
         protected XmlProfileBuilder<TModel> For<TModel>(
             INamingStrategy? tagNamingStrategy = null,
             INamingStrategy? attributeNamingStrategy = null)
-            where TModel : new() =>
-            new XmlProfileBuilder<TModel>(
-                tagNamingStrategy ?? PascalCaseNamingStrategy,
-                attributeNamingStrategy ?? CamelCaseNamingStrategy
+            where TModel : new()
+        {
+            var classType = typeof(TModel);
+            var propertymap = new List<XmlPropertyMap>();
+            var builder = new XmlProfileBuilder<TModel>(
+                attributeNamingStrategy ?? CamelCaseNamingStrategy,
+                propertymap
             );
+
+            _classMaps.Add(classType, new XmlClassMap(
+                classType, 
+                tagNamingStrategy ?? PascalCaseNamingStrategy,
+                null, 
+                propertymap
+            ));
+
+            return builder;
+        }
     }
 }
