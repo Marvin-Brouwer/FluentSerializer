@@ -6,8 +6,8 @@ namespace FluentSerializer.Core.Services
 {
     public interface IConverter<TDestination> : IConverter where TDestination : class
     {
-        public TDestination? Serialize(TDestination? currentValue, object objectToSerialize, ISerializerContext context);
-        public object? Deserialize(object? currentValue, TDestination elementToDeserialize, ISerializerContext context);
+        public TDestination? Serialize(object objectToSerialize, ISerializerContext context);
+        public object? Deserialize(TDestination elementToDeserialize, ISerializerContext context);
     }
     public interface IConverter
     {

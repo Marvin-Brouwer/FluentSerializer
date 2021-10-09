@@ -22,45 +22,31 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }
 
-        object? IConverter<XAttribute>.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<XAttribute>.Deserialize(XAttribute attributeToDeserialize, ISerializerContext context)
         {
-            if (currentValue is bool existingBooleanValue)
-                return existingBooleanValue && ConvertToBool(attributeToDeserialize.Value);
-
             return ConvertToBool(attributeToDeserialize.Value);
         }
 
-        object? IConverter<XElement>.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(XElement elementToDeserialize, ISerializerContext context)
         {
-            if (currentValue is bool existingBooleanValue)
-                return existingBooleanValue && ConvertToBool(elementToDeserialize.Value);
-
             return ConvertToBool(elementToDeserialize.Value);
         }
 
-        XAttribute? IConverter<XAttribute>.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
+        XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            var currentBoolean = true;
-            if (!string.IsNullOrWhiteSpace(currentValue?.Value))
-                currentBoolean = ConvertToBool(currentValue.Value);
-
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
             var attributeName = context.NamingStrategy.GetName(context.Property);
-            var attributeValue = ConvertToString(currentBoolean && objectBoolean);
+            var attributeValue = ConvertToString(objectBoolean);
             return new XAttribute(attributeName, attributeValue);
         }
 
-        XElement? IConverter<XElement>.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
+        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            var currentBoolean = true;
-            if (!string.IsNullOrWhiteSpace(currentValue?.Value))
-                currentBoolean = ConvertToBool(currentValue.Value);
-
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
             var elementName = context.NamingStrategy.GetName(context.Property);
-            var elementValue = ConvertToString(currentBoolean && objectBoolean);
+            var elementValue = ConvertToString(objectBoolean);
             return new XElement(elementName, elementValue);
         }
     }

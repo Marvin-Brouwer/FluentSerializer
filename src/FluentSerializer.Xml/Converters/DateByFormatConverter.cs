@@ -22,7 +22,7 @@ namespace FluentSerializer.Xml.Converters
         }
 
         public SerializerDirection Direction => SerializerDirection.Both;
-        public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
+        public bool CanConvert(PropertyInfo property) => typeof(DateTime).IsAssignableFrom(property.PropertyType);
 
         private string ConvertToString(DateTime currentValue) => currentValue.ToString(_format, _cultureInfo);
         private DateTime ConvertToDateTime(string? currentValue)
@@ -32,17 +32,17 @@ namespace FluentSerializer.Xml.Converters
             return DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
         }
 
-        object? IConverter<XAttribute>.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<XAttribute>.Deserialize(XAttribute attributeToDeserialize, ISerializerContext context)
         {
             return ConvertToDateTime(attributeToDeserialize.Value);
         }
 
-        object? IConverter<XElement>.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(XElement elementToDeserialize, ISerializerContext context)
         {
             return ConvertToDateTime(elementToDeserialize.Value);
         }
 
-        XAttribute? IConverter<XAttribute>.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
+        XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize == null) return null;
 
@@ -51,7 +51,7 @@ namespace FluentSerializer.Xml.Converters
             return new XAttribute(attributeName, ConvertToString(dateValue));
         }
 
-        XElement? IConverter<XElement>.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
+        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize == null) return null;
 
