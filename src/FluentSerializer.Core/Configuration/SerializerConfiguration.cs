@@ -1,7 +1,5 @@
-﻿using FluentSerializer.Xml.Profiles;
-using System;
+﻿using FluentSerializer.Core.Services;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FluentSerializer.Core.Configuration
 {

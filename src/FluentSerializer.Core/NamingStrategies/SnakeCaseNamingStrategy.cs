@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.NamingStrategies
 {
     public class SnakeCaseNamingStrategy : CamelCaseNamingStrategy
     {

@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Services;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Profiles

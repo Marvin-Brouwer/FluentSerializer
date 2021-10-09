@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;

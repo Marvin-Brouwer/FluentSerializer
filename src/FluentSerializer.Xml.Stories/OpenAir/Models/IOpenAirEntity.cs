@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Xml.Stories.OpenAir
+﻿namespace FluentSerializer.Xml.Stories.OpenAir.Models
 {
     internal interface IOpenAirEntity
     {

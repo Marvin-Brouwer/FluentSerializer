@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.NamingStrategies
 {
     public interface INamingStrategy
     {

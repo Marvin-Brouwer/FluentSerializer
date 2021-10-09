@@ -1,7 +1,7 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Core.NamingStrategies;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
+namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies
 {
     public class CustomFieldNamingStrategy : SnakeCaseNamingStrategy
     {

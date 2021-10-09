@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.NamingStrategies
 {
     public class CamelCaseNamingStrategy : INamingStrategy
     {

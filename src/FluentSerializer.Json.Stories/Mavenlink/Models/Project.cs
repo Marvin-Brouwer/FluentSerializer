@@ -1,6 +1,4 @@
-﻿using FluentSerializer.Json.Stories.Mavenlink;
-
-namespace FluentSerializer.Json.Tests
+﻿namespace FluentSerializer.Json.Stories.Mavenlink.Models
 {
     internal sealed class Project : IMavenlinkEntity
     {

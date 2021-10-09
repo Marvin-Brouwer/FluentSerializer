@@ -1,10 +1,9 @@
-﻿using FluentSerializer.Xml.Profiles;
-using FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles;
+﻿using FluentSerializer.Core.NamingStrategies;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace FluentSerializer.Xml.Configuration
+namespace FluentSerializer.Xml.Profiles
 {
     public abstract class XmlSerializerProfile : IXmlSerializerProfile
     {

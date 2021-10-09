@@ -1,4 +1,6 @@
-﻿using FluentSerializer.Xml.Configuration;
+﻿using FluentSerializer.Xml.Profiles;
+using FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters;
+using FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies;
 using System.Globalization;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles

@@ -1,6 +1,5 @@
 using FluentAssertions;
 using FluentSerializer.Xml.Stories.OpenAir.Models;
-using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Services;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +9,10 @@ using FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles;
 using System;
 using FluentSerializer.Xml.Profiles;
 using System.Linq;
+using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
+using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
 
-namespace FluentSerializer.Xml.Tests
+namespace FluentSerializer.Xml.Stories.OpenAir
 {
     public partial class OpenAirTests
     {

@@ -1,7 +1,6 @@
-﻿using FluentSerializer.Core;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace FluentSerializer.Json
+namespace FluentSerializer.Json.Services
 {
     public interface IJsonSerializer : ISerializer
     {

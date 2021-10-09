@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using FluentSerializer.Core.Context;
+using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Services;
+using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -6,9 +9,9 @@ namespace FluentSerializer.Xml.Profiles
     {
         public PropertyInfo Property { get; }
         public INamingStrategy NamingStrategy { get; }
-        public IXmlSerializer CurrentSerializer { get; }
+        public ISerializer CurrentSerializer { get; }
 
-        public SerializerContext(PropertyInfo property, INamingStrategy namingStrategy, IXmlSerializer currentSerializer)
+        public SerializerContext(PropertyInfo property, INamingStrategy namingStrategy, ISerializer currentSerializer)
         {
             Property = property;
             NamingStrategy = namingStrategy;

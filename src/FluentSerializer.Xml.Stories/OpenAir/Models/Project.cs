@@ -1,7 +1,6 @@
-﻿using FluentSerializer.Xml.Stories.OpenAir;
-using System;
+﻿using System;
 
-namespace FluentSerializer.Xml.Tests
+namespace FluentSerializer.Xml.Stories.OpenAir.Models
 {
     internal sealed class Project : IOpenAirEntity
     {

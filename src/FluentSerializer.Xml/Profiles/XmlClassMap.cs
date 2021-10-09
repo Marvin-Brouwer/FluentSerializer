@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
