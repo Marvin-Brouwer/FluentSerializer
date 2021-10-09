@@ -27,9 +27,9 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
             return ConvertToBool(attributeToDeserialize.Value);
         }
 
-        object? IConverter<XElement>.Deserialize(XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToBool(elementToDeserialize.Value);
+            return ConvertToBool(objectToDeserialize.Value);
         }
 
         XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)

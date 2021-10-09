@@ -49,7 +49,7 @@ namespace FluentSerializer.Xml.Services
                 var serializerContext = new SerializerContext(propertyMapping.Property, classType, propertyMapping.NamingStrategy, currentSerializer);
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
 
-                if (propertyMapping.DestinationType == typeof(XAttribute))
+                if (propertyMapping.ContainerType == typeof(XAttribute))
                 {
                     var xAttribute = dataObject.Attribute(propertyName);
                     var attributeValue = xAttribute?.Value;
@@ -73,7 +73,7 @@ namespace FluentSerializer.Xml.Services
                     propertyMapping.Property.SetValue(instance, propertyValue);
                     continue;
                 }
-                if (propertyMapping.DestinationType == typeof(XElement))
+                if (propertyMapping.ContainerType == typeof(XElement))
                 {
                     var xElement = dataObject.Element(propertyName);
                     if (xElement is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
