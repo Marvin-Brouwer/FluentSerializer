@@ -43,7 +43,7 @@ namespace FluentSerializer.Xml.Profiles
 
             var instance = Activator.CreateInstance(classType);
 
-            foreach (var propertyMapping in classMap.PropertyMap.SelectMany(x => x))
+            foreach (var propertyMapping in classMap.PropertyMaps)
             {
                 var serializerContext = new SerializerContext(propertyMapping.Property, propertyMapping.NamingStrategy, currentSerializer);
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);

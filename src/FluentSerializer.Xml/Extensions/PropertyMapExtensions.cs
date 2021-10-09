@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Extensions
 {
     public static class PropertyMapExtensions
     {
-        public static IConverter<XObject>? GetMatchingConverter<TSpecificTarget>(this XmlPropertyMap propertyMapping, IXmlSerializer currentSerializer)
+        public static IConverter<XObject>? GetMatchingConverter<TSpecificTarget>(this IPropertyMap propertyMapping, ISerializer currentSerializer)
             where TSpecificTarget : XObject
         {
             var converter = propertyMapping.CustomConverter ?? currentSerializer.Configuration.DefaultConverters

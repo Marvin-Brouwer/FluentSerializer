@@ -6,11 +6,11 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public sealed class XmlClassMap : ClassMap<XElement, XObject, XmlPropertyMap>
+    public sealed class XmlClassMap : ClassMap
     {
         public XmlClassMap(
-            Type classType, INamingStrategy namingStrategy, IConverter<XElement>? customConverter, List<XmlPropertyMap> propertyMap) : 
-            base(classType, namingStrategy, customConverter, propertyMap)
+            Type classType, INamingStrategy namingStrategy, IEnumerable<XmlPropertyMap> propertyMap) : 
+            base(classType, namingStrategy, propertyMap)
         { }
     }
 }

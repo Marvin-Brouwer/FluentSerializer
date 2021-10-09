@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Stories.Mavenlink.Models;
 using System.Collections.Generic;

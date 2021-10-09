@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Json.Profiles;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Json.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -10,6 +11,8 @@ namespace FluentSerializer.Json.Services
         public FluentJsonSerializer(List<JsonSerializerProfile> profiles)
         {
         }
+
+        public SerializerConfiguration Configuration => throw new NotImplementedException();
 
         public TModel Deserialize<TModel>(string stringData) where TModel : class, new()
         {

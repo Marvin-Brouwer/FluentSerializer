@@ -6,8 +6,7 @@ using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public interface IPropertyMap<out TDestination>
-        where TDestination : class
+    public interface IPropertyMap
     {
         IConverter? CustomConverter { get; }
         SerializerDirection Direction { get; }

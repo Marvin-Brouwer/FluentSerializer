@@ -1,5 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
 using System;
@@ -12,7 +13,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
     /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.
     /// OpenAir requires this value to be matched exactly on the type attribute.
     /// </summary>
-    internal class RequestTypeValueConverter : ICustomAttributeConverter
+    internal class RequestTypeValueConverter : IConverter<XAttribute>
     {
         public SerializerDirection Direction => SerializerDirection.Serialize;
         public bool CanConvert(PropertyInfo propertyInfo) => typeof(string) == propertyInfo.PropertyType;
