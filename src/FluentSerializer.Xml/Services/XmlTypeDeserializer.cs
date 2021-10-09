@@ -46,7 +46,7 @@ namespace FluentSerializer.Xml.Services
 
             foreach (var propertyMapping in classMap.PropertyMaps)
             {
-                var serializerContext = new SerializerContext(propertyMapping.Property, propertyMapping.NamingStrategy, currentSerializer);
+                var serializerContext = new SerializerContext(propertyMapping.Property, classType, propertyMapping.NamingStrategy, currentSerializer);
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
 
                 if (propertyMapping.DestinationType == typeof(XAttribute))
