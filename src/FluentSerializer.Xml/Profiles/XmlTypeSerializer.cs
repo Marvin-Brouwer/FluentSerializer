@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentSerializer.Xml.Extensions;
+using System;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -29,15 +30,16 @@ namespace FluentSerializer.Xml.Profiles
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
                 var propertyName = propertyMapping.NamingStrategy.GetName(property);
-                var serializationContext = new SerializerContext(property, propertyMapping.NamingStrategy, currentSerializer);
+                var serializerContext = new SerializerContext(property, propertyMapping.NamingStrategy, currentSerializer);
 
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.DestinationType))
                 {
-                    var attributeConverter = GetConverter<XAttribute>(propertyMapping);
+                    var attributeConverter = propertyMapping.GetMatchingConverter<XAttribute>(currentSerializer);
+                    if (attributeConverter is null) throw new NotSupportedException("Todo custom exception");
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
-                    newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(null, propertyValue, serializationContext));
+                    newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(null, propertyValue, serializerContext));
                     continue;
                 }
                 if (typeof(XElement).IsAssignableFrom(propertyMapping.DestinationType))
@@ -45,24 +47,25 @@ namespace FluentSerializer.Xml.Profiles
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
-                    if (propertyMapping.CustomConverter is null)
+                    var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(currentSerializer);
+                    if (matchingConverter is null)
                     {
                         newElement.Add(SerializeToElement(propertyValue, currentSerializer));
                         continue;
                     }
                     
-                    if (!propertyMapping.CustomConverter.CanConvert(property))
+                    if (!matchingConverter.CanConvert(property))
                         throw new NotSupportedException("Todo custom exception here");
 
-                    if (propertyMapping.CustomConverter is IConverter<XObject> objectConverter)
+                    if (matchingConverter is IConverter<XObject> objectConverter)
                     {
-                        var customObject = objectConverter.Serialize(null, propertyValue, serializationContext);
+                        var customObject = objectConverter.Serialize(null, propertyValue, serializerContext);
                         newElement.Add(customObject);
                         continue;
                     }
-                    if (propertyMapping.CustomConverter is IConverter<XElement> elementConverter)
+                    if (matchingConverter is IConverter<XElement> elementConverter)
                     {
-                        var customElement = elementConverter.Serialize(null, propertyValue, serializationContext);
+                        var customElement = elementConverter.Serialize(null, propertyValue, serializerContext);
                         newElement.Add(customElement); 
                         continue;
                     }
@@ -74,25 +77,6 @@ namespace FluentSerializer.Xml.Profiles
             }
 
             return newElement;
-        }
-
-        private IConverter<XObject> GetConverter<TSpecificTarget>(XmlPropertyMap propertyMapping)
-            where TSpecificTarget : XObject
-        {
-            // todo lookup known converters
-            var converter = propertyMapping.CustomConverter ?? null;
-            if (converter is null) throw new NotSupportedException("Todo custom exception");
-
-            if (!converter.CanConvert(propertyMapping.Property))
-                throw new NotSupportedException("Todo custom exception");
-
-            if (propertyMapping.CustomConverter is IConverter<XObject> objectConverter)
-                return objectConverter;
-            // todo test if possible
-            if (propertyMapping.CustomConverter is IConverter<TSpecificTarget> specificConverter)
-                return specificConverter as IConverter<XObject> ?? throw new NotSupportedException("Todo custom exception");
-
-            throw new NotSupportedException("Todo custom exception");
         }
     }
 }

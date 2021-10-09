@@ -2,7 +2,7 @@
 {
     public interface ISerializer
     {
-        public string Serialize<TData>(TData dataObject);
-        public TData Deserialize<TData>(string stringData);
+        public string Serialize<TModel>(TModel model);
+        public TModel? Deserialize<TModel>(string stringData) where TModel : class, new();
     }
 }

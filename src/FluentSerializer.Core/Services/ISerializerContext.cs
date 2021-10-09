@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using FluentSerializer.Core;
+using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -6,6 +7,6 @@ namespace FluentSerializer.Xml.Profiles
     {
         PropertyInfo Property { get; }
         INamingStrategy NamingStrategy { get; }
-        IXmlSerializer CurrentSerializer { get; }
+        ISerializer CurrentSerializer { get; }
     }
 }
