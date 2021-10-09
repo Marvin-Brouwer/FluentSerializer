@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Xml.Profiles;
 using System;
 using System.Linq;
 using System.Text;
@@ -11,39 +12,49 @@ namespace FluentSerializer.Xml.Services
         private static readonly XDeclaration DefaultXmlDeclaration = new XDeclaration("v1.0", Encoding.UTF8.WebName, "true");
 
         private readonly XmlTypeSerializer _serializer;
+        private readonly XmlTypeDeserializer _deserializer;
 
-        public FluentXmlSerializer(ILookup<Type, XmlClassMap> mappings)
+        public SerializerConfiguration Configuration { get; }
+
+        public FluentXmlSerializer(ILookup<Type, XmlClassMap> mappings, SerializerConfiguration? configuration = null)
         {
             _serializer = new XmlTypeSerializer(mappings);
+            _deserializer = new XmlTypeDeserializer(mappings);
+
+            Configuration = configuration ?? ConfigurationConstants.GetDefaultXmlConfiguration();
         }
 
-        public TModel Deserialize<TModel>(XObject dataObject)
+        public TModel? Deserialize<TModel>(XElement dataObject)
+            where TModel : class, new()
         {
-            throw new NotImplementedException();
+            return _deserializer.DeserializeFromObject<TModel>(dataObject, this);
         }
 
-        public TData Deserialize<TData>(string stringData)
+        public TModel? Deserialize<TModel>(string stringData)
+            where TModel : class, new()
         {
-            throw new NotImplementedException();
+            // todo see what happens if an element without declaration is passed
+            var xDocument = XDocument.Parse(stringData);
+            return Deserialize<TModel>(xDocument.Root);
         }
 
-        public string Serialize<TData>(TData dataObject)
+        public string Serialize<TModel>(TModel model)
         {
-            return SerializeToDocument(dataObject).ToString();
+            return SerializeToDocument(model).ToString();
         }
 
-        public XDocument SerializeToDocument<TModel>(TModel dataObject, XDeclaration? declaration = null)
+        public XDocument SerializeToDocument<TModel>(TModel model, XDeclaration? declaration = null)
         {
-            var rootElement = SerializeToElement(dataObject);
+            var rootElement = SerializeToElement(model);
             return new XDocument(
                 declaration ?? DefaultXmlDeclaration,
                 rootElement
             );
         }
 
-        public XElement? SerializeToElement<TModel>(TModel dataObject)
+        public XElement? SerializeToElement<TModel>(TModel model)
         {
-           return _serializer.SerializeToElement(dataObject, this);
+           return _serializer.SerializeToElement(model, this);
         }
     }
 }

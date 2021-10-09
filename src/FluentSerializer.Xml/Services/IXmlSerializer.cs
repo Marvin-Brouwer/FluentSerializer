@@ -1,12 +1,15 @@
 ﻿using FluentSerializer.Core;
+using FluentSerializer.Core.Configuration;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml
 {
     public interface IXmlSerializer : ISerializer
     {
-        TModel Deserialize<TModel>(XObject dataObject);
-        XElement? SerializeToElement<TModel>(TModel dataObject);
-        XDocument SerializeToDocument<TModel>(TModel dataObject, XDeclaration? declaration = null);
+        SerializerConfiguration Configuration { get; }
+
+        TModel? Deserialize<TModel>(XElement rootElement) where TModel: class, new ();
+        XElement? SerializeToElement<TModel>(TModel model);
+        XDocument SerializeToDocument<TModel>(TModel model, XDeclaration? declaration = null);
     }
 }

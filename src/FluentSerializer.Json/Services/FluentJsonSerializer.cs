@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Services
         {
         }
 
-        public TData Deserialize<TData>(string stringData)
+        public TModel Deserialize<TModel>(string stringData) where TModel : class, new()
         {
             throw new NotImplementedException();
         }
@@ -36,7 +36,7 @@ namespace FluentSerializer.Json.Services
             throw new NotImplementedException();
         }
 
-        public string Serialize<TData>(TData dataObject)
+        public string Serialize<TModel>(TModel model)
         {
             throw new NotImplementedException();
         }
