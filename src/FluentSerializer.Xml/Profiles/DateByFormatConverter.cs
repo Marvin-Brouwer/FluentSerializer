@@ -19,13 +19,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             _dateTimeStyle = dateTimeStyle;
         }
 
-        private readonly SerializerDirection _direction = SerializerDirection.Both;
-        SerializerDirection ICustomAttributeConverter.Direction => _direction;
-        SerializerDirection ICustomElementConverter.Direction => _direction;
-
-        private bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
-        bool ICustomAttributeConverter.CanConvert(PropertyInfo property) => CanConvert(property);
-        bool ICustomElementConverter.CanConvert(PropertyInfo property) => CanConvert(property);
+        public SerializerDirection Direction => SerializerDirection.Both;
+        public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
 
         private string ConvertToString(DateTime currentValue) => currentValue.ToString(_format, _cultureInfo);
         private DateTime ConvertToDateTime(string? currentValue)
@@ -35,17 +30,17 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
         }
 
-        object? ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<XAttribute>.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
         {
             return ConvertToDateTime(attributeToDeserialize.Value);
         }
 
-        object? ICustomElementConverter.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
         {
             return ConvertToDateTime(elementToDeserialize.Value);
         }
 
-        XAttribute? ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
+        XAttribute? IConverter<XAttribute>.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize == null) return null;
 
@@ -54,7 +49,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return new XAttribute(attributeName, ConvertToString(dateValue));
         }
 
-        XElement? ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
+        XElement? IConverter<XElement>.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize == null) return null;
 

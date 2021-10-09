@@ -7,24 +7,35 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 using FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles;
+using System;
+using FluentSerializer.Xml.Profiles;
+using System.Linq;
 
 namespace FluentSerializer.Xml.Tests
 {
     public partial class OpenAirTests
     {
-        private readonly List<XmlSerializerProfile> _profiles = new List<XmlSerializerProfile>
+
+        public OpenAirTests()
         {
-            new RequestProfile(),
-            new ResponseProfile(),
-            new ProjectProfile(),
-            new RateCardProfile()
-        };
+            var profiles = new List<IXmlSerializerProfile>{
+                new RequestProfile(),
+                new ResponseProfile(),
+                new ProjectProfile(),
+                new RateCardProfile()
+            };
+            _mappings = profiles
+                .SelectMany(x => x.Configure())
+                .ToLookup(x => x.Key, x => x.Value);
+        }
+
+        private readonly ILookup<Type, XmlClassMap> _mappings;
 
         [Fact]
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("./Serialize.Xml");
+            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.Xml");
             var example = new Request<Project>
             {
                 AddRequests =
@@ -37,7 +48,9 @@ namespace FluentSerializer.Xml.Tests
                             {
                                 Id = "0001",
                                 Active = true,
-                                Name = "Project 1"
+                                Name = "Project 1",
+                                LastUpdate = DateTime.Parse("28-11-1991T3:00Z"),
+                                CustomDate = DateTime.Parse("28-11-1991T3:00Z"),
                             }
                         }
                     },
@@ -48,20 +61,22 @@ namespace FluentSerializer.Xml.Tests
                             {
                                 Id = "0002",
                                 Active = false,
-                                Name = "Project 2"
+                                Name = "Project 2",
+                                LastUpdate = DateTime.Parse("28-11-1991T4:00Z")
                             },
                             new Project
                             {
                                 Id = "0003",
                                 Active = true,
-                                Name = "Project 3"
+                                Name = "Project 3",
+                                LastUpdate = DateTime.Parse("28-11-1991T5:00Z")
                             }
                         }
                     }
                 }
             };
             
-            var sut = new FluentXmlSerializer(_profiles);
+            var sut = new FluentXmlSerializer(_mappings);
 
             // Act
             var result = sut.Serialize(example);
@@ -74,9 +89,9 @@ namespace FluentSerializer.Xml.Tests
         public async Task Deserialize()
         {
             // Arrange
-            var expected = new Response<Project>();
-            var example = await File.ReadAllTextAsync("./Deserialize.Xml");
-            var sut = new FluentXmlSerializer(_profiles);
+            var expected = new Response<RateCard>();
+            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.Xml");
+            var sut = new FluentXmlSerializer(_mappings);
 
             // Act
             var result = sut.Deserialize<RateCard>(example);

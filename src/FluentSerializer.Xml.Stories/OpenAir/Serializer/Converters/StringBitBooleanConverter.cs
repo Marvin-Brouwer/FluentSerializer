@@ -7,13 +7,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
     public class StringBitBooleanConverter : ICustomAttributeConverter, ICustomElementConverter
     {
-        private readonly SerializerDirection _direction = SerializerDirection.Both;
-        SerializerDirection ICustomAttributeConverter.Direction => _direction;
-        SerializerDirection ICustomElementConverter.Direction => _direction;
-
-        private bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
-        bool ICustomAttributeConverter.CanConvert(PropertyInfo property) => CanConvert(property);
-        bool ICustomElementConverter.CanConvert(PropertyInfo property) => CanConvert(property);
+        public SerializerDirection Direction => SerializerDirection.Both;
+        public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
 
         private string ConvertToString(bool currentValue) => currentValue ? "1" : "0";
         private bool ConvertToBool(string? currentValue)
@@ -25,7 +20,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }
 
-        object? ICustomAttributeConverter.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<XAttribute>.Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context)
         {
             if (currentValue is bool existingBooleanValue)
                 return existingBooleanValue && ConvertToBool(attributeToDeserialize.Value);
@@ -33,7 +28,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return ConvertToBool(attributeToDeserialize.Value);
         }
 
-        object? ICustomElementConverter.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
+        object? IConverter<XElement>.Deserialize(object? currentValue, XElement elementToDeserialize, ISerializerContext context)
         {
             if (currentValue is bool existingBooleanValue)
                 return existingBooleanValue && ConvertToBool(elementToDeserialize.Value);
@@ -41,7 +36,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return ConvertToBool(elementToDeserialize.Value);
         }
 
-        XAttribute? ICustomAttributeConverter.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
+        XAttribute? IConverter<XAttribute>.Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
         {
             var currentBoolean = true;
             if (!string.IsNullOrWhiteSpace(currentValue?.Value))
@@ -54,7 +49,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             return new XAttribute(attributeName, attributeValue);
         }
 
-        XElement? ICustomElementConverter.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
+        XElement? IConverter<XElement>.Serialize(XElement? currentValue, object objectToSerialize, ISerializerContext context)
         {
             var currentBoolean = true;
             if (!string.IsNullOrWhiteSpace(currentValue?.Value))

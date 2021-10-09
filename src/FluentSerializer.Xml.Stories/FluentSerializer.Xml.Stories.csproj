@@ -34,4 +34,13 @@
     <ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="OpenAir\OpenAirTests.Deserialize.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="OpenAir\OpenAirTests.Serialize.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

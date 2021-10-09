@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<request>
+  <Auth>
+    
+  </Auth>
+  <Read type="Project" method="equal to" limit="1000">
+    <Project>
+      <id>0001</id>
+      <active>1</active>
+      <name>Project 1</name>
+      <updated>
+        <Date>
+          <year>1991</year>
+          <month>11</month>
+          <day>28</day>
+          <hour>3</hour>
+          <minute>0</minute>
+          <second>0</second>
+        </Date>
+      </updated>
+      <custom_date__c>1991-11-28</custom_date__c>
+    </Project>
+  </Read>
+  <Read type="Project" method="equal to" limit="1000">
+    <Project>
+      <id>0002</id>
+      <updated>
+        <Date>
+          <year>1991</year>
+          <month>11</month>
+          <day>28</day>
+          <hour>4</hour>
+          <minute>0</minute>
+          <second>0</second>
+        </Date>
+      </updated>
+    </Project>
+    <Project>
+      <id>0003</id>
+      <updated>
+        <Date>
+          <year>1991</year>
+          <month>11</month>
+          <day>28</day>
+          <hour>5</hour>
+          <minute>0</minute>
+          <second>0</second>
+        </Date>
+      </updated>
+    </Project>
+  </Read>
+</request>

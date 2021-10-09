@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public interface ISerializerContext
+    public sealed class SerializerContext : ISerializerContext
     {
-        PropertyInfo Property { get; set; }
-        INamingStrategy NamingStrategy { get; set; }
-        IXmlSerializer CurrentSerializer { get; set; }
+        public PropertyInfo Property { get; }
+        public INamingStrategy NamingStrategy { get; }
+        public IXmlSerializer CurrentSerializer { get; }
+
+        public SerializerContext(PropertyInfo property, INamingStrategy namingStrategy, IXmlSerializer currentSerializer)
+        {
+            Property = property;
+            NamingStrategy = namingStrategy;
+            CurrentSerializer = currentSerializer;
+        }
     }
 }
