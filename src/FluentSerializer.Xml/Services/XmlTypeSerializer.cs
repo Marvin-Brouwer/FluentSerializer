@@ -43,7 +43,7 @@ namespace FluentSerializer.Xml.Services
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
-                    newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(null, propertyValue, serializerContext));
+                    newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(propertyValue, serializerContext));
                     continue;
                 }
                 if (typeof(XElement).IsAssignableFrom(propertyMapping.DestinationType))
@@ -63,13 +63,13 @@ namespace FluentSerializer.Xml.Services
 
                     if (matchingConverter is IConverter<XObject> objectConverter)
                     {
-                        var customObject = objectConverter.Serialize(null, propertyValue, serializerContext);
+                        var customObject = objectConverter.Serialize(propertyValue, serializerContext);
                         newElement.Add(customObject);
                         continue;
                     }
                     if (matchingConverter is IConverter<XElement> elementConverter)
                     {
-                        var customElement = elementConverter.Serialize(null, propertyValue, serializerContext);
+                        var customElement = elementConverter.Serialize(propertyValue, serializerContext);
                         newElement.Add(customElement); 
                         continue;
                     }

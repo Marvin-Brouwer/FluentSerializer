@@ -66,7 +66,7 @@ namespace FluentSerializer.Xml.Services
                     if (converter is null) throw new NotSupportedException("TODO create custom exception here");
                     if (!converter.CanConvert(propertyMapping.Property)) throw new NotSupportedException("TODO create custom exception here");
 
-                    var propertyValue = converter.Deserialize(null, xAttribute!, serializerContext);
+                    var propertyValue = converter.Deserialize(xAttribute!, serializerContext);
                     if (propertyValue is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
                         throw new NotSupportedException("Todo custom exception");
 
@@ -100,7 +100,7 @@ namespace FluentSerializer.Xml.Services
 
                     if (matchingConverter is IConverter<XObject> objectConverter)
                     {
-                        var deserializedInstance = objectConverter.Deserialize(null, xElement, serializerContext);
+                        var deserializedInstance = objectConverter.Deserialize(xElement, serializerContext);
                         if (deserializedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
                             throw new NotSupportedException("Todo custom exception");
 
@@ -109,7 +109,7 @@ namespace FluentSerializer.Xml.Services
                     }
                     if (matchingConverter is IConverter<XElement> elementConverter)
                     {
-                        var deserializedInstance = elementConverter.Deserialize(null, xElement, serializerContext);
+                        var deserializedInstance = elementConverter.Deserialize(xElement, serializerContext);
                         if (deserializedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
                             throw new NotSupportedException("Todo custom exception");
 

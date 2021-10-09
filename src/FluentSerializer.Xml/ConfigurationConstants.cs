@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Xml.Converters;
 
 namespace FluentSerializer.Xml
 {
@@ -11,7 +12,9 @@ namespace FluentSerializer.Xml
                 FormatOutput = true,
                 DefaultConverters =
                 {
-                    // todo add converters here
+                    new IntegerConverter(),
+                    new BooleanConverter()
+                    // TODO add prmiitive converters, date converter, raw string converter and enumerable converter
                 }
             };
         }

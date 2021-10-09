@@ -16,9 +16,9 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
     {
         public SerializerDirection Direction => SerializerDirection.Serialize;
         public bool CanConvert(PropertyInfo propertyInfo) => typeof(string) == propertyInfo.PropertyType;
-        public object Deserialize(object? currentValue, XAttribute attributeToDeserialize, ISerializerContext context) => throw new NotSupportedException();
+        public object Deserialize(XAttribute attributeToDeserialize, ISerializerContext context) => throw new NotSupportedException();
 
-        public XAttribute? Serialize(XAttribute? currentValue, object objectToSerialize, ISerializerContext context)
+        public XAttribute? Serialize(object objectToSerialize, ISerializerContext context)
         {
             // We know this to be true because of RequestObject<TModel>
             var classType = objectToSerialize.GetType().GetGenericArguments()[0];
