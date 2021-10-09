@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Xml.Profiles;
+﻿using FluentSerializer.Xml.Converters;
+using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters;
 using FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies;
 using System.Globalization;

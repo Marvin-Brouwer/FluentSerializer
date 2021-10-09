@@ -1,12 +1,13 @@
 ﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Extensions;
-using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Mapping;
 using System;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeSerializer
     {

@@ -1,6 +1,5 @@
-﻿using FluentSerializer.Core.Services;
-using FluentSerializer.Xml.Profiles;
-using FluentSerializer.Xml.Services;
+﻿using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Services;
 using System;
 using System.Linq;
 using System.Xml.Linq;

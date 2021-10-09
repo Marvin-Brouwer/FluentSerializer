@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Xml.Converters
 {
     public sealed class DateByFormatConverter : IConverter<XAttribute>, IConverter<XElement>
     {

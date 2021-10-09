@@ -4,7 +4,7 @@ using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Core.Mapping
 {
     public interface IPropertyMap
     {

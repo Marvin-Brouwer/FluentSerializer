@@ -1,10 +1,9 @@
-﻿using FluentSerializer.Core.NamingStrategies;
-using FluentSerializer.Core.Services;
+﻿using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.NamingStrategies;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Profiles
+namespace FluentSerializer.Xml.Mapping
 {
     public sealed class XmlClassMap : ClassMap
     {

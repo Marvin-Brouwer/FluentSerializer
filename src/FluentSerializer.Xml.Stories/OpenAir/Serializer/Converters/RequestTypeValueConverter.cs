@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
-using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
 using System;
 using System.Reflection;

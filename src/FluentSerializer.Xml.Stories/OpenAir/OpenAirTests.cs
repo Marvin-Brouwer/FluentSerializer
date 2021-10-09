@@ -11,6 +11,7 @@ using FluentSerializer.Xml.Profiles;
 using System.Linq;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
+using FluentSerializer.Xml.Mapping;
 
 namespace FluentSerializer.Xml.Stories.OpenAir
 {

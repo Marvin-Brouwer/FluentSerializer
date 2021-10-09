@@ -1,5 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Xml.Profiles;
+using FluentSerializer.Xml.Mapping;
 using System;
 using System.Linq;
 using System.Text;
