@@ -4,7 +4,6 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Xml.Converters.XNodes;
-using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Extensions;
 using System;
 using System.Collections;
@@ -111,7 +110,6 @@ namespace FluentSerializer.Xml.Services
                     {
                         xElement = new XFragment();
                         dataObject.AddFirst(xElement);
-                        var test = xElement.Parent;
                     }
 
                     var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
