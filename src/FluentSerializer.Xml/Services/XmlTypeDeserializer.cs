@@ -1,5 +1,5 @@
-﻿using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Xml.Extensions;
 using FluentSerializer.Xml.Mapping;
 using System;
@@ -9,7 +9,6 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
-    // todo XText, Comment? CData?
     public class XmlTypeDeserializer
     {
         private readonly ILookup<Type, XmlClassMap> _mappings;
@@ -49,7 +48,30 @@ namespace FluentSerializer.Xml.Services
             {
                 var serializerContext = new SerializerContext(propertyMapping.Property, classType, propertyMapping.NamingStrategy, currentSerializer);
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
+                if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
+                if (propertyMapping.ContainerType == typeof(XText))
+                {
+                    var xText = dataObject.Nodes().SingleOrDefault(node => node.NodeType == System.Xml.XmlNodeType.Text) as XText;
+                    var textValue = xText?.Value;
+                    if (string.IsNullOrEmpty(textValue) && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                        throw new NotSupportedException("Todo custom exception");
+                    if (string.IsNullOrEmpty(textValue))
+                    {
+                        propertyMapping.Property.SetValue(instance, null);
+                        continue;
+                    }
+
+                    var converter = propertyMapping.GetMatchingConverter<XText>(SerializerDirection.Deserialize, currentSerializer);
+                    if (converter is null) throw new NotSupportedException("TODO create custom exception here");
+
+                    var propertyValue = converter.Deserialize(xText!, serializerContext);
+                    if (propertyValue is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                        throw new NotSupportedException("Todo custom exception");
+
+                    propertyMapping.Property.SetValue(instance, propertyValue);
+                    continue;
+                }
                 if (propertyMapping.ContainerType == typeof(XAttribute))
                 {
                     var xAttribute = dataObject.Attribute(propertyName);
@@ -62,10 +84,8 @@ namespace FluentSerializer.Xml.Services
                         continue;
                     }
 
-                    // Todo find default converters
-                    var converter = propertyMapping.GetMatchingConverter<XAttribute>(currentSerializer);
+                    var converter = propertyMapping.GetMatchingConverter<XAttribute>(SerializerDirection.Deserialize, currentSerializer);
                     if (converter is null) throw new NotSupportedException("TODO create custom exception here");
-                    if (!converter.CanConvert(propertyMapping.Property)) throw new NotSupportedException("TODO create custom exception here");
 
                     var propertyValue = converter.Deserialize(xAttribute!, serializerContext);
                     if (propertyValue is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
@@ -85,7 +105,7 @@ namespace FluentSerializer.Xml.Services
                         continue;
                     }
 
-                    var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(currentSerializer);
+                    var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
                     if (matchingConverter is null)
                     {
                         var deserializedInstance = DeserializeFromObject(propertyMapping.Property.PropertyType, xElement, currentSerializer);
@@ -96,28 +116,12 @@ namespace FluentSerializer.Xml.Services
                         continue;
                     }
 
-                    if (!matchingConverter.CanConvert(propertyMapping.Property))
-                        throw new NotSupportedException("Todo custom exception here");
+                    var convertedInstance = matchingConverter.Deserialize(xElement, serializerContext);
+                    if (convertedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                        throw new NotSupportedException("Todo custom exception");
 
-                    if (matchingConverter is IConverter<XObject> objectConverter)
-                    {
-                        var deserializedInstance = objectConverter.Deserialize(xElement, serializerContext);
-                        if (deserializedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
-                            throw new NotSupportedException("Todo custom exception");
-
-                        propertyMapping.Property.SetValue(instance, deserializedInstance);
-                        continue;
-                    }
-                    if (matchingConverter is IConverter<XElement> elementConverter)
-                    {
-                        var deserializedInstance = elementConverter.Deserialize(xElement, serializerContext);
-                        if (deserializedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
-                            throw new NotSupportedException("Todo custom exception");
-
-                        propertyMapping.Property.SetValue(instance, deserializedInstance);
-                        continue;
-                    }
-                    throw new NotSupportedException("Todo custom exception");
+                    propertyMapping.Property.SetValue(instance, convertedInstance);
+                    continue;
                 }
 
                 throw new NotSupportedException("Todo custom exception");

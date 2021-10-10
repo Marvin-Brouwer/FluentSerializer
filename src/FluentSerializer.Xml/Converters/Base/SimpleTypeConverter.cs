@@ -1,11 +1,10 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
-using System;
 using System.Reflection;
 using System.Xml.Linq;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.Converters.Base
 {
     public abstract class SimpleTypeConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
         where TObject : class

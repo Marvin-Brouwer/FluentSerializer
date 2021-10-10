@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Mapping;
@@ -12,8 +13,9 @@ namespace FluentSerializer.Xml.Profiles
     public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder
         where TModel : new()
     {
-        private readonly INamingStrategy _defaultNamingStrategy;
+        private static readonly CustomNamingStrategy TextNodeNamingStrategy = new CustomNamingStrategy("#text node");
 
+        private readonly INamingStrategy _defaultNamingStrategy;
         private readonly List<XmlPropertyMap> _propertyMap;
 
         public XmlProfileBuilder(INamingStrategy defaultNamingStrategy, List<XmlPropertyMap> propertyMap)
@@ -31,7 +33,7 @@ namespace FluentSerializer.Xml.Profiles
         {
             _propertyMap.Add(new XmlPropertyMap(
                 direction,
-                GetProperty(propertySelector),
+                propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
             ));
@@ -48,7 +50,7 @@ namespace FluentSerializer.Xml.Profiles
         {
             _propertyMap.Add(new XmlPropertyMap(
                 direction,
-                GetProperty(propertySelector),
+                propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
             ));
@@ -56,13 +58,22 @@ namespace FluentSerializer.Xml.Profiles
             return this;
         }
 
-        // todo move to extension method
-        public static PropertyInfo GetProperty(LambdaExpression lambda)
+        /// <remarks>
+        /// XML Elements can only have one text node so this should be set last and doesn't return a <see cref="XmlProfileBuilder{TModel}"/>
+        /// </remarks>
+        public void Text<XText, TText>(
+            Expression<Func<TModel, TText>> propertySelector,
+            SerializerDirection direction = SerializerDirection.Both,
+            IConverter? converter = null
+        )
         {
-            if (lambda.Body is UnaryExpression unaryExpression)
-                return (PropertyInfo)((MemberExpression)unaryExpression.Operand).Member;
-            
-            return (PropertyInfo)((MemberExpression)lambda.Body).Member;
+            _propertyMap.Add(new XmlPropertyMap(
+                direction,
+                propertySelector.GetProperty(),
+                // This isn't used but setting it to null requires a lot more code.
+                TextNodeNamingStrategy,
+                converter
+            ));
         }
     }
 }
