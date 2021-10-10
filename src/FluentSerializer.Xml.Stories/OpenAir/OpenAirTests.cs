@@ -14,6 +14,7 @@ using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
 using FluentSerializer.Core.Mapping;
 using System.Text;
 using FluentSerializer.Core.Configuration;
+using System.Globalization;
 
 namespace FluentSerializer.Xml.Stories.OpenAir
 {
@@ -55,8 +56,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                                 Id = "0001",
                                 Active = true,
                                 Name = "Project 1",
-                                LastUpdate = DateTime.Parse("1991-11-28T03:00:00.0000000Z"),
-                                CustomDate = DateTime.Parse("1991-11-28T03:00:00.0000000Z"),
+                                LastUpdate = CreateDate("1991-11-28 03:00:00"),
+                                CustomDate = CreateDate("1991-11-28 03:00:00"),
                             }
                         }
                     },
@@ -68,14 +69,14 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                                 Id = "0002",
                                 Active = false,
                                 Name = "Project 2",
-                                LastUpdate = DateTime.Parse("1991-11-28T04:00:00.0000000Z")
+                                LastUpdate = CreateDate("1991-11-28 04:00:00")
                             },
                             new Project
                             {
                                 Id = "0003",
                                 Active = true,
                                 Name = "Project 3",
-                                LastUpdate = DateTime.Parse("1991-11-28T05:00:00.0000000Z")
+                                LastUpdate = CreateDate("1991-11-28 05:00:00")
                             }
                         }
                     }
@@ -95,7 +96,31 @@ namespace FluentSerializer.Xml.Stories.OpenAir
         public async Task Deserialize()
         {
             // Arrange
-            var expected = new Response<RateCard>();
+            var expected = new Response<RateCard>()
+            {
+                ReadResponses = new List<ReadResponse<RateCard>>
+                {
+                    new ReadResponse<RateCard>
+                    {
+                        StatusCode = 0,
+                        Data = new List<RateCard>
+                        {
+                            new RateCard{
+                                Id = "RC1",
+                                Name = "Ratecard 1"
+                            },
+                            new RateCard{
+                                Id = "RC2",
+                                LastUpdate = CreateDate("1991-11-28 04:00:00")
+                            }
+                        }
+                    },
+                    new ReadResponse<RateCard>
+                    {
+                        StatusCode = 601
+                    }
+                }
+            };
             var example = await File.ReadAllTextAsync("../../../OpenAir/OpenAirTests.Deserialize.Xml");
             var sut = new FluentXmlSerializer(_mappings, _configuration);
 
@@ -105,5 +130,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir
             // Assert
             result.Should().BeEquivalentTo(expected);
         }
+
+        private static DateTime CreateDate(string dateString) => DateTime.ParseExact(
+            dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
     }
 }

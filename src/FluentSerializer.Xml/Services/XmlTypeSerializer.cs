@@ -2,7 +2,6 @@
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Extensions;
 using System;
 using System.Collections;

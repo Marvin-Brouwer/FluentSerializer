@@ -39,7 +39,7 @@ namespace FluentSerializer.Json.Services
             throw new NotImplementedException();
         }
 
-        public string Serialize<TModel>(TModel model)
+        public string Serialize<TModel>(TModel model) where TModel : class, new()
         {
             throw new NotImplementedException();
         }

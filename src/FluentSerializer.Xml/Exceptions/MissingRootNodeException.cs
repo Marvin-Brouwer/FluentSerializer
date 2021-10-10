@@ -1,7 +1,5 @@
 ﻿using FluentSerializer.Core.SerializerException;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FluentSerializer.Xml.Exceptions
 {
