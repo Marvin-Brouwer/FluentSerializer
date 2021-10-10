@@ -13,16 +13,16 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
             )
                 .Child(response => response.ReadResponses,
                     namingStrategy: CustomNamingStrategy("Read"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.AddResponses,
                     namingStrategy: CustomNamingStrategy("Add"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.ModifyResponses,
                     namingStrategy: CustomNamingStrategy("Modify"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.DeleteResponses,
                     namingStrategy: CustomNamingStrategy("Delete"),
-                    converter: NonWrappedListConverter);
+                    converter: NonWrappedCollectionConverter);
 
             For<ResponseObject<IOpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
@@ -31,7 +31,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
                 .Attribute(responseObject => responseObject.StatusCode,
                     namingStrategy: CustomNamingStrategy("status"))
                 .Child(response => response.Data,
-                    converter: NonWrappedListConverter);
+                    converter: NonWrappedCollectionConverter);
         }
     }
 }

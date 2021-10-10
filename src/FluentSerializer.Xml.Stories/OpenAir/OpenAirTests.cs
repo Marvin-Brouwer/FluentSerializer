@@ -11,7 +11,9 @@ using FluentSerializer.Xml.Profiles;
 using System.Linq;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
-using FluentSerializer.Xml.Mapping;
+using FluentSerializer.Core.Mapping;
+using System.Text;
+using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Xml.Stories.OpenAir
 {
@@ -26,12 +28,14 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                 new ProjectProfile(),
                 new RateCardProfile()
             };
-            _mappings = profiles
-                .SelectMany(x => x.Configure())
-                .ToLookup(x => x.Key, x => x.Value);
+            _mappings = new ClassMapDictionary(profiles.SelectMany(x => x.Configure()));
+
+            _configuration = ConfigurationConstants.GetDefaultXmlConfiguration();
+            _configuration.Encoding = Encoding.UTF8;
         }
 
-        private readonly ILookup<Type, XmlClassMap> _mappings;
+        private readonly ISearchDictionary<Type, IClassMap> _mappings;
+        private readonly SerializerConfiguration _configuration;
 
         [Fact]
         public async Task Serialize()
@@ -40,9 +44,9 @@ namespace FluentSerializer.Xml.Stories.OpenAir
             var expected = await File.ReadAllTextAsync("../../../OpenAir/OpenAirTests.Serialize.Xml");
             var example = new Request<Project>
             {
-                AddRequests =
+                AddRequests = new List<AddRequest<Project>>
                 {
-                    new RequestObject<Project>
+                    new AddRequest<Project>
                     {
                         Data = new List<Project>
                         {
@@ -56,7 +60,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                             }
                         }
                     },
-                    new RequestObject<Project>{
+                    new AddRequest<Project>{
                         Data = new List<Project>
                         {
                             new Project
@@ -77,8 +81,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                     }
                 }
             };
-            
-            var sut = new FluentXmlSerializer(_mappings);
+
+            var sut = new FluentXmlSerializer(_mappings, _configuration);
 
             // Act
             var result = sut.Serialize(example);
@@ -93,7 +97,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir
             // Arrange
             var expected = new Response<RateCard>();
             var example = await File.ReadAllTextAsync("../../../OpenAir/OpenAirTests.Deserialize.Xml");
-            var sut = new FluentXmlSerializer(_mappings);
+            var sut = new FluentXmlSerializer(_mappings, _configuration);
 
             // Act
             var result = sut.Deserialize<RateCard>(example);

@@ -16,13 +16,12 @@ namespace FluentSerializer.Xml.Extensions
             var converter = propertyMapping.CustomConverter ?? currentSerializer.Configuration.DefaultConverters
                 .Where(converter => converter is IConverter<TSpecificTarget>)
                 .Where(converter => converter.Direction == SerializerDirection.Both || converter.Direction == direction)
-                .FirstOrDefault(converter => converter.CanConvert(propertyMapping.Property));
+                .FirstOrDefault(converter => converter.CanConvert(propertyMapping.ConcretePropertyType));
             if (converter is null) return null;
 
-            if (!converter.CanConvert(propertyMapping.Property))
+            if (!converter.CanConvert(propertyMapping.ConcretePropertyType))
                 throw new ConverterNotSupportedException(propertyMapping.Property, converter.GetType(), typeof(TSpecificTarget), direction);
-            // todo test if cast possible
-            if (propertyMapping.CustomConverter is IConverter<TSpecificTarget> specificConverter)
+            if (converter is IConverter<TSpecificTarget> specificConverter)
                 return specificConverter;
 
             throw new ConverterNotSupportedException(propertyMapping.Property, converter.GetType(), typeof(TSpecificTarget), direction);

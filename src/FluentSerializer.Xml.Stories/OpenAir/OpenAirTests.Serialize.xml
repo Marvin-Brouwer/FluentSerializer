@@ -1,52 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <request>
-  <Auth>
-    
-  </Auth>
-  <Read type="Project" method="equal to" limit="1000">
+  <!--Normally this is where the authentication element would be added-->
+  <Add type="Project">
     <Project>
-      <id>0001</id>
-      <active>1</active>
       <name>Project 1</name>
       <updated>
         <Date>
           <year>1991</year>
           <month>11</month>
           <day>28</day>
-          <hour>3</hour>
-          <minute>0</minute>
-          <second>0</second>
+          <hour>04</hour>
+          <minute>00</minute>
+          <second>00</second>
         </Date>
       </updated>
+      <active>1</active>
       <custom_date__c>1991-11-28</custom_date__c>
     </Project>
-  </Read>
-  <Read type="Project" method="equal to" limit="1000">
+  </Add>
+  <Add type="Project">
     <Project>
-      <id>0002</id>
+      <name>Project 2</name>
       <updated>
         <Date>
           <year>1991</year>
           <month>11</month>
           <day>28</day>
-          <hour>4</hour>
-          <minute>0</minute>
-          <second>0</second>
+          <hour>05</hour>
+          <minute>00</minute>
+          <second>00</second>
         </Date>
       </updated>
+      <active>0</active>
     </Project>
     <Project>
-      <id>0003</id>
+      <name>Project 3</name>
       <updated>
         <Date>
           <year>1991</year>
           <month>11</month>
           <day>28</day>
-          <hour>5</hour>
-          <minute>0</minute>
-          <second>0</second>
+          <hour>06</hour>
+          <minute>00</minute>
+          <second>00</second>
         </Date>
       </updated>
+      <active>1</active>
     </Project>
-  </Read>
+  </Add>
 </request>

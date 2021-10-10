@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Models.Request
 {
     internal class Request<TRequest>
     {
-        public List<GetRequest<TRequest>> ReadRequests { get; set; } = new List<GetRequest<TRequest>>();
-        public List<RequestObject<TRequest>> AddRequests { get; set; } = new List<RequestObject<TRequest>>();
-        public List<RequestObject<TRequest>> ModifyRequests { get; set; } = new List<RequestObject<TRequest>>();
-        public List<RequestObject<TRequest>> DeleteRequests { get; set; } = new List<RequestObject<TRequest>>();
+        public XComment Authentication => new XComment("Normally this is where the authentication element would be added");
+
+        public List<ReadRequest<TRequest>>? ReadRequests { get; set; } 
+        public List<AddRequest<TRequest>>? AddRequests { get; set; }
+        public List<ModifyRequest<TRequest>>? ModifyRequests { get; set; }
+        public List<DeleteRequest<TRequest>>? DeleteRequests { get; set; }
     }
 
     internal class RequestObject<TRequest>
@@ -16,8 +19,17 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Models.Request
         public string Type { get; set; } = string.Empty;
     }
 
-    internal class GetRequest<TRequest> : RequestObject<TRequest>
+    internal class ReadRequest<TRequest> : RequestObject<TRequest>
     {
         public string Filter { get; set; } = string.Empty;
+    }
+    internal class AddRequest<TRequest> : RequestObject<TRequest>
+    {
+    }
+    internal class ModifyRequest<TRequest> : RequestObject<TRequest>
+    {
+    }
+    internal class DeleteRequest<TRequest> : RequestObject<TRequest>
+    {
     }
 }

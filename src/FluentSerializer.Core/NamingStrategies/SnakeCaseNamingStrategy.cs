@@ -1,18 +1,19 @@
 ﻿using System.Linq;
-using System.Reflection;
 
 namespace FluentSerializer.Core.NamingStrategies
 {
     public class SnakeCaseNamingStrategy : CamelCaseNamingStrategy
     {
         // Just use the camelCase logic here
-        public override string GetName(PropertyInfo property)
+        protected override string GetName(string name)
         {
-            var camelCaseName = base.GetName(property);
+            var camelCaseName = base.GetName(name);
 
-            return string.Join(char.ConvertFromUtf32(0), camelCaseName
+            return string.Join(string.Empty, camelCaseName
                 .AsEnumerable()
-                .Select(character => char.IsUpper(character) ? $"_{character}" : character.ToString()));
+                .Select(character => char.IsUpper(character) 
+                    ? $"_{char.ToLowerInvariant(character)}" 
+                    : char.ToLowerInvariant(character).ToString()));
         }
     }
 }

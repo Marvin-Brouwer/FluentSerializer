@@ -1,34 +1,50 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
-using System.Reflection;
+using System;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
 {
-    public class OpenAirDateConverter : IConverter<XAttribute>, IConverter<XElement>
+    public class OpenAirDateConverter : IConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
-        public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
+        public bool CanConvert(Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
 
-        object IConverter<XAttribute>.Deserialize(XAttribute attributeToSerialize, ISerializerContext context)
+
+        object? IConverter<XElement>.Deserialize(XElement elementToSerialize, ISerializerContext context)
         {
             throw new System.NotImplementedException();
         }
 
-        object IConverter<XElement>.Deserialize(XElement elementToSerialize, ISerializerContext context)
+        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            throw new System.NotImplementedException();
+            if (objectToSerialize is null) return null;
+            if (!(objectToSerialize is DateTime dateToSerialize))
+                throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
+
+            var elementName = context.NamingStrategy.GetName(context.Property);
+            return new XElement(elementName, GenerateDateObject(dateToSerialize));
         }
 
-        XAttribute IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
+        private static XElement GenerateDateObject(DateTime dateToSerialize)
         {
-            throw new System.NotImplementedException();
-        }
+            var dateWrapper = new XElement("Date",
+                            new XElement("year", dateToSerialize.ToString("yyyy")),
+                            new XElement("month", dateToSerialize.ToString("MM")),
+                            new XElement("day", dateToSerialize.ToString("dd"))
+                        );
 
-        XElement IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
-        {
-            throw new System.NotImplementedException();
+            if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
+                return dateWrapper;
+
+            dateWrapper.Add(
+                new XElement("hour", dateToSerialize.ToString("HH")),
+                new XElement("minute", dateToSerialize.ToString("mm")),
+                new XElement("second", dateToSerialize.ToString("ss"))
+            );
+
+            return dateWrapper;
         }
     }
 }

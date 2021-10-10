@@ -21,11 +21,10 @@ namespace FluentSerializer.Xml
                     new StringConverter(),
 
                     // Collection converters
-                    new CollectionConverter(),
+                    new WrappedCollectionConverter(),
 
                     // Spcial XNode types
-                    new XCDataConverter(),
-                    new XCommentConverter()
+                    new RawXObjectConverter()
                 }
             };
         }

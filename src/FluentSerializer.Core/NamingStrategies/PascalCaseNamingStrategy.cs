@@ -1,13 +1,11 @@
-﻿using System.Reflection;
-
-namespace FluentSerializer.Core.NamingStrategies
+﻿namespace FluentSerializer.Core.NamingStrategies
 {
     public class PascalCaseNamingStrategy : CamelCaseNamingStrategy
     {
         // Just use the camelCase logic here
-        public override string GetName(PropertyInfo property)
+        protected override string GetName(string name)
         {
-            var camelCaseName = base.GetName(property);
+            var camelCaseName = base.GetName(name);
 
             return $"{char.ToUpper(camelCaseName[0])}{camelCaseName[1..]}";
         }
