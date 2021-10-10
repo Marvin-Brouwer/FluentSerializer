@@ -21,6 +21,7 @@ namespace FluentSerializer.Xml
                     new StringConverter(),
 
                     // Collection converters
+                    new CollectionConverter(),
 
                     // Spcial XNode types
                     new XCDataConverter(),

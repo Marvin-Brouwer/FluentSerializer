@@ -29,8 +29,11 @@ namespace FluentSerializer.Xml.Profiles
         protected readonly KebabCaseNamingStrategy KebabCaseNamingStrategy = new KebabCaseNamingStrategy();
 
         protected DateByFormatConverter DateByFormatConverter(
-            string format, CultureInfo? cultureInfo = null, DateTimeStyles? dateTimeStyle = null) => 
+            string format, CultureInfo? cultureInfo = null, DateTimeStyles? dateTimeStyle = null) =>
             new DateByFormatConverter(format, cultureInfo ?? CultureInfo.CurrentCulture, dateTimeStyle ?? DateTimeStyles.None);
+        protected CollectionConverter CollectionConverter(
+            INamingStrategy wrapperNamingStrategy) =>
+            new CollectionConverter(wrapperNamingStrategy);
 
         protected XmlProfileBuilder<TModel> For<TModel>(
             INamingStrategy? tagNamingStrategy = null,

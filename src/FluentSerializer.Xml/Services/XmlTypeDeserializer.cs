@@ -26,7 +26,8 @@ namespace FluentSerializer.Xml.Services
 
             return (TModel)deserializedInstance;
         }
-        private object? DeserializeFromObject(Type classType, XElement dataObject, IXmlSerializer currentSerializer)
+
+        public object? DeserializeFromObject(Type classType, XElement dataObject, IXmlSerializer currentSerializer)
         {
             var classMap = _mappings[classType].SingleOrDefault();
             if (classMap is null) throw new NotSupportedException("TODO create custom exception here");
