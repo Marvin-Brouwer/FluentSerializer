@@ -29,6 +29,10 @@ namespace FluentSerializer.Xml.Services
         {
             return _deserializer.DeserializeFromObject<TModel>(dataObject, this);
         }
+        public object? Deserialize(XElement dataObject, Type modelType)
+        {
+            return _deserializer.DeserializeFromObject(modelType, dataObject, this);
+        }
 
         public TModel? Deserialize<TModel>(string stringData)
             where TModel : class, new()
@@ -54,7 +58,13 @@ namespace FluentSerializer.Xml.Services
 
         public XElement? SerializeToElement<TModel>(TModel model)
         {
-           return _serializer.SerializeToElement(model, this);
+            if (model is null) return null;
+            return _serializer.SerializeToElement(model, typeof(TModel), this);
+        }
+        public XElement? SerializeToElement(object model, Type modelType)
+        {
+            if (model is null) return null;
+            return _serializer.SerializeToElement(model, modelType, this);
         }
     }
 }

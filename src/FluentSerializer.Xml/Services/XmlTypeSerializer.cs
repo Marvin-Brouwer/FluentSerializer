@@ -18,9 +18,8 @@ namespace FluentSerializer.Xml.Services
             _mappings = mappings;
         }
 
-        public XElement? SerializeToElement<TModel>(TModel dataModel, IXmlSerializer currentSerializer)
+        public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
-            var classType = typeof(TModel);
             var classMap = _mappings[classType].SingleOrDefault();
             if (classMap is null) throw new NotSupportedException("TODO create custom exception here");
             if (dataModel is null) return null;
@@ -64,7 +63,7 @@ namespace FluentSerializer.Xml.Services
                     var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Serialize, currentSerializer);
                     if (matchingConverter is null)
                     {
-                        newElement.Add(SerializeToElement(propertyValue, currentSerializer));
+                        newElement.Add(SerializeToElement(propertyValue, property.PropertyType, currentSerializer));
                         continue;
                     }
 
