@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
-    public sealed class FluentXmlSerializer : IXmlSerializer
+    public sealed class FluentXmlSerializer : IXmlSerializer, IAdvancedXmlSerializer
     {
         private static readonly XDeclaration DefaultXmlDeclaration = new XDeclaration("v1.0", Encoding.UTF8.WebName, "true");
 
