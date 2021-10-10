@@ -1,10 +1,6 @@
-﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
+﻿using FluentSerializer.Xml.Converters.Base;
 using System;
 using System.Globalization;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters
 {

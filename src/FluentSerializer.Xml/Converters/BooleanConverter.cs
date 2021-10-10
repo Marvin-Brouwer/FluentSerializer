@@ -1,4 +1,6 @@
-﻿namespace FluentSerializer.Xml.Converters
+﻿using FluentSerializer.Xml.Converters.Base;
+
+namespace FluentSerializer.Xml.Converters
 {
     public sealed class BooleanConverter : PrimitiveConverter<bool>
     {
