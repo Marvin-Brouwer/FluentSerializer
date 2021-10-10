@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.NamingStrategies
 {
     internal class VerbatimGenericNamingStrategy : INamingStrategy
     {

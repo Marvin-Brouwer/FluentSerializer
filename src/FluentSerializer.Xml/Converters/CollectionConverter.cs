@@ -1,7 +1,9 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Services;
+using FluentSerializer.Xml.NamingStrategies;
 using FluentSerializer.Xml.Services;
 using System;
 using System.Collections;
@@ -27,11 +29,9 @@ namespace FluentSerializer.Xml.Converters
        
         object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
-            // todo figure out generic type + name, iterate through wrapper and use context.currentSerializer
-
             var collectionWrapperName = _collectionNamingStrategy.GetName(context.Property);
             if (!objectToDeserialize.Name.ToString().Equals(collectionWrapperName, StringComparison.Ordinal))
-                throw new NotSupportedException("Todo custom exception");
+                throw new IncorrectElementAccessException(context.ClassType, collectionWrapperName, objectToDeserialize.Name.ToString());
 
             var instance = GetEnumerableInstance(context.Property.PropertyType)!;
             if (objectToDeserialize.IsEmpty) return instance;
@@ -40,7 +40,7 @@ namespace FluentSerializer.Xml.Converters
             foreach (var item in objectToDeserialize.Elements(itemName))
             {
                 if (item is null) continue;
-                var itemValue = ((IXmlSerializer)context.CurrentSerializer).Deserialize(item, context.Property.PropertyType);
+                var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, context.Property.PropertyType);
                 if (itemValue is null) continue;
 
                 instance.Add(itemValue);
@@ -61,20 +61,21 @@ namespace FluentSerializer.Xml.Converters
                 return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
             }
 
-            throw new NotSupportedException("TOdo custom exception");
+            throw new NotSupportedException($"Unable to create an enumerabble collection of '{propertyType.FullName}'");
         }
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize == null) return null;
             var collectionWrapperName = _collectionNamingStrategy.GetName(context.Property);
-            if (!(objectToSerialize is IEnumerable enumerableToSerialize)) throw new NotSupportedException("TOdo custom exception");
+            if (!(objectToSerialize is IEnumerable enumerableToSerialize)) 
+                throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
             var wrapper = new XElement(collectionWrapperName);
             foreach(var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;
-                var itemValue = ((IXmlSerializer)context.CurrentSerializer).SerializeToElement(collectionItem, context.Property.PropertyType);
+                var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).SerializeToElement(collectionItem, context.Property.PropertyType);
                 if (itemValue is null) continue;
 
                 wrapper.Add(itemValue);

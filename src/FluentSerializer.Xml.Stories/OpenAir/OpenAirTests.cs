@@ -37,7 +37,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.Xml");
+            var expected = await File.ReadAllTextAsync("../../../OpenAir/OpenAirTests.Serialize.Xml");
             var example = new Request<Project>
             {
                 AddRequests =
@@ -51,8 +51,8 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                                 Id = "0001",
                                 Active = true,
                                 Name = "Project 1",
-                                LastUpdate = DateTime.Parse("28-11-1991T3:00Z"),
-                                CustomDate = DateTime.Parse("28-11-1991T3:00Z"),
+                                LastUpdate = DateTime.Parse("1991-11-28T03:00:00.0000000Z"),
+                                CustomDate = DateTime.Parse("1991-11-28T03:00:00.0000000Z"),
                             }
                         }
                     },
@@ -64,14 +64,14 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                                 Id = "0002",
                                 Active = false,
                                 Name = "Project 2",
-                                LastUpdate = DateTime.Parse("28-11-1991T4:00Z")
+                                LastUpdate = DateTime.Parse("1991-11-28T04:00:00.0000000Z")
                             },
                             new Project
                             {
                                 Id = "0003",
                                 Active = true,
                                 Name = "Project 3",
-                                LastUpdate = DateTime.Parse("28-11-1991T5:00Z")
+                                LastUpdate = DateTime.Parse("1991-11-28T05:00:00.0000000Z")
                             }
                         }
                     }
@@ -92,7 +92,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir
         {
             // Arrange
             var expected = new Response<RateCard>();
-            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.Xml");
+            var example = await File.ReadAllTextAsync("../../../OpenAir/OpenAirTests.Deserialize.Xml");
             var sut = new FluentXmlSerializer(_mappings);
 
             // Act

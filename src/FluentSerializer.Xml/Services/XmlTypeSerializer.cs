@@ -1,5 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Xml.Extensions;
 using FluentSerializer.Xml.Mapping;
 using System;
@@ -8,7 +9,6 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
-    // todo XText, Comment? CData?
     public class XmlTypeSerializer
     {
         private readonly ILookup<Type, XmlClassMap> _mappings;
@@ -21,13 +21,12 @@ namespace FluentSerializer.Xml.Services
         public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
             var classMap = _mappings[classType].SingleOrDefault();
-            if (classMap is null) throw new NotSupportedException("TODO create custom exception here");
+            if (classMap is null) throw new ClassMapNotFoundException(classType);
             if (dataModel is null) return null;
 
             var newElement = new XElement(classMap.NamingStrategy.GetName(classType), null);
             foreach(var property in classType.GetProperties())
             {
-                // Todo support multiple mappers or just remove the currentValue?
                 var propertyMapping = classMap.PropertyMapLookup[property].SingleOrDefault();
                 if (propertyMapping is null) continue;
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
@@ -38,7 +37,8 @@ namespace FluentSerializer.Xml.Services
                 if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
                 {
                     var textConverter = propertyMapping.GetMatchingConverter<XText>(SerializerDirection.Serialize, currentSerializer);
-                    if (textConverter is null) throw new NotSupportedException("Todo custom exception");
+                    if (textConverter is null) 
+                        throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
@@ -48,7 +48,8 @@ namespace FluentSerializer.Xml.Services
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
                 {
                     var attributeConverter = propertyMapping.GetMatchingConverter<XAttribute>(SerializerDirection.Serialize, currentSerializer);
-                    if (attributeConverter is null) throw new NotSupportedException("Todo custom exception");
+                    if (attributeConverter is null)
+                        throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
@@ -70,11 +71,9 @@ namespace FluentSerializer.Xml.Services
                     var customElement = matchingConverter.Serialize(propertyValue, serializerContext);
                     newElement.Add(customElement); 
                     continue;
-
-                    throw new NotSupportedException("Todo custom exception here");
                 }
 
-                throw new NotSupportedException("Todo custom exception here");
+                throw new ContainerNotSupportedException(propertyMapping.ContainerType);
             }
 
             return newElement;
