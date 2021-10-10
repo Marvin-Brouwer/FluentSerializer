@@ -1,7 +1,10 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.Converters.XNodes;
+using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Extensions;
 using System;
 using System.Collections;
@@ -30,15 +33,15 @@ namespace FluentSerializer.Xml.Services
 
         public object? DeserializeFromObject(Type classType, XElement dataObject, IXmlSerializer currentSerializer)
         {
+            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
+               "An enumerable type made it past the custom converter check. \n" +
+               $"Please make sure '{classType}' has a custom converter selected/configured.");
+
             var classMap = _mappings.Find(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
             if (dataObject is null) return null;
 
             if (classType == typeof(string)) return dataObject.ToString();
-            if (typeof(IEnumerable).IsAssignableFrom(classType) && classType.IsClass)
-            {
-                throw new NotImplementedException("TODO need to figure out how newtonsoft solves this");
-            }
 
             var matchingTagName = classMap.NamingStrategy.GetName(classType);
             if (!dataObject.Name.ToString().Equals(matchingTagName, StringComparison.Ordinal))
@@ -48,7 +51,8 @@ namespace FluentSerializer.Xml.Services
 
             foreach (var propertyMapping in classMap.PropertyMaps)
             {
-                var serializerContext = new SerializerContext(propertyMapping.Property, classType, propertyMapping.NamingStrategy, currentSerializer);
+                var serializerContext = new SerializerContext(
+                    propertyMapping.Property, classType, propertyMapping.NamingStrategy, _mappings, currentSerializer);
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
                 if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
@@ -56,11 +60,11 @@ namespace FluentSerializer.Xml.Services
                 {
                     var xText = dataObject.Nodes().SingleOrDefault(node => node.NodeType == System.Xml.XmlNodeType.Text) as XText;
                     var textValue = xText?.Value;
-                    if (string.IsNullOrEmpty(textValue) && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                    if (string.IsNullOrEmpty(textValue) && !propertyMapping.Property.IsNullable())
                         throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
                     if (string.IsNullOrEmpty(textValue))
                     {
-                        propertyMapping.Property.SetValue(instance, null);
+                        SetPropertyValue(instance, propertyMapping, null);
                         continue;
                     }
 
@@ -68,22 +72,22 @@ namespace FluentSerializer.Xml.Services
                     if (converter is null)
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
 
-                    var propertyValue = converter.Deserialize(xText!, serializerContext);
-                    if (propertyValue is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                    var convertedTextValue = converter.Deserialize(xText!, serializerContext);
+                    if (convertedTextValue is null && !propertyMapping.Property.IsNullable())
                         throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
-                    propertyMapping.Property.SetValue(instance, propertyValue);
+                    SetPropertyValue(instance, propertyMapping, convertedTextValue);
                     continue;
                 }
                 if (propertyMapping.ContainerType == typeof(XAttribute))
                 {
                     var xAttribute = dataObject.Attribute(propertyName);
                     var attributeValue = xAttribute?.Value;
-                    if (string.IsNullOrEmpty(attributeValue) && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                    if (attributeValue is null && !propertyMapping.Property.IsNullable())
                         throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
-                    if (string.IsNullOrEmpty(attributeValue))
+                    if (attributeValue is null)
                     {
-                        propertyMapping.Property.SetValue(instance, null);
+                        SetPropertyValue(instance, propertyMapping, null);
                         continue;
                     }
 
@@ -91,40 +95,49 @@ namespace FluentSerializer.Xml.Services
                     if (converter is null)
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
 
-                    var propertyValue = converter.Deserialize(xAttribute!, serializerContext);
-                    if (propertyValue is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                    var convertedAttributeValue = converter.Deserialize(xAttribute!, serializerContext);
+                    if (convertedAttributeValue is null && !propertyMapping.Property.IsNullable())
                         throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
-                    propertyMapping.Property.SetValue(instance, propertyValue);
+                    SetPropertyValue(instance, propertyMapping, convertedAttributeValue);
                     continue;
                 }
                 if (propertyMapping.ContainerType == typeof(XElement))
                 {
                     var xElement = dataObject.Element(propertyName);
-                    if (xElement is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
-                        throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
+
+                    // Add an empty shell to help if data is missing
                     if (xElement is null)
                     {
-                        propertyMapping.Property.SetValue(instance, null);
-                        continue;
+                        xElement = new XFragment();
+                        dataObject.AddFirst(xElement);
+                        var test = xElement.Parent;
                     }
 
                     var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
                     if (matchingConverter is null)
                     {
+                        if (xElement is null && !propertyMapping.Property.IsNullable())
+                            throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
+                        if (xElement is null)
+                        {
+                            SetPropertyValue(instance, propertyMapping, null);
+                            continue;
+                        }
+
                         var deserializedInstance = DeserializeFromObject(propertyMapping.Property.PropertyType, xElement, currentSerializer);
-                        if (deserializedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                        if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
                             throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
-                        propertyMapping.Property.SetValue(instance, deserializedInstance);
+                        SetPropertyValue(instance, propertyMapping, deserializedInstance);
                         continue;
                     }
 
                     var convertedInstance = matchingConverter.Deserialize(xElement, serializerContext);
-                    if (convertedInstance is null && !typeof(Nullable<>).IsAssignableFrom(propertyMapping.Property.PropertyType))
+                    if (convertedInstance is null && !propertyMapping.Property.IsNullable())
                         throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
-                    propertyMapping.Property.SetValue(instance, convertedInstance);
+                    SetPropertyValue(instance, propertyMapping, convertedInstance);
                     continue;
                 }
 
@@ -132,6 +145,12 @@ namespace FluentSerializer.Xml.Services
             }
 
             return instance;
+        }
+
+        private static void SetPropertyValue(object? instance, IPropertyMap propertyMapping, object? convertedInstance)
+        {
+            var propertyInstance = instance!.GetType().GetProperty(propertyMapping.Property.Name);
+            propertyInstance!.SetValue(instance, convertedInstance, null);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Xml.Exceptions;
 using System;
+using System.Collections;
 using System.Text;
 using System.Xml.Linq;
 
@@ -24,6 +26,7 @@ namespace FluentSerializer.Xml.Services
         public TModel? Deserialize<TModel>(XElement dataObject)
             where TModel : class, new()
         {
+            if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MissingRootNodeException(typeof(TModel));
             return _deserializer.DeserializeFromObject<TModel>(dataObject, this);
         }
         public object? Deserialize(XElement dataObject, Type modelType)
@@ -40,7 +43,9 @@ namespace FluentSerializer.Xml.Services
         }
 
         public string Serialize<TModel>(TModel model)
+            where TModel : class, new()
         {
+            if (typeof(IEnumerable).IsAssignableFrom(model.GetType())) throw new MissingRootNodeException(model.GetType());
             var xDocument = SerializeToDocument(model);
 
             var builder = new StringBuilder();

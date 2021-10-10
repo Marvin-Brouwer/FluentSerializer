@@ -100,7 +100,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir
             var sut = new FluentXmlSerializer(_mappings, _configuration);
 
             // Act
-            var result = sut.Deserialize<RateCard>(example);
+            var result = sut.Deserialize<Response<RateCard>>(example);
 
             // Assert
             result.Should().BeEquivalentTo(expected);

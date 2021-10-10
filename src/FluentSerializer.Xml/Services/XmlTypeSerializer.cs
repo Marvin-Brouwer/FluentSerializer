@@ -2,8 +2,10 @@
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Extensions;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -21,6 +23,10 @@ namespace FluentSerializer.Xml.Services
 
         public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
+            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
+               "An enumerable type made it past the custom converter check. \n" +
+               $"Please make sure '{classType}' has a custom converter selected/configured.");
+
             var classMap = _mappings.Find(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
             if (dataModel is null) return null;
@@ -33,7 +39,8 @@ namespace FluentSerializer.Xml.Services
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
                 var propertyName = propertyMapping.NamingStrategy.GetName(property);
-                var serializerContext = new SerializerContext(property, classType, propertyMapping.NamingStrategy, currentSerializer);
+                var serializerContext = new SerializerContext(
+                    property, classType, propertyMapping.NamingStrategy, _mappings, currentSerializer);
 
                 if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
                 {
