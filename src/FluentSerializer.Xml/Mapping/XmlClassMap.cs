@@ -7,9 +7,9 @@ namespace FluentSerializer.Xml.Mapping
 {
     public sealed class XmlClassMap : ClassMap
     {
-        public XmlClassMap(
-            Type classType, INamingStrategy namingStrategy, IEnumerable<XmlPropertyMap> propertyMap) : 
-            base(classType, namingStrategy, propertyMap)
-        { }
+        public XmlClassMap((Type classType, INamingStrategy namingStrategy, IEnumerable<IPropertyMap> propertyMap) lazyClassMap) :
+            base(lazyClassMap.classType, lazyClassMap.namingStrategy, lazyClassMap.propertyMap)
+        {
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Xml.Extensions;
-using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections;
 using System.Linq;
@@ -12,9 +12,9 @@ namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeDeserializer
     {
-        private readonly ILookup<Type, XmlClassMap> _mappings;
+        private readonly ISearchDictionary<Type, IClassMap> _mappings;
 
-        public XmlTypeDeserializer(ILookup<Type, XmlClassMap> mappings)
+        public XmlTypeDeserializer(ISearchDictionary<Type, IClassMap> mappings)
         {
             _mappings = mappings;
         }
@@ -30,7 +30,7 @@ namespace FluentSerializer.Xml.Services
 
         public object? DeserializeFromObject(Type classType, XElement dataObject, IXmlSerializer currentSerializer)
         {
-            var classMap = _mappings[classType].SingleOrDefault();
+            var classMap = _mappings.Find(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
             if (dataObject is null) return null;
 

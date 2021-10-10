@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Xml.Mapping;
+using FluentSerializer.Core.Mapping;
 using System;
-using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
@@ -9,19 +8,17 @@ namespace FluentSerializer.Xml.Services
 {
     public sealed class FluentXmlSerializer : IXmlSerializer, IAdvancedXmlSerializer
     {
-        private static readonly XDeclaration DefaultXmlDeclaration = new XDeclaration("v1.0", Encoding.UTF8.WebName, "true");
-
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
 
         public SerializerConfiguration Configuration { get; }
 
-        public FluentXmlSerializer(ILookup<Type, XmlClassMap> mappings, SerializerConfiguration? configuration = null)
+        public FluentXmlSerializer(ISearchDictionary<Type, IClassMap> mappings, SerializerConfiguration configuration)
         {
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
 
-            Configuration = configuration ?? ConfigurationConstants.GetDefaultXmlConfiguration();
+            Configuration = configuration;
         }
 
         public TModel? Deserialize<TModel>(XElement dataObject)
@@ -44,16 +41,23 @@ namespace FluentSerializer.Xml.Services
 
         public string Serialize<TModel>(TModel model)
         {
-            return SerializeToDocument(model).ToString();
+            var xDocument = SerializeToDocument(model);
+
+            var builder = new StringBuilder();
+            using var writer = new ConfigurableStringWriter(builder, Configuration.Encoding);
+
+            xDocument.Save(writer);
+
+            return builder.ToString();
         }
 
-        public XDocument SerializeToDocument<TModel>(TModel model, XDeclaration? declaration = null)
+        public XDocument SerializeToDocument<TModel>(TModel model)
         {
             var rootElement = SerializeToElement(model);
-            return new XDocument(
-                declaration ?? DefaultXmlDeclaration,
-                rootElement
-            );
+
+            var document = new XDocument(rootElement);
+
+            return document;
         }
 
         public XElement? SerializeToElement<TModel>(TModel model)

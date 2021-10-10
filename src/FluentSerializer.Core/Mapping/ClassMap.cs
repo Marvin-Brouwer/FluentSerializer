@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.NamingStrategies;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping
@@ -15,13 +14,11 @@ namespace FluentSerializer.Core.Mapping
         {
             ClassType = classType;
             NamingStrategy = namingStrategy;
-            PropertyMaps = propertyMap.ToList().AsReadOnly();
-            PropertyMapLookup = propertyMap.ToLookup(x => x.Property, x => x);
+            PropertyMaps = new PropertyMapDictionary(propertyMap);
         }
         public Type ClassType { get; }
         public INamingStrategy NamingStrategy { get; }
 
-        public IReadOnlyCollection<IPropertyMap> PropertyMaps { get; }
-        public ILookup<PropertyInfo, IPropertyMap> PropertyMapLookup { get; }
+        public ISearchDictionary<PropertyInfo, IPropertyMap> PropertyMaps { get; }
     }
 }

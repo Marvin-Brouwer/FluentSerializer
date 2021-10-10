@@ -12,6 +12,7 @@ namespace FluentSerializer.Core.Mapping
         SerializerDirection Direction { get; }
         INamingStrategy NamingStrategy { get; }
         PropertyInfo Property { get; }
+        Type ConcretePropertyType { get; }
         Type ContainerType { get; }
     }
 }

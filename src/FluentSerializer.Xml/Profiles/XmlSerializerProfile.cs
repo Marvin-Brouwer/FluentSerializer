@@ -1,24 +1,26 @@
-﻿using FluentSerializer.Core.NamingStrategies;
+﻿using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Xml.Converters;
 using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace FluentSerializer.Xml.Profiles
 {
     public abstract class XmlSerializerProfile : IXmlSerializerProfile
     {
-        private readonly Dictionary<Type, XmlClassMap> _classMaps = new Dictionary<Type, XmlClassMap>();
+        private readonly List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)> _classMaps = new List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)>();
         public abstract void Configure();
 
         /// <remarks>
         /// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
         /// </remarks>
-        Dictionary<Type, XmlClassMap> IXmlSerializerProfile.Configure()
+        IEnumerable<XmlClassMap> IXmlSerializerProfile.Configure()
         {
             Configure();
-            return _classMaps;
+            return _classMaps.Select(lazyClassMap => new XmlClassMap(lazyClassMap));
         }
 
         protected CustomNamingStrategy CustomNamingStrategy(string nameOverride) => new CustomNamingStrategy(nameOverride);
@@ -31,9 +33,9 @@ namespace FluentSerializer.Xml.Profiles
         protected DateByFormatConverter DateByFormatConverter(
             string format, CultureInfo? cultureInfo = null, DateTimeStyles? dateTimeStyle = null) =>
             new DateByFormatConverter(format, cultureInfo ?? CultureInfo.CurrentCulture, dateTimeStyle ?? DateTimeStyles.None);
-        protected CollectionConverter CollectionConverter(
-            INamingStrategy wrapperNamingStrategy) =>
-            new CollectionConverter(wrapperNamingStrategy);
+        
+        protected static readonly NonWrappedCollectionConverter NonWrappedCollectionConverter = 
+            new NonWrappedCollectionConverter();
 
         protected XmlProfileBuilder<TModel> For<TModel>(
             INamingStrategy? tagNamingStrategy = null,
@@ -41,17 +43,17 @@ namespace FluentSerializer.Xml.Profiles
             where TModel : new()
         {
             var classType = typeof(TModel);
-            var propertymap = new List<XmlPropertyMap>();
+            var propertyMap = new List<XmlPropertyMap>();
             var builder = new XmlProfileBuilder<TModel>(
                 attributeNamingStrategy ?? CamelCaseNamingStrategy,
-                propertymap
+                propertyMap
             );
 
-            _classMaps.Add(classType, new XmlClassMap(
+            // Store in a tuple for lazy evaluation
+            _classMaps.Add((
                 classType, 
-                tagNamingStrategy ?? PascalCaseNamingStrategy,
-                propertymap
-            ));
+                tagNamingStrategy ?? PascalCaseNamingStrategy, 
+                propertyMap));
 
             return builder;
         }

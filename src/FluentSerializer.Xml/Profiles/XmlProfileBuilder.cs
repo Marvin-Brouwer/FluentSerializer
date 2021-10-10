@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -33,6 +34,7 @@ namespace FluentSerializer.Xml.Profiles
         {
             _propertyMap.Add(new XmlPropertyMap(
                 direction,
+                typeof(XAttribute),
                 propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
@@ -50,6 +52,7 @@ namespace FluentSerializer.Xml.Profiles
         {
             _propertyMap.Add(new XmlPropertyMap(
                 direction,
+                typeof(XElement),
                 propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
@@ -69,6 +72,7 @@ namespace FluentSerializer.Xml.Profiles
         {
             _propertyMap.Add(new XmlPropertyMap(
                 direction,
+                typeof(XText),
                 propertySelector.GetProperty(),
                 // This isn't used but setting it to null requires a lot more code.
                 TextNodeNamingStrategy,

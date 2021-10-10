@@ -12,7 +12,6 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 
         protected static readonly StringBitBooleanConverter StringBitBooleanConverter = new StringBitBooleanConverter();
         protected static readonly OpenAirDateConverter OpenAirDateConverter = new OpenAirDateConverter();
-        protected static readonly NonWrappedListConverter NonWrappedListConverter = new NonWrappedListConverter();
 
         protected DateByFormatConverter SimpleDateConverter
         {

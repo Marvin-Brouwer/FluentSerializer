@@ -2,7 +2,6 @@
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
 using System;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
@@ -10,7 +9,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
     public class StringBitBooleanConverter : IConverter<XAttribute>, IConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
-        public bool CanConvert(PropertyInfo property) => typeof(bool).IsAssignableFrom(property.PropertyType);
+        public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType);
 
         private string ConvertToString(bool currentValue) => currentValue ? "1" : "0";
         private bool ConvertToBool(string? currentValue)

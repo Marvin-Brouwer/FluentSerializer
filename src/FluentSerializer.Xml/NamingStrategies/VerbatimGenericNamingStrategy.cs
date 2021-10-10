@@ -8,8 +8,7 @@ namespace FluentSerializer.Xml.NamingStrategies
 {
     internal class VerbatimGenericNamingStrategy : INamingStrategy
     {
-        private static Regex GenericMatcher = new Regex("`[0-9]+", 
-            RegexOptions.ECMAScript | RegexOptions.Singleline | RegexOptions.CultureInvariant);
+        private static Regex GenericMatcher = new Regex("`[0-9]+",  RegexOptions.ECMAScript | RegexOptions.CultureInvariant);
         public string GetName(PropertyInfo property)
         {
             return GetName(property.PropertyType);
@@ -17,7 +16,7 @@ namespace FluentSerializer.Xml.NamingStrategies
 
         public string GetName(Type classType)
         {
-            var containerTypeName = classType.Name .Replace("`1", "Of");
+            var containerTypeName = classType.Name.Replace("`1", "Of");
             containerTypeName = GenericMatcher.Replace(containerTypeName, "Containing");
 
             var typeInformation = classType.GetTypeInfo();

@@ -1,33 +1,34 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Xml.Extensions;
-using FluentSerializer.Xml.Mapping;
 using System;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeSerializer
     {
-        private readonly ILookup<Type, XmlClassMap> _mappings;
+        private readonly ISearchDictionary<Type, IClassMap> _mappings;
 
-        public XmlTypeSerializer(ILookup<Type, XmlClassMap> mappings)
+        public XmlTypeSerializer(ISearchDictionary<Type, IClassMap> mappings)
         {
             _mappings = mappings;
         }
 
         public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
-            var classMap = _mappings[classType].SingleOrDefault();
+            var classMap = _mappings.Find(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
             if (dataModel is null) return null;
 
-            var newElement = new XElement(classMap.NamingStrategy.GetName(classType), null);
+            var newElement = new XElement(classMap.NamingStrategy.GetName(classType));
             foreach(var property in classType.GetProperties())
             {
-                var propertyMapping = classMap.PropertyMapLookup[property].SingleOrDefault();
+                var propertyMapping = classMap.PropertyMaps.Find(property);
                 if (propertyMapping is null) continue;
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
@@ -53,7 +54,7 @@ namespace FluentSerializer.Xml.Services
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
-                    newElement.SetAttributeValue(propertyName, attributeConverter.Serialize(propertyValue, serializerContext));
+                    newElement.Add(attributeConverter.Serialize(propertyValue, serializerContext));
                     continue;
                 }
                 if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
@@ -69,7 +70,12 @@ namespace FluentSerializer.Xml.Services
                     }
 
                     var customElement = matchingConverter.Serialize(propertyValue, serializerContext);
-                    newElement.Add(customElement); 
+                    if (customElement is null) continue;
+                    // Special case for fragments
+                    if (customElement.NodeType == XmlNodeType.DocumentFragment)
+                        newElement.Add(customElement.Nodes().Where(node => node.NodeType != XmlNodeType.EndElement));
+                    else 
+                        newElement.Add(customElement);
                     continue;
                 }
 

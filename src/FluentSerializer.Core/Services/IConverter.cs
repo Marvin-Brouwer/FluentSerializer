@@ -1,6 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using System.Reflection;
+using System;
 
 namespace FluentSerializer.Core.Services
 {
@@ -11,7 +11,7 @@ namespace FluentSerializer.Core.Services
     }
     public interface IConverter
     {
-        bool CanConvert(PropertyInfo property);
+        bool CanConvert(Type targetType);
         SerializerDirection Direction { get; }
     }
 }

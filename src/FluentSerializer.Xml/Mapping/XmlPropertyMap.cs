@@ -2,16 +2,16 @@
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
+using System;
 using System.Reflection;
-using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Mapping
 {
-    public sealed class XmlPropertyMap : PropertyMap<XObject>
+    public sealed class XmlPropertyMap : PropertyMap
     {
         public XmlPropertyMap(
-            SerializerDirection direction, PropertyInfo property, INamingStrategy namingStrategy, IConverter? customConverter) : 
-            base (direction, property, namingStrategy, customConverter)
+            SerializerDirection direction, Type containerType, PropertyInfo property, INamingStrategy namingStrategy, IConverter? customConverter) : 
+            base (direction, containerType, property, namingStrategy, customConverter)
         { }
     }
 }

@@ -14,37 +14,52 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: LowerCaseNamingStrategy
             )
+                .Child(response => response.Authentication)
                 .Child(response => response.ReadRequests,
-                    namingStrategy: CustomNamingStrategy("Read"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.AddRequests,
-                    namingStrategy: CustomNamingStrategy("Add"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.ModifyRequests,
-                    namingStrategy: CustomNamingStrategy("Modify"),
-                    converter: NonWrappedListConverter)
+                    converter: NonWrappedCollectionConverter)
                 .Child(response => response.DeleteRequests,
-                    namingStrategy: CustomNamingStrategy("Delete"),
-                    converter: NonWrappedListConverter);
+                    converter: NonWrappedCollectionConverter);
 
-            For<GetRequest<object>>(
+            For<ReadRequest<object>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: PascalCaseNamingStrategy
+                tagNamingStrategy: CustomNamingStrategy("Read")
             )
                 .Attribute(responseObject => responseObject.Filter)
                 .Attribute(responseObject => responseObject.Type,
                     converter: RequestTypeValueConverter)
                 .Child(response => response.Data,
-                    converter: NonWrappedListConverter);
+                    converter: NonWrappedCollectionConverter);
 
-            For<RequestObject<object>>(
+            For<AddRequest<object>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: PascalCaseNamingStrategy
+                tagNamingStrategy: CustomNamingStrategy("Add")
             )
                 .Attribute(responseObject => responseObject.Type,
                     converter: RequestTypeValueConverter)
                 .Child(response => response.Data,
-                    converter: NonWrappedListConverter);
+                     converter: NonWrappedCollectionConverter);
+
+            For<ModifyRequest<object>>(
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: CustomNamingStrategy("Modify")
+            )
+                .Attribute(responseObject => responseObject.Type,
+                    converter: RequestTypeValueConverter)
+                .Child(response => response.Data,
+                     converter: NonWrappedCollectionConverter);
+
+            For<DeleteRequest<object>>(
+                attributeNamingStrategy: SnakeCaseNamingStrategy,
+                tagNamingStrategy: CustomNamingStrategy("Delete")
+            )
+                .Attribute(responseObject => responseObject.Type,
+                    converter: RequestTypeValueConverter)
+                .Child(response => response.Data,
+                     converter: NonWrappedCollectionConverter);
         }
     }
 }

@@ -7,6 +7,6 @@ namespace FluentSerializer.Xml.Services
     {
         TModel? Deserialize<TModel>(XElement rootElement) where TModel: class, new ();
         XElement? SerializeToElement<TModel>(TModel model);
-        XDocument SerializeToDocument<TModel>(TModel model, XDeclaration? declaration = null);
+        XDocument SerializeToDocument<TModel>(TModel model);
     }
 }

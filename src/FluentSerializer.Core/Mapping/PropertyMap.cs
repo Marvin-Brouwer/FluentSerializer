@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using System;
@@ -6,26 +7,30 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping
 {
-    public abstract class PropertyMap<TSerialContainer> : IPropertyMap 
-        where TSerialContainer : class
+    public abstract class PropertyMap : IPropertyMap 
     {
         public SerializerDirection Direction { get; }
         public PropertyInfo Property { get; }
+        public Type ConcretePropertyType { get; }
         public INamingStrategy NamingStrategy { get; }
         public IConverter? CustomConverter { get; }
         public Type ContainerType { get; }
 
         public PropertyMap(
             SerializerDirection direction,
+            Type containerType,
             PropertyInfo property,
             INamingStrategy namingStrategy,
             IConverter? customConverter)
         {
             Direction = direction;
             Property = property;
+            ConcretePropertyType = property.PropertyType.EqualsTopLevel(typeof(Nullable<>))
+                ? property.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+                : property.PropertyType;
             NamingStrategy = namingStrategy;
             CustomConverter = customConverter;
-            ContainerType = typeof(TSerialContainer);
+            ContainerType = containerType;
         }
     }
 }

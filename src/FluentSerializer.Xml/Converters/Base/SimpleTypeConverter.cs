@@ -1,7 +1,7 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
-using System.Reflection;
+using System;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters.Base
@@ -10,7 +10,7 @@ namespace FluentSerializer.Xml.Converters.Base
         where TObject : class
     {
         public virtual SerializerDirection Direction => SerializerDirection.Both;
-        public virtual bool CanConvert(PropertyInfo property) => typeof(TObject).IsAssignableFrom(property.PropertyType);
+        public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
         protected abstract string ConvertToString(TObject value);
         protected abstract TObject ConvertToDataType(string currentValue);
