@@ -18,8 +18,10 @@ namespace FluentSerializer.Core.Mapping
 
         public TDataType? Find(TCompareTo type)
         {
+            #if (!DEBUG)
             if (_cachedMappings.ContainsKey(type))
                 return _cachedMappings[type];
+            #endif
 
             var matchingType = _storedDataTypes.FirstOrDefault(dataType => Compare(type, dataType));
             _cachedMappings[type] = matchingType;
@@ -37,6 +39,6 @@ namespace FluentSerializer.Core.Mapping
         public IEnumerator<TDataType> GetEnumerator() => _storedDataTypes.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => _storedDataTypes.GetEnumerator();
 
-        #endregion
+#endregion
     }
 }

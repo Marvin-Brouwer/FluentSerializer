@@ -7,6 +7,8 @@ using FluentSerializer.Xml.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters
@@ -21,28 +23,32 @@ namespace FluentSerializer.Xml.Converters
 
         object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
-            //var collectionWrapperName = _collectionNamingStrategy.GetName(context.Property);
-            //if (!objectToDeserialize.Name.ToString().Equals(collectionWrapperName, StringComparison.Ordinal))
-            //    throw new IncorrectElementAccessException(context.ClassType, collectionWrapperName, objectToDeserialize.Name.ToString());
+            // Make sure we have the instancetype and not an abstract type
+            var targetedProperty = context.ClassType.GetProperty(context.Property.Name)!;
+            var targetType = targetedProperty.PropertyType;
+            var instance = targetType.GetEnumerableInstance();
 
-            //var instance = context.Property.PropertyType.GetEnumerableInstance()!;
-            //if (objectToDeserialize.IsEmpty) return instance;
+            var genericTargetType = targetedProperty.PropertyType.IsGenericType
+                ? targetedProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+                : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
 
-            //var itemName = context.NamingStrategy.GetName(context.Property);
-            //foreach (var item in objectToDeserialize.Elements(itemName))
-            //{
-            //    if (item is null) continue;
-            //    var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, context.Property.PropertyType);
-            //    if (itemValue is null) continue;
+            var itemNamingStrategy =
+                context.ClassMaps.Find(genericTargetType)?.NamingStrategy
+                ?? context.NamingStrategy;
 
-            //    instance.Add(itemValue);
-            //}
+            var itemName = itemNamingStrategy.GetName(genericTargetType);
+            var elmentsToDeserialize = objectToDeserialize.Parent.Elements(itemName);
+            foreach (var item in elmentsToDeserialize)
+            {
+                if (item is null) continue;
+                var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
+                if (itemValue is null) continue;
 
-            //return instance;
+                instance.Add(itemValue);
+            }
 
-            throw new NotImplementedException();
+            return instance;
         }
-
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
