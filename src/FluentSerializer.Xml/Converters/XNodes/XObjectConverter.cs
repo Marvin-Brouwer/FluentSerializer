@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters.XNodes
 {
-    public sealed class RawXObjectConverter : IConverter<XElement>
+    public sealed class XObjectConverter : IConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
 

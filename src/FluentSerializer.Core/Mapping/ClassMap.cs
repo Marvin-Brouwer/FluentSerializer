@@ -7,18 +7,18 @@ namespace FluentSerializer.Core.Mapping
 {
     public abstract class ClassMap : IClassMap
     {
-        public ClassMap(
+        protected ClassMap(
             Type classType,
             INamingStrategy namingStrategy,
             IEnumerable<IPropertyMap> propertyMap)
         {
             ClassType = classType;
             NamingStrategy = namingStrategy;
-            PropertyMaps = new PropertyMapDictionary(propertyMap);
+            PropertyMaps = new PropertyMapScanList(propertyMap);
         }
         public Type ClassType { get; }
         public INamingStrategy NamingStrategy { get; }
 
-        public ISearchDictionary<PropertyInfo, IPropertyMap> PropertyMaps { get; }
+        public IScanList<PropertyInfo, IPropertyMap> PropertyMaps { get; }
     }
 }

@@ -13,9 +13,9 @@ namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeSerializer
     {
-        private readonly ISearchDictionary<Type, IClassMap> _mappings;
+        private readonly IScanList<Type, IClassMap> _mappings;
 
-        public XmlTypeSerializer(ISearchDictionary<Type, IClassMap> mappings)
+        public XmlTypeSerializer(IScanList<Type, IClassMap> mappings)
         {
             _mappings = mappings;
         }
@@ -26,20 +26,22 @@ namespace FluentSerializer.Xml.Services
                "An enumerable type made it past the custom converter check. \n" +
                $"Please make sure '{classType}' has a custom converter selected/configured.");
 
-            var classMap = _mappings.Find(classType);
+            var classMap = _mappings.Scan(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
-            if (dataModel is null) return null;
 
             var newElement = new XElement(classMap.NamingStrategy.GetName(classType));
             foreach(var property in classType.GetProperties())
             {
-                var propertyMapping = classMap.PropertyMaps.Find(property);
+                var propertyMapping = classMap.PropertyMaps.Scan(property);
                 if (propertyMapping is null) continue;
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
+                // todo intialize property here so there's always a value to serialize into
                 var propertyName = propertyMapping.NamingStrategy.GetName(property);
                 var serializerContext = new SerializerContext(
-                    property, classType, propertyMapping.NamingStrategy, _mappings, currentSerializer);
+                    propertyMapping.Property, classType, propertyMapping.NamingStrategy, 
+                    currentSerializer,
+                    classMap.PropertyMaps, _mappings);
 
                 if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
                 {
@@ -48,8 +50,10 @@ namespace FluentSerializer.Xml.Services
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
+                    var serializedPropertyValue = textConverter.Serialize(propertyValue, serializerContext);
+                    if (serializedPropertyValue is null) continue;
 
-                    newElement.Add(new XText(textConverter.Serialize(propertyValue, serializerContext)));
+                    newElement.Add(new XText(serializedPropertyValue));
                     continue;
                 }
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))

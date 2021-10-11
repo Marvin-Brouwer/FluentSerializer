@@ -8,14 +8,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Linq;
+using FluentSerializer.Xml.Constants;
 
 namespace FluentSerializer.Xml.Profiles
 {
     public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder
         where TModel : new()
     {
-        private static readonly CustomNamingStrategy TextNodeNamingStrategy = new CustomNamingStrategy("#text node");
-
         private readonly INamingStrategy _defaultNamingStrategy;
         private readonly List<XmlPropertyMap> _propertyMap;
 
@@ -75,7 +74,7 @@ namespace FluentSerializer.Xml.Profiles
                 typeof(XText),
                 propertySelector.GetProperty(),
                 // This isn't used but setting it to null requires a lot more code.
-                TextNodeNamingStrategy,
+                XmlConstants.TextNodeNamingStrategy,
                 converter
             ));
         }

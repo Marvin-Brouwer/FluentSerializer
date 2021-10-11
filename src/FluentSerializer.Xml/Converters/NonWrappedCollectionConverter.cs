@@ -31,13 +31,12 @@ namespace FluentSerializer.Xml.Converters
                 ? targetedProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0]
                 : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
 
-            var itemNamingStrategy =
-                context.ClassMaps.Find(genericTargetType)?.NamingStrategy
+            var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
                 ?? context.NamingStrategy;
 
             var itemName = itemNamingStrategy.GetName(genericTargetType);
-            var elmentsToDeserialize = objectToDeserialize.Parent.Elements(itemName);
-            foreach (var item in elmentsToDeserialize)
+            var elementsToDeserialize = objectToDeserialize.Parent!.Elements(itemName);
+            foreach (var item in elementsToDeserialize)
             {
                 if (item is null) continue;
                 var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
@@ -51,7 +50,6 @@ namespace FluentSerializer.Xml.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize == null) return null;
             if (!(objectToSerialize is IEnumerable enumerableToSerialize))
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 

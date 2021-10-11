@@ -16,7 +16,7 @@ namespace FluentSerializer.Core.Mapping
         public IConverter? CustomConverter { get; }
         public Type ContainerType { get; }
 
-        public PropertyMap(
+        protected PropertyMap(
             SerializerDirection direction,
             Type containerType,
             PropertyInfo property,
@@ -25,9 +25,8 @@ namespace FluentSerializer.Core.Mapping
         {
             Direction = direction;
             Property = property;
-            ConcretePropertyType = property.PropertyType.EqualsTopLevel(typeof(Nullable<>))
-                ? property.PropertyType.GetTypeInfo().GenericTypeArguments[0]
-                : property.PropertyType;
+            ConcretePropertyType = Nullable.GetUnderlyingType(property.PropertyType) 
+                                   ?? property.PropertyType;
             NamingStrategy = namingStrategy;
             CustomConverter = customConverter;
             ContainerType = containerType;

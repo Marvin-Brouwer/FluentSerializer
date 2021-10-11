@@ -15,6 +15,7 @@ using FluentSerializer.Core.Mapping;
 using System.Text;
 using FluentSerializer.Core.Configuration;
 using System.Globalization;
+using FluentSerializer.Xml.Constants;
 
 namespace FluentSerializer.Xml.Stories.OpenAir
 {
@@ -29,13 +30,13 @@ namespace FluentSerializer.Xml.Stories.OpenAir
                 new ProjectProfile(),
                 new RateCardProfile()
             };
-            _mappings = new ClassMapDictionary(profiles.SelectMany(x => x.Configure()));
+            _mappings = new ClassMapScanList(profiles.SelectMany(x => x.Configure()));
 
             _configuration = ConfigurationConstants.GetDefaultXmlConfiguration();
             _configuration.Encoding = Encoding.UTF8;
         }
 
-        private readonly ISearchDictionary<Type, IClassMap> _mappings;
+        private readonly IScanList<Type, IClassMap> _mappings;
         private readonly SerializerConfiguration _configuration;
 
         [Fact]

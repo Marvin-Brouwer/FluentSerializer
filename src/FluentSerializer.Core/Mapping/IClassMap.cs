@@ -9,6 +9,6 @@ namespace FluentSerializer.Core.Mapping
         INamingStrategy NamingStrategy { get; }
         Type ClassType { get; }
 
-        ISearchDictionary<PropertyInfo, IPropertyMap> PropertyMaps { get; }
+        IScanList<PropertyInfo, IPropertyMap> PropertyMaps { get; }
     }
 }

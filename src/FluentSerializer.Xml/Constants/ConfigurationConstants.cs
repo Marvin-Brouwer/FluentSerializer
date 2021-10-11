@@ -1,8 +1,9 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Xml.Converters;
+using FluentSerializer.Xml.Converters.Base;
 using FluentSerializer.Xml.Converters.XNodes;
 
-namespace FluentSerializer.Xml
+namespace FluentSerializer.Xml.Constants
 {
     public static class ConfigurationConstants
     {
@@ -13,18 +14,14 @@ namespace FluentSerializer.Xml
                 FormatOutput = true,
                 DefaultConverters =
                 {
-                    // Primitives
-                    new IntegerConverter(),
-                    new BooleanConverter(),
-                    // TODO add prmiitive converters, date converter, raw string converter and enumerable converter,
                     new DefaultDateConverter(),
-                    new StringConverter(),
+                    new ConvertibleConverter(),
 
                     // Collection converters
                     new WrappedCollectionConverter(),
 
-                    // Spcial XNode types
-                    new RawXObjectConverter()
+                    // Special XNode types
+                    new XObjectConverter()
                 }
             };
         }
