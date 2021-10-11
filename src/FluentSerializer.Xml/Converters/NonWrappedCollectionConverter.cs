@@ -23,12 +23,11 @@ namespace FluentSerializer.Xml.Converters
         object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
             // Make sure we have the instancetype and not an abstract type
-            var targetedProperty = context.ClassType.GetProperty(context.Property.Name)!;
-            var targetType = targetedProperty.PropertyType;
+            var targetType = context.PropertyType;
             var instance = targetType.GetEnumerableInstance();
 
-            var genericTargetType = targetedProperty.PropertyType.IsGenericType
-                ? targetedProperty.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+            var genericTargetType = context.PropertyType.IsGenericType
+                ? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
                 : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
 
             var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
