@@ -14,5 +14,9 @@ namespace FluentSerializer.Core.Mapping
         PropertyInfo Property { get; }
         Type ConcretePropertyType { get; }
         Type ContainerType { get; }
+
+        IConverter<TDataContainer>? GetConverter<TDataContainer>(
+            SerializerDirection direction, ISerializer currentSerializer)
+            where TDataContainer : class;
     }
 }

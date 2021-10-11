@@ -3,7 +3,6 @@ using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace FluentSerializer.Core.Context
 {

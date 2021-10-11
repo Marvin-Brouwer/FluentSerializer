@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
+using System;
 using System.Reflection;
 
 namespace FluentSerializer.Core.NamingStrategies
@@ -9,6 +10,9 @@ namespace FluentSerializer.Core.NamingStrategies
 
         public CustomNamingStrategy(string name)
         {
+            Guard.Against.NullOrWhiteSpace(name, nameof(name));
+            Guard.Against.InvalidFormat(name, nameof(name), @"^[\w_\-+]*$");
+
             _name = name;
         }
 

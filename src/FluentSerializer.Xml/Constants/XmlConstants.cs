@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-
+﻿
 using FluentSerializer.Core.NamingStrategies;
 
 namespace FluentSerializer.Xml.Constants

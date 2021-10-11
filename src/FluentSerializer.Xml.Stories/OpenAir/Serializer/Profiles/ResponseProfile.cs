@@ -1,14 +1,10 @@
-﻿using FluentSerializer.Core.NamingStrategies;
-using FluentSerializer.Xml.Stories.OpenAir.Models;
+﻿using FluentSerializer.Xml.Stories.OpenAir.Models;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
-using FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
     public sealed class ResponseProfile : OpenAirSerializerProfile
     {
-        public INamingStrategy ResponseTypeNamingStrategy = new ResponseTypeNamingStrategy();
-
         public override void Configure()
         {
             For<Response<IOpenAirEntity>>(

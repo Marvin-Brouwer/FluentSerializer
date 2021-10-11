@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Core.Configuration;
+﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Xml.Extensions;
 using System;
 using System.Collections;
 using System.Linq;
@@ -17,11 +17,17 @@ namespace FluentSerializer.Xml.Services
 
         public XmlTypeSerializer(IScanList<Type, IClassMap> mappings)
         {
+            Guard.Against.Null(mappings, nameof(mappings));
+
             _mappings = mappings;
         }
 
         public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
+            Guard.Against.Null(dataModel, nameof(dataModel));
+            Guard.Against.Null(classType, nameof(classType));
+            Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+
             if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
                "An enumerable type made it past the custom converter check. \n" +
                $"Please make sure '{classType}' has a custom converter selected/configured.");
@@ -45,7 +51,7 @@ namespace FluentSerializer.Xml.Services
 
                 if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
                 {
-                    var textConverter = propertyMapping.GetMatchingConverter<XText>(SerializerDirection.Serialize, currentSerializer);
+                    var textConverter = propertyMapping.GetConverter<XText>(SerializerDirection.Serialize, currentSerializer);
                     if (textConverter is null) 
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
                     var propertyValue = property.GetValue(dataModel);
@@ -58,7 +64,7 @@ namespace FluentSerializer.Xml.Services
                 }
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
                 {
-                    var attributeConverter = propertyMapping.GetMatchingConverter<XAttribute>(SerializerDirection.Serialize, currentSerializer);
+                    var attributeConverter = propertyMapping.GetConverter<XAttribute>(SerializerDirection.Serialize, currentSerializer);
                     if (attributeConverter is null)
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
                     var propertyValue = property.GetValue(dataModel);
@@ -72,7 +78,7 @@ namespace FluentSerializer.Xml.Services
                     var propertyValue = property.GetValue(dataModel);
                     if (propertyValue is null) continue;
 
-                    var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Serialize, currentSerializer);
+                    var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Serialize, currentSerializer);
                     if (matchingConverter is null)
                     {
                         newElement.Add(SerializeToElement(propertyValue, property.PropertyType, currentSerializer));

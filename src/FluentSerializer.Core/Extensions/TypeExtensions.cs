@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,8 @@ namespace FluentSerializer.Core.Extensions
     {
         public static bool EqualsTopLevel(this Type type, Type typeToEqual)
         {
+            Guard.Against.Null(typeToEqual, nameof(typeToEqual));
+
             if (type.IsAssignableFrom(typeToEqual)) return true;
             if (!type.IsGenericType) return false;
 
@@ -24,6 +27,7 @@ namespace FluentSerializer.Core.Extensions
 
             return genericType.IsAssignableFrom(genericClassType);
         }
+
         public static bool Implements(this Type type, Type interfaceType)
         {
             if (interfaceType.IsAssignableFrom(type)) return true;
@@ -31,7 +35,6 @@ namespace FluentSerializer.Core.Extensions
                 .Any(typeInterface => typeInterface.IsGenericType
                 && typeInterface.GetGenericTypeDefinition().Equals(interfaceType));
         }
-
 
         public static IList GetEnumerableInstance(this Type type)
         {
