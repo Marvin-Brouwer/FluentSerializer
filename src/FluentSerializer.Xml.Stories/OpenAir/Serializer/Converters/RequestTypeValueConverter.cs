@@ -30,7 +30,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
             var elementTypeString = wrapperElement?.Name.ToString();
             // todo check name for null and throw
 
-            var attributeName = context.NamingStrategy.GetName(context.Property);
+            var attributeName = context.NamingStrategy.GetName(context.Property, context);
             return new XAttribute(attributeName, elementTypeString);
         }
     }

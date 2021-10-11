@@ -48,7 +48,7 @@ namespace FluentSerializer.Xml.Converters
             if (!(objectToSerialize is IEnumerable enumerableToSerialize)) 
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            var customElement = new XElement(context.NamingStrategy.GetName(context.Property));
+            var customElement = new XElement(context.NamingStrategy.GetName(context.Property, context));
             foreach(var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;

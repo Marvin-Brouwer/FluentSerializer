@@ -36,7 +36,7 @@ namespace FluentSerializer.Xml.Services
             return (TModel)deserializedInstance;
         }
 
-        public object? DeserializeFromObject(XElement dataObject,Type classType,  IXmlSerializer currentSerializer)
+        public object? DeserializeFromObject(XElement dataObject, Type classType,  IXmlSerializer currentSerializer)
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(classType, nameof(classType));
@@ -51,20 +51,20 @@ namespace FluentSerializer.Xml.Services
 
             if (classType == typeof(string)) return dataObject.ToString();
 
-            var matchingTagName = classMap.NamingStrategy.GetName(classType);
-            if (!dataObject.Name.ToString().Equals(matchingTagName, StringComparison.Ordinal))
-                throw new IncorrectElementAccessException(classType, matchingTagName, dataObject.Name.ToString());
+            var matchingTagName = classMap.NamingStrategy.GetName(classType, new NamingContext(_mappings));
 
             var instance = Activator.CreateInstance(classType);
 
             foreach (var propertyMapping in classMap.PropertyMaps)
             {
+
+                var realPropertyInfo = classType.GetProperty(propertyMapping.Property.Name)!;
                 var serializerContext = new SerializerContext(
-                    propertyMapping.Property, classType, propertyMapping.NamingStrategy, 
+                    realPropertyInfo, classType, propertyMapping.NamingStrategy, 
                     currentSerializer,
                     classMap.PropertyMaps, _mappings);
 
-                var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
+                var propertyName = propertyMapping.NamingStrategy.GetName(realPropertyInfo, serializerContext);
                 if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
                 if (propertyMapping.ContainerType == typeof(XText))
@@ -117,11 +117,14 @@ namespace FluentSerializer.Xml.Services
                 {
                     var xElement = dataObject.Element(propertyName);
 
-                    // Crate a fragment so the parent is accessible in the converter
+                    // Collections may be empty
+                    if (xElement is null && propertyMapping.Property.PropertyType.IsEnumerable()) continue;
+                    if (xElement is null && !propertyMapping.Property.IsNullable())
+                            throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
                     if (xElement is null)
                     {
-                        xElement = new XFragment();
-                        dataObject.AddFirst(xElement);
+                        SetPropertyValue(instance, propertyMapping, null);
+                        continue;
                     }
 
                     var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);

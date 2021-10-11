@@ -42,7 +42,7 @@ namespace FluentSerializer.Xml.Converters.Base
             if (objectToSerialize == null) return null;
 
             var value = (TObject)objectToSerialize;
-            var attributeName = context.NamingStrategy.GetName(context.Property);
+            var attributeName = context.NamingStrategy.GetName(context.Property, context);
             return new XAttribute(attributeName, ConvertToString(value));
         }
 
@@ -51,7 +51,7 @@ namespace FluentSerializer.Xml.Converters.Base
             if (objectToSerialize == null) return null;
 
             var value = (TObject)objectToSerialize;
-            var elementName = context.NamingStrategy.GetName(context.Property);
+            var elementName = context.NamingStrategy.GetName(context.Property, context);
             return new XElement(elementName, ConvertToString(value));
         }
 

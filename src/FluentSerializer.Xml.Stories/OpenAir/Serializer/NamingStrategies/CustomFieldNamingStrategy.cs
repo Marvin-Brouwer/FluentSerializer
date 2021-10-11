@@ -5,6 +5,6 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies
 {
     public class CustomFieldNamingStrategy : SnakeCaseNamingStrategy
     {
-        public override string GetName(PropertyInfo property) => $"{base.GetName(property)}__c";
+        protected override string GetName(string name) => $"{base.GetName(name)}__c";
     }
 }

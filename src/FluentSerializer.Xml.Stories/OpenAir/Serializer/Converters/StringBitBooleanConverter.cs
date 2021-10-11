@@ -35,7 +35,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
         {
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
-            var attributeName = context.NamingStrategy.GetName(context.Property);
+            var attributeName = context.NamingStrategy.GetName(context.Property, context);
             var attributeValue = ConvertToString(objectBoolean);
             return new XAttribute(attributeName, attributeValue);
         }
@@ -44,7 +44,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
         {
             var objectBoolean = (bool?)objectToSerialize ?? default;
 
-            var elementName = context.NamingStrategy.GetName(context.Property);
+            var elementName = context.NamingStrategy.GetName(context.Property, context);
             var elementValue = ConvertToString(objectBoolean);
             return new XElement(elementName, elementValue);
         }

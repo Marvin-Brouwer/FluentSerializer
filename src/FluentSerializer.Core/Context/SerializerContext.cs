@@ -7,10 +7,9 @@ using System.Reflection;
 namespace FluentSerializer.Core.Context
 {
     /// <inheritdoc cref="ISerializerContext"/>
-    public sealed class SerializerContext : ISerializerContext
+    public sealed class SerializerContext : NamingContext, ISerializerContext
     {
         private readonly IScanList<PropertyInfo, IPropertyMap> _propertyMappings;
-        private readonly IScanList<Type, IClassMap> _classMappings;
 
         public PropertyInfo Property { get; }
 
@@ -26,24 +25,18 @@ namespace FluentSerializer.Core.Context
             PropertyInfo property, Type classType, 
             INamingStrategy namingStrategy, ISerializer currentSerializer,
             IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-            IScanList<Type, IClassMap> classMappings)
+            IScanList<Type, IClassMap> classMappings) :
+            base(classMappings)
         {
             _propertyMappings = propertyMappings;
-            _classMappings = classMappings;
-
-            var realPropertyType = classType.GetProperty(property.Name)!.PropertyType;
 
             Property = property;
-            PropertyType = Nullable.GetUnderlyingType(realPropertyType) ?? realPropertyType;
+            PropertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
             ClassType = Nullable.GetUnderlyingType(classType) ?? classType;
             NamingStrategy = namingStrategy;
             CurrentSerializer = currentSerializer;
         }
 
-        public INamingStrategy? FindNamingStrategy(PropertyInfo property) => 
-            _propertyMappings.Scan(property)?.NamingStrategy;
-
-        public INamingStrategy? FindNamingStrategy(Type type) => 
-            _classMappings.Scan(type)?.NamingStrategy;
+        public INamingStrategy? FindNamingStrategy(PropertyInfo property) => FindNamingStrategy(_propertyMappings, property);
     }
 }
