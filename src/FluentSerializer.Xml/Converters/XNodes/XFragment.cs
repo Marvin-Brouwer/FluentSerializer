@@ -1,11 +1,12 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
+using FluentSerializer.Xml.Constants;
 
 namespace FluentSerializer.Xml.Converters.XNodes
 {
     public sealed class XFragment : XElement
     {
-        public XFragment() : base("_fragment") { }
+        public XFragment() : base(XmlConstants.FragmentNodeDisplayTag) { }
         public XFragment(XObject other) : this() {
             Add(other);
         }

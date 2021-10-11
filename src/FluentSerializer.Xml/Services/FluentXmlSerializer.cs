@@ -15,7 +15,7 @@ namespace FluentSerializer.Xml.Services
 
         public SerializerConfiguration Configuration { get; }
 
-        public FluentXmlSerializer(ISearchDictionary<Type, IClassMap> mappings, SerializerConfiguration configuration)
+        public FluentXmlSerializer(IScanList<Type, IClassMap> mappings, SerializerConfiguration configuration)
         {
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);

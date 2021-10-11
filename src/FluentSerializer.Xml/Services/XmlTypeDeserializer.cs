@@ -14,9 +14,9 @@ namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeDeserializer
     {
-        private readonly ISearchDictionary<Type, IClassMap> _mappings;
+        private readonly IScanList<Type, IClassMap> _mappings;
 
-        public XmlTypeDeserializer(ISearchDictionary<Type, IClassMap> mappings)
+        public XmlTypeDeserializer(IScanList<Type, IClassMap> mappings)
         {
             _mappings = mappings;
         }
@@ -36,9 +36,8 @@ namespace FluentSerializer.Xml.Services
                "An enumerable type made it past the custom converter check. \n" +
                $"Please make sure '{classType}' has a custom converter selected/configured.");
 
-            var classMap = _mappings.Find(classType);
+            var classMap = _mappings.Scan(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
-            if (dataObject is null) return null;
 
             if (classType == typeof(string)) return dataObject.ToString();
 
@@ -51,7 +50,10 @@ namespace FluentSerializer.Xml.Services
             foreach (var propertyMapping in classMap.PropertyMaps)
             {
                 var serializerContext = new SerializerContext(
-                    propertyMapping.Property, classType, propertyMapping.NamingStrategy, _mappings, currentSerializer);
+                    propertyMapping.Property, classType, propertyMapping.NamingStrategy, 
+                    currentSerializer,
+                    classMap.PropertyMaps, _mappings);
+
                 var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property);
                 if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
@@ -105,6 +107,7 @@ namespace FluentSerializer.Xml.Services
                 {
                     var xElement = dataObject.Element(propertyName);
 
+                    // todo pass parent so this is no longer required
                     // Add an empty shell to help if data is missing
                     if (xElement is null)
                     {

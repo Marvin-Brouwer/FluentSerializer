@@ -54,9 +54,12 @@ namespace FluentSerializer.Core.Extensions
 
         public static bool IsNullable(this FieldInfo field) =>
             IsNullableHelper(field.FieldType, field.DeclaringType, field.CustomAttributes);
-
+        
         public static bool IsNullable(this ParameterInfo parameter) =>
             IsNullableHelper(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
+
+        public static bool IsNullable(this Type type) =>
+            IsNullableHelper(type, null, type.CustomAttributes);
 
         // todo cleanup
         private static bool IsNullableHelper(Type memberType, MemberInfo? declaringType, IEnumerable<CustomAttributeData> customAttributes)

@@ -5,12 +5,12 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping
 {
-    public sealed class PropertyMapDictionary : TypeDictionary<PropertyInfo, IPropertyMap>
+    public sealed class PropertyMapScanList : ScanList<PropertyInfo, IPropertyMap>
     {
-        public PropertyMapDictionary(IEnumerable<IPropertyMap> dataTypes) : base(dataTypes) { }
+        public PropertyMapScanList(IEnumerable<IPropertyMap> dataTypes) : base(dataTypes) { }
 
         /// <remarks>
-        /// Because <see cref="PropertyInfo"/> isn't comparible just check important properties.
+        /// Because <see cref="PropertyInfo"/> isn't comparable just check important properties.
         /// </remarks>
         protected override bool Compare(PropertyInfo type, IPropertyMap dataType)
         {
