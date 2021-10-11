@@ -14,7 +14,6 @@ namespace FluentSerializer.Xml.Converters
 {
     public class NonWrappedCollectionConverter : IConverter<XElement>
     {
-
         public virtual SerializerDirection Direction => SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) =>
             !typeof(string).IsAssignableFrom(targetType) &&

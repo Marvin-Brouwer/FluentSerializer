@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Converters.Base
 {
-    public abstract class PrimitiveConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
+    public abstract class SimpleStructConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
         where TObject : struct
     {
         public virtual SerializerDirection Direction => SerializerDirection.Both;

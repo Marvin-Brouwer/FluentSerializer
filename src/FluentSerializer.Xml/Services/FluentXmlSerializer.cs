@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Core.Configuration;
+﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Xml.Exceptions;
 using System;
@@ -17,6 +18,9 @@ namespace FluentSerializer.Xml.Services
 
         public FluentXmlSerializer(IScanList<Type, IClassMap> mappings, SerializerConfiguration configuration)
         {
+            Guard.Against.Null(mappings, nameof(mappings));
+            Guard.Against.Null(configuration, nameof(configuration));
+
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
 
@@ -31,7 +35,7 @@ namespace FluentSerializer.Xml.Services
         }
         public object? Deserialize(XElement dataObject, Type modelType)
         {
-            return _deserializer.DeserializeFromObject(modelType, dataObject, this);
+            return _deserializer.DeserializeFromObject(dataObject,modelType,  this);
         }
 
         public TModel? Deserialize<TModel>(string stringData)

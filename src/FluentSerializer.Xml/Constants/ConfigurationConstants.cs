@@ -1,6 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Xml.Converters;
-using FluentSerializer.Xml.Converters.Base;
 using FluentSerializer.Xml.Converters.XNodes;
 
 namespace FluentSerializer.Xml.Constants

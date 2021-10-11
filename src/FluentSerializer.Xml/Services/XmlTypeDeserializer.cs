@@ -1,10 +1,10 @@
-﻿using FluentSerializer.Core.Configuration;
+﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Xml.Converters.XNodes;
-using FluentSerializer.Xml.Extensions;
 using System;
 using System.Collections;
 using System.Linq;
@@ -18,20 +18,30 @@ namespace FluentSerializer.Xml.Services
 
         public XmlTypeDeserializer(IScanList<Type, IClassMap> mappings)
         {
+            Guard.Against.Null(mappings, nameof(mappings));
+
             _mappings = mappings;
         }
+
         public TModel? DeserializeFromObject<TModel>(XElement dataObject, IXmlSerializer currentSerializer)
            where TModel : class, new()
         {
+            Guard.Against.Null(dataObject, nameof(dataObject));
+            Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+
             var classType = typeof(TModel);
-            var deserializedInstance = DeserializeFromObject(classType, dataObject, currentSerializer);
+            var deserializedInstance = DeserializeFromObject(dataObject,classType,  currentSerializer);
             if (deserializedInstance is null) return null;
 
             return (TModel)deserializedInstance;
         }
 
-        public object? DeserializeFromObject(Type classType, XElement dataObject, IXmlSerializer currentSerializer)
+        public object? DeserializeFromObject(XElement dataObject,Type classType,  IXmlSerializer currentSerializer)
         {
+            Guard.Against.Null(dataObject, nameof(dataObject));
+            Guard.Against.Null(classType, nameof(classType));
+            Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+
             if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
                "An enumerable type made it past the custom converter check. \n" +
                $"Please make sure '{classType}' has a custom converter selected/configured.");
@@ -69,7 +79,7 @@ namespace FluentSerializer.Xml.Services
                         continue;
                     }
 
-                    var converter = propertyMapping.GetMatchingConverter<XText>(SerializerDirection.Deserialize, currentSerializer);
+                    var converter = propertyMapping.GetConverter<XText>(SerializerDirection.Deserialize, currentSerializer);
                     if (converter is null)
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
 
@@ -92,7 +102,7 @@ namespace FluentSerializer.Xml.Services
                         continue;
                     }
 
-                    var converter = propertyMapping.GetMatchingConverter<XAttribute>(SerializerDirection.Deserialize, currentSerializer);
+                    var converter = propertyMapping.GetConverter<XAttribute>(SerializerDirection.Deserialize, currentSerializer);
                     if (converter is null)
                         throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
 
@@ -115,7 +125,7 @@ namespace FluentSerializer.Xml.Services
                         dataObject.AddFirst(xElement);
                     }
 
-                    var matchingConverter = propertyMapping.GetMatchingConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
+                    var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
                     if (matchingConverter is null)
                     {
                         if (xElement is null && !propertyMapping.Property.IsNullable())
@@ -126,7 +136,7 @@ namespace FluentSerializer.Xml.Services
                             continue;
                         }
 
-                        var deserializedInstance = DeserializeFromObject(propertyMapping.Property.PropertyType, xElement, currentSerializer);
+                        var deserializedInstance = DeserializeFromObject(xElement,propertyMapping.Property.PropertyType,  currentSerializer);
                         if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
                             throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 

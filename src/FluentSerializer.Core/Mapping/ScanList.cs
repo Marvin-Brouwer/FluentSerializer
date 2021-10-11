@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Ardalis.GuardClauses;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,11 +16,15 @@ namespace FluentSerializer.Core.Mapping
 
         protected ScanList(IEnumerable<TScanFor> dataTypes)
         {
+            Guard.Against.Null(dataTypes, nameof(dataTypes));
+            Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Any());
+
             _storedDataTypes = dataTypes.ToList().AsReadOnly();
         }
 
         public TScanFor? Scan(TScanBy key)
         {
+            Guard.Against.Null(key, nameof(key));
             #if (!DEBUG)
             if (_cachedMappings.ContainsKey(type)) return _cachedMappings[type];
             #endif

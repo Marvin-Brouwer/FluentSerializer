@@ -1,11 +1,12 @@
-﻿using FluentSerializer.Xml.Converters.Base;
+﻿using Ardalis.GuardClauses;
+using FluentSerializer.Xml.Converters.Base;
 using System;
 using System.Globalization;
 
 namespace FluentSerializer.Xml.Converters
 {
 
-    public class DateByFormatConverter : PrimitiveConverter<DateTime>
+    public class DateByFormatConverter : SimpleStructConverter<DateTime>
     {
         private readonly string _format;
         private readonly CultureInfo _cultureInfo;
@@ -13,6 +14,10 @@ namespace FluentSerializer.Xml.Converters
 
         public DateByFormatConverter(string format, CultureInfo cultureInfo, DateTimeStyles dateTimeStyle)
         {
+            Guard.Against.NullOrWhiteSpace(format, nameof(format));
+            Guard.Against.Null(cultureInfo, nameof(cultureInfo));
+            Guard.Against.Null(dateTimeStyle, nameof(dateTimeStyle));
+
             _format = format;
             _cultureInfo = cultureInfo;
             _dateTimeStyle = dateTimeStyle;

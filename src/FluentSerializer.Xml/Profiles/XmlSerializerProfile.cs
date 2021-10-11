@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Xml.Converters;
-using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,16 +10,18 @@ namespace FluentSerializer.Xml.Profiles
 {
     public abstract class XmlSerializerProfile : IXmlSerializerProfile
     {
-        private readonly List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)> _classMaps = new List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)>();
+        private readonly List<(Type classType, INamingStrategy namingStrategy, IEnumerable<IPropertyMap> propertyMap)> _classMaps = new List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)>();
         public abstract void Configure();
 
         /// <remarks>
         /// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
         /// </remarks>
-        IEnumerable<XmlClassMap> IXmlSerializerProfile.Configure()
+        IEnumerable<IClassMap> IXmlSerializerProfile.Configure()
         {
             Configure();
-            return _classMaps.Select(lazyClassMap => new XmlClassMap(lazyClassMap));
+            return _classMaps.Select(lazyClassMap => new ClassMap(
+                lazyClassMap.classType, lazyClassMap.namingStrategy, lazyClassMap.propertyMap
+            ));
         }
 
         protected CustomNamingStrategy CustomNamingStrategy(string nameOverride) => new CustomNamingStrategy(nameOverride);
@@ -43,7 +44,7 @@ namespace FluentSerializer.Xml.Profiles
             where TModel : new()
         {
             var classType = typeof(TModel);
-            var propertyMap = new List<XmlPropertyMap>();
+            var propertyMap = new List<IPropertyMap>();
             var builder = new XmlProfileBuilder<TModel>(
                 attributeNamingStrategy ?? CamelCaseNamingStrategy,
                 propertyMap

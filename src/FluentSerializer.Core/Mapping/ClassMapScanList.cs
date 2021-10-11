@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping
 {

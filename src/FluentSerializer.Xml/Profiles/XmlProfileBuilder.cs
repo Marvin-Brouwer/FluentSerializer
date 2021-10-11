@@ -2,13 +2,14 @@
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
-using FluentSerializer.Xml.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Linq;
 using FluentSerializer.Xml.Constants;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -16,10 +17,13 @@ namespace FluentSerializer.Xml.Profiles
         where TModel : new()
     {
         private readonly INamingStrategy _defaultNamingStrategy;
-        private readonly List<XmlPropertyMap> _propertyMap;
+        private readonly List<IPropertyMap> _propertyMap;
 
-        public XmlProfileBuilder(INamingStrategy defaultNamingStrategy, List<XmlPropertyMap> propertyMap)
+        public XmlProfileBuilder(INamingStrategy defaultNamingStrategy, List<IPropertyMap> propertyMap)
         {
+            Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
+            Guard.Against.Null(propertyMap, nameof(propertyMap));
+
             _defaultNamingStrategy = defaultNamingStrategy;
             _propertyMap = propertyMap;
         }
@@ -31,7 +35,7 @@ namespace FluentSerializer.Xml.Profiles
             IConverter? converter = null
         )
         {
-            _propertyMap.Add(new XmlPropertyMap(
+            _propertyMap.Add(new PropertyMap(
                 direction,
                 typeof(XAttribute),
                 propertySelector.GetProperty(),
@@ -49,7 +53,7 @@ namespace FluentSerializer.Xml.Profiles
             IConverter? converter = null
         )
         {
-            _propertyMap.Add(new XmlPropertyMap(
+            _propertyMap.Add(new PropertyMap(
                 direction,
                 typeof(XElement),
                 propertySelector.GetProperty(),
@@ -69,7 +73,7 @@ namespace FluentSerializer.Xml.Profiles
             IConverter? converter = null
         )
         {
-            _propertyMap.Add(new XmlPropertyMap(
+            _propertyMap.Add(new PropertyMap(
                 direction,
                 typeof(XText),
                 propertySelector.GetProperty(),

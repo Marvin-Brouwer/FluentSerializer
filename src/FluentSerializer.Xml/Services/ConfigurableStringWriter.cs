@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Ardalis.GuardClauses;
+using System.IO;
 using System.Text;
 
 namespace FluentSerializer.Xml.Services
@@ -10,6 +11,9 @@ namespace FluentSerializer.Xml.Services
 
         public ConfigurableStringWriter(StringBuilder stringBuilder, Encoding encoding) : base(stringBuilder)
         {
+            Guard.Against.Null(stringBuilder, nameof(stringBuilder));
+            Guard.Against.Null(encoding, nameof(encoding));
+
             _encoding = encoding;
         }
     }

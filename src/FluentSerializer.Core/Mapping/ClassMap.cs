@@ -5,9 +5,9 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping
 {
-    public abstract class ClassMap : IClassMap
+    public sealed class ClassMap : IClassMap
     {
-        protected ClassMap(
+        public ClassMap(
             Type classType,
             INamingStrategy namingStrategy,
             IEnumerable<IPropertyMap> propertyMap)
