@@ -1,5 +1,4 @@
 ﻿using FluentSerializer.Core.NamingStrategies;
-using System.Reflection;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies
 {

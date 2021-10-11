@@ -4,7 +4,6 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Xml.Converters.XNodes;
 using System;
 using System.Collections;
 using System.Linq;
