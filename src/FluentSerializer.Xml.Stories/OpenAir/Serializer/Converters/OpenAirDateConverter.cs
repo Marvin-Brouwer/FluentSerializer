@@ -54,7 +54,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
             if (!(objectToSerialize is DateTime dateToSerialize))
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
-            var elementName = context.NamingStrategy.GetName(context.Property);
+            var elementName = context.NamingStrategy.GetName(context.Property, context);
             return new XElement(elementName, GenerateDateObject(dateToSerialize));
         }
 

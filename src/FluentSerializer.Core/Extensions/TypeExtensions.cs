@@ -51,6 +51,9 @@ namespace FluentSerializer.Core.Extensions
 
             throw new NotSupportedException($"Unable to create an enumerabble collection of '{type.FullName}'");
         }
+        public static bool IsEnumerable(this Type type) => 
+            !typeof(string).IsAssignableFrom(type) &&
+            type.Implements(typeof(IEnumerable));
 
         public static bool IsNullable(this PropertyInfo property) =>
             IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);

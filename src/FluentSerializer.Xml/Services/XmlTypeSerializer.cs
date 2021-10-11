@@ -36,7 +36,7 @@ namespace FluentSerializer.Xml.Services
             var classMap = _mappings.Scan(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
 
-            var newElement = new XElement(classMap.NamingStrategy.GetName(classType));
+            var newElement = new XElement(classMap.NamingStrategy.GetName(classType, new NamingContext(_mappings)));
             foreach(var property in classType.GetProperties())
             {
                 var propertyMapping = classMap.PropertyMaps.Scan(property);

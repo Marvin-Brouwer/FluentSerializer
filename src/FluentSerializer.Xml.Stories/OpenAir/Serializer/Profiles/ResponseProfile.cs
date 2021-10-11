@@ -1,10 +1,13 @@
-﻿using FluentSerializer.Xml.Stories.OpenAir.Models;
+﻿using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Xml.Stories.OpenAir.Models;
 using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
 
 namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
 {
     public sealed class ResponseProfile : OpenAirSerializerProfile
     {
+        private readonly INamingStrategy ResponseTypeNamingStrategy = new ResponseTypeNamingStrategy();
+
         public override void Configure()
         {
             For<Response<IOpenAirEntity>>(
@@ -31,7 +34,7 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
                 .Attribute(responseObject => responseObject.StatusCode,
                     namingStrategy: CustomNamingStrategy("status"))
                 .Child(response => response.Data,
-                    //namingStrategy: ResponseTypeNamingStrategy,
+                    namingStrategy: ResponseTypeNamingStrategy,
                     converter: NonWrappedCollectionConverter);
 
             For<AddResponse<IOpenAirEntity>>(

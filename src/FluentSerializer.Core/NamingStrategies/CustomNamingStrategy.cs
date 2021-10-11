@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.Context;
 using System;
 using System.Reflection;
 
@@ -16,8 +17,8 @@ namespace FluentSerializer.Core.NamingStrategies
             _name = name;
         }
 
-        public string GetName(PropertyInfo property) => _name;
+        public string GetName(PropertyInfo property, INamingContext _) => _name;
 
-        public string GetName(Type classType) => _name;
+        public string GetName(Type classType, INamingContext _) => _name;
     }
 }

@@ -8,7 +8,7 @@ namespace FluentSerializer.Core.Context
     /// <summary>
     /// Current context for serializing data
     /// </summary>
-    public interface ISerializerContext
+    public interface ISerializerContext : INamingContext
     {
         /// <summary>
         /// The original propertyInfo used to define this mapping
@@ -42,19 +42,11 @@ namespace FluentSerializer.Core.Context
         ISerializer CurrentSerializer { get; }
 
         /// <summary>
-        /// Find the <see cref="INamingStrategy"/>  for any property if registered
+        /// Find the <see cref="INamingStrategy"/>  for any property of the current <see cref="ClassType"/> if registered
         /// This can be useful when unpacking collections to a different data structure
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
         INamingStrategy? FindNamingStrategy(PropertyInfo property);
-
-        /// <summary>
-        /// Find the <see cref="INamingStrategy"/>  for any <see cref="Type"/> if registered
-        /// This can be useful when unpacking collections to a different data structure
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        INamingStrategy? FindNamingStrategy(Type type);
     }
 }
