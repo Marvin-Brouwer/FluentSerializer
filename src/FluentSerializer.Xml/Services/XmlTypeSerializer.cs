@@ -6,7 +6,6 @@ using FluentSerializer.Core.SerializerException;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 

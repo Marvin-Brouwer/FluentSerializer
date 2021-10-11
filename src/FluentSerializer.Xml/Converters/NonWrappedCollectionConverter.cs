@@ -6,7 +6,6 @@ using FluentSerializer.Xml.Converters.XNodes;
 using FluentSerializer.Xml.Services;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -19,7 +18,6 @@ namespace FluentSerializer.Xml.Converters
 
         object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
         {
-            // Make sure we have the instancetype and not an abstract type
             var targetType = context.PropertyType;
             var instance = targetType.GetEnumerableInstance();
 

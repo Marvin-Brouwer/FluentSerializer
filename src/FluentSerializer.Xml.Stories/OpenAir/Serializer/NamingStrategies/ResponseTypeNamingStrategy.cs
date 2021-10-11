@@ -3,7 +3,7 @@ using FluentSerializer.Core.NamingStrategies;
 using System;
 using System.Reflection;
 
-namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles
+namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.NamingStrategies
 {
     internal class ResponseTypeNamingStrategy : INamingStrategy
     {
