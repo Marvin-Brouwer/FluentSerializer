@@ -9,6 +9,7 @@ namespace FluentSerializer.Core.Services
         public TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
         public object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
     }
+
     public interface IConverter
     {
         bool CanConvert(Type targetType);

@@ -6,6 +6,7 @@ using FluentSerializer.Core.SerializerException;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -42,8 +43,9 @@ namespace FluentSerializer.Xml.Services
                 if (propertyMapping is null) continue;
                 if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
-                // todo intialize property here so there's always a value to serialize into
-                var propertyName = propertyMapping.NamingStrategy.GetName(property);
+                var propertyValue = property.GetValue(dataModel);
+                if (propertyValue is null) continue;
+
                 var serializerContext = new SerializerContext(
                     propertyMapping.Property, classType, propertyMapping.NamingStrategy, 
                     currentSerializer,
@@ -51,42 +53,21 @@ namespace FluentSerializer.Xml.Services
 
                 if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
                 {
-                    var textConverter = propertyMapping.GetConverter<XText>(SerializerDirection.Serialize, currentSerializer);
-                    if (textConverter is null) 
-                        throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
-                    var propertyValue = property.GetValue(dataModel);
-                    if (propertyValue is null) continue;
-                    var serializedPropertyValue = textConverter.Serialize(propertyValue, serializerContext);
-                    if (serializedPropertyValue is null) continue;
-
-                    newElement.Add(new XText(serializedPropertyValue));
+                    SerializeXNode<XText>(propertyValue, propertyMapping, newElement, serializerContext);
                     continue;
                 }
+
                 if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
                 {
-                    var attributeConverter = propertyMapping.GetConverter<XAttribute>(SerializerDirection.Serialize, currentSerializer);
-                    if (attributeConverter is null)
-                        throw new ConverterNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
-                    var propertyValue = property.GetValue(dataModel);
-                    if (propertyValue is null) continue;
-
-                    newElement.Add(attributeConverter.Serialize(propertyValue, serializerContext));
+                    SerializeXNode<XAttribute>(propertyValue, propertyMapping, newElement, serializerContext);
                     continue;
                 }
+
                 if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
                 {
-                    var propertyValue = property.GetValue(dataModel);
-                    if (propertyValue is null) continue;
-
-                    var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Serialize, currentSerializer);
-                    if (matchingConverter is null)
-                    {
-                        newElement.Add(SerializeToElement(propertyValue, property.PropertyType, currentSerializer));
-                        continue;
-                    }
-
-                    var customElement = matchingConverter.Serialize(propertyValue, serializerContext);
+                    var customElement = SerializeElement(propertyValue, propertyMapping, serializerContext, currentSerializer);
                     if (customElement is null) continue;
+
                     // Special case for fragments
                     if (customElement.NodeType == XmlNodeType.DocumentFragment)
                         newElement.Add(customElement.Nodes().Where(node => node.NodeType != XmlNodeType.EndElement));
@@ -99,6 +80,34 @@ namespace FluentSerializer.Xml.Services
             }
 
             return newElement;
+        }
+
+        private static void SerializeXNode<TNode>(
+            object propertyValue, IPropertyMap propertyMapping, 
+            XElement targetElement, SerializerContext serializerContext)
+            where TNode : XObject
+        {
+            var matchingConverter = propertyMapping.GetConverter<TNode>(
+                SerializerDirection.Serialize, serializerContext.CurrentSerializer);
+            if (matchingConverter is null) throw new ConverterNotFoundException(
+                propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
+            
+            var nodeValue = matchingConverter.Serialize(propertyValue, serializerContext);
+            if (nodeValue is null) return;
+
+            targetElement.Add(nodeValue);
+        }
+
+        private XElement? SerializeElement(
+            object propertyValue, IPropertyMap propertyMapping,
+            SerializerContext serializerContext, IXmlSerializer currentSerializer)
+        {
+            var matchingConverter = propertyMapping.GetConverter<XElement>(
+                SerializerDirection.Serialize, serializerContext.CurrentSerializer);
+            if (matchingConverter is null)
+                return SerializeToElement(propertyValue, serializerContext.PropertyType, currentSerializer);
+
+            return matchingConverter.Serialize(propertyValue, serializerContext);
         }
     }
 }

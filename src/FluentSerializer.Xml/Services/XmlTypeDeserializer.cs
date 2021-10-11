@@ -117,8 +117,7 @@ namespace FluentSerializer.Xml.Services
                 {
                     var xElement = dataObject.Element(propertyName);
 
-                    // todo pass parent so this is no longer required
-                    // Add an empty shell to help if data is missing
+                    // Crate a fragment so the parent is accessible in the converter
                     if (xElement is null)
                     {
                         xElement = new XFragment();
