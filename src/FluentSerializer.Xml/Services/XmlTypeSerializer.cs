@@ -49,35 +49,35 @@ namespace FluentSerializer.Xml.Services
                     currentSerializer,
                     classMap.PropertyMaps, _mappings);
 
-                if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
-                {
-                    SerializeXNode<XText>(propertyValue, propertyMapping, newElement, serializerContext);
-                    continue;
-                }
-
-                if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
-                {
-                    SerializeXNode<XAttribute>(propertyValue, propertyMapping, newElement, serializerContext);
-                    continue;
-                }
-
-                if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
-                {
-                    var customElement = SerializeElement(propertyValue, propertyMapping, serializerContext, currentSerializer);
-                    if (customElement is null) continue;
-
-                    // Special case for fragments
-                    if (customElement.NodeType == XmlNodeType.DocumentFragment)
-                        newElement.Add(customElement.Nodes().Where(node => node.NodeType != XmlNodeType.EndElement));
-                    else 
-                        newElement.Add(customElement);
-                    continue;
-                }
-
-                throw new ContainerNotSupportedException(propertyMapping.ContainerType);
+                SerializeProperty(propertyValue, newElement, propertyMapping, currentSerializer, serializerContext);
             }
 
             return newElement;
+        }
+
+        private void SerializeProperty(
+            object propertyValue, XElement newElement, IPropertyMap propertyMapping,  
+            IXmlSerializer currentSerializer, SerializerContext serializerContext)
+        {
+            if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
+            {
+                SerializeXNode<XText>(propertyValue, propertyMapping, newElement, serializerContext);
+                return;
+            }
+
+            if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
+            {
+                SerializeXNode<XAttribute>(propertyValue, propertyMapping, newElement, serializerContext);
+                return;
+            }
+
+            if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
+            {
+                SerializeXElement(propertyValue, propertyMapping, newElement, serializerContext, currentSerializer);
+                return;
+            }
+
+            throw new ContainerNotSupportedException(propertyMapping.ContainerType);
         }
 
         private static void SerializeXNode<TNode>(
@@ -96,16 +96,25 @@ namespace FluentSerializer.Xml.Services
             targetElement.Add(nodeValue);
         }
 
-        private XElement? SerializeElement(
-            object propertyValue, IPropertyMap propertyMapping,
+        private void SerializeXElement(object propertyValue, IPropertyMap propertyMapping,
+            XElement newElement,
             SerializerContext serializerContext, IXmlSerializer currentSerializer)
         {
             var matchingConverter = propertyMapping.GetConverter<XElement>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);
-            if (matchingConverter is null)
-                return SerializeToElement(propertyValue, serializerContext.PropertyType, currentSerializer);
 
-            return matchingConverter.Serialize(propertyValue, serializerContext);
+            var nodeValue = matchingConverter is null 
+                ? SerializeToElement(propertyValue, serializerContext.PropertyType, currentSerializer) 
+                : matchingConverter.Serialize(propertyValue, serializerContext);
+            if (nodeValue is null) return;
+
+            // Special case for fragments
+            // This is necessary because of XMLs possibility to add multiple children of the same node name
+            // without it being a collection
+            if (nodeValue.NodeType == XmlNodeType.DocumentFragment)
+                newElement.Add(nodeValue.Nodes().Where(node => node.NodeType != XmlNodeType.EndElement));
+            else 
+                newElement.Add(nodeValue);
         }
     }
 }
