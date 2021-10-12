@@ -2,9 +2,8 @@
 
 namespace FluentSerializer.UseCase.OpenAir.Models
 {
-    internal sealed class Project : IOpenAirEntity
+    internal sealed class Project : OpenAirEntity
     {
-        public string Id { get; set; } = string.Empty;
         public string? Name { get; set; }
         public DateTime LastUpdate { get; set; }
         public bool Active { get; set; }

@@ -10,6 +10,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: PascalCaseNamingStrategy
             )
+                .Child(project => project.Id)
                 .Child(project => project.Name)
                 .Child(project => project.LastUpdate,
                     namingStrategy: CustomNamingStrategy("updated"),

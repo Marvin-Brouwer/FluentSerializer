@@ -11,7 +11,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 
         public override void Configure()
         {
-            For<Response<IOpenAirEntity>>(
+            For<Response<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: LowerCaseNamingStrategy
             )
@@ -28,7 +28,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                     namingStrategy: CustomNamingStrategy("Delete"),
                     converter: NonWrappedCollectionConverter);
 
-            For<ReadResponse<IOpenAirEntity>>(
+            For<ReadResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Read")
             )
@@ -38,7 +38,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                     namingStrategy: ResponseTypeNamingStrategy,
                     converter: NonWrappedCollectionConverter);
 
-            For<AddResponse<IOpenAirEntity>>(
+            For<AddResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Add")
             )
@@ -47,7 +47,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 .Child(response => response.Data,
                     converter: NonWrappedCollectionConverter);
 
-            For<ModifyResponse<IOpenAirEntity>>(
+            For<ModifyResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Modify")
             )
@@ -56,7 +56,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 .Child(response => response.Data,
                     converter: NonWrappedCollectionConverter);
 
-            For<DeleteResponse<IOpenAirEntity>>(
+            For<DeleteResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Delete")
             )

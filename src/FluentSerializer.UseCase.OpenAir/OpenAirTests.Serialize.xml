@@ -16,6 +16,7 @@
       </updated>
       <active>1</active>
       <custom_date__c>1991-11-28</custom_date__c>
+      <id>0001</id>
     </Project>
   </Add>
   <Add type="Project">
@@ -32,6 +33,7 @@
         </Date>
       </updated>
       <active>0</active>
+      <id>0002</id>
     </Project>
     <Project>
       <name>Project 3</name>
@@ -46,6 +48,7 @@
         </Date>
       </updated>
       <active>1</active>
+      <id>0003</id>
     </Project>
   </Add>
 </request>
