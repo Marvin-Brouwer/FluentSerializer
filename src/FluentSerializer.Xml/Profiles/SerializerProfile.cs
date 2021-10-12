@@ -5,18 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using FluentSerializer.Core.Profiles;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public abstract class XmlSerializerProfile : IXmlSerializerProfile
+    public abstract class SerializerProfile : ISerializerProfile
     {
         private readonly List<(Type classType, INamingStrategy namingStrategy, IEnumerable<IPropertyMap> propertyMap)> _classMaps = new List<(Type, INamingStrategy, IEnumerable<IPropertyMap>)>();
         public abstract void Configure();
 
         /// <remarks>
-        /// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
+        /// Using an explicit interface here so it's not confusing to users of the <see cref="SerializerProfile"/> but it's also not internal.
         /// </remarks>
-        IEnumerable<IClassMap> IXmlSerializerProfile.Configure()
+        IEnumerable<IClassMap> ISerializerProfile.Configure()
         {
             Configure();
             return _classMaps.Select(lazyClassMap => new ClassMap(
