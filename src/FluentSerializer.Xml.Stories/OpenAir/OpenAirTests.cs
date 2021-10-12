@@ -1,36 +1,27 @@
-using FluentAssertions;
-using FluentSerializer.Xml.Stories.OpenAir.Models;
-using FluentSerializer.Xml.Services;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Xunit;
-using FluentSerializer.Xml.Stories.OpenAir.Serializer.Profiles;
 using System;
-using FluentSerializer.Xml.Profiles;
-using System.Linq;
-using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
-using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
-using FluentSerializer.Core.Mapping;
-using System.Text;
-using FluentSerializer.Core.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using FluentAssertions;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Profiles;
 using FluentSerializer.Xml.Constants;
+using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Stories.OpenAir.Models;
+using FluentSerializer.Xml.Stories.OpenAir.Models.Request;
+using FluentSerializer.Xml.Stories.OpenAir.Models.Response;
+using Xunit;
 
 namespace FluentSerializer.Xml.Stories.OpenAir
 {
-    public partial class OpenAirTests
+    public sealed class OpenAirTests
     {
-
         public OpenAirTests()
         {
-            var profiles = new List<IXmlSerializerProfile>{
-                new RequestProfile(),
-                new ResponseProfile(),
-                new ProjectProfile(),
-                new RateCardProfile()
-            };
-            _mappings = new ClassMapScanList(profiles.SelectMany(x => x.Configure()));
+            _mappings = ProfileScanner.FindClassMapsInAssembly(typeof(OpenAirTests).Assembly);
 
             _configuration = ConfigurationConstants.GetDefaultXmlConfiguration();
             _configuration.Encoding = Encoding.UTF8;
