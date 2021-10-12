@@ -1,9 +1,11 @@
 ﻿using FluentSerializer.Core.Configuration;
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace FluentSerializer.Core.SerializerException
 {
+    [Serializable]
     public sealed class ConverterNotSupportedException : SerializerException
     {
         public Type TargetType { get; }
@@ -22,5 +24,27 @@ namespace FluentSerializer.Core.SerializerException
             ConverterType = converterType;
             Direction = direction;
         }
+
+        #region Serializable
+        private ConverterNotSupportedException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            TargetType = (Type)info.GetValue(nameof(TargetType), typeof(Type))!;
+            Property = (PropertyInfo)info.GetValue(nameof(Property), typeof(PropertyInfo))!;
+            ConverterType = (Type)info.GetValue(nameof(ConverterType), typeof(Type))!;
+            ContainerType = (Type)info.GetValue(nameof(ContainerType), typeof(Type))!;
+            Direction = (SerializerDirection)info.GetValue(nameof(Direction), typeof(SerializerDirection))!;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(TargetType), TargetType);
+            info.AddValue(nameof(Property), Property);
+            info.AddValue(nameof(ConverterType), ConverterType);
+            info.AddValue(nameof(ContainerType), ContainerType);
+            info.AddValue(nameof(Direction), Direction);
+
+            base.GetObjectData(info, context);
+        }
+        #endregion
     }
 }

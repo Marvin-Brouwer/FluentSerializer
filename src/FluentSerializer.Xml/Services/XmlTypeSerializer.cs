@@ -8,6 +8,7 @@ using System.Collections;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using FluentSerializer.Xml.Exceptions;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -28,9 +29,7 @@ namespace FluentSerializer.Xml.Services
             Guard.Against.Null(classType, nameof(classType));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
-            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
-               "An enumerable type made it past the custom converter check. \n" +
-               $"Please make sure '{classType}' has a custom converter selected/configured.");
+            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(classType);
 
             var classMap = _mappings.Scan(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
