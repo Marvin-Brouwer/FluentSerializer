@@ -12,7 +12,7 @@ using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Xml.Profiles
 {
-    public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder
+    public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
         where TModel : new()
     {
         private readonly INamingStrategy _defaultNamingStrategy;
@@ -66,7 +66,7 @@ namespace FluentSerializer.Xml.Profiles
         /// <remarks>
         /// XML Elements can only have one text node so this should be set last and doesn't return a <see cref="XmlProfileBuilder{TModel}"/>
         /// </remarks>
-        public void Text<XText, TText>(
+        public void Text<TText>(
             Expression<Func<TModel, TText>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
             IConverter? converter = null

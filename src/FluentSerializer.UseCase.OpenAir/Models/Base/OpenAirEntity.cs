@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.UseCase.OpenAir.Models
+﻿namespace FluentSerializer.UseCase.OpenAir.Models.Base
 {
     internal abstract class OpenAirEntity
     {

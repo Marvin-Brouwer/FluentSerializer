@@ -5,7 +5,7 @@ namespace FluentSerializer.UseCase.OpenAir.Models.Request
 {
     internal class Request<TRequest>
     {
-        public XComment Authentication => new XComment("Normally this is where the authentication element would be added");
+        public XComment Authentication => new XComment(" Normally this is where the authentication element would be added ");
 
         public List<ReadRequest<TRequest>>? ReadRequests { get; set; } 
         public List<AddRequest<TRequest>>? AddRequests { get; set; }
