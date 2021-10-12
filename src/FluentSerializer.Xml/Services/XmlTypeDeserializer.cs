@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Xml.Linq;
+using FluentSerializer.Xml.Exceptions;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -41,9 +42,7 @@ namespace FluentSerializer.Xml.Services
             Guard.Against.Null(classType, nameof(classType));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
-            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotSupportedException(
-               "An enumerable type made it past the custom converter check. \n" +
-               $"Please make sure '{classType}' has a custom converter selected/configured.");
+            if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(classType);
 
             var classMap = _mappings.Scan(classType);
             if (classMap is null) throw new ClassMapNotFoundException(classType);
@@ -51,6 +50,7 @@ namespace FluentSerializer.Xml.Services
             if (classType == typeof(string)) return dataObject.ToString();
 
             var matchingTagName = classMap.NamingStrategy.GetName(classType, new NamingContext(_mappings));
+            if (dataObject.Name != matchingTagName) throw new MissingNodeException(classType, matchingTagName);
 
             var instance = Activator.CreateInstance(classType);
 
@@ -71,7 +71,7 @@ namespace FluentSerializer.Xml.Services
                     var xText = dataObject.Nodes().SingleOrDefault(node => node.NodeType == System.Xml.XmlNodeType.Text) as XText;
                     var textValue = xText?.Value;
                     if (string.IsNullOrEmpty(textValue) && !propertyMapping.Property.IsNullable())
-                        throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
+                        throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
                     if (string.IsNullOrEmpty(textValue))
                     {
                         SetPropertyValue(instance, propertyMapping, null);
@@ -94,7 +94,7 @@ namespace FluentSerializer.Xml.Services
                     var xAttribute = dataObject.Attribute(propertyName);
                     var attributeValue = xAttribute?.Value;
                     if (attributeValue is null && !propertyMapping.Property.IsNullable())
-                        throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
+                        throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
                     if (attributeValue is null)
                     {
                         SetPropertyValue(instance, propertyMapping, null);
@@ -119,7 +119,7 @@ namespace FluentSerializer.Xml.Services
                     // Collections may be empty
                     if (xElement is null && propertyMapping.Property.PropertyType.IsEnumerable()) continue;
                     if (xElement is null && !propertyMapping.Property.IsNullable())
-                            throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
+                            throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
                     if (xElement is null)
                     {
                         SetPropertyValue(instance, propertyMapping, null);
@@ -129,14 +129,6 @@ namespace FluentSerializer.Xml.Services
                     var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
                     if (matchingConverter is null)
                     {
-                        if (xElement is null && !propertyMapping.Property.IsNullable())
-                            throw new ContainerNotFouncException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
-                        if (xElement is null)
-                        {
-                            SetPropertyValue(instance, propertyMapping, null);
-                            continue;
-                        }
-
                         var deserializedInstance = DeserializeFromObject(xElement,propertyMapping.Property.PropertyType,  currentSerializer);
                         if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
                             throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);

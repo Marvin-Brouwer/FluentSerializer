@@ -5,7 +5,7 @@ namespace FluentSerializer.Xml.Services
 {
     public interface IAdvancedXmlSerializer : IXmlSerializer
     {
-        object? Deserialize(XElement item, Type propertyType);
-        XElement? SerializeToElement(object collectionItem, Type propertyType);
+        object? Deserialize(XElement element, Type modelType);
+        XElement? SerializeToElement(object? model, Type modelType);
     }
 }

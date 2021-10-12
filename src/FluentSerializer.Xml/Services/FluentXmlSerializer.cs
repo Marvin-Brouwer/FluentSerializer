@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace FluentSerializer.Xml.Services
 {
-    public sealed class FluentXmlSerializer : IXmlSerializer, IAdvancedXmlSerializer
+    public sealed class FluentXmlSerializer : IAdvancedXmlSerializer
     {
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
@@ -27,15 +27,16 @@ namespace FluentSerializer.Xml.Services
             Configuration = configuration;
         }
 
-        public TModel? Deserialize<TModel>(XElement dataObject)
+        public TModel? Deserialize<TModel>(XElement element)
             where TModel : class, new()
         {
-            if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MissingRootNodeException(typeof(TModel));
-            return _deserializer.DeserializeFromObject<TModel>(dataObject, this);
+            if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
+            return _deserializer.DeserializeFromObject<TModel>(element, this);
         }
-        public object? Deserialize(XElement dataObject, Type modelType)
+
+        public object? Deserialize(XElement element, Type modelType)
         {
-            return _deserializer.DeserializeFromObject(dataObject,modelType,  this);
+            return _deserializer.DeserializeFromObject(element, modelType,  this);
         }
 
         public TModel? Deserialize<TModel>(string stringData)
@@ -43,13 +44,13 @@ namespace FluentSerializer.Xml.Services
         {
             // todo see what happens if an element without declaration is passed
             var xDocument = XDocument.Parse(stringData);
-            return Deserialize<TModel>(xDocument.Root);
+            return Deserialize<TModel>(xDocument.Root!);
         }
 
         public string Serialize<TModel>(TModel model)
             where TModel : class, new()
         {
-            if (typeof(IEnumerable).IsAssignableFrom(model.GetType())) throw new MissingRootNodeException(model.GetType());
+            if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
             var xDocument = SerializeToDocument(model);
 
             var builder = new StringBuilder();
@@ -74,7 +75,8 @@ namespace FluentSerializer.Xml.Services
             if (model is null) return null;
             return _serializer.SerializeToElement(model, typeof(TModel), this);
         }
-        public XElement? SerializeToElement(object model, Type modelType)
+
+        public XElement? SerializeToElement(object? model, Type modelType)
         {
             if (model is null) return null;
             return _serializer.SerializeToElement(model, modelType, this);
