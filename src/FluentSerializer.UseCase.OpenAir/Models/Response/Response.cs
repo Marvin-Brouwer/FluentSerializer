@@ -2,7 +2,7 @@
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Response
 {
-    internal class Response<TResponse> where TResponse : IOpenAirEntity
+    internal class Response<TResponse> where TResponse : OpenAirEntity
     {
         public List<ReadResponse<TResponse>> ReadResponses { get; set; } = new List<ReadResponse<TResponse>>();
         public List<AddResponse<TResponse>> AddResponses { get; set; } = new List<AddResponse<TResponse>>();
@@ -11,31 +11,31 @@ namespace FluentSerializer.UseCase.OpenAir.Models.Response
     }
 
     internal abstract class ResponseObject<TResponse>
-        where TResponse : IOpenAirEntity
+        where TResponse : OpenAirEntity
     {
         public int StatusCode { get; set; }
         public List<TResponse> Data { get; set; } = new List<TResponse>();
     }
 
     internal class ReadResponse<TResponse> : ResponseObject<TResponse>
-        where TResponse : IOpenAirEntity
+        where TResponse : OpenAirEntity
     {
     }
 
     internal class AddResponse<TResponse> : ResponseObject<TResponse>
-        where TResponse : IOpenAirEntity
+        where TResponse : OpenAirEntity
     {
 
     }
 
     internal class ModifyResponse<TResponse> : ResponseObject<TResponse>
-        where TResponse : IOpenAirEntity
+        where TResponse : OpenAirEntity
     {
 
     }
 
     internal class DeleteResponse<TResponse> : ResponseObject<TResponse>
-        where TResponse : IOpenAirEntity
+        where TResponse : OpenAirEntity
     {
 
     }
