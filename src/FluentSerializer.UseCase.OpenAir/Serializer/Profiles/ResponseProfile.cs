@@ -1,14 +1,11 @@
-﻿using FluentSerializer.Core.NamingStrategies;
-using FluentSerializer.UseCase.OpenAir.Models;
+﻿using FluentSerializer.UseCase.OpenAir.Models.Base;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
-using FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
+using FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
     public sealed class ResponseProfile : OpenAirSerializerProfile
     {
-        private readonly INamingStrategy ResponseTypeNamingStrategy = new ResponseTypeNamingStrategy();
-
         public override void Configure()
         {
             For<Response<OpenAirEntity>>(
@@ -32,38 +29,25 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Read")
             )
-                .Attribute(responseObject => responseObject.StatusCode,
-                    namingStrategy: CustomNamingStrategy("status"))
-                .Child(response => response.Data,
-                    namingStrategy: ResponseTypeNamingStrategy,
-                    converter: NonWrappedCollectionConverter);
+                .UseBase();
 
             For<AddResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Add")
             )
-                .Attribute(responseObject => responseObject.StatusCode,
-                    namingStrategy: CustomNamingStrategy("status"))
-                .Child(response => response.Data,
-                    converter: NonWrappedCollectionConverter);
+                .UseBase();
 
             For<ModifyResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Modify")
             )
-                .Attribute(responseObject => responseObject.StatusCode,
-                    namingStrategy: CustomNamingStrategy("status"))
-                .Child(response => response.Data,
-                    converter: NonWrappedCollectionConverter);
+                .UseBase();
 
             For<DeleteResponse<OpenAirEntity>>(
                 attributeNamingStrategy: SnakeCaseNamingStrategy,
                 tagNamingStrategy: CustomNamingStrategy("Delete")
             )
-                .Attribute(responseObject => responseObject.StatusCode,
-                    namingStrategy: CustomNamingStrategy("status"))
-                .Child(response => response.Data,
-                    converter: NonWrappedCollectionConverter);
+                .UseBase();
         }
     }
 }

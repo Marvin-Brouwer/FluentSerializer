@@ -39,7 +39,7 @@ namespace FluentSerializer.Xml.Profiles
         protected static readonly NonWrappedCollectionConverter NonWrappedCollectionConverter = 
             new NonWrappedCollectionConverter();
 
-        protected XmlProfileBuilder<TModel> For<TModel>(
+        protected IXmlProfileBuilder<TModel> For<TModel>(
             INamingStrategy? tagNamingStrategy = null,
             INamingStrategy? attributeNamingStrategy = null)
             where TModel : new()

@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentSerializer.UseCase.OpenAir.Models.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Models
 {

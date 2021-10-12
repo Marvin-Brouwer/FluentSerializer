@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <request>
-  <!--Normally this is where the authentication element would be added-->
+  <!-- Normally this is where the authentication element would be added -->
   <Add type="Project">
     <Project>
       <name>Project 1</name>

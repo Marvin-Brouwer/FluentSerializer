@@ -4,7 +4,7 @@ using FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
 using FluentSerializer.Xml.Converters;
 using FluentSerializer.Xml.Profiles;
 
-namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
+namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base
 {
     public abstract class OpenAirSerializerProfile : SerializerProfile
     {

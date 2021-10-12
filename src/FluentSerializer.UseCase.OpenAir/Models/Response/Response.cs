@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentSerializer.UseCase.OpenAir.Models.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Response
 {

@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.UseCase.OpenAir.Models;
+using FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
