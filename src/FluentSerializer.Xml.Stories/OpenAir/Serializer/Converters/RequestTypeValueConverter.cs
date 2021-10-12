@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Services;
-using FluentSerializer.Xml.Services;
 using System;
 using System.Reflection;
 using System.Xml.Linq;
@@ -22,15 +21,13 @@ namespace FluentSerializer.Xml.Stories.OpenAir.Serializer.Converters
         {
             // We know this to be true because of RequestObject<TModel>
             var classType = context.ClassType.GetTypeInfo().GenericTypeArguments[0];
+            var classNamingStrategy = context.FindNamingStrategy(classType);
+            if (classNamingStrategy is null)
+                throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
 
-            //var listType = typeof(List<>).GetGenericTypeDefinition().MakeGenericType(classType);
-            var classInstance = Activator.CreateInstance(classType)!;
-            //var classInstance = Activator.CreateInstance(listType)!;
-            var wrapperElement = ((IAdvancedXmlSerializer)context.CurrentSerializer).SerializeToElement(classInstance, classType);
-            var elementTypeString = wrapperElement?.Name.ToString();
-            // todo check name for null and throw
-
+            var elementTypeString = classNamingStrategy.GetName(classType, context);
             var attributeName = context.NamingStrategy.GetName(context.Property, context);
+
             return new XAttribute(attributeName, elementTypeString);
         }
     }

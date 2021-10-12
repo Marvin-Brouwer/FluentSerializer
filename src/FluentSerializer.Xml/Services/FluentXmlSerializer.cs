@@ -42,7 +42,6 @@ namespace FluentSerializer.Xml.Services
         public TModel? Deserialize<TModel>(string stringData)
             where TModel : class, new()
         {
-            // todo see what happens if an element without declaration is passed
             var xDocument = XDocument.Parse(stringData);
             return Deserialize<TModel>(xDocument.Root!);
         }
