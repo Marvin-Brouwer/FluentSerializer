@@ -9,7 +9,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
     public sealed class RequestProfile : XmlSerializerProfile
     {
-        public override void Configure()
+        protected override void Configure()
         {
             For<Request<object>>(
                 direction: SerializerDirection.Serialize,

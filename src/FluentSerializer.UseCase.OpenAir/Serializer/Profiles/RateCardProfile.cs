@@ -8,7 +8,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
     public sealed class RateCardProfile : XmlSerializerProfile
     {
-        public override void Configure()
+        protected override void Configure()
         {
             For<RateCard>(
                 attributeNamingStrategy: Names.Use.SnakeCase,
