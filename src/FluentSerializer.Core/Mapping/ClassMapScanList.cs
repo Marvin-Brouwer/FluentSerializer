@@ -7,7 +7,7 @@ namespace FluentSerializer.Core.Mapping
 {
     public sealed class ClassMapScanList : ScanList<(Type type, SerializerDirection direction), IClassMap>
     {
-        public ClassMapScanList(IEnumerable<IClassMap> dataTypes) : base(dataTypes) { }
+        public ClassMapScanList(IReadOnlyList<IClassMap> dataTypes) : base(dataTypes) { }
 
         protected override bool Compare((Type type, SerializerDirection direction) compareTo, IClassMap dataType)
         {

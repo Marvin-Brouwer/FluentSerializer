@@ -22,7 +22,7 @@ namespace FluentSerializer.Core.Profiles
 
             var profiles = ScanAssembly(assembly);
 
-            return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure()));
+            return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure()).ToList().AsReadOnly());
         }
     }
 }

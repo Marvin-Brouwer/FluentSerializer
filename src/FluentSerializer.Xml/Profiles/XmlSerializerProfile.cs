@@ -1,6 +1,7 @@
 ﻿using FluentSerializer.Core.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming;
@@ -16,6 +17,7 @@ namespace FluentSerializer.Xml.Profiles
     /// Since <see cref="XmlElementAttribute"/> is a system type, no additional dependencies are required.
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
+    [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough]
     internal sealed class ImplicitlyUsedAttribute : XmlElementAttribute { }
     
     [ImplicitlyUsed]
@@ -28,12 +30,14 @@ namespace FluentSerializer.Xml.Profiles
         /// <remarks>
         /// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
         /// </remarks>
-        IEnumerable<IClassMap> ISerializerProfile.Configure()
+        [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
+         System.Diagnostics.DebuggerHidden]
+        IReadOnlyList<IClassMap> ISerializerProfile.Configure()
         {
             Configure();
-            return new List<IClassMap>(_classMaps);
+            return new ReadOnlyCollection<IClassMap>(_classMaps);
         }
-
+        
         protected IXmlProfileBuilder<TModel> For<TModel>(
             SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? tagNamingStrategy = null,
@@ -52,7 +56,7 @@ namespace FluentSerializer.Xml.Profiles
                 classType, 
                 direction,
                 tagNamingStrategy ?? Names.Use.PascalCase, 
-                propertyMap));
+                propertyMap.AsReadOnly()));
 
             return builder;
         }
