@@ -10,7 +10,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
     public sealed class ResponseProfile : XmlSerializerProfile
     {
-        public override void Configure()
+        protected override void Configure()
         {
             For<Response<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,

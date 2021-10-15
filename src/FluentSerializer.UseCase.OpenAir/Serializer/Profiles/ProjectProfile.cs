@@ -9,7 +9,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
     public sealed class ProjectProfile : XmlSerializerProfile
     {
-        public override void Configure()
+        protected override void Configure()
         {
             For<Project>(
                 attributeNamingStrategy: Names.Use.SnakeCase,
