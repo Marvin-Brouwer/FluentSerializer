@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.Profiles
 {
     public interface ISerializerProfile
     {
-        IEnumerable<IClassMap> Configure();
+        [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
+         System.Diagnostics.DebuggerHidden]
+        IReadOnlyList<IClassMap> Configure();
     }
 }

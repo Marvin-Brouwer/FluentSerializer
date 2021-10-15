@@ -11,27 +11,29 @@ namespace FluentSerializer.Core.Mapping
     {
         private readonly IReadOnlyList<TScanFor> _storedDataTypes;
         #if (!DEBUG)
+        #pragma warning disable CS8714
         private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new Dictionary<TScanBy, TScanFor?>();
+        #pragma warning restore CS8714
         #endif
 
-        protected ScanList(IEnumerable<TScanFor> dataTypes)
+        protected ScanList(IReadOnlyList<TScanFor> dataTypes)
         {
             Guard.Against.Null(dataTypes, nameof(dataTypes));
             Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Any());
 
-            _storedDataTypes = dataTypes.ToList().AsReadOnly();
+            _storedDataTypes = dataTypes;
         }
 
         public TScanFor? Scan(TScanBy key)
         {
             Guard.Against.Null(key, nameof(key));
             #if (!DEBUG)
-            if (_cachedMappings.ContainsKey(type)) return _cachedMappings[type];
+            if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
             #endif
 
             var matchingType = _storedDataTypes.FirstOrDefault(dataType => Compare(key, dataType));
             #if (!DEBUG)
-            _cachedMappings[type] = matchingType;
+            _cachedMappings[key] = matchingType;
             #endif
 
             return matchingType;

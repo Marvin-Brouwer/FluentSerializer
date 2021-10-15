@@ -17,7 +17,7 @@ namespace FluentSerializer.Xml.Profiles
     {
         private readonly Func<INamingStrategy> _defaultNamingStrategy;
         private readonly List<IPropertyMap> _propertyMap;
-
+        
         public XmlProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
         {
             Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
@@ -44,7 +44,7 @@ namespace FluentSerializer.Xml.Profiles
 
             return this;
         }
-
+        
         public XmlProfileBuilder<TModel> Child<TAttribute>(
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
