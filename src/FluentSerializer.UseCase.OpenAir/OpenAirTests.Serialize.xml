@@ -16,6 +16,7 @@
       </updated>
       <active>1</active>
       <custom_date__c>1991-11-28</custom_date__c>
+      <some_external_service_name_id__c>P-00-1</some_external_service_name_id__c>
       <id>0001</id>
     </Project>
   </Add>

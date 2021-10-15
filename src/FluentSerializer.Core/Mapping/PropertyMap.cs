@@ -1,36 +1,42 @@
 ﻿using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Services;
 using System;
 using System.Linq;
 using System.Reflection;
+using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Mapping
 {
     public sealed class PropertyMap : IPropertyMap 
     {
+
+        private readonly Func<INamingStrategy> _namingStrategy;
+        private readonly Func<IConverter>? _customConverter;
+
+        public INamingStrategy NamingStrategy => _namingStrategy();
+        public IConverter? CustomConverter => _customConverter?.Invoke();
+
         public SerializerDirection Direction { get; }
         public PropertyInfo Property { get; }
         public Type ConcretePropertyType { get; }
-        public INamingStrategy NamingStrategy { get; }
-        public IConverter? CustomConverter { get; }
         public Type ContainerType { get; }
 
         public PropertyMap(
             SerializerDirection direction,
             Type containerType,
             PropertyInfo property,
-            INamingStrategy namingStrategy,
-            IConverter? customConverter)
+            Func<INamingStrategy> namingStrategy,
+            Func<IConverter>? customConverter)
         {
+            _namingStrategy = namingStrategy;
+            _customConverter = customConverter;
+
             Direction = direction;
             Property = property;
-            ConcretePropertyType = Nullable.GetUnderlyingType(property.PropertyType) 
-                                   ?? property.PropertyType;
-            NamingStrategy = namingStrategy;
-            CustomConverter = customConverter;
+            ConcretePropertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
             ContainerType = containerType;
         }
 
@@ -48,11 +54,11 @@ namespace FluentSerializer.Core.Mapping
             if (converter is null) return null;
 
             if (!converter.CanConvert(ConcretePropertyType))
-                throw new ConverterNotSupportedException(Property, converter.GetType(), typeof(TDataContainer), direction);
+                throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);
             if (converter is IConverter<TDataContainer> specificConverter)
                 return specificConverter;
 
-            throw new ConverterNotSupportedException(Property, converter.GetType(), typeof(TDataContainer), direction);
+            throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);
         }
     }
 }

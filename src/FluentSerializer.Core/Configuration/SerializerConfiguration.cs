@@ -1,6 +1,6 @@
-﻿using FluentSerializer.Core.Services;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
+using FluentSerializer.Core.Converting;
 
 namespace FluentSerializer.Core.Configuration
 {

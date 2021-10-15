@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace FluentSerializer.Core.NamingStrategies
+namespace FluentSerializer.Core.Naming.NamingStrategies
 {
     public class SnakeCaseNamingStrategy : CamelCaseNamingStrategy
     {

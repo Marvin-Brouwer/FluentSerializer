@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies
 {

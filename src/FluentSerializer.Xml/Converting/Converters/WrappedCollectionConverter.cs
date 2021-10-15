@@ -1,15 +1,15 @@
-﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Core.Services;
-using FluentSerializer.Xml.Services;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Extensions;
+using FluentSerializer.Xml.Services;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.Converting.Converters
 {
     public class WrappedCollectionConverter : IConverter<XElement>
     {

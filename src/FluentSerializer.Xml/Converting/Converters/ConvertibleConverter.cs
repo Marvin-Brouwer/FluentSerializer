@@ -2,9 +2,9 @@
 using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
+using FluentSerializer.Core.Converting;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.Converting.Converters
 {
     public sealed class ConvertibleConverter : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
     {

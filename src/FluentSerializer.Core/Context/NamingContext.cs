@@ -1,8 +1,8 @@
 ﻿using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.NamingStrategies;
 using System;
 using System.Reflection;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context
 {
@@ -16,12 +16,12 @@ namespace FluentSerializer.Core.Context
             _classMappings = classMappings;
         }
 
-        public INamingStrategy? FindNamingStrategy(Type type, PropertyInfo property)
+        public INamingStrategy? FindNamingStrategy(Type classType, PropertyInfo property)
         {
-            Guard.Against.Null(type, nameof(type));
+            Guard.Against.Null(classType, nameof(classType));
             Guard.Against.Null(property, nameof(property));
 
-            var classMap = _classMappings.Scan(type);
+            var classMap = _classMappings.Scan(classType);
             if (classMap is null) return null;
 
             return FindNamingStrategy(classMap.PropertyMaps, property);

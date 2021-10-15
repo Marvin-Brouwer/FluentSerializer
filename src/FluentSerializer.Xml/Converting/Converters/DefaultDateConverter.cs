@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Xml.Converters.Base;
-using System;
+﻿using System;
 using System.Globalization;
+using FluentSerializer.Xml.Converting.Converters.Base;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.Converting.Converters
 {
     public class DefaultDateConverter : SimpleStructConverter<DateTime>
     {

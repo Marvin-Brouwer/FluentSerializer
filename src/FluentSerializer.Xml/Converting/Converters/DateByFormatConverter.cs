@@ -1,9 +1,9 @@
-﻿using Ardalis.GuardClauses;
-using FluentSerializer.Xml.Converters.Base;
-using System;
+﻿using System;
 using System.Globalization;
+using Ardalis.GuardClauses;
+using FluentSerializer.Xml.Converting.Converters.Base;
 
-namespace FluentSerializer.Xml.Converters
+namespace FluentSerializer.Xml.Converting.Converters
 {
 
     public class DateByFormatConverter : SimpleStructConverter<DateTime>

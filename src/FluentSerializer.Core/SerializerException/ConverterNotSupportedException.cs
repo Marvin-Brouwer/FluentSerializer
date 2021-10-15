@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.SerializerException
 {
@@ -14,12 +15,12 @@ namespace FluentSerializer.Core.SerializerException
         public Type ContainerType { get; }
         public SerializerDirection Direction { get; }
 
-        public ConverterNotSupportedException(PropertyInfo property, Type converterType, Type containerType, SerializerDirection direction) : base(
-            $"The converter of type '{converterType}' selected for '{property.DeclaringType?.FullName ?? "<dynamic>"}.{property.Name}' cannot convert '{property.PropertyType.FullName}' \n" +
+        public ConverterNotSupportedException(IPropertyMap property, Type converterType, Type containerType, SerializerDirection direction) : base(
+            $"The converter of type '{converterType}' selected for '{property.ContainerType.FullName ?? "<dynamic>"}.{property.Property.Name}' cannot convert '{property.ConcretePropertyType.FullName}' \n" +
             "Make sure you've selected a converter that supports this conversion.")
         {
-            TargetType = property.PropertyType;
-            Property = property;
+            TargetType = property.ConcretePropertyType;
+            Property = property.Property;
             ContainerType = containerType;
             ConverterType = converterType;
             Direction = direction;
