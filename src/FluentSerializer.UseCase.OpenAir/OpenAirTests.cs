@@ -11,6 +11,7 @@ using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Constants;
 using FluentSerializer.Xml.Services;
+
 using Xunit;
 
 namespace FluentSerializer.UseCase.OpenAir

@@ -10,5 +10,6 @@ namespace FluentSerializer.UseCase.OpenAir.Models
         public bool Active { get; set; }
         public int? RateCardId { get; set; }
         public DateTime? CustomDate { get; set; }
+        public string? ExternalId { get; set; }
     }
 }

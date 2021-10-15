@@ -1,13 +1,13 @@
-﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
-using System;
+﻿using System;
 using System.Xml.Linq;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting;
 
-namespace FluentSerializer.Xml.Converters.Base
+namespace FluentSerializer.Xml.Converting.Converters.Base
 {
-    public abstract class SimpleTypeConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
-        where TObject : class
+    public abstract class SimpleStructConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
+        where TObject : struct
     {
         public virtual SerializerDirection Direction => SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);

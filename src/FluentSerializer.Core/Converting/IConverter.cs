@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Core.Configuration;
+﻿using System;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using System;
 
-namespace FluentSerializer.Core.Services
+namespace FluentSerializer.Core.Converting
 {
     public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : class
     {

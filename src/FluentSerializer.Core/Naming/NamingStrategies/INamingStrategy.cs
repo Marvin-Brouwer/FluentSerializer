@@ -1,8 +1,8 @@
-﻿using FluentSerializer.Core.Context;
-using System;
+﻿using System;
 using System.Reflection;
+using FluentSerializer.Core.Context;
 
-namespace FluentSerializer.Core.NamingStrategies
+namespace FluentSerializer.Core.Naming.NamingStrategies
 {
     public interface INamingStrategy
     {

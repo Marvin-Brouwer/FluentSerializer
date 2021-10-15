@@ -1,48 +1,51 @@
-﻿using FluentSerializer.UseCase.OpenAir.Models.Request;
+﻿using FluentSerializer.Core.Naming;
+using FluentSerializer.UseCase.OpenAir.Models.Request;
 using FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base;
+using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.Profiles;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 {
-    public sealed class RequestProfile : OpenAirSerializerProfile
+    public sealed class RequestProfile : XmlSerializerProfile
     {
         public override void Configure()
         {
             For<Request<object>>(
-                attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: LowerCaseNamingStrategy
+                attributeNamingStrategy: Names.Use.SnakeCase,
+                tagNamingStrategy: Names.Use.LowerCase
             )
                 .Child(response => response.Authentication)
                 .Child(response => response.ReadRequests,
-                    converter: NonWrappedCollectionConverter)
+                    converter: Converter.For.Collection(false))
                 .Child(response => response.AddRequests,
-                    converter: NonWrappedCollectionConverter)
+                    converter: Converter.For.Collection(false))
                 .Child(response => response.ModifyRequests,
-                    converter: NonWrappedCollectionConverter)
+                    converter: Converter.For.Collection(false))
                 .Child(response => response.DeleteRequests,
-                    converter: NonWrappedCollectionConverter);
+                    converter: Converter.For.Collection(false));
 
             For<ReadRequest<object>>(
-                attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: CustomNamingStrategy("Read")
+                attributeNamingStrategy: Names.Use.SnakeCase,
+                tagNamingStrategy: Names.Are("Read")
             )
                 .UseBase()
                 .Attribute(responseObject => responseObject.Filter);
 
             For<AddRequest<object>>(
-                attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: CustomNamingStrategy("Add")
+                attributeNamingStrategy: Names.Use.SnakeCase,
+                tagNamingStrategy: Names.Are("Add")
             )
                 .UseBase();
 
             For<ModifyRequest<object>>(
-                attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: CustomNamingStrategy("Modify")
+                attributeNamingStrategy: Names.Use.SnakeCase,
+                tagNamingStrategy: Names.Are("Modify")
             )
                 .UseBase();
 
             For<DeleteRequest<object>>(
-                attributeNamingStrategy: SnakeCaseNamingStrategy,
-                tagNamingStrategy: CustomNamingStrategy("Delete")
+                attributeNamingStrategy: Names.Use.SnakeCase,
+                tagNamingStrategy: Names.Are("Delete")
             )
                 .UseBase();
         }

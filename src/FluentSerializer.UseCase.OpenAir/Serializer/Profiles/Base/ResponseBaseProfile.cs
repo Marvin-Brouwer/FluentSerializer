@@ -1,9 +1,11 @@
-﻿using FluentSerializer.Core.NamingStrategies;
-using FluentSerializer.Core.Services;
+﻿using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.UseCase.OpenAir.Models.Base;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
-using FluentSerializer.Xml.Converters;
+using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Profiles;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base
@@ -25,10 +27,10 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base
         {
             builder 
                 .Attribute(responseObject => responseObject.StatusCode,
-                    namingStrategy: CustomNamingStrategy("status"))
+                    namingStrategy: Names.Are("status"))
                 .Child(response => response.Data,
-                    namingStrategy: ResponseTypeNamingStrategy,
-                    converter: NonWrappedCollectionConverter);
+                    namingStrategy: Names.Use.ResponseTypeName,
+                    converter: Converter.For.Collection(false));
 
             return builder;
         }

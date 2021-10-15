@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
+using FluentSerializer.Core.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {

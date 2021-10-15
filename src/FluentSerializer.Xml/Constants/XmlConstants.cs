@@ -1,5 +1,5 @@
 ﻿
-using FluentSerializer.Core.NamingStrategies;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Xml.Constants
 {

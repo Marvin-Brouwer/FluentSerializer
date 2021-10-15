@@ -1,24 +1,24 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
-using FluentSerializer.Core.NamingStrategies;
-using FluentSerializer.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Xml.Linq;
 using FluentSerializer.Xml.Constants;
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Xml.Profiles
 {
     public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
         where TModel : new()
     {
-        private readonly INamingStrategy _defaultNamingStrategy;
+        private readonly Func<INamingStrategy> _defaultNamingStrategy;
         private readonly List<IPropertyMap> _propertyMap;
 
-        public XmlProfileBuilder(INamingStrategy defaultNamingStrategy, List<IPropertyMap> propertyMap)
+        public XmlProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
         {
             Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
             Guard.Against.Null(propertyMap, nameof(propertyMap));
@@ -30,8 +30,8 @@ namespace FluentSerializer.Xml.Profiles
         public XmlProfileBuilder<TModel> Attribute<TAttribute>(
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
-            INamingStrategy? namingStrategy = null,
-            IConverter? converter = null
+            Func<INamingStrategy>? namingStrategy = null,
+            Func<IConverter<XAttribute>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
@@ -48,8 +48,8 @@ namespace FluentSerializer.Xml.Profiles
         public XmlProfileBuilder<TModel> Child<TAttribute>(
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
-            INamingStrategy? namingStrategy = null,
-            IConverter? converter = null
+            Func<INamingStrategy>? namingStrategy = null,
+            Func<IConverter<XElement>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
@@ -69,7 +69,7 @@ namespace FluentSerializer.Xml.Profiles
         public void Text<TText>(
             Expression<Func<TModel, TText>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
-            IConverter? converter = null
+            Func<IConverter<XText>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
@@ -77,7 +77,7 @@ namespace FluentSerializer.Xml.Profiles
                 typeof(XText),
                 propertySelector.GetProperty(),
                 // This isn't used but setting it to null requires a lot more code.
-                XmlConstants.TextNodeNamingStrategy,
+                () => XmlConstants.TextNodeNamingStrategy,
                 converter
             ));
         }

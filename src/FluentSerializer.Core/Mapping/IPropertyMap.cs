@@ -1,8 +1,9 @@
 ﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.NamingStrategies;
 using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
+using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Mapping
 {

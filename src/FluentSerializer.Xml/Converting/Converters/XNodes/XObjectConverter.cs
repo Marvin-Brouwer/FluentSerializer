@@ -1,10 +1,10 @@
-﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Services;
-using System;
+﻿using System;
 using System.Xml.Linq;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting;
 
-namespace FluentSerializer.Xml.Converters.XNodes
+namespace FluentSerializer.Xml.Converting.Converters.XNodes
 {
     public sealed class XObjectConverter : IConverter<XElement>
     {

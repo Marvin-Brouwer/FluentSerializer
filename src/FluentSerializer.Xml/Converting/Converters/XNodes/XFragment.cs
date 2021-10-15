@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using FluentSerializer.Xml.Constants;
 
-namespace FluentSerializer.Xml.Converters.XNodes
+namespace FluentSerializer.Xml.Converting.Converters.XNodes
 {
     public sealed class XFragment : XElement
     {

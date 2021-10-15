@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Core.NamingStrategies
+﻿namespace FluentSerializer.Core.Naming.NamingStrategies
 {
     public class PascalCaseNamingStrategy : CamelCaseNamingStrategy
     {

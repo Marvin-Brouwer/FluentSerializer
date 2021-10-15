@@ -19,6 +19,7 @@ namespace FluentSerializer.UseCase.OpenAir
                             Id = "0001",
                             Active = true,
                             Name = "Project 1",
+                            ExternalId = "P-00-1",
                             LastUpdate = CreateDate("1991-11-28 03:00:00"),
                             CustomDate = CreateDate("1991-11-28 03:00:00"),
                         }

@@ -1,6 +1,5 @@
 ﻿using FluentSerializer.Core.Configuration;
-using FluentSerializer.Xml.Converters;
-using FluentSerializer.Xml.Converters.XNodes;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.Xml.Constants
 {
@@ -13,14 +12,14 @@ namespace FluentSerializer.Xml.Constants
                 FormatOutput = true,
                 DefaultConverters =
                 {
-                    new DefaultDateConverter(),
-                    new ConvertibleConverter(),
+                    UseXmlConverters.DefaultDateConverter,
+                    UseXmlConverters.ConvertibleConverter,
 
                     // Collection converters
-                    new WrappedCollectionConverter(),
+                    UseXmlConverters.WrappedCollectionConverter,
 
                     // Special XNode types
-                    new XObjectConverter()
+                    UseXmlConverters.XObjectConverter
                 }
             };
         }
