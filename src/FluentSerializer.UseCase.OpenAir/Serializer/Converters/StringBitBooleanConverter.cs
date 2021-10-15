@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
@@ -33,18 +34,18 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
         XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            var objectBoolean = (bool?)objectToSerialize ?? default;
+            var objectBoolean = (bool)objectToSerialize;
 
-            var attributeName = context.NamingStrategy.GetName(context.Property, context);
+            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
             var attributeValue = ConvertToString(objectBoolean);
             return new XAttribute(attributeName, attributeValue);
         }
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            var objectBoolean = (bool?)objectToSerialize ?? default;
+            var objectBoolean = (bool)objectToSerialize;
 
-            var elementName = context.NamingStrategy.GetName(context.Property, context);
+            var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
             var elementValue = ConvertToString(objectBoolean);
             return new XElement(elementName, elementValue);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Mapping
@@ -10,5 +11,6 @@ namespace FluentSerializer.Core.Mapping
         Type ClassType { get; }
 
         IScanList<PropertyInfo, IPropertyMap> PropertyMaps { get; }
+        SerializerDirection Direction { get; }
     }
 }

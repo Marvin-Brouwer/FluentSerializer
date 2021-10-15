@@ -2,6 +2,7 @@
 using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context
@@ -25,7 +26,7 @@ namespace FluentSerializer.Core.Context
             PropertyInfo property, Type classType, 
             INamingStrategy namingStrategy, ISerializer currentSerializer,
             IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-            IScanList<Type, IClassMap> classMappings) :
+            IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings) :
             base(classMappings)
         {
             _propertyMappings = propertyMappings;

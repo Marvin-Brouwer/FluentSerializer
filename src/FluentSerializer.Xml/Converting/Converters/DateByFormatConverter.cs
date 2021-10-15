@@ -5,7 +5,6 @@ using FluentSerializer.Xml.Converting.Converters.Base;
 
 namespace FluentSerializer.Xml.Converting.Converters
 {
-
     public class DateByFormatConverter : SimpleStructConverter<DateTime>
     {
         private readonly string _format;
@@ -23,7 +22,7 @@ namespace FluentSerializer.Xml.Converting.Converters
             _dateTimeStyle = dateTimeStyle;
         }
 
-        protected override DateTime ConvertToDataType(string value) => DateTime.ParseExact(value, _format, _cultureInfo, _dateTimeStyle);
+        protected override DateTime ConvertToDataType(string currentValue) => DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
         protected override string ConvertToString(DateTime value) => value.ToString(_format, _cultureInfo);
     }
 }

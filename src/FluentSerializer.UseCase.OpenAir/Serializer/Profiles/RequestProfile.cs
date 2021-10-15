@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Core.Naming;
+﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Naming;
 using FluentSerializer.UseCase.OpenAir.Models.Request;
 using FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base;
 using FluentSerializer.Xml.Converting;
@@ -11,6 +12,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
         public override void Configure()
         {
             For<Request<object>>(
+                direction: SerializerDirection.Serialize,
                 attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Use.LowerCase
             )
@@ -25,6 +27,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                     converter: Converter.For.Collection(false));
 
             For<ReadRequest<object>>(
+                direction: SerializerDirection.Serialize,
                 attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Read")
             )
@@ -32,18 +35,21 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 .Attribute(responseObject => responseObject.Filter);
 
             For<AddRequest<object>>(
+                direction: SerializerDirection.Serialize,
                 attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Add")
             )
                 .UseBase();
 
             For<ModifyRequest<object>>(
+                direction: SerializerDirection.Serialize,
                 attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Modify")
             )
                 .UseBase();
 
             For<DeleteRequest<object>>(
+                direction: SerializerDirection.Serialize,
                 attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Delete")
             )

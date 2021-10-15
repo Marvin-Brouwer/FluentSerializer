@@ -1,27 +1,19 @@
-﻿using System;
-using System.Globalization;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Xml.Converting;
-using FluentSerializer.Xml.Converting.Converters.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
     public static class ConverterExtensions
     {
-        private static readonly SimpleStructConverter<DateTime> SimpleDateConverter = ConfigureSimpleDateConverter();
-        private static SimpleStructConverter<DateTime> ConfigureSimpleDateConverter()
-        {
-            const string dateFormat = "yyyy-MM-dd";
-            var cultureInfo = CultureInfo.InvariantCulture;
-            var dateTimeStyle = DateTimeStyles.AssumeUniversal;
+        private static readonly OpenAirDateConverter OpenAirDateConverter = new OpenAirDateConverter();
+        private static readonly RequestTypeValueConverter RequestTypeValueConverter = new RequestTypeValueConverter();
+        private static readonly StringBitBooleanConverter StringBitBooleanConverter = new StringBitBooleanConverter();
+        private static readonly SimpleDateConverter SimpleDateConverter = new SimpleDateConverter();
 
-            return Converter.For.Dates(dateFormat, cultureInfo, dateTimeStyle)();
-        }
-
-        public static OpenAirDateConverter OpenAirDate (this IUseXmlConverters _) => new OpenAirDateConverter();
-        public static IConverter<XAttribute> RequestTypeValue (this IUseXmlConverters _) => new RequestTypeValueConverter();
-        public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => new StringBitBooleanConverter();
-        public static SimpleStructConverter<DateTime> SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
+        public static OpenAirDateConverter OpenAirDate (this IUseXmlConverters _) => OpenAirDateConverter;
+        public static IConverter<XAttribute> RequestTypeValue (this IUseXmlConverters _) => RequestTypeValueConverter;
+        public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => StringBitBooleanConverter;
+        public static SimpleDateConverter SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
     }
 }

@@ -15,13 +15,6 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles.Base
     /// </remarks>
     public static class ResponseBaseProfile
     {
-        /// <inheritdoc cref="NonWrappedCollectionConverter"/>
-        private static readonly IConverter NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
-        /// <inheritdoc cref="ResponseTypeNamingStrategy"/>
-        private static readonly INamingStrategy ResponseTypeNamingStrategy = new ResponseTypeNamingStrategy();
-        /// <inheritdoc cref="CustomNamingStrategy"/>
-        private static INamingStrategy CustomNamingStrategy(string name) => new CustomNamingStrategy(name);
-
         internal static IXmlProfileBuilder<TResponseObject> UseBase<TResponseObject>(this IXmlProfileBuilder<TResponseObject> builder)
             where TResponseObject : ResponseObject<OpenAirEntity>, new()
         {

@@ -30,7 +30,7 @@ namespace FluentSerializer.Xml.Converting.Converters
             var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
                 ?? context.NamingStrategy;
 
-            var itemName = itemNamingStrategy.GetName(genericTargetType, context);
+            var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
             var elementsToDeserialize = objectToDeserialize!.Elements(itemName);
             foreach (var item in elementsToDeserialize)
             {
@@ -47,11 +47,10 @@ namespace FluentSerializer.Xml.Converting.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize == null) return null;
             if (!(objectToSerialize is IEnumerable enumerableToSerialize)) 
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            var customElement = new XElement(context.NamingStrategy.GetName(context.Property, context));
+            var customElement = new XElement(context.NamingStrategy.SafeGetName(context.Property, context));
             foreach(var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;

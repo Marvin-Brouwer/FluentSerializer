@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
@@ -25,8 +26,8 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             if (classNamingStrategy is null)
                 throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
 
-            var elementTypeString = classNamingStrategy.GetName(classType, context);
-            var attributeName = context.NamingStrategy.GetName(context.Property, context);
+            var elementTypeString = classNamingStrategy.SafeGetName(classType, context);
+            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
 
             return new XAttribute(attributeName, elementTypeString);
         }
