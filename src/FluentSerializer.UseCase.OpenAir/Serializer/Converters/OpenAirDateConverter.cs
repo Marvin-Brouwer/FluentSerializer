@@ -11,7 +11,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
     public class OpenAirDateConverter : IXmlConverter<XElement>
     {
-        public SerializerDirection Direction => SerializerDirection.Both;
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
 
 

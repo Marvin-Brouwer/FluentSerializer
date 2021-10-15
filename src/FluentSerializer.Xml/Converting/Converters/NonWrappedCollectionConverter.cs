@@ -13,7 +13,7 @@ namespace FluentSerializer.Xml.Converting.Converters
 {
     public class NonWrappedCollectionConverter : IXmlConverter<XElement>
     {
-        public virtual SerializerDirection Direction => SerializerDirection.Both;
+        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) => targetType.IsEnumerable();
 
         object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)

@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Profiles;
@@ -36,7 +33,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = await File.ReadAllTextAsync("../../../MavenlinkTests.Serialize.json");
             var example = ProjectRequestExample;
 
-            var sut = new FluentJsonSerializer(_mappings, _configuration);
+            var sut = new RuntimeJsonSerializer(_mappings, _configuration);
 
             // Act
             var result = sut.Serialize(example);
@@ -52,7 +49,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = UserResponseExample;
             var example = await File.ReadAllTextAsync("../../../MavenlinkTests.Deserialize.json");
 
-            var sut = new FluentJsonSerializer(_mappings, _configuration);
+            var sut = new RuntimeJsonSerializer(_mappings, _configuration);
 
             // Act
             var result = sut.Deserialize<Response<User>>(example);

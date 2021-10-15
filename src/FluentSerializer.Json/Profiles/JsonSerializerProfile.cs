@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Profiles
     [ImplicitlyUsed]
     public abstract class JsonSerializerProfile : ISerializerProfile
     {
-        private readonly List<IClassMap> _classMaps = new List<IClassMap>();
+        private readonly List<IClassMap> _classMaps = new();
         private JsonSerializerConfiguration _configuration = JsonSerializerConfiguration.Default;
 
         protected abstract void Configure();

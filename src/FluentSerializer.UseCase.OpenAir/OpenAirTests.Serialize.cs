@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using FluentSerializer.UseCase.OpenAir.Models;
+﻿using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Request;
 
 namespace FluentSerializer.UseCase.OpenAir
 {
     public sealed partial class OpenAirTests
     {
-        private static readonly Request<Project> ProjectRequestExample = new Request<Project>
+        private static readonly Request<Project> ProjectRequestExample = new()
         {
-            AddRequests = new List<AddRequest<Project>>
+            AddRequests = new()
             {
-                new AddRequest<Project>
+                new AddRequest<Project>()
                 {
-                    Data = new List<Project>
+                    Data = new()
                     {
                         new Project
                         {
@@ -26,7 +25,7 @@ namespace FluentSerializer.UseCase.OpenAir
                     }
                 },
                 new AddRequest<Project>{
-                    Data = new List<Project>
+                    Data = new()
                     {
                         new Project
                         {

@@ -11,7 +11,7 @@ using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.Services
 {
-    public sealed class FluentXmlSerializer : IAdvancedXmlSerializer
+    public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
     {
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
@@ -19,7 +19,7 @@ namespace FluentSerializer.Xml.Services
         public XmlSerializerConfiguration XmlConfiguration { get; }
         public SerializerConfiguration Configuration => XmlConfiguration;
 
-        public FluentXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, XmlSerializerConfiguration configuration)
+        public RuntimeXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, XmlSerializerConfiguration configuration)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));

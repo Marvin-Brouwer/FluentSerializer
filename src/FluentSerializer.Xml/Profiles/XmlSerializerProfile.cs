@@ -13,7 +13,7 @@ namespace FluentSerializer.Xml.Profiles
     [ImplicitlyUsed]
     public abstract class XmlSerializerProfile : ISerializerProfile
     {
-        private readonly List<IClassMap> _classMaps = new List<IClassMap>();
+        private readonly List<IClassMap> _classMaps = new();
         private XmlSerializerConfiguration _configuration = XmlSerializerConfiguration.Default;
 
         protected abstract void Configure();

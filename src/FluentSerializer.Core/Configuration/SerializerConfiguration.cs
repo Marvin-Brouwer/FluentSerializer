@@ -6,7 +6,7 @@ namespace FluentSerializer.Core.Configuration
 {
     public abstract class SerializerConfiguration
     {
-        public bool FormatOutput { get; set; }
+        public bool FormatOutput { get; set; } = true;
         public List<IConverter> DefaultConverters { get; set; } = new List<IConverter>();
         public Encoding Encoding { get; set; } = Encoding.Default;
     }

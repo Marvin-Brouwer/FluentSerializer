@@ -3,7 +3,6 @@ using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text.Json;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;

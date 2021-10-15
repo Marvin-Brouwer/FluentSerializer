@@ -10,7 +10,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
     public class StringBitBooleanConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>
     {
-        public SerializerDirection Direction => SerializerDirection.Both;
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType);
 
         private string ConvertToString(bool currentValue) => currentValue ? "1" : "0";

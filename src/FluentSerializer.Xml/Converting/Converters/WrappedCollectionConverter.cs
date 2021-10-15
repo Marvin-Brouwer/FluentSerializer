@@ -13,7 +13,7 @@ namespace FluentSerializer.Xml.Converting.Converters
 {
     public class WrappedCollectionConverter : IXmlConverter<XElement>
     {
-        public virtual SerializerDirection Direction => SerializerDirection.Both;
+        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) =>
             !typeof(string).IsAssignableFrom(targetType) &&
             targetType.Implements(typeof(IEnumerable<>));
@@ -47,7 +47,7 @@ namespace FluentSerializer.Xml.Converting.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (!(objectToSerialize is IEnumerable enumerableToSerialize)) 
+            if (objectToSerialize is not IEnumerable enumerableToSerialize) 
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
             var customElement = new XElement(context.NamingStrategy.SafeGetName(context.Property, context));

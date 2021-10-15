@@ -7,7 +7,7 @@ namespace FluentSerializer.Xml.Converting.Converters.XNodes
 {
     public sealed class XObjectConverter : IXmlConverter<XElement>
     {
-        public SerializerDirection Direction => SerializerDirection.Both;
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
 
         public bool CanConvert(Type targetType) => typeof(XObject).IsAssignableFrom(targetType);
 
