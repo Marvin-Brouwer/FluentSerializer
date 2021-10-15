@@ -5,10 +5,11 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public class OpenAirDateConverter : IConverter<XElement>
+    public class OpenAirDateConverter : IXmlConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);

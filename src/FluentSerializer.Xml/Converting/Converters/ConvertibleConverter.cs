@@ -7,7 +7,7 @@ using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Xml.Converting.Converters
 {
-    public sealed class ConvertibleConverter : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
+    public sealed class ConvertibleConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>, IXmlConverter<XText>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);

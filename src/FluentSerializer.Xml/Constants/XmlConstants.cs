@@ -3,7 +3,7 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Xml.Constants
 {
-    public static class XmlConstants
+    internal static class XmlConstants
     {
         internal const string TextNodeDisplayTag = "#textNode";
         internal const string FragmentNodeDisplayTag = "__fragmentNode__";

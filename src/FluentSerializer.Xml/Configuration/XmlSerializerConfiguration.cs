@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;

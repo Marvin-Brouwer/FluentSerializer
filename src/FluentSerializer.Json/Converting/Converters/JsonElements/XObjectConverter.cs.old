@@ -2,10 +2,11 @@
 using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting;
 
 namespace FluentSerializer.Xml.Converting.Converters.XNodes
 {
-    public sealed class XObjectConverter : IXmlConverter<XElement>
+    public sealed class XObjectConverter : IConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
 
