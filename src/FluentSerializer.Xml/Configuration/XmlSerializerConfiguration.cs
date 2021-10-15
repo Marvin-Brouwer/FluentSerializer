@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
@@ -17,6 +18,7 @@ namespace FluentSerializer.Xml.Configuration
 
         private XmlSerializerConfiguration()
         {
+            Encoding = Encoding.Unicode;
             FormatOutput = true;
             DefaultClassNamingStrategy = Names.Use.PascalCase;
             DefaultPropertyNamingStrategy = Names.Use.CamelCase;

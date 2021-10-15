@@ -1,7 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.Profiles;
+using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.UseCase.Mavenlink.Models;
@@ -9,19 +17,26 @@ using Xunit;
 
 namespace FluentSerializer.UseCase.Mavenlink
 {
-    public sealed class MavenlinkTests
+    public sealed partial class MavenlinkTests
     {
+        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
+        private readonly JsonSerializerConfiguration _configuration;
+
+        public MavenlinkTests()
+        {
+            _configuration = JsonSerializerConfiguration.Default;
+
+            _mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
+        }
 
         [Fact]
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("./Serialize.json");
-            var example = new Request<Project>();
-            var profiles = new List<JsonSerializerProfile>
-            {
-            };
-            var sut = new FluentJsonSerializer(profiles);
+            var expected = await File.ReadAllTextAsync("../../../MavenlinkTests.Serialize.json");
+            var example = ProjectRequestExample;
+
+            var sut = new FluentJsonSerializer(_mappings, _configuration);
 
             // Act
             var result = sut.Serialize(example);
@@ -34,18 +49,19 @@ namespace FluentSerializer.UseCase.Mavenlink
         public async Task Deserialize()
         {
             // Arrange
-            var expected = new Response<Project>();
-            var example = await File.ReadAllTextAsync("./Deserialize.json");
-            var profiles = new List<JsonSerializerProfile>
-            {
-            };
-            var sut = new FluentJsonSerializer(profiles);
+            var expected = UserResponseExample;
+            var example = await File.ReadAllTextAsync("../../../MavenlinkTests.Deserialize.json");
+
+            var sut = new FluentJsonSerializer(_mappings, _configuration);
 
             // Act
-            var result = sut.Deserialize<Project>(example);
+            var result = sut.Deserialize<Response<User>>(example);
 
             // Assert
             result.Should().BeEquivalentTo(expected);
         }
+
+        private static DateTime CreateDate(string dateString) => DateTime.ParseExact(
+            dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Json.Dirty;
+using Newtonsoft.Json.Linq;
 
 namespace FluentSerializer.Json.Converting.Converters.JsonElements
 {
+    // TODO
     public sealed class JsonObjectConverter : IJsonConverter
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -14,12 +15,12 @@ namespace FluentSerializer.Json.Converting.Converters.JsonElements
             throw new NotImplementedException();
         }
 
-        public JsonWrapper? Serialize(object objectToSerialize, ISerializerContext context)
+        public JToken? Serialize(object objectToSerialize, ISerializerContext context)
         {
             throw new NotImplementedException();
         }
 
-        public object? Deserialize(JsonWrapper? objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(JToken? objectToDeserialize, ISerializerContext context)
         {
             throw new NotImplementedException();
         }

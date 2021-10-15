@@ -8,6 +8,6 @@ namespace FluentSerializer.Core.Configuration
     {
         public bool FormatOutput { get; set; }
         public List<IConverter> DefaultConverters { get; set; } = new List<IConverter>();
-        public Encoding Encoding { get; set; } = Encoding.Unicode;
+        public Encoding Encoding { get; set; } = Encoding.Default;
     }
 }

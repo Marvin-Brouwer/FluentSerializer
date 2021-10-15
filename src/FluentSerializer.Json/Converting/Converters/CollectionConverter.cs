@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
-using FluentSerializer.Json.Dirty;
+using FluentSerializer.Json.Services;
+using Newtonsoft.Json.Linq;
 
 namespace FluentSerializer.Json.Converting.Converters
 {
@@ -14,14 +17,45 @@ namespace FluentSerializer.Json.Converting.Converters
             !typeof(string).IsAssignableFrom(targetType) &&
             targetType.Implements(typeof(IEnumerable<>));
 
-        public object? Deserialize(JsonWrapper objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(JToken objectToDeserialize, ISerializerContext context)
         {
-            throw new NotImplementedException();
+            if (objectToDeserialize.Type != JTokenType.Array)
+                throw new NotSupportedException($"The json object you attempted to deserialize was not a collection");
+
+            var targetType = context.PropertyType;
+            var instance = targetType.GetEnumerableInstance();
+
+            var genericTargetType = context.PropertyType.IsGenericType
+                ? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+                : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+            
+            foreach (var item in objectToDeserialize.Children<JObject>())
+            {
+                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
+                if (itemValue is null) continue;
+
+                instance.Add(itemValue);
+            }
+
+            return instance;
         }
 
-        public JsonWrapper Serialize(object objectToSerialize, ISerializerContext context)
+        public JToken Serialize(object objectToSerialize, ISerializerContext context)
         {
-            throw new NotImplementedException();
+            if (!(objectToSerialize is IEnumerable enumerableToSerialize))
+                throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
+
+            var customElement = new JArray();
+            foreach (var collectionItem in enumerableToSerialize)
+            {
+                if (collectionItem is null) continue;
+                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).SerializeToContainer<JContainer>(collectionItem, collectionItem.GetType());
+                if (itemValue is null) continue;
+
+                customElement.Add(itemValue);
+            }
+
+            return customElement;
         }
     }
 }

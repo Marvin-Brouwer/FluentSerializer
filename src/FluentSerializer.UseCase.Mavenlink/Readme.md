@@ -5,3 +5,7 @@ Meaning that the models used may not be production code but it's validating agai
 
 > **Important:** It's important that these examples are based on public api's that share public documentation so it's both verifiable by documentation
 > and we're not exposing things that aren't public by design.
+
+Todo: 
+ - do formatting when format = true
+ - see if there's a better libray than Json.Net or System.Text.Json for storing this data
