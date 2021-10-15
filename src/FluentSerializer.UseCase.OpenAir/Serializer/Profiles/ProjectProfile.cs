@@ -11,10 +11,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
     {
         protected override void Configure()
         {
-            For<Project>(
-                attributeNamingStrategy: Names.Use.SnakeCase,
-                tagNamingStrategy: Names.Use.PascalCase
-            )
+            For<Project>()
                 .Child(project => project.Id)
                 .Child(project => project.Name)
                 .Child(project => project.LastUpdate,
@@ -27,6 +24,8 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                     converter: Converter.For.SimpleDate)
                 .Child(project => project.ExternalId,
                     namingStrategy: Names.Use.CustomFieldName("some_external_service_name_id"))
+                // Actually this field is named 'ratecard_id' but for illustrating the default INamingStrategy we accept
+                // 'rate_card_id' here
                 .Child(project => project.RateCardId);
         }
     }

@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Xml.Linq;
+using FluentSerializer.Core.Services;
+using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -14,9 +16,10 @@ namespace FluentSerializer.Xml.Services
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
 
-        public SerializerConfiguration Configuration { get; }
+        public XmlSerializerConfiguration XmlConfiguration { get; }
+        public SerializerConfiguration Configuration => XmlConfiguration;
 
-        public FluentXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, SerializerConfiguration configuration)
+        public FluentXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, XmlSerializerConfiguration configuration)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
@@ -24,7 +27,7 @@ namespace FluentSerializer.Xml.Services
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
 
-            Configuration = configuration;
+            XmlConfiguration = configuration;
         }
 
         public TModel? Deserialize<TModel>(XElement element)

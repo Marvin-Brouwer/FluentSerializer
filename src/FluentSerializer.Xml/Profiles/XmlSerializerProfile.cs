@@ -7,6 +7,7 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Profiles;
+using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -24,7 +25,8 @@ namespace FluentSerializer.Xml.Profiles
     public abstract class XmlSerializerProfile : ISerializerProfile
     {
         private readonly List<IClassMap> _classMaps = new List<IClassMap>();
-        
+        private XmlSerializerConfiguration _configuration = XmlSerializerConfiguration.Default;
+
         protected abstract void Configure();
 
         /// <remarks>
@@ -32,8 +34,9 @@ namespace FluentSerializer.Xml.Profiles
         /// </remarks>
         [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
          System.Diagnostics.DebuggerHidden]
-        IReadOnlyList<IClassMap> ISerializerProfile.Configure()
+        IReadOnlyList<IClassMap> ISerializerProfile.Configure(SerializerConfiguration configuration)
         {
+            _configuration = (XmlSerializerConfiguration)configuration;
             Configure();
             return new ReadOnlyCollection<IClassMap>(_classMaps);
         }
@@ -47,7 +50,7 @@ namespace FluentSerializer.Xml.Profiles
             var classType = typeof(TModel);
             var propertyMap = new List<IPropertyMap>();
             var builder = new XmlProfileBuilder<TModel>(
-                attributeNamingStrategy ?? Names.Use.CamelCase,
+                attributeNamingStrategy ?? _configuration.DefaultPropertyNamingStrategy,
                 propertyMap
             );
 
@@ -55,7 +58,7 @@ namespace FluentSerializer.Xml.Profiles
             _classMaps.Add(new ClassMap(
                 classType, 
                 direction,
-                tagNamingStrategy ?? Names.Use.PascalCase, 
+                tagNamingStrategy ?? _configuration.DefaultClassNamingStrategy, 
                 propertyMap.AsReadOnly()));
 
             return builder;

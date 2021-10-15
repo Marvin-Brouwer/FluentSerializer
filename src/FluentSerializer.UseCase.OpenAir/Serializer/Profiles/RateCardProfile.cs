@@ -11,7 +11,6 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
         protected override void Configure()
         {
             For<RateCard>(
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Ratecard")
             )
                 .Child(rateCard => rateCard.Id)

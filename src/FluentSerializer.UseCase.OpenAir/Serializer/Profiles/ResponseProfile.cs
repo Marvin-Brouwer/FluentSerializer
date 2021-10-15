@@ -14,7 +14,6 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
         {
             For<Response<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Use.LowerCase
             )
                 .Child(response => response.ReadResponses,
@@ -32,28 +31,24 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
 
             For<ReadResponse<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Read")
             )
                 .UseBase();
 
             For<AddResponse<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Add")
             )
                 .UseBase();
 
             For<ModifyResponse<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Modify")
             )
                 .UseBase();
 
             For<DeleteResponse<OpenAirEntity>>(
                 direction: SerializerDirection.Deserialize,
-                attributeNamingStrategy: Names.Use.SnakeCase,
                 tagNamingStrategy: Names.Are("Delete")
             )
                 .UseBase();

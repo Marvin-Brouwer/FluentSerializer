@@ -10,19 +10,21 @@ namespace FluentSerializer.Core.Profiles
 {
     public static class ProfileScanner
     {
-        private static IEnumerable<ISerializerProfile> ScanAssembly(Assembly assembly) =>
+        private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile =>
             assembly.GetTypes()
-                .Where(type => typeof(ISerializerProfile).IsAssignableFrom(type))
+                .Where(type => typeof(TSerializerProfile).IsAssignableFrom(type))
                 .Where(type => !type.IsAbstract)
                 .Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
 
-        public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly(Assembly assembly)
+        public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly<TSerializerProfile>(
+            Assembly assembly, SerializerConfiguration configuration)
+            where TSerializerProfile : ISerializerProfile
         {
             Guard.Against.Null(assembly, nameof(assembly));
 
-            var profiles = ScanAssembly(assembly);
+            var profiles = ScanAssembly<TSerializerProfile>(assembly);
 
-            return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure()).ToList().AsReadOnly());
+            return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure(configuration)).ToList().AsReadOnly());
         }
     }
 }
