@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Converting.Converters
 {
     public sealed class ConvertibleConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>, IXmlConverter<XText>
     {
-        public SerializerDirection Direction => SerializerDirection.Both;
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
         private static string? ConvertToString(object value) => Convert.ToString(value);

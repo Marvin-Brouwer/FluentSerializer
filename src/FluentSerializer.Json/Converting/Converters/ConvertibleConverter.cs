@@ -7,7 +7,7 @@ namespace FluentSerializer.Json.Converting.Converters
 {
     public sealed class ConvertibleConverter : IJsonConverter
     {
-        public SerializerDirection Direction => SerializerDirection.Both;
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
         private static string? ConvertToString(object value) => Convert.ToString(value);

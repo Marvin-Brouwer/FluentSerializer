@@ -14,7 +14,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     /// </summary>
     internal class RequestTypeValueConverter : IXmlConverter<XAttribute>
     {
-        public SerializerDirection Direction => SerializerDirection.Serialize;
+        public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
         public bool CanConvert(Type targetType) => typeof(string) == targetType;
         public object Deserialize(XAttribute attributeToDeserialize, ISerializerContext context) => throw new NotSupportedException();
 

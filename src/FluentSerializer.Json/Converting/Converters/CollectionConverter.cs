@@ -12,7 +12,7 @@ namespace FluentSerializer.Json.Converting.Converters
 {
     public class CollectionConverter : IJsonConverter
     {
-        public virtual SerializerDirection Direction => SerializerDirection.Both;
+        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) =>
             !typeof(string).IsAssignableFrom(targetType) &&
             targetType.Implements(typeof(IEnumerable<>));
@@ -42,7 +42,7 @@ namespace FluentSerializer.Json.Converting.Converters
 
         public JToken Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (!(objectToSerialize is IEnumerable enumerableToSerialize))
+            if (objectToSerialize is not IEnumerable enumerableToSerialize)
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
             var customElement = new JArray();

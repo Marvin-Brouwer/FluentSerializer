@@ -7,7 +7,7 @@ namespace FluentSerializer.Json.Converting.Converters.Base
 {
     public abstract class SimpleTypeConverter<TObject> : IJsonConverter
     {
-        public virtual SerializerDirection Direction => SerializerDirection.Both;
+        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
         protected abstract string ConvertToString(TObject value);

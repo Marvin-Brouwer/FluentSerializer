@@ -2,7 +2,6 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using System;
-using System.IO;
 using System.Text;
 using FluentSerializer.Json.Configuration;
 using Newtonsoft.Json;
@@ -11,7 +10,7 @@ using FluentSerializer.Core.Services;
 
 namespace FluentSerializer.Json.Services
 {
-    public sealed class FluentJsonSerializer : IAdvancedJsonSerializer
+    public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
     {
         private readonly JsonTypeSerializer _serializer;
         private readonly JsonTypeDeserializer _deserializer;
@@ -21,7 +20,7 @@ namespace FluentSerializer.Json.Services
 
         public JsonSerializerConfiguration XmlConfiguration => throw new NotImplementedException();
 
-        public FluentJsonSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, JsonSerializerConfiguration configuration)
+        public RuntimeJsonSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, JsonSerializerConfiguration configuration)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
