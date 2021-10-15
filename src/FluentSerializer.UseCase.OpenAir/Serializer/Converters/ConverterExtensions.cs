@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
@@ -12,7 +11,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         private static readonly SimpleDateConverter SimpleDateConverter = new SimpleDateConverter();
 
         public static OpenAirDateConverter OpenAirDate (this IUseXmlConverters _) => OpenAirDateConverter;
-        public static IConverter<XAttribute> RequestTypeValue (this IUseXmlConverters _) => RequestTypeValueConverter;
+        public static IXmlConverter<XAttribute> RequestTypeValue (this IUseXmlConverters _) => RequestTypeValueConverter;
         public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => StringBitBooleanConverter;
         public static SimpleDateConverter SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
     }

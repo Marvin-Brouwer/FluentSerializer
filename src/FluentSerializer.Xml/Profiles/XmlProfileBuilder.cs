@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Xml.Linq;
 using FluentSerializer.Xml.Constants;
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.Xml.Profiles
 {
@@ -27,11 +27,11 @@ namespace FluentSerializer.Xml.Profiles
             _propertyMap = propertyMap;
         }
 
-        public XmlProfileBuilder<TModel> Attribute<TAttribute>(
+        public IXmlProfileBuilder<TModel> Attribute<TAttribute>(
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? namingStrategy = null,
-            Func<IConverter<XAttribute>>? converter = null
+            Func<IXmlConverter<XAttribute>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
@@ -45,11 +45,11 @@ namespace FluentSerializer.Xml.Profiles
             return this;
         }
         
-        public XmlProfileBuilder<TModel> Child<TAttribute>(
+        public IXmlProfileBuilder<TModel> Child<TAttribute>(
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? namingStrategy = null,
-            Func<IConverter<XElement>>? converter = null
+            Func<IXmlConverter<XElement>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
@@ -69,7 +69,7 @@ namespace FluentSerializer.Xml.Profiles
         public void Text<TText>(
             Expression<Func<TModel, TText>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
-            Func<IConverter<XText>>? converter = null
+            Func<IXmlConverter<XText>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(

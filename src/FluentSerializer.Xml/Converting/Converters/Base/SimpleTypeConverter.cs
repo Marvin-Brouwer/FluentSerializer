@@ -7,8 +7,7 @@ using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Xml.Converting.Converters.Base
 {
-    public abstract class SimpleTypeConverter<TObject> : IConverter<XAttribute>, IConverter<XElement>, IConverter<XText>
-        where TObject : class
+    public abstract class SimpleTypeConverter<TObject> : IXmlConverter<XAttribute>, IXmlConverter<XElement>, IXmlConverter<XText>
     {
         public virtual SerializerDirection Direction => SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);

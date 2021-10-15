@@ -4,10 +4,11 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public class StringBitBooleanConverter : IConverter<XAttribute>, IConverter<XElement>
+    public class StringBitBooleanConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>
     {
         public SerializerDirection Direction => SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType);

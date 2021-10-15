@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Ardalis.GuardClauses;
-using FluentSerializer.Xml.Converting.Converters.Base;
+using FluentSerializer.Json.Converting.Converters.Base;
 
-namespace FluentSerializer.Xml.Converting.Converters
+namespace FluentSerializer.Json.Converting.Converters
 {
     public class DateByFormatConverter : SimpleTypeConverter<DateTime>
     {

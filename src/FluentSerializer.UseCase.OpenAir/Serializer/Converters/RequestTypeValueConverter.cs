@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
@@ -12,7 +12,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.
     /// OpenAir requires this value to be matched exactly on the type attribute.
     /// </summary>
-    internal class RequestTypeValueConverter : IConverter<XAttribute>
+    internal class RequestTypeValueConverter : IXmlConverter<XAttribute>
     {
         public SerializerDirection Direction => SerializerDirection.Serialize;
         public bool CanConvert(Type targetType) => typeof(string) == targetType;

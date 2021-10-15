@@ -11,7 +11,7 @@ using FluentSerializer.Xml.Services;
 
 namespace FluentSerializer.Xml.Converting.Converters
 {
-    public class WrappedCollectionConverter : IConverter<XElement>
+    public class WrappedCollectionConverter : IXmlConverter<XElement>
     {
         public virtual SerializerDirection Direction => SerializerDirection.Both;
         public virtual bool CanConvert(Type targetType) =>
