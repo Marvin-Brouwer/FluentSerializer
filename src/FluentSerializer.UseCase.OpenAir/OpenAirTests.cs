@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
+using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Constants;
+using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
 
 using Xunit;
@@ -19,14 +22,15 @@ namespace FluentSerializer.UseCase.OpenAir
     public sealed partial class OpenAirTests
     {
         private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
-        private readonly SerializerConfiguration _configuration;
+        private readonly XmlSerializerConfiguration _configuration;
 
         public OpenAirTests()
         {
-            _mappings = ProfileScanner.FindClassMapsInAssembly(typeof(OpenAirTests).Assembly);
-
-            _configuration = ConfigurationConstants.GetDefaultXmlConfiguration();
+            _configuration = XmlSerializerConfiguration.Default;
             _configuration.Encoding = Encoding.UTF8;
+            _configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
+
+            _mappings = ProfileScanner.FindClassMapsInAssembly<XmlSerializerProfile>(typeof(OpenAirTests).Assembly, _configuration);
         }
 
         [Fact]

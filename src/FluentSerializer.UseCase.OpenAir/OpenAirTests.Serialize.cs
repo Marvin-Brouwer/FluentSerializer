@@ -33,6 +33,7 @@ namespace FluentSerializer.UseCase.OpenAir
                             Id = "0002",
                             Active = false,
                             Name = "Project 2",
+                            RateCardId = "RC1",
                             LastUpdate = CreateDate("1991-11-28 04:00:00")
                         },
                         new Project

@@ -3,7 +3,7 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Naming
 {
-    internal struct UseNamingStrategies : IUseNamingStrategies
+    internal readonly struct UseNamingStrategies : IUseNamingStrategies
     {
         private static readonly CamelCaseNamingStrategy CamelCaseNamingStrategy = new CamelCaseNamingStrategy();
         private static readonly LowerCaseNamingStrategy LowerCaseNamingStrategy = new LowerCaseNamingStrategy();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.Profiles
@@ -8,6 +9,6 @@ namespace FluentSerializer.Core.Profiles
     {
         [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
          System.Diagnostics.DebuggerHidden]
-        IReadOnlyList<IClassMap> Configure();
+        IReadOnlyList<IClassMap> Configure(SerializerConfiguration configuration);
     }
 }
