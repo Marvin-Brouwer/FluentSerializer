@@ -18,7 +18,7 @@ namespace FluentSerializer.UseCase.OpenAir
 {
     public sealed partial class OpenAirTests
     {
-        private readonly IScanList<Type, IClassMap> _mappings;
+        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
         private readonly SerializerConfiguration _configuration;
 
         public OpenAirTests()

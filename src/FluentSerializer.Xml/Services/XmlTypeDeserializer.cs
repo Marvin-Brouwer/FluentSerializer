@@ -14,9 +14,9 @@ namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeDeserializer
     {
-        private readonly IScanList<Type, IClassMap> _mappings;
+        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
-        public XmlTypeDeserializer(IScanList<Type, IClassMap> mappings)
+        public XmlTypeDeserializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
         {
             Guard.Against.Null(mappings, nameof(mappings));
 
@@ -44,12 +44,12 @@ namespace FluentSerializer.Xml.Services
 
             if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(classType);
 
-            var classMap = _mappings.Scan(classType);
+            var classMap = _mappings.Scan((classType, SerializerDirection.Deserialize));
             if (classMap is null) throw new ClassMapNotFoundException(classType);
 
             if (classType == typeof(string)) return dataObject.ToString();
 
-            var matchingTagName = classMap.NamingStrategy.GetName(classType, new NamingContext(_mappings));
+            var matchingTagName = classMap.NamingStrategy.SafeGetName(classType, new NamingContext(_mappings));
             if (dataObject.Name != matchingTagName) throw new MissingNodeException(classType, matchingTagName);
 
             var instance = Activator.CreateInstance(classType)!;
@@ -62,7 +62,7 @@ namespace FluentSerializer.Xml.Services
                     currentSerializer,
                     classMap.PropertyMaps, _mappings);
 
-                var propertyName = propertyMapping.NamingStrategy.GetName(realPropertyInfo, serializerContext);
+                var propertyName = propertyMapping.NamingStrategy.SafeGetName(realPropertyInfo, serializerContext);
                 if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
                 DeserializeProperty(dataObject, propertyName, propertyMapping, instance, currentSerializer, serializerContext);

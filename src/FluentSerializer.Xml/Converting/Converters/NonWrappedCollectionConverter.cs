@@ -28,7 +28,7 @@ namespace FluentSerializer.Xml.Converting.Converters
             var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
                 ?? context.NamingStrategy;
 
-            var itemName = itemNamingStrategy.GetName(genericTargetType, context);
+            var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
             var elementsToDeserialize = objectToDeserialize.Parent!.Elements(itemName);
             foreach (var item in elementsToDeserialize)
             {

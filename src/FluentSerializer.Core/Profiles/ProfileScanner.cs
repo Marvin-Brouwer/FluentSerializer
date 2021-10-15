@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.Profiles
@@ -15,7 +16,7 @@ namespace FluentSerializer.Core.Profiles
                 .Where(type => !type.IsAbstract)
                 .Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
 
-        public static IScanList<Type, IClassMap> FindClassMapsInAssembly(Assembly assembly)
+        public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly(Assembly assembly)
         {
             Guard.Against.Null(assembly, nameof(assembly));
 

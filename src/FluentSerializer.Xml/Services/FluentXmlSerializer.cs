@@ -16,7 +16,7 @@ namespace FluentSerializer.Xml.Services
 
         public SerializerConfiguration Configuration { get; }
 
-        public FluentXmlSerializer(IScanList<Type, IClassMap> mappings, SerializerConfiguration configuration)
+        public FluentXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, SerializerConfiguration configuration)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));

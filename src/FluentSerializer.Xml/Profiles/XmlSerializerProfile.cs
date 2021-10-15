@@ -1,7 +1,7 @@
 ﻿using FluentSerializer.Core.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Profiles;
@@ -10,7 +10,7 @@ namespace FluentSerializer.Xml.Profiles
 {
     public abstract class XmlSerializerProfile : ISerializerProfile
     {
-        private readonly List<(Type classType, Func<INamingStrategy> namingStrategy, IEnumerable<IPropertyMap> propertyMap)> _classMaps = new List<(Type, Func<INamingStrategy>, IEnumerable<IPropertyMap>)>();
+        private readonly List<IClassMap> _classMaps = new List<IClassMap>();
         public abstract void Configure();
 
         /// <remarks>
@@ -19,12 +19,11 @@ namespace FluentSerializer.Xml.Profiles
         IEnumerable<IClassMap> ISerializerProfile.Configure()
         {
             Configure();
-            return _classMaps.Select(lazyClassMap => new ClassMap(
-                lazyClassMap.classType, lazyClassMap.namingStrategy, lazyClassMap.propertyMap
-            ));
+            return new List<IClassMap>(_classMaps);
         }
 
         protected IXmlProfileBuilder<TModel> For<TModel>(
+            SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? tagNamingStrategy = null,
             Func<INamingStrategy>? attributeNamingStrategy = null)
             where TModel : new()
@@ -37,8 +36,9 @@ namespace FluentSerializer.Xml.Profiles
             );
 
             // Store in a tuple for lazy evaluation
-            _classMaps.Add((
+            _classMaps.Add(new ClassMap(
                 classType, 
+                direction,
                 tagNamingStrategy ?? Names.Use.PascalCase, 
                 propertyMap));
 

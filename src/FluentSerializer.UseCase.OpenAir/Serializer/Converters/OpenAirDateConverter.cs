@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
@@ -50,11 +51,10 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize is null) return null;
             if (!(objectToSerialize is DateTime dateToSerialize))
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
-            var elementName = context.NamingStrategy.GetName(context.Property, context);
+            var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
             return new XElement(elementName, GenerateDateObject(dateToSerialize));
         }
 

@@ -8,15 +8,16 @@ using System.Collections;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Exceptions;
 
 namespace FluentSerializer.Xml.Services
 {
     public class XmlTypeSerializer
     {
-        private readonly IScanList<Type, IClassMap> _mappings;
+        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
-        public XmlTypeSerializer(IScanList<Type, IClassMap> mappings)
+        public XmlTypeSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
         {
             Guard.Against.Null(mappings, nameof(mappings));
 
@@ -31,10 +32,10 @@ namespace FluentSerializer.Xml.Services
 
             if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(classType);
 
-            var classMap = _mappings.Scan(classType);
+            var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
             if (classMap is null) throw new ClassMapNotFoundException(classType);
 
-            var newElement = new XElement(classMap.NamingStrategy.GetName(classType, new NamingContext(_mappings)));
+            var newElement = new XElement(classMap.NamingStrategy.SafeGetName(classType, new NamingContext(_mappings)));
             foreach(var property in classType.GetProperties())
             {
                 var propertyMapping = classMap.PropertyMaps.Scan(property);

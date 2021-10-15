@@ -2,6 +2,7 @@
 using FluentSerializer.Core.Mapping;
 using System;
 using System.Reflection;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context
@@ -9,9 +10,9 @@ namespace FluentSerializer.Core.Context
     /// <inheritdoc cref="INamingContext"/>
     public class NamingContext : INamingContext
     {
-        private readonly IScanList<Type, IClassMap> _classMappings;
+        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _classMappings;
 
-        public NamingContext(IScanList<Type, IClassMap> classMappings)
+        public NamingContext(IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
         {
             _classMappings = classMappings;
         }
@@ -21,7 +22,7 @@ namespace FluentSerializer.Core.Context
             Guard.Against.Null(classType, nameof(classType));
             Guard.Against.Null(property, nameof(property));
 
-            var classMap = _classMappings.Scan(classType);
+            var classMap = _classMappings.Scan((classType, SerializerDirection.Both));
             if (classMap is null) return null;
 
             return FindNamingStrategy(classMap.PropertyMaps, property);
@@ -39,7 +40,7 @@ namespace FluentSerializer.Core.Context
         {
             Guard.Against.Null(type, nameof(type));
 
-            return _classMappings.Scan(type)?.NamingStrategy;
+            return _classMappings.Scan((type, SerializerDirection.Both))?.NamingStrategy;
         }
     }
 }

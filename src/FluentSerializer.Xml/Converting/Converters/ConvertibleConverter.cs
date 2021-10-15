@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Xml.Converting.Converters
 {
@@ -40,7 +41,7 @@ namespace FluentSerializer.Xml.Converting.Converters
             var stringValue = ConvertToString(objectToSerialize);
             if (stringValue is null) return null;
 
-            var attributeName = context.NamingStrategy.GetName(context.Property, context);
+            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
             return new XAttribute(attributeName, stringValue);
         }
 
@@ -49,7 +50,7 @@ namespace FluentSerializer.Xml.Converting.Converters
             var stringValue = ConvertToString(objectToSerialize);
             if (stringValue is null) return null;
 
-            var elementName = context.NamingStrategy.GetName(context.Property, context);
+            var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
             return new XElement(elementName, stringValue);
         }
 

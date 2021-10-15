@@ -23,7 +23,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Profiles
                 .Child(project => project.Active,
                     converter: Converter.For.StringBitBoolean)
                 .Child(project => project.CustomDate,
-                    namingStrategy: Names.Use.CustomFieldNames,
+                    namingStrategy: Names.Use.CustomFieldName,
                     converter: Converter.For.SimpleDate)
                 .Child(project => project.ExternalId,
                     namingStrategy: Names.Use.CustomFieldName("some_external_service_name_id"))

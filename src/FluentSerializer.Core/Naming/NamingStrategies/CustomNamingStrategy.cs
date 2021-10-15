@@ -2,6 +2,7 @@
 using System.Reflection;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies
 {
@@ -11,9 +12,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies
 
         public CustomNamingStrategy(string name)
         {
-            // TODO put in extentionMethod and validate on use too
-            Guard.Against.NullOrWhiteSpace(name, nameof(name));
-            Guard.Against.InvalidFormat(name, nameof(name), @"^[\w_\-+]*$");
+            Guard.Against.InvalidName(name, nameof(name));
 
             _name = name;
         }
