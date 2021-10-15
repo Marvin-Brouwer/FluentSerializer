@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Xml.Linq;
+using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.Services

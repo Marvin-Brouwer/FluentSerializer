@@ -2,6 +2,6 @@
 {
     internal sealed class User : IMavenlinkEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;
     }
 }

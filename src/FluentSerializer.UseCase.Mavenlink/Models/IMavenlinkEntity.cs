@@ -1,7 +1,9 @@
-﻿namespace FluentSerializer.UseCase.Mavenlink.Models
+﻿using System;
+
+namespace FluentSerializer.UseCase.Mavenlink.Models
 {
     internal interface IMavenlinkEntity
     {
-        int Id { get; }
+        string Id { get; }
     }
 }

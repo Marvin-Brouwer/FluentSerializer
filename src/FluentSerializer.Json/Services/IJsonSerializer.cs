@@ -1,13 +1,14 @@
 ﻿using FluentSerializer.Core.Services;
-using System.Text.Json;
+using FluentSerializer.Json.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace FluentSerializer.Json.Services
 {
     public interface IJsonSerializer : ISerializer
     {
-        string Serialize(JsonDocument dataObject);
-        string Serialize(JsonElement dataObject);
-        JsonDocument DeserializeToDocument(string dataObject);
-        JsonElement DeserializeToElement(string dataObject);
+        JsonSerializerConfiguration XmlConfiguration { get; }
+
+        TModel? Deserialize<TModel>(JContainer element) where TModel: class, new ();
+        JContainer? SerializeToContainer<TModel>(TModel model);
     }
 }

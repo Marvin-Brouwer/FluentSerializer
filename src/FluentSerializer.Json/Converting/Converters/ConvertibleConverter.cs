@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Text.Json;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Json.Dirty;
+using Newtonsoft.Json.Linq;
 
 namespace FluentSerializer.Json.Converting.Converters
 {
@@ -20,17 +19,20 @@ namespace FluentSerializer.Json.Converting.Converters
             return Convert.ChangeType(currentValue, targetType);
         }
 
-        public JsonWrapper? Serialize(object objectToSerialize, ISerializerContext context)
+        public JToken? Serialize(object objectToSerialize, ISerializerContext context)
         {
             var stringValue = ConvertToString(objectToSerialize);
-            if (stringValue is null) return null;
+            if (string.IsNullOrWhiteSpace(stringValue)) return new JObject(JValue.CreateNull());
 
-            return new JsonWrapper(JsonDocument.Parse(stringValue).RootElement);
+            if (context.PropertyType == typeof(string)) return JValue.CreateString(stringValue);
+            if (context.PropertyType.IsClass) return JObject.FromObject(stringValue);
+
+            return JToken.FromObject(stringValue);
         }
 
-        public object? Deserialize(JsonWrapper objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(JToken objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToNullableDataType(objectToDeserialize.ToString(), context.ClassType);
+            return ConvertToNullableDataType(objectToDeserialize.ToString(), context.PropertyType);
         }
     }
 }

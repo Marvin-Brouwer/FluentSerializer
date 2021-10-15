@@ -1,9 +1,9 @@
 ﻿using FluentSerializer.Core.Converting;
-using FluentSerializer.Json.Dirty;
+using Newtonsoft.Json.Linq;
 
 namespace FluentSerializer.Json.Converting
 {
-    public interface IJsonConverter : IConverter<JsonWrapper>
+    public interface IJsonConverter : IConverter<JToken>
     {
     }
 }

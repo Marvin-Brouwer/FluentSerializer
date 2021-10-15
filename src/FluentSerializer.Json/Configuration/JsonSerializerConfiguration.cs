@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
@@ -16,6 +17,7 @@ namespace FluentSerializer.Json.Configuration
 
         private JsonSerializerConfiguration()
         {
+            Encoding = Encoding.UTF8;
             FormatOutput = true;
             DefaultNamingStrategy = Names.Use.CamelCase;
             DefaultConverters = new List<IConverter>

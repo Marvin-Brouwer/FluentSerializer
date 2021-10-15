@@ -1,20 +1,19 @@
-﻿using Ardalis.GuardClauses;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using Ardalis.GuardClauses;
 
-namespace FluentSerializer.Xml.Services
+namespace FluentSerializer.Core.Services
 {
     public sealed class ConfigurableStringWriter : StringWriter
     {
-        private readonly Encoding _encoding;
-        public override Encoding Encoding => _encoding;
+        public override Encoding Encoding { get; }
 
         public ConfigurableStringWriter(StringBuilder stringBuilder, Encoding encoding) : base(stringBuilder)
         {
             Guard.Against.Null(stringBuilder, nameof(stringBuilder));
             Guard.Against.Null(encoding, nameof(encoding));
 
-            _encoding = encoding;
+            Encoding = encoding;
         }
     }
 }
