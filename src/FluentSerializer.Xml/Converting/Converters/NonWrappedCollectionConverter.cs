@@ -44,7 +44,7 @@ namespace FluentSerializer.Xml.Converting.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (!(objectToSerialize is IEnumerable enumerableToSerialize))
+            if (objectToSerialize is not IEnumerable enumerableToSerialize)
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
             var customElement = new XFragment();
