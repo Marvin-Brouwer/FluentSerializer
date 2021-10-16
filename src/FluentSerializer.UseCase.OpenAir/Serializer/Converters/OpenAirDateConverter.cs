@@ -52,7 +52,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
         XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (!(objectToSerialize is DateTime dateToSerialize))
+            if (objectToSerialize is not DateTime dateToSerialize)
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
