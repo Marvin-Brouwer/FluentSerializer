@@ -1,6 +1,8 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using FluentSerializer.Core.Data;
+using FluentSerializer.Core.Data.Json;
+using FluentSerializer.Core.Data.Xml;
 
 namespace FluentSerializer.Core.Profiling.Data
 {
@@ -15,13 +17,14 @@ namespace FluentSerializer.Core.Profiling.Data
     #endif
     public class DataCompilerProfile
     {
-        public IJsonNode JsonTest { get; private set; }
-        public IXmlNode XmlTest { get; private set; }
+        private JsonObject _jsonTest;
+        private XmlElement _xmlTest;
 
         [IterationSetup]
         public void Setup()
         {
-            JsonTest = new JsonObject(
+            // todo use Bogus or Autofixture
+            _jsonTest = new JsonObject(
                 new JsonProperty("prop", JsonValue.String("Test")),
                 new JsonProperty("prop2", new JsonObject(
                     new JsonProperty("array", new JsonArray(
@@ -34,7 +37,7 @@ namespace FluentSerializer.Core.Profiling.Data
                 ))
             );
 
-            XmlTest = new XmlElement("Class",
+            _xmlTest = new XmlElement("Class",
                 new XmlAttribute("someAttribute", "1"),
                 new XmlElement("someProperty", new XmlElement("AnotherClass")),
                 new XmlText("text here")
@@ -44,14 +47,19 @@ namespace FluentSerializer.Core.Profiling.Data
         [Benchmark]
         public void ContainerBasedSerializer()
         {
-            var jsonResult = JsonTest.ToString();
-            var jsonResultNonFormat = JsonTest.ToString(false);
-            var xmlResult = XmlTest.ToString();
-            var xmlResultNonFormat = XmlTest.ToString(false);
+            _jsonTest.ToString();
+            _jsonTest.ToString(false);
+            _xmlTest.ToString();
+            _xmlTest.ToString(false);
         }
-        //public void ServiceBasedSerializer()
-        //{
 
-        //}
+        [Benchmark]
+        public void ServiceBasedSerializer()
+        {
+            new SerialJsonWriter(true, true).Write(_jsonTest);
+            new SerialJsonWriter(false, true).Write(_jsonTest);
+            new SerialXmlWriter(true, true).Write(_xmlTest);
+            new SerialXmlWriter(false, true).Write(_xmlTest);
+        }
     }
 }
