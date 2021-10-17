@@ -2,7 +2,7 @@
 
 namespace FluentSerializer.Core.Data.Xml
 {
-    public sealed class XmlText : IXmlNode
+    public readonly struct XmlText : IXmlNode
     {
         public string Name { get; }
         public string? Value { get; }

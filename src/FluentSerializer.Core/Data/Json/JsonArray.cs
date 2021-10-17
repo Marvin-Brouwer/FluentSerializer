@@ -16,10 +16,9 @@ namespace FluentSerializer.Core.Data.Json
         {
             const string arrayName = "[ ]";
             Name = arrayName;
-            Children = elements is null ? new List<IJsonNode>(0) : new(elements);
+            Children = elements is null ? new List<IJsonNode>(0) : elements.ToList();
         }
         public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) {  }
-        public JsonArray() : this(new List<IJsonContainer>(0)) { }
 
         public override string ToString() => ToString(true);
         public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
@@ -33,15 +32,19 @@ namespace FluentSerializer.Core.Data.Json
 
             stringBuilder
                 .Append(openingCharacter);
-            foreach (var child in Children)
+
+            for (var i = 0; i < Children.Count; i++)
             {
+                var child = Children[i];
+
                 stringBuilder
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent);
-                if (child != Children[^1])
-                    stringBuilder.Append(separatorCharacter);
+
+                if (i != Children.Count - 1) stringBuilder.Append(separatorCharacter);
             }
+
             stringBuilder
                 .AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)

@@ -4,7 +4,7 @@ using System.Text;
 namespace FluentSerializer.Core.Data.Json
 {
     [DebuggerDisplay(nameof(Value))]
-    public sealed class JsonValue : IJsonNode
+    public readonly struct JsonValue : IJsonNode
     {
         public string Name { get; }
         public string? Value { get; }

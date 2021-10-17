@@ -6,20 +6,23 @@ using System.Text;
 namespace FluentSerializer.Core.Data.Json
 {
     [DebuggerDisplay(nameof(ToString))]
-    public sealed class JsonObject : IJsonContainer
+    public readonly struct JsonObject : IJsonContainer
     {
-        public IReadOnlyList<IJsonNode> Children {get;}
+        private readonly List<IJsonNode> _children;
+        public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
         public string Name { get; }
 
-        private JsonObject(List<JsonProperty> properties)
+        public JsonObject(IEnumerable<JsonProperty> properties)
         {
+
             const string className = "{ }";
             Name = className;
-            Children = properties;
+
+            _children = new List<IJsonNode>();
+            foreach (var property in properties) _children.Add(property);
         }
-        public JsonObject() : this(new List<JsonProperty>(0)) { }
-        public JsonObject(IEnumerable<JsonProperty> properties) : this(properties.ToList()) { }
+
         public JsonObject(params JsonProperty[] properties) : this(properties.AsEnumerable()) { }
 
         public override string ToString() => ToString(true);
@@ -34,15 +37,19 @@ namespace FluentSerializer.Core.Data.Json
 
             stringBuilder
                 .Append(openingCharacter);
-            foreach (var child in Children)
+
+            for (var i = 0; i < Children.Count; i++)
             {
+                var child = Children[i];
+
                 stringBuilder
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent);
-                if (child != Children[^1]) 
-                    stringBuilder.Append(separatorCharacter);
+
+                if (i != Children.Count -1) stringBuilder.Append(separatorCharacter);
             }
+
             stringBuilder
                 .AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)

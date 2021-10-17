@@ -8,7 +8,7 @@ using System.Text;
 namespace FluentSerializer.Core.Data.Json
 {
     [DebuggerDisplay(nameof(ToString))]
-    public sealed class JsonProperty : IJsonContainer
+    public readonly struct JsonProperty : IJsonContainer
     {
         public string Name { get; }
 
@@ -19,8 +19,7 @@ namespace FluentSerializer.Core.Data.Json
             Guard.Against.InvalidName(name, nameof(name));
 
             Name = name;
-            var valueList = value is null ? new List<IJsonNode>(0) : new(1) { value };
-            Children = valueList.AsReadOnly();
+            Children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
         }
         public JsonProperty(string name, JsonValue? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, JsonObject? value = null) : this(name, (IJsonNode?)value) { }
@@ -43,7 +42,7 @@ namespace FluentSerializer.Core.Data.Json
                 .Append(wrappingCharacter);
 
             if (format) stringBuilder.Append(spacer);
-            stringBuilder .Append(assignmentCharacter);
+            stringBuilder.Append(assignmentCharacter);
             if (format) stringBuilder.Append(spacer);
 
             if (childValue is null) stringBuilder.Append("null");

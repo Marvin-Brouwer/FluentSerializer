@@ -13,7 +13,7 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
         public string Name { get; set; }
         public List<House> Houses { get; set; }
 
-        public JsonObject ToJsonElement()
+        public IJsonContainer ToJsonElement()
         {
             var properties = new List<JsonProperty> {
                 new JsonProperty("type", JsonValue.String(Type)),
@@ -26,7 +26,7 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
             return new JsonObject(properties);
         }
 
-        public XmlElement ToXmlElement()
+        public IXmlContainer ToXmlElement()
         {
             var children = new List<IXmlNode> {
                 new XmlAttribute("type", Type),
