@@ -3,6 +3,8 @@ using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using FluentSerializer.Core.Data;
 using FluentSerializer.Core.Data.Json;
 using FluentSerializer.Core.Data.Xml;
+using FluentSerializer.Core.Profiling.Data.TestData;
+using System.Linq;
 
 namespace FluentSerializer.Core.Profiling.Data
 {
@@ -19,45 +21,53 @@ namespace FluentSerializer.Core.Profiling.Data
     {
         private JsonObject _jsonTest;
         private XmlElement _xmlTest;
+        private int _iteration;
+
+        [GlobalSetup]
+        public void GlobalSetup()
+        {
+            _iteration = -1;
+        }
 
         [IterationSetup]
-        public void Setup()
+        public void IterationSetup()
         {
-            // todo use Bogus or Autofixture
+            _iteration++;
+            var testDataSet = BogusConfiguration.Generate(98123600 + _iteration);
+
             _jsonTest = new JsonObject(
-                new JsonProperty("prop", JsonValue.String("Test")),
-                new JsonProperty("prop2", new JsonObject(
-                    new JsonProperty("array", new JsonArray(
-                        new JsonObject(),
-                        new JsonArray()
-                    )),
-                    new JsonProperty("prop3", new JsonValue("1")),
-                    new JsonProperty("prop4", new JsonValue("true")),
-                    new JsonProperty("prop5", new JsonValue("null"))
-                ))
+                new JsonProperty("data", new JsonArray(testDataSet.Select(testItem => testItem.ToJsonElement())))
             );
 
-            _xmlTest = new XmlElement("Class",
-                new XmlAttribute("someAttribute", "1"),
-                new XmlElement("someProperty", new XmlElement("AnotherClass")),
-                new XmlText("text here")
+            _xmlTest = new XmlElement("Data", 
+                testDataSet.Select(testItem => testItem.ToXmlElement())
             );
         }
 
-        [Benchmark]
-        public void ContainerBasedSerializer()
+        [Benchmark(Description = nameof(JsonDataToSTring)), BenchmarkCategory("ToString", "Json")]
+        public void JsonDataToSTring()
         {
             _jsonTest.ToString();
             _jsonTest.ToString(false);
+        }
+
+        [Benchmark(Description = nameof(XmlDataToSTring)), BenchmarkCategory("ToString", "Xml")]
+        public void XmlDataToSTring()
+        {
             _xmlTest.ToString();
             _xmlTest.ToString(false);
         }
 
-        [Benchmark]
-        public void ServiceBasedSerializer()
+        [Benchmark(Description = nameof(SerialJsonWriter)), BenchmarkCategory("ISerialWriter", "Json")]
+        public void SerialJsonWriter()
         {
             new SerialJsonWriter(true, true).Write(_jsonTest);
             new SerialJsonWriter(false, true).Write(_jsonTest);
+        }
+
+        [Benchmark(Description = nameof(SerialXmlWriter)), BenchmarkCategory("ISerialWriter", "Xml")]
+        public void SerialXmlWriter()
+        {
             new SerialXmlWriter(true, true).Write(_xmlTest);
             new SerialXmlWriter(false, true).Write(_xmlTest);
         }

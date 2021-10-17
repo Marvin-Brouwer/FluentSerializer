@@ -11,17 +11,21 @@ namespace FluentSerializer.Core.Profiling.Move
     {
         protected static ManualConfig CreateConfig()
         {
-            var config = ManualConfig
-                .CreateMinimumViable()
+            var config =
+#if DEBUG
+                 new DebugInProcessConfig()
+#else
+                ManualConfig.CreateMinimumViable()
+#endif
                 .AddExporter(PlainExporter.Default)
                 .AddJob(Job.Dry
                     .WithLaunchCount(5)
                     .WithMaxRelativeError(0.01)
                     .WithId(typeof(BenchmarkRunner).Assembly.FullName)
                 );
-            #if (DEBUG)
+#if (DEBUG)
             config = config.WithOptions(ConfigOptions.DisableOptimizationsValidator);
-            #endif
+#endif
 
             return config;
         }
