@@ -8,14 +8,13 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
 {
     public sealed class House
     {
-
         public string Type { get; set; }
         public string StreetName { get; set; }
         public int HouseNumber { get; set; }
 
         public List<Person> Residents { get; set; }
 
-        public JsonObject ToJsonElement()
+        public IJsonContainer ToJsonElement()
         {
             var properties = new List<JsonProperty> {
                 new JsonProperty("type", JsonValue.String(Type)),
@@ -33,7 +32,7 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
             return new JsonObject(properties);
         }
 
-        public XmlElement ToXmlElement()
+        public IXmlContainer ToXmlElement()
         {
             var children = new List<IXmlNode> {
                 new XmlAttribute("type", Type),

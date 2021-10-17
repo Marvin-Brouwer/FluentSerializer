@@ -46,17 +46,19 @@ namespace FluentSerializer.Core.Data.Json
 
             _stringBuilder
                 .Append(openingCharacter);
-            foreach (var child in jsonObject.Children)
+
+            for (var i = 0; i < jsonObject.Children.Count; i++)
             {
+                var child = jsonObject.Children[i];
+
                 _stringBuilder
                     .AppendOptionalNewline(_format)
-                    .AppendOptionalIndent(childIndent, _format);
+                    .AppendOptionalIndent(childIndent, _format)
+                    .AppendNode(child, _format, childIndent);
 
-                WriteNode(child, childIndent);
-
-                if (child != jsonObject.Children[^1])
-                    _stringBuilder.Append(separatorCharacter);
+                if (i != jsonObject.Children.Count - 1) _stringBuilder.Append(separatorCharacter);
             }
+
             _stringBuilder
                 .AppendOptionalNewline(_format)
                 .AppendOptionalIndent(indent, _format)
@@ -73,17 +75,19 @@ namespace FluentSerializer.Core.Data.Json
 
             _stringBuilder
                 .Append(openingCharacter);
-            foreach (var child in jsonArray.Children)
+
+            for (var i = 0; i < jsonArray.Children.Count; i++)
             {
+                var child = jsonArray.Children[i];
+
                 _stringBuilder
                     .AppendOptionalNewline(_format)
-                    .AppendOptionalIndent(childIndent, _format);
+                    .AppendOptionalIndent(childIndent, _format)
+                    .AppendNode(child, _format, childIndent);
 
-                WriteNode(child, childIndent);
-
-                if (child != jsonArray.Children[^1])
-                    _stringBuilder.Append(separatorCharacter);
+                if (i != jsonArray.Children.Count - 1) _stringBuilder.Append(separatorCharacter);
             }
+
             _stringBuilder
                 .AppendOptionalNewline(_format)
                 .AppendOptionalIndent(indent, _format)

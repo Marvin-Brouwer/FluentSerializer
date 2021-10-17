@@ -15,7 +15,7 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
         public Bogus.DataSets.Name.Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        public JsonObject ToJsonElement()
+        public IJsonContainer ToJsonElement()
         {
             var properties = new List<JsonProperty> {
                 new JsonProperty("fullName", JsonValue.String(string.Join(" ", FirstName, MiddleName, LastName))),
@@ -33,7 +33,7 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
             return new JsonObject(properties);
         }
 
-        public XmlElement ToXmlElement()
+        public IXmlContainer ToXmlElement()
         {
             var children = new List<IXmlNode> {
                 new XmlElement("fullName", new XmlText($"{FirstName} {LastName}")),

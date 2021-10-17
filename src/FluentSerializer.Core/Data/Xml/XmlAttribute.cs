@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.Data.Xml
 {
-    public sealed class XmlAttribute : IXmlNode
+    public readonly struct XmlAttribute : IXmlNode
     {
         public string Name { get; }
         public string? Value { get; }

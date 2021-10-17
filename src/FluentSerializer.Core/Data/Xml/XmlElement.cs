@@ -6,21 +6,20 @@ using System.Text;
 
 namespace FluentSerializer.Core.Data.Xml
 {
-    public sealed class XmlElement : IXmlContainer
+    public readonly struct XmlElement : IXmlContainer
     {
         private readonly List<XmlAttribute> _attributes;
         private readonly List<XmlElement> _children;
         private readonly List<XmlText> _textNodes;
-
 
         public IReadOnlyList<IXmlNode> Children
         {
             get
             {
                 var value = new List<IXmlNode>();
-                value.AddRange(_attributes);
-                value.AddRange(_children);
-                value.AddRange(_textNodes);
+                foreach (var attribute in _attributes) value.Add(attribute);
+                foreach (var children in _children) value.Add(children);
+                foreach (var textNodes in _textNodes) value.Add(textNodes);
 
                 return value.AsReadOnly();
             }
@@ -41,10 +40,14 @@ namespace FluentSerializer.Core.Data.Xml
             _children = new();
             _textNodes = new();
 
-            _attributes.AddRange(childNodes.Where(node => node is XmlAttribute).Cast<XmlAttribute>());
-            _children.AddRange(childNodes.Where(node => node is XmlElement).Cast<XmlElement>());
-            _textNodes.AddRange(childNodes.Where(node => node is XmlText).Cast<XmlText>());
+            foreach(var node in childNodes)
+            {
+                if (node is XmlAttribute attribute) _attributes.Add(attribute);
+                if (node is XmlElement element) _children.Add(element);
+                if (node is XmlText textNode) _textNodes.Add(textNode);
+            }
         }
+
         public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
         public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
 
@@ -76,7 +79,7 @@ namespace FluentSerializer.Core.Data.Xml
             {
                 stringBuilder
                     .AppendOptionalNewline(format)
-                    .AppendOptionalIndent(childIndent, format)
+                    .AppendOptionalIndent(indent, format)
                     .Append(spacer)
                     .AppendNode(attribute, format, childIndent);
             }
@@ -90,16 +93,23 @@ namespace FluentSerializer.Core.Data.Xml
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent);
             }
+            var first = true;
             foreach (var text in _textNodes)
             {
-                if (text == _textNodes[0])
+                if (first)
                 {
+                    first = false;
                     stringBuilder
                         .AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
+
+                    stringBuilder
+                        .AppendNode(text, true, childIndent);
+                    continue;
                 }
+
                 stringBuilder
-                    .AppendNode(text, text == _textNodes[0], childIndent);
+                    .AppendNode(text, false, childIndent);
             }
 
             stringBuilder

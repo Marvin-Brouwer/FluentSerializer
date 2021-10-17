@@ -43,8 +43,7 @@ namespace FluentSerializer.Core.Tests.Data
                 new XmlText("text here")
             );
 
-            _expectedXmlFormatted = "<Class\r\n\t someAttribute=\"1\">\r\n\t<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";
-            _expectedXmlSlim = "<Class someAttribute=\"1\"><someProperty><AnotherClass /></someProperty>text here</Class>";
+            _expectedXmlFormatted = "<Class\r\n someAttribute=\"1\">\r\n\t<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";            _expectedXmlSlim = "<Class someAttribute=\"1\"><someProperty><AnotherClass /></someProperty>text here</Class>";
         }
 
         [Theory, InlineData(true), InlineData(false)]

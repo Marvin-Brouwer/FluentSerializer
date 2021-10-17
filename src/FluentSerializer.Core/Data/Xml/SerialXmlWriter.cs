@@ -58,7 +58,7 @@ namespace FluentSerializer.Core.Data.Xml
             {
                 _stringBuilder
                     .AppendOptionalNewline(_format)
-                    .AppendOptionalIndent(childIndent, _format)
+                    .AppendOptionalIndent(indent, _format)
                     .Append(spacer);
 
                 WriteAttribute(attribute);
@@ -74,11 +74,12 @@ namespace FluentSerializer.Core.Data.Xml
 
                 WriteElement(child, childIndent);
             }
-            var textNodes = xmlElement.TextNodes;
-            foreach (var text in textNodes)
+            var first = true;
+            foreach (var text in xmlElement.TextNodes)
             {
-                if (text == textNodes[0])
+                if (first)
                 {
+                    first = false;
                     _stringBuilder
                         .AppendOptionalNewline(_format)
                         .AppendOptionalIndent(childIndent, _format);
