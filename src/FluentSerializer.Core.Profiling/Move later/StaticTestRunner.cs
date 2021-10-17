@@ -2,8 +2,8 @@
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using System;
 using System.Linq;
+using System.Reflection;
 
 namespace FluentSerializer.Core.Profiling.Move
 {
@@ -26,14 +26,14 @@ namespace FluentSerializer.Core.Profiling.Move
             return config;
         }
 
-        public static void Run(string[] parameters, System.Collections.Generic.IEnumerable<Type> profileDefinitions)
+        public static void Run(string[] parameters, Assembly assembly)
         {
             var config = CreateConfig();
-            var tests = profileDefinitions.ToArray();
 
             if (!parameters.Any())
-                BenchmarkSwitcher.FromTypes(tests).RunAllJoined(config);
-            BenchmarkSwitcher.FromTypes(tests).Run(parameters, config);
+                BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
+
+            BenchmarkSwitcher.FromAssembly(assembly).Run(parameters, config);
         }
     }
 }
