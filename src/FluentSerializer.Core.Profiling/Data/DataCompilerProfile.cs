@@ -23,59 +23,40 @@ namespace FluentSerializer.Core.Profiling.Data
     [Orderer(SummaryOrderPolicy.Declared)]
     public class DataCompilerProfile
     {
-        private const int LargeSet = 5000;
-        private const int MiddleSet = 500;
-        private const int SmallSet = 100;
+        public static IEnumerable<JsonObject> GetJsonValues() => TestDataSet.JsonValues;
+        public static IEnumerable<XmlElement> GetXmlValues() => TestDataSet.XmlValues;
 
-        private static readonly TestDataSet TestData = new(LargeSet, MiddleSet, SmallSet);
-
-        public static IEnumerable<JsonObject> GetJsonValues()
-        {
-            Console.WriteLine("GetJsonValues");
-            return TestData.JsonValues;
-        }
-        public static IEnumerable<XmlElement> GetXmlValues()
-        {
-            Console.WriteLine("GetXmlValues");
-            return TestData.XmlValues;
-        }
-
-
-        [ParamsSource(nameof(GetJsonValues))]
-        public JsonObject JsonTestData { get; set; }
-        [ParamsSource(nameof(GetXmlValues))]
-        public XmlElement XmlTestData { get; set; }
 
         [Benchmark(Description = nameof(JsonDataToString)), BenchmarkCategory("ToString", "Json")]
-        public void JsonDataToString()
+        [ArgumentsSource(nameof(GetJsonValues))]
+        public void JsonDataToString(JsonObject data)
         {
-            Console.WriteLine("JsonDataToString");
-            JsonTestData.ToString(true);
-            JsonTestData.ToString(false);
+            data.ToString(true);
+            data.ToString(false);
         }
 
         [Benchmark(Description = nameof(SerialJsonWriter)), BenchmarkCategory("ISerialWriter", "Json")]
-        public void SerialJsonWriter()
+        [ArgumentsSource(nameof(GetJsonValues))]
+        public void SerialJsonWriter(JsonObject data)
         {
-            Console.WriteLine("SerialJsonWriter");
-            new SerialJsonWriter(true, true).Write(JsonTestData);
-            new SerialJsonWriter(false, true).Write(JsonTestData);
+            new SerialJsonWriter(true, true).Write(data);
+            new SerialJsonWriter(false, true).Write(data);
         }
 
         [Benchmark(Description = nameof(XmlDataToString)), BenchmarkCategory("ToString", "Xml")]
-        public void XmlDataToString()
+        [ArgumentsSource(nameof(GetXmlValues))]
+        public void XmlDataToString(XmlElement data)
         {
-            Console.WriteLine("XmlDataToString");
-            XmlTestData.ToString(true);
-            XmlTestData.ToString(false);
+            data.ToString(true);
+            data.ToString(false);
         }
 
         [Benchmark(Description = nameof(SerialXmlWriter)), BenchmarkCategory("ISerialWriter", "Xml")]
-        public void SerialXmlWriter()
+        [ArgumentsSource(nameof(GetXmlValues))]
+        public void SerialXmlWriter(XmlElement data)
         {
-            Console.WriteLine("SerialXmlWriter");
-            new SerialXmlWriter(true, true).Write(XmlTestData);
-            new SerialXmlWriter(false, true).Write(XmlTestData);
+            new SerialXmlWriter(true, true).Write(data);
+            new SerialXmlWriter(false, true).Write(data);
         }
     }
 }

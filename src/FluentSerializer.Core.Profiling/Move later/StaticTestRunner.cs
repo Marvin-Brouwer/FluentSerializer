@@ -19,11 +19,14 @@ namespace FluentSerializer.Core.Profiling.Move
                 ManualConfig.CreateMinimumViable()
 #endif
                 .AddExporter(PlainExporter.Default)
-                .AddJob(Job.Default
-                    .WithLaunchCount(5)
+                .AddJob(Job.Dry
+                    .WithLaunchCount(2)
+                    .WithWarmupCount(2)
+                    .WithIterationCount(5)
                     .WithMaxRelativeError(0.01)
                     .WithId(typeof(BenchmarkRunner).Assembly.FullName)
-                );
+                )
+                .AddExporter(PlainExporter.Default, MarkdownExporter.GitHub);
 #if (DEBUG)
             config = config.WithOptions(ConfigOptions.DisableOptimizationsValidator);
 #endif

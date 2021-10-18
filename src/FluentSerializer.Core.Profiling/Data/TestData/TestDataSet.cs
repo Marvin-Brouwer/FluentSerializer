@@ -11,13 +11,23 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
     {
         private const int BogusSeed = 98123600;
 
-        public List<JsonObject> JsonValues { get; }
-        public List<XmlElement> XmlValues { get; }
+        public static List<JsonObject> JsonValues { get; }
+        public static List<XmlElement> XmlValues { get; }
 
-        public TestDataSet (int largeSet, int middleSet, int smallSet)
+#if (DEBUG)
+        private const int LargeSet = 100;
+        private const int MiddleSet = 50;
+        private const int SmallSet = 10;
+#else
+        private const int LargeSet = 10000;
+        private const int MiddleSet = 5000;
+        private const int SmallSet = 2500;
+#endif
+
+        static TestDataSet()
         {
             Console.WriteLine("Building test dataSet");
-            var testData = BogusConfiguration.Generate(BogusSeed, largeSet).ToList();
+            var testData = BogusConfiguration.Generate(BogusSeed, LargeSet).ToList();
 
             Console.WriteLine("Mapping JSON dataSet");
             var jsonDataSet = testData
@@ -30,14 +40,14 @@ namespace FluentSerializer.Core.Profiling.Data.TestData
             Console.WriteLine("Wrapping collection subsets");
 
             JsonValues = new List<JsonObject>(3){
-                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(smallSet).ToList()))),
-                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(middleSet).ToList()))),
+                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(SmallSet).ToList()))),
+                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(MiddleSet).ToList()))),
                 new (new JsonProperty("data", new JsonArray(jsonDataSet)))
             };
 
             XmlValues =  new List<XmlElement>(3){
-                new ("Data", xmlDataSet.Take(smallSet).ToList()),
-                new ("Data", xmlDataSet.Take(middleSet).ToList()),
+                new ("Data", xmlDataSet.Take(SmallSet).ToList()),
+                new ("Data", xmlDataSet.Take(MiddleSet).ToList()),
                 new ("Data", xmlDataSet)
             };
 
