@@ -1,11 +1,13 @@
 ﻿using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace FluentSerializer.Core.Data.Xml
 {
+    [DebuggerDisplay("<{Name,nq} />")]
     public readonly struct XmlElement : IXmlContainer
     {
         private readonly List<XmlAttribute> _attributes;
@@ -52,7 +54,7 @@ namespace FluentSerializer.Core.Data.Xml
         public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
 
         public override string ToString() => ToString(true);
-        public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
+        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             const char tagStartCharacter = '<';

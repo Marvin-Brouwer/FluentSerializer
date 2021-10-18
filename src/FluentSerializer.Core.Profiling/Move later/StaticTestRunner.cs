@@ -1,4 +1,5 @@
-﻿using BenchmarkDotNet.Configs;
+﻿using System;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
@@ -13,12 +14,12 @@ namespace FluentSerializer.Core.Profiling.Move
         {
             var config =
 #if DEBUG
-                 new DebugInProcessConfig()
+                new DebugInProcessConfig()
 #else
                 ManualConfig.CreateMinimumViable()
 #endif
                 .AddExporter(PlainExporter.Default)
-                .AddJob(Job.Dry
+                .AddJob(Job.Default
                     .WithLaunchCount(5)
                     .WithMaxRelativeError(0.01)
                     .WithId(typeof(BenchmarkRunner).Assembly.FullName)
@@ -33,6 +34,7 @@ namespace FluentSerializer.Core.Profiling.Move
         public static void Run(string[] parameters, Assembly assembly)
         {
             var config = CreateConfig();
+            Console.WriteLine("Starting benchmark runner");
 
             if (!parameters.Any())
                 BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
