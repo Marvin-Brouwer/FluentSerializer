@@ -53,7 +53,7 @@ namespace FluentSerializer.Core.Data.Xml
         public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
         public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
 
-        public override string ToString() => ToString(true);
+        public override string ToString() => ToString(false);
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {

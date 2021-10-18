@@ -25,7 +25,7 @@ namespace FluentSerializer.Core.Data.Json
         public JsonProperty(string name, JsonObject? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, JsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
-        public override string ToString() => ToString(true);
+        public override string ToString() => ToString(false);
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {

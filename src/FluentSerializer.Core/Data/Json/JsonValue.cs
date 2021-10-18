@@ -19,7 +19,7 @@ namespace FluentSerializer.Core.Data.Json
             Value = value;
         }
 
-        public override string ToString() => ToString(true);
+        public override string ToString() => ToString(false);
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
