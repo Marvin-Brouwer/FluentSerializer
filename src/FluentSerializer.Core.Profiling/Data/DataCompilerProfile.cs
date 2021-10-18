@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using BenchmarkDotNet.Order;
@@ -18,69 +20,62 @@ namespace FluentSerializer.Core.Profiling.Data
     //[ConcurrencyVisualizerProfiler]
     //[NativeMemoryProfiler]
     #endif
-    [Orderer(SummaryOrderPolicy.Declared, MethodOrderPolicy.Declared)]
+    [Orderer(SummaryOrderPolicy.Declared)]
     public class DataCompilerProfile
     {
-        private JsonObject _jsonTest;
-        private XmlElement _xmlTest;
-        private int _iteration;
+        private const int LargeSet = 5000;
+        private const int MiddleSet = 500;
+        private const int SmallSet = 100;
 
-        [GlobalSetup]
-        public void GlobalSetup()
+        private static readonly TestDataSet TestData = new(LargeSet, MiddleSet, SmallSet);
+
+        public static IEnumerable<JsonObject> GetJsonValues()
         {
-            _iteration = -1;
+            Console.WriteLine("GetJsonValues");
+            return TestData.JsonValues;
+        }
+        public static IEnumerable<XmlElement> GetXmlValues()
+        {
+            Console.WriteLine("GetXmlValues");
+            return TestData.XmlValues;
         }
 
-        [IterationSetup]
-        public void IterationSetup()
-        {
-            _iteration++;
-            var seed = 98123600 + _iteration;
-            var testDataSet = BogusConfiguration.Generate(seed, 5000);
 
-            _jsonTest = new JsonObject(
-                new JsonProperty("data", new JsonArray(
-                    testDataSet.Select(testItem => testItem.ToJsonElement()))
-                )
-            );
+        [ParamsSource(nameof(GetJsonValues))]
+        public JsonObject JsonTestData { get; set; }
+        [ParamsSource(nameof(GetXmlValues))]
+        public XmlElement XmlTestData { get; set; }
 
-            _xmlTest = new XmlElement("Data", 
-                testDataSet.Select(testItem => testItem.ToXmlElement())
-            );
-        }
-        [IterationCleanup]
-        public void IterationCleanup()
+        [Benchmark(Description = nameof(JsonDataToString)), BenchmarkCategory("ToString", "Json")]
+        public void JsonDataToString()
         {
-            _jsonTest = new JsonObject();
-            _xmlTest = new XmlElement();
-        }
-
-        [Benchmark(Description = nameof(JsonDataToSTring)), BenchmarkCategory("ToString", "Json")]
-        public void JsonDataToSTring()
-        {
-            _jsonTest.ToString();
-            _jsonTest.ToString(false);
+            Console.WriteLine("JsonDataToString");
+            JsonTestData.ToString(true);
+            JsonTestData.ToString(false);
         }
 
         [Benchmark(Description = nameof(SerialJsonWriter)), BenchmarkCategory("ISerialWriter", "Json")]
         public void SerialJsonWriter()
         {
-            new SerialJsonWriter(true, true).Write(_jsonTest);
-            new SerialJsonWriter(false, true).Write(_jsonTest);
+            Console.WriteLine("SerialJsonWriter");
+            new SerialJsonWriter(true, true).Write(JsonTestData);
+            new SerialJsonWriter(false, true).Write(JsonTestData);
         }
 
-        [Benchmark(Description = nameof(XmlDataToSTring)), BenchmarkCategory("ToString", "Xml")]
-        public void XmlDataToSTring()
+        [Benchmark(Description = nameof(XmlDataToString)), BenchmarkCategory("ToString", "Xml")]
+        public void XmlDataToString()
         {
-            _xmlTest.ToString();
-            _xmlTest.ToString(false);
+            Console.WriteLine("XmlDataToString");
+            XmlTestData.ToString(true);
+            XmlTestData.ToString(false);
         }
 
         [Benchmark(Description = nameof(SerialXmlWriter)), BenchmarkCategory("ISerialWriter", "Xml")]
         public void SerialXmlWriter()
         {
-            new SerialXmlWriter(true, true).Write(_xmlTest);
-            new SerialXmlWriter(false, true).Write(_xmlTest);
+            Console.WriteLine("SerialXmlWriter");
+            new SerialXmlWriter(true, true).Write(XmlTestData);
+            new SerialXmlWriter(false, true).Write(XmlTestData);
         }
     }
 }

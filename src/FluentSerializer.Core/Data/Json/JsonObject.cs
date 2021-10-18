@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.Data.Json
 {
-    [DebuggerDisplay(nameof(ToString))]
+    [DebuggerDisplay("{ }")]
     public readonly struct JsonObject : IJsonContainer
     {
         private readonly List<IJsonNode> _children;
@@ -26,7 +26,7 @@ namespace FluentSerializer.Core.Data.Json
         public JsonObject(params JsonProperty[] properties) : this(properties.AsEnumerable()) { }
 
         public override string ToString() => ToString(true);
-        public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
+        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             const char openingCharacter = '{';

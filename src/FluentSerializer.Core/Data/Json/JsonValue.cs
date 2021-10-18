@@ -3,7 +3,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.Data.Json
 {
-    [DebuggerDisplay(nameof(Value))]
+    [DebuggerDisplay("{Value,nq}")]
     public readonly struct JsonValue : IJsonNode
     {
         public string Name { get; }
@@ -20,7 +20,7 @@ namespace FluentSerializer.Core.Data.Json
         }
 
         public override string ToString() => ToString(true);
-        public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
+        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             // JSON does not support empty property assignment or array members

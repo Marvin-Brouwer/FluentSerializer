@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.Data.Json
 {
-    [DebuggerDisplay(nameof(ToString))]
+    [DebuggerDisplay("{Name,nq}: /* */,")]
     public readonly struct JsonProperty : IJsonContainer
     {
         public string Name { get; }
@@ -26,7 +26,7 @@ namespace FluentSerializer.Core.Data.Json
         public JsonProperty(string name, JsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
         public override string ToString() => ToString(true);
-        public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
+        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             const char wrappingCharacter = '"';

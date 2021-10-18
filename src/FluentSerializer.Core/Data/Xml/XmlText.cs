@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace FluentSerializer.Core.Data.Xml
 {
+    [DebuggerDisplay("{Value}")]
     public readonly struct XmlText : IXmlNode
     {
         public string Name { get; }
@@ -15,7 +17,7 @@ namespace FluentSerializer.Core.Data.Xml
         }
 
         public override string ToString() => ToString(true);
-        public string ToString(bool format = true) => WriteTo(new StringBuilder(), format).ToString();
+        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             if (!writeNull && Value is null) return stringBuilder;
