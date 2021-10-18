@@ -29,4 +29,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
+  </ItemGroup>
+
 </Project>
