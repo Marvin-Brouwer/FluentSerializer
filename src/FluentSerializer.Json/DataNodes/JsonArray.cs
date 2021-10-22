@@ -1,25 +1,69 @@
 ﻿using FluentSerializer.Core.DataNodes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
 namespace FluentSerializer.Json.DataNodes
 {
-    [DebuggerDisplay("[ ]")]
-    public sealed class JsonArray : IJsonContainer
+    [DebuggerDisplay("{Name, nq}")]
+    public sealed class JsonArray : IJsonContainer, IEquatable<IJsonNode>
     {
-        public IReadOnlyList<IJsonNode> Children { get; }
+        private readonly List<IJsonNode> _children;
+        public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
         public string Name { get; }
 
-        public JsonArray(IEnumerable<IJsonContainer> elements)
+        public JsonArray(IEnumerable<IJsonContainer>? elements)
         {
             const string arrayName = "[ ]";
             Name = arrayName;
-            Children = elements.ToList();
+
+            if (elements is null) _children = new List<IJsonNode>(0);
+            else
+            {
+                _children = new List<IJsonNode>();
+                foreach (var property in elements) _children.Add(property);
+            }
         }
-        public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) {  }
+        public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) { }
+        public JsonArray(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset) : this((IEnumerable<IJsonContainer>?)null)
+        {
+            const char propertyStartCharacter = '"';
+            const char objectStartCharacter = '{';
+            const char objectEndCharacter = '}';
+            const char arrayStartCharacter = '[';
+            const char arrayEndCharacter = ']';
+
+            offset++;
+            _children = new List<IJsonNode>();
+
+            stringBuilder.Clear();
+            while (offset < text.Length)
+            {
+                var character = text[offset];
+
+                if (character == objectStartCharacter)
+                {
+                    _children.Add(new JsonObject(text, stringBuilder, ref offset));
+                    continue;
+                }
+                if (character == arrayStartCharacter)
+                {
+                    _children.Add(new JsonArray(text, stringBuilder, ref offset));
+                    continue;
+                }
+
+
+                if (character == propertyStartCharacter) break;
+                if (character == objectEndCharacter) break;
+                if (character == arrayEndCharacter) break;
+                offset++;
+            }
+            offset++;
+        }
 
         public override string ToString() => ToString(false);
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
@@ -52,6 +96,18 @@ namespace FluentSerializer.Json.DataNodes
                 .Append(closingCharacter);
 
             return stringBuilder;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IJsonNode node) return false;
+            return Equals(node);
+        }
+        public bool Equals([AllowNull] IJsonNode other)
+        {
+            if (other is not JsonArray otherArray) return false;
+
+            return Children.SequenceEqual(otherArray.Children);
         }
     }
 }

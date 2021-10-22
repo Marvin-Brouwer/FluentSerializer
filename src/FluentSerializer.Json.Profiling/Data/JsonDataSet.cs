@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Json.DataNodes;
-using FluentSerializer.Json.Profiling.Data;
 
 namespace FluentSerializer.Json.Profiling.Data
 {

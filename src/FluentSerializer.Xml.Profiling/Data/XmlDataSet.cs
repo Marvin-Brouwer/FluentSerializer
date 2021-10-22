@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Xml.DataNodes;
-using FluentSerializer.Xml.Profiling.Data;
 
 namespace FluentSerializer.Xml.Profiling.Data
 {

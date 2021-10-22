@@ -1,6 +1,5 @@
 ﻿using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Xml.DataNodes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
