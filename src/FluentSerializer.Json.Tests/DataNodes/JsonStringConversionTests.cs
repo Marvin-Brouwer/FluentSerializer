@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using FluentAssertions;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Json.DataNodes;
 using Xunit;
 
@@ -60,7 +61,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var result = new JsonObject(input.AsSpan(), new StringBuilder(), ref offset);
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.Should().BeEquatableTo<IJsonNode>(expected);
         }
     }
 }

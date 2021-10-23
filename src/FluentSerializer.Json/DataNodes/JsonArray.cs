@@ -7,19 +7,19 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes
 {
-    [DebuggerDisplay("{Name, nq}")]
-    public sealed class JsonArray : IJsonContainer, IEquatable<IJsonNode>
+    [DebuggerDisplay("{ArrayName, nq}")]
+    public readonly record struct  JsonArray : IJsonContainer, IEquatable<IJsonNode>
     {
+        private const string ArrayName = "[ ]";
+        public string Name => ArrayName;
+
+
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-        public string Name { get; }
-
+        public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) { }
         public JsonArray(IEnumerable<IJsonContainer>? elements)
         {
-            const string arrayName = "[ ]";
-            Name = arrayName;
-
             if (elements is null) _children = new List<IJsonNode>(0);
             else
             {
@@ -27,38 +27,33 @@ namespace FluentSerializer.Json.DataNodes
                 foreach (var property in elements) _children.Add(property);
             }
         }
-        public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) { }
-        public JsonArray(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset) : this((IEnumerable<IJsonContainer>?)null)
+
+        public JsonArray(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
         {
-            const char propertyStartCharacter = '"';
-            const char objectStartCharacter = '{';
-            const char objectEndCharacter = '}';
-            const char arrayStartCharacter = '[';
-            const char arrayEndCharacter = ']';
+            _children = new List<IJsonNode>();
 
             offset++;
-            _children = new List<IJsonNode>();
 
             stringBuilder.Clear();
             while (offset < text.Length)
             {
                 var character = text[offset];
 
-                if (character == objectStartCharacter)
+                if (character == JsonConstants.ObjectStartCharacter)
                 {
                     _children.Add(new JsonObject(text, stringBuilder, ref offset));
                     continue;
                 }
-                if (character == arrayStartCharacter)
+                if (character == JsonConstants.ArrayStartCharacter)
                 {
                     _children.Add(new JsonArray(text, stringBuilder, ref offset));
                     continue;
                 }
 
 
-                if (character == propertyStartCharacter) break;
-                if (character == objectEndCharacter) break;
-                if (character == arrayEndCharacter) break;
+                if (character == JsonConstants.PropertyWrapCharacter) break;
+                if (character == JsonConstants.ObjectEndCharacter) break;
+                if (character == JsonConstants.ArrayEndCharacter) break;
                 offset++;
             }
             offset++;
@@ -68,14 +63,10 @@ namespace FluentSerializer.Json.DataNodes
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
-            const char openingCharacter = '[';
-            const char separatorCharacter = ',';
-            const char closingCharacter = ']';
-
             var childIndent = indent + 1;
 
             stringBuilder
-                .Append(openingCharacter);
+                .Append(JsonConstants.ArrayStartCharacter);
 
             for (var i = 0; i < Children.Count; i++)
             {
@@ -86,34 +77,36 @@ namespace FluentSerializer.Json.DataNodes
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent);
 
-                if (i != Children.Count - 1) stringBuilder.Append(separatorCharacter);
+                if (i != Children.Count - 1) stringBuilder.Append(JsonConstants.DividerCharacter);
             }
 
             stringBuilder
                 .AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
-                .Append(closingCharacter);
+                .Append(JsonConstants.ArrayEndCharacter);
 
             return stringBuilder;
         }
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IJsonNode jsonNode) return false;
-
-            return Equals(jsonNode);
-        }
-
         public bool Equals(IJsonNode? obj)
         {
             if (obj is not JsonArray otherArray) return false;
 
-            return Children.SequenceEqual(otherArray.Children);
+            return _children.SequenceEqual(otherArray._children, JsonNodeComparer.Default);
         }
 
-        public override int GetHashCode() => HashCode.Combine(_children);
+        public override int GetHashCode()
+        {
+            if (_children?.Any() != true) return 0;
+
+            var hash = new HashCode();
+            foreach (var child in _children)
+                hash.Add(child);
+
+            return hash.ToHashCode();
+        }
 
         #endregion
     }

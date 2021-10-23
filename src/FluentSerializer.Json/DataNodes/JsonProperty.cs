@@ -9,45 +9,51 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes
 {
-    [DebuggerDisplay("{Name,nq}: /* */,")]
-    public readonly struct JsonProperty : IJsonContainer, IEquatable<IJsonNode>
+    [DebuggerDisplay("{Name,nq}: {GetDebugValue(), nq},")]
+    public readonly record struct JsonProperty(string Name) : IJsonContainer, IEquatable<IJsonNode>
     {
-        public string Name { get; }
-
-        private readonly IJsonNode[] _children;
-        public IReadOnlyList<IJsonNode> Children => _children ?? new IJsonNode[] { };
-
-        private JsonProperty(string name, IJsonNode? value = null)
+        [DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
+        private string GetDebugValue()
         {
-            Guard.Against.InvalidName(name, nameof(name));
+            if (_children.Length == 0) return JsonConstants.NullValue;
+            var value = _children[0];
+            if (value is JsonValue jsonValue) return jsonValue.Value ?? JsonConstants.NullValue;
+            return value.Name;
+        }
 
-            Name = name;
+        public string Name { get; init; } = CheckName(Name, nameof(Name));
+
+        private readonly IJsonNode[] _children = new IJsonNode[] { };
+        public IReadOnlyList<IJsonNode> Children => _children;
+
+        private static string CheckName(string name, string propertyName)
+        {
+            Guard.Against.InvalidName(name, propertyName);
+            return name;
+        }
+
+        private JsonProperty(string name, IJsonNode? value = null) : this(name)
+        {
+            Name = CheckName(name, nameof(name));
             _children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
         }
+
         public JsonProperty(string name, JsonValue? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, JsonObject? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, JsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
-        public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
+        public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset) : this("TEMP")
         {
-            const char nameEndCharacter = '"';
-            const char propertyAssignmentCharacter = ':';
-            const char propertyValueEndCharacter = ',';
-            const char objectStartCharacter = '{';
-            const char objectEndCharacter = '}';
-            const char arrayStartCharacter = '[';
-            const char arrayEndCharacter = ']';
-
             stringBuilder.Clear();
             while (offset < text.Length)
             {
                 var character = text[offset];
 
-                if (character == objectEndCharacter) break;
-                if (character == arrayEndCharacter) break;
+                if (character == JsonConstants.ObjectEndCharacter) break;
+                if (character == JsonConstants.ArrayEndCharacter) break;
                 offset++;
-                if (character == propertyValueEndCharacter) break;
-                if (character == nameEndCharacter) break;
+                if (character == JsonConstants.DividerCharacter) break;
+                if (character == JsonConstants.PropertyWrapCharacter) break;
 
                 stringBuilder.Append(character);
             }
@@ -59,13 +65,13 @@ namespace FluentSerializer.Json.DataNodes
             {
                 var character = text[offset];
 
-                if (character == objectEndCharacter) break;
-                if (character == arrayEndCharacter) break;
+                if (character == JsonConstants.ObjectEndCharacter) break;
+                if (character == JsonConstants.ArrayEndCharacter) break;
                 offset++;
-                if (character == propertyValueEndCharacter) break;
+                if (character == JsonConstants.DividerCharacter) break;
                 if (char.IsWhiteSpace(character)) continue;
 
-                if (character == propertyAssignmentCharacter) break;
+                if (character == JsonConstants.PropertyAssignmentCharacter) break;
             }
 
             _children = new IJsonNode[1];
@@ -74,15 +80,15 @@ namespace FluentSerializer.Json.DataNodes
             {
                 var character = text[offset];
 
-                if (character == objectEndCharacter) return;
-                if (character == arrayEndCharacter) return;
+                if (character == JsonConstants.ObjectEndCharacter) return;
+                if (character == JsonConstants.ArrayEndCharacter) return;
 
-                if (character == objectStartCharacter)
+                if (character == JsonConstants.ObjectStartCharacter)
                 {
                     _children[0] = new JsonObject(text, stringBuilder, ref offset);
                     return;
                 }
-                if (character == arrayStartCharacter)
+                if (character == JsonConstants.ArrayStartCharacter)
                 {
                     _children[0] = new JsonArray(text, stringBuilder, ref offset);
                     return;
@@ -90,7 +96,7 @@ namespace FluentSerializer.Json.DataNodes
 
                 if (!char.IsWhiteSpace(character)) break;
                 offset++;
-                if (character == propertyValueEndCharacter) return;
+                if (character == JsonConstants.DividerCharacter) return;
             }
 
             _children[0] = new JsonValue(text, stringBuilder, ref offset);
@@ -100,23 +106,23 @@ namespace FluentSerializer.Json.DataNodes
         public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
         public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
-            const char wrappingCharacter = '"';
-            const char assignmentCharacter = ':';
+            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
+
             const char spacer = ' ';
 
             var childValue = Children.FirstOrDefault();
             if (!writeNull && childValue is null) return stringBuilder;
 
             stringBuilder
-                .Append(wrappingCharacter)
+                .Append(JsonConstants.PropertyWrapCharacter)
                 .Append(Name)
-                .Append(wrappingCharacter);
+                .Append(JsonConstants.PropertyWrapCharacter);
 
             if (format) stringBuilder.Append(spacer);
-            stringBuilder.Append(assignmentCharacter);
+            stringBuilder.Append(JsonConstants.PropertyAssignmentCharacter);
             if (format) stringBuilder.Append(spacer);
 
-            if (childValue is null) stringBuilder.Append("null");
+            if (childValue is null) stringBuilder.Append(JsonConstants.NullValue);
             else stringBuilder.AppendNode(childValue, format, indent);
 
             return stringBuilder;
@@ -124,13 +130,6 @@ namespace FluentSerializer.Json.DataNodes
 
 
         #region IEquatable
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IJsonNode jsonNode) return false;
-
-            return Equals(jsonNode);
-        }
 
         public bool Equals(IJsonNode? other)
         {
@@ -140,7 +139,18 @@ namespace FluentSerializer.Json.DataNodes
 
             return Children[0].Equals(otherProperty.Children[0]);
         }
-        public override int GetHashCode() => HashCode.Combine(Name, _children);
+
+        public override int GetHashCode()
+        {
+            if (_children?.Any() != true) return 0;
+
+            var hash = new HashCode();
+            hash.Add(Name.GetHashCode());
+            foreach (var child in _children)
+                hash.Add(child);
+
+            return hash.ToHashCode();
+        }
 
         #endregion
     }
