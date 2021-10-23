@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -98,16 +97,24 @@ namespace FluentSerializer.Json.DataNodes
             return stringBuilder;
         }
 
+        #region IEquatable
+
         public override bool Equals(object? obj)
         {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
+            if (obj is not IJsonNode jsonNode) return false;
+
+            return Equals(jsonNode);
         }
-        public bool Equals([AllowNull] IJsonNode other)
+
+        public bool Equals(IJsonNode? obj)
         {
-            if (other is not JsonArray otherArray) return false;
+            if (obj is not JsonArray otherArray) return false;
 
             return Children.SequenceEqual(otherArray.Children);
         }
+
+        public override int GetHashCode() => HashCode.Combine(_children);
+
+        #endregion
     }
 }

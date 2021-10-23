@@ -4,7 +4,6 @@ using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -122,12 +121,18 @@ namespace FluentSerializer.Json.DataNodes
 
             return stringBuilder;
         }
+
+
+        #region IEquatable
+
         public override bool Equals(object? obj)
         {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
+            if (obj is not IJsonNode jsonNode) return false;
+
+            return Equals(jsonNode);
         }
-        public bool Equals([AllowNull] IJsonNode other)
+
+        public bool Equals(IJsonNode? other)
         {
             if (other is not JsonProperty otherProperty) return false;
 
@@ -135,5 +140,8 @@ namespace FluentSerializer.Json.DataNodes
 
             return Children[0].Equals(otherProperty.Children[0]);
         }
+        public override int GetHashCode() => HashCode.Combine(Name, _children);
+
+        #endregion
     }
 }

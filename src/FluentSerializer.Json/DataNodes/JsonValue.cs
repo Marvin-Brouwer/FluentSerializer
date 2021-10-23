@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace FluentSerializer.Json.DataNodes
 {
     [DebuggerDisplay("{Value,nq}")]
-    public readonly struct JsonValue : IJsonNode, IEquatable<IJsonNode>
+    public readonly struct JsonValue : IJsonValue, IEquatable<IJsonNode>
     {
         public string Name { get; }
         public string? Value { get; }
@@ -63,17 +62,25 @@ namespace FluentSerializer.Json.DataNodes
            return stringBuilder.Append(Value);
         }
 
+        #region IEquatable
+
         public override bool Equals(object? obj)
         {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
+            if (obj is not IJsonNode jsonNode) return false;
+
+            return Equals(jsonNode);
         }
-        public bool Equals([AllowNull] IJsonNode other)
+        public bool Equals(IJsonNode? other)
         {
             if (other is not JsonValue otherValue) return false;
-            if (Value is null && other is null) return true;
+            if (Value is null && otherValue.Value is null) return true;
+            if (otherValue.Value is null) return false;
 
             return Value!.Equals(otherValue.Value, StringComparison.Ordinal);
         }
+
+        public override int GetHashCode() => HashCode.Combine(Value);
+
+        #endregion
     }
 }
