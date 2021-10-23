@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using FluentSerializer.Xml.DataNodes;
+using System;
+using System.Text;
 using Xunit;
 
 namespace FluentSerializer.Xml.Tests.DataNodes
@@ -30,6 +32,21 @@ namespace FluentSerializer.Xml.Tests.DataNodes
 
             // Act
             var result = _testObject.ToString(format);
+
+            // Assert
+            result.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory, InlineData(true), InlineData(false)]
+        public void StringToObject(bool format)
+        {
+            // Arrange
+            var expected = _testObject;
+            var input = format ? _testXmlFormatted : _testXmlSlim;
+
+            // Act
+            var offset = 0;
+            var result = new XmlElement(input.AsSpan(), new StringBuilder(), ref offset);
 
             // Assert
             result.Should().BeEquivalentTo(expected);
