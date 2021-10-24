@@ -7,10 +7,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace FluentSerializer.Json.DataNodes
+namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{Name,nq}: {GetDebugValue(), nq},")]
-    public readonly struct JsonProperty: IJsonContainer
+    internal readonly struct JsonProperty : IJsonProperty
     {
         [DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
         private string GetDebugValue()
@@ -26,21 +26,17 @@ namespace FluentSerializer.Json.DataNodes
         private readonly IJsonNode[] _children;
         public IReadOnlyList<IJsonNode> Children => _children;
 
-        private static string CheckName(string name, string propertyName)
-        {
-            Guard.Against.InvalidName(name, propertyName);
-            return name;
-        }
-
         private JsonProperty(string name, IJsonNode? value = null)
         {
-            Name = CheckName(name, nameof(name));
+            Guard.Against.InvalidName(name, nameof(name));
+
+            Name = name;
             _children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
         }
 
-        public JsonProperty(string name, JsonValue? value = null) : this(name, (IJsonNode?)value) { }
-        public JsonProperty(string name, JsonObject? value = null) : this(name, (IJsonNode?)value) { }
-        public JsonProperty(string name, JsonArray? value = null) : this(name, (IJsonNode?)value) { }
+        public JsonProperty(string name, IJsonValue? value = null) : this(name, (IJsonNode?)value) { }
+        public JsonProperty(string name, IJsonObject? value = null) : this(name, (IJsonNode?)value) { }
+        public JsonProperty(string name, IJsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
         public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
         {

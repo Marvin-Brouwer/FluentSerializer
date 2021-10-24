@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace FluentSerializer.Json.DataNodes
+namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{ObjectName, nq}")]
-    public readonly struct JsonObject : IJsonContainer
+    internal readonly struct JsonObject : IJsonObject
     {
         private const string ObjectName = "[ ]";
         public string Name => ObjectName;
@@ -16,8 +16,8 @@ namespace FluentSerializer.Json.DataNodes
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-        public JsonObject(params JsonProperty[] properties) : this(properties.AsEnumerable()) { }
-        public JsonObject(IEnumerable<JsonProperty>? properties)
+        public JsonObject(params IJsonProperty[] properties) : this(properties.AsEnumerable()) { }
+        public JsonObject(IEnumerable<IJsonProperty>? properties)
         {
             if (properties is null) _children = new List<IJsonNode>(0);
             else
@@ -80,7 +80,7 @@ namespace FluentSerializer.Json.DataNodes
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent);
 
-                if (i != Children.Count -1) stringBuilder.Append(JsonConstants.DividerCharacter);
+                if (i != Children.Count - 1) stringBuilder.Append(JsonConstants.DividerCharacter);
             }
 
             stringBuilder
