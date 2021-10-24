@@ -8,7 +8,7 @@ using System.Text;
 namespace FluentSerializer.Json.DataNodes
 {
     [DebuggerDisplay("{ArrayName, nq}")]
-    public readonly record struct  JsonArray : IJsonContainer, IEquatable<IJsonNode>
+    public readonly struct  JsonArray : IJsonContainer
     {
         private const string ArrayName = "[ ]";
         public string Name => ArrayName;
@@ -89,6 +89,12 @@ namespace FluentSerializer.Json.DataNodes
         }
 
         #region IEquatable
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IJsonNode node) return false;
+            return Equals(node);
+        }
 
         public bool Equals(IJsonNode? obj)
         {

@@ -5,15 +5,19 @@ using System.Text;
 namespace FluentSerializer.Json.DataNodes
 {
     [DebuggerDisplay("{Value,nq}")]
-    public readonly record struct JsonValue(string? Value = null) : IJsonValue, IEquatable<IJsonNode>
+    public readonly struct JsonValue: IJsonValue
     {
         private const string ValueName = "#value";
         public string Name => ValueName;
-        public string? Value { get; } = Value;
+        public string? Value { get; }
 
         public static JsonValue String(string? value = null) => new ($"\"{value}\"");
+        public JsonValue(string? value)
+        {
+            Value = value;
+        }
 
-        public JsonValue(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset) : this(null)
+        public JsonValue(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
         {
             const char lineEndCharacter = ',';
             const char objectEndCharacter = '}';
@@ -56,6 +60,13 @@ namespace FluentSerializer.Json.DataNodes
         }
 
         #region IEquatable
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IJsonNode node) return false;
+            return Equals(node);
+        }
+
         public bool Equals(IJsonNode? other)
         {
             if (other is not JsonValue otherValue) return false;

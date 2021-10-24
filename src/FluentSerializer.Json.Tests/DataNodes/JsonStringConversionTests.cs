@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using FluentAssertions;
-using FluentSerializer.Core.Tests.Extensions;
+using FluentSerializer.Json.Tests.Extensions;
 using FluentSerializer.Json.DataNodes;
 using Xunit;
 
