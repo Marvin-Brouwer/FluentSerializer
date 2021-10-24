@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace FluentSerializer.Json.DataNodes
+namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{ArrayName, nq}")]
-    public readonly struct  JsonArray : IJsonContainer
+    internal readonly struct JsonArray : IJsonArray
     {
         private const string ArrayName = "[ ]";
         public string Name => ArrayName;

@@ -5,28 +5,29 @@ using FluentSerializer.Json.Tests.Extensions;
 using FluentSerializer.Json.DataNodes;
 using Xunit;
 
+using static FluentSerializer.Json.JsonBuilder;
+
 namespace FluentSerializer.Json.Tests.DataNodes
 {
     public sealed class JsonStringConversionTests
-
     {
-        private readonly JsonObject _testObject;
+        private readonly IJsonObject _testObject;
         private readonly string _testJsonFormatted;
         private readonly string _testJsonSlim;
 
         public JsonStringConversionTests
 ()
         {
-            _testObject = new JsonObject(
-                new JsonProperty("prop", JsonValue.String("Test")),
-                new JsonProperty("prop2", new JsonObject(
-                    new JsonProperty("array", new JsonArray(
-                        new JsonObject(),
-                        new JsonArray()
+            _testObject = Object(
+                Property("prop", Value($"\"Test\"")),
+                Property("prop2", Object(
+                    Property("array", Array(
+                        Object(),
+                        Array()
                     )),
-                    new JsonProperty("prop3", new JsonValue("1")),
-                    new JsonProperty("prop4", new JsonValue("true")),
-                    new JsonProperty("prop5", new JsonValue("null"))
+                    Property("prop3", Value("1")),
+                    Property("prop4", Value("true")),
+                    Property("prop5", Value("null"))
                 ))
             );
 
@@ -57,8 +58,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testJsonFormatted : _testJsonSlim;
 
             // Act
-            var offset = 0;
-            var result = new JsonObject(input.AsSpan(), new StringBuilder(), ref offset);
+            var result = JsonParser.Parse(input.AsSpan(), new StringBuilder());
 
             // Assert
             result.Should().BeEquatableTo<IJsonNode>(expected);

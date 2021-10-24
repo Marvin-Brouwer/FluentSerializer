@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace FluentSerializer.Json.DataNodes
+namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{Value,nq}")]
-    public readonly struct JsonValue: IJsonValue
+    internal readonly struct JsonValue : IJsonValue
     {
         private const string ValueName = "#value";
         public string Name => ValueName;

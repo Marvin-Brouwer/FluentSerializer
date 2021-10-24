@@ -19,11 +19,11 @@ namespace FluentSerializer.Json.Profiling.Profiles
     [Orderer(SummaryOrderPolicy.SlowestToFastest)]
     public class JsonToStringProfile
     {
-        public static IEnumerable<JsonObject> GetValues() => JsonDataSet.JsonValues;
+        public static IEnumerable<IJsonObject> GetValues() => JsonDataSet.JsonValues;
 
         [Benchmark(Description = nameof(JsonDataToString)), BenchmarkCategory("ToString", "Json")]
         [ArgumentsSource(nameof(GetValues))]
-        public void JsonDataToString(JsonObject data)
+        public void JsonDataToString(IJsonObject data)
         {
             data.ToString(true);
             data.ToString(false);

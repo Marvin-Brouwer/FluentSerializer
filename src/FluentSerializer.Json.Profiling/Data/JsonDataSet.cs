@@ -4,11 +4,13 @@ using System.Linq;
 using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Json.DataNodes;
 
+using static FluentSerializer.Json.JsonBuilder;
+
 namespace FluentSerializer.Json.Profiling.Data
 {
     public readonly struct JsonDataSet
     {
-        public static List<JsonObject> JsonValues { get; }
+        public static List<IJsonObject> JsonValues { get; }
 
         static JsonDataSet()
         {
@@ -16,10 +18,10 @@ namespace FluentSerializer.Json.Profiling.Data
             var jsonDataSet = TestDataSet.TestData
                 .Select(testItem => testItem.ToJsonElement()).ToList();
 
-            JsonValues = new List<JsonObject>(3){
-                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(jsonDataSet.Count / 4).ToList()))),
-                new (new JsonProperty("data", new JsonArray(jsonDataSet.Take(jsonDataSet.Count / 2).ToList()))),
-                new (new JsonProperty("data", new JsonArray(jsonDataSet)))
+            JsonValues = new List<IJsonObject>(3){
+                Object(Property("data", Array(jsonDataSet.Take(jsonDataSet.Count / 4).ToList()))),
+                Object(Property("data", Array(jsonDataSet.Take(jsonDataSet.Count / 2).ToList()))),
+                Object(Property("data", Array(jsonDataSet)))
             };
         }
     }
