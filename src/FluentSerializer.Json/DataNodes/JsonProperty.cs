@@ -10,7 +10,7 @@ using System.Text;
 namespace FluentSerializer.Json.DataNodes
 {
     [DebuggerDisplay("{Name,nq}: {GetDebugValue(), nq},")]
-    public readonly record struct JsonProperty(string Name) : IJsonContainer, IEquatable<IJsonNode>
+    public readonly struct JsonProperty: IJsonContainer
     {
         [DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
         private string GetDebugValue()
@@ -21,9 +21,9 @@ namespace FluentSerializer.Json.DataNodes
             return value.Name;
         }
 
-        public string Name { get; init; } = CheckName(Name, nameof(Name));
+        public string Name { get; init; }
 
-        private readonly IJsonNode[] _children = new IJsonNode[] { };
+        private readonly IJsonNode[] _children;
         public IReadOnlyList<IJsonNode> Children => _children;
 
         private static string CheckName(string name, string propertyName)
@@ -32,7 +32,7 @@ namespace FluentSerializer.Json.DataNodes
             return name;
         }
 
-        private JsonProperty(string name, IJsonNode? value = null) : this(name)
+        private JsonProperty(string name, IJsonNode? value = null)
         {
             Name = CheckName(name, nameof(name));
             _children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
@@ -42,7 +42,7 @@ namespace FluentSerializer.Json.DataNodes
         public JsonProperty(string name, JsonObject? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, JsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
-        public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset) : this("TEMP")
+        public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
         {
             stringBuilder.Clear();
             while (offset < text.Length)
@@ -130,6 +130,12 @@ namespace FluentSerializer.Json.DataNodes
 
 
         #region IEquatable
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not IJsonNode node) return false;
+            return Equals(node);
+        }
 
         public bool Equals(IJsonNode? other)
         {
