@@ -18,8 +18,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-        public JsonObject(params IJsonProperty[] properties) : this(properties.AsEnumerable()) { }
-        public JsonObject(IEnumerable<IJsonProperty>? properties)
+        public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
+        public JsonObject(IEnumerable<IJsonObjectContent>? properties)
         {
             if (properties is null) _children = new List<IJsonNode>(0);
             else
@@ -49,6 +49,17 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonConstants.ArrayStartCharacter)
                 {
                     _children.Add(new JsonArray(text, ref offset));
+                    continue;
+                }
+
+                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.SingleLineCommentMarker, StringComparison.OrdinalIgnoreCase))
+                {
+                    _children.Add(new JsonCommentSingleLine(text, ref offset));
+                    continue;
+                }
+                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.MultiLineCommentStart, StringComparison.OrdinalIgnoreCase))
+                {
+                    _children.Add(new JsonCommentMultiLine(text, ref offset));
                     continue;
                 }
 
@@ -96,7 +107,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
 
-                if (i != Children.Count - 1) stringBuilder.Append(JsonConstants.DividerCharacter);
+                // todo figure out how to handle the last element followed by comments
+                if (i != Children.Count - 1 && child is not IJsonComment) stringBuilder.Append(JsonConstants.DividerCharacter);
             }
 
             stringBuilder

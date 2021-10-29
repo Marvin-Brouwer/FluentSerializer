@@ -26,7 +26,7 @@ namespace FluentSerializer.Core.Tests.Assertions
                 .Given(() => (Subject is TEquatable target) && target.Equals(expectation))
                 .ForCondition(result => result)
                 .FailWith("Expected result to be {0}, but found {1}.",
-                    _ => Subject.ToString(), _ => expectation.ToString());
+                    _ => expectation.ToString(), _ => Subject.ToString());
 
             return new AndConstraint<EquatableAssertions<TSubjectEquatable>>(this);
         }

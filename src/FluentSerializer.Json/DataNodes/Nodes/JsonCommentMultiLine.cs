@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.ObjectPool;
+﻿using Ardalis.GuardClauses;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,44 +7,39 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
-    [DebuggerDisplay("{Value,nq}")]
-    public readonly struct JsonValue : IJsonValue
+    [DebuggerDisplay("/* {Value,nq} */")]
+    public readonly struct JsonCommentMultiLine : IJsonComment
     {
-        private const string ValueName = "#value";
-        public string Name => ValueName;
+        public string Name => JsonConstants.SingleLineCommentMarker;
         public string? Value { get; }
 
-        public static JsonValue String(string? value = null) => new ($"\"{value}\"");
-        public JsonValue(string? value)
+        public JsonCommentMultiLine(string value)
         {
+            Guard.Against.NullOrEmpty(value, nameof(value));
+
             Value = value;
         }
 
-        public JsonValue(ReadOnlySpan<char> text, ref int offset)
+        public JsonCommentMultiLine(ReadOnlySpan<char> text, ref int offset)
         {
-            var stringValue = false;
+            offset += 2;
+
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
-                var character = text[offset];
-                offset++;
-
-                if (character == JsonConstants.PropertyWrapCharacter && stringValue)
+                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.MultiLineCommentEnd, StringComparison.OrdinalIgnoreCase))
                 {
-                    stringBuilder.Append(character);
+                    offset += 2;
                     break;
                 }
-                if (character == JsonConstants.DividerCharacter) break;
-                if (character == JsonConstants.ObjectEndCharacter) break;
-                if (character == JsonConstants.ArrayEndCharacter) break;
 
-                if (character == JsonConstants.PropertyWrapCharacter) stringValue = true; 
-                if (!stringValue && char.IsWhiteSpace(character)) break;
+                var character = text[offset];
+                offset++;
 
                 stringBuilder.Append(character);
             }
 
-            Value = stringBuilder.ToString();
+            Value = stringBuilder.ToString().Trim();
         }
 
         public override string ToString()
@@ -65,7 +61,10 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             // JSON does not support empty property assignment or array members
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            return stringBuilder.Append(Value);
+            return stringBuilder
+                .Append(JsonConstants.MultiLineCommentStart)
+                .Append(Value)
+                .Append(JsonConstants.MultiLineCommentEnd);
         }
 
         #region IEquatable
