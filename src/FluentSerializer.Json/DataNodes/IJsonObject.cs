@@ -1,4 +1,5 @@
-﻿namespace FluentSerializer.Json.DataNodes
+﻿
+namespace FluentSerializer.Json.DataNodes
 {
-    public interface IJsonObject : IJsonContainer { }
+    public interface IJsonObject : IJsonContainer<IJsonObject> { }
 }

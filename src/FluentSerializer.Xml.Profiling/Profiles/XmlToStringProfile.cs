@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
-using BenchmarkDotNet.Order;
+using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Profiling.Data;
 
@@ -11,23 +13,39 @@ namespace FluentSerializer.Xml.Profiling.Profiles
     [InliningDiagnoser(true, true)]
     [TailCallDiagnoser]
     [ThreadingDiagnoser]
-#if (!DEBUG)
-    //[EtwProfiler]
-    //[ConcurrencyVisualizerProfiler]
-    //[NativeMemoryProfiler]
-#endif
-    [Orderer(SummaryOrderPolicy.SlowestToFastest)]
     public class XmlToStringProfile
     {
-        public static IEnumerable<XmlElement> GetValues() => XmlDataSet.XmlValues;
+        private MemoryStream WriteStream { get; set; }
+        private StreamWriter StreamWriter { get; set; }
 
-
-        [Benchmark(Description = nameof(XmlDataToString)), BenchmarkCategory("ToString", "Xml")]
-        [ArgumentsSource(nameof(GetValues))]
-        public void XmlDataToString(XmlElement data)
+        [GlobalSetup]
+        public void GlobalSetup()
         {
-            data.ToString(true);
-            data.ToString(false);
+            WriteStream = new MemoryStream();
+            StreamWriter = new StreamWriter(WriteStream);
+        }
+
+        [GlobalCleanup]
+        public void GlobalCleanup()
+        {
+            StreamWriter.Dispose();
+            WriteStream.Dispose();
+            StreamWriter = null;
+            WriteStream = null;
+        }
+
+        public static IEnumerable<DataContainer<IXmlElement>> Inputs => XmlDataSet.XmlValues;
+
+        [ParamsSource(nameof(Inputs))]
+        public DataContainer<IXmlElement> Input { get; set; }
+
+        [Benchmark, BenchmarkCategory("WriteTo")]
+        public void WriteTo()
+        {
+            Input.Value.WriteTo(XmlDataSet.StringBuilderPool, StreamWriter, true);
+            StreamWriter.Flush();
+            var result = Encoding.UTF8.GetString(WriteStream.ToArray());
+            _ = result;
         }
     }
 }

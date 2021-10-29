@@ -4,9 +4,9 @@ namespace FluentSerializer.Core.DataNodes
 {
     public static class StringBuilderExtensions
     {
-        public static StringBuilder AppendNode(this StringBuilder stringBuilder, IDataNode node, bool format, int indent)
+        public static StringBuilder AppendNode(this StringBuilder stringBuilder, IDataNode node, bool format, int indent, bool writeNull)
         {
-            return node.WriteTo(stringBuilder, format, format ? indent : 0);
+            return node.AppendTo(stringBuilder, format, format ? indent : 0, writeNull);
         }
         public static StringBuilder AppendOptionalNewline(this StringBuilder stringBuilder, bool newLine)
         {

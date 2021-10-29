@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.Extensions.ObjectPool;
+using System.IO;
+using System.Text;
 
 namespace FluentSerializer.Core.DataNodes
 {
@@ -6,8 +8,8 @@ namespace FluentSerializer.Core.DataNodes
     {
         string Name { get; }
 
-        string ToString(bool format);
-        StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true);
+        void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, int indent = 0, bool writeNull = true);
+        StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true);
 
     }
 }
