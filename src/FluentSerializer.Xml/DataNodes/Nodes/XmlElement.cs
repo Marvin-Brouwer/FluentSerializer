@@ -1,20 +1,22 @@
 ﻿using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FluentSerializer.Xml.DataNodes
+namespace FluentSerializer.Xml.DataNodes.Nodes
 {
     [DebuggerDisplay("<{Name,nq} />")]
-    public readonly struct XmlElement : IXmlContainer, IEquatable<IXmlNode>
+    public readonly struct XmlElement : IXmlElement
     {
-        private readonly List<XmlAttribute> _attributes;
-        private readonly List<XmlElement> _children;
-        private readonly List<XmlText> _textNodes;
+        private readonly List<IXmlAttribute> _attributes;
+        private readonly List<IXmlElement> _children;
+        private readonly List<IXmlText> _textNodes;
 
         public IReadOnlyList<IXmlNode> Children
         {
@@ -30,10 +32,9 @@ namespace FluentSerializer.Xml.DataNodes
         }
 
         public string Name { get; }
-        public IReadOnlyList<XmlAttribute> AttributeNodes => _attributes.AsReadOnly();
-        public IReadOnlyList<XmlElement> ElementNodes => _children.AsReadOnly();
-        public IReadOnlyList<XmlText> TextNodes => _textNodes.AsReadOnly();
-
+        public IReadOnlyList<IXmlAttribute> AttributeNodes => _attributes.AsReadOnly();
+        public IReadOnlyList<IXmlElement> ElementNodes => _children.AsReadOnly();
+        public IReadOnlyList<IXmlText> TextNodes => _textNodes.AsReadOnly();
 
         public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
         {
@@ -44,7 +45,7 @@ namespace FluentSerializer.Xml.DataNodes
             _children = new();
             _textNodes = new();
 
-            foreach(var node in childNodes)
+            foreach (var node in childNodes)
             {
                 if (node is XmlAttribute attribute) _attributes.Add(attribute);
                 if (node is XmlElement element) _children.Add(element);
@@ -52,13 +53,11 @@ namespace FluentSerializer.Xml.DataNodes
             }
         }
 
-        public XmlElement(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
+        // todo support even more whitespace scenarios, probably setup some test cases first
+        public XmlElement(ReadOnlySpan<char> text, ref int offset)
         {
-            const char tagStartCharacter = '<';
-            const char tagEndharacter = '>';
-            const char tagTerminateCharacter = '/';
-
             offset++;
+
             _attributes = new();
             _children = new();
             _textNodes = new();
@@ -66,12 +65,13 @@ namespace FluentSerializer.Xml.DataNodes
             var elementClosed = false;
             var tagFinished = false;
             var nameFinished = false;
-            stringBuilder.Clear();
+
+            var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
                 var character = text[offset];
 
-                if (character == tagTerminateCharacter && text[offset +1] == tagEndharacter)
+                if (character == XmlConstants.TagTerminationCharacter && text[offset + 1] == XmlConstants.TagEndCharacter)
                 {
                     elementClosed = true;
                     offset++;
@@ -79,7 +79,7 @@ namespace FluentSerializer.Xml.DataNodes
                     offset++;
                     break;
                 }
-                if (character == tagEndharacter)
+                if (character == XmlConstants.TagEndCharacter)
                 {
                     tagFinished = true;
                     offset++;
@@ -105,14 +105,14 @@ namespace FluentSerializer.Xml.DataNodes
                 {
                     var character = text[offset];
 
-                    if (character == tagTerminateCharacter && text[offset + 1] == tagEndharacter)
+                    if (character == XmlConstants.TagTerminationCharacter && text[offset + 1] == XmlConstants.TagEndCharacter)
                     {
                         offset++;
                         elementClosed = true;
                         offset++;
                         break;
                     }
-                    if (character == tagEndharacter)
+                    if (character == XmlConstants.TagEndCharacter)
                     {
                         offset++;
                         break;
@@ -124,7 +124,7 @@ namespace FluentSerializer.Xml.DataNodes
                         continue;
                     }
 
-                    _attributes.Add(new XmlAttribute(text, stringBuilder, ref offset));
+                    _attributes.Add(new XmlAttribute(text, ref offset));
                 }
 
             if (elementClosed) return;
@@ -134,14 +134,15 @@ namespace FluentSerializer.Xml.DataNodes
             {
                 var character = text[offset];
 
-                if (character == tagStartCharacter && text[offset + 1] == tagTerminateCharacter)
+                if (character == XmlConstants.TagStartCharacter && text[offset + 1] == XmlConstants.TagTerminationCharacter)
                 {
-                    offset+= 2 + Name.Length +1;
+                    offset += 2 + Name.Length + 1;
                     return;
                 }
-                if (character == tagStartCharacter)
+                if (character == XmlConstants.TagStartCharacter)
                 {
-                    _children.Add(new XmlElement(text, stringBuilder, ref offset));
+
+                    _children.Add(new XmlElement(text, ref offset));
                     continue;
                 }
                 if (char.IsWhiteSpace(character))
@@ -150,20 +151,34 @@ namespace FluentSerializer.Xml.DataNodes
                     continue;
                 }
 
-                _textNodes.Add(new XmlText(text, stringBuilder, ref offset));
+                _textNodes.Add(new XmlText(text, ref offset));
             }
         }
 
         public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
         public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
 
-        public override string ToString() => ToString(false);
-        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
-        public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+
+        public override string ToString()
         {
-            const char tagStartCharacter = '<';
-            const char tagTerminaterCharacter = '/';
-            const char tagEndCharacter = '>';
+            var stringBuilder = new StringBuilder();
+            AppendTo(stringBuilder, false);
+            return stringBuilder.ToString();
+        }
+
+        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, int indent = 0, bool writeNull = true)
+        {
+            var stringBuilder = stringBuilders.Get();
+
+            stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
+            writer.Write(stringBuilder);
+
+            stringBuilder.Clear();
+            stringBuilders.Return(stringBuilder);
+        }
+
+        public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        {
             const char spacer = ' ';
 
             var children = Children;
@@ -173,13 +188,13 @@ namespace FluentSerializer.Xml.DataNodes
 
             stringBuilder
                 .AppendOptionalNewline(false)
-                .Append(tagStartCharacter)
+                .Append(XmlConstants.TagStartCharacter)
                 .Append(Name);
 
             if (!children.Any()) return stringBuilder
                     .Append(spacer)
-                    .Append(tagTerminaterCharacter)
-                    .Append(tagEndCharacter);
+                    .Append(XmlConstants.TagTerminationCharacter)
+                    .Append(XmlConstants.TagEndCharacter);
 
             foreach (var attribute in _attributes)
             {
@@ -187,17 +202,17 @@ namespace FluentSerializer.Xml.DataNodes
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(indent, format)
                     .Append(spacer)
-                    .AppendNode(attribute, format, childIndent);
+                    .AppendNode(attribute, format, childIndent, writeNull);
             }
             stringBuilder
-                .Append(tagEndCharacter);
+                .Append(XmlConstants.TagEndCharacter);
 
             foreach (var child in _children)
             {
                 stringBuilder
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
-                    .AppendNode(child, format, childIndent);
+                    .AppendNode(child, format, childIndent, writeNull);
             }
             var first = true;
             foreach (var text in _textNodes)
@@ -210,21 +225,21 @@ namespace FluentSerializer.Xml.DataNodes
                         .AppendOptionalIndent(childIndent, format);
 
                     stringBuilder
-                        .AppendNode(text, true, childIndent);
+                        .AppendNode(text, true, childIndent, writeNull);
                     continue;
                 }
 
                 stringBuilder
-                    .AppendNode(text, false, childIndent);
+                    .AppendNode(text, false, childIndent, writeNull);
             }
 
             stringBuilder
                 .AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
-                .Append(tagStartCharacter)
-                .Append(tagTerminaterCharacter)
+                .Append(XmlConstants.TagStartCharacter)
+                .Append(XmlConstants.TagTerminationCharacter)
                 .Append(Name)
-                .Append(tagEndCharacter);
+                .Append(XmlConstants.TagEndCharacter);
 
             return stringBuilder;
         }
@@ -242,10 +257,16 @@ namespace FluentSerializer.Xml.DataNodes
         {
             if (obj is not XmlElement otherElement) return false;
 
-            return Name!.Equals(otherElement.Name, StringComparison.Ordinal)
-                && _attributes.SequenceEqual(otherElement._attributes)
-                && _children.SequenceEqual(otherElement._children)
-                && _textNodes.SequenceEqual(otherElement._textNodes);
+            if (!Name!.Equals(otherElement.Name, StringComparison.Ordinal)) return false;
+            if (_attributes.Count != otherElement._attributes.Count) return false;
+            if (_children.Count != otherElement._children.Count) return false;
+            if (_textNodes.Count != otherElement._textNodes.Count) return false;
+
+            if (_attributes.Any() && !_attributes.SequenceEqual(otherElement._attributes)) return false;
+            if (_children.Any() && !_children.SequenceEqual(otherElement._children)) return false;
+            if (_textNodes.Any() && !_textNodes.SequenceEqual(otherElement._textNodes)) return false;
+
+            return true;
         }
 
         public override int GetHashCode() => HashCode.Combine(Name, _attributes, _children, _textNodes);

@@ -1,16 +1,18 @@
 ﻿using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{Name,nq}: {GetDebugValue(), nq},")]
-    internal readonly struct JsonProperty : IJsonProperty
+    public readonly struct JsonProperty : IJsonProperty
     {
         [DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
         private string GetDebugValue()
@@ -21,7 +23,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             return value.Name;
         }
 
-        public string Name { get; init; }
+        public string Name { get; }
 
         private readonly IJsonNode[] _children;
         public IReadOnlyList<IJsonNode> Children => _children;
@@ -38,9 +40,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public JsonProperty(string name, IJsonObject? value = null) : this(name, (IJsonNode?)value) { }
         public JsonProperty(string name, IJsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
-        public JsonProperty(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
+        public JsonProperty(ReadOnlySpan<char> text, ref int offset)
         {
-            stringBuilder.Clear();
+            var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
                 var character = text[offset];
@@ -81,12 +83,12 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
                 if (character == JsonConstants.ObjectStartCharacter)
                 {
-                    _children[0] = new JsonObject(text, stringBuilder, ref offset);
+                    _children[0] = new JsonObject(text, ref offset);
                     return;
                 }
                 if (character == JsonConstants.ArrayStartCharacter)
                 {
-                    _children[0] = new JsonArray(text, stringBuilder, ref offset);
+                    _children[0] = new JsonArray(text, ref offset);
                     return;
                 }
 
@@ -95,12 +97,30 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonConstants.DividerCharacter) return;
             }
 
-            _children[0] = new JsonValue(text, stringBuilder, ref offset);
+            _children[0] = new JsonValue(text, ref offset);
         }
 
-        public override string ToString() => ToString(false);
-        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
-        public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder = AppendTo(stringBuilder);
+            return stringBuilder.ToString();
+        }
+
+        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, int indent = 0, bool writeNull = true)
+        {
+            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
+
+            var stringBuilder = stringBuilders.Get();
+
+            stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
+            writer.Write(stringBuilder);
+
+            stringBuilder.Clear();
+            stringBuilders.Return(stringBuilder);
+        }
+
+        public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
 
@@ -119,7 +139,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             if (format) stringBuilder.Append(spacer);
 
             if (childValue is null) stringBuilder.Append(JsonConstants.NullValue);
-            else stringBuilder.AppendNode(childValue, format, indent);
+            else stringBuilder.AppendNode(childValue, format, indent, writeNull);
 
             return stringBuilder;
         }

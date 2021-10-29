@@ -1,16 +1,20 @@
-﻿using System;
-using System.Text;
-using FluentAssertions;
-using FluentSerializer.Json.Tests.Extensions;
+﻿using FluentAssertions;
 using FluentSerializer.Json.DataNodes;
+using FluentSerializer.Json.Tests.Extensions;
+using Microsoft.Extensions.ObjectPool;
+using System;
+using System.IO;
+using System.Text;
 using Xunit;
-
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Tests.DataNodes
 {
     public sealed class JsonStringConversionTests
     {
+        private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
+        public static readonly ObjectPool<StringBuilder> StringBuilderPool = ObjectPoolProvider.CreateStringBuilderPool();
+
         private readonly IJsonObject _testObject;
         private readonly string _testJsonFormatted;
         private readonly string _testJsonSlim;
@@ -44,7 +48,12 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var expected = format ? _testJsonFormatted : _testJsonSlim;
 
             // Act
-            var result = _testObject.ToString(format);
+            using var stream = new MemoryStream();
+            using var writer = new StreamWriter(stream);
+
+            _testObject.WriteTo(StringBuilderPool, writer, format);
+            writer.Flush();
+            var result = Encoding.UTF8.GetString(stream.ToArray());
 
             // Assert
             result.Should().BeEquivalentTo(expected);
@@ -58,7 +67,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testJsonFormatted : _testJsonSlim;
 
             // Act
-            var result = JsonParser.Parse(input.AsSpan(), new StringBuilder());
+            var result = JsonParser.Parse(input.AsSpan());
 
             // Assert
             result.Should().BeEquatableTo<IJsonNode>(expected);

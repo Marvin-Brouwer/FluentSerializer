@@ -1,23 +1,30 @@
 ﻿using FluentAssertions;
 using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.Tests.Extensions;
+using Microsoft.Extensions.ObjectPool;
 using System;
+using System.IO;
 using System.Text;
 using Xunit;
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.DataNodes
 {
     public sealed class XmlStringConversionTests
     {
-        private readonly XmlElement _testObject;
+        private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
+        public static readonly ObjectPool<StringBuilder> StringBuilderPool = ObjectPoolProvider.CreateStringBuilderPool();
+
+        private readonly IXmlElement _testObject;
         private readonly string _testXmlFormatted;
         private readonly string _testXmlSlim;
 
         public XmlStringConversionTests()
         {
-            _testObject = new XmlElement("Class",
-                new XmlAttribute("someAttribute", "1"),
-                new XmlElement("someProperty", new XmlElement("AnotherClass")),
-                new XmlText("text here")
+            _testObject = Element("Class",
+                Attribute("someAttribute", "1"),
+                Element("someProperty", Element("AnotherClass")),
+                Text("text here")
             );
 
             _testXmlFormatted = "<Class\r\n someAttribute=\"1\">\r\n\t<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";           
@@ -25,13 +32,18 @@ namespace FluentSerializer.Xml.Tests.DataNodes
         }
 
         [Theory, InlineData(true), InlineData(false)]
-        public void XmlElementToStringTests(bool format)
+        public void XmlElementToString(bool format)
         {
             // Arrange
             var expected = format ? _testXmlFormatted : _testXmlSlim;
 
             // Act
-            var result = _testObject.ToString(format);
+            using var stream = new MemoryStream();
+            using var writer = new StreamWriter(stream);
+
+            _testObject.WriteTo(StringBuilderPool, writer, format);
+            writer.Flush();
+            var result = Encoding.UTF8.GetString(stream.ToArray());
 
             // Assert
             result.Should().BeEquivalentTo(expected);
@@ -45,11 +57,10 @@ namespace FluentSerializer.Xml.Tests.DataNodes
             var input = format ? _testXmlFormatted : _testXmlSlim;
 
             // Act
-            var offset = 0;
-            var result = new XmlElement(input.AsSpan(), new StringBuilder(), ref offset);
+            var result = XmlParser.Parse(input.AsSpan());
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.Should().BeEquatableTo<IXmlNode>(expected);
         }
     }
 }

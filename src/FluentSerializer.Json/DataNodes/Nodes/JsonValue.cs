@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.ObjectPool;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
     [DebuggerDisplay("{Value,nq}")]
-    internal readonly struct JsonValue : IJsonValue
+    public readonly struct JsonValue : IJsonValue
     {
         private const string ValueName = "#value";
         public string Name => ValueName;
@@ -17,7 +19,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Value = value;
         }
 
-        public JsonValue(ReadOnlySpan<char> text, StringBuilder stringBuilder, ref int offset)
+        public JsonValue(ReadOnlySpan<char> text, ref int offset)
         {
             const char lineEndCharacter = ',';
             const char objectEndCharacter = '}';
@@ -25,7 +27,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             const char stringWrapCharacter = '"';
 
             var stringValue = false;
-            stringBuilder.Clear();
+            var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
                 var character = text[offset];
@@ -49,14 +51,26 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Value = stringBuilder.ToString();
         }
 
-        public override string ToString() => ToString(false);
-        public string ToString(bool format) => WriteTo(new StringBuilder(), format).ToString();
-        public StringBuilder WriteTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder = AppendTo(stringBuilder);
+            return stringBuilder.ToString();
+        }
+
+        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, int indent = 0, bool writeNull = true)
+        {
+            var stringBuilder = stringBuilders.Get();
+            writer.Write(AppendTo(stringBuilder, format, indent, writeNull));
+            stringBuilders.Return(stringBuilder);
+        }
+
+        public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             // JSON does not support empty property assignment or array members
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-           return stringBuilder.Append(Value);
+            return stringBuilder.Append(Value);
         }
 
         #region IEquatable
