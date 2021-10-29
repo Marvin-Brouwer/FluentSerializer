@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
@@ -55,12 +56,12 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonConstants.ObjectEndCharacter) break;
                 if (character == JsonConstants.ArrayEndCharacter) break;
 
-                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.SingleLineCommentMarker, StringComparison.OrdinalIgnoreCase))
+                if (text.HasStringAtOffset(offset, JsonConstants.SingleLineCommentMarker))
                 {
                     _children.Add(new JsonCommentSingleLine(text, ref offset));
                     continue;
                 }
-                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.MultiLineCommentStart, StringComparison.OrdinalIgnoreCase))
+                if (text.HasStringAtOffset(offset, JsonConstants.MultiLineCommentStart))
                 {
                     _children.Add(new JsonCommentMultiLine(text, ref offset));
                     continue;

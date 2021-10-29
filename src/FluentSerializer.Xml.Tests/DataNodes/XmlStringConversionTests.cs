@@ -23,12 +23,14 @@ namespace FluentSerializer.Xml.Tests.DataNodes
         {
             _testObject = Element("Class",
                 Attribute("someAttribute", "1"),
+                Comment("Comment"),
                 Element("someProperty", Element("AnotherClass")),
                 Text("text here")
             );
 
-            _testXmlFormatted = "<Class\r\n someAttribute=\"1\">\r\n\t<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";           
-            _testXmlSlim = "<Class someAttribute=\"1\"><someProperty><AnotherClass /></someProperty>text here</Class>";
+            _testXmlFormatted = "<Class\r\n someAttribute=\"1\">\r\n\t<!-- Comment -->\r\n\t" +
+                "<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";           
+            _testXmlSlim = "<Class someAttribute=\"1\"><!-- Comment --><someProperty><AnotherClass /></someProperty>text here</Class>";
         }
 
         [Theory, InlineData(true), InlineData(false)]

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.ObjectPool;
+﻿using FluentSerializer.Core.Extensions;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,27 +7,33 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    [DebuggerDisplay("{Value}")]
-    public readonly struct XmlText : IXmlText
+    [DebuggerDisplay("<!-- {Value, nq} -->")]
+    public readonly struct XmlComment : IXmlComment
     {
-        private const string CommentName = "#text";
+        private const string CommentName = "<!-- comment -->";
         public string Name => CommentName;
         public string? Value { get; }
 
-        public XmlText(string? value = null)
+        public XmlComment(string? value = null)
         {
             Value = value;
         }
 
         // todo maybe just store the span with offset and range instead of allocating a new stringbuilder
-        public XmlText(ReadOnlySpan<char> text, ref int offset)
+        public XmlComment(ReadOnlySpan<char> text, ref int offset)
         {
-            // todo support CData, possibly in Element instead of here?
+            offset += XmlConstants.CommentStart.Length;
+
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
+                if (text.HasStringAtOffset(offset, XmlConstants.CommentEnd))
+                {
+                    offset += XmlConstants.CommentEnd.Length;
+                    break;
+                }
+
                 var character = text[offset];
-                if (character == XmlConstants.TagStartCharacter) break;
                 offset++;
 
                 stringBuilder.Append(character);
@@ -51,10 +58,16 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
-            // THis should never happen because null tags are selfclosing but just to be sure this check is here
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            return stringBuilder.Append(Value);
+            const char spacer = ' ';
+
+            return stringBuilder
+                .Append(XmlConstants.CommentStart)
+                .Append(spacer)
+                .Append(Value)
+                .Append(spacer)
+                .Append(XmlConstants.CommentEnd);
         }
 
         #region IEquatable
@@ -68,11 +81,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public bool Equals(IXmlNode? obj)
         {
-            if (obj is not XmlText otherText) return false;
-            if (Value is null && otherText.Value is null) return true;
-            if (otherText.Value is null) return false;
+            if (obj is not XmlComment OtherComment) return false;
+            if (Value is null && OtherComment.Value is null) return true;
+            if (OtherComment.Value is null) return false;
 
-            return Value!.Equals(otherText.Value, StringComparison.Ordinal);
+            return Value!.Equals(OtherComment.Value, StringComparison.Ordinal);
         }
 
         public override int GetHashCode() => HashCode.Combine(Name, Value);

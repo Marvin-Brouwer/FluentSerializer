@@ -8,5 +8,8 @@
 
         internal static readonly char PropertyAssignmentCharacter = '=';
         internal static readonly char PropertyWrapCharacter = '"';
+
+        internal const string CommentStart = "<!--";
+        internal const string CommentEnd = "-->";
     }
 }
