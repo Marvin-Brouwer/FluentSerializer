@@ -15,5 +15,11 @@
         internal const char DividerCharacter = ',';
 
         internal const string NullValue = "null";
+        internal const string SingleLineCommentMarker = "//";
+        internal const string MultiLineCommentStart = "/*";
+        internal const string MultiLineCommentEnd = "*/";
+
+        internal const char LineReturnCharacter = '\r';
+        internal const char NewLineCharacter = '\n';
     }
 }

@@ -19,8 +19,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-        public JsonArray(params IJsonContainer[] elements) : this(elements.AsEnumerable()) { }
-        public JsonArray(IEnumerable<IJsonContainer>? elements)
+        public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
+        public JsonArray(IEnumerable<IJsonArrayContent>? elements)
         {
             if (elements is null) _children = new List<IJsonNode>(0);
             else
@@ -51,10 +51,20 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                     continue;
                 }
 
-
                 if (character == JsonConstants.PropertyWrapCharacter) break;
                 if (character == JsonConstants.ObjectEndCharacter) break;
                 if (character == JsonConstants.ArrayEndCharacter) break;
+
+                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.SingleLineCommentMarker, StringComparison.OrdinalIgnoreCase))
+                {
+                    _children.Add(new JsonCommentSingleLine(text, ref offset));
+                    continue;
+                }
+                if (MemoryExtensions.Equals(text[offset..(offset + 2)], JsonConstants.MultiLineCommentStart, StringComparison.OrdinalIgnoreCase))
+                {
+                    _children.Add(new JsonCommentMultiLine(text, ref offset));
+                    continue;
+                }
                 offset++;
             }
             offset++;
@@ -94,7 +104,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
 
-                if (i != Children.Count - 1) stringBuilder.Append(JsonConstants.DividerCharacter);
+                // todo figure out how to handle the last element followed by comments
+                if (i != Children.Count - 1 && child is not IJsonComment) stringBuilder.Append(JsonConstants.DividerCharacter);
             }
 
             stringBuilder

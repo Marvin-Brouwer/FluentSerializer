@@ -10,7 +10,7 @@ namespace FluentSerializer.Json.Profiling.Data
     public static class TestDataExtensions
     {
         private static IJsonValue StringValue(string value) => Value($"\"{value}\"");
-        public static IJsonContainer ToJsonElement(this ResidentialArea residentialArea)
+        public static IJsonObject ToJsonElement(this ResidentialArea residentialArea)
         {
             var properties = new List<IJsonProperty> {
                 Property("type", StringValue(residentialArea.Type)),
@@ -23,7 +23,7 @@ namespace FluentSerializer.Json.Profiling.Data
             return Object(properties);
         }
 
-        public static IJsonContainer ToJsonElement(this House house)
+        public static IJsonObject ToJsonElement(this House house)
         {
             var properties = new List<IJsonProperty> {
                 Property("type", StringValue(house.Type)),
@@ -41,7 +41,7 @@ namespace FluentSerializer.Json.Profiling.Data
             return Object(properties);
         }
 
-        public static IJsonContainer ToJsonElement(this Person person)
+        public static IJsonObject ToJsonElement(this Person person)
         {
             var properties = new List<IJsonProperty> {
                 Property("fullName", StringValue(
