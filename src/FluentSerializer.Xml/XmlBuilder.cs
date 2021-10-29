@@ -30,5 +30,6 @@ namespace FluentSerializer.Xml
         }
 
         public static IXmlText Text(string? value) => new XmlText(value);
+        public static IXmlComment Comment(string value) => new XmlComment(value);
     }
 }

@@ -22,7 +22,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public JsonCommentSingleLine(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += 2;
+            offset += JsonConstants.SingleLineCommentMarker.Length;
 
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
@@ -58,15 +58,20 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             // JSON does not support empty property assignment or array members
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
+            const char spacer = ' ';
+
             // Fallback because otherwise JSON wouldn't be readable
             if (!format)
                 return stringBuilder
                 .Append(JsonConstants.MultiLineCommentStart)
+                .Append(spacer)
                 .Append(Value)
+                .Append(spacer)
                 .Append(JsonConstants.MultiLineCommentEnd);
 
             return stringBuilder
                 .Append(JsonConstants.SingleLineCommentMarker)
+                .Append(spacer)
                 .Append(Value);
         }
 
@@ -80,11 +85,11 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public bool Equals(IJsonNode? other)
         {
-            if (other is not JsonValue otherValue) return false;
-            if (Value is null && otherValue.Value is null) return true;
-            if (otherValue.Value is null) return false;
+            if (other is not JsonCommentSingleLine otherComment) return false;
+            if (Value is null && otherComment.Value is null) return true;
+            if (otherComment.Value is null) return false;
 
-            return Value!.Equals(otherValue.Value, StringComparison.Ordinal);
+            return Value!.Equals(otherComment.Value, StringComparison.Ordinal);
         }
 
         public override int GetHashCode() => Value?.GetHashCode() ?? 0;

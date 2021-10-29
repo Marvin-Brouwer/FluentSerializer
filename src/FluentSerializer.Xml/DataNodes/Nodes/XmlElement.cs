@@ -129,6 +129,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     offset += 2 + Name.Length + 1;
                     return;
                 }
+
+                if (text.HasStringAtOffset(offset, XmlConstants.CommentStart)) 
+                {
+                    _children.Add(new XmlComment(text, ref offset));
+                    continue;
+                }
+
                 if (character == XmlConstants.TagStartCharacter)
                 {
 
@@ -207,6 +214,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                         .AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format)
                         .AppendNode(childElement, format, childIndent, writeNull);
+                    continue;
                 }
                 if (child is IXmlText textNode)
                 {
@@ -224,6 +232,17 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                     stringBuilder
                         .AppendNode(textNode, false, childIndent, writeNull);
+                    continue;
+                }
+                if (child is IXmlComment commentNode)
+                {
+                    stringBuilder
+                        .AppendOptionalNewline(format)
+                        .AppendOptionalIndent(childIndent, format);
+
+                    stringBuilder
+                        .AppendNode(commentNode, true, childIndent, writeNull);
+                    continue;
                 }
             }
 
