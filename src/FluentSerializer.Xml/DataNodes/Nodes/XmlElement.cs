@@ -14,27 +14,20 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("<{Name,nq} />")]
     public readonly struct XmlElement : IXmlElement
     {
+        private readonly List<IXmlNode> _children;
         private readonly List<IXmlAttribute> _attributes;
-        private readonly List<IXmlElement> _children;
-        private readonly List<IXmlText> _textNodes;
 
         public IReadOnlyList<IXmlNode> Children
         {
             get
             {
-                var value = new List<IXmlNode>();
-                foreach (var attribute in _attributes) value.Add(attribute);
-                foreach (var children in _children) value.Add(children);
-                foreach (var textNodes in _textNodes) value.Add(textNodes);
-
-                return value.AsReadOnly();
+                var childList = new List<IXmlNode>(_attributes);
+                childList.AddRange(_children);
+                return childList;
             }
         }
 
         public string Name { get; }
-        public IReadOnlyList<IXmlAttribute> AttributeNodes => _attributes.AsReadOnly();
-        public IReadOnlyList<IXmlElement> ElementNodes => _children.AsReadOnly();
-        public IReadOnlyList<IXmlText> TextNodes => _textNodes.AsReadOnly();
 
         public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
         {
@@ -43,13 +36,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Name = name;
             _attributes = new();
             _children = new();
-            _textNodes = new();
 
             foreach (var node in childNodes)
             {
                 if (node is XmlAttribute attribute) _attributes.Add(attribute);
-                if (node is XmlElement element) _children.Add(element);
-                if (node is XmlText textNode) _textNodes.Add(textNode);
+                else _children.Add(node);
             }
         }
 
@@ -60,7 +51,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             _attributes = new();
             _children = new();
-            _textNodes = new();
 
             var elementClosed = false;
             var tagFinished = false;
@@ -151,7 +141,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     continue;
                 }
 
-                _textNodes.Add(new XmlText(text, ref offset));
+                _children.Add(new XmlText(text, ref offset));
             }
         }
 
@@ -207,30 +197,34 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             stringBuilder
                 .Append(XmlConstants.TagEndCharacter);
 
+            // Technically this object can have multiple text nodes, only the first needs indentation
+            var firstTextNode = true;
             foreach (var child in _children)
             {
-                stringBuilder
-                    .AppendOptionalNewline(format)
-                    .AppendOptionalIndent(childIndent, format)
-                    .AppendNode(child, format, childIndent, writeNull);
-            }
-            var first = true;
-            foreach (var text in _textNodes)
-            {
-                if (first)
-                {
-                    first = false;
+                if (child is IXmlElement childElement) {
+                    firstTextNode = true;
                     stringBuilder
                         .AppendOptionalNewline(format)
-                        .AppendOptionalIndent(childIndent, format);
+                        .AppendOptionalIndent(childIndent, format)
+                        .AppendNode(childElement, format, childIndent, writeNull);
+                }
+                if (child is IXmlText textNode)
+                {
+                    if (firstTextNode)
+                    {
+                        firstTextNode = false;
+                        stringBuilder
+                            .AppendOptionalNewline(format)
+                            .AppendOptionalIndent(childIndent, format);
+
+                        stringBuilder
+                            .AppendNode(textNode, true, childIndent, writeNull);
+                        continue;
+                    }
 
                     stringBuilder
-                        .AppendNode(text, true, childIndent, writeNull);
-                    continue;
+                        .AppendNode(textNode, false, childIndent, writeNull);
                 }
-
-                stringBuilder
-                    .AppendNode(text, false, childIndent, writeNull);
             }
 
             stringBuilder
@@ -260,16 +254,14 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             if (!Name!.Equals(otherElement.Name, StringComparison.Ordinal)) return false;
             if (_attributes.Count != otherElement._attributes.Count) return false;
             if (_children.Count != otherElement._children.Count) return false;
-            if (_textNodes.Count != otherElement._textNodes.Count) return false;
 
             if (_attributes.Any() && !_attributes.SequenceEqual(otherElement._attributes)) return false;
             if (_children.Any() && !_children.SequenceEqual(otherElement._children)) return false;
-            if (_textNodes.Any() && !_textNodes.SequenceEqual(otherElement._textNodes)) return false;
 
             return true;
         }
 
-        public override int GetHashCode() => HashCode.Combine(Name, _attributes, _children, _textNodes);
+        public override int GetHashCode() => HashCode.Combine(Name, _attributes, _children);
 
         #endregion
     }
