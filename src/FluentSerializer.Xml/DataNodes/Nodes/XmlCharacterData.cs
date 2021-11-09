@@ -7,29 +7,29 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    [DebuggerDisplay("<!-- {Value, nq} -->")]
-    public readonly struct XmlComment : IXmlComment
+    [DebuggerDisplay(CharacterDataName)]
+    public readonly struct XmlCharacterData : IXmlCharacterData
     {
-        private const string CommentName = "<!-- comment -->";
-        public string Name => CommentName;
+        private const string CharacterDataName = "<![CDATA[ ]]>";
+        public string Name => CharacterDataName;
         public string? Value { get; }
 
-        public XmlComment(string? value = null)
+        public XmlCharacterData(string? value = null)
         {
             Value = value;
         }
 
         // todo maybe just store the span with offset and range instead of allocating a new stringbuilder
-        public XmlComment(ReadOnlySpan<char> text, ref int offset)
+        public XmlCharacterData(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += XmlConstants.CommentStart.Length;
+            offset += XmlConstants.CharacterDataStart.Length;
 
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
-                if (text.HasStringAtOffset(offset, XmlConstants.CommentEnd))
+                if (text.HasStringAtOffset(offset, XmlConstants.CharacterDataEnd))
                 {
-                    offset += XmlConstants.CommentEnd.Length;
+                    offset += XmlConstants.CharacterDataEnd.Length;
                     break;
                 }
 
@@ -60,14 +60,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         {
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            const char spacer = ' ';
-
             return stringBuilder
-                .Append(XmlConstants.CommentStart)
-                .Append(spacer)
+                .Append(XmlConstants.CharacterDataStart)
                 .Append(Value)
-                .Append(spacer)
-                .Append(XmlConstants.CommentEnd);
+                .Append(XmlConstants.CharacterDataEnd);
         }
 
         #region IEquatable
@@ -81,11 +77,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public bool Equals(IXmlNode? obj)
         {
-            if (obj is not XmlComment otherComment) return false;
-            if (Value is null && otherComment.Value is null) return true;
-            if (otherComment.Value is null) return false;
+            if (obj is not XmlCharacterData otherData) return false;
+            if (Value is null && otherData.Value is null) return true;
+            if (otherData.Value is null) return false;
 
-            return Value!.Equals(otherComment.Value, StringComparison.Ordinal);
+            return Value!.Equals(otherData.Value, StringComparison.Ordinal);
         }
 
         public override int GetHashCode() => HashCode.Combine(Name, Value);
