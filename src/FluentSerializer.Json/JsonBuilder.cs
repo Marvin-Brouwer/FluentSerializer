@@ -34,6 +34,13 @@ namespace FluentSerializer.Json
 
             return new JsonProperty(name, jsonValue);
         }
+        
+        public static IJsonProperty Property(string name, IJsonPropertyContent jsonPropertyItem)
+        {
+            Guard.Against.InvalidName(name, nameof(name));
+
+            return new JsonProperty(name, jsonPropertyItem);
+        }
 
         public static IJsonValue Value(string? value)
         {

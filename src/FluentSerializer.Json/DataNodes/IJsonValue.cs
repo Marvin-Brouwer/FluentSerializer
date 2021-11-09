@@ -2,5 +2,5 @@
 
 namespace FluentSerializer.Json.DataNodes
 {
-    public interface IJsonValue : IDataValue, IJsonNode { }
+    public interface IJsonValue : IDataValue, IJsonNode, IJsonPropertyContent { }
 }

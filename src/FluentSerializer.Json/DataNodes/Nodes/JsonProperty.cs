@@ -28,17 +28,15 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         private readonly IJsonNode[] _children;
         public IReadOnlyList<IJsonNode> Children => _children;
 
-        private JsonProperty(string name, IJsonNode? value = null)
+        public IJsonNode? Value => _children.FirstOrDefault();
+
+        public JsonProperty(string name, IJsonPropertyContent? value = null)
         {
             Guard.Against.InvalidName(name, nameof(name));
 
             Name = name;
             _children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
         }
-
-        public JsonProperty(string name, IJsonValue? value = null) : this(name, (IJsonNode?)value) { }
-        public JsonProperty(string name, IJsonObject? value = null) : this(name, (IJsonNode?)value) { }
-        public JsonProperty(string name, IJsonArray? value = null) : this(name, (IJsonNode?)value) { }
 
         public JsonProperty(ReadOnlySpan<char> text, ref int offset)
         {

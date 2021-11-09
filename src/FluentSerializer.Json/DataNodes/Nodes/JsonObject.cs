@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Core.DataNodes;
+﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using System;
@@ -18,6 +19,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
+
+        public IJsonProperty? GetProperty(string name)
+        {
+            Guard.Against.InvalidName(name, nameof(name));
+
+            return _children.FirstOrDefault(child => 
+                child.Name.Equals(name, StringComparison.Ordinal)) as IJsonProperty;
+        }
 
         public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
         public JsonObject(IEnumerable<IJsonObjectContent>? properties)
