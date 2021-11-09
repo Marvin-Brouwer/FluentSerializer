@@ -3,6 +3,8 @@ using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 
+// TODO create one for IXmlElement etc
+// TODO create a library for System.Text.Xml if necessary and do the same for the json types
 namespace FluentSerializer.Xml.Converting.Converters.XNodes
 {
     public sealed class XObjectConverter : IXmlConverter<XElement>

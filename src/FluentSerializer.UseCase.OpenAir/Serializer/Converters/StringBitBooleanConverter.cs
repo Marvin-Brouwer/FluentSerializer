@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.DataNodes;
+
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public class StringBitBooleanConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>
+    public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType);
@@ -23,32 +25,32 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }
 
-        object? IConverter<XAttribute>.Deserialize(XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<IXmlAttribute>.Deserialize(IXmlAttribute attributeToDeserialize, ISerializerContext context)
         {
             return ConvertToBool(attributeToDeserialize.Value);
         }
 
-        object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
+        object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToBool(objectToDeserialize.Value);
+            return ConvertToBool(objectToDeserialize.GetTextValue());
         }
 
-        XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 
             var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
             var attributeValue = ConvertToString(objectBoolean);
-            return new XAttribute(attributeName, attributeValue);
+            return Attribute(attributeName, attributeValue);
         }
 
-        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
             var elementValue = ConvertToString(objectBoolean);
-            return new XElement(elementName, elementValue);
+            return Element(elementName, Text(elementValue));
         }
     }
 }

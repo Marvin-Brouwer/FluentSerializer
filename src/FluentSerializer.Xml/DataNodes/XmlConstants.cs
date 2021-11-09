@@ -9,6 +9,9 @@
         internal static readonly char PropertyAssignmentCharacter = '=';
         internal static readonly char PropertyWrapCharacter = '"';
 
+        internal const string DeclarationStart = "<?";
+        internal const string DeclarationEnd = "?>";
+
         internal const string CommentStart = "<!--";
         internal const string CommentEnd = "-->";
 

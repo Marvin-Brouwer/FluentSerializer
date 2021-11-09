@@ -5,8 +5,6 @@ namespace FluentSerializer.Xml.Constants
 {
     internal static class XmlConstants
     {
-        internal const string TextNodeDisplayTag = "#textNode";
-        internal const string FragmentNodeDisplayTag = "__fragmentNode__";
-        internal static readonly CustomNamingStrategy TextNodeNamingStrategy = new(TextNodeDisplayTag);
+        internal static readonly CustomNamingStrategy TextNodeNamingStrategy = new(DataNodes.Nodes.XmlText.TextName);
     }
 }

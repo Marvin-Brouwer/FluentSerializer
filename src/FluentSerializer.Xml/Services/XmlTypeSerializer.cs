@@ -5,11 +5,12 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using System;
 using System.Collections;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Exceptions;
+using FluentSerializer.Xml.DataNodes;
+
+using static FluentSerializer.Xml.XmlBuilder;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -24,7 +25,7 @@ namespace FluentSerializer.Xml.Services
             _mappings = mappings;
         }
 
-        public XElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
+        public IXmlElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
         {
             Guard.Against.Null(dataModel, nameof(dataModel));
             Guard.Against.Null(classType, nameof(classType));
@@ -35,7 +36,8 @@ namespace FluentSerializer.Xml.Services
             var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
             if (classMap is null) throw new ClassMapNotFoundException(classType);
 
-            var newElement = new XElement(classMap.NamingStrategy.SafeGetName(classType, new NamingContext(_mappings)));
+            var elementName = classMap.NamingStrategy.SafeGetName(classType, new NamingContext(_mappings));
+            var childNodes = new List<IXmlNode>();
             foreach(var property in classType.GetProperties())
             {
                 var propertyMapping = classMap.PropertyMaps.Scan(property);
@@ -50,72 +52,57 @@ namespace FluentSerializer.Xml.Services
                     currentSerializer,
                     classMap.PropertyMaps, _mappings);
 
-                SerializeProperty(propertyValue, newElement, propertyMapping, currentSerializer, serializerContext);
+                var childNode = SerializeProperty(propertyValue, propertyMapping, currentSerializer, serializerContext);
+                if (childNode is not null) childNodes.Add(childNode);
             }
 
-            return newElement;
+            return Element(elementName, childNodes);
         }
 
-        private void SerializeProperty(
-            object propertyValue, XElement newElement, IPropertyMap propertyMapping,  
+        private IXmlNode? SerializeProperty(
+            object propertyValue, IPropertyMap propertyMapping,  
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
         {
-            if (typeof(XText).IsAssignableFrom(propertyMapping.ContainerType))
+            if (typeof(IXmlText).IsAssignableFrom(propertyMapping.ContainerType))
             {
-                SerializeXNode<XText>(propertyValue, propertyMapping, newElement, serializerContext);
-                return;
+                return SerializeNode<IXmlText>(propertyValue, propertyMapping, serializerContext);
             }
 
-            if (typeof(XAttribute).IsAssignableFrom(propertyMapping.ContainerType))
+            if (typeof(IXmlAttribute).IsAssignableFrom(propertyMapping.ContainerType))
             {
-                SerializeXNode<XAttribute>(propertyValue, propertyMapping, newElement, serializerContext);
-                return;
+                return SerializeNode<IXmlAttribute>(propertyValue, propertyMapping, serializerContext);
             }
 
-            if (typeof(XElement).IsAssignableFrom(propertyMapping.ContainerType))
+            if (typeof(IXmlElement).IsAssignableFrom(propertyMapping.ContainerType))
             {
-                SerializeXElement(propertyValue, propertyMapping, newElement, serializerContext, currentSerializer);
-                return;
+                return SerializeXElement(propertyValue, propertyMapping, serializerContext, currentSerializer);
             }
 
             throw new ContainerNotSupportedException(propertyMapping.ContainerType);
         }
 
-        private static void SerializeXNode<TNode>(
+        private static TNode? SerializeNode<TNode>(
             object propertyValue, IPropertyMap propertyMapping, 
-            XElement targetElement, SerializerContext serializerContext)
-            where TNode : XObject
+            SerializerContext serializerContext)
+            where TNode : IXmlNode
         {
             var matchingConverter = propertyMapping.GetConverter<TNode>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);
             if (matchingConverter is null) throw new ConverterNotFoundException(
                 propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
             
-            var nodeValue = matchingConverter.Serialize(propertyValue, serializerContext);
-            if (nodeValue is null) return;
-
-            targetElement.Add(nodeValue);
+            return matchingConverter.Serialize(propertyValue, serializerContext);
         }
 
-        private void SerializeXElement(object propertyValue, IPropertyMap propertyMapping,
-            XElement newElement,
+        private IXmlElement? SerializeXElement(object propertyValue, IPropertyMap propertyMapping,
             SerializerContext serializerContext, IXmlSerializer currentSerializer)
         {
-            var matchingConverter = propertyMapping.GetConverter<XElement>(
+            var matchingConverter = propertyMapping.GetConverter<IXmlElement>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
-            var nodeValue = matchingConverter is null 
+            return matchingConverter is null 
                 ? SerializeToElement(propertyValue, serializerContext.PropertyType, currentSerializer) 
                 : matchingConverter.Serialize(propertyValue, serializerContext);
-            if (nodeValue is null) return;
-
-            // Special case for fragments
-            // This is necessary because of XMLs possibility to add multiple children of the same node name
-            // without it being a collection
-            if (nodeValue.NodeType == XmlNodeType.DocumentFragment)
-                newElement.Add(nodeValue.Nodes().Where(node => node.NodeType != XmlNodeType.EndElement));
-            else 
-                newElement.Add(nodeValue);
         }
     }
 }
