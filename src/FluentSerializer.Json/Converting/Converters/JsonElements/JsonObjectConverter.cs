@@ -1,7 +1,9 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Json.DataNodes;
+
+using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters.JsonElements
 {
@@ -15,13 +17,14 @@ namespace FluentSerializer.Json.Converting.Converters.JsonElements
             throw new NotImplementedException();
         }
 
-        public JToken? Serialize(object objectToSerialize, ISerializerContext context)
+        public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
         {
             throw new NotImplementedException();
         }
 
-        public object? Deserialize(JToken? objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
         {
+            _ = Object();
             throw new NotImplementedException();
         }
     }

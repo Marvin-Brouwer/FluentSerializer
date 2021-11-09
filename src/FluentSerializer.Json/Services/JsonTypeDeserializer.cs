@@ -6,7 +6,7 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using System;
 using System.Collections;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Services
 {
@@ -21,27 +21,27 @@ namespace FluentSerializer.Json.Services
             _mappings = mappings;
         }
 
-        public TModel? DeserializeFromToken<TModel>(JToken dataObject, IJsonSerializer currentSerializer)
+        public TModel? DeserializeFromNode<TModel>(IJsonNode dataObject, IJsonSerializer currentSerializer)
            where TModel : class, new()
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
             var classType = typeof(TModel);
-            var deserializedInstance = DeserializeFromToken(dataObject,classType,  currentSerializer);
+            var deserializedInstance = DeserializeFromNode(dataObject, classType, currentSerializer);
             if (deserializedInstance is null) return null;
 
             return (TModel)deserializedInstance;
         }
 
-        public object? DeserializeFromToken(JToken dataObject, Type classType,  IJsonSerializer currentSerializer)
+        public object? DeserializeFromNode(IJsonNode dataObject, Type classType,  IJsonSerializer currentSerializer)
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(classType, nameof(classType));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
             if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotImplementedException("Todo");
-            if (dataObject is not JObject jObject)  throw new NotImplementedException("Todo");
+            if (dataObject is not IJsonObject jsonObject)  throw new NotImplementedException("Todo");
 
             var classMap = _mappings.Scan((classType, SerializerDirection.Deserialize));
             if (classMap is null) throw new ClassMapNotFoundException(classType);
@@ -61,20 +61,20 @@ namespace FluentSerializer.Json.Services
                 var propertyName = propertyMapping.NamingStrategy.SafeGetName(realPropertyInfo, serializerContext);
                 if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
 
-                DeserializeProperty(jObject, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
+                DeserializeProperty(jsonObject, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
             }
 
             return instance;
         }
 
         private void DeserializeProperty(
-            JObject dataObject, string propertyName, IPropertyMap propertyMapping, object instance, 
+            IJsonObject dataObject, string propertyName, IPropertyMap propertyMapping, object instance, 
             IJsonSerializer currentSerializer, SerializerContext serializerContext)
         {
-            if (propertyMapping.ContainerType == typeof(JProperty))
+            if (propertyMapping.ContainerType == typeof(IJsonProperty))
             {
-                var jProperty = dataObject.Property(propertyName);
-                var propertyValue = jProperty?.Value;
+                var jsonProperty = dataObject.GetProperty(propertyName);
+                var propertyValue = jsonProperty?.Value;
                 DeserializeXElement(propertyValue, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
                 return;
             }
@@ -83,11 +83,10 @@ namespace FluentSerializer.Json.Services
         }
 
         private void DeserializeXElement(
-            JToken? propertyValue, string propertyName, IPropertyMap propertyMapping,object instance, 
+            IJsonNode? propertyValue, string propertyName, IPropertyMap propertyMapping,object instance, 
             IJsonSerializer currentSerializer, SerializerContext serializerContext)
         {
-            var empty = propertyValue is null || propertyValue.Type == JTokenType.None 
-                            || propertyValue.Type == JTokenType.Null || propertyValue.Type == JTokenType.Undefined;
+            var empty = propertyValue is null || propertyValue is IJsonValue jsonValue && string.IsNullOrEmpty(jsonValue.Value);
             // Collections may be empty
             if (empty && propertyMapping.Property.PropertyType.IsEnumerable()) return;
 
@@ -99,10 +98,10 @@ namespace FluentSerializer.Json.Services
                 return;
             }
 
-            var matchingConverter = propertyMapping.GetConverter<JToken>(SerializerDirection.Deserialize, currentSerializer);
+            var matchingConverter = propertyMapping.GetConverter<IJsonNode>(SerializerDirection.Deserialize, currentSerializer);
             if (matchingConverter is null)
             {
-                var deserializedInstance = DeserializeFromToken(propertyValue!, propertyMapping.Property.PropertyType, currentSerializer);
+                var deserializedInstance = DeserializeFromNode(propertyValue!, propertyMapping.Property.PropertyType, currentSerializer);
                 if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
                     throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 

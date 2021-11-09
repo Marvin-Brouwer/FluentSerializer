@@ -22,6 +22,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         public MavenlinkTests()
         {
             _configuration = JsonSerializerConfiguration.Default;
+            _configuration.FormatOutput = false;
 
             _mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
         }
