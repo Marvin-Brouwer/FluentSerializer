@@ -28,7 +28,17 @@ namespace FluentSerializer.Xml.Profiling.Data
                 Attribute("type", house.Type),
                 Element("Address",
                     Element("street", Text(house.StreetName)),
-                    Element("number", Text(house.HouseNumber.ToString()))
+                    Element("number", Text(house.HouseNumber.ToString())),
+                    Element("city", Text(house.ZipCode)),
+                    Element("zipCode", Text(house.ZipCode)),
+                    Element("country", Text(house.Country)),
+                    Element("letterValue",
+                        CData("\r\n" +
+                            $"{house.StreetName} {house.HouseNumber}, " +
+                            $"{house.ZipCode} {house.City}" + "\r\n" +
+                            house.Country
+                        +  "\r\n")
+                    )
                 ),
                 Element("Residents",
                     house.Residents.Select(person => person.ToXmlElement())

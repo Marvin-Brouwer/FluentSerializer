@@ -30,7 +30,10 @@ namespace FluentSerializer.Json.Profiling.Data
                 Property("address",
                     Object(
                         Property("street", StringValue(house.StreetName)),
-                        Property("number", Value(house.HouseNumber.ToString()))
+                        Property("number", Value(house.HouseNumber.ToString())),
+                        Property("city", Value(house.ZipCode)),
+                        Property("zipCode", Value(house.ZipCode)),
+                        Property("country", Value(house.Country))
                     )
                 ),
                 Property("residents", Array(

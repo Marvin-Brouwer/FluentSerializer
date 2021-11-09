@@ -130,14 +130,18 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     return;
                 }
 
-                if (text.HasStringAtOffset(offset, XmlConstants.CommentStart)) 
-                {
-                    _children.Add(new XmlComment(text, ref offset));
-                    continue;
-                }
-
                 if (character == XmlConstants.TagStartCharacter)
                 {
+                    if (text.HasStringAtOffset(offset, XmlConstants.CommentStart))
+                    {
+                        _children.Add(new XmlComment(text, ref offset));
+                        continue;
+                    }
+                    if (text.HasStringAtOffset(offset, XmlConstants.CharacterDataStart))
+                    {
+                        _children.Add(new XmlCharacterData(text, ref offset));
+                        continue;
+                    }
 
                     _children.Add(new XmlElement(text, ref offset));
                     continue;
@@ -242,6 +246,16 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                     stringBuilder
                         .AppendNode(commentNode, true, childIndent, writeNull);
+                    continue;
+                }
+                if (child is IXmlCharacterData cDataNode)
+                {
+                    stringBuilder
+                        .AppendOptionalNewline(format)
+                        .AppendOptionalIndent(childIndent, format);
+
+                    stringBuilder
+                        .AppendNode(cDataNode, true, childIndent, writeNull);
                     continue;
                 }
             }

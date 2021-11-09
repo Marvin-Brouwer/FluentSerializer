@@ -11,5 +11,8 @@
 
         internal const string CommentStart = "<!--";
         internal const string CommentEnd = "-->";
+
+        internal const string CharacterDataStart = "<![CDATA[";
+        internal const string CharacterDataEnd = "]]>";
     }
 }
