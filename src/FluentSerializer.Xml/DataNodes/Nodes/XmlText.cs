@@ -9,8 +9,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("{Value}")]
     public readonly struct XmlText : IXmlText
     {
-        private const string CommentName = "#text";
-        public string Name => CommentName;
+        internal const string TextName = "#text";
+        public string Name => TextName;
         public string? Value { get; }
 
         public XmlText(string? value = null)

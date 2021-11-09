@@ -14,6 +14,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("<{Name,nq} />")]
     public readonly struct XmlElement : IXmlElement
     {
+        public string Name { get; }
+
         private readonly List<IXmlNode> _children;
         private readonly List<IXmlAttribute> _attributes;
 
@@ -26,8 +28,40 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 return childList;
             }
         }
+        public IXmlAttribute? GetChildAttribute(string name)
+        {
+            Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
-        public string Name { get; }
+            return _attributes.FirstOrDefault(attribute => attribute.Name.Equals(name, StringComparison.Ordinal));
+        }
+
+        public IEnumerable<IXmlElement> GetChildElements(string? name = null)
+        {
+            foreach (var child in _children)
+            {
+                if (child is not IXmlElement element) continue;
+                if (string.IsNullOrEmpty(name) || element.Name.Equals(name, StringComparison.Ordinal))
+                    yield return element;
+            }
+        }
+        public IXmlElement? GetChildElement(string name)
+        {
+            Guard.Against.NullOrWhiteSpace(name, nameof(name));
+
+            return GetChildElements(name).FirstOrDefault();
+        }
+
+        public string? GetTextValue()
+        {
+            var textValues = _children
+                .Where(child => child is IXmlText)
+                .Select(child => ((IXmlText)child).Value ?? string.Empty)
+                .ToList();
+
+            if (!textValues.Any()) return default;
+
+            return string.Join(string.Empty, textValues);
+        }
 
         public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
         {
@@ -47,6 +81,20 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         // todo support even more whitespace scenarios, probably setup some test cases first
         public XmlElement(ReadOnlySpan<char> text, ref int offset)
         {
+            // If we encounter a declaration just ignore it, if this becomes a problem we can start the parse in
+            // the document. For now this is fine.
+            if (text.HasStringAtOffset(offset, XmlConstants.DeclarationStart))
+            {
+                while (offset < text.Length && !text.HasStringAtOffset(offset, XmlConstants.DeclarationEnd))
+                {
+                    offset++;
+                }
+                while (offset < text.Length && text[offset] != XmlConstants.TagStartCharacter)
+                {
+                    offset++;
+                }
+            }
+
             offset++;
 
             _attributes = new();
@@ -188,7 +236,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             if (!writeNull && !children.Any()) return stringBuilder;
 
             stringBuilder
-                .AppendOptionalNewline(false)
                 .Append(XmlConstants.TagStartCharacter)
                 .Append(Name);
 

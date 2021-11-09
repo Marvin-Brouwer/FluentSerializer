@@ -15,7 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Converting\Converters\XNodes\XObjectConverter.cs.old" />
     <None Remove="DataNodes\XmlElement.cs~RF33cd434d.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Converting\Converters\XNodes\XObjectConverter.cs.old" />
   </ItemGroup>
 
   <ItemGroup>

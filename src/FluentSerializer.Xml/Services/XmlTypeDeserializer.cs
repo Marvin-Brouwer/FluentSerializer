@@ -4,11 +4,13 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.Exceptions;
 using System;
 using System.Collections;
-using System.Linq;
-using System.Xml.Linq;
-using FluentSerializer.Xml.Exceptions;
+
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -23,20 +25,20 @@ namespace FluentSerializer.Xml.Services
             _mappings = mappings;
         }
 
-        public TModel? DeserializeFromObject<TModel>(XElement dataObject, IXmlSerializer currentSerializer)
+        public TModel? DeserializeFromElement<TModel>(IXmlElement dataObject, IXmlSerializer currentSerializer)
            where TModel : class, new()
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
             var classType = typeof(TModel);
-            var deserializedInstance = DeserializeFromObject(dataObject,classType,  currentSerializer);
+            var deserializedInstance = DeserializeFromElement(dataObject, classType,  currentSerializer);
             if (deserializedInstance is null) return null;
 
             return (TModel)deserializedInstance;
         }
 
-        public object? DeserializeFromObject(XElement dataObject, Type classType,  IXmlSerializer currentSerializer)
+        public object? DeserializeFromElement(IXmlElement dataObject, Type classType,  IXmlSerializer currentSerializer)
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(classType, nameof(classType));
@@ -72,42 +74,38 @@ namespace FluentSerializer.Xml.Services
         }
 
         private void DeserializeProperty(
-            XElement dataObject, string propertyName, IPropertyMap propertyMapping, object instance, 
+            IXmlElement dataObject, string propertyName, IPropertyMap propertyMapping, object instance, 
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
         {
-            if (propertyMapping.ContainerType == typeof(XText))
+            if (propertyMapping.ContainerType == typeof(IXmlText))
             {
-                // Technically there can be many text nodes, we just want all the text.
-                var xText = new XText(string.Join(string.Empty, dataObject.Nodes()
-                    .Where(node => node.NodeType == System.Xml.XmlNodeType.Text)
-                    .Cast<XText>()
-                    .Select(node => node?.Value ?? string.Empty)));
-
-                DeserializeXNode(xText, xText?.Value, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
+                // This may look strange here but it makes DeserializeNode a lot simpler
+                var text = Text(dataObject.GetTextValue());
+                DeserializeNode(text, dataObject, text.Value, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
                 return;
             }
 
-            if (propertyMapping.ContainerType == typeof(XAttribute))
+            if (propertyMapping.ContainerType == typeof(IXmlAttribute))
             {
-                var xAttribute = dataObject.Attribute(propertyName);
-                DeserializeXNode(xAttribute, xAttribute?.Value, propertyName, propertyMapping, instance, currentSerializer,serializerContext);
+                var attribute = dataObject.GetChildAttribute(propertyName);
+                DeserializeNode(attribute, dataObject, attribute?.Value, propertyName, propertyMapping, instance, currentSerializer,serializerContext);
                 return;
             }
 
-            if (propertyMapping.ContainerType == typeof(XElement))
+            if (propertyMapping.ContainerType == typeof(IXmlElement))
             {
-                var xElement = dataObject.Element(propertyName);
-                DeserializeXElement(xElement, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
+                var element = dataObject.GetChildElement(propertyName);
+                DeserializeElement(element, dataObject, propertyName, propertyMapping, instance, currentSerializer, serializerContext);
                 return;
             }
 
             throw new ContainerNotSupportedException(propertyMapping.ContainerType);
         }
 
-        private static void DeserializeXNode<TNode>(
-            TNode? xNode, string? nodeValue, string propertyName, IPropertyMap propertyMapping,object instance, 
+        private static void DeserializeNode<TNode>(
+            TNode? node, IXmlElement parent, string? nodeValue, string propertyName, IPropertyMap propertyMapping,object instance, 
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
-            where TNode : XObject
+            where TNode : IXmlNode
         {
             if (nodeValue is null && !propertyMapping.Property.IsNullable())
                 throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
@@ -121,32 +119,34 @@ namespace FluentSerializer.Xml.Services
             if (converter is null) throw new ConverterNotFoundException(
                 propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
 
-            var convertedAttributeValue = converter.Deserialize(xNode!, serializerContext);
+            var convertedAttributeValue = converter is IXmlConverter<TNode> xmlConverter
+                ? xmlConverter.Deserialize(node!, parent, serializerContext)
+                : converter.Deserialize(node!, serializerContext);
             if (convertedAttributeValue is null && !propertyMapping.Property.IsNullable())
                 throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
             SetPropertyValue(instance, propertyMapping, convertedAttributeValue);
         }
 
-        private void DeserializeXElement(
-            XElement? xElement, string propertyName, IPropertyMap propertyMapping,object instance, 
+        private void DeserializeElement(
+            IXmlElement? element, IXmlElement parent, string propertyName, IPropertyMap propertyMapping,object instance, 
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
         {
             // Collections may be empty
-            if (xElement is null && propertyMapping.Property.PropertyType.IsEnumerable()) return;
+            if (element is null && propertyMapping.Property.PropertyType.IsEnumerable()) return;
 
-            if (xElement is null && !propertyMapping.Property.IsNullable())
+            if (element is null && !propertyMapping.Property.IsNullable())
                 throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);
-            if (xElement is null)
+            if (element is null)
             {
                 SetPropertyValue(instance, propertyMapping, null);
                 return;
             }
 
-            var matchingConverter = propertyMapping.GetConverter<XElement>(SerializerDirection.Deserialize, currentSerializer);
+            var matchingConverter = propertyMapping.GetConverter<IXmlElement>(SerializerDirection.Deserialize, currentSerializer);
             if (matchingConverter is null)
             {
-                var deserializedInstance = DeserializeFromObject(xElement, propertyMapping.Property.PropertyType, currentSerializer);
+                var deserializedInstance = DeserializeFromElement(element, propertyMapping.Property.PropertyType, currentSerializer);
                 if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
                     throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
@@ -154,7 +154,9 @@ namespace FluentSerializer.Xml.Services
                 return;
             }
 
-            var convertedInstance = matchingConverter.Deserialize(xElement, serializerContext);
+            var convertedInstance = matchingConverter is IXmlConverter<IXmlElement> xmlConverter
+                ? xmlConverter.Deserialize(element, parent, serializerContext)
+                : matchingConverter.Deserialize(element, serializerContext);
             if (convertedInstance is null && !propertyMapping.Property.IsNullable())
                 throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, propertyName);
 
