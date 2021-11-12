@@ -23,7 +23,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         {
             if (!elementToSerialize.Children.Any()) return null;
             var dateWrapper = elementToSerialize.GetChildElement("Date");
-            if (dateWrapper is null || dateWrapper.Children.Any()) return null;
+            if (dateWrapper is null || !dateWrapper.Children.Any()) return null;
 
             var yearValue = dateWrapper.GetChildElement("year")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(yearValue))

@@ -15,12 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Converting\Converters\XNodes\XObjectConverter.cs.old" />
+    <None Remove="Converting\Converters\XmlNodes\XObjectConverter.cs.old" />
     <None Remove="DataNodes\XmlElement.cs~RF33cd434d.TMP" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Converting\Converters\XNodes\XObjectConverter.cs.old" />
+    <Content Include="Converting\Converters\XmlNodes\XObjectConverter.cs.old" />
   </ItemGroup>
 
   <ItemGroup>

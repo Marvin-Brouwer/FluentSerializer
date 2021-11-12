@@ -26,12 +26,12 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public string? GetTextValue() => _innerElement.GetTextValue();
 
-        public XmlFragment(IEnumerable<IXmlElement> elements)
+        public XmlFragment(IEnumerable<IXmlNode> elements)
         {
-            _innerElement = new XmlElement(FragmentName, elements);
+            _innerElement = new XmlElement(nameof(XmlFragment), elements);
         }
 
-        public XmlFragment(params IXmlElement[] childNodes) : this(childNodes.AsEnumerable()) { }
+        public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
 
         public override string ToString()
         {
@@ -57,12 +57,17 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             if (!_innerElement.Children.Any()) return stringBuilder;
 
+            var firstNode = true;
             foreach (var child in _innerElement.Children)
             {
-                stringBuilder
+                if (!firstNode) stringBuilder
                     .AppendOptionalNewline(format)
-                    .AppendOptionalIndent(childIndent, format)
+                    .AppendOptionalIndent(childIndent, format);
+
+                stringBuilder
                     .AppendNode(child, format, childIndent, writeNull);
+
+                firstNode = false;
             }
 
             return stringBuilder;
