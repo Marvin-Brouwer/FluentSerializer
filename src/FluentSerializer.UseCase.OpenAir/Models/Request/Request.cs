@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using FluentSerializer.Xml.DataNodes;
+using System.Collections.Generic;
+
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Request
 {
     internal class Request<TRequest>
     {
-        public XComment Authentication => new(" Normally this is where the authentication element would be added ");
+        public IXmlComment Authentication => Comment("Normally this is where the authentication element would be added");
 
         public List<ReadRequest<TRequest>>? ReadRequests { get; set; } 
         public List<AddRequest<TRequest>>? AddRequests { get; set; }

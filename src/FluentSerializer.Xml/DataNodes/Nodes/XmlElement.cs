@@ -256,15 +256,21 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 .Append(XmlConstants.TagEndCharacter);
 
             // Technically this object can have multiple text nodes, only the first needs indentation
+            var textOnly = true;
             var firstTextNode = true;
             foreach (var child in _children)
             {
                 if (child is IXmlElement childElement) {
+                    textOnly = false;
                     firstTextNode = true;
+
                     stringBuilder
                         .AppendOptionalNewline(format)
-                        .AppendOptionalIndent(childIndent, format)
+                        .AppendOptionalIndent(childIndent, format);
+
+                    stringBuilder
                         .AppendNode(childElement, format, childIndent, writeNull);
+
                     continue;
                 }
                 if (child is IXmlText textNode)
@@ -272,17 +278,19 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     if (firstTextNode)
                     {
                         firstTextNode = false;
-                        stringBuilder
+                        if (!textOnly) stringBuilder
                             .AppendOptionalNewline(format)
                             .AppendOptionalIndent(childIndent, format);
 
                         stringBuilder
                             .AppendNode(textNode, true, childIndent, writeNull);
+
                         continue;
                     }
 
                     stringBuilder
                         .AppendNode(textNode, false, childIndent, writeNull);
+
                     continue;
                 }
                 if (child is IXmlComment commentNode)
@@ -293,6 +301,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                     stringBuilder
                         .AppendNode(commentNode, true, childIndent, writeNull);
+
                     continue;
                 }
                 if (child is IXmlCharacterData cDataNode)
@@ -303,13 +312,16 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                     stringBuilder
                         .AppendNode(cDataNode, true, childIndent, writeNull);
+
                     continue;
                 }
             }
 
-            stringBuilder
+            if (!textOnly) stringBuilder
                 .AppendOptionalNewline(format)
-                .AppendOptionalIndent(indent, format)
+                .AppendOptionalIndent(indent, format);
+
+            stringBuilder
                 .Append(XmlConstants.TagStartCharacter)
                 .Append(XmlConstants.TagTerminationCharacter)
                 .Append(Name)
