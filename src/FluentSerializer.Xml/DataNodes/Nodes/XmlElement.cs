@@ -312,8 +312,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                     stringBuilder
                         .AppendNode(cDataNode, true, childIndent, writeNull);
-
-                    continue;
                 }
             }
 
@@ -343,7 +341,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         {
             if (obj is not XmlElement otherElement) return false;
 
-            if (!Name!.Equals(otherElement.Name, StringComparison.Ordinal)) return false;
+            if (!Name.Equals(otherElement.Name, StringComparison.Ordinal)) return false;
             if (_attributes.Count != otherElement._attributes.Count) return false;
             if (_children.Count != otherElement._children.Count) return false;
 

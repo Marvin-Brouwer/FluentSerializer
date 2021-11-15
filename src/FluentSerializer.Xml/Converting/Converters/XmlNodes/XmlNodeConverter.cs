@@ -14,7 +14,7 @@ namespace FluentSerializer.Xml.Converting.Converters.XmlNodes
 
         public object? Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
         {
-            if (context.PropertyType.IsAssignableFrom(objectToDeserialize.GetType())) 
+            if (context.PropertyType.IsInstanceOfType(objectToDeserialize)) 
                 throw new NotSupportedException($"Type of '${objectToDeserialize.GetType().FullName}' is not assignable to {context.PropertyType}");
 
             return objectToDeserialize;
@@ -22,7 +22,6 @@ namespace FluentSerializer.Xml.Converting.Converters.XmlNodes
 
         public IXmlElement? Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize is null) return null;
             if (objectToSerialize is IXmlNode element) return new XmlFragment(element);
 
             throw new NotSupportedException($"Type of '${objectToSerialize.GetType().FullName}' could not be converted");

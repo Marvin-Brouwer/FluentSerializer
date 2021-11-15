@@ -35,7 +35,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Guard.Against.InvalidName(name, nameof(name));
 
             Name = name;
-            _children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value }; ;
+            _children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value }; 
         }
 
         public JsonProperty(ReadOnlySpan<char> text, ref int offset)
@@ -162,7 +162,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public override int GetHashCode()
         {
-            if (_children?.Any() != true) return 0;
+            if (_children.Any() != true) return 0;
 
             var hash = new HashCode();
             hash.Add(Name.GetHashCode());

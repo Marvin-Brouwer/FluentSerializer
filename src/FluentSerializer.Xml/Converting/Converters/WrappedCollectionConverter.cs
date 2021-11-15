@@ -15,8 +15,8 @@ namespace FluentSerializer.Xml.Converting.Converters
 {
     public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
     {
-        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public virtual bool CanConvert(Type targetType) =>
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
+        public bool CanConvert(Type targetType) =>
             !typeof(string).IsAssignableFrom(targetType) &&
             targetType.Implements(typeof(IEnumerable<>));
        
@@ -33,7 +33,7 @@ namespace FluentSerializer.Xml.Converting.Converters
                 ?? context.NamingStrategy;
 
             var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
-            var elementsToDeserialize = objectToDeserialize!.GetChildElements(itemName);
+            var elementsToDeserialize = objectToDeserialize.GetChildElements(itemName);
 
             foreach (var item in elementsToDeserialize)
             {

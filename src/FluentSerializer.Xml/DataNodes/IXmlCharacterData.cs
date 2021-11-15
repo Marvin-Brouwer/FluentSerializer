@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FluentSerializer.Xml.DataNodes
+﻿namespace FluentSerializer.Xml.DataNodes
 {
-    public interface IXmlCharacterData : IXmlValue, IEquatable<IXmlNode> { }
+    public interface IXmlCharacterData : IXmlValue { }
 }

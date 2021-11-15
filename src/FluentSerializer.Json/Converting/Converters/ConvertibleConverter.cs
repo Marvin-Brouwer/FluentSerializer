@@ -23,7 +23,6 @@ namespace FluentSerializer.Json.Converting.Converters
 
         public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize is null) return Value(null);
             if (objectToSerialize is string stringToSerialize)
                 return Value($"\"{stringToSerialize}\"");
 

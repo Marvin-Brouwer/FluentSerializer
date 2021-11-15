@@ -54,7 +54,7 @@ namespace FluentSerializer.Json.Profiling.Data
                 Property("details",
                     Object(
                         Property("firstName", StringValue(person.FirstName)),
-                        Property("middleName", person.MiddleName is null ? null : StringValue(person.MiddleName)),
+                        Property("middleName", StringValue(person.MiddleName)),
                         Property("lastName", StringValue(person.LastName)),
                         Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
                         Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))

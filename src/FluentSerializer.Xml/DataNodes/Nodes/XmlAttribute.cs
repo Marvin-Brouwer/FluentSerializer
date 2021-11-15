@@ -122,7 +122,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         {
             if (obj is not XmlAttribute otherAttribute) return false;
 
-            return Name!.Equals(otherAttribute.Name, StringComparison.Ordinal)
+            return Name.Equals(otherAttribute.Name, StringComparison.Ordinal)
                 && Value?.Equals(otherAttribute.Value, StringComparison.Ordinal) == true;
         }
         public override int GetHashCode() => HashCode.Combine(Name, Value);

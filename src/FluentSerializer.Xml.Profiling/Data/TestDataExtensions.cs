@@ -57,7 +57,7 @@ namespace FluentSerializer.Xml.Profiling.Data
                         : string.Join(" ", person.FirstName, person.MiddleName, person.LastName))),
                 Element("Details",
                     Element("firstName", Text(person.FirstName)),
-                    Element("middleName", person.MiddleName is null ? null : Text(person.MiddleName)),
+                    Element("middleName", Text(person.MiddleName)),
                     Element("lastName", Text(person.LastName)),
                     Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
                     Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
