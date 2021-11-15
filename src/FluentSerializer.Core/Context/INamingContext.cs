@@ -13,16 +13,12 @@ namespace FluentSerializer.Core.Context
         /// Find the <see cref="INamingStrategy"/>  for any property of a certain <see cref="Type"/> if registered
         /// This can be useful when unpacking collections to a different data structure
         /// </summary>
-        /// <param name="property"></param>
-        /// <returns></returns>
         INamingStrategy? FindNamingStrategy(Type classType, PropertyInfo property);
 
         /// <summary>
         /// Find the <see cref="INamingStrategy"/>  for any <see cref="Type"/> if registered
         /// This can be useful when unpacking collections to a different data structure
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
         INamingStrategy? FindNamingStrategy(Type type);
     }
 }

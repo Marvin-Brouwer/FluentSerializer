@@ -14,8 +14,8 @@ namespace FluentSerializer.Xml.Converting.Converters
 {
     public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
     {
-        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public virtual bool CanConvert(Type targetType) => targetType.IsEnumerable();
+        public SerializerDirection Direction { get; } = SerializerDirection.Both;
+        public bool CanConvert(Type targetType) => targetType.IsEnumerable();
 
         object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
         {
@@ -37,7 +37,7 @@ namespace FluentSerializer.Xml.Converting.Converters
                 ?? context.NamingStrategy;
 
             var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
-            var elementsToDeserialize = parent!.GetChildElements(itemName);
+            var elementsToDeserialize = parent.GetChildElements(itemName);
             foreach (var item in elementsToDeserialize)
             {
                 if (item is null) continue;

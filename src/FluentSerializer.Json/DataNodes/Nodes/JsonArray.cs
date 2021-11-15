@@ -134,7 +134,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public override int GetHashCode()
         {
-            if (_children?.Any() != true) return 0;
+            if (_children.Any() != true) return 0;
 
             var hash = new HashCode();
             foreach (var child in _children)

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Profiling.TestData
 {
-    public sealed class BogusConfiguration
+    public readonly struct BogusConfiguration
     {
-        private static readonly List<string> _areaTypes = new() { "city", "town", "village" };
-        private static readonly List<string> _houseTypes = new() { "apartment", "detached", "condominium", "ranch" };
+        private static readonly List<string> AreaTypes = new() { "city", "town", "village" };
+        private static readonly List<string> HouseTypes = new() { "apartment", "detached", "condominium", "ranch" };
         public static List<ResidentialArea> Generate(int seed, int amount)
         {
             var personFaker = new Faker<Person>()
@@ -20,7 +20,7 @@ namespace FluentSerializer.Core.Profiling.TestData
 
             var houseFaker = new Faker<House>()
                 .UseSeed(seed)
-                .RuleFor(house => house.Type, f => f.PickRandom(_houseTypes))
+                .RuleFor(house => house.Type, f => f.PickRandom(HouseTypes))
                 .RuleFor(house => house.StreetName, f => f.Address.StreetName())
                 .RuleFor(house => house.HouseNumber, f => f.Random.Number(min: 1))
                 .RuleFor(house => house.ZipCode, f => f.Address.ZipCode())
@@ -29,7 +29,7 @@ namespace FluentSerializer.Core.Profiling.TestData
 
             var residentialFaker = new Faker<ResidentialArea>()
                 .UseSeed(seed)
-                .RuleFor(residentialArea => residentialArea.Type, f => f.PickRandom(_areaTypes))
+                .RuleFor(residentialArea => residentialArea.Type, f => f.PickRandom(AreaTypes))
                 .RuleFor(residentialArea => residentialArea.Name, f => f.Address.City())
                 .RuleFor(residentialArea => residentialArea.Houses, (f, c) => {
                     var houses = houseFaker.Generate(f.Random.Number(0, 20));

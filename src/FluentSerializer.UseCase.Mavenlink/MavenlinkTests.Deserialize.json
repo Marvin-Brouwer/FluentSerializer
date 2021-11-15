@@ -3,9 +3,8 @@
   "data": [
     {
       "id": "U1",
-      "name": "Rianne Martens",
-      "age": 209,
-      "female": true
+      "name": "John Doe",
+      "age": 22
     }
   ]
 }

@@ -77,7 +77,6 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonConstants.PropertyWrapCharacter)
                 {
                     _children.Add(new JsonProperty(text, ref offset));
-                    continue;
                 }
             }
             offset++;
@@ -146,7 +145,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public override int GetHashCode()
         {
-            if (_children?.Any() != true) return 0;
+            if (_children.Any() != true) return 0;
 
             var hash = new HashCode();
             foreach (var child in _children)

@@ -10,6 +10,7 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
+    // todo allow for nullable bool
     public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -19,8 +20,8 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         private bool ConvertToBool(string? currentValue)
         {
             if (string.IsNullOrWhiteSpace(currentValue)) return default;
-            if (currentValue.Equals("1", System.StringComparison.OrdinalIgnoreCase)) return true;
-            if (currentValue.Equals("0", System.StringComparison.OrdinalIgnoreCase)) return false;
+            if (currentValue.Equals("1", StringComparison.OrdinalIgnoreCase)) return true;
+            if (currentValue.Equals("0", StringComparison.OrdinalIgnoreCase)) return false;
 
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }

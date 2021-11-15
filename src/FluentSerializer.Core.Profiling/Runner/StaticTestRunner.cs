@@ -6,14 +6,13 @@ using BenchmarkDotNet.Running;
 using System.Linq;
 using System.Reflection;
 using FluentSerializer.Core.Profiling.Configuration;
-using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using BenchmarkDotNet.Environments;
 
 namespace FluentSerializer.Core.Profiling.Runner
 {
     public abstract class StaticTestRunner
     {
-        protected static ManualConfig CreateConfig()
+        private static ManualConfig CreateConfig()
         {
             var config = ManualConfig.Create(DefaultConfig.Instance)
                 .AddExporter(PlainExporter.Default)

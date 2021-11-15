@@ -72,7 +72,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             };
 
             if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
-                return Element("Date", dateProperties); ;
+                return Element("Date", dateProperties); 
 
             dateProperties.Add(Element("hour", Text(dateToSerialize.ToString("HH"))));
             dateProperties.Add(Element("minute", Text(dateToSerialize.ToString("mm"))));

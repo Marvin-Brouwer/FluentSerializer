@@ -13,16 +13,16 @@ namespace FluentSerializer.Core.Profiling.Configuration
                 .OrderBy(benchmark => benchmark.Parameters["X"])
                 .ThenBy(benchmark => benchmark.Descriptor.WorkloadMethodDisplayInfo);
 
-        public IEnumerable<BenchmarkCase> GetSummaryOrder(ImmutableArray<BenchmarkCase> benchmarksCase, Summary summary) =>
-            benchmarksCase
+        public IEnumerable<BenchmarkCase> GetSummaryOrder(ImmutableArray<BenchmarkCase> benchmarksCases, Summary summary) =>
+            benchmarksCases
                 .OrderBy(benchmark => summary[benchmark]?.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo)
                 .ThenBy(benchmark => summary[benchmark]?.BenchmarkCase.GetRuntime()?.Name)
                 .ThenBy(benchmark => summary[benchmark]?.ResultStatistics?.Mean);
 
-        public string GetHighlightGroupKey(BenchmarkCase benchmarkCase) => benchmarkCase?.GetRuntime().Name ?? string.Empty;
+        public string GetHighlightGroupKey(BenchmarkCase benchmarkCase) => benchmarkCase.GetRuntime().Name ?? string.Empty;
 
         public string GetLogicalGroupKey(ImmutableArray<BenchmarkCase> allBenchmarksCases, BenchmarkCase benchmarkCase) =>
-            string.Empty + benchmarkCase?.Descriptor.WorkloadMethodDisplayInfo + benchmarkCase?.GetRuntime().Name;
+            string.Empty + benchmarkCase.Descriptor.WorkloadMethodDisplayInfo + benchmarkCase?.GetRuntime().Name;
 
         public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups) =>
             logicalGroups.OrderBy(it => it.Key);
