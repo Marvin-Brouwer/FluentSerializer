@@ -54,18 +54,20 @@ namespace FluentSerializer.Xml.Converting.Converters
             if (objectToSerialize is not IEnumerable enumerableToSerialize)
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            // todo select
-            var customElement = new List<IXmlElement>();
+            var elements = GetArrayElements((IAdvancedXmlSerializer)context.CurrentSerializer, enumerableToSerialize);
+            return new XmlFragment(elements);
+        }
+
+        private static IEnumerable<IXmlElement> GetArrayElements(IAdvancedXmlSerializer serializer, IEnumerable enumerableToSerialize)
+        {
             foreach (var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;
-                var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).SerializeToElement(collectionItem, collectionItem.GetType());
+                var itemValue = serializer.SerializeToElement(collectionItem, collectionItem.GetType());
                 if (itemValue is null) continue;
 
-                customElement.Add(itemValue);
+                 yield return itemValue;
             }
-
-            return new XmlFragment(customElement);
         }
     }
 }

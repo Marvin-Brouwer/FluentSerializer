@@ -54,18 +54,20 @@ namespace FluentSerializer.Xml.Converting.Converters
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
 
-            // todo select
-            var customElement = new List<IXmlElement>();
-            foreach(var collectionItem in enumerableToSerialize)
+            var elements = GetArrayElements((IAdvancedXmlSerializer)context.CurrentSerializer, enumerableToSerialize);
+            return Element(elementName, elements) ;
+        }
+
+        private static IEnumerable<IXmlElement> GetArrayElements(IAdvancedXmlSerializer serializer, IEnumerable enumerableToSerialize)
+        {
+            foreach (var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;
-                var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).SerializeToElement(collectionItem, collectionItem.GetType());
+                var itemValue = serializer.SerializeToElement(collectionItem, collectionItem.GetType());
                 if (itemValue is null) continue;
 
-                customElement.Add(itemValue);
+                yield return itemValue;
             }
-
-            return Element(elementName, customElement) ;
         }
     }
 }
