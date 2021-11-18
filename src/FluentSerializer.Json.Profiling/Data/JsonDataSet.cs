@@ -21,7 +21,7 @@ namespace FluentSerializer.Json.Profiling.Data
 
         static JsonDataSet()
         {
-            var testData = new TestDataSet(25000);
+            var testData = new TestDataSet(30000);
 
             Console.WriteLine("Mapping JSON dataSet");
             var jsonDataSet = testData.TestData

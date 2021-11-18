@@ -19,27 +19,26 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Value = value;
         }
 
-        // todo maybe just store the span with offset and range instead of allocating a new stringbuilder
         public XmlComment(ReadOnlySpan<char> text, ref int offset)
         {
             offset += XmlConstants.CommentStart.Length;
 
-            var stringBuilder = new StringBuilder(128);
+            var valueStartOffset = offset;
+            var valueEndOffset = offset;
+
             while (offset < text.Length)
             {
+                valueEndOffset = offset;
                 if (text.HasStringAtOffset(offset, XmlConstants.CommentEnd))
                 {
                     offset += XmlConstants.CommentEnd.Length;
                     break;
                 }
-
-                var character = text[offset];
+                
                 offset++;
-
-                stringBuilder.Append(character);
             }
 
-            Value = stringBuilder.ToString().Trim();
+            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
         public override string ToString()

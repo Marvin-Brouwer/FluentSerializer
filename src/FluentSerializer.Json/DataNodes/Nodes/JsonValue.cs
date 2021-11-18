@@ -22,28 +22,29 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public JsonValue(ReadOnlySpan<char> text, ref int offset)
         {
             var stringValue = false;
-            var stringBuilder = new StringBuilder(128);
+
+            var valueStartOffset = offset;
+            var valueEndOffset = offset;
+
             while (offset < text.Length)
             {
+                valueEndOffset = offset;
+
                 var character = text[offset];
                 offset++;
 
-                if (character == JsonConstants.PropertyWrapCharacter && stringValue)
-                {
-                    stringBuilder.Append(character);
-                    break;
-                }
+                if (character == JsonConstants.PropertyWrapCharacter && stringValue) break; 
                 if (character == JsonConstants.DividerCharacter) break;
                 if (character == JsonConstants.ObjectEndCharacter) break;
                 if (character == JsonConstants.ArrayEndCharacter) break;
 
                 if (character == JsonConstants.PropertyWrapCharacter) stringValue = true; 
                 if (!stringValue && char.IsWhiteSpace(character)) break;
-
-                stringBuilder.Append(character);
             }
 
-            Value = stringBuilder.ToString();
+            // Append a '"' if it started with a '"'
+            if (stringValue) valueEndOffset++;
+            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
         public override string ToString()
