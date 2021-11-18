@@ -10,11 +10,10 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    // todo allow for nullable bool
     public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType);
+        public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType) || typeof(bool?).IsAssignableFrom(targetType);
 
         private string ConvertToString(bool currentValue) => currentValue ? "1" : "0";
         private bool ConvertToBool(string? currentValue)
@@ -36,8 +35,9 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             return ConvertToBool(objectToDeserialize.GetTextValue());
         }
 
-        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object? objectToSerialize, ISerializerContext context)
         {
+            if (objectToSerialize is null) return default;
             var objectBoolean = (bool)objectToSerialize;
 
             var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
@@ -45,8 +45,9 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             return Attribute(attributeName, attributeValue);
         }
 
-        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(object? objectToSerialize, ISerializerContext context)
         {
+            if (objectToSerialize is null) return default;
             var objectBoolean = (bool)objectToSerialize;
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);

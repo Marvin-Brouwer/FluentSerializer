@@ -21,7 +21,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         // todo maybe just store the span with offset and range instead of allocating a new stringbuilder
         public XmlText(ReadOnlySpan<char> text, ref int offset)
         {
-            // todo support CData, possibly in Element instead of here?
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {

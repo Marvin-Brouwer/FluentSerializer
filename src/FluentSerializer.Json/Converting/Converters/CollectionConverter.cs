@@ -50,18 +50,20 @@ namespace FluentSerializer.Json.Converting.Converters
             if (objectToSerialize is not IEnumerable enumerableToSerialize)
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            // todo convert to select
-            var customElement = new List<IJsonArrayContent>();
+            var elements = GetArrayItems((IAdvancedJsonSerializer)context.CurrentSerializer, enumerableToSerialize);
+            return Array(elements);
+        }
+
+        private static IEnumerable<IJsonArrayContent> GetArrayItems(IAdvancedJsonSerializer serializer, IEnumerable enumerableToSerialize)
+        {
             foreach (var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;
-                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
+                var itemValue = serializer.SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
                 if (itemValue is not IJsonArrayContent arrayItem) continue;
 
-                customElement.Add(arrayItem);
+                yield return arrayItem;
             }
-
-            return Array(customElement);
         }
     }
 }
