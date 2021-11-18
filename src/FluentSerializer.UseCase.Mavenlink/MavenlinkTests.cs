@@ -10,6 +10,7 @@ using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.UseCase.Mavenlink.Models;
+using Microsoft.Extensions.ObjectPool;
 using Xunit;
 
 namespace FluentSerializer.UseCase.Mavenlink
@@ -34,7 +35,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = await File.ReadAllTextAsync("../../../MavenlinkTests.Serialize.json");
             var example = ProjectRequestExample;
 
-            var sut = new RuntimeJsonSerializer(_mappings, _configuration);
+            var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
             var result = sut.Serialize(example);
@@ -50,7 +51,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = UserResponseExample;
             var example = await File.ReadAllTextAsync("../../../MavenlinkTests.Deserialize.json");
 
-            var sut = new RuntimeJsonSerializer(_mappings, _configuration);
+            var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
             var result = sut.Deserialize<Response<User>>(example);

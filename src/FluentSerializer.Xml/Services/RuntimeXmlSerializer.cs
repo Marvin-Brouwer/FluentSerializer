@@ -22,16 +22,16 @@ namespace FluentSerializer.Xml.Services
         public XmlSerializerConfiguration XmlConfiguration { get; }
         public SerializerConfiguration Configuration => XmlConfiguration;
 
-        public RuntimeXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, XmlSerializerConfiguration configuration)
+        public RuntimeXmlSerializer(
+            IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+            XmlSerializerConfiguration configuration,
+            ObjectPoolProvider objectPoolProvider)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
 
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
-
-            // todo make injectable
-            var objectPoolProvider = new DefaultObjectPoolProvider();
             _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
 
             XmlConfiguration = configuration;

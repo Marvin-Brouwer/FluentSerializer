@@ -21,16 +21,16 @@ namespace FluentSerializer.Json.Services
         public JsonSerializerConfiguration JsonConfiguration { get; }
         public SerializerConfiguration Configuration => JsonConfiguration;
 
-        public RuntimeJsonSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, JsonSerializerConfiguration configuration)
+        public RuntimeJsonSerializer(
+            IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+            JsonSerializerConfiguration configuration,
+            ObjectPoolProvider objectPoolProvider)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
 
             _serializer = new JsonTypeSerializer(mappings);
             _deserializer = new JsonTypeDeserializer(mappings);
-            
-            // todo make injectable
-            var objectPoolProvider = new DefaultObjectPoolProvider();
             _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
 
             JsonConfiguration = configuration;
