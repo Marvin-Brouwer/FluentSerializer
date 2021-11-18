@@ -8,6 +8,10 @@ using System.Reflection;
 using FluentSerializer.Core.Profiling.Configuration;
 using BenchmarkDotNet.Environments;
 
+#if (DEBUG)
+using BenchmarkDotNet.Toolchains.InProcess.Emit;
+#endif
+
 namespace FluentSerializer.Core.Profiling.Runner
 {
     public abstract class StaticTestRunner
