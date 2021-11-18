@@ -78,7 +78,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             }
         }
 
-        // todo support even more whitespace scenarios, probably setup some test cases first
         public XmlElement(ReadOnlySpan<char> text, ref int offset)
         {
             // If we encounter a declaration just ignore it, if this becomes a problem we can start the parse in
@@ -107,7 +106,6 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             var tagFinished = false;
             var nameFinished = false;
 
-            var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
                 nameEndOffset = offset;
@@ -133,14 +131,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 if (char.IsWhiteSpace(character))
                 {
                     nameFinished = true;
-                    continue;
                 }
-
-                stringBuilder.Append(character);
             }
             
             Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
-            stringBuilder.Clear();
 
             if (!tagFinished)
                 while (offset < text.Length)
@@ -171,15 +165,14 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             if (elementClosed) return;
 
-            stringBuilder.Clear();
             while (offset < text.Length)
             {
                 var character = text[offset];
 
                 if (character == XmlConstants.TagStartCharacter && text[offset + 1] == XmlConstants.TagTerminationCharacter)
                 {
-                    offset += 2 + Name.Length + 1;
-                    return;
+                    offset += 2;
+                    break;
                 }
 
                 if (character == XmlConstants.TagStartCharacter)
@@ -205,6 +198,15 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 }
 
                 _children.Add(new XmlText(text, ref offset));
+            }
+
+            // Walk to the end of the current closing tag
+            while (offset < text.Length)
+            {
+                var character = text[offset];
+                offset++;
+
+                if (character == XmlConstants.TagEndCharacter) return;
             }
         }
 
