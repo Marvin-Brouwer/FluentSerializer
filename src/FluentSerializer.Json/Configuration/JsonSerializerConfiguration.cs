@@ -19,6 +19,7 @@ namespace FluentSerializer.Json.Configuration
         {
             Encoding = Encoding.UTF8;
             FormatOutput = true;
+            WriteNull = false;
             DefaultNamingStrategy = Names.Use.CamelCase;
             DefaultConverters = new List<IConverter>
             {

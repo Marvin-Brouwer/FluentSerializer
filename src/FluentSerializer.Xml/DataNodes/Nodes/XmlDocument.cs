@@ -29,13 +29,12 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             return stringBuilder.ToString();
         }
 
-        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, int indent = 0, bool writeNull = true)
+        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
         {
             var stringBuilder = stringBuilders.Get();
 
             var encoding = writer.Encoding;
             stringBuilder
-                // todo skip when parsing
                 .Append($"<?xml version=\"1.0\" encoding=\"{encoding.WebName}\"?>")
                 .AppendOptionalNewline(format);
 
