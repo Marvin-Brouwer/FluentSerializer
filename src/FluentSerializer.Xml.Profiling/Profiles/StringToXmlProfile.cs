@@ -9,7 +9,6 @@ namespace FluentSerializer.Xml.Profiling.Profiles
     [MemoryDiagnoser]
     [InliningDiagnoser(true, true)]
     [TailCallDiagnoser]
-    [ThreadingDiagnoser]
     public class StringToXmlProfile
     {
         public static IEnumerable<DataContainer<string>> Inputs => XmlDataSet.XmlStringValues;
