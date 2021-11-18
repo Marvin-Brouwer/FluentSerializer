@@ -23,22 +23,22 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         }
         public XmlAttribute(ReadOnlySpan<char> text, ref int offset)
         {
-            var stringBuilder = new StringBuilder(128);
+            var nameStartOffset = offset;
+            var nameEndOffset = offset;
+
             while (offset < text.Length)
             {
+                nameEndOffset = offset;
+
                 var character = text[offset];
 
                 if (character == XmlConstants.TagTerminationCharacter) break;
                 if (character == XmlConstants.TagEndCharacter) break;
                 offset++;
                 if (character == XmlConstants.PropertyAssignmentCharacter) break;
-                if (char.IsWhiteSpace(character)) continue;
-
-                stringBuilder.Append(character);
             }
 
-            Name = stringBuilder.ToString();
-            stringBuilder.Clear();
+            Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
             while (offset < text.Length)
             {
@@ -54,20 +54,23 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 if (!char.IsWhiteSpace(character)) break;
                 offset++;
             }
+            
+            var valueStartOffset = offset;
+            var valueEndOffset = offset;
 
             while (offset < text.Length)
             {
+                valueEndOffset = offset;
+
                 var character = text[offset];
 
                 if (character == XmlConstants.TagTerminationCharacter) break;
                 if (character == XmlConstants.TagStartCharacter) break;
                 offset++;
                 if (character == XmlConstants.PropertyWrapCharacter) break;
-
-                stringBuilder.Append(character);
             }
-
-            Value = stringBuilder.ToString();
+            
+            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
         public override string ToString()

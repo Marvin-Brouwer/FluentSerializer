@@ -40,9 +40,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public JsonProperty(ReadOnlySpan<char> text, ref int offset)
         {
-            var stringBuilder = new StringBuilder(128);
+            var nameStartOffset = offset;
+            var nameEndOffset = offset;
+
             while (offset < text.Length)
             {
+                nameEndOffset = offset;
+
                 var character = text[offset];
 
                 if (character == JsonConstants.ObjectEndCharacter) break;
@@ -50,12 +54,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 offset++;
                 if (character == JsonConstants.DividerCharacter) break;
                 if (character == JsonConstants.PropertyWrapCharacter) break;
-
-                stringBuilder.Append(character);
             }
-
-            Name = stringBuilder.ToString();
-            stringBuilder.Clear();
+            
+            Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
             while (offset < text.Length)
             {

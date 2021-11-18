@@ -25,22 +25,23 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         {
             offset += JsonConstants.MultiLineCommentStart.Length;
 
-            var stringBuilder = new StringBuilder(128);
+            var valueStartOffset = offset;
+            var valueEndOffset = offset;
+
             while (offset < text.Length)
             {
+                valueEndOffset = offset;
+
                 if (text.HasStringAtOffset(offset, JsonConstants.MultiLineCommentEnd)) 
                 {
                     offset += JsonConstants.MultiLineCommentEnd.Length;
                     break;
                 }
-
-                var character = text[offset];
+                
                 offset++;
-
-                stringBuilder.Append(character);
             }
 
-            Value = stringBuilder.ToString().Trim();
+            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
         public override string ToString()

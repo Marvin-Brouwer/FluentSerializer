@@ -100,6 +100,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             _attributes = new List<IXmlAttribute>();
             _children = new List<IXmlNode>();
 
+            var nameStartOffset = offset;
+            var nameEndOffset = offset;
+
             var elementClosed = false;
             var tagFinished = false;
             var nameFinished = false;
@@ -107,6 +110,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             var stringBuilder = new StringBuilder(128);
             while (offset < text.Length)
             {
+                nameEndOffset = offset;
                 var character = text[offset];
 
                 if (character == XmlConstants.TagTerminationCharacter && text[offset + 1] == XmlConstants.TagEndCharacter)
@@ -134,8 +138,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                 stringBuilder.Append(character);
             }
-
-            Name = stringBuilder.ToString();
+            
+            Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
             stringBuilder.Clear();
 
             if (!tagFinished)

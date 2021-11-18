@@ -16,7 +16,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
     {
         private const string ObjectName = "{ }";
         public string Name => ObjectName;
-
+        
+        private readonly IJsonNode? _lastProperty;
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
@@ -31,36 +32,37 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
         public JsonObject(IEnumerable<IJsonObjectContent>? properties)
         {
-            if (properties is null) _children = new List<IJsonNode>(0);
+            _lastProperty = null;
+
+            if (properties is null)
+            {
+                _children = new List<IJsonNode>(0);
+            }
             else
             {
                 _children = new List<IJsonNode>();
-                foreach (var property in properties) _children.Add(property);
+                foreach (var property in properties)
+                {
+                    _children.Add(property);
+                    if (property is not IJsonComment) _lastProperty = property;
+                }
             }
         }
 
         public JsonObject(ReadOnlySpan<char> text, ref int offset)
         {
             _children = new List<IJsonNode>();
+            _lastProperty = null;
 
             offset++;
             while (offset < text.Length)
             {
                 var character = text[offset];
-
+                
+                if (character == JsonConstants.ObjectStartCharacter) break;
+                if (character == JsonConstants.ArrayStartCharacter) break;
                 if (character == JsonConstants.ObjectEndCharacter) break;
                 if (character == JsonConstants.ArrayEndCharacter) break;
-
-                if (character == JsonConstants.ObjectStartCharacter)
-                {
-                    _children.Add(new JsonObject(text, ref offset));
-                    continue;
-                }
-                if (character == JsonConstants.ArrayStartCharacter)
-                {
-                    _children.Add(new JsonArray(text, ref offset));
-                    continue;
-                }
 
                 if (text.HasStringAtOffset(offset, JsonConstants.SingleLineCommentMarker))
                 {
@@ -76,7 +78,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 offset++;
                 if (character == JsonConstants.PropertyWrapCharacter)
                 {
-                    _children.Add(new JsonProperty(text, ref offset));
+                    var jsonProperty = new JsonProperty(text, ref offset);
+                    _children.Add(jsonProperty);
+                    _lastProperty = jsonProperty;
                 }
             }
             offset++;
@@ -107,17 +111,16 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             stringBuilder
                 .Append(JsonConstants.ObjectStartCharacter);
 
-            for (var i = 0; i < Children.Count; i++)
+            foreach (var child in Children)
             {
-                var child = Children[i];
-
                 stringBuilder
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
-
-                // todo figure out how to handle the last element followed by comments
-                if (i != Children.Count - 1 && child is not IJsonComment) stringBuilder.Append(JsonConstants.DividerCharacter);
+                
+                // Make sure the last item does not append a comma to confirm to JSON spec.
+                if (child is not IJsonComment && !child.Equals(_lastProperty)) 
+                    stringBuilder.Append(JsonConstants.DividerCharacter);
             }
 
             stringBuilder
