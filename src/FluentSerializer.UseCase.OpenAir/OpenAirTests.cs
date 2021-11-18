@@ -13,7 +13,7 @@ using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
-
+using Microsoft.Extensions.ObjectPool;
 using Xunit;
 
 namespace FluentSerializer.UseCase.OpenAir
@@ -39,7 +39,7 @@ namespace FluentSerializer.UseCase.OpenAir
             var expected = await File.ReadAllTextAsync("../../../OpenAirTests.Serialize.Xml");
             var example = ProjectRequestExample;
 
-            var sut = new RuntimeXmlSerializer(_mappings, _configuration);
+            var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
             var result = sut.Serialize(example);
@@ -54,7 +54,7 @@ namespace FluentSerializer.UseCase.OpenAir
             // Arrange
             var expected = RateCardResponseExample;
             var example = await File.ReadAllTextAsync("../../../OpenAirTests.Deserialize.Xml");
-            var sut = new RuntimeXmlSerializer(_mappings, _configuration);
+            var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
             var result = sut.Deserialize<Response<RateCard>>(example);
