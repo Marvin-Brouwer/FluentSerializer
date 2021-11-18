@@ -9,7 +9,6 @@ namespace FluentSerializer.Json.Profiling.Profiles
     [MemoryDiagnoser]
     [InliningDiagnoser(true, true)]
     [TailCallDiagnoser]
-    [ThreadingDiagnoser]
     public class StringToJsonProfile
     {
         public static IEnumerable<DataContainer<string>> Inputs => JsonDataSet.JsonStringValues;
