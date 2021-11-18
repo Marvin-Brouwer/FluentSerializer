@@ -65,8 +65,7 @@ namespace FluentSerializer.Xml.Services
             var stringBuilder = _stringBuilderPool.Get();
 
             using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-            // todo configuration.writenull
-            document.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput);
+            document.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
             writer.Flush();
 
             var stringValue = stringBuilder.ToString();

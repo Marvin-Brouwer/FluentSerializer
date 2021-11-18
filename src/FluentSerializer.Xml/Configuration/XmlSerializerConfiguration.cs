@@ -20,6 +20,7 @@ namespace FluentSerializer.Xml.Configuration
         {
             Encoding = Encoding.Unicode;
             FormatOutput = true;
+            WriteNull = false;
             DefaultClassNamingStrategy = Names.Use.PascalCase;
             DefaultPropertyNamingStrategy = Names.Use.CamelCase;
             DefaultConverters = new List<IConverter>

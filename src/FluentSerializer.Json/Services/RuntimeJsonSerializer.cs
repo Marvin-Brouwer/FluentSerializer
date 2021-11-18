@@ -60,8 +60,7 @@ namespace FluentSerializer.Json.Services
             var stringBuilder = _stringBuilderPool.Get();
 
             using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-            // todo configuration.writenull
-            container.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput);
+            container.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
             writer.Flush();
 
             var stringValue = stringBuilder.ToString();
