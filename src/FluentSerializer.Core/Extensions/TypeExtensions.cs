@@ -52,7 +52,7 @@ namespace FluentSerializer.Core.Extensions
                 return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
             }
 
-            throw new NotSupportedException($"Unable to create an enumerabble collection of '{type.FullName}'");
+            throw new NotSupportedException($"Unable to create an enumerable collection of '{type.FullName}'");
         }
         public static bool IsEnumerable(this Type type) => 
             !typeof(string).IsAssignableFrom(type) &&
