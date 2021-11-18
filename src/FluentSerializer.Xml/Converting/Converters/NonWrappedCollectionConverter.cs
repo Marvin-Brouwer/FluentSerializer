@@ -40,7 +40,6 @@ namespace FluentSerializer.Xml.Converting.Converters
             var elementsToDeserialize = parent.GetChildElements(itemName);
             foreach (var item in elementsToDeserialize)
             {
-                if (item is null) continue;
                 var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
                 if (itemValue is null) continue;
 

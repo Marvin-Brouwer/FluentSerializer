@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Configuration
 {
     public sealed class JsonSerializerConfiguration : SerializerConfiguration
     {
-        public static JsonSerializerConfiguration Default { get; } = new JsonSerializerConfiguration();
+        public static JsonSerializerConfiguration Default { get; } = new();
 
         public Func<INamingStrategy> DefaultNamingStrategy { get; set; }
 

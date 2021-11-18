@@ -53,7 +53,7 @@ namespace FluentSerializer.Xml.Profiling.Data
             var xml = stringBuilder.ToString();
             stringBuilder.Clear();
 
-            return new(xml, xmlObject.Size);
+            return new DataContainer<string>(xml, xmlObject.Size);
         }
     }
 }

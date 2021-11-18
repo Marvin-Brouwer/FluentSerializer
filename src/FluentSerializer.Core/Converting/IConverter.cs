@@ -7,7 +7,7 @@ namespace FluentSerializer.Core.Converting
 {
     public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
     {
-        TSerialContainer? Serialize(object? objectToSerialize, ISerializerContext context);
+        TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
         object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
     }
 

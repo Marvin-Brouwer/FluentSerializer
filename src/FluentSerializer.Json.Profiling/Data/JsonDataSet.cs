@@ -51,7 +51,7 @@ namespace FluentSerializer.Json.Profiling.Data
             var json = stringBuilder.ToString();
             stringBuilder.Clear();
 
-            return new (json, jsonObject.Size);
+            return new DataContainer<string>(json, jsonObject.Size);
         }
     }
 }

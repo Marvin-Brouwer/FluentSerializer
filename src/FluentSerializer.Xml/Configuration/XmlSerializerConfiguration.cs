@@ -11,7 +11,7 @@ namespace FluentSerializer.Xml.Configuration
 {
     public sealed class XmlSerializerConfiguration : SerializerConfiguration
     {
-        public static XmlSerializerConfiguration Default { get; } = new XmlSerializerConfiguration();
+        public static XmlSerializerConfiguration Default { get; } = new();
 
         public Func<INamingStrategy> DefaultClassNamingStrategy { get; set; }
         public Func<INamingStrategy> DefaultPropertyNamingStrategy { get; set; }

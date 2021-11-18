@@ -17,7 +17,7 @@ namespace FluentSerializer.UseCase.OpenAir.Models.Request
 
     internal class RequestObject<TRequest>
     {
-        public List<TRequest> Data { get; set; } = new List<TRequest>();
+        public List<TRequest> Data { get; set; } = new();
         public string Type { get; set; } = string.Empty;
     }
 
