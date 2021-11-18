@@ -21,7 +21,7 @@ namespace FluentSerializer.Core.Profiling.Runner
             var config = ManualConfig.Create(DefaultConfig.Instance)
                 .AddExporter(PlainExporter.Default)
                 .WithOrderer(new GroupedSlowestToFastestOrderer())
-                // todo figure out how to make this work
+                // Todo figure out how to make this work
                 // maybe use this: https://www.cafe-encounter.net/p2312/multi-targetting-net-framework-and-net-core-in-a-single-project
                 //.AddJob(CreateJob(ClrRuntime.Net48))
                 .AddJob(CreateJob(CoreRuntime.Core31))
