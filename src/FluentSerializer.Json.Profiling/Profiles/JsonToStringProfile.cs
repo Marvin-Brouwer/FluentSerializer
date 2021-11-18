@@ -12,7 +12,6 @@ namespace FluentSerializer.Json.Profiling.Profiles
     [MemoryDiagnoser]
     [InliningDiagnoser(true, true)]
     [TailCallDiagnoser]
-    [ThreadingDiagnoser]
     public class JsonToStringProfile
     {
         private MemoryStream WriteStream { get; set; }
