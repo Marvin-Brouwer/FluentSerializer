@@ -13,12 +13,13 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType) || typeof(bool?).IsAssignableFrom(targetType);
+        public bool CanConvert(Type targetType) => typeof(bool).IsAssignableFrom(targetType) 
+                                                || typeof(bool?).IsAssignableFrom(targetType);
 
-        private string ConvertToString(bool currentValue) => currentValue ? "1" : "0";
-        private bool ConvertToBool(string? currentValue)
+        private static string ConvertToString(bool currentValue) => currentValue ? "1" : "0";
+        private static bool? ConvertToBool(string? currentValue, bool? defaultValue)
         {
-            if (string.IsNullOrWhiteSpace(currentValue)) return default;
+            if (string.IsNullOrWhiteSpace(currentValue)) return defaultValue;
             if (currentValue.Equals("1", StringComparison.OrdinalIgnoreCase)) return true;
             if (currentValue.Equals("0", StringComparison.OrdinalIgnoreCase)) return false;
 
@@ -27,17 +28,18 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
         object? IConverter<IXmlAttribute>.Deserialize(IXmlAttribute attributeToDeserialize, ISerializerContext context)
         {
-            return ConvertToBool(attributeToDeserialize.Value);
+            var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
+            return ConvertToBool(attributeToDeserialize.Value, defaultValue);
         }
 
         object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToBool(objectToDeserialize.GetTextValue());
+            var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
+            return ConvertToBool(objectToDeserialize.GetTextValue(), defaultValue);
         }
 
-        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object? objectToSerialize, ISerializerContext context)
+        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize is null) return default;
             var objectBoolean = (bool)objectToSerialize;
 
             var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
@@ -45,9 +47,8 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             return Attribute(attributeName, attributeValue);
         }
 
-        IXmlElement? IConverter<IXmlElement>.Serialize(object? objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (objectToSerialize is null) return default;
             var objectBoolean = (bool)objectToSerialize;
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);

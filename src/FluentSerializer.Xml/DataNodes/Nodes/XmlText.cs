@@ -50,7 +50,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
-            // THis should never happen because null tags are selfclosing but just to be sure this check is here
+            // This should never happen because null tags are self-closing but just to be sure this check is here
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
             return stringBuilder.Append(Value);

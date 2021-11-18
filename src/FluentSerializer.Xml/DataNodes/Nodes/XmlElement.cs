@@ -68,8 +68,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Guard.Against.InvalidName(name, nameof(name));
 
             Name = name;
-            _attributes = new();
-            _children = new();
+            _attributes = new List<IXmlAttribute>();
+            _children = new List<IXmlNode>();
 
             foreach (var node in childNodes)
             {
@@ -97,8 +97,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             offset++;
 
-            _attributes = new();
-            _children = new();
+            _attributes = new List<IXmlAttribute>();
+            _children = new List<IXmlNode>();
 
             var elementClosed = false;
             var tagFinished = false;

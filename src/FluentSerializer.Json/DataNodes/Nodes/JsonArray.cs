@@ -23,7 +23,10 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
         public JsonArray(IEnumerable<IJsonArrayContent>? elements)
         {
-            if (elements is null) _children = new List<IJsonNode>(0);
+            if (elements is null)
+            {
+                _children = new List<IJsonNode>(0);
+            }
             else
             {
                 _children = new List<IJsonNode>();
@@ -134,7 +137,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         public override int GetHashCode()
         {
-            if (_children.Any() != true) return 0;
+            if (!_children.Any()) return 0;
 
             var hash = new HashCode();
             foreach (var child in _children)
