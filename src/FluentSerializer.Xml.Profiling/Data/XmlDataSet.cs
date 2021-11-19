@@ -22,7 +22,7 @@ namespace FluentSerializer.Xml.Profiling.Data
 
         static XmlDataSet()
         {
-            var testData = new TestDataSet(25000);
+            var testData = new TestDataSet(22000);
 
             Console.WriteLine("Mapping XML dataSet");
             var xmlDataSet = testData.TestData
