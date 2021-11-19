@@ -8,12 +8,17 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IJsonComment"/>
     [DebuggerDisplay("/* {Value,nq} */")]
     public readonly struct JsonCommentMultiLine : IJsonComment
     {
-        public string Name => JsonConstants.SingleLineCommentMarker;
+        public string Name => JsonCharacterConstants.SingleLineCommentMarker;
         public string? Value { get; }
 
+        /// <inheritdoc cref="JsonBuilder.MultilineComment(string)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonBuilder.MultilineComment"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonCommentMultiLine(string value)
         {
             Guard.Against.NullOrEmpty(value, nameof(value));
@@ -21,9 +26,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Value = value;
         }
 
+        /// <inheritdoc cref="IJsonComment"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonCommentMultiLine(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += JsonConstants.MultiLineCommentStart.Length;
+            offset += JsonCharacterConstants.MultiLineCommentStart.Length;
 
             var valueStartOffset = offset;
             var valueEndOffset = offset;
@@ -32,9 +41,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             {
                 valueEndOffset = offset;
 
-                if (text.HasStringAtOffset(offset, JsonConstants.MultiLineCommentEnd)) 
+                if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentEnd)) 
                 {
-                    offset += JsonConstants.MultiLineCommentEnd.Length;
+                    offset += JsonCharacterConstants.MultiLineCommentEnd.Length;
                     break;
                 }
                 
@@ -66,11 +75,11 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             const char spacer = ' ';
 
             return stringBuilder
-                .Append(JsonConstants.MultiLineCommentStart)
+                .Append(JsonCharacterConstants.MultiLineCommentStart)
                 .Append(spacer)
                 .Append(Value)
                 .Append(spacer)
-                .Append(JsonConstants.MultiLineCommentEnd);
+                .Append(JsonCharacterConstants.MultiLineCommentEnd);
         }
 
         #region IEquatable

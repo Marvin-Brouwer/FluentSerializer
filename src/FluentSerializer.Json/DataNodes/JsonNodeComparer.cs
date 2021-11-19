@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Json.DataNodes
 {
+    /// <summary>
+    /// Simple comparer between <see cref="IJsonNode"/>s, relying on <see cref="IEquatable{IJsonNode?}.GetHashCode()"/>
+    /// </summary>
     internal readonly struct JsonNodeComparer : IEqualityComparer<IEquatable<IJsonNode>>
     {
         internal static readonly JsonNodeComparer Default = new();
