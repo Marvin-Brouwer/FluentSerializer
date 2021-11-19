@@ -5,9 +5,18 @@ using System;
 
 namespace FluentSerializer.Json
 {
-    // todo inherit doc of interfaces and write docs for interfaces
+    /// <summary>
+    /// JSON parsing utility class
+    /// </summary>
     public readonly struct JsonParser
     {
+        /// <summary>
+        /// Parse a string value to a JSON object tree
+        /// </summary>
+        /// <param name="value">The JSON to parse</param>
+        /// <remarks>
+        /// This parser will not parse values to C# types, they will all be represented as string.
+        /// </remarks>
         public static IJsonObject Parse(string value)
         {
             Guard.Against.NullOrWhiteSpace(value, nameof(value));
@@ -15,6 +24,7 @@ namespace FluentSerializer.Json
             return Parse(value.AsSpan());
         }
 
+        /// <inheritdoc cref="Parse(string)"/>
         public static IJsonObject Parse(ReadOnlySpan<char> value)
         {
             Guard.Against.Zero(value.Length, nameof(value));

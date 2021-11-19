@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IJsonValue"/>
     [DebuggerDisplay("{Value,nq}")]
     public readonly struct JsonValue : IJsonValue
     {
@@ -13,12 +14,19 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public string Name => ValueName;
         public string? Value { get; }
 
-        public static JsonValue String(string? value = null) => new ($"\"{value}\"");
+        /// <inheritdoc cref="JsonBuilder.Value(string?)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonBuilder.Value"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonValue(string? value)
         {
             Value = value;
         }
 
+        /// <inheritdoc cref="IJsonValue"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonValue(ReadOnlySpan<char> text, ref int offset)
         {
             var stringValue = false;
@@ -33,12 +41,12 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 var character = text[offset];
                 offset++;
 
-                if (character == JsonConstants.PropertyWrapCharacter && stringValue) break; 
-                if (character == JsonConstants.DividerCharacter) break;
-                if (character == JsonConstants.ObjectEndCharacter) break;
-                if (character == JsonConstants.ArrayEndCharacter) break;
+                if (character == JsonCharacterConstants.PropertyWrapCharacter && stringValue) break; 
+                if (character == JsonCharacterConstants.DividerCharacter) break;
+                if (character == JsonCharacterConstants.ObjectEndCharacter) break;
+                if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 
-                if (character == JsonConstants.PropertyWrapCharacter) stringValue = true; 
+                if (character == JsonCharacterConstants.PropertyWrapCharacter) stringValue = true; 
                 if (!stringValue && char.IsWhiteSpace(character)) break;
             }
 

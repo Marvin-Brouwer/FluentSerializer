@@ -10,6 +10,7 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IJsonArray"/>
     [DebuggerDisplay("{ArrayName, nq}")]
     public readonly struct JsonArray : IJsonArray
     {
@@ -20,7 +21,16 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
+        /// <inheritdoc cref="JsonBuilder.Array(IJsonArrayContent[])"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
+
+        /// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent}))"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonArray(IEnumerable<IJsonArrayContent>? elements)
         {
             _lastNonCommentChild = null;
@@ -40,6 +50,10 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             }
         }
 
+        /// <inheritdoc cref="IJsonArray"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonArray(ReadOnlySpan<char> text, ref int offset)
         {
             _children = new List<IJsonNode>();
@@ -51,14 +65,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             {
                 var character = text[offset];
 
-                if (character == JsonConstants.ObjectStartCharacter)
+                if (character == JsonCharacterConstants.ObjectStartCharacter)
                 {
                     var jsonObject = new JsonObject(text, ref offset);
                     _children.Add(jsonObject);
                     _lastNonCommentChild = jsonObject;
                     continue;
                 }
-                if (character == JsonConstants.ArrayStartCharacter)
+                if (character == JsonCharacterConstants.ArrayStartCharacter)
                 {
                     var jsonArray = new JsonArray(text, ref offset);
                     _children.Add(jsonArray);
@@ -66,16 +80,16 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                     continue;
                 }
 
-                if (character == JsonConstants.PropertyWrapCharacter) break;
-                if (character == JsonConstants.ObjectEndCharacter) break;
-                if (character == JsonConstants.ArrayEndCharacter) break;
+                if (character == JsonCharacterConstants.PropertyWrapCharacter) break;
+                if (character == JsonCharacterConstants.ObjectEndCharacter) break;
+                if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 
-                if (text.HasStringAtOffset(offset, JsonConstants.SingleLineCommentMarker))
+                if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
                 {
                     _children.Add(new JsonCommentSingleLine(text, ref offset));
                     continue;
                 }
-                if (text.HasStringAtOffset(offset, JsonConstants.MultiLineCommentStart))
+                if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
                 {
                     _children.Add(new JsonCommentMultiLine(text, ref offset));
                     continue;
@@ -108,7 +122,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             var childIndent = indent + 1;
 
             stringBuilder
-                .Append(JsonConstants.ArrayStartCharacter);
+                .Append(JsonCharacterConstants.ArrayStartCharacter);
             
             foreach (var child in Children)
             {
@@ -119,13 +133,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
                 if (child is not IJsonComment && !child.Equals(_lastNonCommentChild)) 
-                    stringBuilder.Append(JsonConstants.DividerCharacter);
+                    stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
             }
 
             stringBuilder
                 .AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
-                .Append(JsonConstants.ArrayEndCharacter);
+                .Append(JsonCharacterConstants.ArrayEndCharacter);
 
             return stringBuilder;
         }

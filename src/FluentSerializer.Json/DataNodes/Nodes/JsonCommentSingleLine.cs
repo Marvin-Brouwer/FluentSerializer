@@ -7,12 +7,17 @@ using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IJsonComment"/>
     [DebuggerDisplay("// {Value,nq}")]
     public readonly struct JsonCommentSingleLine : IJsonComment
     {
-        public string Name => JsonConstants.SingleLineCommentMarker;
+        public string Name => JsonCharacterConstants.SingleLineCommentMarker;
         public string? Value { get; }
 
+        /// <inheritdoc cref="JsonBuilder.Comment(string)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonBuilder.Comment"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonCommentSingleLine(string value)
         {
             Guard.Against.NullOrEmpty(value, nameof(value));
@@ -20,9 +25,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Value = value;
         }
 
+        /// <inheritdoc cref="IJsonComment"/>
+        /// <remarks>
+        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public JsonCommentSingleLine(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += JsonConstants.SingleLineCommentMarker.Length;
+            offset += JsonCharacterConstants.SingleLineCommentMarker.Length;
 
             var valueStartOffset = offset;
             var valueEndOffset = offset;
@@ -33,8 +42,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 var character = text[offset];
                 offset++;
 
-                if (character == JsonConstants.LineReturnCharacter) break;
-                if (character == JsonConstants.NewLineCharacter) break;
+                if (character == JsonCharacterConstants.LineReturnCharacter) break;
+                if (character == JsonCharacterConstants.NewLineCharacter) break;
             }
 
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
@@ -64,14 +73,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             // Fallback because otherwise JSON wouldn't be readable
             if (!format)
                 return stringBuilder
-                .Append(JsonConstants.MultiLineCommentStart)
+                .Append(JsonCharacterConstants.MultiLineCommentStart)
                 .Append(spacer)
                 .Append(Value)
                 .Append(spacer)
-                .Append(JsonConstants.MultiLineCommentEnd);
+                .Append(JsonCharacterConstants.MultiLineCommentEnd);
 
             return stringBuilder
-                .Append(JsonConstants.SingleLineCommentMarker)
+                .Append(JsonCharacterConstants.SingleLineCommentMarker)
                 .Append(spacer)
                 .Append(Value);
         }
