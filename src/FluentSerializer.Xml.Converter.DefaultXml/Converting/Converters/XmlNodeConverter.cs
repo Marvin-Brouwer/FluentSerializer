@@ -1,10 +1,11 @@
 ﻿using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
 using System;
 
-namespace FluentSerializer.Xml.Converting.Converters.XmlNodes
+namespace FluentSerializer.Xml.Converter.DefaultXml.Converting.Converters
 {
     public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
     {

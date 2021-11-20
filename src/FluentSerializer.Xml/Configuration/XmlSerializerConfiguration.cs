@@ -29,10 +29,7 @@ namespace FluentSerializer.Xml.Configuration
                 UseXmlConverters.ConvertibleConverter,
 
                 // Collection converters
-                UseXmlConverters.WrappedCollectionConverter,
-
-                // Special XNode types
-                UseXmlConverters.XmlNodeConverter
+                UseXmlConverters.WrappedCollectionConverter
             };
         }
     }

@@ -27,10 +27,7 @@ namespace FluentSerializer.Json.Configuration
                 UseJsonConverters.ConvertibleConverter,
 
                 // Collection converters
-                UseJsonConverters.CollectionConverter,
-
-                // Special JsonObject types
-                UseJsonConverters.JsonObjectConverter
+                UseJsonConverters.CollectionConverter
             };
         }
     }

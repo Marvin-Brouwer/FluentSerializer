@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
   </ItemGroup>
 

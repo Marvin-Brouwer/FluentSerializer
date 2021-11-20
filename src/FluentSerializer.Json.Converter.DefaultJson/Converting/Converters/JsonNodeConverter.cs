@@ -1,9 +1,10 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 
-namespace FluentSerializer.Json.Converting.Converters.JsonElements
+namespace FluentSerializer.Json.Converter.DefaultJson.Converting.Converters
 {
     public sealed class JsonNodeConverter : IJsonConverter
     {
