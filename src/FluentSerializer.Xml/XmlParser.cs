@@ -5,9 +5,15 @@ using System;
 
 namespace FluentSerializer.Xml
 {
-    // todo inherit doc of interfaces and write docs for interfaces
+    /// <summary>
+    /// XML parsing utility class
+    /// </summary>
     public readonly struct XmlParser
     {
+        /// <summary>
+        /// Parse a string value to an XML object tree
+        /// </summary>
+        /// <param name="value">The XML to parse</param>
         public static IXmlElement Parse(string value)
         {
             Guard.Against.NullOrWhiteSpace(value, nameof(value));
@@ -15,6 +21,7 @@ namespace FluentSerializer.Xml
             return Parse(value.AsSpan());
         }
 
+        /// <inheritdoc cref="Parse(string)"/>
         public static IXmlElement Parse(ReadOnlySpan<char> value)
         {
             Guard.Against.Zero(value.Length, nameof(value));

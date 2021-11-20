@@ -7,6 +7,7 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlComment"/>
     [DebuggerDisplay("<!-- {Value, nq} -->")]
     public readonly struct XmlComment : IXmlComment
     {
@@ -14,14 +15,22 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         public string Name => CommentName;
         public string? Value { get; }
 
+        /// <inheritdoc cref="XmlBuilder.Comment(string)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Comment"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlComment(string? value = null)
         {
             Value = value;
         }
 
+        /// <inheritdoc cref="IXmlComment"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlComment(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += XmlConstants.CommentStart.Length;
+            offset += XmlCharacterConstants.CommentStart.Length;
 
             var valueStartOffset = offset;
             var valueEndOffset = offset;
@@ -29,9 +38,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             while (offset < text.Length)
             {
                 valueEndOffset = offset;
-                if (text.HasStringAtOffset(offset, XmlConstants.CommentEnd))
+                if (text.HasStringAtOffset(offset, XmlCharacterConstants.CommentEnd))
                 {
-                    offset += XmlConstants.CommentEnd.Length;
+                    offset += XmlCharacterConstants.CommentEnd.Length;
                     break;
                 }
                 
@@ -62,11 +71,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             const char spacer = ' ';
 
             return stringBuilder
-                .Append(XmlConstants.CommentStart)
+                .Append(XmlCharacterConstants.CommentStart)
                 .Append(spacer)
                 .Append(Value)
                 .Append(spacer)
-                .Append(XmlConstants.CommentEnd);
+                .Append(XmlCharacterConstants.CommentEnd);
         }
 
         #region IEquatable

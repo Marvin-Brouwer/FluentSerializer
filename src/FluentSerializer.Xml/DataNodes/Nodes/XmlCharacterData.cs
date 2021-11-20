@@ -7,6 +7,7 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlCharacterData"/>
     [DebuggerDisplay(CharacterDataName)]
     public readonly struct XmlCharacterData : IXmlCharacterData
     {
@@ -14,14 +15,22 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         public string Name => CharacterDataName;
         public string? Value { get; }
 
+        /// <inheritdoc cref="XmlBuilder.CData(string)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.CData"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlCharacterData(string? value = null)
         {
             Value = value;
         }
 
+        /// <inheritdoc cref="IXmlCharacterData"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlCharacterData(ReadOnlySpan<char> text, ref int offset)
         {
-            offset += XmlConstants.CharacterDataStart.Length;
+            offset += XmlCharacterConstants.CharacterDataStart.Length;
 
             var valueStartOffset = offset;
             var valueEndOffset = offset;
@@ -29,9 +38,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             while (offset < text.Length)
             {
                 valueEndOffset = offset;
-                if (text.HasStringAtOffset(offset, XmlConstants.CharacterDataEnd))
+                if (text.HasStringAtOffset(offset, XmlCharacterConstants.CharacterDataEnd))
                 {
-                    offset += XmlConstants.CharacterDataEnd.Length;
+                    offset += XmlCharacterConstants.CharacterDataEnd.Length;
                     break;
                 }
                 
@@ -60,9 +69,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
             return stringBuilder
-                .Append(XmlConstants.CharacterDataStart)
+                .Append(XmlCharacterConstants.CharacterDataStart)
                 .Append(Value)
-                .Append(XmlConstants.CharacterDataEnd);
+                .Append(XmlCharacterConstants.CharacterDataEnd);
         }
 
         #region IEquatable

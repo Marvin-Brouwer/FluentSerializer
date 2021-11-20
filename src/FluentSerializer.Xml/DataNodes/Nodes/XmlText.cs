@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlText"/>
     [DebuggerDisplay("{Value}")]
     public readonly struct XmlText : IXmlText
     {
@@ -13,11 +14,19 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         public string Name => TextName;
         public string? Value { get; }
 
+        /// <inheritdoc cref="XmlBuilder.Text(string?)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Text"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlText(string? value = null)
         {
             Value = value;
         }
 
+        /// <inheritdoc cref="IXmlText"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlText(ReadOnlySpan<char> text, ref int offset)
         {
             var valueStartOffset = offset;
@@ -28,7 +37,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 valueEndOffset = offset;
 
                 var character = text[offset];
-                if (character == XmlConstants.TagStartCharacter) break;
+                if (character == XmlCharacterConstants.TagStartCharacter) break;
 
                 offset++;
             }

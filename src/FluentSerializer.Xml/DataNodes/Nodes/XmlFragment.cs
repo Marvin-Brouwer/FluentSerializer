@@ -9,6 +9,9 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <summary>
+    /// A special XML element that doesn't print it's container but only its children
+    /// </summary>
     [DebuggerDisplay(FragmentName)]
     public readonly struct XmlFragment : IXmlElement
     {
@@ -26,11 +29,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public string? GetTextValue() => _innerElement.GetTextValue();
 
-        public XmlFragment(IEnumerable<IXmlNode> elements)
+        /// <inheritdoc cref="XmlFragment"/>
+        public XmlFragment(IEnumerable<IXmlNode> childNodes)
         {
-            _innerElement = new XmlElement(nameof(XmlFragment), elements);
+            _innerElement = new XmlElement(nameof(XmlFragment), childNodes);
         }
 
+        /// <inheritdoc cref="XmlFragment"/>
         public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
 
         public override string ToString()
