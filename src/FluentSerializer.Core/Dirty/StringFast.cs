@@ -144,6 +144,8 @@ public class StringFast
 	///<summary>Append a string without memory allocation</summary>
 	public StringFast Append(string value)
 	{
+		if (value is null) return this;
+
 		ReallocateIFN(value.Length);
 		int n = value.Length;
 		for (int i = 0; i < n; i++)
