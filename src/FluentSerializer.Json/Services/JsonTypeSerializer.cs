@@ -5,7 +5,10 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
 using System;
 using System.Collections;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Json.DataNodes;
+using System.Collections.Generic;
+
+using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Services
 {
@@ -20,7 +23,7 @@ namespace FluentSerializer.Json.Services
             _mappings = mappings;
         }
 
-        public JToken? SerializeToToken(object dataModel, Type classType, IJsonSerializer currentSerializer)
+        public IJsonNode? SerializeToNode(object dataModel, Type classType, IJsonSerializer currentSerializer)
         {
             Guard.Against.Null(dataModel, nameof(dataModel));
             Guard.Against.Null(classType, nameof(classType));
@@ -31,7 +34,7 @@ namespace FluentSerializer.Json.Services
             var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
             if (classMap is null) throw new ClassMapNotFoundException(classType);
 
-            var newElement = new JObject();
+            var properties = new List<IJsonObjectContent>();
             foreach(var property in classType.GetProperties())
             {
                 var propertyMapping = classMap.PropertyMaps.Scan(property);
@@ -46,38 +49,39 @@ namespace FluentSerializer.Json.Services
                     currentSerializer,
                     classMap.PropertyMaps, _mappings);
 
-                SerializeProperty(propertyValue, newElement, propertyMapping, currentSerializer, serializerContext);
+                var jsonNode = SerializeObjectContent(propertyValue, propertyMapping, currentSerializer, serializerContext);
+                if (jsonNode is not null) properties.Add(jsonNode);
             }
 
-            return newElement;
+            return Object(properties);
         }
 
-        private void SerializeProperty(
-            object propertyValue, JContainer newElement, IPropertyMap propertyMapping,  
+        private IJsonObjectContent? SerializeObjectContent(
+            object propertyValue, IPropertyMap propertyMapping,  
             IJsonSerializer currentSerializer, SerializerContext serializerContext)
         {
-            if (typeof(JProperty).IsAssignableFrom(propertyMapping.ContainerType))
+            if (typeof(IJsonProperty).IsAssignableFrom(propertyMapping.ContainerType))
             {
-                SerializeJProperty(propertyValue, propertyMapping, newElement, serializerContext, currentSerializer);
-                return;
+                return SerializeProperty(propertyValue, propertyMapping, serializerContext, currentSerializer);
             }
 
             throw new ContainerNotSupportedException(propertyMapping.ContainerType);
         }
 
-        private void SerializeJProperty(object propertyValue, IPropertyMap propertyMapping,
-            JContainer newElement, SerializerContext serializerContext, IJsonSerializer currentSerializer)
+        private IJsonObjectContent? SerializeProperty(object propertyValue, IPropertyMap propertyMapping,
+            SerializerContext serializerContext, IJsonSerializer currentSerializer)
         {
-            var matchingConverter = propertyMapping.GetConverter<JToken>(
+            var matchingConverter = propertyMapping.GetConverter<IJsonNode>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
             var nodeValue = matchingConverter is null 
-                ? SerializeToToken(propertyValue, serializerContext.PropertyType, currentSerializer) 
+                ? SerializeToNode(propertyValue, serializerContext.PropertyType, currentSerializer) 
                 : matchingConverter.Serialize(propertyValue, serializerContext);
-            if (nodeValue is null) return;
+            if (nodeValue is not IJsonPropertyContent jsonContent) return default;
 
             var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property, serializerContext);
-            newElement.Add(new JProperty(propertyName, nodeValue));
+            
+            return Property(propertyName, jsonContent);
         }
     }
 }

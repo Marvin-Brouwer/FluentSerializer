@@ -4,9 +4,11 @@ using FluentSerializer.Core.Mapping;
 using System;
 using System.Text;
 using FluentSerializer.Json.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using FluentSerializer.Core.Services;
+using FluentSerializer.Json.DataNodes;
+
+using static FluentSerializer.Json.JsonBuilder;
+using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Json.Services
 {
@@ -14,118 +16,74 @@ namespace FluentSerializer.Json.Services
     {
         private readonly JsonTypeSerializer _serializer;
         private readonly JsonTypeDeserializer _deserializer;
+        private readonly ObjectPool<StringBuilder> _stringBuilderPool;
 
         public JsonSerializerConfiguration JsonConfiguration { get; }
         public SerializerConfiguration Configuration => JsonConfiguration;
 
-        public JsonSerializerConfiguration XmlConfiguration => throw new NotImplementedException();
-
-        public RuntimeJsonSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, JsonSerializerConfiguration configuration)
+        public RuntimeJsonSerializer(
+            IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+            JsonSerializerConfiguration configuration,
+            ObjectPoolProvider objectPoolProvider)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
 
             _serializer = new JsonTypeSerializer(mappings);
             _deserializer = new JsonTypeDeserializer(mappings);
+            _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
 
             JsonConfiguration = configuration;
         }
-        
 
-        //public TModel? Deserialize<TModel>(XElement element)
-        //    where TModel : class, new()
-        //{
-        //    if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
-        //    return _deserializer.DeserializeFromObject<TModel>(element, this);
-        //}
-        public TModel? Deserialize<TModel>(JContainer element) where TModel : class, new()
+        public TModel? Deserialize<TModel>(IJsonContainer element) where TModel : class, new()
         {
-            return _deserializer.DeserializeFromToken<TModel>(element, this);
+            return _deserializer.DeserializeFromNode<TModel>(element, this);
         }
 
-        //public object? Deserialize(XElement element, Type modelType)
-        //{
-        //    return _deserializer.DeserializeFromObject(element, modelType,  this);
-        //}
-        public object? Deserialize(JContainer element, Type modelType)
+        public object? Deserialize(IJsonContainer element, Type modelType)
         {
-            return _deserializer.DeserializeFromToken(element, modelType,  this);
+            return _deserializer.DeserializeFromNode(element, modelType,  this);
         }
 
-        //public TModel? Deserialize<TModel>(string stringData)
-        //    where TModel : class, new()
-        //{
-        //    var xDocument = XDocument.Parse(stringData);
-        //    return Deserialize<TModel>(xDocument.Root!);
-        //}
         public TModel? Deserialize<TModel>(string stringData) where TModel : class, new()
         {
-            var jObject = JObject.Parse(stringData);
+            var jObject = JsonParser.Parse(stringData);
             return Deserialize<TModel>(jObject);
         }
 
-        //public string Serialize<TModel>(TModel model)
-        //    where TModel : class, new()
-        //{
-        //    if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
-        //    var xDocument = SerializeToDocument(model);
-
-        //    var builder = new StringBuilder();
-        //    using var writer = new ConfigurableStringWriter(builder, Configuration.Encoding);
-
-        //    xDocument.Save(writer);
-
-        //    return builder.ToString();
-        //}
         public string Serialize<TModel>(TModel model) where TModel : class, new()
         {
             var container = SerializeToContainer(model);
             if (container is null) return string.Empty;
 
-            var builder = new StringBuilder();
-            using var writer = new ConfigurableStringWriter(builder, Configuration.Encoding);
-            using var jWriter = new JsonTextWriter(writer);
+            var stringBuilder = _stringBuilderPool.Get();
 
-            container.WriteTo(jWriter);
+            using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
+            container.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
+            writer.Flush();
 
-            return builder.ToString();
+            var stringValue = stringBuilder.ToString();
+            _stringBuilderPool.Return(stringBuilder);
+
+            return stringValue;
         }
 
-        //public XDocument SerializeToDocument<TModel>(TModel model)
-        //{
-        //    var rootElement = SerializeToElement(model);
-
-        //    var document = new XDocument(rootElement);
-
-        //    return document;
-        //}
-
-
-        //public XElement? SerializeToElement<TModel>(TModel model)
-        //{
-        //    if (model is null) return null;
-        //    return _serializer.SerializeToElement(model, typeof(TModel), this);
-        //}
-        public JContainer? SerializeToContainer<TModel>(TModel model)
+        public IJsonContainer? SerializeToContainer<TModel>(TModel model)
         {
-            if (model is null) return new JObject(JValue.CreateNull());
-            var token = _serializer.SerializeToToken(model, typeof(TModel), this);
-            if (token is null) return null;
-            if (token is JContainer container) return container;
+            if (model is null) return null;
+            var token = _serializer.SerializeToNode(model, typeof(TModel), this);
+            if (token is null) return Object();
+            if (token is IJsonContainer container) return container;
 
             throw new NotSupportedException();
         }
 
-        //public XElement? SerializeToElement(object? model, Type modelType)
-        //{
-        //    if (model is null) return null;
-        //    return _serializer.SerializeToElement(model, modelType, this);
-        //}
-        public TContainer? SerializeToContainer<TContainer>(object? model, Type modelType) where TContainer : JContainer
+        public TContainer? SerializeToContainer<TContainer>(object? model, Type modelType) where TContainer : IJsonContainer
         {
-            if (model is null) return null;
-            var token = _serializer.SerializeToToken(model, modelType, this);
-            if (token is null) return null;
+            if (model is null) return default;
+            var token = _serializer.SerializeToNode(model, modelType, this);
+            if (token is null) return default;
             if (token is TContainer container) return container;
 
             throw new NotSupportedException();

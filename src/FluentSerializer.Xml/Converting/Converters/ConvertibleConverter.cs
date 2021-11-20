@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Xml.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Xml.DataNodes;
+
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Converting.Converters
 {
-    public sealed class ConvertibleConverter : IXmlConverter<XAttribute>, IXmlConverter<XElement>, IXmlConverter<XText>
+    public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
@@ -21,45 +23,45 @@ namespace FluentSerializer.Xml.Converting.Converters
             return Convert.ChangeType(currentValue, targetType);
         }
 
-        object? IConverter<XAttribute>.Deserialize(XAttribute attributeToDeserialize, ISerializerContext context)
+        object? IConverter<IXmlAttribute>.Deserialize(IXmlAttribute attributeToDeserialize, ISerializerContext context)
         {
             return ConvertToNullableDataType(attributeToDeserialize.Value, context.PropertyType);
         }
 
-        object? IConverter<XElement>.Deserialize(XElement objectToDeserialize, ISerializerContext context)
+        object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+        {
+            return ConvertToNullableDataType(objectToDeserialize.GetTextValue(), context.PropertyType);
+        }
+
+        object? IConverter<IXmlText>.Deserialize(IXmlText objectToDeserialize, ISerializerContext context)
         {
             return ConvertToNullableDataType(objectToDeserialize.Value, context.PropertyType);
         }
 
-        object? IConverter<XText>.Deserialize(XText objectToDeserialize, ISerializerContext context)
-        {
-            return ConvertToNullableDataType(objectToDeserialize.Value, context.PropertyType);
-        }
-
-        XAttribute? IConverter<XAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             var stringValue = ConvertToString(objectToSerialize);
             if (stringValue is null) return null;
 
             var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
-            return new XAttribute(attributeName, stringValue);
+            return Attribute(attributeName, stringValue);
         }
 
-        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             var stringValue = ConvertToString(objectToSerialize);
             if (stringValue is null) return null;
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
-            return new XElement(elementName, stringValue);
+            return Element(elementName, Text(stringValue));
         }
 
-        XText? IConverter<XText>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlText? IConverter<IXmlText>.Serialize(object objectToSerialize, ISerializerContext context)
         {
             var stringValue = ConvertToString(objectToSerialize);
             if (stringValue is null) return null;
 
-            return new XText(stringValue);
+            return Text(stringValue);
         }
     }
 }

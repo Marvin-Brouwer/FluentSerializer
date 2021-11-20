@@ -1,56 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <request>
-  <!-- Normally this is where the authentication element would be added -->
-  <Add type="Project">
-    <Project>
-      <name>Project 1</name>
-      <updated>
-        <Date>
-          <year>1991</year>
-          <month>11</month>
-          <day>28</day>
-          <hour>04</hour>
-          <minute>00</minute>
-          <second>00</second>
-        </Date>
-      </updated>
-      <active>1</active>
-      <custom_date__c>1991-11-28</custom_date__c>
-      <some_external_service_name_id__c>P-00-1</some_external_service_name_id__c>
-      <id>0001</id>
-    </Project>
-  </Add>
-  <Add type="Project">
-    <Project>
-      <name>Project 2</name>
-      <updated>
-        <Date>
-          <year>1991</year>
-          <month>11</month>
-          <day>28</day>
-          <hour>05</hour>
-          <minute>00</minute>
-          <second>00</second>
-        </Date>
-      </updated>
-      <active>0</active>
-      <rate_card_id>RC1</rate_card_id>
-      <id>0002</id>
-    </Project>
-    <Project>
-      <name>Project 3</name>
-      <updated>
-        <Date>
-          <year>1991</year>
-          <month>11</month>
-          <day>28</day>
-          <hour>06</hour>
-          <minute>00</minute>
-          <second>00</second>
-        </Date>
-      </updated>
-      <active>1</active>
-      <id>0003</id>
-    </Project>
-  </Add>
+	<!-- Normally this is where the authentication element would be added -->
+	<Add
+		 type="Project">
+			<Project>
+					<name>Project 1</name>
+					<updated>
+						<Date>
+							<year>1991</year>
+							<month>11</month>
+							<day>28</day>
+							<hour>04</hour>
+							<minute>00</minute>
+							<second>00</second>
+						</Date>
+					</updated>
+					<active>1</active>
+					<custom_date__c>1991-11-28</custom_date__c>
+					<some_external_service_name_id__c>P-00-1</some_external_service_name_id__c>
+					<id>0001</id>
+				</Project>
+		</Add>
+		<Add
+		 type="Project">
+			<Project>
+					<name>Project 2</name>
+					<updated>
+						<Date>
+							<year>1991</year>
+							<month>11</month>
+							<day>28</day>
+							<hour>05</hour>
+							<minute>00</minute>
+							<second>00</second>
+						</Date>
+					</updated>
+					<active>0</active>
+					<rate_card_id>RC1</rate_card_id>
+					<id>0002</id>
+				</Project>
+				<Project>
+					<name>Project 3</name>
+					<updated>
+						<Date>
+							<year>1991</year>
+							<month>11</month>
+							<day>28</day>
+							<hour>06</hour>
+							<minute>00</minute>
+							<second>00</second>
+						</Date>
+					</updated>
+					<active>1</active>
+					<id>0003</id>
+				</Project>
+		</Add>
 </request>

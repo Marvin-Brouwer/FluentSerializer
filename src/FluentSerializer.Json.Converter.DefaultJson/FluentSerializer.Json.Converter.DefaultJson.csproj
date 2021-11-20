@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>Preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
+    <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
+  </ItemGroup>
+
+</Project>

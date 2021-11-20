@@ -1,7 +1,10 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Json.DataNodes;
+
+using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters.Base
 {
@@ -20,19 +23,20 @@ namespace FluentSerializer.Json.Converting.Converters.Base
             return ConvertToDataType(currentValue);
         }
         
-        public object? Deserialize(JToken objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
         {
-            var stringValue = objectToDeserialize.ToString();
+            if (objectToDeserialize is not IDataValue dataValue) return default;
+
+            var stringValue = dataValue.Value;
             return ConvertToNullableDataType(stringValue);
         }
 
-        public JToken? Serialize(object objectToSerialize, ISerializerContext context)
+        public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
         {
             var value = (TObject)objectToSerialize;
             var stringValue = ConvertToString(value);
-            if (string.IsNullOrWhiteSpace(stringValue)) return new JObject(JValue.CreateNull());
 
-            return JObject.Parse(stringValue);
+            return Value(stringValue);
         }
     }
 }

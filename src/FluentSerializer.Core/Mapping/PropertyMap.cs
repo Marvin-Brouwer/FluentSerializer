@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming.NamingStrategies;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Mapping
 {
@@ -42,7 +43,7 @@ namespace FluentSerializer.Core.Mapping
 
         public IConverter<TDataContainer>? GetConverter<TDataContainer>(
             SerializerDirection direction, ISerializer currentSerializer)
-            where TDataContainer : class
+            where TDataContainer : IDataNode
         {
             Guard.Against.Null(direction, nameof(direction));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));

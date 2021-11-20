@@ -1,13 +1,14 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Converting
 {
-    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : class
+    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
     {
-        public TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
-        public object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
+        TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
+        object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
     }
 
     public interface IConverter
