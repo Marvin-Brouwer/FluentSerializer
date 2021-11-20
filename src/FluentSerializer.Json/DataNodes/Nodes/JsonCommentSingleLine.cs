@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using FluentSerializer.Core.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
@@ -11,6 +12,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
     [DebuggerDisplay("// {Value,nq}")]
     public readonly struct JsonCommentSingleLine : IJsonComment
     {
+        private static readonly int TypeHashCode = typeof(JsonCommentSingleLine).GetHashCode();
+
         public string Name => JsonCharacterConstants.SingleLineCommentMarker;
         public string? Value { get; }
 
@@ -87,22 +90,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
-        }
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IJsonNode? other)
-        {
-            if (other is not JsonCommentSingleLine otherComment) return false;
-            if (Value is null && otherComment.Value is null) return true;
-            if (otherComment.Value is null) return false;
+        public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
-            return Value!.Equals(otherComment.Value, StringComparison.Ordinal);
-        }
+        public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-        public override int GetHashCode() => Value?.GetHashCode() ?? 0;
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
         #endregion
     }

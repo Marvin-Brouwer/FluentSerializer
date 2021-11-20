@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.ObjectPool;
+﻿using FluentSerializer.Core.DataNodes;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("{Value}")]
     public readonly struct XmlText : IXmlText
     {
+        private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
+
         internal const string TextName = "#text";
+
         public string Name => TextName;
         public string? Value { get; }
 
@@ -69,23 +73,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (obj is not XmlText otherText) return false;
-            if (Value is null && otherText.Value is null) return true;
-            if (otherText.Value is null) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return Value!.Equals(otherText.Value, StringComparison.Ordinal);
-        }
-
-        public override int GetHashCode() => HashCode.Combine(Name, Value);
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
         #endregion
     }

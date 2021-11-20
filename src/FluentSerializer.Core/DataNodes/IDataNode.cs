@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.ObjectPool;
+using System;
 using System.IO;
 using System.Text;
 
 namespace FluentSerializer.Core.DataNodes
 {
-    public interface IDataNode
+    public interface IDataNode : IEquatable<IDataNode?>
     {
         string Name { get; }
 

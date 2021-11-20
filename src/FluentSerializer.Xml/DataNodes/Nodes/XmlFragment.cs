@@ -80,21 +80,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (obj is not XmlFragment otherFragment) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return _innerElement.Equals(otherFragment._innerElement);
-        }
-
-        public override int GetHashCode() => HashCode.Combine(Name, _innerElement.GetHashCode());
+        public override int GetHashCode() => _innerElement.GetHashCode();
 
         #endregion
     }
