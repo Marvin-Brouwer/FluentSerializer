@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
+using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
-using System.IO;
-using System.Text;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -14,7 +13,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
     public sealed class XmlStringConversionTests
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringBuilder> StringBuilderPool = ObjectPoolProvider.CreateStringBuilderPool();
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool();
 
         private readonly IXmlElement _testObject;
         private readonly string _testXmlFormatted;
@@ -44,12 +43,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
             var expected = format ? _testXmlFormatted : _testXmlSlim;
 
             // Act
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream);
-
-            _testObject.WriteTo(StringBuilderPool, writer, format);
-            writer.Flush();
-            var result = Encoding.UTF8.GetString(stream.ToArray());
+            var result = _testObject.WriteTo(StringFastPool, format);
 
             // Assert
             result.Should().BeEquivalentTo(expected);
