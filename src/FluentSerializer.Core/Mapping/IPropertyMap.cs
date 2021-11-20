@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming.NamingStrategies;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Mapping
 {
@@ -18,6 +19,6 @@ namespace FluentSerializer.Core.Mapping
 
         IConverter<TDataContainer>? GetConverter<TDataContainer>(
             SerializerDirection direction, ISerializer currentSerializer)
-            where TDataContainer : class;
+            where TDataContainer : IDataNode;
     }
 }

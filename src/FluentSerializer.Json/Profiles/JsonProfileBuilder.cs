@@ -7,7 +7,7 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Converting;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Profiles
 {
@@ -35,7 +35,7 @@ namespace FluentSerializer.Json.Profiles
         {
             _propertyMap.Add(new PropertyMap(
                 direction,
-                typeof(JProperty),
+                typeof(IJsonProperty),
                 propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter

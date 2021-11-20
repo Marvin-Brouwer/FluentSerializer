@@ -11,7 +11,7 @@ namespace FluentSerializer.Xml.Configuration
 {
     public sealed class XmlSerializerConfiguration : SerializerConfiguration
     {
-        public static XmlSerializerConfiguration Default { get; } = new XmlSerializerConfiguration();
+        public static XmlSerializerConfiguration Default { get; } = new();
 
         public Func<INamingStrategy> DefaultClassNamingStrategy { get; set; }
         public Func<INamingStrategy> DefaultPropertyNamingStrategy { get; set; }
@@ -20,6 +20,7 @@ namespace FluentSerializer.Xml.Configuration
         {
             Encoding = Encoding.Unicode;
             FormatOutput = true;
+            WriteNull = false;
             DefaultClassNamingStrategy = Names.Use.PascalCase;
             DefaultPropertyNamingStrategy = Names.Use.CamelCase;
             DefaultConverters = new List<IConverter>
@@ -28,10 +29,7 @@ namespace FluentSerializer.Xml.Configuration
                 UseXmlConverters.ConvertibleConverter,
 
                 // Collection converters
-                UseXmlConverters.WrappedCollectionConverter,
-
-                // Special XNode types
-                UseXmlConverters.XObjectConverter
+                UseXmlConverters.WrappedCollectionConverter
             };
         }
     }

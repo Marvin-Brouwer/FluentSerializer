@@ -1,12 +1,12 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Services
 {
     public interface IAdvancedJsonSerializer : IJsonSerializer
     {
-        object? Deserialize(JContainer element, Type modelType);
+        object? Deserialize(IJsonContainer element, Type modelType);
         TContainer? SerializeToContainer<TContainer>(object? model, Type modelType)
-            where TContainer : JContainer;
+            where TContainer : IJsonContainer;
     }
 }

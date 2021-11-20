@@ -15,7 +15,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies
                    : property.PropertyType;
 
             var itemNamingStrategy = namingContext.FindNamingStrategy(genericTargetType)
-                ?? throw new NotSupportedException("Cannot support a type that is has no registered namingstrategy");
+                ?? throw new NotSupportedException("Cannot support a type that is has no registered naming strategy");
 
             return itemNamingStrategy.SafeGetName(property, namingContext);
         }

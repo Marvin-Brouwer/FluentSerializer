@@ -1,46 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Xml.Linq;
+using System.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.DataNodes;
+
+using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public class OpenAirDateConverter : IXmlConverter<XElement>
+    public class OpenAirDateConverter : IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
         public bool CanConvert(Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
 
 
-        object? IConverter<XElement>.Deserialize(XElement elementToSerialize, ISerializerContext context)
+        object? IConverter<IXmlElement>.Deserialize(IXmlElement elementToSerialize, ISerializerContext context)
         {
-            if (elementToSerialize.IsEmpty) return null;
-            var dateWrapper = elementToSerialize.Element("Date");
-            if (dateWrapper is null || dateWrapper.IsEmpty) return null;
+            if (!elementToSerialize.Children.Any()) return null;
+            var dateWrapper = elementToSerialize.GetChildElement("Date");
+            if (dateWrapper is null || !dateWrapper.Children.Any()) return null;
 
-            var yearValue = dateWrapper.Element("year")?.Value;
+            var yearValue = dateWrapper.GetChildElement("year")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(yearValue))
                 throw new DataMisalignedException("A date object is required to have at least a year element");
-            var monthValue = dateWrapper.Element("month")?.Value;
+            var monthValue = dateWrapper.GetChildElement("month")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(monthValue))
                 throw new DataMisalignedException("A date object is required to have at least a month element");
-            var dayValue = dateWrapper.Element("day")?.Value;
+            var dayValue = dateWrapper.GetChildElement("day")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(dayValue))
                 throw new DataMisalignedException("A date object is required to have at least a day element");
 
-            var hourValue = dateWrapper.Element("hour")?.Value;
+            var hourValue = dateWrapper.GetChildElement("hour")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(hourValue)) return DateTime.ParseExact(
                 $"{yearValue}/{monthValue}/{dayValue}", "yyyy/MM/dd",
                 CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal
             );
 
-            var minuteValue = dateWrapper.Element("minute")?.Value;
+            var minuteValue = dateWrapper.GetChildElement("minute")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(minuteValue))
                 throw new DataMisalignedException("A date object with time is required to have at least a minute element");
-            var secondValue = dateWrapper.Element("second")?.Value;
+            var secondValue = dateWrapper.GetChildElement("second")?.GetTextValue();
             if (string.IsNullOrWhiteSpace(secondValue))
                 throw new DataMisalignedException("A date object with time is required to have at least a second element");
 
@@ -50,33 +54,31 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             );
         }
 
-        XElement? IConverter<XElement>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
         {
-            if (!(objectToSerialize is DateTime dateToSerialize))
+            if (objectToSerialize is not DateTime dateToSerialize)
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
-            return new XElement(elementName, GenerateDateObject(dateToSerialize));
+            return Element(elementName, GenerateDateObject(dateToSerialize));
         }
 
-        private static XElement GenerateDateObject(DateTime dateToSerialize)
+        private static IXmlElement GenerateDateObject(DateTime dateToSerialize)
         {
-            var dateWrapper = new XElement("Date",
-                            new XElement("year", dateToSerialize.ToString("yyyy")),
-                            new XElement("month", dateToSerialize.ToString("MM")),
-                            new XElement("day", dateToSerialize.ToString("dd"))
-                        );
+            var dateProperties = new List<IXmlElement> {
+                Element("year", Text(dateToSerialize.ToString("yyyy"))),
+                Element("month", Text(dateToSerialize.ToString("MM"))),
+                Element("day", Text(dateToSerialize.ToString("dd")))
+            };
 
             if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
-                return dateWrapper;
+                return Element("Date", dateProperties); 
 
-            dateWrapper.Add(
-                new XElement("hour", dateToSerialize.ToString("HH")),
-                new XElement("minute", dateToSerialize.ToString("mm")),
-                new XElement("second", dateToSerialize.ToString("ss"))
-            );
+            dateProperties.Add(Element("hour", Text(dateToSerialize.ToString("HH"))));
+            dateProperties.Add(Element("minute", Text(dateToSerialize.ToString("mm"))));
+            dateProperties.Add(Element("second", Text(dateToSerialize.ToString("ss"))));
 
-            return dateWrapper;
+            return Element("Date", dateProperties);
         }
     }
 }

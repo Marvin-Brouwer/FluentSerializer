@@ -4,6 +4,6 @@ namespace FluentSerializer.UseCase.Mavenlink.Models
 {
     internal class Request<TRequest>
     {
-        public List<TRequest> Data { get; set; } = new List<TRequest>();
+        public List<TRequest> Data { get; set; } = new ();
     }
 }

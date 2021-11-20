@@ -3,18 +3,19 @@ using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Xml.Linq;
-using FluentSerializer.Xml.Constants;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.DataNodes;
 
 namespace FluentSerializer.Xml.Profiles
 {
     public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
         where TModel : new()
     {
+        internal static readonly CustomNamingStrategy TextNodeNamingStrategy = new(DataNodes.Nodes.XmlText.TextName);
+
         private readonly Func<INamingStrategy> _defaultNamingStrategy;
         private readonly List<IPropertyMap> _propertyMap;
         
@@ -31,12 +32,12 @@ namespace FluentSerializer.Xml.Profiles
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? namingStrategy = null,
-            Func<IXmlConverter<XAttribute>>? converter = null
+            Func<IXmlConverter<IXmlAttribute>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
                 direction,
-                typeof(XAttribute),
+                typeof(IXmlAttribute),
                 propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
@@ -49,12 +50,12 @@ namespace FluentSerializer.Xml.Profiles
             Expression<Func<TModel, TAttribute>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
             Func<INamingStrategy>? namingStrategy = null,
-            Func<IXmlConverter<XElement>>? converter = null
+            Func<IXmlConverter<IXmlElement>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
                 direction,
-                typeof(XElement),
+                typeof(IXmlElement),
                 propertySelector.GetProperty(),
                 namingStrategy ?? _defaultNamingStrategy,
                 converter
@@ -69,15 +70,15 @@ namespace FluentSerializer.Xml.Profiles
         public void Text<TText>(
             Expression<Func<TModel, TText>> propertySelector,
             SerializerDirection direction = SerializerDirection.Both,
-            Func<IXmlConverter<XText>>? converter = null
+            Func<IXmlConverter<IXmlText>>? converter = null
         )
         {
             _propertyMap.Add(new PropertyMap(
                 direction,
-                typeof(XText),
+                typeof(IXmlText),
                 propertySelector.GetProperty(),
                 // This isn't used but setting it to null requires a lot more code.
-                () => XmlConstants.TextNodeNamingStrategy,
+                () => TextNodeNamingStrategy,
                 converter
             ));
         }

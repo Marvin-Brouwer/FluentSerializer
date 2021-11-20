@@ -1,7 +1,6 @@
 ﻿using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context
@@ -33,7 +32,7 @@ namespace FluentSerializer.Core.Context
         Type ClassType { get; }
 
         /// <summary>
-        /// The <see cref="UseNamingStrategies.INamingStrategy"/> passed for the property currently being (de)serialized
+        /// The <see cref="INamingStrategy"/> passed for the property currently being (de)serialized
         /// </summary>
         INamingStrategy NamingStrategy { get; }
 
@@ -43,7 +42,7 @@ namespace FluentSerializer.Core.Context
         ISerializer CurrentSerializer { get; }
 
         /// <summary>
-        /// Find the <see cref="UseNamingStrategies.INamingStrategy"/>  for any property of the current <see cref="ClassType"/> if registered
+        /// Find the <see cref="INamingStrategy"/>  for any property of the current <see cref="ClassType"/> if registered
         /// This can be useful when unpacking collections to a different data structure
         /// </summary>
         /// <param name="property"></param>

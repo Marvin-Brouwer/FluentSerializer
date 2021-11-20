@@ -5,8 +5,10 @@ using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
-using Newtonsoft.Json.Linq;
+
+using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters
 {
@@ -17,9 +19,9 @@ namespace FluentSerializer.Json.Converting.Converters
             !typeof(string).IsAssignableFrom(targetType) &&
             targetType.Implements(typeof(IEnumerable<>));
 
-        public object? Deserialize(JToken objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
         {
-            if (objectToDeserialize.Type != JTokenType.Array)
+            if (objectToDeserialize is not IJsonArray arrayToDeserialize)
                 throw new NotSupportedException($"The json object you attempted to deserialize was not a collection");
 
             var targetType = context.PropertyType;
@@ -29,9 +31,12 @@ namespace FluentSerializer.Json.Converting.Converters
                 ? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
                 : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
             
-            foreach (var item in objectToDeserialize.Children<JObject>())
+            foreach (var item in arrayToDeserialize.Children)
             {
-                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
+                // This will skip comments
+                if (item is not IJsonContainer container) continue;
+
+                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType);
                 if (itemValue is null) continue;
 
                 instance.Add(itemValue);
@@ -40,22 +45,25 @@ namespace FluentSerializer.Json.Converting.Converters
             return instance;
         }
 
-        public JToken Serialize(object objectToSerialize, ISerializerContext context)
+        public IJsonNode Serialize(object objectToSerialize, ISerializerContext context)
         {
             if (objectToSerialize is not IEnumerable enumerableToSerialize)
                 throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            var customElement = new JArray();
+            var elements = GetArrayItems((IAdvancedJsonSerializer)context.CurrentSerializer, enumerableToSerialize);
+            return Array(elements);
+        }
+
+        private static IEnumerable<IJsonArrayContent> GetArrayItems(IAdvancedJsonSerializer serializer, IEnumerable enumerableToSerialize)
+        {
             foreach (var collectionItem in enumerableToSerialize)
             {
                 if (collectionItem is null) continue;
-                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).SerializeToContainer<JContainer>(collectionItem, collectionItem.GetType());
-                if (itemValue is null) continue;
+                var itemValue = serializer.SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
+                if (itemValue is not IJsonArrayContent arrayItem) continue;
 
-                customElement.Add(itemValue);
+                yield return arrayItem;
             }
-
-            return customElement;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Configuration
 {
     public sealed class JsonSerializerConfiguration : SerializerConfiguration
     {
-        public static JsonSerializerConfiguration Default { get; } = new JsonSerializerConfiguration();
+        public static JsonSerializerConfiguration Default { get; } = new();
 
         public Func<INamingStrategy> DefaultNamingStrategy { get; set; }
 
@@ -19,6 +19,7 @@ namespace FluentSerializer.Json.Configuration
         {
             Encoding = Encoding.UTF8;
             FormatOutput = true;
+            WriteNull = false;
             DefaultNamingStrategy = Names.Use.CamelCase;
             DefaultConverters = new List<IConverter>
             {
@@ -26,10 +27,7 @@ namespace FluentSerializer.Json.Configuration
                 UseJsonConverters.ConvertibleConverter,
 
                 // Collection converters
-                UseJsonConverters.CollectionConverter,
-
-                // Special JsonObject types
-                UseJsonConverters.JsonObjectConverter
+                UseJsonConverters.CollectionConverter
             };
         }
     }

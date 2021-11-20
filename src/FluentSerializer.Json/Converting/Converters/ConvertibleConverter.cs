@@ -1,7 +1,9 @@
 ﻿using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using Newtonsoft.Json.Linq;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Json.DataNodes;
+using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters
 {
@@ -19,20 +21,23 @@ namespace FluentSerializer.Json.Converting.Converters
             return Convert.ChangeType(currentValue, targetType);
         }
 
-        public JToken? Serialize(object objectToSerialize, ISerializerContext context)
+        public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
         {
+            if (objectToSerialize is string stringToSerialize)
+                return Value($"\"{stringToSerialize}\"");
+
             var stringValue = ConvertToString(objectToSerialize);
-            if (string.IsNullOrWhiteSpace(stringValue)) return new JObject(JValue.CreateNull());
 
-            if (context.PropertyType == typeof(string)) return JValue.CreateString(stringValue);
-            if (context.PropertyType.IsClass) return JObject.FromObject(stringValue);
-
-            return JToken.FromObject(stringValue);
+            return Value(stringValue);
         }
 
-        public object? Deserialize(JToken objectToDeserialize, ISerializerContext context)
+        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
         {
-            return ConvertToNullableDataType(objectToDeserialize.ToString(), context.PropertyType);
+            if (objectToDeserialize is not IDataValue data) return default;
+            if (context.PropertyType == typeof(string) && data.Value?.Length > 2)
+                return data.Value[1..^1];
+
+            return ConvertToNullableDataType(data.Value, context.PropertyType);
         }
     }
 }

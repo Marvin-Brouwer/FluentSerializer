@@ -5,9 +5,11 @@ using FluentSerializer.Xml.Exceptions;
 using System;
 using System.Collections;
 using System.Text;
-using System.Xml.Linq;
 using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Configuration;
+using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.DataNodes.Nodes;
+using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -15,70 +17,77 @@ namespace FluentSerializer.Xml.Services
     {
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
+        private readonly ObjectPool<StringBuilder> _stringBuilderPool;
 
         public XmlSerializerConfiguration XmlConfiguration { get; }
         public SerializerConfiguration Configuration => XmlConfiguration;
 
-        public RuntimeXmlSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, XmlSerializerConfiguration configuration)
+        public RuntimeXmlSerializer(
+            IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+            XmlSerializerConfiguration configuration,
+            ObjectPoolProvider objectPoolProvider)
         {
             Guard.Against.Null(mappings, nameof(mappings));
             Guard.Against.Null(configuration, nameof(configuration));
 
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
+            _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
 
             XmlConfiguration = configuration;
         }
 
-        public TModel? Deserialize<TModel>(XElement element)
+        public TModel? Deserialize<TModel>(IXmlElement element)
             where TModel : class, new()
         {
             if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
-            return _deserializer.DeserializeFromObject<TModel>(element, this);
+            return _deserializer.DeserializeFromElement<TModel>(element, this);
         }
 
-        public object? Deserialize(XElement element, Type modelType)
+        public object? Deserialize(IXmlElement element, Type modelType)
         {
-            return _deserializer.DeserializeFromObject(element, modelType,  this);
+            return _deserializer.DeserializeFromElement(element, modelType,  this);
         }
 
         public TModel? Deserialize<TModel>(string stringData)
             where TModel : class, new()
         {
-            var xDocument = XDocument.Parse(stringData);
-            return Deserialize<TModel>(xDocument.Root!);
+            var rootElement = XmlParser.Parse(stringData);
+            return Deserialize<TModel>(rootElement);
         }
 
         public string Serialize<TModel>(TModel model)
             where TModel : class, new()
         {
             if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
-            var xDocument = SerializeToDocument(model);
+            var document = SerializeToDocument(model);
 
-            var builder = new StringBuilder();
-            using var writer = new ConfigurableStringWriter(builder, Configuration.Encoding);
+            var stringBuilder = _stringBuilderPool.Get();
 
-            xDocument.Save(writer);
+            using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
+            document.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
+            writer.Flush();
 
-            return builder.ToString();
+            var stringValue = stringBuilder.ToString();
+            _stringBuilderPool.Return(stringBuilder);
+
+            return stringValue;
         }
 
-        public XDocument SerializeToDocument<TModel>(TModel model)
+        public IXmlDocument SerializeToDocument<TModel>(TModel model)
         {
             var rootElement = SerializeToElement(model);
 
-            var document = new XDocument(rootElement);
-
-            return document;
+            return new XmlDocument(rootElement);
         }
 
-        public XElement? SerializeToElement<TModel>(TModel model)
+        public IXmlElement? SerializeToElement<TModel>(TModel model)
         {
             if (model is null) return null;
             return _serializer.SerializeToElement(model, typeof(TModel), this);
         }
 
-        public XElement? SerializeToElement(object? model, Type modelType)
+        public IXmlElement? SerializeToElement(object? model, Type modelType)
         {
             if (model is null) return null;
             return _serializer.SerializeToElement(model, modelType, this);
