@@ -43,7 +43,7 @@ namespace FluentSerializer.Json.Profiling.Data
 
         private static DataContainer<string> CreateStringPair(DataContainer<IJsonObject> jsonObject, StringFast stringBuilder, bool format)
         {
-            jsonObject.Value.WriteTo(StringFastPool, format);
+            stringBuilder = jsonObject.Value.AppendTo(stringBuilder, format);
             var json = stringBuilder.ToString();
             stringBuilder.Clear();
 

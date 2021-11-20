@@ -45,8 +45,9 @@ namespace FluentSerializer.Xml.Profiling.Data
 
         private static DataContainer<string> CreateStringPair(DataContainer<IXmlElement> xmlObject, StringFast stringBuilder, bool format)
         {
-            xmlObject.Value.WriteTo(StringFastPool, format);
+            stringBuilder = xmlObject.Value.AppendTo(stringBuilder, format);
             var xml = stringBuilder.ToString();
+            stringBuilder.Clear();
 
             return new DataContainer<string>(xml, xmlObject.Size);
         }
