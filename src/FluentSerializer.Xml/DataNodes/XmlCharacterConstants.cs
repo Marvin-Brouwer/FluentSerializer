@@ -1,6 +1,9 @@
 ﻿namespace FluentSerializer.Xml.DataNodes
 {
-    internal readonly struct XmlConstants
+    /// <summary>
+    /// Constants class containing all the characters used for parsing and writing JSON.
+    /// </summary>
+    internal readonly struct XmlCharacterConstants
     {
         internal static readonly char TagStartCharacter = '<';
         internal static readonly char TagEndCharacter = '>';

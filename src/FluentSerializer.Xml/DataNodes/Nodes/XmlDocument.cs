@@ -8,6 +8,7 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlDocument"/>
     [DebuggerDisplay(DocumentName)]
     public readonly struct XmlDocument : IXmlDocument
     {
@@ -17,6 +18,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         private const string DocumentName = "<?xml ?>";
         public string Name => DocumentName;
 
+        /// <inheritdoc cref="IXmlDocument"/>
+        /// <param name="root">The root element to represent the actual document</param>
         public XmlDocument(IXmlElement? root)
         {
             RootElement = root;

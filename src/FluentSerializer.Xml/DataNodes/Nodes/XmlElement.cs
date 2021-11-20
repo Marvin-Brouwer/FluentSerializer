@@ -11,6 +11,7 @@ using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlElement"/>
     [DebuggerDisplay("<{Name,nq} />")]
     public readonly struct XmlElement : IXmlElement
     {
@@ -63,6 +64,22 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             return string.Join(string.Empty, textValues);
         }
 
+        /// <inheritdoc cref="XmlBuilder.Element"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Element"/> method instead of this constructor</b>
+        /// </remarks>
+        public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
+
+        /// <inheritdoc cref="XmlBuilder.Element(string, IXmlNode[])"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Element"/> method instead of this constructor</b>
+        /// </remarks>
+        public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
+
+        /// <inheritdoc cref="XmlBuilder.Element(string, IEnumerable{IXmlNode})"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Element"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
         {
             Guard.Against.InvalidName(name, nameof(name));
@@ -78,17 +95,21 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             }
         }
 
+        /// <inheritdoc cref="IXmlElement"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlElement(ReadOnlySpan<char> text, ref int offset)
         {
             // If we encounter a declaration just ignore it, if this becomes a problem we can start the parse in
             // the document. For now this is fine.
-            if (text.HasStringAtOffset(offset, XmlConstants.DeclarationStart))
+            if (text.HasStringAtOffset(offset, XmlCharacterConstants.DeclarationStart))
             {
-                while (offset < text.Length && !text.HasStringAtOffset(offset, XmlConstants.DeclarationEnd))
+                while (offset < text.Length && !text.HasStringAtOffset(offset, XmlCharacterConstants.DeclarationEnd))
                 {
                     offset++;
                 }
-                while (offset < text.Length && text[offset] != XmlConstants.TagStartCharacter)
+                while (offset < text.Length && text[offset] != XmlCharacterConstants.TagStartCharacter)
                 {
                     offset++;
                 }
@@ -111,7 +132,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 nameEndOffset = offset;
                 var character = text[offset];
 
-                if (character == XmlConstants.TagTerminationCharacter && text[offset + 1] == XmlConstants.TagEndCharacter)
+                if (character == XmlCharacterConstants.TagTerminationCharacter && text[offset + 1] == XmlCharacterConstants.TagEndCharacter)
                 {
                     elementClosed = true;
                     offset++;
@@ -119,7 +140,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     offset++;
                     break;
                 }
-                if (character == XmlConstants.TagEndCharacter)
+                if (character == XmlCharacterConstants.TagEndCharacter)
                 {
                     tagFinished = true;
                     offset++;
@@ -141,14 +162,14 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 {
                     var character = text[offset];
 
-                    if (character == XmlConstants.TagTerminationCharacter && text[offset + 1] == XmlConstants.TagEndCharacter)
+                    if (character == XmlCharacterConstants.TagTerminationCharacter && text[offset + 1] == XmlCharacterConstants.TagEndCharacter)
                     {
                         offset++;
                         elementClosed = true;
                         offset++;
                         break;
                     }
-                    if (character == XmlConstants.TagEndCharacter)
+                    if (character == XmlCharacterConstants.TagEndCharacter)
                     {
                         offset++;
                         break;
@@ -169,20 +190,20 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             {
                 var character = text[offset];
 
-                if (character == XmlConstants.TagStartCharacter && text[offset + 1] == XmlConstants.TagTerminationCharacter)
+                if (character == XmlCharacterConstants.TagStartCharacter && text[offset + 1] == XmlCharacterConstants.TagTerminationCharacter)
                 {
                     offset += 2;
                     break;
                 }
 
-                if (character == XmlConstants.TagStartCharacter)
+                if (character == XmlCharacterConstants.TagStartCharacter)
                 {
-                    if (text.HasStringAtOffset(offset, XmlConstants.CommentStart))
+                    if (text.HasStringAtOffset(offset, XmlCharacterConstants.CommentStart))
                     {
                         _children.Add(new XmlComment(text, ref offset));
                         continue;
                     }
-                    if (text.HasStringAtOffset(offset, XmlConstants.CharacterDataStart))
+                    if (text.HasStringAtOffset(offset, XmlCharacterConstants.CharacterDataStart))
                     {
                         _children.Add(new XmlCharacterData(text, ref offset));
                         continue;
@@ -206,13 +227,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 var character = text[offset];
                 offset++;
 
-                if (character == XmlConstants.TagEndCharacter) return;
+                if (character == XmlCharacterConstants.TagEndCharacter) return;
             }
         }
-
-        public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
-        public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
-
 
         public override string ToString()
         {
@@ -242,13 +259,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             if (!writeNull && !children.Any()) return stringBuilder;
 
             stringBuilder
-                .Append(XmlConstants.TagStartCharacter)
+                .Append(XmlCharacterConstants.TagStartCharacter)
                 .Append(Name);
 
             if (!children.Any()) return stringBuilder
                     .Append(spacer)
-                    .Append(XmlConstants.TagTerminationCharacter)
-                    .Append(XmlConstants.TagEndCharacter);
+                    .Append(XmlCharacterConstants.TagTerminationCharacter)
+                    .Append(XmlCharacterConstants.TagEndCharacter);
 
             foreach (var attribute in _attributes)
             {
@@ -259,7 +276,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     .AppendNode(attribute, format, childIndent, writeNull);
             }
             stringBuilder
-                .Append(XmlConstants.TagEndCharacter);
+                .Append(XmlCharacterConstants.TagEndCharacter);
 
             // Technically this object can have multiple text nodes, only the first needs indentation
             var textOnly = true;
@@ -326,10 +343,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                 .AppendOptionalIndent(indent, format);
 
             stringBuilder
-                .Append(XmlConstants.TagStartCharacter)
-                .Append(XmlConstants.TagTerminationCharacter)
+                .Append(XmlCharacterConstants.TagStartCharacter)
+                .Append(XmlCharacterConstants.TagTerminationCharacter)
                 .Append(Name)
-                .Append(XmlConstants.TagEndCharacter);
+                .Append(XmlCharacterConstants.TagEndCharacter);
 
             return stringBuilder;
         }

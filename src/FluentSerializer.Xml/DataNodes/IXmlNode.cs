@@ -3,5 +3,5 @@ using System;
 
 namespace FluentSerializer.Xml.DataNodes
 {
-    public interface IXmlNode : IDataNode, IEquatable<IXmlNode> { }
+    public interface IXmlNode : IDataNode, IEquatable<IXmlNode?> { }
 }

@@ -8,12 +8,17 @@ using System.IO;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
+    /// <inheritdoc cref="IXmlAttribute"/>
     [DebuggerDisplay("{Name,nq}={Value}")]
     public readonly struct XmlAttribute : IXmlAttribute
     {
         public string Name { get; }
         public string? Value { get; }
 
+        /// <inheritdoc cref="XmlBuilder.Attribute(string, string?)"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlBuilder.Attribute"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlAttribute(string name, string? value = null)
         {
             Guard.Against.InvalidName(name, nameof(name));
@@ -21,6 +26,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Name = name;
             Value = value;
         }
+
+        /// <inheritdoc cref="IXmlAttribute"/>
+        /// <remarks>
+        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+        /// </remarks>
         public XmlAttribute(ReadOnlySpan<char> text, ref int offset)
         {
             var nameStartOffset = offset;
@@ -32,10 +42,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                 var character = text[offset];
 
-                if (character == XmlConstants.TagTerminationCharacter) break;
-                if (character == XmlConstants.TagEndCharacter) break;
+                if (character == XmlCharacterConstants.TagTerminationCharacter) break;
+                if (character == XmlCharacterConstants.TagEndCharacter) break;
                 offset++;
-                if (character == XmlConstants.PropertyAssignmentCharacter) break;
+                if (character == XmlCharacterConstants.PropertyAssignmentCharacter) break;
             }
 
             Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
@@ -44,9 +54,9 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             {
                 var character = text[offset];
 
-                if (character == XmlConstants.TagTerminationCharacter) break;
-                if (character == XmlConstants.TagStartCharacter) break;
-                if (character == XmlConstants.PropertyWrapCharacter)
+                if (character == XmlCharacterConstants.TagTerminationCharacter) break;
+                if (character == XmlCharacterConstants.TagStartCharacter) break;
+                if (character == XmlCharacterConstants.PropertyWrapCharacter)
                 {
                     offset++;
                     break;
@@ -64,10 +74,10 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                 var character = text[offset];
 
-                if (character == XmlConstants.TagTerminationCharacter) break;
-                if (character == XmlConstants.TagStartCharacter) break;
+                if (character == XmlCharacterConstants.TagTerminationCharacter) break;
+                if (character == XmlCharacterConstants.TagStartCharacter) break;
                 offset++;
-                if (character == XmlConstants.PropertyWrapCharacter) break;
+                if (character == XmlCharacterConstants.PropertyWrapCharacter) break;
             }
             
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
@@ -101,13 +111,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             stringBuilder
                 .Append(Name)
-                .Append(XmlConstants.PropertyAssignmentCharacter)
-                .Append(XmlConstants.PropertyWrapCharacter);
+                .Append(XmlCharacterConstants.PropertyAssignmentCharacter)
+                .Append(XmlCharacterConstants.PropertyWrapCharacter);
 
             if (Value is not null) stringBuilder.Append(Value);
 
             stringBuilder
-                .Append(XmlConstants.PropertyWrapCharacter);
+                .Append(XmlCharacterConstants.PropertyWrapCharacter);
 
             return stringBuilder;
         }

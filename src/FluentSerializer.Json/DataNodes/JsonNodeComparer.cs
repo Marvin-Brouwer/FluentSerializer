@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Json.DataNodes
 {
+    // todo: Move to core and implement in xml
     /// <summary>
     /// Simple comparer between <see cref="IJsonNode"/>s, relying on <see cref="IEquatable{IJsonNode?}.GetHashCode()"/>
     /// </summary>
