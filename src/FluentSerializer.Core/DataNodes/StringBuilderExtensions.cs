@@ -1,20 +1,18 @@
-﻿using System.Text;
-
-namespace FluentSerializer.Core.DataNodes
+﻿namespace FluentSerializer.Core.DataNodes
 {
-    public static class StringBuilderExtensions
+    public static class StringFastExtensions
     {
-        public static StringBuilder AppendNode(this StringBuilder stringBuilder, IDataNode node, bool format, int indent, bool writeNull)
+        public static StringFast AppendNode(this StringFast stringBuilder, IDataNode node, bool format, int indent, bool writeNull)
         {
             return node.AppendTo(stringBuilder, format, format ? indent : 0, writeNull);
         }
-        public static StringBuilder AppendOptionalNewline(this StringBuilder stringBuilder, bool newLine)
+        public static StringFast AppendOptionalNewline(this StringFast stringBuilder, bool newLine)
         {
             if (!newLine) return stringBuilder;
 
             return stringBuilder.AppendLine();
         }
-        public static StringBuilder AppendOptionalIndent(this StringBuilder stringBuilder, int indent, bool format)
+        public static StringFast AppendOptionalIndent(this StringFast stringBuilder, int indent, bool format)
         {
             const char indentChar = '\t';
 

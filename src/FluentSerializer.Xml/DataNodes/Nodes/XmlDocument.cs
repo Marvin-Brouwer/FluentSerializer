@@ -2,8 +2,6 @@
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
@@ -28,28 +26,33 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder();
+            var stringBuilder = new StringFast();
             AppendTo(stringBuilder, false);
             return stringBuilder.ToString();
         }
 
-        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
+        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
         {
             var stringBuilder = stringBuilders.Get();
 
-            var encoding = writer.Encoding;
-            stringBuilder
-                .Append($"<?xml version=\"1.0\" encoding=\"{encoding.WebName}\"?>")
-                .AppendOptionalNewline(format);
+            try
+            {
+                // todo fix encoding later
+                stringBuilder
+                    .Append($"<?xml version=\"1.0\" encoding=\"UTF-16\"?>")
+                    .AppendOptionalNewline(format);
 
-            stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-            writer.Write(stringBuilder);
-
-            stringBuilder.Clear();
-            stringBuilders.Return(stringBuilder);
+                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
+                return stringBuilder.ToString();
+            }
+            finally
+            {
+                stringBuilder.Clear();
+                stringBuilders.Return(stringBuilder);
+            }
         }
 
-        public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             return RootElement?.AppendTo(stringBuilder, format, indent, writeNull) ?? stringBuilder;
         }

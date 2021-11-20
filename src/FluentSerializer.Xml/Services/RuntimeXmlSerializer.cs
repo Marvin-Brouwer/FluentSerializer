@@ -4,12 +4,11 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Xml.Exceptions;
 using System;
 using System.Collections;
-using System.Text;
-using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
 using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Core.Dirty;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -17,7 +16,7 @@ namespace FluentSerializer.Xml.Services
     {
         private readonly XmlTypeSerializer _serializer;
         private readonly XmlTypeDeserializer _deserializer;
-        private readonly ObjectPool<StringBuilder> _stringBuilderPool;
+        private readonly ObjectPool<StringFast> _stringBuilderPool;
 
         public XmlSerializerConfiguration XmlConfiguration { get; }
         public SerializerConfiguration Configuration => XmlConfiguration;
@@ -32,7 +31,7 @@ namespace FluentSerializer.Xml.Services
 
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
+            _stringBuilderPool = objectPoolProvider.CreateStringFastPool();
 
             XmlConfiguration = configuration;
         }
@@ -62,15 +61,8 @@ namespace FluentSerializer.Xml.Services
             if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
             var document = SerializeToDocument(model);
 
-            var stringBuilder = _stringBuilderPool.Get();
-
-            using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-            document.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
-            writer.Flush();
-
-            var stringValue = stringBuilder.ToString();
-            _stringBuilderPool.Return(stringBuilder);
-
+            var stringValue = document.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
+            
             return stringValue;
         }
 

@@ -2,13 +2,12 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using System;
-using System.Text;
 using FluentSerializer.Json.Configuration;
-using FluentSerializer.Core.Services;
 using FluentSerializer.Json.DataNodes;
 
 using static FluentSerializer.Json.JsonBuilder;
 using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Core.Dirty;
 
 namespace FluentSerializer.Json.Services
 {
@@ -16,7 +15,7 @@ namespace FluentSerializer.Json.Services
     {
         private readonly JsonTypeSerializer _serializer;
         private readonly JsonTypeDeserializer _deserializer;
-        private readonly ObjectPool<StringBuilder> _stringBuilderPool;
+        private readonly ObjectPool<StringFast> _stringBuilderPool;
 
         public JsonSerializerConfiguration JsonConfiguration { get; }
         public SerializerConfiguration Configuration => JsonConfiguration;
@@ -31,7 +30,7 @@ namespace FluentSerializer.Json.Services
 
             _serializer = new JsonTypeSerializer(mappings);
             _deserializer = new JsonTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
+            _stringBuilderPool = objectPoolProvider.CreateStringFastPool();
 
             JsonConfiguration = configuration;
         }
@@ -57,14 +56,7 @@ namespace FluentSerializer.Json.Services
             var container = SerializeToContainer(model);
             if (container is null) return string.Empty;
 
-            var stringBuilder = _stringBuilderPool.Get();
-
-            using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-            container.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
-            writer.Flush();
-
-            var stringValue = stringBuilder.ToString();
-            _stringBuilderPool.Return(stringBuilder);
+            var stringValue = container.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
             return stringValue;
         }

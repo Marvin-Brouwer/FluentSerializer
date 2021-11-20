@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Xml.DataNodes;
 using Microsoft.Extensions.ObjectPool;
@@ -15,7 +14,7 @@ namespace FluentSerializer.Xml.Profiling.Data
     public readonly struct XmlDataSet
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringBuilder> StringBuilderPool = ObjectPoolProvider.CreateStringBuilderPool();
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool();
 
         public static List<DataContainer<IXmlElement>> XmlValues { get; }
         public static List<DataContainer<string>> XmlStringValues { get; }
@@ -35,23 +34,19 @@ namespace FluentSerializer.Xml.Profiling.Data
                 new (Element("Data", xmlDataSet), xmlDataSet.Count)
             };
 
-            var stringBuilder = StringBuilderPool.Get();
+            var stringBuilder = StringFastPool.Get();
             XmlStringValues = new List<DataContainer<string>>(3) {
                 CreateStringPair(XmlValues[0], stringBuilder, true),
                 CreateStringPair(XmlValues[1], stringBuilder, true),
                 CreateStringPair(XmlValues[2], stringBuilder, true)
             };
-            StringBuilderPool.Return(stringBuilder);
+            StringFastPool.Return(stringBuilder);
         }
 
-        private static DataContainer<string> CreateStringPair(DataContainer<IXmlElement> xmlObject, StringBuilder stringBuilder, bool format)
+        private static DataContainer<string> CreateStringPair(DataContainer<IXmlElement> xmlObject, StringFast stringBuilder, bool format)
         {
-            using var writer = new StringWriter(stringBuilder);
-
-            xmlObject.Value.WriteTo(StringBuilderPool, writer, format);
-            writer.Flush();
+            xmlObject.Value.WriteTo(StringFastPool, format);
             var xml = stringBuilder.ToString();
-            stringBuilder.Clear();
 
             return new DataContainer<string>(xml, xmlObject.Size);
         }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using FluentSerializer.Core.Profiling.TestData;
@@ -41,9 +40,7 @@ namespace FluentSerializer.Xml.Profiling.Profiles
         [Benchmark, BenchmarkCategory("WriteTo")]
         public void WriteTo()
         {
-            Input.Value.WriteTo(XmlDataSet.StringBuilderPool, StreamWriter, true);
-            StreamWriter.Flush();
-            var result = Encoding.UTF8.GetString(WriteStream.ToArray());
+            var result = Input.Value.WriteTo(XmlDataSet.StringFastPool, true);
             _ = result;
         }
     }

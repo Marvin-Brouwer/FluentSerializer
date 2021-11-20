@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using System;
-using System.IO;
-using System.Text;
 
 namespace FluentSerializer.Core.DataNodes
 {
@@ -9,8 +7,8 @@ namespace FluentSerializer.Core.DataNodes
     {
         string Name { get; }
 
-        void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0);
-        StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true);
+        string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0);
+        StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true);
 
     }
 }

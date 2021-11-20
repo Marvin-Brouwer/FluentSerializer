@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
-using System.Text;
 using System;
 using Microsoft.Extensions.ObjectPool;
 using System.IO;
@@ -86,14 +85,21 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
-        public override string ToString()
+        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
         {
-            var stringBuilder = new StringBuilder();
-            stringBuilder = AppendTo(stringBuilder);
-            return stringBuilder.ToString();
+            var stringBuilder = stringBuilders.Get();
+            try
+            {
+                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
+                return stringBuilder.ToString();
+            }
+            finally
+            {
+                stringBuilders.Return(stringBuilder);
+            }
         }
 
-        public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
+        public void WriteTo(ObjectPool<StringFast> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
         {
             Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
 
@@ -106,7 +112,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             stringBuilders.Return(stringBuilder);
         }
 
-        public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
 
