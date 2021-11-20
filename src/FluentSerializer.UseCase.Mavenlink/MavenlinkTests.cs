@@ -7,6 +7,8 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Json.Configuration;
+using FluentSerializer.Json.Converter.DefaultJson.Extensions;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.UseCase.Mavenlink.Models;
@@ -24,6 +26,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         {
             _configuration = JsonSerializerConfiguration.Default;
             _configuration.FormatOutput = false;
+            _configuration.DefaultConverters.Add(Converter.For.Json());
 
             _mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
         }

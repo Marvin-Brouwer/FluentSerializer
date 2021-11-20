@@ -3,7 +3,6 @@ using System.Globalization;
 using Ardalis.GuardClauses;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters.Base;
-using FluentSerializer.Xml.Converting.Converters.XmlNodes;
 using FluentSerializer.Xml.DataNodes;
 
 namespace FluentSerializer.Xml.Converting
@@ -14,7 +13,6 @@ namespace FluentSerializer.Xml.Converting
         internal static readonly IXmlConverter<IXmlElement> WrappedCollectionConverter = new WrappedCollectionConverter();
         internal static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
         internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
-        internal static readonly IXmlConverter XmlNodeConverter = new XmlNodeConverter();
 
         public Func<SimpleTypeConverter<DateTime>> Dates(string? format = null, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
         {

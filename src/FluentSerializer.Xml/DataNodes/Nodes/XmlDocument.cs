@@ -1,6 +1,5 @@
 ﻿using FluentSerializer.Core.DataNodes;
 using Microsoft.Extensions.ObjectPool;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
