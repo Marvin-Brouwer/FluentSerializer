@@ -5,6 +5,7 @@ using System.Text;
 using System;
 using Microsoft.Extensions.ObjectPool;
 using System.IO;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
@@ -12,6 +13,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("{Name,nq}={Value}")]
     public readonly struct XmlAttribute : IXmlAttribute
     {
+        private static readonly int TypeHashCode = typeof(XmlAttribute).GetHashCode();
+
         public string Name { get; }
         public string? Value { get; }
 
@@ -124,21 +127,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (obj is not XmlAttribute otherAttribute) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return Name.Equals(otherAttribute.Name, StringComparison.Ordinal)
-                && Value?.Equals(otherAttribute.Value, StringComparison.Ordinal) == true;
-        }
-        public override int GetHashCode() => HashCode.Combine(Name, Value);
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
 
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Core.Extensions;
+﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
@@ -11,6 +12,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("<!-- {Value, nq} -->")]
     public readonly struct XmlComment : IXmlComment
     {
+        private static readonly int TypeHashCode = typeof(XmlComment).GetHashCode();
+
         private const string CommentName = "<!-- comment -->";
         public string Name => CommentName;
         public string? Value { get; }
@@ -80,23 +83,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (obj is not XmlComment otherComment) return false;
-            if (Value is null && otherComment.Value is null) return true;
-            if (otherComment.Value is null) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return Value!.Equals(otherComment.Value, StringComparison.Ordinal);
-        }
-
-        public override int GetHashCode() => HashCode.Combine(Name, Value);
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
         #endregion
     }

@@ -6,20 +6,19 @@ using System;
 namespace FluentSerializer.Core.Tests.Assertions
 {
     /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
-    public class EquatableAssertions<TSubjectEquatable> :
-       ReferenceTypeAssertions<TSubjectEquatable, EquatableAssertions<TSubjectEquatable>>
-        where TSubjectEquatable : IEquatable<TSubjectEquatable>
+    public class EquatableAssertions<TEquatable> :
+       ReferenceTypeAssertions<TEquatable, EquatableAssertions<TEquatable>>
+        where TEquatable : IEquatable<TEquatable>
     {
-        public EquatableAssertions(TSubjectEquatable instance)
+        public EquatableAssertions(TEquatable instance)
             : base(instance)
         {
         }
 
         protected override string Identifier => Subject.ToString();
 
-        public AndConstraint<EquatableAssertions<TSubjectEquatable>> BeEquatableTo<TEquatable>(
+        public AndConstraint<EquatableAssertions<TEquatable>> BeEquatableTo(
             TEquatable expectation, string because = "", params object[] becauseArgs)
-            where TEquatable : IEquatable<TEquatable>
         {
             Execute.Assertion
                 .BecauseOf(because, becauseArgs)
@@ -28,7 +27,7 @@ namespace FluentSerializer.Core.Tests.Assertions
                 .FailWith("Expected result to be {0}, but found {1}.",
                     _ => expectation.ToString(), _ => Subject.ToString());
 
-            return new AndConstraint<EquatableAssertions<TSubjectEquatable>>(this);
+            return new AndConstraint<EquatableAssertions<TEquatable>>(this);
         }
     }
 }

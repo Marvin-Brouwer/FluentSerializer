@@ -15,6 +15,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
     [DebuggerDisplay("{Name}: {GetDebugValue(), nq},")]
     public readonly struct JsonProperty : IJsonProperty
     {
+        private static readonly int TypeHashCode = typeof(JsonProperty).GetHashCode();
+
         [DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
         private string GetDebugValue()
         {
@@ -155,32 +157,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
-        }
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IJsonNode? other)
-        {
-            if (other is not JsonProperty otherProperty) return false;
+        public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
-            if (Name != otherProperty.Name) return false;
+        public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return Children[0].Equals(otherProperty.Children[0]);
-        }
-
-        public override int GetHashCode()
-        {
-            if (_children.Any() != true) return 0;
-
-            var hash = new HashCode();
-            hash.Add(Name.GetHashCode());
-            foreach (var child in _children)
-                hash.Add(child);
-
-            return hash.ToHashCode();
-        }
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _children);
 
         #endregion
     }

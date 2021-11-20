@@ -12,6 +12,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay(DocumentName)]
     public readonly struct XmlDocument : IXmlDocument
     {
+        private static readonly int TypeHashCode = typeof(XmlDocument).GetHashCode();
+
         public IXmlElement? RootElement { get; }
         public IReadOnlyList<IXmlNode> Children => RootElement?.Children ?? new List<IXmlNode>(0);
 
@@ -55,23 +57,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (RootElement is null && obj is null) return true;
-            if (RootElement is null) return false;
-            if (obj is not IXmlDocument otherDocument) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            return RootElement.Equals(otherDocument.RootElement);
-        }
-
-        public override int GetHashCode() => HashCode.Combine(Name, RootElement?.GetHashCode() ?? 0);
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, RootElement);
 
         #endregion
     }

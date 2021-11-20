@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Xml.DataNodes;
-using FluentSerializer.Xml.Tests.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.IO;
 using System.Text;
 using Xunit;
+
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.DataNodes
@@ -65,7 +66,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
             var result = XmlParser.Parse(input.AsSpan());
 
             // Assert
-            result.Should().BeEquatableTo<IXmlNode>(expected);
+            result.Should().BeEquatableTo(expected);
         }
     }
 }

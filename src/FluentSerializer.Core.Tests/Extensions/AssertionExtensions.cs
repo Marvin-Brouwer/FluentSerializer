@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Tests.Assertions;
 using System;
 
@@ -16,6 +17,13 @@ namespace FluentSerializer.Core.Tests.Extensions
             where TEquatable : IEquatable<TEquatable>
         {
             return new EquatableAssertions<TEquatable>(assertions);
+        }
+
+        /// <inheritdoc cref="FluentAssertions.AssertionExtensions.Should{T}(System.IComparable{T})"/>
+        [CustomAssertion]
+        public static EquatableAssertions<IDataNode> Should(this IDataNode assertions)
+        {
+            return new EquatableAssertions<IDataNode>(assertions);
         }
     }
 }

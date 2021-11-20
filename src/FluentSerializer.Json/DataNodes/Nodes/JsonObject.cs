@@ -15,6 +15,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
     [DebuggerDisplay("{ObjectName, nq}")]
     public readonly struct JsonObject : IJsonObject
     {
+        private static readonly int TypeHashCode = typeof(JsonObject).GetHashCode();
+
         private const string ObjectName = "{ }";
         public string Name => ObjectName;
         
@@ -147,29 +149,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IJsonNode node) return false;
-            return Equals(node);
-        }
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IJsonNode? other)
-        {
-            if (other is not JsonObject otherObject) return false;
+        public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
-            return _children.SequenceEqual(otherObject._children, JsonNodeComparer.Default);
-        }
+        public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-        public override int GetHashCode()
-        {
-            if (_children.Any() != true) return 0;
-
-            var hash = new HashCode();
-            foreach (var child in _children)
-                hash.Add(child);
-
-            return hash.ToHashCode();
-        }
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, _children);
 
         #endregion
     }

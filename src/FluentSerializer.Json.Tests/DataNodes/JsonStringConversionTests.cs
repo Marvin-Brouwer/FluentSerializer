@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Json.DataNodes;
-using FluentSerializer.Json.Tests.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.IO;
 using System.Text;
 using Xunit;
+
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Tests.DataNodes
@@ -103,7 +104,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var result = JsonParser.Parse(input.AsSpan());
 
             // Assert
-            result.Should().BeEquatableTo<IJsonNode>(expected);
+            result.Should().BeEquatableTo(expected);
         }
     }
 }

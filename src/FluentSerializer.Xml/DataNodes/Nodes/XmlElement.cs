@@ -15,6 +15,8 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
     [DebuggerDisplay("<{Name,nq} />")]
     public readonly struct XmlElement : IXmlElement
     {
+        private static readonly int TypeHashCode = typeof(XmlElement).GetHashCode();
+
         public string Name { get; }
 
         private readonly List<IXmlNode> _children;
@@ -353,28 +355,13 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
         #region IEquatable
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not IXmlNode xmlNode) return false;
+        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-            return Equals(xmlNode);
-        }
+        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public bool Equals(IXmlNode? obj)
-        {
-            if (obj is not XmlElement otherElement) return false;
+        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-            if (!Name.Equals(otherElement.Name, StringComparison.Ordinal)) return false;
-            if (_attributes.Count != otherElement._attributes.Count) return false;
-            if (_children.Count != otherElement._children.Count) return false;
-
-            if (_attributes.Any() && !_attributes.SequenceEqual(otherElement._attributes)) return false;
-            if (_children.Any() && !_children.SequenceEqual(otherElement._children)) return false;
-
-            return true;
-        }
-
-        public override int GetHashCode() => HashCode.Combine(Name, _attributes, _children);
+        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _attributes, _children);
 
         #endregion
     }
