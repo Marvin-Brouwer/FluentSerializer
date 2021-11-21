@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
     public sealed class JsonStringConversionTests
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool();
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(StringExtensions.LineFeed);
 
         private readonly IJsonObject _testObjectFormatted;
         private readonly IJsonObject _testObjectSlim;
@@ -83,7 +83,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testObjectFormatted : _testObjectSlim;
 
             // Act
-            var result = input.WriteTo(StringFastPool, format).FixNewLine();
+            var result = input.WriteTo(StringFastPool, format);
             
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);

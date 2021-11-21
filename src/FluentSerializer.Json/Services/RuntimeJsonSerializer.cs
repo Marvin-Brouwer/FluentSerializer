@@ -30,7 +30,7 @@ namespace FluentSerializer.Json.Services
 
             _serializer = new JsonTypeSerializer(mappings);
             _deserializer = new JsonTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringFastPool();
+            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(Environment.NewLine);
 
             JsonConfiguration = configuration;
         }

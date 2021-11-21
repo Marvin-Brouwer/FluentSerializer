@@ -4,9 +4,14 @@ namespace FluentSerializer.Core.Dirty
 {
     public sealed class StringFastPooledObjectPolicy : PooledObjectPolicy<StringFast>
     {
-        internal static readonly StringFastPooledObjectPolicy Default = new();
+        private readonly string _newLine;
 
-        public override StringFast Create() => new();
+        public StringFastPooledObjectPolicy(string newLine)
+        {
+            _newLine = newLine;
+        }
+
+        public override StringFast Create() => new(_newLine);
 
         public override bool Return(StringFast obj)
         {
@@ -17,6 +22,7 @@ namespace FluentSerializer.Core.Dirty
 
     public static class ObjectPoolExtensions
     {
-        public static ObjectPool<StringFast> CreateStringFastPool(this ObjectPoolProvider provider) => provider.Create(StringFastPooledObjectPolicy.Default);
+        public static ObjectPool<StringFast> CreateStringFastPool(this ObjectPoolProvider provider, string newLine) => 
+            provider.Create(new StringFastPooledObjectPolicy(newLine));
     }
 }

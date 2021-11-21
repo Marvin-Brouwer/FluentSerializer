@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Profiling.TestData;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 
@@ -14,7 +15,7 @@ namespace FluentSerializer.Xml.Profiling.Data
     public readonly struct XmlDataSet
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool();
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(StringExtensions.LineFeed);
 
         public static List<DataContainer<IXmlElement>> XmlValues { get; }
         public static List<DataContainer<string>> XmlStringValues { get; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Profiling.TestData;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using static FluentSerializer.Json.JsonBuilder;
@@ -13,7 +14,7 @@ namespace FluentSerializer.Json.Profiling.Data
     public readonly struct JsonDataSet
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool();
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(StringExtensions.LineFeed);
 
         public static List<DataContainer<IJsonObject>> JsonValues { get; }
         public static List<DataContainer<string>> JsonStringValues { get; }
