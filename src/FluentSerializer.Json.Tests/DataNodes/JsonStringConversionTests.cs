@@ -75,7 +75,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
         }
         
         [Theory,
-            Trait("Type", "UnitTest"), Trait("DataFormat", "JSON"),
+            Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
             InlineData(true), InlineData(false)]
         public void JsonObjectToString(bool format)
         {
@@ -96,7 +96,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
         }
 
         [Theory,
-            Trait("Type", "UnitTest"), Trait("DataFormat", "JSON"), 
+            Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"), 
             InlineData(true), InlineData(false)]
         public void StringToObject(bool format)
         {

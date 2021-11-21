@@ -32,7 +32,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         }
 
         [Fact,
-            Trait("Type", "UseCase")]
+            Trait("Category", "UseCase")]
         public async Task Serialize()
         {
             // Arrange
@@ -49,7 +49,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         }
 
         [Fact,
-            Trait("Type", "UseCase")]
+            Trait("Category", "UseCase")]
         public async Task Deserialize()
         {
             // Arrange

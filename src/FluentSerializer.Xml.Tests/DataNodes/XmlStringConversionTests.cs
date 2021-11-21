@@ -38,7 +38,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
         }
 
         [Theory,
-            Trait("Type", "UnitTest"), Trait("DataFormat", "XML"), 
+            Trait("Category", "UnitTest"), Trait("DataFormat", "XML"), 
             InlineData(true), InlineData(false)]
         public void XmlElementToString(bool format)
         {
@@ -58,7 +58,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
         }
 
         [Theory,
-            Trait("Type", "UnitTest"), Trait("DataFormat", "XML"), 
+            Trait("Category", "UnitTest"), Trait("DataFormat", "XML"), 
             InlineData(true), InlineData(false)]
         public void StringToObject(bool format)
         {
