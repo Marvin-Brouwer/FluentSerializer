@@ -2,7 +2,6 @@
 using FluentSerializer.Json.DataNodes;
 using System.Collections.Generic;
 using System.Linq;
-
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Profiling.Data
@@ -31,9 +30,9 @@ namespace FluentSerializer.Json.Profiling.Data
                     Object(
                         Property("street", StringValue(house.StreetName)),
                         Property("number", Value(house.HouseNumber.ToString())),
-                        Property("city", Value(house.ZipCode)),
-                        Property("zipCode", Value(house.ZipCode)),
-                        Property("country", Value(house.Country))
+                        Property("city", StringValue(house.ZipCode)),
+                        Property("zipCode", StringValue(house.ZipCode)),
+                        Property("country", StringValue(house.Country))
                     )
                 ),
                 Property("residents", Array(
@@ -51,10 +50,11 @@ namespace FluentSerializer.Json.Profiling.Data
                     person.MiddleName is null 
                         ? string.Join(" ", person.FirstName, person.LastName) 
                         : string.Join(" ", person.FirstName, person.MiddleName, person.LastName))),
+
                 Property("details",
                     Object(
                         Property("firstName", StringValue(person.FirstName)),
-                        Property("middleName", StringValue(person.MiddleName)),
+                        Property("middleName", string.IsNullOrEmpty(person.MiddleName) ? null : StringValue(person.MiddleName)),
                         Property("lastName", StringValue(person.LastName)),
                         Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
                         Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))

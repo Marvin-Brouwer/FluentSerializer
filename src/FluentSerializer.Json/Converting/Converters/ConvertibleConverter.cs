@@ -28,7 +28,9 @@ namespace FluentSerializer.Json.Converting.Converters
 
             var stringValue = ConvertToString(objectToSerialize);
 
-            return Value(stringValue);
+            return stringValue is null 
+                ? null 
+                : Value(stringValue);
         }
 
         public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
