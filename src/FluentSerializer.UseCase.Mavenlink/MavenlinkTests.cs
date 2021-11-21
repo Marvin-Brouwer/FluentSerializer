@@ -35,7 +35,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("../../../MavenlinkTests.Serialize.json");
+            var expected = await File.ReadAllTextAsync("./MavenlinkTests.Serialize.json");
             var example = ProjectRequestExample;
 
             var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
@@ -52,7 +52,7 @@ namespace FluentSerializer.UseCase.Mavenlink
         {
             // Arrange
             var expected = UserResponseExample;
-            var example = await File.ReadAllTextAsync("../../../MavenlinkTests.Deserialize.json");
+            var example = await File.ReadAllTextAsync("./MavenlinkTests.Deserialize.json");
 
             var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
