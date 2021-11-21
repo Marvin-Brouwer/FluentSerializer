@@ -17,6 +17,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public string Name => ValueName;
         public string? Value { get; }
 
+        public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
+
         /// <inheritdoc cref="JsonBuilder.Value(string?)"/>
         /// <remarks>
         /// <b>Please use <see cref="JsonBuilder.Value"/> method instead of this constructor</b>
@@ -75,9 +77,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             // JSON does not support empty property assignment or array members
-            if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
-
-            return stringBuilder.Append(Value);
+            return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);
         }
 
         #region IEquatable

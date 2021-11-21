@@ -50,10 +50,11 @@ namespace FluentSerializer.Json.Profiling.Data
                     person.MiddleName is null 
                         ? string.Join(" ", person.FirstName, person.LastName) 
                         : string.Join(" ", person.FirstName, person.MiddleName, person.LastName))),
+
                 Property("details",
                     Object(
                         Property("firstName", StringValue(person.FirstName)),
-                        Property("middleName", StringValue(person.MiddleName)),
+                        Property("middleName", string.IsNullOrEmpty(person.MiddleName) ? null : StringValue(person.MiddleName)),
                         Property("lastName", StringValue(person.LastName)),
                         Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
                         Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))

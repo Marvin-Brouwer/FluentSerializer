@@ -29,6 +29,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public string Name { get; }
 
         private readonly IJsonNode[] _children;
+
+        public bool HasValue { get; }
+
         public IReadOnlyList<IJsonNode> Children => _children;
 
         public IJsonNode? Value => _children.FirstOrDefault();
@@ -37,12 +40,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         /// <remarks>
         /// <b>Please use <see cref="JsonBuilder.Property"/> method instead of this constructor</b>
         /// </remarks>
-        public JsonProperty(string name, IJsonPropertyContent? value = null)
+        public JsonProperty(string name, IJsonPropertyContent value)
         {
             Guard.Against.InvalidName(name, nameof(name));
 
             Name = name;
-            _children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value }; 
+            HasValue = value is not null && (value is not IJsonValue jsonValue || jsonValue.HasValue);
+
+            _children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value };
         }
 
         /// <inheritdoc cref="IJsonObject"/>
@@ -51,6 +56,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         /// </remarks>
         public JsonProperty(ReadOnlySpan<char> text, ref int offset)
         {
+            HasValue = false;
+
             var nameStartOffset = offset;
             var nameEndOffset = offset;
 
@@ -94,11 +101,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonCharacterConstants.ObjectStartCharacter)
                 {
                     _children[0] = new JsonObject(text, ref offset);
+                    HasValue = true;
                     return;
                 }
                 if (character == JsonCharacterConstants.ArrayStartCharacter)
                 {
                     _children[0] = new JsonArray(text, ref offset);
+                    HasValue = true;
                     return;
                 }
 
@@ -107,7 +116,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (character == JsonCharacterConstants.DividerCharacter) return;
             }
 
-            _children[0] = new JsonValue(text, ref offset);
+            var jsonValue = new JsonValue(text, ref offset);
+            _children[0] = jsonValue;
+            HasValue = jsonValue.HasValue;
         }
 
         public override string ToString()
@@ -136,15 +147,15 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             const char spacer = ' ';
 
+            if (!writeNull && !HasValue) return stringBuilder;
+
             var childValue = Children.FirstOrDefault();
-            if (!writeNull && childValue is null) return stringBuilder;
 
             stringBuilder
                 .Append(JsonCharacterConstants.PropertyWrapCharacter)
                 .Append(Name)
                 .Append(JsonCharacterConstants.PropertyWrapCharacter);
 
-            if (format) stringBuilder.Append(spacer);
             stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
             if (format) stringBuilder.Append(spacer);
 
