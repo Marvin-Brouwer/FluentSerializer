@@ -27,14 +27,14 @@ namespace FluentSerializer.Json.Tests.DataNodes
             _testObjectFormatted = Object(
                 Comment("object level comment"),
                 MultilineComment(
-                    "object level comment\r\n" +
+                    "object level comment\n" +
                     "With a new line"),
                 Property("prop", Value($"\"Test\"")),
                 Property("prop2", Object(
                     Property("array", Array(
                         Comment("array level comment"),
                         MultilineComment(
-                            "array level comment\r\n" +
+                            "array level comment\n" +
                             "With a new line"),
                         Object(),
                         Array()
@@ -48,14 +48,14 @@ namespace FluentSerializer.Json.Tests.DataNodes
             _testObjectSlim = Object(
                 MultilineComment("object level comment"),
                 MultilineComment(
-                    "object level comment\r\n" +
+                    "object level comment\n" +
                     "With a new line"),
                 Property("prop", Value($"\"Test\"")),
                 Property("prop2", Object(
                     Property("array", Array(
                         MultilineComment("array level comment"),
                         MultilineComment(
-                            "array level comment\r\n" +
+                            "array level comment\n" +
                             "With a new line"),
                         Object(),
                         Array()
@@ -66,15 +66,17 @@ namespace FluentSerializer.Json.Tests.DataNodes
                 ))
             );
 
-            _testJsonFormatted = "{\r\n\t// object level comment\r\n\t/* object level comment\r\nWith a new line */\r\n\t\"prop\" : \"Test\",\r\n\t\"prop2\" : " +
-                "{\r\n\t\t\"array\" : [\r\n\t\t\t// array level comment\r\n\t\t\t/* array level comment\r\nWith a new line */\r\n\t\t\t" +
-                "{\r\n\t\t\t},\r\n\t\t\t[\r\n\t\t\t]\r\n\t\t],\r\n\t\t\"prop3\" : 1,\r\n\t\t\"prop4\" : true,\r\n\t\t\"prop5\" : null\r\n\t}\r\n}";
-            _testJsonSlim = "{/* object level comment *//* object level comment\r\nWith a new line */\"prop\":\"Test\",\"prop2\":{\"array\":" +
-                "[/* array level comment *//* array level comment\r\nWith a new line */{},[]],\"prop3\":1,\"prop4\":true,\"prop5\":null}}";
+            _testJsonFormatted = "{\n\t// object level comment\n\t/* object level comment\nWith a new line */\n\t\"prop\" : \"Test\",\n\t\"prop2\" : " +
+                "{\n\t\t\"array\" : [\n\t\t\t// array level comment\n\t\t\t/* array level comment\nWith a new line */\n\t\t\t" +
+                "{\n\t\t\t},\n\t\t\t[\n\t\t\t]\n\t\t],\n\t\t\"prop3\" : 1,\n\t\t\"prop4\" : true,\n\t\t\"prop5\" : null\n\t}\n}";
+            _testJsonSlim = "{/* object level comment *//* object level comment\nWith a new line */\"prop\":\"Test\",\"prop2\":{\"array\":" +
+                "[/* array level comment *//* array level comment\nWith a new line */{},[]],\"prop3\":1,\"prop4\":true,\"prop5\":null}}";
 
         }
         
-        [Theory, InlineData(true), InlineData(false)]
+        [Theory,
+            Trait("Type", "UnitTest"), Trait("DataFormat", "JSON"),
+            InlineData(true), InlineData(false)]
         public void JsonObjectToString(bool format)
         {
             // Arrange
@@ -87,13 +89,15 @@ namespace FluentSerializer.Json.Tests.DataNodes
 
             input.WriteTo(StringBuilderPool, writer, format);
             writer.Flush();
-            var result = Encoding.UTF8.GetString(stream.ToArray());
+            var result = Encoding.UTF8.GetString(stream.ToArray()).FixNewLine();
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.ShouldBeBinaryEquatableTo(expected);
         }
 
-        [Theory, InlineData(true), InlineData(false)]
+        [Theory,
+            Trait("Type", "UnitTest"), Trait("DataFormat", "JSON"), 
+            InlineData(true), InlineData(false)]
         public void StringToObject(bool format)
         {
             // Arrange

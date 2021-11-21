@@ -30,14 +30,16 @@ namespace FluentSerializer.Xml.Tests.DataNodes
                 Text("text here")
             );
 
-            _testXmlFormatted = "<Class\r\n someAttribute=\"1\">\r\n\t<!-- Comment -->\r\n\t" +
-                "<![CDATA[<p>some xml data here</p>]]>\r\n\t" + 
-                "<someProperty>\r\n\t\t<AnotherClass />\r\n\t</someProperty>\r\n\ttext here\r\n</Class>";           
+            _testXmlFormatted = "<Class\n someAttribute=\"1\">\n\t<!-- Comment -->\n\t" +
+                "<![CDATA[<p>some xml data here</p>]]>\n\t" + 
+                "<someProperty>\n\t\t<AnotherClass />\n\t</someProperty>\n\ttext here\n</Class>";           
             _testXmlSlim = "<Class someAttribute=\"1\"><!-- Comment --><![CDATA[<p>some xml data here</p>]]>" +
                 "<someProperty><AnotherClass /></someProperty>text here</Class>";
         }
 
-        [Theory, InlineData(true), InlineData(false)]
+        [Theory,
+            Trait("Type", "UnitTest"), Trait("DataFormat", "XML"), 
+            InlineData(true), InlineData(false)]
         public void XmlElementToString(bool format)
         {
             // Arrange
@@ -49,13 +51,15 @@ namespace FluentSerializer.Xml.Tests.DataNodes
 
             _testObject.WriteTo(StringBuilderPool, writer, format);
             writer.Flush();
-            var result = Encoding.UTF8.GetString(stream.ToArray());
+            var result = Encoding.UTF8.GetString(stream.ToArray()).FixNewLine();
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.ShouldBeBinaryEquatableTo(expected);
         }
 
-        [Theory, InlineData(true), InlineData(false)]
+        [Theory,
+            Trait("Type", "UnitTest"), Trait("DataFormat", "XML"), 
+            InlineData(true), InlineData(false)]
         public void StringToObject(bool format)
         {
             // Arrange

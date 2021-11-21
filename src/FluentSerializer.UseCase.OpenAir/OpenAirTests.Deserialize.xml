@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <response>
-  <Auth status="0" />
-  <Read status="0">
-    <Ratecard>
-      <id>RC1</id>
-      <name>Ratecard 1</name>
-    </Ratecard>
-    <Ratecard>
-      <id>RC2</id>
-      <updated>
-        <Date>
-          <year>1991</year>
-          <month>11</month>
-          <day>28</day>
-          <hour>04</hour>
-          <minute>00</minute>
-          <second>00</second>
-        </Date>
-      </updated>
-    </Ratecard>
-  </Read>
-  <Read status="601">
-  </Read>
+	<Auth status="0" />
+	<Read status="0">
+		<Ratecard>
+			<id>RC1</id>
+			<name>Ratecard 1</name>
+		</Ratecard>
+		<Ratecard>
+			<id>RC2</id>
+			<updated>
+				<Date>
+					<year>1991</year>
+					<month>11</month>
+					<day>28</day>
+					<hour>04</hour>
+					<minute>00</minute>
+					<second>00</second>
+				</Date>
+			</updated>
+		</Ratecard>
+	</Read>
+	<Read status="601">
+	</Read>
 </response>

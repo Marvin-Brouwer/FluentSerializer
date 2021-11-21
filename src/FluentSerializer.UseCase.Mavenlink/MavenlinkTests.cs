@@ -6,6 +6,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 using FluentSerializer.Json.Converting;
@@ -25,13 +26,13 @@ namespace FluentSerializer.UseCase.Mavenlink
         public MavenlinkTests()
         {
             _configuration = JsonSerializerConfiguration.Default;
-            _configuration.FormatOutput = false;
             _configuration.DefaultConverters.Add(Converter.For.Json());
 
             _mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
         }
 
-        [Fact]
+        [Fact,
+            Trait("Type", "UseCase")]
         public async Task Serialize()
         {
             // Arrange
@@ -41,13 +42,14 @@ namespace FluentSerializer.UseCase.Mavenlink
             var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
-            var result = sut.Serialize(example);
+            var result = sut.Serialize(example).FixNewLine();
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.ShouldBeBinaryEquatableTo(expected);
         }
 
-        [Fact]
+        [Fact,
+            Trait("Type", "UseCase")]
         public async Task Deserialize()
         {
             // Arrange
