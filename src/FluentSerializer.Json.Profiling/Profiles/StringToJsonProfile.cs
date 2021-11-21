@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Profiling.Profiles
     [TailCallDiagnoser]
     public class StringToJsonProfile
     {
-        public static IEnumerable<DataContainer<string>> Inputs => JsonDataSet.JsonStringValues;
+        public static IEnumerable<DataContainer<string>> Inputs => JsonDataSet.JsonStringValues();
 
         [ParamsSource(nameof(Inputs))]
         public DataContainer<string> Input { get; set; }
