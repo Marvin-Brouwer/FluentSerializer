@@ -20,6 +20,44 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --nologo --configuration "Release"
+    - name: Upload dotnet binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-files
+        path: ./src/**/bin
+        retention-days: 1
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+
+  tests:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Download dotnet binaries
+      uses: actions/download-artifact@v2
+      with:
+        name: build-files
+        path: ./src      
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --nologo --no-build --configuration "Release" --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
+      working-directory: .
+    # TODO: Upload test results
+    # TODO: Measure code coverage
+    # add report as PR comment (if PR)
+    # TODO: https://github.com/Tyrrrz/GitHubActionsTestLogger
+    # TODO: remove
+    - name: Upload files for testing
+      uses: actions/upload-artifact@v2
+      with:
+        name: all-files
+        path: .
+        retention-days: 1
+      if: ${{ always() }}
