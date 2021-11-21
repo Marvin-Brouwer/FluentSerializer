@@ -40,8 +40,6 @@ namespace FluentSerializer.Core.Profiling.TestData
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
             var filePath = GetFilePath(directory, collectionName, dataCount);
-            if (File.Exists(filePath)) return;
-
             Console.WriteLine($"Generating {dataCount} bogus items to \"{filePath}\"");
             var stringDataSet = BogusConfiguration.Generate(BogusSeed, dataCount);
 
