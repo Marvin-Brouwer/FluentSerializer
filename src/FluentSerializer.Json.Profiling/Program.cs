@@ -1,4 +1,5 @@
 ﻿using FluentSerializer.Core.Profiling.Runner;
+using FluentSerializer.Json.Profiling.Data;
 using System;
 
 namespace FluentSerializer.Json.Profiling

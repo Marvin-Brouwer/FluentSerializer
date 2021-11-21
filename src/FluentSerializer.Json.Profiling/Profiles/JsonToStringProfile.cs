@@ -33,15 +33,17 @@ namespace FluentSerializer.Json.Profiling.Profiles
             WriteStream = null;
         }
 
-        public static IEnumerable<DataContainer<IJsonObject>> Inputs => JsonDataSet.JsonValues;
+        public static IEnumerable<string> Inputs => new List<string> { "S", "M", "L" };
 
         [ParamsSource(nameof(Inputs))]
-        public DataContainer<IJsonObject> Input { get; set; }
+        public string Size { get; set; }
 
         [Benchmark, BenchmarkCategory("WriteTo")]
         public void WriteTo()
         {
-            Input.Value.WriteTo(JsonDataSet.StringBuilderPool, StreamWriter, true);
+            var value = JsonDataCollection.Default.GetObjectData(Size);
+
+            value.WriteTo(JsonDataSet.StringBuilderPool, StreamWriter, true);
             StreamWriter.Flush();
             var result = Encoding.UTF8.GetString(WriteStream.ToArray());
             _ = result;
