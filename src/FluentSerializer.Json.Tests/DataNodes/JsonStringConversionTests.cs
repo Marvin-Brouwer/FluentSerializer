@@ -65,9 +65,9 @@ namespace FluentSerializer.Json.Tests.DataNodes
                 ))
             );
 
-            _testJsonFormatted = "{\n\t// object level comment\n\t/* object level comment\nWith a new line */\n\t\"prop\" : \"Test\",\n\t\"prop2\" : " +
-                "{\n\t\t\"array\" : [\n\t\t\t// array level comment\n\t\t\t/* array level comment\nWith a new line */\n\t\t\t" +
-                "{\n\t\t\t},\n\t\t\t[\n\t\t\t]\n\t\t],\n\t\t\"prop3\" : 1,\n\t\t\"prop4\" : true,\n\t\t\"prop5\" : null\n\t}\n}";
+            _testJsonFormatted = "{\n\t// object level comment\n\t/* object level comment\nWith a new line */\n\t\"prop\": \"Test\",\n\t\"prop2\": " +
+                "{\n\t\t\"array\": [\n\t\t\t// array level comment\n\t\t\t/* array level comment\nWith a new line */\n\t\t\t" +
+                "{\n\t\t\t},\n\t\t\t[\n\t\t\t]\n\t\t],\n\t\t\"prop3\": 1,\n\t\t\"prop4\": true,\n\t\t\"prop5\": null\n\t}\n}";
             _testJsonSlim = "{/* object level comment *//* object level comment\nWith a new line */\"prop\":\"Test\",\"prop2\":{\"array\":" +
                 "[/* array level comment *//* array level comment\nWith a new line */{},[]],\"prop3\":1,\"prop4\":true,\"prop5\":null}}";
 

@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
-using FluentSerializer.Core.Profiling.TestData;
-using FluentSerializer.Json.DataNodes;
+using FluentSerializer.Core.Tests.Helpers;
 using FluentSerializer.Json.Profiling.Data;
 
 namespace FluentSerializer.Json.Profiling.Profiles
@@ -21,6 +20,8 @@ namespace FluentSerializer.Json.Profiling.Profiles
         {
             WriteStream = new MemoryStream();
             StreamWriter = new StreamWriter(WriteStream);
+
+            JsonDataCollection.Default.GenerateObjectData();
         }
 
         [GlobalCleanup]
@@ -32,16 +33,14 @@ namespace FluentSerializer.Json.Profiling.Profiles
             WriteStream = null;
         }
 
-        public static IEnumerable<DataContainer<IJsonObject>> Inputs => JsonDataSet.JsonValues;
-
-        [ParamsSource(nameof(Inputs))]
-        public DataContainer<IJsonObject> Input { get; set; }
-
         [Benchmark, BenchmarkCategory("WriteTo")]
-        public void WriteTo()
+        public void JsonToString()
         {
-            var result = Input.Value.WriteTo(JsonDataSet.StringFastPool, true);
-            _ = result;
+            var value = JsonDataCollection.Default.ObjectTestData;
+
+            value.WriteTo(TestStringBuilderPool.StringFastPool, true);
+            StreamWriter.Flush();
+            _ = Encoding.UTF8.GetString(WriteStream.ToArray());
         }
     }
 }

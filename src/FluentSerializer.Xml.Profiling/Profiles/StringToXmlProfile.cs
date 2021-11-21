@@ -1,7 +1,6 @@
-using System.Collections.Generic;
+using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
-using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Xml.Profiling.Data;
 
 namespace FluentSerializer.Xml.Profiling.Profiles
@@ -11,16 +10,13 @@ namespace FluentSerializer.Xml.Profiling.Profiles
     [TailCallDiagnoser]
     public class StringToXmlProfile
     {
-        public static IEnumerable<DataContainer<string>> Inputs => XmlDataSet.XmlStringValues;
-
-        [ParamsSource(nameof(Inputs))]
-        public DataContainer<string> Input { get; set; }
-
-
         [Benchmark, BenchmarkCategory("Parse")]
-        public void ParseXml()
+        public void StringToXml()
         {
-            XmlParser.Parse(Input.Value);
+            using var textStream = XmlDataCollection.Default.StringTestData;
+            using var reader = new StreamReader(textStream);
+
+            XmlParser.Parse(reader.ReadToEnd());
         }
     }
 }

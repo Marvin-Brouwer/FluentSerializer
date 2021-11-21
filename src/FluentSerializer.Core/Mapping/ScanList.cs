@@ -11,9 +11,7 @@ namespace FluentSerializer.Core.Mapping
     {
         private readonly IReadOnlyList<TScanFor> _storedDataTypes;
         #if (!DEBUG)
-        #pragma warning disable CS8714
         private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
-        #pragma warning restore CS8714
         #endif
 
         protected ScanList(IReadOnlyList<TScanFor> dataTypes)

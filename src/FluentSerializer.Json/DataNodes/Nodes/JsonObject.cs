@@ -130,6 +130,8 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             foreach (var child in Children)
             {
+                if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
+
                 stringBuilder
                     .AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)

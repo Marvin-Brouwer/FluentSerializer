@@ -22,7 +22,7 @@ namespace FluentSerializer.Core.Profiling.TestData
                 .UseSeed(seed)
                 .RuleFor(house => house.Type, f => f.PickRandom(HouseTypes))
                 .RuleFor(house => house.StreetName, f => f.Address.StreetName())
-                .RuleFor(house => house.HouseNumber, f => f.Random.Number(min: 1))
+                .RuleFor(house => house.HouseNumber, f => f.Random.Number(min: 1, max: 409))
                 .RuleFor(house => house.ZipCode, f => f.Address.ZipCode())
                 .RuleFor(house => house.Country, f => f.Address.Country())
                 .RuleFor(house => house.Residents, f => personFaker.Generate(f.Random.Number(0, 5)));

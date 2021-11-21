@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
-using FluentSerializer.Core.Profiling.TestData;
-using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Core.Tests.Helpers;
 using FluentSerializer.Xml.Profiling.Data;
 
 namespace FluentSerializer.Xml.Profiling.Profiles
@@ -21,6 +20,8 @@ namespace FluentSerializer.Xml.Profiling.Profiles
         {
             WriteStream = new MemoryStream();
             StreamWriter = new StreamWriter(WriteStream);
+
+            XmlDataCollection.Default.GenerateObjectData();
         }
 
         [GlobalCleanup]
@@ -32,16 +33,15 @@ namespace FluentSerializer.Xml.Profiling.Profiles
             WriteStream = null;
         }
 
-        public static IEnumerable<DataContainer<IXmlElement>> Inputs => XmlDataSet.XmlValues;
-
-        [ParamsSource(nameof(Inputs))]
-        public DataContainer<IXmlElement> Input { get; set; }
 
         [Benchmark, BenchmarkCategory("WriteTo")]
-        public void WriteTo()
+        public void XmlToString()
         {
-            var result = Input.Value.WriteTo(XmlDataSet.StringFastPool, true);
-            _ = result;
+            var value = XmlDataCollection.Default.ObjectTestData;
+
+            value.WriteTo(TestStringBuilderPool.StringFastPool, true);
+            StreamWriter.Flush();
+            _ = Encoding.UTF8.GetString(WriteStream.ToArray());
         }
     }
 }
