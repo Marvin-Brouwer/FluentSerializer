@@ -8,6 +8,7 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
+using FluentSerializer.Core.Tests.Extensions;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Configuration;
@@ -35,28 +36,30 @@ namespace FluentSerializer.UseCase.OpenAir
             _mappings = ProfileScanner.FindClassMapsInAssembly<XmlSerializerProfile>(typeof(OpenAirTests).Assembly, _configuration);
         }
 
-        [Fact]
+        [Fact,
+            Trait("Category", "UseCase")]
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("../../../OpenAirTests.Serialize.Xml");
+            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.Xml");
             var example = ProjectRequestExample;
 
             var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
-            var result = sut.Serialize(example);
+            var result = sut.Serialize(example).FixNewLine();
 
             // Assert
-            result.Should().BeEquivalentTo(expected);
+            result.ShouldBeBinaryEquatableTo(expected);
         }
 
-        [Fact]
+        [Fact,
+            Trait("Category", "UseCase")]
         public async Task Deserialize()
         {
             // Arrange
             var expected = RateCardResponseExample;
-            var example = await File.ReadAllTextAsync("../../../OpenAirTests.Deserialize.Xml");
+            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.Xml");
             var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
