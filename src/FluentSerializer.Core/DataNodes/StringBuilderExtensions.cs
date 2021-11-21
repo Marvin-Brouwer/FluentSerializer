@@ -10,7 +10,7 @@
         {
             if (!newLine) return stringBuilder;
 
-            return stringBuilder.AppendLine();
+            return stringBuilder.AppendLineEnding();
         }
         public static StringFast AppendOptionalIndent(this StringFast stringBuilder, int indent, bool format)
         {
