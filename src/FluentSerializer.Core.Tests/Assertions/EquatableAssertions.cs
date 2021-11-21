@@ -15,7 +15,7 @@ namespace FluentSerializer.Core.Tests.Assertions
         {
         }
 
-        protected override string Identifier => Subject.ToString();
+        protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
         public AndConstraint<EquatableAssertions<TEquatable>> BeEquatableTo(
             TEquatable expectation, string because = "", params object[] becauseArgs)
