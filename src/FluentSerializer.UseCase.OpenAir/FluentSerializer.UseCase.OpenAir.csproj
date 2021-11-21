@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj" />
     <ProjectReference Include="..\FluentSerializer.Xml.Converter.DefaultXml\FluentSerializer.Xml.Converter.DefaultXml.csproj" />
     <ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
   </ItemGroup>
