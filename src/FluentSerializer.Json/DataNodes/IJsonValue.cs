@@ -8,5 +8,8 @@ namespace FluentSerializer.Json.DataNodes
     /// https://www.json.org/json-en.html
     /// </see>
     /// </summary>
-    public interface IJsonValue : IDataValue, IJsonNode, IJsonPropertyContent { }
+    public interface IJsonValue : IDataValue, IJsonNode, IJsonPropertyContent
+    {
+        bool HasValue { get; }
+    }
 }

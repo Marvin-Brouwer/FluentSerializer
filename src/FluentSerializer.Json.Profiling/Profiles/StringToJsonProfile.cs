@@ -1,7 +1,6 @@
-using System.Collections.Generic;
+using System.IO;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
-using FluentSerializer.Core.Profiling.TestData;
 using FluentSerializer.Json.Profiling.Data;
 
 namespace FluentSerializer.Json.Profiling.Profiles
@@ -11,16 +10,14 @@ namespace FluentSerializer.Json.Profiling.Profiles
     [TailCallDiagnoser]
     public class StringToJsonProfile
     {
-        public static IEnumerable<DataContainer<string>> Inputs => JsonDataSet.JsonStringValues;
-
-        [ParamsSource(nameof(Inputs))]
-        public DataContainer<string> Input { get; set; }
-
 
         [Benchmark, BenchmarkCategory("Parse")]
-        public void ParseJson()
+        public void StringToJson()
         {
-            JsonParser.Parse(Input.Value);
+            using var textStream = JsonDataCollection.Default.StringTestData;
+            using var reader = new StreamReader(textStream);
+            
+            JsonParser.Parse(reader.ReadToEnd());
         }
     }
 }
