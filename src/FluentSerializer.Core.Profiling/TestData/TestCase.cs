@@ -1,6 +1,8 @@
-﻿namespace FluentSerializer.Core.Profiling.TestData
+﻿using System;
+
+namespace FluentSerializer.Core.Profiling.TestData
 {
-    public readonly record struct TestCase<TData>(TData Data, int Count, long SizeInBytes)
+    public readonly record struct TestCase<TData>(Func<TData> GetData, int Count, long SizeInBytes)
     {
         public override string ToString() => $"{GetReadableSize()} {Count,5:(##000)}";
 

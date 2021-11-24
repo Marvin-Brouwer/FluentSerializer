@@ -9,7 +9,7 @@ namespace FluentSerializer.Json.Profiling.Data
 {
     public sealed class JsonDataCollection : DataCollectionFactory<IJsonObject>
     {
-        public static JsonDataCollection Default => new();
+        public static JsonDataCollection Default = new();
 
         protected override string GetStringFileName(int dataCount) => $"{nameof(JsonDataCollection)}-{dataCount}.json";
         protected override IJsonObject ConvertToData(List<ResidentialArea> data, int residentialAreaCount, long houseCount, long peopleCount) =>

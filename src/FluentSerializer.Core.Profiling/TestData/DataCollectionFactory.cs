@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace FluentSerializer.Core.Profiling.TestData
@@ -12,11 +11,9 @@ namespace FluentSerializer.Core.Profiling.TestData
         private const int BogusSeed = 98123600;
 
 #if (RELEASE)
-        protected virtual int[] StringItemCount => new int[] { 1000, 20000, 50000 };
-        protected virtual int[] DataItemCount => new int[] { 1000, 20000, 50000 };
+        protected virtual int[] ItemCount => new int[] { 500, 5000, 50000 };
 #else
-        protected virtual int[] StringItemCount =>  new int[] { 100, 500 };
-        protected virtual int[] DataItemCount => new int[] { 100, 500 };
+        protected virtual int[] ItemCount =>  new int[] { 100, 500 };
 #endif
 
         public void GenerateTestCaseFiles()
@@ -24,8 +21,7 @@ namespace FluentSerializer.Core.Profiling.TestData
             var directory = GetDirectory();
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
-            foreach (var amount in StringItemCount.Concat(DataItemCount).Distinct().OrderBy(x => x))
-                GenerateTestCase(amount, directory);
+            foreach (var amount in ItemCount) GenerateTestCase(amount, directory);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -34,8 +30,11 @@ namespace FluentSerializer.Core.Profiling.TestData
         private void GenerateTestCase(int dataCount, string directory)
         {
             var filePath = GetFilePath(directory, dataCount);
-            Console.WriteLine($"Generating with bogus with a top level count of {dataCount}");
+            Console.Write($"Generating with bogus with a top level count of {dataCount}; ");
             var (data, houseCount, peopleCount) = BogusConfiguration.Generate(BogusSeed, dataCount);
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine($"Data composition: {dataCount:N0}/{houseCount:N0}/{peopleCount:N0}; Total unique items: {dataCount + houseCount + peopleCount :N0}");
+            Console.ResetColor();
             Console.WriteLine($"Writing bogus to \"{filePath}\"");
 
             var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
@@ -81,11 +80,11 @@ namespace FluentSerializer.Core.Profiling.TestData
         /// However, it appears that generating the bogus data on test run takes up a lot more memory.
         /// This way we only take that cost on startup and not on every test run.
         /// </remarks>
-        public IEnumerable<TestCase<TData>> ObjectTestData
+        public IEnumerable<TestCase<IDataNode>> ObjectTestData
         {
             get
             {
-                foreach (var amount in DataItemCount)
+                foreach (var amount in ItemCount)
                 {
                     using var fileStream = File.OpenRead(GetFilePath(GetDirectory(), amount));
                     using var stream = new MemoryStream((int)fileStream.Length);
@@ -94,7 +93,7 @@ namespace FluentSerializer.Core.Profiling.TestData
                     var fileString = Encoding.UTF8.GetString(stream.GetBuffer());
                     var data = GetDataFromSpan(fileString);
 
-                    yield return new TestCase<TData>(data, amount, fileStream.Length);
+                    yield return new TestCase<IDataNode>(() => data, amount, fileStream.Length);
                 }
             }
         }
@@ -106,10 +105,11 @@ namespace FluentSerializer.Core.Profiling.TestData
         {
             get
             {
-                foreach (var amount in StringItemCount)
+                foreach (var amount in ItemCount)
                 {
-                    var fileStream = File.OpenRead(GetFilePath(GetDirectory(), amount));
-                    yield return new TestCase<Stream>(fileStream, amount, fileStream.Length);
+                    var testFileInfo = new FileInfo(GetFilePath(GetDirectory(), amount));
+                    yield return new TestCase<Stream>(
+                        () => File.OpenRead(testFileInfo.FullName), amount, testFileInfo.Length);
                 }
             }
         }
