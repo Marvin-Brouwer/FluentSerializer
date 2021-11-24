@@ -9,11 +9,17 @@ namespace FluentSerializer.Json.Profiling.Data
 {
     public sealed class JsonDataCollection : DataCollectionFactory<IJsonObject>
     {
-        public static JsonDataCollection Default = new();
+        public static JsonDataCollection Default => new();
 
-        protected override string GetStringFileName(string name) => $"{nameof(JsonDataCollection)}-{name}.json";
-        protected override IJsonObject ConvertToData(List<ResidentialArea> residentialAreas) =>
-            Object(Property("data", Array(residentialAreas.Select(area => area.ToJsonElement()))));
+        protected override string GetStringFileName(int dataCount) => $"{nameof(JsonDataCollection)}-{dataCount}.json";
+        protected override IJsonObject ConvertToData(List<ResidentialArea> data, int residentialAreaCount, long houseCount, long peopleCount) =>
+            Object(
+                Property(nameof(residentialAreaCount), Value(residentialAreaCount.ToString())),
+                Property(nameof(houseCount), Value(houseCount.ToString())),
+                Property(nameof(peopleCount), Value(peopleCount.ToString())),
+                Property(nameof(data), Array(data.Select(area => area.ToJsonElement())))
+            );
 
+        protected override IJsonObject GetDataFromSpan(string stringValue) => JsonParser.Parse(stringValue);
     }
 }

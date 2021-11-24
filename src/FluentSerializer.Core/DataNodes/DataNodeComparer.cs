@@ -17,7 +17,7 @@ namespace FluentSerializer.Core.DataNodes
             return x.GetHashCode().Equals(y?.GetHashCode());
         }
 
-        public int GetHashCode(IEquatable<IDataNode> obj) => obj.GetHashCode();
+        public int GetHashCode(IEquatable<IDataNode>? obj) => obj?.GetHashCode() ?? 0;
 
         /// <summary>
         /// Get the combined HashCode of all objects passed to this method.

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace FluentSerializer.Core.Profiling.TestData
@@ -9,49 +10,42 @@ namespace FluentSerializer.Core.Profiling.TestData
     public abstract class DataCollectionFactory<TData> where TData : IDataNode
     {
         private const int BogusSeed = 98123600;
-        private TData? _objectTestData;
 
 #if (RELEASE)
-        protected virtual int StringItemCount => 50000;
-        protected virtual int DataItemCount => 30000;
+        protected virtual int[] StringItemCount => new int[] { 1000, 20000, 50000 };
+        protected virtual int[] DataItemCount => new int[] { 1000, 20000, 50000 };
 #else
-        protected virtual int StringItemCount => 500;
-        protected virtual int DataItemCount => 100;
+        protected virtual int[] StringItemCount =>  new int[] { 100, 500 };
+        protected virtual int[] DataItemCount => new int[] { 100, 500 };
 #endif
 
-        public void GenerateObjectData()
-        {
-            if (_objectTestData is not null) return;
-
-            Console.WriteLine($"Generating {DataItemCount} bogus items into memory");
-            var objectDataSet = BogusConfiguration.Generate(BogusSeed, DataItemCount);
-            _objectTestData = ConvertToData(objectDataSet);
-        }
-
-        public void GenerateStringFiles()
-        {
-            GenerateStringFile(nameof(StringTestData), StringItemCount);
-            GenerateStringFile(nameof(ObjectTestData), DataItemCount);
-        }
-
-        private void GenerateStringFile(string collectionName, int dataCount)
+        public void GenerateTestCaseFiles()
         {
             var directory = GetDirectory();
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
-            var filePath = GetFilePath(directory, collectionName, dataCount);
-            Console.WriteLine($"Generating {dataCount} bogus items to \"{filePath}\"");
-            var stringDataSet = BogusConfiguration.Generate(BogusSeed, dataCount);
+            foreach (var amount in StringItemCount.Concat(DataItemCount).Distinct().OrderBy(x => x))
+                GenerateTestCase(amount, directory);
 
-            var objectData = ConvertToData(stringDataSet);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        private void GenerateTestCase(int dataCount, string directory)
+        {
+            var filePath = GetFilePath(directory, dataCount);
+            Console.WriteLine($"Generating with bogus with a top level count of {dataCount}");
+            var (data, houseCount, peopleCount) = BogusConfiguration.Generate(BogusSeed, dataCount);
+            Console.WriteLine($"Writing bogus to \"{filePath}\"");
+
+            var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
             WriteStringContent(objectData, filePath);
         }
 
         private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
-        private string GetFilePath(string directory, string collectionName, int dataCount) => Path.Join(directory, 
-            GetStringFileName($"{collectionName}-{dataCount}"));
+        private string GetFilePath(string directory, int dataCount) => Path.Join(directory, GetStringFileName(dataCount));
 
-        protected void WriteStringContent(TData data, string filePath)
+        private void WriteStringContent(TData data, string filePath)
         {
             using var writer = File.CreateText(filePath);
             var stringBuilder = new StringBuilder();
@@ -63,18 +57,61 @@ namespace FluentSerializer.Core.Profiling.TestData
             writer.Close();
         }
 
-        protected abstract TData ConvertToData(List<ResidentialArea> residentialAreas);
-        protected abstract string GetStringFileName(string name);
+        /// <summary>
+        /// Convert the generated data set to <see cref="TData"/>
+        /// </summary>
+        protected abstract TData ConvertToData(List<ResidentialArea> data, int residentialAreaCount, long houseCount, long peopleCount);
 
-        public TData ObjectTestData
+        /// <summary>
+        /// Generate a filename for this test case, preferably with the right extension.
+        /// </summary>
+        protected abstract string GetStringFileName(int dataCount);
+
+        /// <summary>
+        /// Construct a <see cref="TData"/> object to contain the test case presented in <see cref="GetDataFromSpan(string)"/>
+        /// </summary>
+        protected abstract TData GetDataFromSpan(string stringValue);
+
+        /// <summary>
+        /// A collection of TestCases for writing a data object to string
+        /// </summary>
+        /// <remarks>
+        /// It may seem counter intuitive to first parse serialized data into a data object and
+        /// then writing it back to that same serialized format again.
+        /// However, it appears that generating the bogus data on test run takes up a lot more memory.
+        /// This way we only take that cost on startup and not on every test run.
+        /// </remarks>
+        public IEnumerable<TestCase<TData>> ObjectTestData
         {
             get
             {
-                // This should never happen
-                if (_objectTestData is null) GenerateObjectData();
-                return _objectTestData!;
+                foreach (var amount in DataItemCount)
+                {
+                    using var fileStream = File.OpenRead(GetFilePath(GetDirectory(), amount));
+                    using var stream = new MemoryStream((int)fileStream.Length);
+                    fileStream.CopyTo(stream);
+
+                    var fileString = Encoding.UTF8.GetString(stream.GetBuffer());
+                    var data = GetDataFromSpan(fileString);
+
+                    yield return new TestCase<TData>(data, amount, fileStream.Length);
+                }
             }
         }
-        public Stream StringTestData => File.OpenRead(GetFilePath(GetDirectory(), nameof(StringTestData), StringItemCount));
+
+        /// <summary>
+        /// A collection of test cases for parsing string to a data object
+        /// </summary>
+        public IEnumerable<TestCase<Stream>> StringTestData
+        {
+            get
+            {
+                foreach (var amount in StringItemCount)
+                {
+                    var fileStream = File.OpenRead(GetFilePath(GetDirectory(), amount));
+                    yield return new TestCase<Stream>(fileStream, amount, fileStream.Length);
+                }
+            }
+        }
     }
 }
