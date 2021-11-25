@@ -1,10 +1,10 @@
 ﻿{
-  "count": 1,
-  "data": [
-    {
-      "id": "U1",
-      "name": "John Doe",
-      "age": 22
-    }
-  ]
+	"count": 1,
+	"data": [
+		{
+			"id": "U1",
+			"name": "John Doe",
+			"age": 22
+		}
+	]
 }

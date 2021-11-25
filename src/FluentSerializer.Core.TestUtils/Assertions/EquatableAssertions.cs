@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using System;
 
-namespace FluentSerializer.Core.Tests.Assertions
+namespace FluentSerializer.Core.TestUtils.Assertions
 {
     /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
     public class EquatableAssertions<TEquatable> :
@@ -15,7 +15,7 @@ namespace FluentSerializer.Core.Tests.Assertions
         {
         }
 
-        protected override string Identifier => Subject.ToString();
+        protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
         public AndConstraint<EquatableAssertions<TEquatable>> BeEquatableTo(
             TEquatable expectation, string because = "", params object[] becauseArgs)
