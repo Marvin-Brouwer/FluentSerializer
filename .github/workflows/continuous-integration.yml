@@ -17,7 +17,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
-          2.1.x
           3.1.x
           5.0.x
     - name: 🗃 Restore dependencies
@@ -57,11 +56,12 @@ jobs:
     - name: 🧪 Run unit tests
       run: >- 
         dotnet test "./**/bin/**/*Tests.dll" --filter Category=UnitTest
-        --nologo --no-build --configuration Release 
+        --nologo --no-build --configuration Release --results-directory "./test-results"
         --logger GitHubActions
         --logger "trx;LogFileName=test-results.trx"
         --logger "console;verbosity=detailed" 
-        --collect:"XPlat Code Coverage"
+        --collect "DotnetCodeCoverage" 
+        --collect "Code Coverage"
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
       run: >- 
