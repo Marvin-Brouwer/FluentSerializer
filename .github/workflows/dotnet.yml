@@ -32,7 +32,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build-files
-        path: ./src/**/bin
+        path: |
+          ./src/**/bin/Release
+          ./src/**/obj
         retention-days: 1
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
@@ -57,7 +59,7 @@ jobs:
         path: ./src      
     - name: Test
       run: >- 
-        dotnet test "${{github.workspace}}/FluentSerializer.sln" --nologo --no-build --configuration Release 
+        dotnet test --nologo --no-build --configuration Release 
       working-directory: ${{github.workspace}}
     # TODO:
     # - name: Unit test
