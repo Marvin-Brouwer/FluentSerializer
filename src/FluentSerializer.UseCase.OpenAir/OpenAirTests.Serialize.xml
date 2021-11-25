@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <request>
 	<!-- Normally this is where the authentication element would be added -->
 	<Add
@@ -10,7 +10,7 @@
 							<year>1991</year>
 							<month>11</month>
 							<day>28</day>
-							<hour>04</hour>
+							<hour>03</hour>
 							<minute>00</minute>
 							<second>00</second>
 						</Date>
@@ -30,7 +30,7 @@
 							<year>1991</year>
 							<month>11</month>
 							<day>28</day>
-							<hour>05</hour>
+							<hour>04</hour>
 							<minute>00</minute>
 							<second>00</second>
 						</Date>
@@ -46,7 +46,7 @@
 							<year>1991</year>
 							<month>11</month>
 							<day>28</day>
-							<hour>06</hour>
+							<hour>05</hour>
 							<minute>00</minute>
 							<second>00</second>
 						</Date>
