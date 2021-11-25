@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
     <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.1" />
-    <PackageReference Include="Bogus" Version="33.1.1" />
+    <PackageReference Include="Bogus" Version="34.0.1" />
     <PackageReference Include="IsExternalInit" Version="1.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj" />
     <ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
   </ItemGroup>
 
