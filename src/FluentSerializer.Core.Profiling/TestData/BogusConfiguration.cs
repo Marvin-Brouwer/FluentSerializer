@@ -7,8 +7,11 @@ namespace FluentSerializer.Core.Profiling.TestData
     {
         private static readonly List<string> AreaTypes = new() { "city", "town", "village" };
         private static readonly List<string> HouseTypes = new() { "apartment", "detached", "condominium", "ranch" };
-        public static List<ResidentialArea> Generate(int seed, int amount)
+        public static (List<ResidentialArea> data, long houseCount, long peopleCount) Generate(int seed, int amount)
         {
+            long peopleCount = 0;
+            long houseCount = 0;
+
             var personFaker = new Faker<Person>()
                 .UseSeed(seed)
                 .RuleFor(person => person.Gender, (f) => f.PickRandom<Bogus.DataSets.Name.Gender>())
@@ -25,20 +28,30 @@ namespace FluentSerializer.Core.Profiling.TestData
                 .RuleFor(house => house.HouseNumber, f => f.Random.Number(min: 1, max: 409))
                 .RuleFor(house => house.ZipCode, f => f.Address.ZipCode())
                 .RuleFor(house => house.Country, f => f.Address.Country())
-                .RuleFor(house => house.Residents, f => personFaker.Generate(f.Random.Number(0, 5)));
+                .RuleFor(house => house.Residents, f =>
+                {
+                    var amount = f.Random.Number(1, 5);
+                    peopleCount += amount;
+
+                    return personFaker.Generate(amount);
+                });
 
             var residentialFaker = new Faker<ResidentialArea>()
                 .UseSeed(seed)
                 .RuleFor(residentialArea => residentialArea.Type, f => f.PickRandom(AreaTypes))
                 .RuleFor(residentialArea => residentialArea.Name, f => f.Address.City())
                 .RuleFor(residentialArea => residentialArea.Houses, (f, c) => {
-                    var houses = houseFaker.Generate(f.Random.Number(0, 20));
+
+                    var amount = f.Random.Number(3, 20);
+                    houseCount += amount;
+
+                    var houses = houseFaker.Generate(amount);
                     houses.ForEach(house => house.City = c.Name);
                     return houses;
                 });
 
-            return residentialFaker
-                .Generate(amount);
+            var data = residentialFaker.Generate(amount);
+            return (data, houseCount, peopleCount);
         }
     }
 }

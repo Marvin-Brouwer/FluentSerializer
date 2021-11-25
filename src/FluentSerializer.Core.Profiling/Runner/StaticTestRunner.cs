@@ -51,7 +51,11 @@ namespace FluentSerializer.Core.Profiling.Runner
         public static void Run(string[] parameters, Assembly assembly)
         {
             var config = CreateConfig();
-            Console.WriteLine("Starting benchmark runner");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Starting benchmark runner...");
+            Console.ResetColor();
+            Console.WriteLine();
 
             if (!parameters.Any())
                 BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);

@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Profiling.Data
 {
     public static class TestDataExtensions
     {
-        public static IXmlContainer ToXmlElement(this ResidentialArea residentialArea)
+        public static IXmlNode ToXmlElement(this ResidentialArea residentialArea)
         {
             var children = new List<IXmlNode> {
                 Attribute("type", residentialArea.Type),
