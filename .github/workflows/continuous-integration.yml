@@ -42,7 +42,6 @@ jobs:
     - name: 🗃 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-coverage
-        dotnet tool install --global coverlet.console
     - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -63,13 +62,13 @@ jobs:
         --logger "trx;LogFileName=test-results.trx"
         --logger "console;verbosity=detailed" 
       working-directory: ${{github.workspace}}
-    - name: 🧪 Measure unit test code-coverage
-      run: >- 
-        coverlet "." --format opencover --format lcov --format cobertura
-        --target "dotnet" 
-        --targetargs "test "./**/bin/**/*Tests.dll" --configuration Release --no-build --filter Category=UnitTest"
-      # --exclude "[*Test*]*,[*UseCase*]"*
-      working-directory: ${{github.workspace}}
+    # - name: 🧪 Measure unit test code-coverage
+    #   run: >- 
+    #     coverlet "." --format opencover --format lcov --format cobertura
+    #     --target "dotnet" 
+    #     --targetargs "test "./**/bin/**/*Tests.dll" --configuration Release --no-build --filter Category=UnitTest"
+    #     --exclude "[*Test*]*,[*UseCase*]"*
+    #   working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
       run: >- 
         dotnet test "./**/bin/**/*UseCase*.dll" --filter Category=UseCase
@@ -77,11 +76,3 @@ jobs:
         --logger GitHubActions
         --logger "console;verbosity=detailed" 
       working-directory: ${{github.workspace}}
-    # TODO: remove
-    - name: Upload files for testing
-      uses: actions/upload-artifact@v2
-      with:
-        name: all-files
-        path: .
-        retention-days: 1
-      if: ${{ always() }}
