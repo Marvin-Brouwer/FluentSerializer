@@ -24,6 +24,10 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --nologo --configuration "Release"
+    - name: Test
+      run: >- 
+        dotnet test --nologo --no-build --configuration Release 
+        --logger "console;verbosity=detailed" 
     - name: Upload dotnet binaries
       uses: actions/upload-artifact@v2
       with:
@@ -53,8 +57,19 @@ jobs:
         name: build-files
         path: ./src      
     - name: Test
-      run: dotnet test --nologo --no-build --configuration "Release" --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
-      working-directory: .
+      run: >- 
+        dotnet test --nologo --no-build --configuration Release 
+        --logger "console;verbosity=detailed" 
+    # TODO:
+    # - name: Unit test
+    #   run: >- 
+    #     dotnet test --nologo --no-build --configuration "Release" --filter Category=UnitTest
+    #     --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
+    #   working-directory: .
+    # - name: Use-case examples
+    #   run: >- 
+    #     dotnet test --nologo --no-build --configuration "Release" --filter Category=UseCase;"
+    #   working-directory: .
     # TODO: Upload test results
     # TODO: Measure code coverage
     # add report as PR comment (if PR)
