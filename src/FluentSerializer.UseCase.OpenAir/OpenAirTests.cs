@@ -41,7 +41,7 @@ namespace FluentSerializer.UseCase.OpenAir
         public async Task Serialize()
         {
             // Arrange
-            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.Xml");
+            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
             var example = ProjectRequestExample;
 
             var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
@@ -59,7 +59,7 @@ namespace FluentSerializer.UseCase.OpenAir
         {
             // Arrange
             var expected = RateCardResponseExample;
-            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.Xml");
+            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
             var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
