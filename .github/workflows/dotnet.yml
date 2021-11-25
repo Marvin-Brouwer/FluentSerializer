@@ -13,28 +13,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
+    - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
           2.1.x
           3.1.x
           5.0.x
-    - name: Restore dependencies
+    - name: 🗃 Restore dependencies
       run: dotnet restore
-    - name: Build
+    - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
-    # - name: Test
-    #   run: >- 
-    #     dotnet test --nologo --no-build --configuration Release 
-    #     --logger "console;verbosity=detailed" 
-    - name: Upload dotnet binaries
+    - name: 🗃 Upload './src/**/bin'
       uses: actions/upload-artifact@v2
       with:
         name: build-files
-        path: |
-          ./src/**/bin/Release
-          ./src/**/obj
+        path: ./src/**/bin/Release
         retention-days: 1
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
@@ -46,35 +40,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
+    - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
           3.1.x
           5.0.x
-    - name: Download dotnet binaries
+    - name: 🗃 Restore './src/**/bin'
       uses: actions/download-artifact@v2
       with:
         name: build-files
         path: ./src      
-    - name: Test
-      run: >- 
-        dotnet test --nologo --no-build --configuration Release 
-      working-directory: ${{github.workspace}}
-    # TODO:
-    # - name: Unit test
-    #   run: >- 
-    #     dotnet test --nologo --no-build --configuration "Release" --filter Category=UnitTest
-    #     --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
-    #   working-directory: .
-    # - name: Use-case examples
-    #   run: >- 
-    #     dotnet test --nologo --no-build --configuration "Release" --filter Category=UseCase;"
-    #   working-directory: .
     # TODO: Upload test results
     # TODO: Measure code coverage
     # add report as PR comment (if PR)
     # TODO: https://github.com/Tyrrrz/GitHubActionsTestLogger
+    - name: 🧪 Run unit tests
+      run: >- 
+        dotnet test "./**/bin/**/*Tests.dll" --filter Category=UnitTest
+        --nologo --no-build --configuration Release 
+        --logger "console;verbosity=detailed" 
+      working-directory: ${{github.workspace}}
+    # TODO: Upload test results
+    # add report as PR comment (if PR)
+    # TODO: https://github.com/Tyrrrz/GitHubActionsTestLogger
+    - name: 🧪 Run use-case tests
+      run: >- 
+        dotnet test "./**/bin/**/*UseCase*.dll" --filter Category=UseCase
+        --nologo --no-build --configuration Release 
+        --logger "console;verbosity=detailed" 
+      working-directory: ${{github.workspace}}
     # TODO: remove
     - name: Upload files for testing
       uses: actions/upload-artifact@v2
