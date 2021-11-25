@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Tests.Helpers;
+using FluentSerializer.Core.TestUtils.Helpers;
 using System;
 using System.IO;
 using System.Text;

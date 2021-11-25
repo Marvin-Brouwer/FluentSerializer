@@ -6,7 +6,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
-using FluentSerializer.Core.Tests.Extensions;
+using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 using FluentSerializer.Json.Converting;
@@ -18,7 +18,7 @@ using Xunit;
 
 namespace FluentSerializer.UseCase.Mavenlink
 {
-    public sealed partial class MavenlinkTests
+	public sealed partial class MavenlinkTests
     {
         private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
         private readonly JsonSerializerConfiguration _configuration;

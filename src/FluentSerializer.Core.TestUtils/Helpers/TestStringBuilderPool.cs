@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.ObjectPool;
 using System.Text;
 
-namespace FluentSerializer.Core.Tests.Helpers
+namespace FluentSerializer.Core.TestUtils.Helpers
 {
     public readonly struct TestStringBuilderPool
     {

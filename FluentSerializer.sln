@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xml", "Xml", "{A3D13BDF-78F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6AE18568-4F61-4920-9D44-140C013B2F66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Core.Tests", "src\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj", "{D3832D51-E05A-4947-89EF-DD929AC042E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Core.TestUtils", "src\FluentSerializer.Core.TestUtils\FluentSerializer.Core.TestUtils.csproj", "{D3832D51-E05A-4947-89EF-DD929AC042E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UseCases", "UseCases", "{69019026-F1D9-478C-95DA-ABA44A503157}"
 EndProject

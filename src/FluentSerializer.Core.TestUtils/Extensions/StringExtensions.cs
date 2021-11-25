@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentSerializer.Core.Tests.Extensions
+namespace FluentSerializer.Core.TestUtils.Extensions
 {
     public static class StringExtensions
     {
