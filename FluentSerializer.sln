@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{6D31C618-434F-478E-A1B0-55321178D216}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		LICENSE.md = LICENSE.md
 		README.md = README.md
@@ -47,7 +48,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Profi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Profiling", "src\FluentSerializer.Xml.Profiling\FluentSerializer.Xml.Profiling.csproj", "{2CD835E4-5E03-4358-AF7D-B0DE533861A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.Xml.Converter.DefaultXml", "src\FluentSerializer.Xml.Converter.DefaultXml\FluentSerializer.Xml.Converter.DefaultXml.csproj", "{66B04BC9-C43E-49B0-BD4B-8C04A1CA67F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Converter.DefaultXml", "src\FluentSerializer.Xml.Converter.DefaultXml\FluentSerializer.Xml.Converter.DefaultXml.csproj", "{66B04BC9-C43E-49B0-BD4B-8C04A1CA67F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Converter.DefaultJson", "src\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj", "{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}"
 EndProject
