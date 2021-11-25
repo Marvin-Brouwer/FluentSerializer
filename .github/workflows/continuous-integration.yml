@@ -40,6 +40,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: 🗃 Setup .NET tools
+      run: dotnet tool install --global dotnet-coverage
     - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -51,23 +53,21 @@ jobs:
       with:
         name: build-files
         path: ./src      
-    # TODO: Upload test results
-    # TODO: Measure code coverage
-    # add report as PR comment (if PR)
-    # TODO: https://github.com/Tyrrrz/GitHubActionsTestLogger
+    # TODO: expose code coverage
     - name: 🧪 Run unit tests
       run: >- 
         dotnet test "./**/bin/**/*Tests.dll" --filter Category=UnitTest
         --nologo --no-build --configuration Release 
+        --logger GitHubActions
+        --logger "trx;LogFileName=test-results.trx"
         --logger "console;verbosity=detailed" 
+        --collect:"XPlat Code Coverage"
       working-directory: ${{github.workspace}}
-    # TODO: Upload test results
-    # add report as PR comment (if PR)
-    # TODO: https://github.com/Tyrrrz/GitHubActionsTestLogger
     - name: 🧪 Run use-case tests
       run: >- 
         dotnet test "./**/bin/**/*UseCase*.dll" --filter Category=UseCase
         --nologo --no-build --configuration Release 
+        --logger GitHubActions
         --logger "console;verbosity=detailed" 
       working-directory: ${{github.workspace}}
     # TODO: remove
