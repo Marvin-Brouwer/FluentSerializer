@@ -5,7 +5,7 @@ using FluentSerializer.Xml.DataNodes;
 namespace FluentSerializer.Xml.Converting
 {
     public interface IXmlConverter<TDataContainer> : IConverter<TDataContainer>, IXmlConverter
-        where TDataContainer : class, IXmlNode
+        where TDataContainer : IXmlNode
     {
         object? Deserialize(TDataContainer objectToDeserialize, IXmlElement? parent, ISerializerContext context) => 
             Deserialize(objectToDeserialize, context);

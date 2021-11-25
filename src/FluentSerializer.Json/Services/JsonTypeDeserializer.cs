@@ -22,14 +22,14 @@ namespace FluentSerializer.Json.Services
         }
 
         public TModel? DeserializeFromNode<TModel>(IJsonNode dataObject, IJsonSerializer currentSerializer)
-           where TModel : class, new()
+           where TModel : new()
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
             var classType = typeof(TModel);
             var deserializedInstance = DeserializeFromNode(dataObject, classType, currentSerializer);
-            if (deserializedInstance is null) return null;
+            if (deserializedInstance is null) return default;
 
             return (TModel)deserializedInstance;
         }

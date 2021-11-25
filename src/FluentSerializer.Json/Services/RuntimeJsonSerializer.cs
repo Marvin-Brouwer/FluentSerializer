@@ -36,7 +36,7 @@ namespace FluentSerializer.Json.Services
             JsonConfiguration = configuration;
         }
 
-        public TModel? Deserialize<TModel>(IJsonContainer element) where TModel : class, new()
+        public TModel? Deserialize<TModel>(IJsonContainer element) where TModel : new()
         {
             return _deserializer.DeserializeFromNode<TModel>(element, this);
         }
@@ -46,13 +46,13 @@ namespace FluentSerializer.Json.Services
             return _deserializer.DeserializeFromNode(element, modelType,  this);
         }
 
-        public TModel? Deserialize<TModel>(string stringData) where TModel : class, new()
+        public TModel? Deserialize<TModel>(string stringData) where TModel : new()
         {
             var jObject = JsonParser.Parse(stringData);
             return Deserialize<TModel>(jObject);
         }
 
-        public string Serialize<TModel>(TModel model) where TModel : class, new()
+        public string Serialize<TModel>(TModel model) where TModel : new()
         {
             var container = SerializeToContainer(model);
             if (container is null) return string.Empty;

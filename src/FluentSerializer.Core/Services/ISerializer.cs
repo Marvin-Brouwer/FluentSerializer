@@ -6,7 +6,7 @@ namespace FluentSerializer.Core.Services
     {
         SerializerConfiguration Configuration { get; }
 
-        public string Serialize<TModel>(TModel model) where TModel : class, new();
-        public TModel? Deserialize<TModel>(string stringData) where TModel : class, new();
+        public string Serialize<TModel>(TModel model) where TModel : new();
+        public TModel? Deserialize<TModel>(string stringData) where TModel : new();
     }
 }

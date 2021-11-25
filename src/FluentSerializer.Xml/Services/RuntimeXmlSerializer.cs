@@ -38,7 +38,7 @@ namespace FluentSerializer.Xml.Services
         }
 
         public TModel? Deserialize<TModel>(IXmlElement element)
-            where TModel : class, new()
+            where TModel : new()
         {
             if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
             return _deserializer.DeserializeFromElement<TModel>(element, this);
@@ -50,14 +50,14 @@ namespace FluentSerializer.Xml.Services
         }
 
         public TModel? Deserialize<TModel>(string stringData)
-            where TModel : class, new()
+            where TModel : new()
         {
             var rootElement = XmlParser.Parse(stringData);
             return Deserialize<TModel>(rootElement);
         }
 
         public string Serialize<TModel>(TModel model)
-            where TModel : class, new()
+            where TModel : new()
         {
             if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
             var document = SerializeToDocument(model);

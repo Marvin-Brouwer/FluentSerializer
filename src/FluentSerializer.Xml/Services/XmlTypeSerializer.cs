@@ -84,7 +84,7 @@ namespace FluentSerializer.Xml.Services
         private static TNode? SerializeNode<TNode>(
             object propertyValue, IPropertyMap propertyMapping, 
             SerializerContext serializerContext)
-            where TNode : class, IXmlNode
+            where TNode : IXmlNode
         {
             var matchingConverter = propertyMapping.GetConverter<TNode>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);

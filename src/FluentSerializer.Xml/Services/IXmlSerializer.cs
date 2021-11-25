@@ -7,7 +7,7 @@ namespace FluentSerializer.Xml.Services
     public interface IXmlSerializer : ISerializer
     {
         XmlSerializerConfiguration XmlConfiguration { get; }
-        TModel? Deserialize<TModel>(IXmlElement element) where TModel: class, new ();
+        TModel? Deserialize<TModel>(IXmlElement element) where TModel: new ();
         IXmlElement? SerializeToElement<TModel>(TModel model);
         IXmlDocument? SerializeToDocument<TModel>(TModel model);
     }

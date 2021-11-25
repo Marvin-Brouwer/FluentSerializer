@@ -26,14 +26,14 @@ namespace FluentSerializer.Xml.Services
         }
 
         public TModel? DeserializeFromElement<TModel>(IXmlElement dataObject, IXmlSerializer currentSerializer)
-           where TModel : class, new()
+           where TModel : new()
         {
             Guard.Against.Null(dataObject, nameof(dataObject));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
             var classType = typeof(TModel);
             var deserializedInstance = DeserializeFromElement(dataObject, classType,  currentSerializer);
-            if (deserializedInstance is null) return null;
+            if (deserializedInstance is null) return default;
 
             return (TModel)deserializedInstance;
         }
@@ -105,7 +105,7 @@ namespace FluentSerializer.Xml.Services
         private static void DeserializeNode<TNode>(
             TNode? node, IXmlElement parent, string? nodeValue, string propertyName, IPropertyMap propertyMapping,object instance, 
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
-            where TNode : class, IXmlNode
+            where TNode : IXmlNode
         {
             if (nodeValue is null && !propertyMapping.Property.IsNullable())
                 throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);

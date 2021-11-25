@@ -8,7 +8,7 @@ namespace FluentSerializer.Json.Services
     {
         JsonSerializerConfiguration JsonConfiguration { get; }
 
-        TModel? Deserialize<TModel>(IJsonContainer element) where TModel: class, new ();
+        TModel? Deserialize<TModel>(IJsonContainer element) where TModel: new ();
         IJsonContainer? SerializeToContainer<TModel>(TModel model);
     }
 }
