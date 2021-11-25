@@ -1,4 +1,4 @@
-name: .NET
+name: Continuous Integration
 
 on:
   push:
@@ -40,7 +40,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: 🗃 Setup .NET tools
-      run: dotnet tool install --global dotnet-coverage
+      run: |-
+        dotnet tool install --global dotnet-coverage
+        dotnet tool install --global coverlet.console
     - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -60,8 +62,13 @@ jobs:
         --logger GitHubActions
         --logger "trx;LogFileName=test-results.trx"
         --logger "console;verbosity=detailed" 
-        --collect "DotnetCodeCoverage" 
-        --collect "Code Coverage"
+      working-directory: ${{github.workspace}}
+    - name: 🧪 Measure unit test code-coverage
+      run: >- 
+        coverlet "." --format opencover --format lcov --format cobertura
+        --target "dotnet" 
+        --targetargs "test "./**/bin/**/*Tests.dll" --configuration Release --no-build --filter Category=UnitTest"
+      # --exclude "[*Test*]*,[*UseCase*]"*
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
       run: >- 
