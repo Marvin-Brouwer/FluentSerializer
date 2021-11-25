@@ -5,7 +5,7 @@ using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Converting
 {
-    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
+    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : class, IDataNode
     {
         TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
         object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);

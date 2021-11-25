@@ -43,7 +43,7 @@ namespace FluentSerializer.Core.Mapping
 
         public IConverter<TDataContainer>? GetConverter<TDataContainer>(
             SerializerDirection direction, ISerializer currentSerializer)
-            where TDataContainer : IDataNode
+            where TDataContainer : class, IDataNode
         {
             Guard.Against.Null(direction, nameof(direction));
             Guard.Against.Null(currentSerializer, nameof(currentSerializer));

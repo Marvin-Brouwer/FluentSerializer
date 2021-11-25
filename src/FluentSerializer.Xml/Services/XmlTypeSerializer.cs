@@ -8,9 +8,9 @@ using System.Collections;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.DataNodes;
+using System.Collections.Generic;
 
 using static FluentSerializer.Xml.XmlBuilder;
-using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.Services
 {
@@ -84,7 +84,7 @@ namespace FluentSerializer.Xml.Services
         private static TNode? SerializeNode<TNode>(
             object propertyValue, IPropertyMap propertyMapping, 
             SerializerContext serializerContext)
-            where TNode : IXmlNode
+            where TNode : class, IXmlNode
         {
             var matchingConverter = propertyMapping.GetConverter<TNode>(
                 SerializerDirection.Serialize, serializerContext.CurrentSerializer);

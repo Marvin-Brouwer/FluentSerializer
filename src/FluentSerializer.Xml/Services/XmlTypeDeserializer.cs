@@ -105,7 +105,7 @@ namespace FluentSerializer.Xml.Services
         private static void DeserializeNode<TNode>(
             TNode? node, IXmlElement parent, string? nodeValue, string propertyName, IPropertyMap propertyMapping,object instance, 
             IXmlSerializer currentSerializer, SerializerContext serializerContext)
-            where TNode : IXmlNode
+            where TNode : class, IXmlNode
         {
             if (nodeValue is null && !propertyMapping.Property.IsNullable())
                 throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, propertyName);

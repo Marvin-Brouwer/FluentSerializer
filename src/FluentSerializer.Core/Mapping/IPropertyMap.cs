@@ -19,6 +19,6 @@ namespace FluentSerializer.Core.Mapping
 
         IConverter<TDataContainer>? GetConverter<TDataContainer>(
             SerializerDirection direction, ISerializer currentSerializer)
-            where TDataContainer : IDataNode;
+            where TDataContainer : class, IDataNode;
     }
 }
