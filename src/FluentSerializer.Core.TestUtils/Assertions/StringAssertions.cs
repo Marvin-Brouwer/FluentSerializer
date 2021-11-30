@@ -27,7 +27,7 @@ namespace FluentSerializer.Core.TestUtils.Assertions
         }
 
         private static string ReplaceEscapeCharacters(string input) =>
-            input.Replace("\n", "\n\\n ").Replace("\r", "\r\\r ")
-				.Replace("\r\\r\n\\n", "\n\\r\\n ").Replace("\t", "\\t ");
+            input.Replace("\n", "\\n\n").Replace("\r", "\\r\r")
+				.Replace("\\r\r\\n\n", "\\r\\n\n").Replace("\t", "\\t ");
     }
 }

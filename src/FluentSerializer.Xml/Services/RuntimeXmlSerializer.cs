@@ -32,7 +32,7 @@ namespace FluentSerializer.Xml.Services
 
             _serializer = new XmlTypeSerializer(mappings);
             _deserializer = new XmlTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(Environment.NewLine);
+            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(configuration.NewLine);
 
 			XmlConfiguration = configuration;
 		}

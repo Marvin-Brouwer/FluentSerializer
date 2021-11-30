@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.DataNodes;
@@ -13,7 +14,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
 	public sealed class JsonStringConversionTests
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(StringExtensions.LineFeed);
+        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(LineEndings.LineFeed);
 
         private readonly IJsonObject _testObjectFormatted;
         private readonly IJsonObject _testObjectSlim;

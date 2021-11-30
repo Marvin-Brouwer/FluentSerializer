@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.TestUtils.Extensions;
@@ -27,8 +28,10 @@ namespace FluentSerializer.UseCase.Mavenlink
         {
             _configuration = JsonSerializerConfiguration.Default;
             _configuration.DefaultConverters.Add(Converter.For.Json());
+			_configuration.NewLine = LineEndings.LineFeed;
 
-            _mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
+
+			_mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
         }
 
         [Fact,
@@ -42,7 +45,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
-            var result = sut.Serialize(example).FixNewLine();
+            var result = sut.Serialize(example);
 
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);

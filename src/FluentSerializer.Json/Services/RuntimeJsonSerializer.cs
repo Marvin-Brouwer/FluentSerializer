@@ -7,6 +7,7 @@ using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics.CodeAnalysis;
+
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Services
@@ -30,7 +31,7 @@ namespace FluentSerializer.Json.Services
 
             _serializer = new JsonTypeSerializer(mappings);
             _deserializer = new JsonTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(Environment.NewLine);
+            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(configuration.NewLine);
 
 			JsonConfiguration = configuration;
 		}

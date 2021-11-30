@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
@@ -32,8 +33,9 @@ namespace FluentSerializer.UseCase.OpenAir
             _configuration.Encoding = Encoding.UTF8;
             _configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
             _configuration.DefaultConverters.Add(Converter.For.Xml());
+			_configuration.NewLine = LineEndings.LineFeed;
 
-            _mappings = ProfileScanner.FindClassMapsInAssembly<XmlSerializerProfile>(typeof(OpenAirTests).Assembly, _configuration);
+			_mappings = ProfileScanner.FindClassMapsInAssembly<XmlSerializerProfile>(typeof(OpenAirTests).Assembly, _configuration);
         }
 
         [Fact,
@@ -47,7 +49,7 @@ namespace FluentSerializer.UseCase.OpenAir
             var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
             // Act
-            var result = sut.Serialize(example).FixNewLine();
+            var result = sut.Serialize(example);
 
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);
