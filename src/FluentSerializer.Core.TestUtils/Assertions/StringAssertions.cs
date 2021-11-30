@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using System;
 
-namespace FluentSerializer.Core.Tests.Assertions
+namespace FluentSerializer.Core.TestUtils.Assertions
 {
     /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
     public class StringAssertions : ReferenceTypeAssertions<string, StringAssertions>
@@ -27,6 +27,7 @@ namespace FluentSerializer.Core.Tests.Assertions
         }
 
         private static string ReplaceEscapeCharacters(string input) =>
-            input.Replace("\r", "\r\\r ").Replace("\n", "\\n ").Replace("\t", "\\t ");
+            input.Replace("\n", "\n\\n ").Replace("\r", "\r\\r ")
+				.Replace("\r\\r\n\\n", "\n\\r\\n ").Replace("\t", "\\t ");
     }
 }

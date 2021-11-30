@@ -9,7 +9,7 @@ namespace FluentSerializer.Json.Profiling
         [STAThread]
         public static void Main(params string[] parameters)
         {
-            JsonDataCollection.Default.GenerateStringFiles();
+            JsonDataCollection.Default.GenerateTestCaseFiles();
 
             StaticTestRunner.Run(parameters, typeof(Program).Assembly);
         }

@@ -16,9 +16,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.1.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="coverlet.msbuild" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="6.2.0" />
+    <PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -30,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj" />
+    <ProjectReference Include="..\FluentSerializer.Core.TestUtils\FluentSerializer.Core.TestUtils.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
   </ItemGroup>

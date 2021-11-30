@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 using System;
 
-namespace FluentSerializer.Core.Tests.Assertions
+namespace FluentSerializer.Core.TestUtils.Assertions
 {
     /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
     public class EquatableAssertions<TEquatable> :

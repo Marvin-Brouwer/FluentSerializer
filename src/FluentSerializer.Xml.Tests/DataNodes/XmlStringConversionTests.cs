@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentSerializer.Core.Dirty;
-using FluentSerializer.Core.Tests.Extensions;
+using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
@@ -10,7 +10,7 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.DataNodes
 {
-    public sealed class XmlStringConversionTests
+	public sealed class XmlStringConversionTests
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
         public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(StringExtensions.LineFeed);

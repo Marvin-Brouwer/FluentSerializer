@@ -45,7 +45,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 offset++;
 
                 if (character == JsonCharacterConstants.PropertyWrapCharacter && stringValue) break; 
-                if (character == JsonCharacterConstants.DividerCharacter) break;
+                if (character == JsonCharacterConstants.DividerCharacter && !stringValue) break;
                 if (character == JsonCharacterConstants.ObjectEndCharacter) break;
                 if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 

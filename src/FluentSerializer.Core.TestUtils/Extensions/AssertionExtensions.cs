@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Tests.Assertions;
+using FluentSerializer.Core.TestUtils.Assertions;
 using System;
 
-namespace FluentSerializer.Core.Tests.Extensions
+namespace FluentSerializer.Core.TestUtils.Extensions
 {
     public static class AssertionExtensions
     {

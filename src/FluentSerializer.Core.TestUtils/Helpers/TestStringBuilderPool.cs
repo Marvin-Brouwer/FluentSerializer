@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.ObjectPool;
 using FluentSerializer.Core.Dirty;
-using FluentSerializer.Core.Tests.Extensions;
+using FluentSerializer.Core.TestUtils.Extensions;
 
-namespace FluentSerializer.Core.Tests.Helpers
+namespace FluentSerializer.Core.TestUtils.Helpers
 {
     public readonly struct TestStringBuilderPool
     {

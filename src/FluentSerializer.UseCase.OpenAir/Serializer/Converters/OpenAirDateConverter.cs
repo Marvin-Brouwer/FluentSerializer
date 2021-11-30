@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -65,18 +65,20 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
         private static IXmlElement GenerateDateObject(DateTime dateToSerialize)
         {
+			var universalDate = dateToSerialize.ToUniversalTime();
+
             var dateProperties = new List<IXmlElement> {
-                Element("year", Text(dateToSerialize.ToString("yyyy"))),
-                Element("month", Text(dateToSerialize.ToString("MM"))),
-                Element("day", Text(dateToSerialize.ToString("dd")))
+                Element("year", Text(universalDate.ToString("yyyy"))),
+                Element("month", Text(universalDate.ToString("MM"))),
+                Element("day", Text(universalDate.ToString("dd")))
             };
 
             if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
                 return Element("Date", dateProperties); 
 
-            dateProperties.Add(Element("hour", Text(dateToSerialize.ToString("HH"))));
-            dateProperties.Add(Element("minute", Text(dateToSerialize.ToString("mm"))));
-            dateProperties.Add(Element("second", Text(dateToSerialize.ToString("ss"))));
+            dateProperties.Add(Element("hour", Text(universalDate.ToString("HH"))));
+            dateProperties.Add(Element("minute", Text(universalDate.ToString("mm"))));
+            dateProperties.Add(Element("second", Text(universalDate.ToString("ss"))));
 
             return Element("Date", dateProperties);
         }

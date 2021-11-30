@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Profiling
         [STAThread]
         public static void Main(params string[] parameters)
         {
-            XmlDataCollection.Default.GenerateStringFiles();
+            XmlDataCollection.Default.GenerateTestCaseFiles();
 
             StaticTestRunner.Run(parameters, typeof(Program).Assembly);
         }
