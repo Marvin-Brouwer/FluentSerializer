@@ -29,7 +29,6 @@ jobs:
         name: build-files
         path: ./src/**/bin/Release
         retention-days: 1
-      # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
 
   tests:
@@ -85,3 +84,10 @@ jobs:
         --filter Category=UseCase 
         "FluentSerializer.sln"
       working-directory: ${{github.workspace}}
+    - name: 🗃 Upload './test-results/coverage'
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-files
+        path: ./test-results/coverage
+        retention-days: 1
+      if: ${{ always() }}
