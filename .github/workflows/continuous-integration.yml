@@ -57,20 +57,20 @@ jobs:
         path: ./src      
     - name: 🧪 Run unit tests
       run: >- 
-        dotnet test
+        echo dotnet test
         --no-build --no-restore --nologo --configuration=Release
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
         --logger:"trx;LogFileName=test-results.trx"
-        --results-directory:"./test-results"
         --collect:"DotnetCodeCoverage"
         --collect:"XPlat Code coverage"
+        --results-directory:"./test-results"
         --filter:"Category=UnitTest"
         "./FluentSerializer.sln"
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
       run: >- 
-        dotnet test
+        echo dotnet test
         --no-build --no-restore --nologo --configuration=Release
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
