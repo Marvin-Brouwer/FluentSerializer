@@ -56,8 +56,8 @@ jobs:
         name: build-files
         path: ./src      
     - name: 🧪 Run unit tests
-      run: >- 
-        dotnet test 
+      run: >
+        dotnet test
         --no-build --no-restore --nologo --verbosity:normal
         --configuration=Release
         --logger:"console;verbosity=detailed"
@@ -70,9 +70,10 @@ jobs:
         "./FluentSerializer.sln"
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
-      run: >- 
+      run: >
         dotnet test
-        --no-build --no-restore --nologo --configuration=Release
+        --no-build --no-restore --nologo --verbosity:normal
+        --configuration=Release
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
         --filter:"Category=UseCase"
