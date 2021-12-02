@@ -13,17 +13,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: 🗃 Setup .NET
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
           3.1.x
           5.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
     - name: 🗃 Restore dependencies
       run: dotnet restore
+    ###
+    # 🛠 Build
+    #
+    # Build the library code for later use
+    ###
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release" 
+    ###
+    # 🗃 Publish 'library-binaries' artifacts
+    ###
     - name: 🗃 Publish 'library-binaries' artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -34,6 +56,10 @@ jobs:
           !./src/*.Usecase.*
           !./src/*.Profiling
         retention-days: 1
+      if: ${{ always() }}
+    ###
+    # 🗃 Publish 'test-binaries' artifacts
+    ###
     - name: 🗃 Publish 'test-binaries' artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -44,6 +70,9 @@ jobs:
           ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
+    ###
+    # 🗃 Publish 'profiling-binaries' artifacts
+    ###
     - name: 🗃 Publish 'profiling-binaries' artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -59,36 +88,70 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v2
-    - name: 🗃 Setup .NET
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
           3.1.x
           5.0.x
-    - name: 🗃 Setup .NET tools
+    ###
+    # 🧰 Setup .Net tools
+    #
+    # Register tools necessary to run the `test` pipeline-job
+    ###
+    - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-reportgenerator-globaltool
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
     - name: 🗃 Restore dependencies
       run: dotnet restore
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
     - name: 🗃 Restore 'library-binaries'
       uses: actions/download-artifact@v2
       with:
         name: library-binaries
-        path: ./src   
+        path: ./src
+    ###
+    # 🗃 Restore 'test-binaries'
+    ###   
     - name: 🗃 Restore 'test-binaries'
       uses: actions/download-artifact@v2
       with:
         name: test-binaries
         path: ./src  
+    ###
+    # 🗃 Restore 'profiling-binaries'
+    #
     # Because `dotnet test` tries to load all csproj files, we need these dlls. 
+    ###
     - name: 🗃 Restore 'profiling-binaries'
       uses: actions/download-artifact@v2
       with:
         name: profiling-binaries
         path: ./src   
+    ###
+    # 🧪 Run unit tests
+    #
+    # Run the unit tests of category `UnitTest` and generate a code coverage report.
+    ###
     - name: 🧪 Run unit tests
       run: >-
         dotnet test --verbosity:normal
@@ -114,6 +177,12 @@ jobs:
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
       working-directory: ${{github.workspace}} 
+    ###
+    # 🧪 Run use-case tests
+    #
+    # Run the unit tests of category `UseCase` to illustrate the library still works as intended.
+    # This is basically a kind of integration test.
+    ###
     - name: 🧪 Run use-case tests
       run:  >- 
         dotnet test --verbosity:normal
@@ -125,6 +194,9 @@ jobs:
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln";
       working-directory: ${{github.workspace}}
+    ###
+    # 🗃 Publish 'unit-test-coverage' artifacts
+    ###
     - name: 🗃 Publish 'unit-test-coverage' artifacts
       uses: actions/upload-artifact@v2
       with:
