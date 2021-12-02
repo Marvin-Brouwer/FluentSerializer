@@ -24,64 +24,111 @@ jobs:
       run: dotnet restore
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release" 
-    - name: 🗃 Upload './src/**/bin/Release' build files
+    - name: 🗃 Publish 'library-binaries' artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: bin-release
-        path: |
-          ./src/**/bin/Release/*/*FluentSerializer*
-          ./src/**/bin/Release/*/testhost*
-          ./src/**/bin/Release/*/xunit*
-        retention-days: 1
-      if: ${{ always() }}
-    - name: 🗃 Upload './src/**/bin/Release' full
-      uses: actions/upload-artifact@v2
-      with:
-        name: bin-release-full
+        name: library-binaries
         path: |
           ./src/**/bin/Release/*/*.*
+          !./src/*.Tests
+          !./src/*.Usecase.*
+          !./src/*.Profiling
+        retention-days: 1
+    - name: 🗃 Publish 'test-binaries' artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-binaries
+        path: |
+          ./src/**/obj/Release/*/*.*
+          ./src/*.Tests/bin/Release/*/*.*
+          ./src/*.Usecase.*/bin/Release/*/*.*
+        retention-days: 1
+      if: ${{ always() }}
+    - name: 🗃 Publish 'profiling-binaries' artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: profiling-binaries
+        path: |
+          ./src/*.Profiling/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
 
   test:
 
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
     - uses: actions/checkout@v2
-    - name: 🗃 Setup .NET tools
-      run: |-
-        dotnet tool install --global dotnet-reportgenerator-globaltool
-        dotnet tool install --global dotnet-coverage
-        dotnet tool install --global coverlet.console
     - name: 🗃 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version:  | 
           3.1.x
           5.0.x
-    - name: 🗃 Restore './src/**/bin/Release' full
+    - name: 🗃 Setup .NET tools
+      run: |-
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        dotnet tool install --global dotnet-coverage
+        dotnet tool install --global coverlet.console
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    - name: 🗃 Restore 'library-binaries'
       uses: actions/download-artifact@v2
       with:
-        name: bin-release-full
-        path: ./src      
-    - name: TEST TREE
-      run: tree .
+        name: library-binaries
+        path: ./src   
+    - name: 🗃 Restore 'test-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: test-binaries
+        path: ./src  
+    # Because `dotnet test` tries to load all csproj files, we need these dlls. 
+    - name: 🗃 Restore 'profiling-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: profiling-binaries
+        path: ./src   
     - name: 🧪 Run unit tests
-      run: pwsh ./.github/workflows/unit-test.ps1
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --logger "trx;LogFileName=test-results.trx"
+        --collect "DotnetCodeCoverage"
+        --collect "XPlat Code coverage"
+        --results-directory:"${{github.workspace}}/test-results"
+        --filter:"Category=UnitTest"
+        /p:CollectCoverage="true"
+        /p:CoverletOutputFormat="opencover"
+        /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
+        /p:MergeWith="${{github.workspace}}/test-results/coverage/"
+        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+        
+        reportgenerator
+        -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
+        -targetdir:"${{github.workspace}}/test-results/coverage"
+        -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
       working-directory: ${{github.workspace}} 
-    - name: TEST TREE 2
-      run: tree .
-      if: ${{ always() }}
     - name: 🧪 Run use-case tests
-      run: ./.github/workflows/use-case-test.ps1
+      run:  >- 
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=UseCase"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
       working-directory: ${{github.workspace}}
-    # TODO: publish code coverage
-    - name: 🗃 Upload './test-results/coverage'
+    - name: 🗃 Publish 'unit-test-coverage' artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: build-files
+        name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
       if: ${{ always() }}
