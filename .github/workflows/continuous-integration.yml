@@ -35,7 +35,7 @@ jobs:
         retention-days: 1
       if: ${{ always() }}
 
-  tests:
+  test:
 
     runs-on: ubuntu-latest
     needs: build
@@ -65,21 +65,7 @@ jobs:
       shell: pwsh  
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
-      run: >
-        dotnet test
-        --no-build --no-restore --nologo --verbosity:normal
-        --configuration=Release
-        --logger:"console;verbosity=detailed"
-        --logger:"GitHubActions"
-        --filter:"Category=UseCase"
-        "./FluentSerializer.sln"
-      working-directory: ${{github.workspace}}
-    - name: 🧪 Generate unit test code-coverage report
-      run: >- 
-        reportgenerator 
-        -reports:"./test-results/*/coverage.cobertura.xml" 
-        -targetdir:"./test-results/coverage" 
-        -reporttypes:HtmlInline_AzurePipelines;Cobertura
+      run: ./.github/workflows/use-case-test.ps1
       working-directory: ${{github.workspace}}
     # TODO: publish code coverage
     - name: 🗃 Upload './test-results/coverage'
