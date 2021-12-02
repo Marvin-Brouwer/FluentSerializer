@@ -56,18 +56,8 @@ jobs:
         name: build-files
         path: ./src      
     - name: 🧪 Run unit tests
-      run: >
-        dotnet test
-        --no-build --no-restore --nologo --verbosity:normal
-        --configuration=Release
-        --logger:"console;verbosity=detailed"
-        --logger:"GitHubActions"
-        --logger:"trx;LogFileName=test-results.trx"
-        --results-directory:"./test-results"
-        --collect:"DotnetCodeCoverage"
-        --collect:"XPlat Code coverage"
-        --filter:"Category=UnitTest" 
-        "./FluentSerializer.sln"
+      run: ./.github/workflows/unit-test.ps1
+      shell: pwsh  
       working-directory: ${{github.workspace}}
     - name: 🧪 Run use-case tests
       run: >
