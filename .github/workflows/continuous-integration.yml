@@ -23,21 +23,29 @@ jobs:
     - name: 🗃 Restore dependencies
       run: dotnet restore
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release"
-    - name: 🗃 Upload './src/**/bin/Release'
+      run: dotnet build --no-restore --nologo --configuration "Release" 
+    - name: 🗃 Upload './src/**/bin/Release' build files
       uses: actions/upload-artifact@v2
       with:
-        name: build-files
+        name: bin-release
         path: |
           ./src/**/bin/Release/*/*FluentSerializer*
           ./src/**/bin/Release/*/testhost*
           ./src/**/bin/Release/*/xunit*
         retention-days: 1
       if: ${{ always() }}
+    - name: 🗃 Upload './src/**/bin/Release' full
+      uses: actions/upload-artifact@v2
+      with:
+        name: bin-release-full
+        path: |
+          ./src/**/bin/Release/*/*.*
+        retention-days: 1
+      if: ${{ always() }}
 
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: build
 
     steps:
@@ -53,17 +61,19 @@ jobs:
         dotnet-version:  | 
           3.1.x
           5.0.x
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    - name: 🗃 Restore './src/**/bin/Release'
+    - name: 🗃 Restore './src/**/bin/Release' full
       uses: actions/download-artifact@v2
       with:
-        name: build-files
+        name: bin-release-full
         path: ./src      
+    - name: TEST TREE
+      run: tree .
     - name: 🧪 Run unit tests
-      run: ./.github/workflows/unit-test.ps1
-      shell: pwsh  
-      working-directory: ${{github.workspace}}
+      run: pwsh ./.github/workflows/unit-test.ps1
+      working-directory: ${{github.workspace}} 
+    - name: TEST TREE 2
+      run: tree .
+      if: ${{ always() }}
     - name: 🧪 Run use-case tests
       run: ./.github/workflows/use-case-test.ps1
       working-directory: ${{github.workspace}}
