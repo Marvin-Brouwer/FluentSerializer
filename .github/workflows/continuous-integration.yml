@@ -28,7 +28,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build-files
-        path: ./src/**/bin/Release
+        path: |
+          ./src/**/bin/Release/*/*FluentSerializer*
+          ./src/**/bin/Release/*/testhost*
+          ./src/**/bin/Release/*/xunit*
         retention-days: 1
       if: ${{ always() }}
 
@@ -50,6 +53,8 @@ jobs:
         dotnet-version:  | 
           3.1.x
           5.0.x
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
     - name: 🗃 Restore './src/**/bin/Release'
       uses: actions/download-artifact@v2
       with:
