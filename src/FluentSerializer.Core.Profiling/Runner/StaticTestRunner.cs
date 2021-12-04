@@ -3,7 +3,6 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using System.Linq;
 using System.Reflection;
 using FluentSerializer.Core.Profiling.Configuration;
 using BenchmarkDotNet.Environments;
@@ -18,13 +17,8 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 
 namespace FluentSerializer.Core.Profiling.Runner
 {
-    public abstract class StaticTestRunner
+	public abstract class StaticTestRunner
     {
-		public StaticTestRunner()
-		{
-
-		}
-
         private static ManualConfig CreateConfig()
         {
             var config = ManualConfig.Create(DefaultConfig.Instance)
