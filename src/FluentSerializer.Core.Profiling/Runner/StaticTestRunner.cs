@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using System.Linq;
 using System.Reflection;
 using FluentSerializer.Core.Profiling.Configuration;
 using BenchmarkDotNet.Environments;
+using System.Security.Permissions;
+using System.Diagnostics;
+using System.Security.Principal;
+using System.Runtime.InteropServices;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -14,7 +17,7 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 
 namespace FluentSerializer.Core.Profiling.Runner
 {
-    public abstract class StaticTestRunner
+	public abstract class StaticTestRunner
     {
         private static ManualConfig CreateConfig()
         {
@@ -48,19 +51,54 @@ namespace FluentSerializer.Core.Profiling.Runner
                 .WithId(typeof(BenchmarkRunner).Assembly.FullName);
         }
 
-        public static void Run(string[] parameters, Assembly assembly)
-        {
-            var config = CreateConfig();
+		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+		public static void Run(string[] parameters, Assembly assembly)
+		{
+			RequireElevatedPermissions();
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Starting benchmark runner...");
-            Console.ResetColor();
-            Console.WriteLine();
+			var config = CreateConfig();
 
-            if (!parameters.Any())
-                BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.WriteLine("Starting benchmark runner...");
+			Console.ResetColor();
+			Console.WriteLine();
 
-            BenchmarkSwitcher.FromAssembly(assembly).Run(parameters, config);
-        }
-    }
+			BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
+		}
+
+		public static void RequireElevatedPermissions()
+		{
+			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !IsAdministrator()) Elevate();
+		}
+
+		private static void Elevate()
+		{
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.WriteLine();
+			Console.WriteLine("Restarting process with admin permissions.");
+
+			// Restart program and run as admin
+			var exeName = Process.GetCurrentProcess().MainModule.FileName;
+			var startInfo = new ProcessStartInfo(exeName);
+			startInfo.UseShellExecute = true;
+			startInfo.Verb = "runas";
+
+			Process.Start(startInfo);
+			Environment.Exit(0);
+		}
+
+		private static bool IsAdministrator()
+		{
+			try
+			{
+				var user = WindowsIdentity.GetCurrent();
+				var principal = new WindowsPrincipal(user);
+				return principal.IsInRole(WindowsBuiltInRole.Administrator);
+			}
+			catch
+			{
+				return false;
+			}
+		}
+	}
 }
