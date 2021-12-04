@@ -1,5 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnostics.Windows.Configs;
+using BenchmarkDotNet.Attributes;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Helpers;
 using System;
@@ -8,9 +7,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.Profiling.Profilers
 {
-    [MemoryDiagnoser]
-    [InliningDiagnoser(true, true)]
-    [TailCallDiagnoser]
+	[MemoryDiagnoser]
     public abstract class ReadProfile
     {
         private MemoryStream? _writeStream;

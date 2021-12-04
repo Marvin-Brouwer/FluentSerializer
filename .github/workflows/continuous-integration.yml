@@ -204,3 +204,79 @@ jobs:
         path: ./test-results/coverage
         retention-days: 1
       if: ${{ always() }}
+
+  profile:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version:  | 
+          3.1.x
+          5.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
+    - name: 🗃 Restore 'library-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: library-binaries
+        path: ./src
+    ###
+    # 🗃 Restore 'profiling-binaries'
+    ###
+    - name: 🗃 Restore 'profiling-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: profiling-binaries
+        path: ./src  
+    ###
+    # ⏱ Profile XML serializer
+    #
+    # Run the profiler for serializing and deserializing a test set of XML data.
+    ###
+    - name: ⏱ Profile XML serializer
+      run: |-
+        sudo chmod +rwx ./FluentSerializer.Xml.Profiling
+        sudo ./FluentSerializer.Xml.Profiling
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Profiling/bin/Release/netcoreapp3.1
+    ###
+    # ⏱ Profile JSON serializer
+    #
+    # Run the profiler for serializing and deserializing a test set of JSON data.
+    ###
+    - name: ⏱ Profile JSON serializer
+      run: |-
+        sudo chmod +rwx ./FluentSerializer.Json.Profiling
+        sudo ./FluentSerializer.Json.Profiling
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Profiling/bin/Release/netcoreapp3.1
+    ###
+    # 🗃 Publish 'profiling' artifacts
+    ###
+    - name: 🗃 Publish 'profiling' artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: profiling
+        path: ./src/FluentSerializer.*.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
+        retention-days: 1
+      if: ${{ always() }}
