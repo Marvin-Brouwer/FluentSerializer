@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.DataNodes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +11,9 @@ namespace FluentSerializer.Core.Profiling.TestData
         private const int BogusSeed = 98123600;
 
 #if (RELEASE)
-        protected virtual int[] ItemCount => new int[] { 500, 5000, 50000 };
+        protected virtual int[] ItemCount => new int[] { 20, 200, 2000, 20000 };
 #else
-        protected virtual int[] ItemCount =>  new int[] { 100, 500 };
+        protected virtual int[] ItemCount =>  new int[] { 10, 20 };
 #endif
 
         public void GenerateTestCaseFiles()
