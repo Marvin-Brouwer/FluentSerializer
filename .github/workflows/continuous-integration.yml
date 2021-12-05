@@ -271,12 +271,12 @@ jobs:
         sudo ./FluentSerializer.Json.Profiling
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Profiling/bin/Release/netcoreapp3.1
     ###
-    # 🗃 Publish 'profiling' artifacts
+    # 🗃 Publish 'profiling-results' artifacts
     ###
-    - name: 🗃 Publish 'profiling' artifacts
+    - name: 🗃 Publish 'profiling-results' artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: profiling
+        name: profiling-results
         path: ./src/FluentSerializer.*.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
         retention-days: 1
       if: ${{ always() }}

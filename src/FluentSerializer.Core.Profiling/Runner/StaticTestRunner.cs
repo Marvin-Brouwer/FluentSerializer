@@ -10,6 +10,7 @@ using System.Security.Permissions;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using Perfolizer.Horology;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -40,14 +41,15 @@ namespace FluentSerializer.Core.Profiling.Runner
                 .WithRuntime(runtime)
 #if (DEBUG)
                 .WithLaunchCount(1)
-                .WithIterationCount(1)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
 #else
-                .WithLaunchCount(3)
+                .WithLaunchCount(5)
                 .WithWarmupCount(3)
-                .WithIterationCount(3)
 #endif
-                .WithMaxRelativeError(0.01)
+				.WithIterationCount(1)
+				.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
+				.WithMinIterationCount(1)
+				.WithMaxRelativeError(0.01)
                 .WithId(typeof(BenchmarkRunner).Assembly.FullName);
         }
 
@@ -79,9 +81,11 @@ namespace FluentSerializer.Core.Profiling.Runner
 
 			// Restart program and run as admin
 			var exeName = Process.GetCurrentProcess().MainModule.FileName;
-			var startInfo = new ProcessStartInfo(exeName);
-			startInfo.UseShellExecute = true;
-			startInfo.Verb = "runas";
+			var startInfo = new ProcessStartInfo(exeName)
+			{
+				UseShellExecute = true,
+				Verb = "runas"
+			};
 
 			Process.Start(startInfo);
 			Environment.Exit(0);
