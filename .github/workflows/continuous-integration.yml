@@ -275,14 +275,10 @@ jobs:
     ###
     - name: 🗃 Rename and move benchmark reports
       run: |-
-        sudo apt-get install rename
-        sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.Xml.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo rename 'rename 's/BenchmarkRun-joined/xml-benchmark' *.c' *.md
-        mv ./*.md ${{github.workspace}}/benchmark-results
+        sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.Json.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo rename 'rename 's/BenchmarkRun-joined/json-benchmark' *.c' *.md
-        mv ./*.md ${{github.workspace}}/benchmark-results
+        sudo mv ./jxon-*.md ${{github.workspace}}/benchmark-results
       working-directory: ${{github.workspace}}
       if: ${{ always() }}
     ###

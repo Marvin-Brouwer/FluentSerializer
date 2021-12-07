@@ -8,12 +8,12 @@ namespace FluentSerializer.Json.Profiling
     public static class Program
 	{
 		[STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-		public static void Main(params string[] parameters)
+		public static void Main()
 		{
 			StaticTestRunner.RequireElevatedPermissions();
 			JsonDataCollection.Default.GenerateTestCaseFiles();
 
-            StaticTestRunner.Run(parameters, typeof(Program).Assembly);
+            StaticTestRunner.Run(typeof(Program).Assembly, "json");
         }
     }
 }

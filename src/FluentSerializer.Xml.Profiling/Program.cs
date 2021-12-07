@@ -8,12 +8,12 @@ namespace FluentSerializer.Xml.Profiling
     public static class Program
     {
         [STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-		public static void Main(params string[] parameters)
+		public static void Main()
 		{
 			StaticTestRunner.RequireElevatedPermissions();
 			XmlDataCollection.Default.GenerateTestCaseFiles();
 
-            StaticTestRunner.Run(parameters, typeof(Program).Assembly);
+            StaticTestRunner.Run(typeof(Program).Assembly, "xml");
         }
     }
 }
