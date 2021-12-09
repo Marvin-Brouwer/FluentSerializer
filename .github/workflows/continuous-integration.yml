@@ -279,10 +279,11 @@ jobs:
     ###
     - name: 🗃 Rename and move benchmark reports
       run: |-
+        sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results
+        sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/*
         cd ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo mv ./json-*.md ${{github.workspace}}/benchmark-results
+        sudo mv ./json-*.md ${{github.workspace}}/benchmark-results/*
       working-directory: ${{github.workspace}}
       if: ${{ always() }}
     ###
