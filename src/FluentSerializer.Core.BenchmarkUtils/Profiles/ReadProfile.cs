@@ -1,12 +1,12 @@
-using BenchmarkDotNet.Attributes;
-using FluentSerializer.Core.BenchmarkUtils.TestData;
 using System;
 using System.IO;
+using BenchmarkDotNet.Attributes;
+using FluentSerializer.Core.BenchmarkUtils.TestData;
 
-namespace FluentSerializer.Core.BenchmarkUtils.Profilers
+namespace FluentSerializer.Core.BenchmarkUtils.Profiles
 {
 	[MemoryDiagnoser]
-    public abstract class WriteProfile
+    public abstract class ReadProfile
     {
         private Stream? _textStream;
         private StreamReader? _reader;
