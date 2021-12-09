@@ -42,11 +42,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.UseCase.Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.UseCase.OpenAir", "src\FluentSerializer.UseCase.OpenAir\FluentSerializer.UseCase.OpenAir.csproj", "{EAD29C39-BA6C-4C07-90FB-361B366E2B75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Core.Profiling", "src\FluentSerializer.Core.Profiling\FluentSerializer.Core.Profiling.csproj", "{90446465-CCE1-458E-9C43-2B11743611FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Core.BenchmarkUtils", "src\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj", "{90446465-CCE1-458E-9C43-2B11743611FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Profiling", "src\FluentSerializer.Json.Profiling\FluentSerializer.Json.Profiling.csproj", "{2DD54D58-96A1-417B-B84D-F09857B2C6A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Benchmark", "src\FluentSerializer.Json.Benchmark\FluentSerializer.Json.Benchmark.csproj", "{2DD54D58-96A1-417B-B84D-F09857B2C6A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Profiling", "src\FluentSerializer.Xml.Profiling\FluentSerializer.Xml.Profiling.csproj", "{2CD835E4-5E03-4358-AF7D-B0DE533861A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Benchmark", "src\FluentSerializer.Xml.Benchmark\FluentSerializer.Xml.Benchmark.csproj", "{2CD835E4-5E03-4358-AF7D-B0DE533861A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Converter.DefaultXml", "src\FluentSerializer.Xml.Converter.DefaultXml\FluentSerializer.Xml.Converter.DefaultXml.csproj", "{66B04BC9-C43E-49B0-BD4B-8C04A1CA67F9}"
 EndProject

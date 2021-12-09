@@ -1,4 +1,3 @@
-﻿using FluentAssertions;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using Microsoft.Extensions.ObjectPool;
