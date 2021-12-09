@@ -7,10 +7,11 @@ namespace FluentSerializer.Core.TestUtils.Extensions
 {
     public static class AssertionExtensions
     {
-        /// Custom implementation of <see cref="FluentAssertions.Primitives.StringAssertions"/>
-        /// to make it easier to work with escape characters.
-        /// </summary>
-        [CustomAssertion]
+		/// <summary>
+		/// Custom implementation of <see cref="FluentAssertions.Primitives.StringAssertions"/>
+		/// to make it easier to work with escape characters.
+		/// </summary>
+		[CustomAssertion]
         public static AndConstraint<StringAssertions> ShouldBeBinaryEquatableTo(this string assertions, string expectation)
         {
             return new StringAssertions(assertions).BeEquatableTo(expectation);

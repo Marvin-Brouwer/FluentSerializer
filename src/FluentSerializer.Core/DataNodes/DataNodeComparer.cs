@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace FluentSerializer.Core.DataNodes
 {
     /// <summary>
-    /// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="IEquatable{IDataNode?}.GetHashCode()"/>
+    /// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="IEquatable{IDataNode}.GetHashCode()"/>
     /// </summary>
     public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode>>
     {
