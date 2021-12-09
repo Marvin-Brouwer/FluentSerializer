@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;

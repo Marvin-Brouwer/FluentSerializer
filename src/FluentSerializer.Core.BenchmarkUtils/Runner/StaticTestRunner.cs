@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
@@ -13,6 +14,7 @@ using System.Runtime.InteropServices;
 using Perfolizer.Horology;
 using System.IO;
 using System.Linq;
+using BenchmarkDotNet.Columns;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -29,6 +31,12 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
                 .AddJob(CreateJob(CoreRuntime.Core31))
                 .AddJob(CreateJob(CoreRuntime.Core50))
                 .AddExporter(MarkdownExporter.GitHub);
+
+			// We only ever profile methods so no need for an additional column
+			var columnProviders = (List<IColumnProvider>)config.GetColumnProviders();
+			columnProviders.RemoveAt(0);
+			columnProviders.Insert(0, MethodOnlyDescriptorColumnProvider.Default);
+
 #if (DEBUG)
             config = config.WithOptions(ConfigOptions.DisableOptimizationsValidator);
 #endif

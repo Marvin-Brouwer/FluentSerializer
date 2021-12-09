@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using BenchmarkDotNet.Attributes;
-using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.BenchmarkUtils.Profilers;
+using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.Benchmark.Data;
 
@@ -9,12 +9,12 @@ namespace FluentSerializer.Json.Benchmark.Profiles
 {
     public class JsonReadProfile : ReadProfile
     {
-        public IEnumerable<TestCase<IDataNode>> Values() => JsonDataCollection.Default.ObjectTestData;
+        public IEnumerable<TestCase<Stream>> Values => JsonDataCollection.Default.StringTestData;
 
         [ParamsSource(nameof(Values))]
-        public TestCase<IDataNode> Value { get; set; }
+        public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
-        [Benchmark, BenchmarkCategory(nameof(Read))]
-        public void Read() => base.Read(Value.GetData());
+        [Benchmark, BenchmarkCategory(nameof(ReadJson))]
+        public void ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
     }
 }

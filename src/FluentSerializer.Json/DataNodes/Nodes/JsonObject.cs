@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -18,7 +18,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         private const string ObjectName = "{ }";
         public string Name => ObjectName;
         
-        private readonly IJsonNode? _lastProperty;
+        private readonly ulong? _lastPropertyIndex;
         private readonly List<IJsonNode> _children;
         public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
@@ -42,7 +42,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         /// </remarks>
         public JsonObject(IEnumerable<IJsonObjectContent>? properties)
         {
-            _lastProperty = null;
+            _lastPropertyIndex = null;
 
             if (properties is null)
             {
@@ -50,11 +50,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             }
             else
             {
+	            var currentPropertyIndex = 0uL;
                 _children = new List<IJsonNode>();
                 foreach (var property in properties)
                 {
                     _children.Add(property);
-                    if (property is not IJsonComment) _lastProperty = property;
+                    if (property is not IJsonComment) _lastPropertyIndex = currentPropertyIndex;
+                    currentPropertyIndex++;
                 }
             }
         }
@@ -66,9 +68,10 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public JsonObject(ReadOnlySpan<char> text, ref int offset)
         {
             _children = new List<IJsonNode>();
-            _lastProperty = null;
+            _lastPropertyIndex = null;
+            var currentPropertyIndex = 0uL;
 
-            offset++;
+			offset++;
             while (offset < text.Length)
             {
                 var character = text[offset];
@@ -81,12 +84,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
                 {
                     _children.Add(new JsonCommentSingleLine(text, ref offset));
+                    currentPropertyIndex++;
                     continue;
                 }
                 if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
                 {
                     _children.Add(new JsonCommentMultiLine(text, ref offset));
-                    continue;
+                    currentPropertyIndex++;
+					continue;
                 }
 
                 offset++;
@@ -94,8 +99,9 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                 {
                     var jsonProperty = new JsonProperty(text, ref offset);
                     _children.Add(jsonProperty);
-                    _lastProperty = jsonProperty;
-                }
+                    _lastPropertyIndex = currentPropertyIndex;
+                    currentPropertyIndex++;
+}
             }
             offset++;
         }
@@ -124,11 +130,12 @@ namespace FluentSerializer.Json.DataNodes.Nodes
         public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
         {
             var childIndent = indent + 1;
+			var currentPropertyIndex = 0uL;
 
             stringBuilder
                 .Append(JsonCharacterConstants.ObjectStartCharacter);
 
-            foreach (var child in Children)
+			foreach (var child in Children)
             {
                 if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
 
@@ -138,8 +145,10 @@ namespace FluentSerializer.Json.DataNodes.Nodes
                     .AppendNode(child, format, childIndent, writeNull);
                 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
-                if (child is not IJsonComment && !child.Equals(_lastProperty)) 
+                if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex)) 
                     stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
+
+                currentPropertyIndex++;
             }
 
             stringBuilder

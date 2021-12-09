@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using BenchmarkDotNet.Attributes;
-using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.BenchmarkUtils.Profilers;
+using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.Benchmark.Data;
 
@@ -9,12 +9,12 @@ namespace FluentSerializer.Xml.Benchmark.Profiles
 {
     public class XmlReadProfile : ReadProfile
     {
-        public IEnumerable<TestCase<IDataNode>> Values() => XmlDataCollection.Default.ObjectTestData;
+        public IEnumerable<TestCase<Stream>> Values => XmlDataCollection.Default.StringTestData;
 
         [ParamsSource(nameof(Values))]
-        public TestCase<IDataNode> Value { get; set; }
+        public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
-        [Benchmark, BenchmarkCategory(nameof(Read))]
-        public void Read() => base.Read(Value.GetData());
+        [Benchmark, BenchmarkCategory(nameof(ReadXml))]
+        public void ReadXml() => XmlParser.Parse(CaseReader.ReadToEnd());
     }
 }
