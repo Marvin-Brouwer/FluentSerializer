@@ -1,10 +1,9 @@
-using FluentAssertions;
-using FluentSerializer.Core.Constants;
-using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Dirty;
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
