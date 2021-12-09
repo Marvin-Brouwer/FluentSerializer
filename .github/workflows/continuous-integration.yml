@@ -275,9 +275,9 @@ jobs:
         sudo ./FluentSerializer.Json.Benchmark
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1
     ###
-    # 🗃 Rename and move benchmark reports
+    # 🗃 Collect benchmark reports
     ###
-    - name: 🗃 Rename and move benchmark reports
+    - name: 🗃 Collect benchmark reports
       run: |-
         sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
