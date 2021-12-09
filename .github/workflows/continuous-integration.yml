@@ -53,8 +53,10 @@ jobs:
         path: |
           ./src/**/bin/Release/*/*.*
           !./src/*.Tests
+          !./src/*.TestUtils
           !./src/*.Usecase.*
-          !./src/*.Profiling
+          !./src/*.Benchmark
+          !./src/*.BenchmarkUtils
         retention-days: 1
       if: ${{ always() }}
     ###
@@ -67,6 +69,7 @@ jobs:
         path: |
           ./src/**/obj/Release/*/*.*
           ./src/*.Tests/bin/Release/*/*.*
+          ./src/*.TestUtils/bin/Release/*/*.*
           ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
@@ -78,7 +81,8 @@ jobs:
       with:
         name: benchmark-binaries
         path: |
-          ./src/*.Profiling/bin/Release/*/*.*
+          ./src/*.Benchmark/bin/Release/*/*.*
+          ./src/*.BenchmarkUtils/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
 
@@ -257,9 +261,9 @@ jobs:
     ###
     - name: ⏱ Benchmark XML serializer
       run: |-
-        sudo chmod +rwx ./FluentSerializer.Xml.Profiling
-        sudo ./FluentSerializer.Xml.Profiling
-      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Profiling/bin/Release/netcoreapp3.1
+        sudo chmod +rwx ./FluentSerializer.Xml.Benchmark
+        sudo ./FluentSerializer.Xml.Benchmark
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1
     ###
     # ⏱ Benchmark JSON serializer
     #
@@ -267,18 +271,19 @@ jobs:
     ###
     - name: ⏱ Benchmark JSON serializer
       run: |-
-        sudo chmod +rwx ./FluentSerializer.Json.Profiling
-        sudo ./FluentSerializer.Json.Profiling
-      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Profiling/bin/Release/netcoreapp3.1
+        sudo chmod +rwx ./FluentSerializer.Json.Benchmark
+        sudo ./FluentSerializer.Json.Benchmark
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1
     ###
     # 🗃 Rename and move benchmark reports
     ###
     - name: 🗃 Rename and move benchmark reports
       run: |-
-        cd ${{github.workspace}}/src/FluentSerializer.Xml.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results
-        cd ${{github.workspace}}/src/FluentSerializer.Json.Profiling/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
-        sudo mv ./jxon-*.md ${{github.workspace}}/benchmark-results
+        sudo mkdir ${{github.workspace}}/benchmark-results
+        cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
+        sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
+        cd ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
+        sudo mv ./json-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
       if: ${{ always() }}
     ###
