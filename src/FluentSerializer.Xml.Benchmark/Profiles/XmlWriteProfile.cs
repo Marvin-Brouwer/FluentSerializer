@@ -15,6 +15,6 @@ namespace FluentSerializer.Xml.Benchmark.Profiles
         public TestCase<IDataNode> Value { get; set; }
 
         [Benchmark, BenchmarkCategory(nameof(Write))]
-        public void WriteXml() => Write(Value.GetData());
+        public string WriteXml() => Write(Value.GetData());
     }
 }

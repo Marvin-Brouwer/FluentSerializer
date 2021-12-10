@@ -37,12 +37,12 @@ namespace FluentSerializer.Core.BenchmarkUtils.Profiles
             _writeStream = null;
         }
 
-        public void Write(IDataNode value)
+        public string Write(IDataNode value)
         {
             value.WriteTo(TestStringBuilderPool.StringBuilderPool, _streamWriter!, true);
-
             _streamWriter!.Flush();
-            _ = Encoding.UTF8.GetString(_writeStream!.ToArray());
+
+            return Encoding.UTF8.GetString(_writeStream!.ToArray());
         }
     }
 }

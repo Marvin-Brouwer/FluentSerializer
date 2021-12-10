@@ -4,6 +4,7 @@ using BenchmarkDotNet.Attributes;
 using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.Benchmark.Data;
+using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Benchmark.Profiles
 {
@@ -15,6 +16,6 @@ namespace FluentSerializer.Json.Benchmark.Profiles
         public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
         [Benchmark, BenchmarkCategory(nameof(ReadJson))]
-        public void ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
+        public IJsonObject ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
     }
 }
