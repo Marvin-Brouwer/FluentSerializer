@@ -7,6 +7,9 @@
     <StartupObject>FluentSerializer.Json.Benchmark.Program</StartupObject>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+		<ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
+		<PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
+		<PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +25,4 @@
     <ProjectReference Include="..\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
   </ItemGroup>
-
 </Project>
