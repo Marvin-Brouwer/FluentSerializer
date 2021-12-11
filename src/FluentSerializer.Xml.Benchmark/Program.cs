@@ -1,6 +1,7 @@
 using FluentSerializer.Core.BenchmarkUtils.Runner;
 using FluentSerializer.Xml.Benchmark.Data;
 using System;
+using System.Linq;
 using System.Security.Permissions;
 
 namespace FluentSerializer.Xml.Benchmark
@@ -10,10 +11,12 @@ namespace FluentSerializer.Xml.Benchmark
 #if !NET5_0_OR_GREATER
 		[STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
-		public static void Main()
+		public static void Main(params string[] arguments)
 		{
 			StaticTestRunner.RequireElevatedPermissions();
-			XmlDataCollection.Default.GenerateTestCaseFiles();
+
+			if (!arguments.Contains("--no-generate"))
+				XmlDataCollection.Default.GenerateTestCaseFiles();
 
             StaticTestRunner.Run(typeof(Program).Assembly, "xml-serializer");
         }
