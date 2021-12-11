@@ -6,8 +6,10 @@ using System.Security.Permissions;
 namespace FluentSerializer.Xml.Benchmark
 {
     public static class Program
-    {
-        [STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+	{
+#if !NET5_0_OR_GREATER
+		[STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+#endif
 		public static void Main()
 		{
 			StaticTestRunner.RequireElevatedPermissions();

@@ -16,10 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="DataNodes\XmlElement.cs~RF33cd434d.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="3.3.0" />
   </ItemGroup>
 

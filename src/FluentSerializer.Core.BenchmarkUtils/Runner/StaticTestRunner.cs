@@ -17,6 +17,7 @@ using System.Linq;
 using BenchmarkDotNet.Columns;
 using System.Threading;
 using System.Globalization;
+using Microsoft.Extensions.PlatformAbstractions;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -41,7 +42,6 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 
 			var config = ManualConfig.Create(DefaultConfig.Instance)
                 .WithOrderer(new GroupedSlowestToFastestOrderer())
-                .AddJob(CreateJob(CoreRuntime.Core31))
                 .AddJob(CreateJob(CoreRuntime.Core50))
 				.WithCultureInfo(AppCulture)
                 .AddExporter(MarkdownExporter.Console);
@@ -60,7 +60,6 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
         private static Job CreateJob(Runtime runtime)
         {
             return Job.Dry
-                .WithRuntime(runtime)
 #if (DEBUG)
                 .WithLaunchCount(1)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
@@ -115,8 +114,10 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.OrderByDescending(directory => directory.CreationTimeUtc)
 				.FirstOrDefault();
 
+			var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
+			var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
 			var readableFileName = markdownSummaryFile.FullName
-				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark")
+				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
 				.Replace("-report-console", string.Empty);
 
 			Console.WriteLine($"Renaming report to \"{readableFileName}\"");

@@ -82,6 +82,7 @@ jobs:
         name: benchmark-binaries
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
+          ./src/*.Benchmark/bin/Release/*/ref/*.*
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
@@ -261,9 +262,10 @@ jobs:
     ###
     - name: ⏱ Benchmark XML serializer
       run: |-
-        sudo chmod +rwx ./FluentSerializer.Xml.Benchmark
-        sudo ./FluentSerializer.Xml.Benchmark
-      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1
+        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark
+        sudo ./net5.0/FluentSerializer.Xml.Benchmark
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # ⏱ Benchmark JSON serializer
     #
@@ -271,18 +273,19 @@ jobs:
     ###
     - name: ⏱ Benchmark JSON serializer
       run: |-
-        sudo chmod +rwx ./FluentSerializer.Json.Benchmark
-        sudo ./FluentSerializer.Json.Benchmark
-      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1
+        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark
+        sudo ./net5.0/FluentSerializer.Json.Benchmark
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
     ###
     - name: 🗃 Collect benchmark reports
       run: |-
         sudo mkdir ${{github.workspace}}/benchmark-results
-        cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
+        cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
         sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
-        cd ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/netcoreapp3.1/BenchmarkDotNet.Artifacts/results
+        cd ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
         sudo mv ./json-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
       if: ${{ always() }}
