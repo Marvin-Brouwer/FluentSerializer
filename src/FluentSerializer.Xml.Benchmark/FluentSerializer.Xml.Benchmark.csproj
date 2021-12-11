@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
     <StartupObject>FluentSerializer.Xml.Benchmark.Program</StartupObject>
     <ApplicationIcon />
     <Win32Resource />
-  </PropertyGroup>
+	</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj" />

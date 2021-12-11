@@ -15,6 +15,8 @@ using Perfolizer.Horology;
 using System.IO;
 using System.Linq;
 using BenchmarkDotNet.Columns;
+using System.Threading;
+using System.Globalization;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -24,12 +26,24 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 {
 	public abstract class StaticTestRunner
     {
+		public static CultureInfo AppCulture = new(CultureInfo.InvariantCulture.Name)
+		{
+			NumberFormat = NumberFormatInfo.InvariantInfo
+		};
+
         private static ManualConfig CreateConfig()
         {
+			Environment.SetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", "1");
+			Environment.SetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", "1");
+
+			Thread.CurrentThread.CurrentCulture = AppCulture;
+			Thread.CurrentThread.CurrentUICulture = AppCulture;
+
 			var config = ManualConfig.Create(DefaultConfig.Instance)
                 .WithOrderer(new GroupedSlowestToFastestOrderer())
                 .AddJob(CreateJob(CoreRuntime.Core31))
                 .AddJob(CreateJob(CoreRuntime.Core50))
+				.WithCultureInfo(AppCulture)
                 .AddExporter(MarkdownExporter.GitHub);
 
 			// We only ever profile methods so no need for an additional column
@@ -58,7 +72,13 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 				.WithMinIterationCount(1)
 				.WithMaxRelativeError(0.01)
-                .WithId(typeof(BenchmarkRunner).Assembly.FullName);
+                .WithId(typeof(BenchmarkRunner).Assembly.FullName)
+				.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects"))
+				.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects"))
+				.WithGcForce(true)
+				// This is set to false until the new benchmarkdotnet version is released:
+				// https://github.com/dotnet/BenchmarkDotNet/issues/1519
+				.WithGcAllowVeryLargeObjects(false);
         }
 
 		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
