@@ -5,9 +5,11 @@
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
     <LangVersion>Preview</LangVersion>
     <StartupObject>FluentSerializer.Xml.Benchmark.Program</StartupObject>
-		<ApplicationIcon>../../doc/logo/logo-xml.ico</ApplicationIcon>
-		<PackageIcon>../../doc/logo/logo-xml.ico</PackageIcon>
-		<PackageIconUrl />
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <ApplicationIcon>../../doc/logo/logo-xml.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-xml.ico</PackageIcon>
+    <PackageIconUrl />
 	</PropertyGroup>
 
   <ItemGroup>
