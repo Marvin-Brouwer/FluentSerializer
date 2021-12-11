@@ -5,6 +5,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>Preview</LangVersion>
+		<ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
+		<PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
+		<PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
