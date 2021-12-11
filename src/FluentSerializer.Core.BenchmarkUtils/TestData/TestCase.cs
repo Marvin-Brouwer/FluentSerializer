@@ -1,4 +1,5 @@
-﻿using System;
+using FluentSerializer.Core.BenchmarkUtils.Runner;
+using System;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData
 {
@@ -52,7 +53,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
             // Divide by 1024 to get fractional value
             readable /= 1024;
             // Return formatted number with suffix
-            return readable.ToString("0.### ") + suffix;
+            return readable.ToString("0.### ", StaticTestRunner.AppCulture) + suffix;
         }
     }
 }

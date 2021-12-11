@@ -24,8 +24,10 @@ namespace FluentSerializer.Core.BenchmarkUtils.Profiles
         public void IterationSetup()
         {
             _textStream!.Seek(0, SeekOrigin.Begin);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+			GC.Collect(0, GCCollectionMode.Forced, true);
+			GC.Collect(1, GCCollectionMode.Forced, true);
+			GC.Collect(2, GCCollectionMode.Forced, true);
+			GC.WaitForPendingFinalizers();
         }
 
         [GlobalCleanup]

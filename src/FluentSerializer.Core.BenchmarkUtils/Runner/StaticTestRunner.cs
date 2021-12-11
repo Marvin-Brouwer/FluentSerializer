@@ -15,6 +15,9 @@ using Perfolizer.Horology;
 using System.IO;
 using System.Linq;
 using BenchmarkDotNet.Columns;
+using System.Threading;
+using System.Globalization;
+using Microsoft.Extensions.PlatformAbstractions;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -24,13 +27,24 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 {
 	public abstract class StaticTestRunner
     {
+		public static CultureInfo AppCulture = new(CultureInfo.InvariantCulture.Name)
+		{
+			NumberFormat = NumberFormatInfo.InvariantInfo
+		};
+
         private static ManualConfig CreateConfig()
         {
+			Environment.SetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", "1");
+			Environment.SetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", "1");
+
+			Thread.CurrentThread.CurrentCulture = AppCulture;
+			Thread.CurrentThread.CurrentUICulture = AppCulture;
+
 			var config = ManualConfig.Create(DefaultConfig.Instance)
                 .WithOrderer(new GroupedSlowestToFastestOrderer())
-                .AddJob(CreateJob(CoreRuntime.Core31))
                 .AddJob(CreateJob(CoreRuntime.Core50))
-                .AddExporter(MarkdownExporter.GitHub);
+				.WithCultureInfo(AppCulture)
+                .AddExporter(MarkdownExporter.Console);
 
 			// We only ever profile methods so no need for an additional column
 			var columnProviders = (List<IColumnProvider>)config.GetColumnProviders();
@@ -46,7 +60,6 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
         private static Job CreateJob(Runtime runtime)
         {
             return Job.Dry
-                .WithRuntime(runtime)
 #if (DEBUG)
                 .WithLaunchCount(1)
                 .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
@@ -58,7 +71,13 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 				.WithMinIterationCount(1)
 				.WithMaxRelativeError(0.01)
-                .WithId(typeof(BenchmarkRunner).Assembly.FullName);
+                .WithId(typeof(BenchmarkRunner).Assembly.FullName)
+				.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects"))
+				.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects"))
+				.WithGcForce(true)
+				// This is set to false until the new benchmarkdotnet version is released:
+				// https://github.com/dotnet/BenchmarkDotNet/issues/1519
+				.WithGcAllowVeryLargeObjects(false);
         }
 
 		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
@@ -95,9 +114,11 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.OrderByDescending(directory => directory.CreationTimeUtc)
 				.FirstOrDefault();
 
+			var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
+			var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
 			var readableFileName = markdownSummaryFile.FullName
-				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark")
-				.Replace("-report-github", string.Empty);
+				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
+				.Replace("-report-console", string.Empty);
 
 			Console.WriteLine($"Renaming report to \"{readableFileName}\"");
 			Console.WriteLine();

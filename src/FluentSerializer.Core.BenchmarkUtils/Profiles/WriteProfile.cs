@@ -24,8 +24,10 @@ namespace FluentSerializer.Core.BenchmarkUtils.Profiles
         public virtual void IterationSetup()
         {
             _writeStream!.Seek(0, SeekOrigin.Begin);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+			GC.Collect(0, GCCollectionMode.Forced, true);
+			GC.Collect(1, GCCollectionMode.Forced, true);
+			GC.Collect(2, GCCollectionMode.Forced, true);
+			GC.WaitForPendingFinalizers();
         }
 
         [GlobalCleanup]
@@ -37,12 +39,12 @@ namespace FluentSerializer.Core.BenchmarkUtils.Profiles
             _writeStream = null;
         }
 
-        public void Write(IDataNode value)
+        public string Write(IDataNode value)
         {
             value.WriteTo(TestStringBuilderPool.StringFastPool, true);
-            
             _streamWriter!.Flush();
-            _ = Encoding.UTF8.GetString(_writeStream!.ToArray());
+
+            return Encoding.UTF8.GetString(_writeStream!.ToArray());
         }
     }
 }

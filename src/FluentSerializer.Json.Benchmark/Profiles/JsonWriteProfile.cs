@@ -15,6 +15,6 @@ namespace FluentSerializer.Json.Benchmark.Profiles
         public TestCase<IDataNode> Value { get; set; }
 
         [Benchmark, BenchmarkCategory(nameof(WriteJson))]
-        public void WriteJson() => Write(Value.GetData());
+        public string WriteJson() => Write(Value.GetData());
     }
 }
