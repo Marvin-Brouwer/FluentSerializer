@@ -44,7 +44,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
                 .AddJob(CreateJob(CoreRuntime.Core31))
                 .AddJob(CreateJob(CoreRuntime.Core50))
 				.WithCultureInfo(AppCulture)
-                .AddExporter(MarkdownExporter.GitHub);
+                .AddExporter(MarkdownExporter.Console);
 
 			// We only ever profile methods so no need for an additional column
 			var columnProviders = (List<IColumnProvider>)config.GetColumnProviders();
@@ -117,7 +117,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 
 			var readableFileName = markdownSummaryFile.FullName
 				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark")
-				.Replace("-report-github", string.Empty);
+				.Replace("-report-console", string.Empty);
 
 			Console.WriteLine($"Renaming report to \"{readableFileName}\"");
 			Console.WriteLine();

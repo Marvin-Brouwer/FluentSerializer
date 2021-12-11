@@ -13,7 +13,7 @@ namespace FluentSerializer.Xml.Benchmark
 			StaticTestRunner.RequireElevatedPermissions();
 			XmlDataCollection.Default.GenerateTestCaseFiles();
 
-            StaticTestRunner.Run(typeof(Program).Assembly, "xml");
+            StaticTestRunner.Run(typeof(Program).Assembly, "xml-serializer");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Benchmark
 			StaticTestRunner.RequireElevatedPermissions();
 			JsonDataCollection.Default.GenerateTestCaseFiles();
 
-            StaticTestRunner.Run(typeof(Program).Assembly, "json");
+            StaticTestRunner.Run(typeof(Program).Assembly, "json-serializer");
         }
     }
 }
