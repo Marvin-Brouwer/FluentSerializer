@@ -16,7 +16,7 @@ namespace FluentSerializer.Json.Services
     {
         private readonly JsonTypeSerializer _serializer;
         private readonly JsonTypeDeserializer _deserializer;
-        private readonly ObjectPool<StringFast> _stringBuilderPool;
+        private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
 		public JsonSerializerConfiguration JsonConfiguration { get; }
 		public SerializerConfiguration Configuration => JsonConfiguration;

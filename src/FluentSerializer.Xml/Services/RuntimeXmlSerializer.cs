@@ -17,7 +17,7 @@ namespace FluentSerializer.Xml.Services
 	{
 		private readonly XmlTypeSerializer _serializer;
 		private readonly XmlTypeDeserializer _deserializer;
-		private readonly ObjectPool<StringFast> _stringBuilderPool;
+		private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
 		public XmlSerializerConfiguration XmlConfiguration { get; }
 		public SerializerConfiguration Configuration => XmlConfiguration;

@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Core.Dirty
 {
-    public sealed class StringFastPooledObjectPolicy : PooledObjectPolicy<StringFast>
+    public sealed class StringFastPooledObjectPolicy : PooledObjectPolicy<ITextWriter>
     {
         private readonly string _newLine;
 
@@ -11,9 +11,9 @@ namespace FluentSerializer.Core.Dirty
             _newLine = newLine;
         }
 
-        public override StringFast Create() => new(_newLine);
+        public override ITextWriter Create() => new StringFast(_newLine);
 
-        public override bool Return(StringFast obj)
+        public override bool Return(ITextWriter obj)
         {
             obj.Clear();
             return true;
@@ -22,7 +22,7 @@ namespace FluentSerializer.Core.Dirty
 
     public static class ObjectPoolExtensions
     {
-        public static ObjectPool<StringFast> CreateStringFastPool(this ObjectPoolProvider provider, string newLine) => 
+        public static ObjectPool<ITextWriter> CreateStringFastPool(this ObjectPoolProvider provider, string newLine) => 
             provider.Create(new StringFastPooledObjectPolicy(newLine));
     }
 }

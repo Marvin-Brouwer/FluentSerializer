@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -52,38 +53,19 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             }
 
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
-        }
+		}
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringFast();
-            stringBuilder = AppendTo(stringBuilder);
-            return stringBuilder.ToString();
-        }
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            // JSON does not support empty property assignment or array members
-            if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			// JSON does not support empty property assignment or array members
+			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
             const char spacer = ' ';
 
-            return stringBuilder
-                .Append(JsonCharacterConstants.MultiLineCommentStart)
+            return stringBuilder = stringBuilder
+				.Append(JsonCharacterConstants.MultiLineCommentStart)
                 .Append(spacer)
                 .Append(Value)
                 .Append(spacer)

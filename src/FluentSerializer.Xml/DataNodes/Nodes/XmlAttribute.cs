@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System;
 using Microsoft.Extensions.ObjectPool;
 using System.IO;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Constants;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
@@ -85,48 +86,23 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public void WriteTo(ObjectPool<StringFast> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
-
-            var stringBuilder = stringBuilders.Get();
-
-            stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-            writer.Write(stringBuilder);
-
-            stringBuilder.Clear();
-            stringBuilders.Return(stringBuilder);
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
 
             if (!writeNull && Value is null) return stringBuilder;
 
-            stringBuilder
-                .Append(Name)
+			stringBuilder = stringBuilder
+				.Append(Name)
                 .Append(XmlCharacterConstants.PropertyAssignmentCharacter)
                 .Append(XmlCharacterConstants.PropertyWrapCharacter);
 
-            if (Value is not null) stringBuilder.Append(Value);
+            if (Value is not null) stringBuilder = stringBuilder.Append(Value);
 
-            stringBuilder
-                .Append(XmlCharacterConstants.PropertyWrapCharacter);
+			stringBuilder = stringBuilder
+				.Append(XmlCharacterConstants.PropertyWrapCharacter);
 
             return stringBuilder;
         }

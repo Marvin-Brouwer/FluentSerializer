@@ -1,18 +1,18 @@
-﻿namespace FluentSerializer.Core.DataNodes
+namespace FluentSerializer.Core.DataNodes
 {
     public static class StringFastExtensions
     {
-        public static StringFast AppendNode(this StringFast stringBuilder, IDataNode node, bool format, int indent, bool writeNull)
+        public static ITextWriter AppendNode(this ITextWriter stringBuilder, in IDataNode node, bool format, in uint indent, in bool writeNull)
         {
-            return node.AppendTo(stringBuilder, format, format ? indent : 0, writeNull);
+            return node.AppendTo(ref stringBuilder, format, format ? indent : 0, writeNull);
         }
-        public static StringFast AppendOptionalNewline(this StringFast stringBuilder, bool newLine)
+        public static ITextWriter AppendOptionalNewline(this ITextWriter stringBuilder, in bool newLine)
         {
             if (!newLine) return stringBuilder;
 
             return stringBuilder.AppendLineEnding();
         }
-        public static StringFast AppendOptionalIndent(this StringFast stringBuilder, int indent, bool format)
+        public static ITextWriter AppendOptionalIndent(this ITextWriter stringBuilder, in uint indent, in bool format)
         {
             const char indentChar = '\t';
 

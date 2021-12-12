@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -104,55 +105,35 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 }
             }
             offset++;
-        }
+		}
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringFast();
-            stringBuilder = AppendTo(stringBuilder);
-            return stringBuilder.ToString();
-        }
-
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            var childIndent = indent + 1;
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			var childIndent = indent + 1;
 			var currentPropertyIndex = 0uL;
 
-            stringBuilder
-                .Append(JsonCharacterConstants.ObjectStartCharacter);
+			stringBuilder = stringBuilder
+				.Append(JsonCharacterConstants.ObjectStartCharacter);
 
 			foreach (var child in Children)
             {
                 if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
 
-                stringBuilder
-                    .AppendOptionalNewline(format)
+				stringBuilder = stringBuilder
+					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
                 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
-                if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex)) 
-                    stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
+                if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
+					stringBuilder = stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
                 currentPropertyIndex++;
             }
 
-            stringBuilder
-                .AppendOptionalNewline(format)
+			stringBuilder = stringBuilder
+				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
                 .Append(JsonCharacterConstants.ObjectEndCharacter);
 

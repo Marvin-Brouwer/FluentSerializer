@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -118,38 +119,13 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             var jsonValue = new JsonValue(text, ref offset);
             _children[0] = jsonValue;
             HasValue = jsonValue.HasValue;
-        }
+		}
 
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public void WriteTo(ObjectPool<StringFast> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
-
-            var stringBuilder = stringBuilders.Get();
-
-            stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-            writer.Write(stringBuilder);
-
-            stringBuilder.Clear();
-            stringBuilders.Return(stringBuilder);
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
 
             const char spacer = ' ';
 
@@ -157,16 +133,16 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             var childValue = Children.FirstOrDefault();
 
-            stringBuilder
+            stringBuilder = stringBuilder
                 .Append(JsonCharacterConstants.PropertyWrapCharacter)
                 .Append(Name)
                 .Append(JsonCharacterConstants.PropertyWrapCharacter);
 
-            stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
-            if (format) stringBuilder.Append(spacer);
+			stringBuilder = stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
+            if (format) stringBuilder = stringBuilder.Append(spacer);
 
-            if (childValue is null) stringBuilder.Append(JsonCharacterConstants.NullValue);
-            else stringBuilder.AppendNode(childValue, format, indent, writeNull);
+            if (childValue is null) stringBuilder = stringBuilder.Append(JsonCharacterConstants.NullValue);
+            else stringBuilder = stringBuilder.AppendNode(childValue, format, indent, writeNull);
 
             return stringBuilder;
         }

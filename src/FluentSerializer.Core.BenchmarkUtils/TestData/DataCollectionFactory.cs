@@ -51,7 +51,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
 			var stringBuilder = TestStringBuilderPool.StringFastPool.Get();
 
 
-			data.AppendTo(stringBuilder, true, 0, false);
+			data.AppendTo(ref stringBuilder, true, 0, false);
             writer.Write(stringBuilder);
 
             writer.Flush();

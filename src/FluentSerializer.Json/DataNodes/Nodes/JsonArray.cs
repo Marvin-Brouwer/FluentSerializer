@@ -1,3 +1,4 @@
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -111,51 +112,32 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             offset++;
         }
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringFast();
-            stringBuilder = AppendTo(stringBuilder);
-            return stringBuilder.ToString();
-        }
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+        public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
         {
             var childIndent = indent + 1;
 			var currentChildIndex = 0uL;
 
-			stringBuilder
-                .Append(JsonCharacterConstants.ArrayStartCharacter);
+			stringBuilder = stringBuilder
+				.Append(JsonCharacterConstants.ArrayStartCharacter);
             
             foreach (var child in Children)
             {
-                stringBuilder
-                    .AppendOptionalNewline(format)
+				stringBuilder = stringBuilder
+					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
-                if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex)) 
-                    stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
+                if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex))
+					stringBuilder = stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
                 currentChildIndex++;
             }
 
-            stringBuilder
-                .AppendOptionalNewline(format)
+			stringBuilder = stringBuilder
+				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
                 .Append(JsonCharacterConstants.ArrayEndCharacter);
 

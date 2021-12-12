@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
 	public sealed class JsonStringConversionTests
     {
         private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringFast> StringFastPool = ObjectPoolProvider.CreateStringFastPool(LineEndings.LineFeed);
+        public static readonly ObjectPool<ITextWriter> StringFastPool = ObjectPoolProvider.CreateStringFastPool(LineEndings.LineFeed);
 
         private readonly IJsonObject _testObjectFormatted;
         private readonly IJsonObject _testObjectSlim;

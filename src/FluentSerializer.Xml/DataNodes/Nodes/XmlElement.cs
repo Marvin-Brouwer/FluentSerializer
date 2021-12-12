@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -229,57 +230,37 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
                 if (character == XmlCharacterConstants.TagEndCharacter) return;
             }
-        }
+		}
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringFast();
-            AppendTo(stringBuilder, false);
-            return stringBuilder.ToString();
-        }
-
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            const char spacer = ' ';
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			const char spacer = ' ';
 
             var children = Children;
             var childIndent = format ? indent + 1 : 0;
 
             if (!writeNull && !children.Any()) return stringBuilder;
 
-            stringBuilder
-                .Append(XmlCharacterConstants.TagStartCharacter)
+			stringBuilder = stringBuilder
+				.Append(XmlCharacterConstants.TagStartCharacter)
                 .Append(Name);
 
-            if (!children.Any()) return stringBuilder
-                    .Append(spacer)
+            if (!children.Any()) return stringBuilder = stringBuilder
+					.Append(spacer)
                     .Append(XmlCharacterConstants.TagTerminationCharacter)
                     .Append(XmlCharacterConstants.TagEndCharacter);
 
             foreach (var attribute in _attributes)
             {
-                stringBuilder
-                    .AppendOptionalNewline(format)
+				stringBuilder = stringBuilder
+					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(indent, format)
                     .Append(spacer)
                     .AppendNode(attribute, format, childIndent, writeNull);
             }
-            stringBuilder
-                .Append(XmlCharacterConstants.TagEndCharacter);
+			stringBuilder = stringBuilder
+				.Append(XmlCharacterConstants.TagEndCharacter);
 
             // Technically this object can have multiple text nodes, only the first needs indentation
             var textOnly = true;
@@ -290,12 +271,12 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     textOnly = false;
                     firstTextNode = true;
 
-                    stringBuilder
-                        .AppendOptionalNewline(format)
+					stringBuilder = stringBuilder
+						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-                    stringBuilder
-                        .AppendNode(childElement, format, childIndent, writeNull);
+					stringBuilder = stringBuilder
+						.AppendNode(childElement, format, childIndent, writeNull);
 
                     continue;
                 }
@@ -304,49 +285,49 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     if (firstTextNode)
                     {
                         firstTextNode = false;
-                        if (!textOnly) stringBuilder
-                            .AppendOptionalNewline(format)
+                        if (!textOnly) stringBuilder = stringBuilder
+							.AppendOptionalNewline(format)
                             .AppendOptionalIndent(childIndent, format);
 
-                        stringBuilder
-                            .AppendNode(textNode, true, childIndent, writeNull);
+						stringBuilder = stringBuilder
+							.AppendNode(textNode, true, childIndent, writeNull);
 
                         continue;
                     }
 
-                    stringBuilder
-                        .AppendNode(textNode, false, childIndent, writeNull);
+					stringBuilder = stringBuilder
+						.AppendNode(textNode, false, childIndent, writeNull);
 
                     continue;
                 }
                 if (child is IXmlComment commentNode)
                 {
-                    stringBuilder
-                        .AppendOptionalNewline(format)
+					stringBuilder = stringBuilder
+						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-                    stringBuilder
-                        .AppendNode(commentNode, true, childIndent, writeNull);
+					stringBuilder = stringBuilder
+						.AppendNode(commentNode, true, childIndent, writeNull);
 
                     continue;
                 }
                 if (child is IXmlCharacterData cDataNode)
                 {
-                    stringBuilder
-                        .AppendOptionalNewline(format)
+					stringBuilder = stringBuilder
+						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-                    stringBuilder
-                        .AppendNode(cDataNode, true, childIndent, writeNull);
+					stringBuilder = stringBuilder
+						.AppendNode(cDataNode, true, childIndent, writeNull);
                 }
             }
 
-            if (!textOnly) stringBuilder
-                .AppendOptionalNewline(format)
+            if (!textOnly) stringBuilder = stringBuilder
+				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format);
 
-            stringBuilder
-                .Append(XmlCharacterConstants.TagStartCharacter)
+			stringBuilder = stringBuilder
+				.Append(XmlCharacterConstants.TagStartCharacter)
                 .Append(XmlCharacterConstants.TagTerminationCharacter)
                 .Append(Name)
                 .Append(XmlCharacterConstants.TagEndCharacter);

@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
@@ -56,33 +57,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             // Append a '"' if it started with a '"'
             if (stringValue) valueEndOffset++;
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
-        }
+		}
 
-        public override string ToString()
-        {
-            var stringBuilder = new StringFast();
-            stringBuilder = AppendTo(stringBuilder);
-            return stringBuilder.ToString();
-        }
+		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
 
-        public string WriteTo(ObjectPool<StringFast> stringBuilders, bool format = true, bool writeNull = true, int indent = 0)
-        {
-            var stringBuilder = stringBuilders.Get();
-            try
-            {
-                stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-                return stringBuilder.ToString();
-            }
-            finally
-            {
-                stringBuilders.Return(stringBuilder);
-            }
-        }
-
-        public StringFast AppendTo(StringFast stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
-        {
-            // JSON does not support empty property assignment or array members
-            return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		{
+			// JSON does not support empty property assignment or array members
+			return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);
         }
 
         #region IEquatable

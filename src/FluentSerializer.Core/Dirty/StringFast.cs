@@ -1,61 +1,62 @@
-﻿using System;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Constants;
+using System;
 
 ///<summary>
 /// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.
 /// Similar use than StringFast, but avoid a lot of allocations done by StringFast (conversion of int and float to string, frequent capacity change, etc.)
 /// Author: Nicolas Gadenne contact@gaddygames.com
 ///</summary>
-public sealed class StringFast
+public struct StringFast : ITextWriter
 {
-	private readonly string _newLine = Environment.NewLine;
+	private readonly string _newLine;
 
 	///<summary>Immutable string. Generated at last moment, only if needed</summary>
-	private string? _generatedStringValue = null;
-    private readonly int _initialCapacity;
+	private string? _generatedStringValue;
+	private readonly int _initialCapacity;
 
-    ///<summary>Working mutable string</summary>
-    private char[] _memoryBuffer;
-    private int _currentBufferPosition = 0;
-	private int _characterCapacity = 0;
+	///<summary>Working mutable string</summary>
+	private char[] _memoryBuffer;
+	private int _currentBufferPosition;
+	private int _characterCapacity;
 
 	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-	public StringFast() : this(Environment.NewLine)
+	public StringFast(in string? newLine, in int initialCapacity = 32)
 	{
-	}
+		Guard.Against.NegativeOrZero(initialCapacity, nameof(initialCapacity));
 
-	public StringFast(in string newLine, in int initialCapacity = 32) : this(initialCapacity)
-	{
-		_newLine = newLine;
-	}
-
-	public StringFast(in int initialCapacity)
-	{
 		_initialCapacity = initialCapacity;
 		_characterCapacity = initialCapacity;
+		_generatedStringValue = null;
+		_currentBufferPosition = 0;
+		_characterCapacity = 0;
+
+		_newLine = newLine ?? LineEndings.Environment;
 		_memoryBuffer = new char[_characterCapacity];
 		_generatedStringValue = null;
 	}
 
-    ///<summary>Return the string</summary>
-    public override string ToString() => _generatedStringValue ??= new string(_memoryBuffer, 0, _currentBufferPosition);
+	///<summary>Return the string</summary>
+	public override string ToString() => _generatedStringValue ??= new string(_memoryBuffer, 0, _currentBufferPosition);
 
-    // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    // Append methods, to build the string without allocation
+	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+	// Append methods, to build the string without allocation
 
-    ///<summary>Reset the m_char array</summary>
-    public StringFast Clear()
+	///<summary>Reset the m_char array</summary>
+	public StringFast Clear()
 	{
 		_currentBufferPosition = 0;
-		_generatedStringValue = null; 
+		_generatedStringValue = null;
 		_memoryBuffer = new char[_characterCapacity = _initialCapacity];
 
 		return this;
 	}
 
-    public StringFast AppendLineEnding() => Append(_newLine);
+	public StringFast AppendLineEnding() => Append(_newLine);
 
-    public StringFast Append(in char character, in int repeat)
+	// todo smarter append
+	public StringFast Append(in char character, in uint repeat)
 	{
 		for (var i = 0; i < repeat; i++) Append(character);
 		return this;
@@ -83,19 +84,19 @@ public sealed class StringFast
 		ReallocateIFN(1);
 
 		_memoryBuffer[_currentBufferPosition] = value;
-		_currentBufferPosition ++;
+		_currentBufferPosition++;
 
 		return this;
 	}
 
 	private void ReallocateIFN(in int amountOfCharactersAdded)
-    {
+	{
 		if (_currentBufferPosition + amountOfCharactersAdded <= _characterCapacity) return;
 
-        _characterCapacity = Math.Max(_characterCapacity + amountOfCharactersAdded, _characterCapacity * 2);
-        char[] newChars = new char[_characterCapacity];
-        _memoryBuffer.CopyTo(newChars, 0);
-        _memoryBuffer = newChars;
-    }
+		_characterCapacity = Math.Max(_characterCapacity + amountOfCharactersAdded, _characterCapacity * 2);
+		char[] newChars = new char[_characterCapacity];
+		_memoryBuffer.CopyTo(newChars, 0);
+		_memoryBuffer = newChars;
+	}
 
 }
