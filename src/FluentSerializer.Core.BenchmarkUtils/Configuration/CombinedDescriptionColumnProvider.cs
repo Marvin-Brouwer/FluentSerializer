@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 
-namespace FluentSerializer.Core.BenchmarkUtils.Runner
+namespace FluentSerializer.Core.BenchmarkUtils.Configuration
 {
 	internal sealed class MethodOnlyDescriptorColumnProvider : IColumnProvider
 	{
