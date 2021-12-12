@@ -1,17 +1,15 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    /// <summary>
-    /// A special XML element that doesn't print it's container but only its children
-    /// </summary>
-    [DebuggerDisplay(FragmentName)]
+	/// <summary>
+	/// A special XML element that doesn't print it's container but only its children
+	/// </summary>
+	[DebuggerDisplay(FragmentName)]
     public readonly struct XmlFragment : IXmlElement
     {
         private readonly IXmlElement _innerElement;
@@ -39,7 +37,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			var childIndent = format ? indent + 1 : 0;
 

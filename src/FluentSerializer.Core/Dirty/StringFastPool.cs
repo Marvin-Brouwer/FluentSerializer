@@ -1,4 +1,5 @@
 using Microsoft.Extensions.ObjectPool;
+using System.Buffers;
 using System.Text;
 
 namespace FluentSerializer.Core.Dirty
@@ -14,7 +15,7 @@ namespace FluentSerializer.Core.Dirty
             _newLine = newLine;
         }
 
-        public override ITextWriter Create() => new StringFast(_encoding, _newLine);
+        public override ITextWriter Create() => new StringFast(_encoding, _newLine, ArrayPool<char>.Shared);
 
         public override bool Return(ITextWriter obj)
         {

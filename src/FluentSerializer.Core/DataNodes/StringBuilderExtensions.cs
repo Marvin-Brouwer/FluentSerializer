@@ -2,7 +2,7 @@ namespace FluentSerializer.Core.DataNodes
 {
     public static class StringFastExtensions
     {
-        public static ITextWriter AppendNode(this ITextWriter stringBuilder, in IDataNode node, bool format, in uint indent, in bool writeNull)
+        public static ITextWriter AppendNode(this ITextWriter stringBuilder, in IDataNode node, bool format, in int indent, in bool writeNull)
         {
             return node.AppendTo(ref stringBuilder, format, format ? indent : 0, writeNull);
         }
@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.DataNodes
 
             return stringBuilder.AppendLineEnding();
         }
-        public static ITextWriter AppendOptionalIndent(this ITextWriter stringBuilder, in uint indent, in bool format)
+        public static ITextWriter AppendOptionalIndent(this ITextWriter stringBuilder, in int indent, in bool format)
         {
             const char indentChar = '\t';
 

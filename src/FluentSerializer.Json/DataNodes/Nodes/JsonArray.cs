@@ -1,18 +1,15 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IJsonArray"/>
-    [DebuggerDisplay("{ArrayName, nq}")]
+	/// <inheritdoc cref="IJsonArray"/>
+	[DebuggerDisplay("{ArrayName, nq}")]
     public readonly struct JsonArray : IJsonArray
     {
         private static readonly int TypeHashCode = typeof(JsonArray).GetHashCode();
@@ -116,7 +113,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-        public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+        public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
         {
             var childIndent = indent + 1;
 			var currentChildIndex = 0uL;

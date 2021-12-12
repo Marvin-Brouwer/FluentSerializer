@@ -2,17 +2,13 @@ using System.Diagnostics;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System;
-using Microsoft.Extensions.ObjectPool;
-using System.IO;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Constants;
-using System.Text;
 using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IXmlAttribute"/>
-    [DebuggerDisplay("{Name,nq}={Value}")]
+	/// <inheritdoc cref="IXmlAttribute"/>
+	[DebuggerDisplay("{Name,nq}={Value}")]
     public readonly struct XmlAttribute : IXmlAttribute
     {
         private static readonly int TypeHashCode = typeof(XmlAttribute).GetHashCode();
@@ -90,7 +86,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
 

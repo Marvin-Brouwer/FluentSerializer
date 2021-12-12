@@ -1,14 +1,12 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IXmlText"/>
-    [DebuggerDisplay("{Value}")]
+	/// <inheritdoc cref="IXmlText"/>
+	[DebuggerDisplay("{Value}")]
     public readonly struct XmlText : IXmlText
     {
         private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
@@ -51,7 +49,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			// This should never happen because null tags are self-closing but just to be sure this check is here
 			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;

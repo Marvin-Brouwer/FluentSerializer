@@ -1,17 +1,14 @@
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
-using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IJsonComment"/>
-    [DebuggerDisplay("/* {Value,nq} */")]
+	/// <inheritdoc cref="IJsonComment"/>
+	[DebuggerDisplay("/* {Value,nq} */")]
     public readonly struct JsonCommentMultiLine : IJsonComment
     {
         private static readonly int TypeHashCode = typeof(JsonCommentMultiLine).GetHashCode();
@@ -59,7 +56,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			// JSON does not support empty property assignment or array members
 			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;

@@ -1,16 +1,13 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
-using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IXmlCharacterData"/>
-    [DebuggerDisplay(CharacterDataName)]
+	/// <inheritdoc cref="IXmlCharacterData"/>
+	[DebuggerDisplay(CharacterDataName)]
     public readonly struct XmlCharacterData : IXmlCharacterData
     {
         private static readonly int TypeHashCode = typeof(XmlCharacterData).GetHashCode();
@@ -56,7 +53,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 

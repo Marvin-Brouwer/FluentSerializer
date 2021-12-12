@@ -1,9 +1,6 @@
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes;
-using Microsoft.Extensions.ObjectPool;
 using System;
-using FluentSerializer.Core.Constants;
-using FluentSerializer.Core.Dirty;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

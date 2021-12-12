@@ -22,7 +22,7 @@ using Xunit;
 
 namespace FluentSerializer.UseCase.OpenAir
 {
-    public sealed partial class OpenAirTests
+	public sealed partial class OpenAirTests
     {
         private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
         private readonly XmlSerializerConfiguration _configuration;

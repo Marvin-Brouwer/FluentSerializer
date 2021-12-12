@@ -1,20 +1,16 @@
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IJsonProperty"/>
-    [DebuggerDisplay("{Name}: {GetDebugValue(), nq},")]
+	/// <inheritdoc cref="IJsonProperty"/>
+	[DebuggerDisplay("{Name}: {GetDebugValue(), nq},")]
     public readonly struct JsonProperty : IJsonProperty
     {
         private static readonly int TypeHashCode = typeof(JsonProperty).GetHashCode();
@@ -125,7 +121,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
 

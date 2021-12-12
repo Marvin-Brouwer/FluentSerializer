@@ -43,7 +43,8 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
 
 				var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
 				WriteStringContent(objectData, filePath);
-			} finally
+			}
+			finally
 			{
 				Console.WriteLine();
 			}
@@ -60,7 +61,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
 
 			data.AppendTo(ref stringBuilder, true, 0, false);
 			Console.Write('.');
-			bufferedStream.Write(stringBuilder.GetBytes());
+			bufferedStream.Write(stringBuilder.AsSpan());
 
 			Console.Write('.');
 			bufferedStream.Flush();

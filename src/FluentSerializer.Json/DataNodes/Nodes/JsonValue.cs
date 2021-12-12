@@ -1,15 +1,12 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
-using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IJsonValue"/>
-    [DebuggerDisplay("{Value,nq}")]
+	/// <inheritdoc cref="IJsonValue"/>
+	[DebuggerDisplay("{Value,nq}")]
     public readonly struct JsonValue : IJsonValue
     {
         private static readonly int TypeHashCode = typeof(JsonValue).GetHashCode();
@@ -63,7 +60,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			// JSON does not support empty property assignment or array members
 			return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);

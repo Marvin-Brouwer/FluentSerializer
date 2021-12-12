@@ -1,6 +1,6 @@
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Constants;
 using System;
+using System.Buffers;
 using System.Text;
 
 ///<summary>
@@ -10,98 +10,127 @@ using System.Text;
 ///</summary>
 public sealed class StringFast : ITextWriter
 {
+	private const int DefaultChunkSize = 65536;
+
+	private readonly ArrayPool<char> _arrayPool;
+	private string? _generatedStringValue;
+
+	#region WriterSettings
 	public Encoding Encoding { get; }
 	private readonly string _newLine;
+	#endregion
 
-	///<summary>Immutable string. Generated at last moment, only if needed</summary>
-	private string? _generatedStringValue;
-	private readonly int _initialCapacity;
-
-	///<summary>Working mutable string</summary>
-	/// todo span?
+	#region StringMutation
 	private char[] _memoryBuffer;
+	private readonly int _chunkSize;
 	private int _currentBufferPosition;
-	private int _characterCapacity;
+	private int _bufferCapacity;
+	#endregion
 
-	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
-	public StringFast(in Encoding encoding, in string newLine, in int initialCapacity = 32)
+	public StringFast(in Encoding encoding, in string newLine, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
 	{
-		Guard.Against.NegativeOrZero(initialCapacity, nameof(initialCapacity));
+		Guard.Against.NegativeOrZero(chunkSize, nameof(chunkSize));
 
-		_initialCapacity = initialCapacity;
-		_characterCapacity = initialCapacity;
+		_chunkSize = chunkSize;
+		_bufferCapacity = chunkSize;
 		_generatedStringValue = null;
 		_currentBufferPosition = 0;
-		_characterCapacity = 0;
+		_bufferCapacity = 0;
 
 		Encoding = encoding;
 		_newLine = newLine;
-		_memoryBuffer = new char[_characterCapacity];
+		_arrayPool = arrayPool;
+		_memoryBuffer = arrayPool.Rent(_bufferCapacity);
 		_generatedStringValue = null;
 	}
 
-	///<summary>Return the string</summary>
 	public override string ToString() => _generatedStringValue ??= new string(_memoryBuffer, 0, _currentBufferPosition);
 
-	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-	// Append methods, to build the string without allocation
-
-	///<summary>Reset the m_char array</summary>
 	public ITextWriter Clear()
 	{
 		_currentBufferPosition = 0;
 		_generatedStringValue = null;
-		_memoryBuffer = new char[_characterCapacity = _initialCapacity];
+		_arrayPool.Return(_memoryBuffer, true);
+		_memoryBuffer = _arrayPool.Rent(_bufferCapacity = _chunkSize);
 
 		return this;
 	}
 
 	public ITextWriter AppendLineEnding() => Append(_newLine);
 
-	// todo smarter append
-	public ITextWriter Append(in char character, in uint repeat)
-	{
-		for (var i = 0; i < repeat; i++) Append(character);
-		return this;
-	}
-
-	///<summary>Append a string without memory allocation</summary>
+	#region AppendStringValue
 	public ITextWriter Append(in string? value)
 	{
 		if (value is null) return this;
-		ReallocateIFN(value.Length);
 
+		ReallocateIFN(value.Length);
+		CopyStringValue(value);
+
+		return this;
+	}
+
+	public ITextWriter Append(in ReadOnlySpan<char> value)
+	{
+		if (value.IsEmpty) return this;
+
+		ReallocateIFN(value.Length);
+		CopyStringValue(value.ToString());
+
+		return this;
+	}
+
+	private void CopyStringValue(string value)
+	{
 		int stringLength = value.Length;
 		value.CopyTo(0, _memoryBuffer, _currentBufferPosition, stringLength);
 
 		_currentBufferPosition += stringLength;
-
-		return this;
 	}
+	#endregion
 
-	///<summary>Append a character without memory allocation</summary>
 	public ITextWriter Append(in char value)
 	{
 		if (value == (char)0) return this;
 
 		ReallocateIFN(1);
+		CopyCharValue(value);
 
-		_memoryBuffer[_currentBufferPosition] = value;
-		_currentBufferPosition++;
+		return this;
+	}
+	public ITextWriter Append(in char value, in int repeat)
+	{
+		if (value == (char)0) return this;
+
+		ReallocateIFN(repeat);
+		CopyCharValues(value, repeat);
 
 		return this;
 	}
 
+	private void CopyCharValue(char value)
+	{
+		_memoryBuffer[_currentBufferPosition] = value;
+		_currentBufferPosition++;
+	}
+	private void CopyCharValues(char value, int repeat)
+	{
+		for (var i = 0; i < repeat; i++) CopyCharValue(value);
+	}
+
 	private void ReallocateIFN(in int amountOfCharactersAdded)
 	{
-		if (_currentBufferPosition + amountOfCharactersAdded <= _characterCapacity) return;
+		if (_currentBufferPosition + amountOfCharactersAdded <= _bufferCapacity) return;
 
-		_characterCapacity = Math.Max(_characterCapacity + amountOfCharactersAdded, _characterCapacity * 2);
-		char[] newChars = new char[_characterCapacity];
+		_bufferCapacity = Math.Max(_bufferCapacity + amountOfCharactersAdded, _bufferCapacity * 2);
+
+		var newChars = _arrayPool.Rent(_bufferCapacity);
 		_memoryBuffer.CopyTo(newChars, 0);
+		_arrayPool.Return(_memoryBuffer, true);
 		_memoryBuffer = newChars;
 	}
 
-	public ReadOnlySpan<byte> GetBytes() => Encoding.GetBytes(_memoryBuffer).AsSpan();
+	public Span<byte> AsSpan() => Encoding.GetBytes(_memoryBuffer).AsSpan(0, _currentBufferPosition);
+
+	public Memory<byte> AsMemory() => Encoding.GetBytes(_memoryBuffer).AsMemory(0, _currentBufferPosition);
+
 }

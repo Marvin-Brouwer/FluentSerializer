@@ -1,4 +1,3 @@
-using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
@@ -7,8 +6,8 @@ using System.Diagnostics;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
-    /// <inheritdoc cref="IXmlDocument"/>
-    [DebuggerDisplay(DocumentName)]
+	/// <inheritdoc cref="IXmlDocument"/>
+	[DebuggerDisplay(DocumentName)]
     public readonly struct XmlDocument : IXmlDocument
     {
         private static readonly int TypeHashCode = typeof(XmlDocument).GetHashCode();
@@ -28,15 +27,14 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in uint indent = 0)
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
         {
             var stringBuilder = stringBuilders.Get();
 
             try
             {
-				// todo fix encoding later
-				stringBuilder = stringBuilder
-					.Append($"<?xml version=\"1.0\" encoding=\"UTF-16\"?>")
+				stringBuilder
+					.Append($"<?xml version=\"1.0\" encoding=\"{stringBuilder.Encoding.WebName}\"?>")
                     .AppendOptionalNewline(format);
 
 				AppendTo(ref stringBuilder, format, indent, writeNull);
@@ -48,7 +46,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             }
         }
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 		{
 			return RootElement?.AppendTo(ref stringBuilder, format, indent, writeNull) ?? stringBuilder;
         }
