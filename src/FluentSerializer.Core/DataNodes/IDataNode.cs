@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.DataNodes
 
 		string ToString(SerializerConfiguration configuration)
 		{
-			var stringBuilder = (ITextWriter)new StringFast(
+			var stringBuilder = (ITextWriter)new LowAllocationStringBuilder(
 				configuration.Encoding, configuration.NewLine, ArrayPool<char>.Shared);
 			stringBuilder = AppendTo(ref stringBuilder);
 			return stringBuilder.ToString();

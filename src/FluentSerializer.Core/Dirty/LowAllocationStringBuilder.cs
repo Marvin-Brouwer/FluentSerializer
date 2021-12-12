@@ -8,7 +8,7 @@ using System.Text;
 /// Similar use than StringFast, but avoid a lot of allocations done by StringFast (conversion of int and float to string, frequent capacity change, etc.)
 /// Author: Nicolas Gadenne contact@gaddygames.com
 ///</summary>
-public sealed class StringFast : ITextWriter
+public sealed class LowAllocationStringBuilder : ITextWriter
 {
 	private const int DefaultChunkSize = 65536;
 
@@ -27,7 +27,7 @@ public sealed class StringFast : ITextWriter
 	private int _bufferCapacity;
 	#endregion
 
-	public StringFast(in Encoding encoding, in string newLine, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
+	public LowAllocationStringBuilder(in Encoding encoding, in string newLine, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
 	{
 		Guard.Against.NegativeOrZero(chunkSize, nameof(chunkSize));
 
@@ -88,12 +88,13 @@ public sealed class StringFast : ITextWriter
 	}
 	#endregion
 
+	#region AppendCharacterValue
 	public ITextWriter Append(in char value)
 	{
 		if (value == (char)0) return this;
 
 		ReallocateIFN(1);
-		CopyCharValue(value);
+		CopyCharacterValue(value);
 
 		return this;
 	}
@@ -102,20 +103,22 @@ public sealed class StringFast : ITextWriter
 		if (value == (char)0) return this;
 
 		ReallocateIFN(repeat);
-		CopyCharValues(value, repeat);
+		CopyCharacterValues(value, repeat);
 
 		return this;
 	}
 
-	private void CopyCharValue(char value)
+	private void CopyCharacterValue(char value)
 	{
 		_memoryBuffer[_currentBufferPosition] = value;
 		_currentBufferPosition++;
 	}
-	private void CopyCharValues(char value, int repeat)
+
+	private void CopyCharacterValues(char value, int repeat)
 	{
-		for (var i = 0; i < repeat; i++) CopyCharValue(value);
+		for (var i = 0; i < repeat; i++) CopyCharacterValue(value);
 	}
+	#endregion
 
 	private void ReallocateIFN(in int amountOfCharactersAdded)
 	{
