@@ -2,11 +2,11 @@ using System;
 
 public interface ITextWriter
 {
-	StringFast Append(in char value);
-	StringFast Append(in char character, in uint repeat);
-	StringFast Append(in string? value);
-	StringFast AppendLineEnding();
-	StringFast Clear();
+	ITextWriter Append(in char value);
+	ITextWriter Append(in char character, in uint repeat);
+	ITextWriter Append(in string? value);
+	ITextWriter AppendLineEnding();
+	ITextWriter Clear();
 	string ToString();
 	ReadOnlySpan<byte> GetBytes();
 }

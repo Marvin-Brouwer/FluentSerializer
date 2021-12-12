@@ -48,11 +48,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             var firstNode = true;
             foreach (var child in _innerElement.Children)
             {
-                if (!firstNode) stringBuilder = stringBuilder
+                if (!firstNode) stringBuilder
 					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format);
 
-				stringBuilder = stringBuilder
+				stringBuilder
 					.AppendNode(child, format, childIndent, writeNull);
 
                 firstNode = false;

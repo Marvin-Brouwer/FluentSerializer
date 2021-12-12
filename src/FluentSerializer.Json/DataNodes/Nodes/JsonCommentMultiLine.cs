@@ -66,7 +66,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             const char spacer = ' ';
 
-            return stringBuilder = stringBuilder
+            return stringBuilder
 				.Append(JsonCharacterConstants.MultiLineCommentStart)
                 .Append(spacer)
                 .Append(Value)

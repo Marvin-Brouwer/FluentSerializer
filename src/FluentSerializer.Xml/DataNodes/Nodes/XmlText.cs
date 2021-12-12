@@ -56,7 +56,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 			// This should never happen because null tags are self-closing but just to be sure this check is here
 			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            return stringBuilder = stringBuilder.Append(Value);
+            return stringBuilder.Append(Value);
         }
 
         #region IEquatable

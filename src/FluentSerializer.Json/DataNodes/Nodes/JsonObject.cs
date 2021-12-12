@@ -116,26 +116,26 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 			var childIndent = indent + 1;
 			var currentPropertyIndex = 0uL;
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(JsonCharacterConstants.ObjectStartCharacter);
 
 			foreach (var child in Children)
             {
                 if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
 
-				stringBuilder = stringBuilder
+				stringBuilder
 					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
                 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
                 if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
-					stringBuilder = stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
+					stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
                 currentPropertyIndex++;
             }
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
                 .Append(JsonCharacterConstants.ObjectEndCharacter);

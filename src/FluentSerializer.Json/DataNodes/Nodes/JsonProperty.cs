@@ -135,16 +135,16 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             var childValue = Children.FirstOrDefault();
 
-            stringBuilder = stringBuilder
+            stringBuilder
                 .Append(JsonCharacterConstants.PropertyWrapCharacter)
                 .Append(Name)
                 .Append(JsonCharacterConstants.PropertyWrapCharacter);
 
-			stringBuilder = stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
-            if (format) stringBuilder = stringBuilder.Append(spacer);
+			stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
+            if (format) stringBuilder.Append(spacer);
 
-            if (childValue is null) stringBuilder = stringBuilder.Append(JsonCharacterConstants.NullValue);
-            else stringBuilder = stringBuilder.AppendNode(childValue, format, indent, writeNull);
+            if (childValue is null) stringBuilder.Append(JsonCharacterConstants.NullValue);
+            else stringBuilder.AppendNode(childValue, format, indent, writeNull);
 
             return stringBuilder;
         }

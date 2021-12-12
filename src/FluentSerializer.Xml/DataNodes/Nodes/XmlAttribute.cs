@@ -96,14 +96,14 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             if (!writeNull && Value is null) return stringBuilder;
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(Name)
                 .Append(XmlCharacterConstants.PropertyAssignmentCharacter)
                 .Append(XmlCharacterConstants.PropertyWrapCharacter);
 
             if (Value is not null) stringBuilder = stringBuilder.Append(Value);
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(XmlCharacterConstants.PropertyWrapCharacter);
 
             return stringBuilder;

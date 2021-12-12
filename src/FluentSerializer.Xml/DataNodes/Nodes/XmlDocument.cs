@@ -39,7 +39,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 					.Append($"<?xml version=\"1.0\" encoding=\"UTF-16\"?>")
                     .AppendOptionalNewline(format);
 
-				stringBuilder = AppendTo(ref stringBuilder, format, indent, writeNull);
+				AppendTo(ref stringBuilder, format, indent, writeNull);
                 return stringBuilder.ToString();
             }
             finally
@@ -50,7 +50,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
 		{
-			return stringBuilder = RootElement?.AppendTo(ref stringBuilder, format, indent, writeNull) ?? stringBuilder;
+			return RootElement?.AppendTo(ref stringBuilder, format, indent, writeNull) ?? stringBuilder;
         }
 
         #region IEquatable

@@ -121,24 +121,24 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             var childIndent = indent + 1;
 			var currentChildIndex = 0uL;
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(JsonCharacterConstants.ArrayStartCharacter);
             
             foreach (var child in Children)
             {
-				stringBuilder = stringBuilder
+				stringBuilder
 					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(childIndent, format)
                     .AppendNode(child, format, childIndent, writeNull);
 
                 // Make sure the last item does not append a comma to confirm to JSON spec.
                 if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex))
-					stringBuilder = stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
+					stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
                 currentChildIndex++;
             }
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format)
                 .Append(JsonCharacterConstants.ArrayEndCharacter);

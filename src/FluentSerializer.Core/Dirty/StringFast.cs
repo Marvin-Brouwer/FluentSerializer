@@ -8,7 +8,7 @@ using System.Text;
 /// Similar use than StringFast, but avoid a lot of allocations done by StringFast (conversion of int and float to string, frequent capacity change, etc.)
 /// Author: Nicolas Gadenne contact@gaddygames.com
 ///</summary>
-public struct StringFast : ITextWriter
+public sealed class StringFast : ITextWriter
 {
 	public Encoding Encoding { get; }
 	private readonly string _newLine;
@@ -48,7 +48,7 @@ public struct StringFast : ITextWriter
 	// Append methods, to build the string without allocation
 
 	///<summary>Reset the m_char array</summary>
-	public StringFast Clear()
+	public ITextWriter Clear()
 	{
 		_currentBufferPosition = 0;
 		_generatedStringValue = null;
@@ -57,23 +57,23 @@ public struct StringFast : ITextWriter
 		return this;
 	}
 
-	public StringFast AppendLineEnding() => Append(_newLine);
+	public ITextWriter AppendLineEnding() => Append(_newLine);
 
 	// todo smarter append
-	public StringFast Append(in char character, in uint repeat)
+	public ITextWriter Append(in char character, in uint repeat)
 	{
 		for (var i = 0; i < repeat; i++) Append(character);
 		return this;
 	}
 
 	///<summary>Append a string without memory allocation</summary>
-	public StringFast Append(in string? value)
+	public ITextWriter Append(in string? value)
 	{
 		if (value is null) return this;
 		ReallocateIFN(value.Length);
 
 		int stringLength = value.Length;
-		 value.CopyTo(0, _memoryBuffer, _currentBufferPosition, stringLength);
+		value.CopyTo(0, _memoryBuffer, _currentBufferPosition, stringLength);
 
 		_currentBufferPosition += stringLength;
 
@@ -81,7 +81,7 @@ public struct StringFast : ITextWriter
 	}
 
 	///<summary>Append a character without memory allocation</summary>
-	public StringFast Append(in char value)
+	public ITextWriter Append(in char value)
 	{
 		if (value == (char)0) return this;
 

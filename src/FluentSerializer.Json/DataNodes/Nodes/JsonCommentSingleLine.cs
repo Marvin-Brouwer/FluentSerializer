@@ -64,14 +64,14 @@ namespace FluentSerializer.Json.DataNodes.Nodes
 
             // Fallback because otherwise JSON wouldn't be readable
             if (!format)
-                return stringBuilder = stringBuilder
+                return stringBuilder
 					.Append(JsonCharacterConstants.MultiLineCommentStart)
 					.Append(spacer)
 					.Append(Value)
 					.Append(spacer)
 					.Append(JsonCharacterConstants.MultiLineCommentEnd);
 
-            return stringBuilder = stringBuilder
+            return stringBuilder
 				.Append(JsonCharacterConstants.SingleLineCommentMarker)
                 .Append(spacer)
                 .Append(Value);

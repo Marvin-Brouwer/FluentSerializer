@@ -244,24 +244,24 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             if (!writeNull && !children.Any()) return stringBuilder;
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(XmlCharacterConstants.TagStartCharacter)
                 .Append(Name);
 
-            if (!children.Any()) return stringBuilder = stringBuilder
+            if (!children.Any()) return stringBuilder
 					.Append(spacer)
                     .Append(XmlCharacterConstants.TagTerminationCharacter)
                     .Append(XmlCharacterConstants.TagEndCharacter);
 
             foreach (var attribute in _attributes)
             {
-				stringBuilder = stringBuilder
+				stringBuilder
 					.AppendOptionalNewline(format)
                     .AppendOptionalIndent(indent, format)
                     .Append(spacer)
                     .AppendNode(attribute, format, childIndent, writeNull);
             }
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(XmlCharacterConstants.TagEndCharacter);
 
             // Technically this object can have multiple text nodes, only the first needs indentation
@@ -273,11 +273,11 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     textOnly = false;
                     firstTextNode = true;
 
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendNode(childElement, format, childIndent, writeNull);
 
                     continue;
@@ -287,48 +287,48 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
                     if (firstTextNode)
                     {
                         firstTextNode = false;
-                        if (!textOnly) stringBuilder = stringBuilder
+                        if (!textOnly) stringBuilder
 							.AppendOptionalNewline(format)
                             .AppendOptionalIndent(childIndent, format);
 
-						stringBuilder = stringBuilder
+						stringBuilder
 							.AppendNode(textNode, true, childIndent, writeNull);
 
                         continue;
                     }
 
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendNode(textNode, false, childIndent, writeNull);
 
                     continue;
                 }
                 if (child is IXmlComment commentNode)
                 {
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendNode(commentNode, true, childIndent, writeNull);
 
                     continue;
                 }
                 if (child is IXmlCharacterData cDataNode)
                 {
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendOptionalNewline(format)
                         .AppendOptionalIndent(childIndent, format);
 
-					stringBuilder = stringBuilder
+					stringBuilder
 						.AppendNode(cDataNode, true, childIndent, writeNull);
                 }
             }
 
-            if (!textOnly) stringBuilder = stringBuilder
+            if (!textOnly) stringBuilder
 				.AppendOptionalNewline(format)
                 .AppendOptionalIndent(indent, format);
 
-			stringBuilder = stringBuilder
+			stringBuilder
 				.Append(XmlCharacterConstants.TagStartCharacter)
                 .Append(XmlCharacterConstants.TagTerminationCharacter)
                 .Append(Name)

@@ -60,7 +60,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 		{
 			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            return stringBuilder = stringBuilder
+            return stringBuilder
 				.Append(XmlCharacterConstants.CharacterDataStart)
                 .Append(Value)
                 .Append(XmlCharacterConstants.CharacterDataEnd);

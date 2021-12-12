@@ -62,7 +62,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
 
             const char spacer = ' ';
 
-            return stringBuilder = stringBuilder
+            return stringBuilder
 				.Append(XmlCharacterConstants.CommentStart)
                 .Append(spacer)
                 .Append(Value)
