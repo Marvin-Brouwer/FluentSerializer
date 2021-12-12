@@ -1,9 +1,9 @@
+using FluentSerializer.Core.Configuration;
 using System;
-using System.Text;
 
 public interface ITextWriter
 {
-	Encoding Encoding { get; }
+	public ITextConfiguration TextConfiguration { get; }
 
 	ITextWriter Append(in char value);
 	ITextWriter Append(in char character, in int repeat);

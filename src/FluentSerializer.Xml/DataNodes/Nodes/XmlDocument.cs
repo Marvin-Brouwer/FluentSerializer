@@ -34,7 +34,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             try
             {
 				stringBuilder
-					.Append($"<?xml version=\"1.0\" encoding=\"{stringBuilder.Encoding.WebName}\"?>")
+					.Append($"<?xml version=\"1.0\" encoding=\"{stringBuilder.TextConfiguration.Encoding.WebName}\"?>")
                     .AppendOptionalNewline(format);
 
 				AppendTo(ref stringBuilder, format, indent, writeNull);

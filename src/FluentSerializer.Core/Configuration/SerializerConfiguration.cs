@@ -5,12 +5,12 @@ using FluentSerializer.Core.Converting;
 
 namespace FluentSerializer.Core.Configuration
 {
-	public abstract class SerializerConfiguration
+	public abstract class SerializerConfiguration : ITextConfiguration, ISerializerConfiguration
 	{
 		public bool FormatOutput { get; set; } = true;
-        public bool WriteNull { get; set; } = false;
-        public List<IConverter> DefaultConverters { get; set; } = new();
-        public Encoding Encoding { get; set; } = Encoding.Default;
-        public string NewLine { get; set; } = LineEndings.Environment;
+		public bool WriteNull { get; set; } = false;
+		public List<IConverter> DefaultConverters { get; set; } = new();
+		public Encoding Encoding { get; set; } = Encoding.Default;
+		public string NewLine { get; set; } = LineEndings.Environment;
 	}
 }

@@ -1,7 +1,7 @@
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
 using System;
 using System.Buffers;
-using System.Text;
 
 ///<summary>
 /// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.
@@ -11,14 +11,10 @@ using System.Text;
 public sealed class LowAllocationStringBuilder : ITextWriter
 {
 	private const int DefaultChunkSize = 65536;
+	public ITextConfiguration TextConfiguration { get; }
 
 	private readonly ArrayPool<char> _arrayPool;
 	private string? _generatedStringValue;
-
-	#region WriterSettings
-	public Encoding Encoding { get; }
-	private readonly string _newLine;
-	#endregion
 
 	#region StringMutation
 	private char[] _memoryBuffer;
@@ -27,7 +23,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	private int _bufferCapacity;
 	#endregion
 
-	public LowAllocationStringBuilder(in Encoding encoding, in string newLine, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
+	public LowAllocationStringBuilder(in ITextConfiguration textConfiguration, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
 	{
 		Guard.Against.NegativeOrZero(chunkSize, nameof(chunkSize));
 
@@ -37,8 +33,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 		_currentBufferPosition = 0;
 		_bufferCapacity = 0;
 
-		Encoding = encoding;
-		_newLine = newLine;
+		TextConfiguration = textConfiguration;
 		_arrayPool = arrayPool;
 		_memoryBuffer = arrayPool.Rent(_bufferCapacity);
 		_generatedStringValue = null;
@@ -56,7 +51,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 		return this;
 	}
 
-	public ITextWriter AppendLineEnding() => Append(_newLine);
+	public ITextWriter AppendLineEnding() => Append(TextConfiguration.NewLine);
 
 	#region AppendStringValue
 	public ITextWriter Append(in string? value)
@@ -132,8 +127,12 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 		_memoryBuffer = newChars;
 	}
 
-	public Span<byte> AsSpan() => Encoding.GetBytes(_memoryBuffer).AsSpan(0, _currentBufferPosition);
+	public Span<byte> AsSpan() => TextConfiguration.Encoding
+		.GetBytes(_memoryBuffer)
+		.AsSpan(0, _currentBufferPosition);
 
-	public Memory<byte> AsMemory() => Encoding.GetBytes(_memoryBuffer).AsMemory(0, _currentBufferPosition);
+	public Memory<byte> AsMemory() => TextConfiguration.Encoding
+		.GetBytes(_memoryBuffer)
+		.AsMemory(0, _currentBufferPosition);
 
 }
