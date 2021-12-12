@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,7 +26,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             RootElement = root;
 		}
 
-		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
+		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
 		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in uint indent = 0)
         {

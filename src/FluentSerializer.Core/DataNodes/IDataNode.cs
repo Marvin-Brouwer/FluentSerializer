@@ -1,6 +1,8 @@
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
 using Microsoft.Extensions.ObjectPool;
 using System;
+using System.Text;
 
 namespace FluentSerializer.Core.DataNodes
 {
@@ -9,9 +11,9 @@ namespace FluentSerializer.Core.DataNodes
         string Name { get; }
 
 
-		string ToString(string lineEnding)
+		string ToString(SerializerConfiguration configuration)
 		{
-			var stringBuilder = (ITextWriter)new StringFast(lineEnding);
+			var stringBuilder = (ITextWriter)new StringFast(configuration.Encoding, configuration.NewLine);
 			stringBuilder = AppendTo(ref stringBuilder);
 			return stringBuilder.ToString();
 		}

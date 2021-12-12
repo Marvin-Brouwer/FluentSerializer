@@ -6,6 +6,8 @@ using Microsoft.Extensions.ObjectPool;
 using System.IO;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Constants;
+using System.Text;
+using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes
 {
@@ -86,7 +88,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
         }
 
-		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
+		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
 		{

@@ -7,14 +7,12 @@ using FluentSerializer.Core.Dirty;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
+using FluentSerializer.Core.TestUtils.Helpers;
 
 namespace FluentSerializer.Xml.Tests.DataNodes
 {
 	public sealed class XmlStringConversionTests
 	{
-		private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-		public static readonly ObjectPool<ITextWriter> StringFastPool = ObjectPoolProvider.CreateStringFastPool(LineEndings.LineFeed);
-
 		private readonly IXmlElement _testObject;
 		private readonly string _testXmlFormatted;
 		private readonly string _testXmlSlim;
@@ -45,7 +43,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
 			var expected = format ? _testXmlFormatted : _testXmlSlim;
 
 			// Act
-			var result = _testObject.WriteTo(StringFastPool, format);
+			var result = _testObject.WriteTo(TestStringBuilderPool.StringFastPool, format);
 
 			// Assert
 			result.ShouldBeBinaryEquatableTo(expected);

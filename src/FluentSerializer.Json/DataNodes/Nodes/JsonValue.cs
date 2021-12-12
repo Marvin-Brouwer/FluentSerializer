@@ -1,8 +1,10 @@
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Json.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes
 {
@@ -59,7 +61,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes
             Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 		}
 
-		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
+		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
 		{

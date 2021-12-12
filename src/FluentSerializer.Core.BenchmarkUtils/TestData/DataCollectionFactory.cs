@@ -36,10 +36,17 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"Data composition: {dataCount:N0}/{houseCount:N0}/{peopleCount:N0}; Total unique items: {dataCount + houseCount + peopleCount :N0}");
             Console.ResetColor();
-            Console.WriteLine($"Writing bogus to \"{filePath}\"");
 
-            var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
-            WriteStringContent(objectData, filePath);
+			try
+			{
+				Console.Write($"Writing bogus to \"{filePath}\"");
+
+				var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
+				WriteStringContent(objectData, filePath);
+			} finally
+			{
+				Console.WriteLine();
+			}
         }
 
         private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
@@ -47,16 +54,19 @@ namespace FluentSerializer.Core.BenchmarkUtils.TestData
 
         private void WriteStringContent(TData data, string filePath)
         {
-            using var writer = File.CreateText(filePath);
+            using var fileStream = File.Create(filePath);
+			using var bufferedStream = new BufferedStream(fileStream);
 			var stringBuilder = TestStringBuilderPool.StringFastPool.Get();
 
-
 			data.AppendTo(ref stringBuilder, true, 0, false);
-            writer.Write(stringBuilder);
+			Console.Write('.');
+			bufferedStream.Write(stringBuilder.GetBytes());
 
-            writer.Flush();
-            writer.Close();
+			Console.Write('.');
+			bufferedStream.Flush();
+			bufferedStream.Close();
 			TestStringBuilderPool.StringFastPool.Return(stringBuilder);
+			Console.Write('.');
 		}
 
         /// <summary>

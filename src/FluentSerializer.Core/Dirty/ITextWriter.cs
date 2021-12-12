@@ -1,3 +1,5 @@
+using System;
+
 public interface ITextWriter
 {
 	StringFast Append(in char value);
@@ -6,4 +8,5 @@ public interface ITextWriter
 	StringFast AppendLineEnding();
 	StringFast Clear();
 	string ToString();
+	ReadOnlySpan<byte> GetBytes();
 }

@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace FluentSerializer.Xml.DataNodes.Nodes
         /// <inheritdoc cref="XmlFragment"/>
         public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
 
-		public override string ToString() => ((IDataNode)this).ToString(LineEndings.Environment);
+		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in uint indent = 0, in bool writeNull = true)
 		{

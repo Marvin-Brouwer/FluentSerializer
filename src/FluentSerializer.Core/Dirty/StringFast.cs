@@ -1,6 +1,7 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Constants;
 using System;
+using System.Text;
 
 ///<summary>
 /// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.
@@ -9,6 +10,7 @@ using System;
 ///</summary>
 public struct StringFast : ITextWriter
 {
+	public Encoding Encoding { get; }
 	private readonly string _newLine;
 
 	///<summary>Immutable string. Generated at last moment, only if needed</summary>
@@ -16,13 +18,14 @@ public struct StringFast : ITextWriter
 	private readonly int _initialCapacity;
 
 	///<summary>Working mutable string</summary>
+	/// todo span?
 	private char[] _memoryBuffer;
 	private int _currentBufferPosition;
 	private int _characterCapacity;
 
 	// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-	public StringFast(in string? newLine, in int initialCapacity = 32)
+	public StringFast(in Encoding encoding, in string newLine, in int initialCapacity = 32)
 	{
 		Guard.Against.NegativeOrZero(initialCapacity, nameof(initialCapacity));
 
@@ -32,7 +35,8 @@ public struct StringFast : ITextWriter
 		_currentBufferPosition = 0;
 		_characterCapacity = 0;
 
-		_newLine = newLine ?? LineEndings.Environment;
+		Encoding = encoding;
+		_newLine = newLine;
 		_memoryBuffer = new char[_characterCapacity];
 		_generatedStringValue = null;
 	}
@@ -69,7 +73,7 @@ public struct StringFast : ITextWriter
 		ReallocateIFN(value.Length);
 
 		int stringLength = value.Length;
-		value.CopyTo(0, _memoryBuffer, _currentBufferPosition, stringLength);
+		 value.CopyTo(0, _memoryBuffer, _currentBufferPosition, stringLength);
 
 		_currentBufferPosition += stringLength;
 
@@ -99,4 +103,5 @@ public struct StringFast : ITextWriter
 		_memoryBuffer = newChars;
 	}
 
+	public ReadOnlySpan<byte> GetBytes() => Encoding.GetBytes(_memoryBuffer).AsSpan();
 }

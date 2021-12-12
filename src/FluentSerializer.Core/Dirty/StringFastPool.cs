@@ -1,17 +1,20 @@
 using Microsoft.Extensions.ObjectPool;
+using System.Text;
 
 namespace FluentSerializer.Core.Dirty
 {
     public sealed class StringFastPooledObjectPolicy : PooledObjectPolicy<ITextWriter>
     {
-        private readonly string _newLine;
+		private readonly Encoding _encoding;
+		private readonly string _newLine;
 
-        public StringFastPooledObjectPolicy(string newLine)
+        public StringFastPooledObjectPolicy(Encoding encoding, string newLine)
         {
+			_encoding = encoding;
             _newLine = newLine;
         }
 
-        public override ITextWriter Create() => new StringFast(_newLine);
+        public override ITextWriter Create() => new StringFast(_encoding, _newLine);
 
         public override bool Return(ITextWriter obj)
         {
@@ -22,7 +25,7 @@ namespace FluentSerializer.Core.Dirty
 
     public static class ObjectPoolExtensions
     {
-        public static ObjectPool<ITextWriter> CreateStringFastPool(this ObjectPoolProvider provider, string newLine) => 
-            provider.Create(new StringFastPooledObjectPolicy(newLine));
+        public static ObjectPool<ITextWriter> CreateStringFastPool(this ObjectPoolProvider provider, Encoding encoding, string newLine) => 
+            provider.Create(new StringFastPooledObjectPolicy(encoding, newLine));
     }
 }
