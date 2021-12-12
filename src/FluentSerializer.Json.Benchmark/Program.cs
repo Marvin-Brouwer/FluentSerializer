@@ -6,7 +6,7 @@ using System.Security.Permissions;
 
 namespace FluentSerializer.Json.Benchmark
 {
-    public static class Program
+	public static class Program
 	{
 #if !NET5_0_OR_GREATER
 		[STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]

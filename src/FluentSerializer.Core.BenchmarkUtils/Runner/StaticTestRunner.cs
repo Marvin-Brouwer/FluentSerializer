@@ -18,6 +18,7 @@ using BenchmarkDotNet.Columns;
 using System.Threading;
 using System.Globalization;
 using Microsoft.Extensions.PlatformAbstractions;
+using BenchmarkDotNet.Reports;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -41,10 +42,16 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 			Thread.CurrentThread.CurrentUICulture = AppCulture;
 
 			var config = ManualConfig.Create(DefaultConfig.Instance)
-                .WithOrderer(new GroupedSlowestToFastestOrderer())
+                .WithOrderer(new ValueSizeTestOrderer())
                 .AddJob(CreateJob(CoreRuntime.Core50))
 				.WithCultureInfo(AppCulture)
-                .AddExporter(MarkdownExporter.Console);
+                .AddExporter(MarkdownExporter.Console)
+				.WithSummaryStyle(SummaryStyle.Default
+					.WithCultureInfo(AppCulture)
+					// We'd actually like it to grow when the size grows but this doesn't seem to be consistent between
+					// the XML and JSON bencmarks so we set it to a constant metric.
+					.WithSizeUnit(SizeUnit.MB)
+					.WithTimeUnit(TimeUnit.Millisecond));
 
 			// We only ever profile methods so no need for an additional column
 			var columnProviders = (List<IColumnProvider>)config.GetColumnProviders();
@@ -54,7 +61,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 #if (DEBUG)
             config = config.WithOptions(ConfigOptions.DisableOptimizationsValidator);
 #endif
-            return config;
+			return config;
         }
 
         private static Job CreateJob(Runtime runtime)
