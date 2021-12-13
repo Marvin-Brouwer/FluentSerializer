@@ -6,6 +6,7 @@ public static class StringFastExtensions
 	{
 		return node.AppendTo(ref stringBuilder, format, format ? indent : 0, writeNull);
 	}
+	
 	public static ITextWriter AppendOptionalNewline(this ITextWriter stringBuilder, in bool newLine)
 	{
 		if (!newLine) return stringBuilder;

@@ -7,21 +7,21 @@ using System.Linq;
 using System.Security.Permissions;
 #endif
 
-namespace FluentSerializer.Json.Benchmark
+namespace FluentSerializer.Json.Benchmark;
+
+public static class Program
 {
-	public static class Program
-	{
+	[STAThread]
 #if !NET5_0_OR_GREATER
-		[STAThread, PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+	[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
-		public static void Main(params string[] arguments)
-		{
-			StaticTestRunner.RequireElevatedPermissions();
+	public static void Main(params string[] arguments)
+	{
+		StaticTestRunner.RequireElevatedPermissions();
 
-			if (!arguments.Contains("--no-generate"))
-				JsonDataCollection.Default.GenerateTestCaseFiles();
+		if (!arguments.Contains("--no-generate"))
+			JsonDataCollection.Default.GenerateTestCaseFiles();
 
-            StaticTestRunner.Run(typeof(Program).Assembly, "json-serializer");
-        }
-    }
+		StaticTestRunner.Run(typeof(Program).Assembly, "json-serializer");
+	}
 }

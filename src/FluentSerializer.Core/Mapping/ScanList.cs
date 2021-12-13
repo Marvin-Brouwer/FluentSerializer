@@ -26,12 +26,12 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	{
 		Guard.Against.Null(key, nameof(key));
 #if (!DEBUG)
-            if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
+		if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
 #endif
 
 		var matchingType = _storedDataTypes.FirstOrDefault(dataType => Compare(key, dataType));
 #if (!DEBUG)
-            _cachedMappings[key] = matchingType;
+		_cachedMappings[key] = matchingType;
 #endif
 
 		return matchingType;

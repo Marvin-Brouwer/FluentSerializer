@@ -5,6 +5,8 @@
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
     <LangVersion>Preview</LangVersion>
     <StartupObject>FluentSerializer.Xml.Benchmark.Program</StartupObject>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
 	</PropertyGroup>
 
   <ItemGroup>

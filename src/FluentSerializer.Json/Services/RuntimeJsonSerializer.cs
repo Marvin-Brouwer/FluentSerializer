@@ -8,8 +8,6 @@ using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-using static FluentSerializer.Json.JsonBuilder;
-
 namespace FluentSerializer.Json.Services;
 
 public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
@@ -49,6 +47,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 		return _deserializer.DeserializeFromNode(element, modelType,  this);
 	}
+	
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData) where TModel : new()
 	{
 		if (string.IsNullOrEmpty(stringData)) return default;
@@ -71,7 +70,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	{
 		if (model is null) return default;
 		var token = _serializer.SerializeToNode(model, typeof(TModel), this);
-		if (token is null) return Object();
+		if (token is null) return JsonBuilder.Object();
 		if (token is IJsonContainer container) return container;
 
 		throw new NotSupportedException();
