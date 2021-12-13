@@ -6,16 +6,15 @@ using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.Benchmark.Data;
 using FluentSerializer.Json.DataNodes;
 
-namespace FluentSerializer.Json.Benchmark.Profiles
+namespace FluentSerializer.Json.Benchmark.Profiles;
+
+public class JsonReadProfile : ReadProfile
 {
-    public class JsonReadProfile : ReadProfile
-    {
-        public IEnumerable<TestCase<Stream>> Values => JsonDataCollection.Default.StringTestData;
+	public IEnumerable<TestCase<Stream>> Values => JsonDataCollection.Default.StringTestData;
 
-        [ParamsSource(nameof(Values))]
-        public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
+	[ParamsSource(nameof(Values))]
+	public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
-        [Benchmark, BenchmarkCategory(nameof(ReadJson))]
-        public IJsonObject ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
-    }
+	[Benchmark, BenchmarkCategory(nameof(ReadJson))]
+	public IJsonObject ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
 }

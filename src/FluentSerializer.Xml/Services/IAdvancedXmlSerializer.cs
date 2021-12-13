@@ -1,11 +1,10 @@
 ﻿using FluentSerializer.Xml.DataNodes;
 using System;
 
-namespace FluentSerializer.Xml.Services
+namespace FluentSerializer.Xml.Services;
+
+public interface IAdvancedXmlSerializer : IXmlSerializer
 {
-    public interface IAdvancedXmlSerializer : IXmlSerializer
-    {
-        object? Deserialize(IXmlElement element, Type modelType);
-        IXmlElement? SerializeToElement(object? model, Type modelType);
-    }
+	object? Deserialize(IXmlElement element, Type modelType);
+	IXmlElement? SerializeToElement(object? model, Type modelType);
 }

@@ -2,32 +2,31 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace FluentSerializer.Xml.Exceptions
+namespace FluentSerializer.Xml.Exceptions;
+
+[Serializable]
+public sealed class MalConfiguredRootNodeException : OperationNotSupportedException
 {
-    [Serializable]
-    public sealed class MalConfiguredRootNodeException : OperationNotSupportedException
-    {
-        public Type AttemptedType { get; }
+	public Type AttemptedType { get; }
 
-        public MalConfiguredRootNodeException(Type attemptedType) : base(
-            $"Type '{attemptedType}' implements IEnumerable. \n"+
-            "XML documents require a root node, thus cannot (de)serialize collections as root node.")
-        {
-            AttemptedType = attemptedType;
-        }
+	public MalConfiguredRootNodeException(Type attemptedType) : base(
+		$"Type '{attemptedType}' implements IEnumerable. \n"+
+		"XML documents require a root node, thus cannot (de)serialize collections as root node.")
+	{
+		AttemptedType = attemptedType;
+	}
 
-        #region Serializable
-        private MalConfiguredRootNodeException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            AttemptedType = (Type)info.GetValue(nameof(AttemptedType), typeof(Type))!;
-        }
+	#region Serializable
+	private MalConfiguredRootNodeException(SerializationInfo info, StreamingContext context) : base(info, context)
+	{
+		AttemptedType = (Type)info.GetValue(nameof(AttemptedType), typeof(Type))!;
+	}
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue(nameof(AttemptedType), AttemptedType);
+	public override void GetObjectData(SerializationInfo info, StreamingContext context)
+	{
+		info.AddValue(nameof(AttemptedType), AttemptedType);
 
-            base.GetObjectData(info, context);
-        }
-        #endregion
-    }
+		base.GetObjectData(info, context);
+	}
+	#endregion
 }

@@ -1,7 +1,6 @@
-﻿namespace FluentSerializer.Json.Converting
+﻿namespace FluentSerializer.Json.Converting;
+
+public readonly struct Converter
 {
-    public readonly struct Converter
-    {
-        public static IUseJsonConverters For { get; } = new UseJsonConverters();
-    }
+	public static IUseJsonConverters For { get; } = new UseJsonConverters();
 }

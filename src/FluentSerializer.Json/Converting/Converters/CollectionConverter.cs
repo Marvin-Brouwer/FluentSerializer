@@ -10,60 +10,59 @@ using FluentSerializer.Json.Services;
 
 using static FluentSerializer.Json.JsonBuilder;
 
-namespace FluentSerializer.Json.Converting.Converters
+namespace FluentSerializer.Json.Converting.Converters;
+
+public class CollectionConverter : IJsonConverter
 {
-    public class CollectionConverter : IJsonConverter
-    {
-        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public virtual bool CanConvert(Type targetType) =>
-            !typeof(string).IsAssignableFrom(targetType) &&
-            targetType.Implements(typeof(IEnumerable<>));
+	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
+	public virtual bool CanConvert(Type targetType) =>
+		!typeof(string).IsAssignableFrom(targetType) &&
+		targetType.Implements(typeof(IEnumerable<>));
 
-        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
-        {
-            if (objectToDeserialize is not IJsonArray arrayToDeserialize)
-                throw new NotSupportedException($"The json object you attempted to deserialize was not a collection");
+	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	{
+		if (objectToDeserialize is not IJsonArray arrayToDeserialize)
+			throw new NotSupportedException($"The json object you attempted to deserialize was not a collection");
 
-            var targetType = context.PropertyType;
-            var instance = targetType.GetEnumerableInstance();
+		var targetType = context.PropertyType;
+		var instance = targetType.GetEnumerableInstance();
 
-            var genericTargetType = context.PropertyType.IsGenericType
-                ? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
-                : instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+		var genericTargetType = context.PropertyType.IsGenericType
+			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
             
-            foreach (var item in arrayToDeserialize.Children)
-            {
-                // This will skip comments
-                if (item is not IJsonContainer container) continue;
+		foreach (var item in arrayToDeserialize.Children)
+		{
+			// This will skip comments
+			if (item is not IJsonContainer container) continue;
 
-                var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType);
-                if (itemValue is null) continue;
+			var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType);
+			if (itemValue is null) continue;
 
-                instance.Add(itemValue);
-            }
+			instance.Add(itemValue);
+		}
 
-            return instance;
-        }
+		return instance;
+	}
 
-        public IJsonNode Serialize(object objectToSerialize, ISerializerContext context)
-        {
-            if (objectToSerialize is not IEnumerable enumerableToSerialize)
-                throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
+	public IJsonNode Serialize(object objectToSerialize, ISerializerContext context)
+	{
+		if (objectToSerialize is not IEnumerable enumerableToSerialize)
+			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-            var elements = GetArrayItems((IAdvancedJsonSerializer)context.CurrentSerializer, enumerableToSerialize);
-            return Array(elements);
-        }
+		var elements = GetArrayItems((IAdvancedJsonSerializer)context.CurrentSerializer, enumerableToSerialize);
+		return Array(elements);
+	}
 
-        private static IEnumerable<IJsonArrayContent> GetArrayItems(IAdvancedJsonSerializer serializer, IEnumerable enumerableToSerialize)
-        {
-            foreach (var collectionItem in enumerableToSerialize)
-            {
-                if (collectionItem is null) continue;
-                var itemValue = serializer.SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
-                if (itemValue is not IJsonArrayContent arrayItem) continue;
+	private static IEnumerable<IJsonArrayContent> GetArrayItems(IAdvancedJsonSerializer serializer, IEnumerable enumerableToSerialize)
+	{
+		foreach (var collectionItem in enumerableToSerialize)
+		{
+			if (collectionItem is null) continue;
+			var itemValue = serializer.SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
+			if (itemValue is not IJsonArrayContent arrayItem) continue;
 
-                yield return arrayItem;
-            }
-        }
-    }
+			yield return arrayItem;
+		}
+	}
 }

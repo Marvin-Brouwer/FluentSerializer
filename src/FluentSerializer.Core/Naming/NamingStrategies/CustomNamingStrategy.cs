@@ -4,21 +4,20 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 
-namespace FluentSerializer.Core.Naming.NamingStrategies
+namespace FluentSerializer.Core.Naming.NamingStrategies;
+
+public sealed class CustomNamingStrategy : INamingStrategy
 {
-    public sealed class CustomNamingStrategy : INamingStrategy
-    {
-        private readonly string _name;
+	private readonly string _name;
 
-        public CustomNamingStrategy(string name)
-        {
-            Guard.Against.InvalidName(name, nameof(name));
+	public CustomNamingStrategy(string name)
+	{
+		Guard.Against.InvalidName(name, nameof(name));
 
-            _name = name;
-        }
+		_name = name;
+	}
 
-        public string GetName(PropertyInfo property, INamingContext namingContext) => _name;
+	public string GetName(PropertyInfo property, INamingContext namingContext) => _name;
 
-        public string GetName(Type classType, INamingContext namingContext) => _name;
-    }
+	public string GetName(Type classType, INamingContext namingContext) => _name;
 }

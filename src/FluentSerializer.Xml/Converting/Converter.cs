@@ -1,7 +1,6 @@
-﻿namespace FluentSerializer.Xml.Converting
+﻿namespace FluentSerializer.Xml.Converting;
+
+public readonly struct Converter
 {
-    public readonly struct Converter
-    {
-        public static IUseXmlConverters For { get; } = new UseXmlConverters();
-    }
+	public static IUseXmlConverters For { get; } = new UseXmlConverters();
 }

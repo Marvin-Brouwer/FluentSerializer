@@ -1,9 +1,8 @@
-﻿namespace FluentSerializer.Core.Configuration
+﻿namespace FluentSerializer.Core.Configuration;
+
+public enum SerializerDirection
 {
-    public enum SerializerDirection
-    {
-        Both,
-        Serialize,
-        Deserialize
-    }
+	Both,
+	Serialize,
+	Deserialize
 }

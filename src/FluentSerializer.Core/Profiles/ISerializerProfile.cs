@@ -2,12 +2,11 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 
-namespace FluentSerializer.Core.Profiles
+namespace FluentSerializer.Core.Profiles;
+
+public interface ISerializerProfile
 {
-    public interface ISerializerProfile
-    {
-        [System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
-         System.Diagnostics.DebuggerHidden]
-        IReadOnlyList<IClassMap> Configure(SerializerConfiguration configuration);
-    }
+	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
+	 System.Diagnostics.DebuggerHidden]
+	IReadOnlyList<IClassMap> Configure(SerializerConfiguration configuration);
 }

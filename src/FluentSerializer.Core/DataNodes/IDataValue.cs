@@ -1,7 +1,6 @@
-﻿namespace FluentSerializer.Core.DataNodes
+﻿namespace FluentSerializer.Core.DataNodes;
+
+public interface IDataValue : IDataNode
 {
-    public interface IDataValue : IDataNode
-    {
-        string? Value { get; }
-    }
+	string? Value { get; }
 }

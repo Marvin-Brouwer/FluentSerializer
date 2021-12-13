@@ -1,17 +1,16 @@
 ﻿using System.Linq;
 
-namespace FluentSerializer.Core.Naming.NamingStrategies
-{
-    public class KebabCaseNamingStrategy : CamelCaseNamingStrategy
-    {
-        // Just use the camelCase logic here
-        protected override string GetName(string name)
-        {
-            var camelCaseName = base.GetName(name);
+namespace FluentSerializer.Core.Naming.NamingStrategies;
 
-            return string.Join(string.Empty, camelCaseName
-                .AsEnumerable()
-                .Select(character => char.IsUpper(character) ? $"-{character}" : character.ToString()));
-        }
-    }
+public class KebabCaseNamingStrategy : CamelCaseNamingStrategy
+{
+	// Just use the camelCase logic here
+	protected override string GetName(string name)
+	{
+		var camelCaseName = base.GetName(name);
+
+		return string.Join(string.Empty, camelCaseName
+			.AsEnumerable()
+			.Select(character => char.IsUpper(character) ? $"-{character}" : character.ToString()));
+	}
 }
