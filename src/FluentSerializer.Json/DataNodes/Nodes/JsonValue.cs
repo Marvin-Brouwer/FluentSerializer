@@ -3,79 +3,78 @@ using FluentSerializer.Json.Configuration;
 using System;
 using System.Diagnostics;
 
-namespace FluentSerializer.Json.DataNodes.Nodes
+namespace FluentSerializer.Json.DataNodes.Nodes;
+
+/// <inheritdoc cref="IJsonValue"/>
+[DebuggerDisplay("{Value,nq}")]
+public readonly struct JsonValue : IJsonValue
 {
+	private static readonly int TypeHashCode = typeof(JsonValue).GetHashCode();
+
+	private const string ValueName = "#value";
+	public string Name => ValueName;
+	public string? Value { get; }
+
+	public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
+
+	/// <inheritdoc cref="JsonBuilder.Value(string?)"/>
+	/// <remarks>
+	/// <b>Please use <see cref="JsonBuilder.Value"/> method instead of this constructor</b>
+	/// </remarks>
+	public JsonValue(string? value)
+	{
+		Value = value;
+	}
+
 	/// <inheritdoc cref="IJsonValue"/>
-	[DebuggerDisplay("{Value,nq}")]
-    public readonly struct JsonValue : IJsonValue
-    {
-        private static readonly int TypeHashCode = typeof(JsonValue).GetHashCode();
+	/// <remarks>
+	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+	/// </remarks>
+	public JsonValue(ReadOnlySpan<char> text, ref int offset)
+	{
+		var stringValue = false;
 
-        private const string ValueName = "#value";
-        public string Name => ValueName;
-        public string? Value { get; }
+		var valueStartOffset = offset;
+		var valueEndOffset = offset;
 
-        public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
+		while (offset < text.Length)
+		{
+			valueEndOffset = offset;
 
-        /// <inheritdoc cref="JsonBuilder.Value(string?)"/>
-        /// <remarks>
-        /// <b>Please use <see cref="JsonBuilder.Value"/> method instead of this constructor</b>
-        /// </remarks>
-        public JsonValue(string? value)
-        {
-            Value = value;
-        }
+			var character = text[offset];
+			offset++;
 
-        /// <inheritdoc cref="IJsonValue"/>
-        /// <remarks>
-        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
-        /// </remarks>
-        public JsonValue(ReadOnlySpan<char> text, ref int offset)
-        {
-            var stringValue = false;
+			if (character == JsonCharacterConstants.PropertyWrapCharacter && stringValue) break; 
+			if (character == JsonCharacterConstants.DividerCharacter && !stringValue) break;
+			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
+			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 
-            var valueStartOffset = offset;
-            var valueEndOffset = offset;
-
-            while (offset < text.Length)
-            {
-                valueEndOffset = offset;
-
-                var character = text[offset];
-                offset++;
-
-                if (character == JsonCharacterConstants.PropertyWrapCharacter && stringValue) break; 
-                if (character == JsonCharacterConstants.DividerCharacter && !stringValue) break;
-                if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-                if (character == JsonCharacterConstants.ArrayEndCharacter) break;
-
-                if (character == JsonCharacterConstants.PropertyWrapCharacter) stringValue = true; 
-                if (!stringValue && char.IsWhiteSpace(character)) break;
-            }
-
-            // Append a '"' if it started with a '"'
-            if (stringValue) valueEndOffset++;
-            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+			if (character == JsonCharacterConstants.PropertyWrapCharacter) stringValue = true; 
+			if (!stringValue && char.IsWhiteSpace(character)) break;
 		}
 
-		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
+		// Append a '"' if it started with a '"'
+		if (stringValue) valueEndOffset++;
+		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+	}
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
-		{
-			// JSON does not support empty property assignment or array members
-			return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);
-        }
+	public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-        #region IEquatable
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
+	{
+		// JSON does not support empty property assignment or array members
+		return stringBuilder.Append(Value ?? JsonCharacterConstants.NullValue);
+	}
 
-        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
+	#region IEquatable
 
-        public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
+	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
-        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-        #endregion
-    }
+	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+
+	#endregion
 }

@@ -6,16 +6,15 @@ using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.Benchmark.Data;
 using FluentSerializer.Xml.DataNodes;
 
-namespace FluentSerializer.Xml.Benchmark.Profiles
+namespace FluentSerializer.Xml.Benchmark.Profiles;
+
+public class XmlReadProfile : ReadProfile
 {
-    public class XmlReadProfile : ReadProfile
-    {
-        public IEnumerable<TestCase<Stream>> Values => XmlDataCollection.Default.StringTestData;
+	public IEnumerable<TestCase<Stream>> Values => XmlDataCollection.Default.StringTestData;
 
-        [ParamsSource(nameof(Values))]
-        public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
+	[ParamsSource(nameof(Values))]
+	public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
-        [Benchmark, BenchmarkCategory(nameof(ReadXml))]
-        public IXmlElement ReadXml() => XmlParser.Parse(CaseReader.ReadToEnd());
-    }
+	[Benchmark, BenchmarkCategory(nameof(ReadXml))]
+	public IXmlElement ReadXml() => XmlParser.Parse(CaseReader.ReadToEnd());
 }

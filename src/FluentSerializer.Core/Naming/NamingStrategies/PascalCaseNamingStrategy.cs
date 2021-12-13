@@ -1,13 +1,12 @@
-﻿namespace FluentSerializer.Core.Naming.NamingStrategies
-{
-    public class PascalCaseNamingStrategy : CamelCaseNamingStrategy
-    {
-        // Just use the camelCase logic here
-        protected override string GetName(string name)
-        {
-            var camelCaseName = base.GetName(name);
+﻿namespace FluentSerializer.Core.Naming.NamingStrategies;
 
-            return $"{char.ToUpper(camelCaseName[0])}{camelCaseName[1..]}";
-        }
-    }
+public class PascalCaseNamingStrategy : CamelCaseNamingStrategy
+{
+	// Just use the camelCase logic here
+	protected override string GetName(string name)
+	{
+		var camelCaseName = base.GetName(name);
+
+		return $"{char.ToUpper(camelCaseName[0])}{camelCaseName[1..]}";
+	}
 }

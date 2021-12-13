@@ -1,8 +1,7 @@
-namespace FluentSerializer.Core.BenchmarkUtils.TestData
+namespace FluentSerializer.Core.BenchmarkUtils.TestData;
+
+public interface ITestCase
 {
-	public interface ITestCase
-	{
-		int Count { get; }
-		long SizeInBytes { get; }
-	}
+	int Count { get; }
+	long SizeInBytes { get; }
 }

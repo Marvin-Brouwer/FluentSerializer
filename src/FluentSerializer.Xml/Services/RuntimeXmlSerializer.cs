@@ -11,89 +11,88 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace FluentSerializer.Xml.Services
+namespace FluentSerializer.Xml.Services;
+
+public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 {
-	public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
+	private readonly XmlTypeSerializer _serializer;
+	private readonly XmlTypeDeserializer _deserializer;
+	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
+
+	public XmlSerializerConfiguration XmlConfiguration { get; }
+	public SerializerConfiguration Configuration => XmlConfiguration;
+
+	public RuntimeXmlSerializer(
+		IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+		XmlSerializerConfiguration configuration,
+		ObjectPoolProvider objectPoolProvider)
 	{
-		private readonly XmlTypeSerializer _serializer;
-		private readonly XmlTypeDeserializer _deserializer;
-		private readonly ObjectPool<ITextWriter> _stringBuilderPool;
+		Guard.Against.Null(mappings, nameof(mappings));
+		Guard.Against.Null(configuration, nameof(configuration));
 
-		public XmlSerializerConfiguration XmlConfiguration { get; }
-		public SerializerConfiguration Configuration => XmlConfiguration;
+		_serializer = new XmlTypeSerializer(mappings);
+		_deserializer = new XmlTypeDeserializer(mappings);
+		_stringBuilderPool = objectPoolProvider.CreateStringFastPool(configuration);
 
-		public RuntimeXmlSerializer(
-			IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
-			XmlSerializerConfiguration configuration,
-			ObjectPoolProvider objectPoolProvider)
-		{
-			Guard.Against.Null(mappings, nameof(mappings));
-			Guard.Against.Null(configuration, nameof(configuration));
+		XmlConfiguration = configuration;
+	}
 
-            _serializer = new XmlTypeSerializer(mappings);
-            _deserializer = new XmlTypeDeserializer(mappings);
-            _stringBuilderPool = objectPoolProvider.CreateStringFastPool(configuration);
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IXmlElement? element)
+		where TModel : new()
+	{
+		if (element is null) return default;
 
-			XmlConfiguration = configuration;
-		}
+		if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
+		return _deserializer.DeserializeFromElement<TModel>(element, this);
+	}
 
-		public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IXmlElement? element)
-			where TModel : new()
-		{
-			if (element is null) return default;
+	public object? Deserialize([MaybeNull, AllowNull] IXmlElement? element, Type modelType)
+	{
+		if (element is null) return default;
 
-			if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
-			return _deserializer.DeserializeFromElement<TModel>(element, this);
-		}
+		return _deserializer.DeserializeFromElement(element, modelType,  this);
+	}
 
-		public object? Deserialize([MaybeNull, AllowNull] IXmlElement? element, Type modelType)
-		{
-			if (element is null) return default;
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData)
+		where TModel : new()
+	{
+		if (string.IsNullOrWhiteSpace(stringData)) return default;
 
-			return _deserializer.DeserializeFromElement(element, modelType,  this);
-		}
+		var rootElement = XmlParser.Parse(stringData);
+		return Deserialize<TModel>(rootElement);
+	}
 
-		public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData)
-			where TModel : new()
-		{
-			if (string.IsNullOrWhiteSpace(stringData)) return default;
+	public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model)
+		where TModel : new()
+	{
+		if (model is null) return string.Empty;
+		if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
 
-			var rootElement = XmlParser.Parse(stringData);
-			return Deserialize<TModel>(rootElement);
-		}
+		var document = SerializeToDocument(model);
 
-		public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model)
-			where TModel : new()
-		{
-			if (model is null) return string.Empty;
-			if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
+		var stringValue = document.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
-			var document = SerializeToDocument(model);
+		return stringValue;
+	}
 
-			var stringValue = document.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
+	public IXmlDocument SerializeToDocument<TModel>([MaybeNull, AllowNull] TModel? model)
+	{
+		var rootElement = SerializeToElement(model);
 
-			return stringValue;
-		}
+		return new XmlDocument(rootElement);
+	}
 
-		public IXmlDocument SerializeToDocument<TModel>([MaybeNull, AllowNull] TModel? model)
-		{
-			var rootElement = SerializeToElement(model);
+	public IXmlElement? SerializeToElement<TModel>([MaybeNull, AllowNull] TModel? model)
+	{
+		if (model is null) return default;
 
-			return new XmlDocument(rootElement);
-		}
+		return _serializer.SerializeToElement(model, typeof(TModel), this);
+	}
 
-		public IXmlElement? SerializeToElement<TModel>([MaybeNull, AllowNull] TModel? model)
-		{
-			if (model is null) return default;
+	public IXmlElement? SerializeToElement([MaybeNull, AllowNull] object? model, Type modelType)
+	{
+		if (model is null) return default;
 
-			return _serializer.SerializeToElement(model, typeof(TModel), this);
-		}
-
-		public IXmlElement? SerializeToElement([MaybeNull, AllowNull] object? model, Type modelType)
-		{
-			if (model is null) return default;
-
-			return _serializer.SerializeToElement(model, modelType, this);
-		}
+		return _serializer.SerializeToElement(model, modelType, this);
 	}
 }

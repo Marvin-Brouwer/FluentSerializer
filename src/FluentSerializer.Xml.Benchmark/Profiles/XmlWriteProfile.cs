@@ -5,16 +5,15 @@ using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.Benchmark.Data;
 
-namespace FluentSerializer.Xml.Benchmark.Profiles
+namespace FluentSerializer.Xml.Benchmark.Profiles;
+
+public class XmlWriteProfile : WriteProfile
 {
-    public class XmlWriteProfile : WriteProfile
-    {
-        public IEnumerable<TestCase<IDataNode>> Values() => XmlDataCollection.Default.ObjectTestData;
+	public IEnumerable<TestCase<IDataNode>> Values() => XmlDataCollection.Default.ObjectTestData;
 
-        [ParamsSource(nameof(Values))]
-        public TestCase<IDataNode> Value { get; set; }
+	[ParamsSource(nameof(Values))]
+	public TestCase<IDataNode> Value { get; set; }
 
-        [Benchmark, BenchmarkCategory(nameof(Write))]
-        public string WriteXml() => Write(Value.GetData());
-    }
+	[Benchmark, BenchmarkCategory(nameof(Write))]
+	public string WriteXml() => Write(Value.GetData());
 }

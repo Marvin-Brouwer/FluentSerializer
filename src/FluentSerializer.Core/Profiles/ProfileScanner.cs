@@ -6,25 +6,24 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 
-namespace FluentSerializer.Core.Profiles
+namespace FluentSerializer.Core.Profiles;
+
+public static class ProfileScanner
 {
-    public static class ProfileScanner
-    {
-        private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile =>
-            assembly.GetTypes()
-                .Where(type => typeof(TSerializerProfile).IsAssignableFrom(type))
-                .Where(type => !type.IsAbstract)
-                .Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
+	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile =>
+		assembly.GetTypes()
+			.Where(type => typeof(TSerializerProfile).IsAssignableFrom(type))
+			.Where(type => !type.IsAbstract)
+			.Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
 
-        public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly<TSerializerProfile>(
-            Assembly assembly, SerializerConfiguration configuration)
-            where TSerializerProfile : ISerializerProfile
-        {
-            Guard.Against.Null(assembly, nameof(assembly));
+	public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly<TSerializerProfile>(
+		Assembly assembly, SerializerConfiguration configuration)
+		where TSerializerProfile : ISerializerProfile
+	{
+		Guard.Against.Null(assembly, nameof(assembly));
 
-            var profiles = ScanAssembly<TSerializerProfile>(assembly);
+		var profiles = ScanAssembly<TSerializerProfile>(assembly);
 
-            return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure(configuration)).ToList().AsReadOnly());
-        }
-    }
+		return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure(configuration)).ToList().AsReadOnly());
+	}
 }

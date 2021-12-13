@@ -7,28 +7,27 @@ using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Converting;
 
-namespace FluentSerializer.Json.Configuration
+namespace FluentSerializer.Json.Configuration;
+
+public sealed class JsonSerializerConfiguration : SerializerConfiguration
 {
-    public sealed class JsonSerializerConfiguration : SerializerConfiguration
-    {
-        public static JsonSerializerConfiguration Default { get; } = new();
+	public static JsonSerializerConfiguration Default { get; } = new();
 
-        public Func<INamingStrategy> DefaultNamingStrategy { get; set; }
+	public Func<INamingStrategy> DefaultNamingStrategy { get; set; }
 
-        private JsonSerializerConfiguration()
-        {
-            Encoding = Encoding.UTF8;
-            FormatOutput = true;
-            WriteNull = false;
-            DefaultNamingStrategy = Names.Use.CamelCase;
-            DefaultConverters = new List<IConverter>
-            {
-                UseJsonConverters.DefaultDateConverter,
-                UseJsonConverters.ConvertibleConverter,
+	private JsonSerializerConfiguration()
+	{
+		Encoding = Encoding.UTF8;
+		FormatOutput = true;
+		WriteNull = false;
+		DefaultNamingStrategy = Names.Use.CamelCase;
+		DefaultConverters = new List<IConverter>
+		{
+			UseJsonConverters.DefaultDateConverter,
+			UseJsonConverters.ConvertibleConverter,
 
-                // Collection converters
-                UseJsonConverters.CollectionConverter
-            };
-        }
-    }
+			// Collection converters
+			UseJsonConverters.CollectionConverter
+		};
+	}
 }

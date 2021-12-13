@@ -4,86 +4,85 @@ using FluentSerializer.Json.Configuration;
 using System;
 using System.Diagnostics;
 
-namespace FluentSerializer.Json.DataNodes.Nodes
+namespace FluentSerializer.Json.DataNodes.Nodes;
+
+/// <inheritdoc cref="IJsonComment"/>
+[DebuggerDisplay("// {Value,nq}")]
+public readonly struct JsonCommentSingleLine : IJsonComment
 {
+	private static readonly int TypeHashCode = typeof(JsonCommentSingleLine).GetHashCode();
+
+	public string Name => JsonCharacterConstants.SingleLineCommentMarker;
+	public string? Value { get; }
+
+	/// <inheritdoc cref="JsonBuilder.Comment(string)"/>
+	/// <remarks>
+	/// <b>Please use <see cref="JsonBuilder.Comment"/> method instead of this constructor</b>
+	/// </remarks>
+	public JsonCommentSingleLine(string value)
+	{
+		Guard.Against.NullOrEmpty(value, nameof(value));
+
+		Value = value;
+	}
+
 	/// <inheritdoc cref="IJsonComment"/>
-	[DebuggerDisplay("// {Value,nq}")]
-    public readonly struct JsonCommentSingleLine : IJsonComment
-    {
-        private static readonly int TypeHashCode = typeof(JsonCommentSingleLine).GetHashCode();
+	/// <remarks>
+	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
+	/// </remarks>
+	public JsonCommentSingleLine(ReadOnlySpan<char> text, ref int offset)
+	{
+		offset += JsonCharacterConstants.SingleLineCommentMarker.Length;
 
-        public string Name => JsonCharacterConstants.SingleLineCommentMarker;
-        public string? Value { get; }
+		var valueStartOffset = offset;
+		var valueEndOffset = offset;
 
-        /// <inheritdoc cref="JsonBuilder.Comment(string)"/>
-        /// <remarks>
-        /// <b>Please use <see cref="JsonBuilder.Comment"/> method instead of this constructor</b>
-        /// </remarks>
-        public JsonCommentSingleLine(string value)
-        {
-            Guard.Against.NullOrEmpty(value, nameof(value));
+		while (offset < text.Length)
+		{
+			valueEndOffset = offset;
+			var character = text[offset];
+			offset++;
 
-            Value = value;
-        }
-
-        /// <inheritdoc cref="IJsonComment"/>
-        /// <remarks>
-        /// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
-        /// </remarks>
-        public JsonCommentSingleLine(ReadOnlySpan<char> text, ref int offset)
-        {
-            offset += JsonCharacterConstants.SingleLineCommentMarker.Length;
-
-            var valueStartOffset = offset;
-            var valueEndOffset = offset;
-
-            while (offset < text.Length)
-            {
-                valueEndOffset = offset;
-                var character = text[offset];
-                offset++;
-
-                if (character == JsonCharacterConstants.LineReturnCharacter) break;
-                if (character == JsonCharacterConstants.NewLineCharacter) break;
-            }
-
-            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+			if (character == JsonCharacterConstants.LineReturnCharacter) break;
+			if (character == JsonCharacterConstants.NewLineCharacter) break;
 		}
 
-		public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
+		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+	}
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
-		{
-			// JSON does not support empty property assignment or array members
-			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
+	public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
 
-            const char spacer = ' ';
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
+	{
+		// JSON does not support empty property assignment or array members
+		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-            // Fallback because otherwise JSON wouldn't be readable
-            if (!format)
-                return stringBuilder
-					.Append(JsonCharacterConstants.MultiLineCommentStart)
-					.Append(spacer)
-					.Append(Value)
-					.Append(spacer)
-					.Append(JsonCharacterConstants.MultiLineCommentEnd);
+		const char spacer = ' ';
 
-            return stringBuilder
-				.Append(JsonCharacterConstants.SingleLineCommentMarker)
-                .Append(spacer)
-                .Append(Value);
-        }
+		// Fallback because otherwise JSON wouldn't be readable
+		if (!format)
+			return stringBuilder
+				.Append(JsonCharacterConstants.MultiLineCommentStart)
+				.Append(spacer)
+				.Append(Value)
+				.Append(spacer)
+				.Append(JsonCharacterConstants.MultiLineCommentEnd);
 
-        #region IEquatable
+		return stringBuilder
+			.Append(JsonCharacterConstants.SingleLineCommentMarker)
+			.Append(spacer)
+			.Append(Value);
+	}
 
-        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
+	#region IEquatable
 
-        public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
+	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
-        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-        #endregion
-    }
+	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+
+	#endregion
 }

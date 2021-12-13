@@ -2,6 +2,7 @@ using FluentSerializer.Core.BenchmarkUtils.Runner;
 using FluentSerializer.Xml.Benchmark.Data;
 using System;
 using System.Linq;
+
 #if !NET5_0_OR_GREATER
 using System.Security.Permissions;
 #endif

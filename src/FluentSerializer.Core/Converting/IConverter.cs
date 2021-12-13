@@ -4,18 +4,17 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
 
-namespace FluentSerializer.Core.Converting
+namespace FluentSerializer.Core.Converting;
+
+public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
 {
-    public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
-    {
-		[return: MaybeNull] TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
+	[return: MaybeNull] TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
 
-		[return: MaybeNull] object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
-    }
+	[return: MaybeNull] object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
+}
 
-    public interface IConverter
-    {
-        bool CanConvert(Type targetType);
-        SerializerDirection Direction { get; }
-    }
+public interface IConverter
+{
+	bool CanConvert(Type targetType);
+	SerializerDirection Direction { get; }
 }

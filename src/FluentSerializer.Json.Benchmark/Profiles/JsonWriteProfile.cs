@@ -5,16 +5,15 @@ using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.Benchmark.Data;
 
-namespace FluentSerializer.Json.Benchmark.Profiles
+namespace FluentSerializer.Json.Benchmark.Profiles;
+
+public class JsonWriteProfile : WriteProfile
 {
-    public class JsonWriteProfile : WriteProfile
-    {
-        public IEnumerable<TestCase<IDataNode>> Values() => JsonDataCollection.Default.ObjectTestData;
+	public IEnumerable<TestCase<IDataNode>> Values() => JsonDataCollection.Default.ObjectTestData;
 
-        [ParamsSource(nameof(Values))]
-        public TestCase<IDataNode> Value { get; set; }
+	[ParamsSource(nameof(Values))]
+	public TestCase<IDataNode> Value { get; set; }
 
-        [Benchmark, BenchmarkCategory(nameof(WriteJson))]
-        public string WriteJson() => Write(Value.GetData());
-    }
+	[Benchmark, BenchmarkCategory(nameof(WriteJson))]
+	public string WriteJson() => Write(Value.GetData());
 }

@@ -6,37 +6,36 @@ using FluentSerializer.Json.DataNodes;
 
 using static FluentSerializer.Json.JsonBuilder;
 
-namespace FluentSerializer.Json.Converting.Converters.Base
+namespace FluentSerializer.Json.Converting.Converters.Base;
+
+public abstract class SimpleTypeConverter<TObject> : IJsonConverter
 {
-    public abstract class SimpleTypeConverter<TObject> : IJsonConverter
-    {
-        public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
+	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
+	public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
-        protected abstract string ConvertToString(TObject value);
-        protected abstract TObject ConvertToDataType(string currentValue);
+	protected abstract string ConvertToString(TObject value);
+	protected abstract TObject ConvertToDataType(string currentValue);
 
-        protected virtual TObject? ConvertToNullableDataType(string? currentValue)
-        {
-            if (string.IsNullOrWhiteSpace(currentValue)) return default;
+	protected virtual TObject? ConvertToNullableDataType(string? currentValue)
+	{
+		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
-            return ConvertToDataType(currentValue);
-        }
+		return ConvertToDataType(currentValue);
+	}
         
-        public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
-        {
-            if (objectToDeserialize is not IDataValue dataValue) return default;
+	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	{
+		if (objectToDeserialize is not IDataValue dataValue) return default;
 
-            var stringValue = dataValue.Value;
-            return ConvertToNullableDataType(stringValue);
-        }
+		var stringValue = dataValue.Value;
+		return ConvertToNullableDataType(stringValue);
+	}
 
-        public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
-        {
-            var value = (TObject)objectToSerialize;
-            var stringValue = ConvertToString(value);
+	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	{
+		var value = (TObject)objectToSerialize;
+		var stringValue = ConvertToString(value);
 
-            return Value(stringValue);
-        }
-    }
+		return Value(stringValue);
+	}
 }

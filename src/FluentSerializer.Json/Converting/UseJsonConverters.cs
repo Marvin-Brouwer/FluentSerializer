@@ -3,22 +3,21 @@ using System.Globalization;
 using Ardalis.GuardClauses;
 using FluentSerializer.Json.Converting.Converters;
 
-namespace FluentSerializer.Json.Converting
+namespace FluentSerializer.Json.Converting;
+
+public sealed class UseJsonConverters : IUseJsonConverters
 {
-    public sealed class UseJsonConverters : IUseJsonConverters
-    {
-        internal static readonly IJsonConverter DefaultDateConverter = new DefaultDateConverter();
-        internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
-        internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
+	internal static readonly IJsonConverter DefaultDateConverter = new DefaultDateConverter();
+	internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
+	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 
-        public Func<IJsonConverter> Dates(string? format = null, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
-        {
-            if (format is null) return () => DefaultDateConverter;
+	public Func<IJsonConverter> Dates(string? format = null, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	{
+		if (format is null) return () => DefaultDateConverter;
 
-            Guard.Against.NullOrWhiteSpace(format, nameof(format));
-            return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
-        }
+		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
+	}
 
-        public IJsonConverter Collection() => CollectionConverter;
-    }
+	public IJsonConverter Collection() => CollectionConverter;
 }

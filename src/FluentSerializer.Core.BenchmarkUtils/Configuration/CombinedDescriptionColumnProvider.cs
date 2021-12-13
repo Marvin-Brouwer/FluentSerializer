@@ -2,17 +2,16 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 
-namespace FluentSerializer.Core.BenchmarkUtils.Configuration
+namespace FluentSerializer.Core.BenchmarkUtils.Configuration;
+
+internal sealed class MethodOnlyDescriptorColumnProvider : IColumnProvider
 {
-	internal sealed class MethodOnlyDescriptorColumnProvider : IColumnProvider
+	public static readonly MethodOnlyDescriptorColumnProvider Default = new();
+
+	private MethodOnlyDescriptorColumnProvider() { }
+
+	public IEnumerable<IColumn> GetColumns(Summary summary)
 	{
-		public static readonly MethodOnlyDescriptorColumnProvider Default = new();
-
-		private MethodOnlyDescriptorColumnProvider() { }
-
-		public IEnumerable<IColumn> GetColumns(Summary summary)
-		{
-			yield return TargetMethodColumn.Method;
-		}
+		yield return TargetMethodColumn.Method;
 	}
 }

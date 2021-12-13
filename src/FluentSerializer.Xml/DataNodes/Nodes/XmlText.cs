@@ -3,70 +3,69 @@ using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;
 
-namespace FluentSerializer.Xml.DataNodes.Nodes
+namespace FluentSerializer.Xml.DataNodes.Nodes;
+
+/// <inheritdoc cref="IXmlText"/>
+[DebuggerDisplay("{Value}")]
+public readonly struct XmlText : IXmlText
 {
+	private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
+
+	internal const string TextName = "#text";
+
+	public string Name => TextName;
+	public string? Value { get; }
+
+	/// <inheritdoc cref="XmlBuilder.Text(string?)"/>
+	/// <remarks>
+	/// <b>Please use <see cref="XmlBuilder.Text"/> method instead of this constructor</b>
+	/// </remarks>
+	public XmlText(string? value = null)
+	{
+		Value = value;
+	}
+
 	/// <inheritdoc cref="IXmlText"/>
-	[DebuggerDisplay("{Value}")]
-    public readonly struct XmlText : IXmlText
-    {
-        private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
+	/// <remarks>
+	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
+	/// </remarks>
+	public XmlText(ReadOnlySpan<char> text, ref int offset)
+	{
+		var valueStartOffset = offset;
+		var valueEndOffset = offset;
 
-        internal const string TextName = "#text";
+		while (offset < text.Length)
+		{
+			valueEndOffset = offset;
 
-        public string Name => TextName;
-        public string? Value { get; }
+			var character = text[offset];
+			if (character == XmlCharacterConstants.TagStartCharacter) break;
 
-        /// <inheritdoc cref="XmlBuilder.Text(string?)"/>
-        /// <remarks>
-        /// <b>Please use <see cref="XmlBuilder.Text"/> method instead of this constructor</b>
-        /// </remarks>
-        public XmlText(string? value = null)
-        {
-            Value = value;
-        }
-
-        /// <inheritdoc cref="IXmlText"/>
-        /// <remarks>
-        /// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
-        /// </remarks>
-        public XmlText(ReadOnlySpan<char> text, ref int offset)
-        {
-            var valueStartOffset = offset;
-            var valueEndOffset = offset;
-
-            while (offset < text.Length)
-            {
-                valueEndOffset = offset;
-
-                var character = text[offset];
-                if (character == XmlCharacterConstants.TagStartCharacter) break;
-
-                offset++;
-            }
-
-            Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+			offset++;
 		}
 
-		public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
+		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+	}
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
-		{
-			// This should never happen because null tags are self-closing but just to be sure this check is here
-			if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
+	public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
 
-            return stringBuilder.Append(Value);
-        }
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
+	{
+		// This should never happen because null tags are self-closing but just to be sure this check is here
+		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
-        #region IEquatable
+		return stringBuilder.Append(Value);
+	}
 
-        public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
+	#region IEquatable
 
-        public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
+	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
-        public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
-        public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
-        #endregion
-    }
+	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+
+	#endregion
 }
