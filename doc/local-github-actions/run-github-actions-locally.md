@@ -1,6 +1,6 @@
-# Setup act locally  
+# Test the GitHub actions locally  
   
-This is a guide to  make you able to run the github actions locally.  
+This is a guide to help you run the github actions locally.  
   
 # WSl  
   
@@ -18,7 +18,7 @@ Either call `wsl` in the `cmd` prompt or install [remote-wsl-for-vscode](https:/
   
 # Installing on Ubuntu  
   
-These are the steps necessary to make act run on `Ubuntu`.
+These are the steps necessary to run the GitHub actions runner on `Ubuntu`.
   
 ## Installing docker  
   
@@ -44,34 +44,35 @@ sudo adduser $USER docker
 newgrp docker
 ```
 
-## Installing Act  
+## Installing `Act`  
   
-Installing `act` is pretty straightforward, either follow this guide.  
+Installing `Act` is pretty straightforward, either follow this guide.  
 Or if you don't want to use brew, see the readme here: https://github.com/nektos/act#installation.  
   
-### Installing brew
+### Installing `HomeBrew`
 
-If you already have brew, you can skip to the next step.   
+If you already have `HomeBrew`, you can skip to the next step.   
 ```txt
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 Run the generated command to install brew to your path.  
 Install the `build-essential` package
-``txt
+```txt
 sudo apt-get install build-essential
 ```
-### Installing the Act application  
+
+### Installing the `Act` application  
   
-Next install the `act` application:  
+Next install the `Act` application:  
 ```txt
 brew install act
 ```
-To validate act is installed correctly run:  
+To validate `Act` is installed correctly run:  
 ```txt
 act -n
 ```
   
-# Running Act  
+# Running `Act`  
   
 To actually test your pipeline you can use the following command because we setup the CI pipeline for workflow_dispatch:  
 ```txt
@@ -79,3 +80,16 @@ act workflow_dispatch
 ```
 **Keep in mind that** this will download a full ubuntu server image for the pipeline runner, so make sure you have enough disk space.  
 This is **_especially_** important if you're running through `wsl` as having no more disk space during the download may destroy your linux image in the wsl.  
+  
+
+# Troubleshooting
+
+- **`message here`:**  
+  This probably means the docker service isn't running. Try running `sudo service docker start` and try again.  
+  You can always try `sudo service docker status` to validate it started correctly.  
+  If you're running `wsl` keep in mind that docker probably doesn't run on startup (which is a good thing really).
+- **File access issues on `wsl`**:  
+  If you're running `wsl` and you suddenly find yourself unable to read files on an `ntfs` drive, you've probably run windows and
+  linux actions on the same directory at the same time, causing a lock.  
+  Rebooting your pc fixes this.
+
