@@ -60,6 +60,8 @@ done
     
 # Move old folder
 sudo rsync -aP $currentDockerDir/* $newDockerDir;
+sudo chmod 777 $newDockerDir;
+
 sudo mv -f $currentDockerDir "${currentDockerDir}.old"
 
 # Start and test docker
