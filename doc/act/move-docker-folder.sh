@@ -2,10 +2,10 @@
 # https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/
 
 newDockerDir=$1;
-dockerConfigFile="/etc/docker/daemon.json"
+currentDockerDir="/var/lib/docker";
+dockerConfigFile="/etc/docker/daemon.json";
 searchPattern="^(.*[\"]data-root[\"]:[ \t]*[\"])(.*)([\"].*)$";
 replaceDockerConfigLine="\"data-root\": \"$newDockerDir\"";
-
 
 [ ! -d $newDockerDir ] && echo "Directory '$newDockerDir' DOES NOT exists." && exit 1;
 
@@ -37,24 +37,30 @@ else
         echo "No change necessary" && exit 0;
     fi
 
-    echo "Moving '$currentDockerDir' to '$newDockerDir'";
-    echo "Moving is currently not suppored, see script source for more info!" && exit 2;
-    # If you run into this, please follow this article and edit the script to support this:
-    # https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/
-    
     # Stop docker
     dockerRunning="$(sudo service docker status)"
     if [ "${dockerRunning}" = " * Docker is running" ]; then
         sudo service docker stop;
     fi
-    # Replace config file 
-    sed -i "s|$searchPattern|$replaceDockerConfigLine|g" $dockerConfigFile
 
-    # Move old folder
-    # sudo rsync -aP /var/lib/docker/ /path/to/your/docker
-
-    # etc....
+    # Replace value config file 
+    `sed -i "s|$currentDockerDir|$newDockerDir|g" $dockerConfigFile`;
 fi
+
+echo "Moving '$currentDockerDir' to '$newDockerDir'";
+
+# Make sure docker is stopped
+while : ; do
+    sleep 1
+    dockerRunning="$(sudo service docker status)";
+    if [ "${dockerRunning}" = " * Docker is not running" ]; then
+        break;
+    fi
+done
+    
+# Move old folder
+sudo rsync -aP $currentDockerDir/* $newDockerDir;
+sudo mv -f $currentDockerDir "${currentDockerDir}.old"
 
 # Start and test docker
 sudo service docker start;
@@ -68,3 +74,6 @@ while : ; do
     fi
 done
 
+echo "";
+echo "If everything works fine and you don't want to keep the old directory run:";
+echo "sudo rm -rf ${currentDockerDir}.old";
