@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.BenchmarkUtils.TestData;
+using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.DataNodes;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,17 +50,29 @@ public static class TestDataExtensions
 
 	public static IXmlContainer ToXmlElement(this Person person)
 	{
+		var details = string.IsNullOrEmpty(person.MiddleName) ? new List<IXmlNode>
+		{
+			Element("firstName", Text(person.FirstName)),
+			Element("lastName", Text(person.LastName))
+		} : new List<IXmlNode>
+		{
+			Element("firstName", Text(person.FirstName)),
+			Element("middleName", Text(person.MiddleName)),
+			Element("lastName", Text(person.LastName))
+		};
+
+		details.AddRange(new List<IXmlNode> {
+			Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
+			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
+		});
+
 		var children = new List<IXmlNode> {
 			Element("fullName", Text(
 				person.MiddleName is null
 					? string.Join(" ", person.FirstName, person.LastName)
 					: string.Join(" ", person.FirstName, person.MiddleName, person.LastName))),
 			Element("Details",
-				Element("firstName", Text(person.FirstName)),
-				string.IsNullOrEmpty(person.MiddleName) ? null : Element("middleName", Text(person.MiddleName)),
-				Element("lastName", Text(person.LastName)),
-				Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
-				Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
+				details
 			)
 		};
 

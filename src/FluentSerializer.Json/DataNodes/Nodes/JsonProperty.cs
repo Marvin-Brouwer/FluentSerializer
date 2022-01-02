@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -40,7 +40,7 @@ public readonly struct JsonProperty : IJsonProperty
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Property"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(string name, IJsonPropertyContent value)
+	public JsonProperty(string name, IJsonPropertyContent? value)
 	{
 		Guard.Against.InvalidName(name, nameof(name));
 
