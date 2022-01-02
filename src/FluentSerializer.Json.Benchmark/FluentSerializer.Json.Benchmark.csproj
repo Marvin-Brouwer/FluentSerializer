@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>Preview</LangVersion>
+    <LangVersion>10</LangVersion>
     <StartupObject>FluentSerializer.Json.Benchmark.Program</StartupObject>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
