@@ -26,15 +26,15 @@ _**Note:** The scripts in this guide are to use at your own risk._
 
 Follow the steps of https://docs.docker.com/engine/install/ubuntu/ or run the **interactive** install script:
 ```txt
-sudo chmod +rwx ./doc/act/install-docker.sh
-sh ./doc/act/install-docker.sh
+sudo chmod +rwx ./doc/local-github-actions/install-docker.sh
+sh ./doc/local-github-actions/install-docker.sh
 ```
 If you'd like to move your docker container directory you can use this **interactive** script:
 ```txt
-sudo chmod +rwx ./doc/act/move-docker-folder.sh
-sh ./doc/act/move-docker-folder.sh [FOLDERNAME]
+sudo chmod +rwx ./doc/local-github-actions/move-docker-folder.sh
+sh ./doc/local-github-actions/move-docker-folder.sh [FOLDERNAME]
 ```
-For example `sudo sh ./doc/act/move-docker-folder.sh /mnt/d/docker`.  
+For example `sudo sh ./doc/local-github-actions/move-docker-folder.sh /mnt/d/docker`.  
 **Note:** You are responsible for ensuring the drive and folder exist!
   
 Make sure you have permissions to run docker:  
