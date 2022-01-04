@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -45,9 +45,9 @@ public readonly struct JsonProperty : IJsonProperty
 		Guard.Against.InvalidName(name, nameof(name));
 
 		Name = name;
-		HasValue = value is not null && (value is not IJsonValue jsonValue || jsonValue.HasValue);
+		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value };
+		_children = new IJsonNode[] { value };
 	}
 
 	/// <inheritdoc cref="IJsonObject"/>
