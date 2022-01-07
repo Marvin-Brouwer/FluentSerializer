@@ -117,14 +117,14 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 
 			var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
 			var markdownSummaryFile = resultsDir
-				.GetFiles("*.md")
+				.GetFiles("*-report-console.md")
 				.OrderByDescending(directory => directory.CreationTimeUtc)
 				.FirstOrDefault();
 
 			if (markdownSummaryFile is null)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("No summary found with pattern \"*.md\"");
+				Console.WriteLine("No summary found with pattern \"*-report-console.md\"");
 				Console.ResetColor();
 				Console.WriteLine();
 				return;
