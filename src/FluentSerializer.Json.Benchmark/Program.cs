@@ -22,6 +22,6 @@ public static class Program
 		if (!arguments.Contains("--no-generate"))
 			JsonDataCollection.Default.GenerateTestCaseFiles();
 
-		StaticTestRunner.Run(typeof(Program).Assembly, "json-serializer");
+		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "json-serializer");
 	}
 }

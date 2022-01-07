@@ -22,6 +22,6 @@ public static class Program
 		if (!arguments.Contains("--no-generate"))
 			XmlDataCollection.Default.GenerateTestCaseFiles();
 
-		StaticTestRunner.Run(typeof(Program).Assembly, "xml-serializer");
+		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "xml-serializer");
 	}
 }
