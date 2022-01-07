@@ -1,8 +1,8 @@
+using System.Buffers;
 using FluentSerializer.Core.Configuration;
 using Microsoft.Extensions.ObjectPool;
-using System.Buffers;
 
-namespace FluentSerializer.Core.Dirty;
+namespace FluentSerializer.Core.Text.Writers;
 
 public sealed class LowAllocationStringBuilderPolicy : PooledObjectPolicy<ITextWriter>
 {

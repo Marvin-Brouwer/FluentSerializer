@@ -1,7 +1,8 @@
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Text.Writers;
 using Microsoft.Extensions.ObjectPool;
 
-namespace FluentSerializer.Core.Dirty;
+namespace FluentSerializer.Core.Text.Extensions;
 
 public static class ObjectPoolExtensions
 {

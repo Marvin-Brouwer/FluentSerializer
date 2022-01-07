@@ -1,4 +1,9 @@
-namespace FluentSerializer.Core.DataNodes;
+using System.Buffers;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Text.Writers;
+
+namespace FluentSerializer.Core.Text.Extensions;
 
 public static class StringFastExtensions
 {
@@ -19,5 +24,12 @@ public static class StringFastExtensions
 
 		if (!format) return stringBuilder;
 		return stringBuilder.Append(indentChar, indent);
+	}
+	
+	public static string ToString(this IDataNode node, SerializerConfiguration configuration)
+	{
+		var stringBuilder = (ITextWriter)new LowAllocationStringBuilder(configuration, ArrayPool<char>.Shared);
+		stringBuilder = node.AppendTo(ref stringBuilder);
+		return stringBuilder.ToString();
 	}
 }

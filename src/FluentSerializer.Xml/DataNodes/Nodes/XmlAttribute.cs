@@ -3,6 +3,8 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
@@ -84,7 +86,7 @@ public readonly struct XmlAttribute : IXmlAttribute
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
-	public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{

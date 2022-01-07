@@ -3,6 +3,8 @@ using FluentSerializer.Xml.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -35,7 +37,7 @@ public readonly struct XmlFragment : IXmlElement
 	/// <inheritdoc cref="XmlFragment"/>
 	public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
 
-	public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{

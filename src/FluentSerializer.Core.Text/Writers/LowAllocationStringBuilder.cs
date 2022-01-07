@@ -1,7 +1,9 @@
-using Ardalis.GuardClauses;
-using FluentSerializer.Core.Configuration;
 using System;
 using System.Buffers;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Configuration;
+
+namespace FluentSerializer.Core.Text.Writers;
 
 ///<summary>
 /// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.

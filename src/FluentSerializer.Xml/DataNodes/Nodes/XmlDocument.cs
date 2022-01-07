@@ -3,6 +3,8 @@ using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -25,7 +27,7 @@ public readonly struct XmlDocument : IXmlDocument
 		RootElement = root;
 	}
 
-	public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
 	public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
 	{

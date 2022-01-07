@@ -2,6 +2,8 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -47,7 +49,7 @@ public readonly struct XmlText : IXmlText
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
-	public override string ToString() => ((IDataNode)this).ToString(XmlSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{

@@ -4,6 +4,8 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
 using System;
 using System.Diagnostics;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -54,7 +56,7 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
-	public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{

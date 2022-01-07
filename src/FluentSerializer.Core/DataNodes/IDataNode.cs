@@ -2,20 +2,13 @@ using FluentSerializer.Core.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Buffers;
+using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Core.DataNodes;
 
 public interface IDataNode : IEquatable<IDataNode?>
 {
 	string Name { get; }
-
-
-	string ToString(SerializerConfiguration configuration)
-	{
-		var stringBuilder = (ITextWriter)new LowAllocationStringBuilder(configuration, ArrayPool<char>.Shared);
-		stringBuilder = AppendTo(ref stringBuilder);
-		return stringBuilder.ToString();
-	}
 
 	public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
 	{

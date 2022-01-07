@@ -1,5 +1,7 @@
-using FluentSerializer.Core.Configuration;
 using System;
+using FluentSerializer.Core.Configuration;
+
+namespace FluentSerializer.Core.Text;
 
 public interface ITextWriter
 {

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -119,7 +121,7 @@ public readonly struct JsonProperty : IJsonProperty
 		HasValue = jsonValue.HasValue;
 	}
 
-	public override string ToString() => ((IDataNode)this).ToString(JsonSerializerConfiguration.Default);
+	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
