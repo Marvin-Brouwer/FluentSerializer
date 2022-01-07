@@ -85,6 +85,7 @@ jobs:
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
           ./src/*.Benchmark/bin/Release/*/ref/*.*
+          ./src/*.Benchmark/obj/Release/*/apphost
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1

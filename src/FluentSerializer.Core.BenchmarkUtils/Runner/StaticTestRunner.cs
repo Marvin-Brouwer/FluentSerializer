@@ -135,13 +135,17 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				return;
 			}
 
+			var oldName = markdownSummaryFile.FullName;
+
 			var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 			var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
 			var readableFileName = markdownSummaryFile.FullName
 				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
 				.Replace("-report-console", string.Empty);
 
-			Console.WriteLine($"Renaming report to \"{readableFileName}\"");
+			Console.WriteLine("Renaming report");
+			Console.WriteLine($"  from: \"{oldName}\"");
+			Console.WriteLine($"  to: \"{readableFileName}\"");
 			Console.WriteLine();
 			markdownSummaryFile.MoveTo(readableFileName);
 		}
