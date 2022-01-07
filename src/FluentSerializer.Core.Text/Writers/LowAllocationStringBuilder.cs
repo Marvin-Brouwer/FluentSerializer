@@ -26,7 +26,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	private const int DefaultChunkSize = 65536;
 	public ITextConfiguration TextConfiguration { get; }
 
-	private readonly ArrayPool<char> _arrayPool;
+	private readonly ArrayPool<char>? _arrayPool;
 	private string? _generatedStringValue;
 
 	#region StringMutation
@@ -36,10 +36,10 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	private int _bufferCapacity;
 	#endregion
 
-	public LowAllocationStringBuilder(in ITextConfiguration textConfiguration, in ArrayPool<char> arrayPool, in int chunkSize = DefaultChunkSize)
+	public LowAllocationStringBuilder(in ITextConfiguration textConfiguration, in int chunkSize = DefaultChunkSize)
 	{
 		Guard.Against.NegativeOrZero(chunkSize, nameof(chunkSize));
-
+		
 		_chunkSize = chunkSize;
 		_bufferCapacity = chunkSize;
 		_generatedStringValue = null;
@@ -47,9 +47,18 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 		_bufferCapacity = 0;
 
 		TextConfiguration = textConfiguration;
-		_arrayPool = arrayPool;
-		_memoryBuffer = arrayPool.Rent(_bufferCapacity);
+		_arrayPool = textConfiguration.UseWriteArrayPool ? ArrayPool<char>.Shared : null;
+		_memoryBuffer = InitializeMemoryBuffer(_bufferCapacity);
 		_generatedStringValue = null;
+	}
+
+	private char[] InitializeMemoryBuffer(in int size)
+	{
+		return _arrayPool?.Rent(size) ?? new char[size];
+	}
+	private void ReleaseMemoryBuffer(in char[] buffer)
+	{
+		_arrayPool?.Return(buffer, true);
 	}
 
 	public override string ToString() => _generatedStringValue ??= new string(_memoryBuffer, 0, _currentBufferPosition);
@@ -58,8 +67,8 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	{
 		_currentBufferPosition = 0;
 		_generatedStringValue = null;
-		_arrayPool.Return(_memoryBuffer, true);
-		_memoryBuffer = _arrayPool.Rent(_bufferCapacity = _chunkSize);
+		ReleaseMemoryBuffer(_memoryBuffer);
+		_memoryBuffer = InitializeMemoryBuffer(_bufferCapacity = _chunkSize);
 
 		return this;
 	}
@@ -134,9 +143,9 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 
 		_bufferCapacity = Math.Max(_bufferCapacity + amountOfCharactersAdded, _bufferCapacity * 2);
 
-		var newChars = _arrayPool.Rent(_bufferCapacity);
+		var newChars = InitializeMemoryBuffer(_bufferCapacity);
 		_memoryBuffer.CopyTo(newChars, 0);
-		_arrayPool.Return(_memoryBuffer, true);
+		ReleaseMemoryBuffer(_memoryBuffer);
 		_memoryBuffer = newChars;
 	}
 

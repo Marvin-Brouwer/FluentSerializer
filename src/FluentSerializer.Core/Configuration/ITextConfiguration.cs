@@ -6,4 +6,5 @@ public interface ITextConfiguration
 {
 	Encoding Encoding { get; }
 	string NewLine { get; }
+	bool UseWriteArrayPool { get; }
 }

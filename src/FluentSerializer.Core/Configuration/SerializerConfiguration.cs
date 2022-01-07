@@ -9,6 +9,8 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 {
 	public bool FormatOutput { get; set; } = true;
 	public bool WriteNull { get; set; } = false;
+	public bool UseWriteArrayPool { get; set; } = true;
+
 	public List<IConverter> DefaultConverters { get; set; } = new();
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	public string NewLine { get; set; } = LineEndings.Environment;

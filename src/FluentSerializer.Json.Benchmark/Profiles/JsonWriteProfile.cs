@@ -15,5 +15,5 @@ public class JsonWriteProfile : WriteProfile
 	public TestCase<IDataNode> Value { get; set; }
 
 	[Benchmark, BenchmarkCategory(nameof(WriteJson))]
-	public string WriteJson() => Write(Value.GetData());
+	public string WriteJson() => Write(Value);
 }

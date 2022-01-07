@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using BenchmarkDotNet.Attributes;
+using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Helpers;
 
@@ -39,9 +40,16 @@ public abstract class WriteProfile
 		_writeStream = null;
 	}
 
-	public string Write(IDataNode value)
+	public string Write(TestCase<IDataNode> testCase)
 	{
-		value.WriteTo(TestStringBuilderPool.Instance, true);
+		// We don't care about comparing the difference between these to atm, this only makes the benchmark run longer
+		// whilst we already know the outcome.
+		// Remark: Add a note about this when adding benchmarks to the readme or make it a run param.
+		var stringBuilderPool = testCase.Count > 1000
+			? TestStringBuilderPool.Default
+			: TestStringBuilderPool.NoArrayPool;
+
+		testCase.GetData().WriteTo(stringBuilderPool, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());

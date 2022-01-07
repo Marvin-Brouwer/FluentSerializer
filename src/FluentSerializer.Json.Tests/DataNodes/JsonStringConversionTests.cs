@@ -78,7 +78,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testObjectFormatted : _testObjectSlim;
 
             // Act
-            var result = input.WriteTo(TestStringBuilderPool.Instance, format);
+            var result = input.WriteTo(TestStringBuilderPool.NoArrayPool, format);
             
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);

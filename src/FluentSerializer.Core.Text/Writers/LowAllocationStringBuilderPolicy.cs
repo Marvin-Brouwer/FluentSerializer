@@ -1,4 +1,3 @@
-using System.Buffers;
 using FluentSerializer.Core.Configuration;
 using Microsoft.Extensions.ObjectPool;
 
@@ -8,14 +7,12 @@ public sealed class LowAllocationStringBuilderPolicy : PooledObjectPolicy<ITextW
 {
 	private readonly ITextConfiguration _textConfiguration;
 
-
 	public LowAllocationStringBuilderPolicy(in ITextConfiguration textConfiguration)
 	{
 		_textConfiguration = textConfiguration;
 	}
 
-	public override ITextWriter Create() =>
-		new LowAllocationStringBuilder(_textConfiguration, ArrayPool<char>.Shared);
+	public override ITextWriter Create() => new LowAllocationStringBuilder(_textConfiguration);
 
 	public override bool Return(ITextWriter obj)
 	{

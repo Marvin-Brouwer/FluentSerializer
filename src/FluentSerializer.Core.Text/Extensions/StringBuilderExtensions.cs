@@ -1,4 +1,3 @@
-using System.Buffers;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text.Writers;
@@ -28,7 +27,7 @@ public static class StringBuilderExtensions
 	
 	public static string ToString(this IDataNode node, SerializerConfiguration configuration)
 	{
-		var stringBuilder = (ITextWriter)new LowAllocationStringBuilder(configuration, ArrayPool<char>.Shared);
+		var stringBuilder = (ITextWriter)new LowAllocationStringBuilder(configuration);
 		stringBuilder = node.AppendTo(ref stringBuilder);
 		return stringBuilder.ToString();
 	}

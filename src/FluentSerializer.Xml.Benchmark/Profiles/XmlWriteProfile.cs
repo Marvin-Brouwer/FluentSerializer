@@ -15,5 +15,5 @@ public class XmlWriteProfile : WriteProfile
 	public TestCase<IDataNode> Value { get; set; }
 
 	[Benchmark, BenchmarkCategory(nameof(Write))]
-	public string WriteXml() => Write(Value.GetData());
+	public string WriteXml() => Write(Value);
 }

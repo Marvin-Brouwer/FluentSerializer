@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Converting;
 using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Configuration;

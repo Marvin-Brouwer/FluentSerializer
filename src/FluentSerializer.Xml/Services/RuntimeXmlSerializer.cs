@@ -1,6 +1,5 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
