@@ -86,6 +86,7 @@ jobs:
           ./src/*.Benchmark/bin/Release/*/*.*
           ./src/*.Benchmark/bin/Release/*/ref/*.*
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
+          ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
 
