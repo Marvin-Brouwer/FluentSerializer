@@ -5,7 +5,7 @@ using FluentSerializer.Core.Text.Writers;
 
 namespace FluentSerializer.Core.Text.Extensions;
 
-public static class StringFastExtensions
+public static class StringBuilderExtensions
 {
 	public static ITextWriter AppendNode(this ITextWriter stringBuilder, in IDataNode node, bool format, in int indent, in bool writeNull)
 	{

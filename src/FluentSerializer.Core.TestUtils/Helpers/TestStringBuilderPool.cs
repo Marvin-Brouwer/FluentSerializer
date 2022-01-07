@@ -10,5 +10,5 @@ public readonly struct TestStringBuilderPool
 {
 	private static readonly ITextConfiguration TextConfiguration = TestStringBuilderConfiguration.Default;
 	private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-	public static readonly ObjectPool<ITextWriter> StringFastPool = ObjectPoolProvider.CreateStringFastPool(TextConfiguration);
+	public static readonly ObjectPool<ITextWriter> Instance = ObjectPoolProvider.CreateLowAllocationStringBuilderPool(TextConfiguration);
 }

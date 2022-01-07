@@ -57,7 +57,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 	{
 		using var fileStream = File.Create(filePath);
 		using var bufferedStream = new BufferedStream(fileStream);
-		var stringBuilder = TestStringBuilderPool.StringFastPool.Get();
+		var stringBuilder = TestStringBuilderPool.Instance.Get();
 
 		data.AppendTo(ref stringBuilder, true, 0, false);
 		Console.Write('.');
@@ -66,7 +66,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 		Console.Write('.');
 		bufferedStream.Flush();
 		bufferedStream.Close();
-		TestStringBuilderPool.StringFastPool.Return(stringBuilder);
+		TestStringBuilderPool.Instance.Return(stringBuilder);
 		Console.Write('.');
 	}
 

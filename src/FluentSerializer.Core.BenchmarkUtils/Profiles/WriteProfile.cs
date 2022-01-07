@@ -41,7 +41,7 @@ public abstract class WriteProfile
 
 	public string Write(IDataNode value)
 	{
-		value.WriteTo(TestStringBuilderPool.StringFastPool, true);
+		value.WriteTo(TestStringBuilderPool.Instance, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());

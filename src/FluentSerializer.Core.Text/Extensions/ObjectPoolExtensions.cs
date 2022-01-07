@@ -6,6 +6,6 @@ namespace FluentSerializer.Core.Text.Extensions;
 
 public static class ObjectPoolExtensions
 {
-	public static ObjectPool<ITextWriter> CreateStringFastPool(this ObjectPoolProvider provider, in ITextConfiguration textConfiguration) => 
+	public static ObjectPool<ITextWriter> CreateLowAllocationStringBuilderPool(this ObjectPoolProvider provider, in ITextConfiguration textConfiguration) => 
 		provider.Create(new LowAllocationStringBuilderPolicy(textConfiguration));
 }

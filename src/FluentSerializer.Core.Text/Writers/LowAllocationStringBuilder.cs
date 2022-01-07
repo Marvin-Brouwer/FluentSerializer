@@ -5,11 +5,22 @@ using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Text.Writers;
 
-///<summary>
-/// Mutable String class, optimized for speed and memory allocations while retrieving the final result as a string.
-/// Similar use than StringFast, but avoid a lot of allocations done by StringFast (conversion of int and float to string, frequent capacity change, etc.)
+/// <summary>
+/// Low allocation string builder, this String builder is highly custom to the purpose of writing out serialized data and is missing
+/// some methods like formatted Appends because we don't need these.
+/// </summary>
+/// <remarks>
+/// The implementation of this class is loosely based on `StringFast` <br />
+/// Reddit: <see href="https://www.reddit.com/r/Unity3D/comments/3zz62z/alternative_to_stringbuilder_without_memory/">
+/// Alternative to StringBuilder, without memory allocation and faster
+/// </see><br />
+/// Pastebin: <seealso href="https://pastebin.com/HqAw2pTG">
+/// StringFast - optimized C# string class</seealso>  <br />
 /// Author: Nicolas Gadenne contact@gaddygames.com
-///</summary>
+/// <br />
+///  <br />
+/// Even though this doesn't resemble the original file anymore, it helped us a lot and we think it's fair to give credit.
+/// </remarks>
 public sealed class LowAllocationStringBuilder : ITextWriter
 {
 	private const int DefaultChunkSize = 65536;
@@ -60,7 +71,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	{
 		if (value is null) return this;
 
-		ReallocateIFN(value.Length);
+		ReallocateInternalBuffer(value.Length);
 		CopyStringValue(value);
 
 		return this;
@@ -70,7 +81,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	{
 		if (value.IsEmpty) return this;
 
-		ReallocateIFN(value.Length);
+		ReallocateInternalBuffer(value.Length);
 		CopyStringValue(value.ToString());
 
 		return this;
@@ -90,7 +101,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	{
 		if (value == (char)0) return this;
 
-		ReallocateIFN(1);
+		ReallocateInternalBuffer(1);
 		CopyCharacterValue(value);
 
 		return this;
@@ -99,7 +110,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	{
 		if (value == (char)0) return this;
 
-		ReallocateIFN(repeat);
+		ReallocateInternalBuffer(repeat);
 		CopyCharacterValues(value, repeat);
 
 		return this;
@@ -117,7 +128,7 @@ public sealed class LowAllocationStringBuilder : ITextWriter
 	}
 	#endregion
 
-	private void ReallocateIFN(in int amountOfCharactersAdded)
+	private void ReallocateInternalBuffer(in int amountOfCharactersAdded)
 	{
 		if (_currentBufferPosition + amountOfCharactersAdded <= _bufferCapacity) return;
 
