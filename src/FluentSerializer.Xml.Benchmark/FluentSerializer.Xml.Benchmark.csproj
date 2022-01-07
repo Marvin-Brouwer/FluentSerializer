@@ -3,11 +3,22 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>Preview</LangVersion>
+    <LangVersion>10</LangVersion>
     <StartupObject>FluentSerializer.Xml.Benchmark.Program</StartupObject>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <ApplicationIcon>../../doc/logo/logo-xml.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-xml.ico</PackageIcon>
+    <PackageIconUrl />
 	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj" />

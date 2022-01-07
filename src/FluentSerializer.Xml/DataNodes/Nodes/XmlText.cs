@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ public readonly struct XmlText : IXmlText
 {
 	private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
 
-	internal const string TextName = "#text";
+	private const string TextName = "#text";
 
 	public string Name => TextName;
 	public string? Value { get; }

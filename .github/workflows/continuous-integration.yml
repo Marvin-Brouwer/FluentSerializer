@@ -26,9 +26,11 @@ jobs:
     - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version:  | 
+        include-prerelease: true
+        dotnet-version: | 
           3.1.x
           5.0.x
+          6.0.x
     ###
     # 🗃 Restore dependencies
     #
@@ -83,7 +85,9 @@ jobs:
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
           ./src/*.Benchmark/bin/Release/*/ref/*.*
+          ./src/*.Benchmark/obj/Release/*/apphost
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
+          ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
       if: ${{ always() }}
 
@@ -106,9 +110,11 @@ jobs:
     - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version:  | 
+        include-prerelease: true
+        dotnet-version: | 
           3.1.x
           5.0.x
+          6.0.x
     ###
     # 🧰 Setup .Net tools
     #
@@ -229,9 +235,11 @@ jobs:
     - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version:  | 
+        include-prerelease: true
+        dotnet-version: | 
           3.1.x
           5.0.x
+          6.0.x
     ###
     # 🗃 Restore dependencies
     #
@@ -262,9 +270,9 @@ jobs:
     ###
     - name: ⏱ Benchmark XML serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net5.0/FluentSerializer.Xml.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
+        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark 
+        sudo ./net5.0/FluentSerializer.Xml.Benchmark 
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate 
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # ⏱ Benchmark JSON serializer
@@ -273,9 +281,9 @@ jobs:
     ###
     - name: ⏱ Benchmark JSON serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
-        sudo ./net5.0/FluentSerializer.Json.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
+        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark 
+        sudo ./net5.0/FluentSerializer.Json.Benchmark 
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate 
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports

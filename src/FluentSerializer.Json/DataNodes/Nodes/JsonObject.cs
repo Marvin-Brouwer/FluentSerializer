@@ -38,7 +38,7 @@ public readonly struct JsonObject : IJsonObject
 	/// </remarks>
 	public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
 
-	/// <inheritdoc cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent}))"/>
+	/// <inheritdoc cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Object"/> method instead of this constructor</b>
 	/// </remarks>

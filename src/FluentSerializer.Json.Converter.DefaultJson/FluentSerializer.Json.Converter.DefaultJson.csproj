@@ -4,7 +4,10 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <LangVersion>Preview</LangVersion>
+    <LangVersion>10</LangVersion>
+    <ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
+    <PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>

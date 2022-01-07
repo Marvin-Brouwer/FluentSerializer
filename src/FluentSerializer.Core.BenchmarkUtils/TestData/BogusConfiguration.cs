@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using System.Collections.Generic;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;
@@ -30,10 +30,10 @@ public readonly struct BogusConfiguration
 			.RuleFor(house => house.Country, f => f.Address.Country())
 			.RuleFor(house => house.Residents, f =>
 			{
-				var amount = f.Random.Number(1, 5);
-				peopleCount += amount;
+				var houseAmount = f.Random.Number(1, 5);
+				peopleCount += houseAmount;
 
-				return personFaker.Generate(amount);
+				return personFaker.Generate(houseAmount);
 			});
 
 		var residentialFaker = new Faker<ResidentialArea>()
@@ -42,10 +42,10 @@ public readonly struct BogusConfiguration
 			.RuleFor(residentialArea => residentialArea.Name, f => f.Address.City())
 			.RuleFor(residentialArea => residentialArea.Houses, (f, c) => {
 
-				var amount = f.Random.Number(3, 20);
-				houseCount += amount;
+				var areaAmount = f.Random.Number(3, 20);
+				houseCount += areaAmount;
 
-				var houses = houseFaker.Generate(amount);
+				var houses = houseFaker.Generate(areaAmount);
 				houses.ForEach(house => house.City = c.Name);
 				return houses;
 			});

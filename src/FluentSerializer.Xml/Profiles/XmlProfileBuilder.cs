@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
@@ -14,8 +14,6 @@ namespace FluentSerializer.Xml.Profiles;
 public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 	where TModel : new()
 {
-	internal static readonly CustomNamingStrategy TextNodeNamingStrategy = new(DataNodes.Nodes.XmlText.TextName);
-
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
         
@@ -78,7 +76,7 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 			typeof(IXmlText),
 			propertySelector.GetProperty(),
 			// This isn't used but setting it to null requires a lot more code.
-			() => TextNodeNamingStrategy,
+			() => TextNamingStrategy.Instance,
 			converter
 		));
 	}

@@ -12,36 +12,36 @@ public readonly record struct TestCase<TData>(Func<TData> GetData, int Count, lo
 	private string GetReadableSize()
 	{
 		// Get absolute value
-		long absolute_i = (SizeInBytes < 0 ? -SizeInBytes : SizeInBytes);
+		long absoluteValue = (SizeInBytes < 0 ? -SizeInBytes : SizeInBytes);
 		// Determine the suffix and readable value
 		string suffix;
 		double readable;
-		if (absolute_i >= 0x1000000000000000) // Exabyte
+		if (absoluteValue >= 0x1000000000000000) // Exabyte
 		{
 			suffix = "EB";
 			readable = (SizeInBytes >> 50);
 		}
-		else if (absolute_i >= 0x4000000000000) // Petabyte
+		else if (absoluteValue >= 0x4000000000000) // Petabyte
 		{
 			suffix = "PB";
 			readable = (SizeInBytes >> 40);
 		}
-		else if (absolute_i >= 0x10000000000) // Terabyte
+		else if (absoluteValue >= 0x10000000000) // Terabyte
 		{
 			suffix = "TB";
 			readable = (SizeInBytes >> 30);
 		}
-		else if (absolute_i >= 0x40000000) // Gigabyte
+		else if (absoluteValue >= 0x40000000) // Gigabyte
 		{
 			suffix = "GB";
 			readable = (SizeInBytes >> 20);
 		}
-		else if (absolute_i >= 0x100000) // Megabyte
+		else if (absoluteValue >= 0x100000) // Megabyte
 		{
 			suffix = "MB";
 			readable = (SizeInBytes >> 10);
 		}
-		else if (absolute_i >= 0x400) // Kilobyte
+		else if (absoluteValue >= 0x400) // Kilobyte
 		{
 			suffix = "KB";
 			readable = SizeInBytes;
