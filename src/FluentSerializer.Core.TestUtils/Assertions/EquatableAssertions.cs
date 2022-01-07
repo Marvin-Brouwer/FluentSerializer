@@ -22,7 +22,7 @@ public class EquatableAssertions<TEquatable> :
 	{
 		Execute.Assertion
 			.BecauseOf(because, becauseArgs)
-			.Given(() => (Subject is TEquatable target) && target.Equals(expectation))
+			.Given(() => Subject is TEquatable target && target.Equals(expectation))
 			.ForCondition(result => result)
 			.FailWith("Expected result to be {0}, but found {1}.",
 				_ => expectation.ToString(), _ => Subject.ToString());

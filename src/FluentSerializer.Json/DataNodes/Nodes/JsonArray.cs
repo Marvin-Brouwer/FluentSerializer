@@ -27,7 +27,7 @@ public readonly struct JsonArray : IJsonArray
 	/// </remarks>
 	public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
 
-	/// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent}))"/>
+	/// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent})"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
 	/// </remarks>

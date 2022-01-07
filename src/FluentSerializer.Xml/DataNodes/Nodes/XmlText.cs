@@ -11,7 +11,7 @@ public readonly struct XmlText : IXmlText
 {
 	private static readonly int TypeHashCode = typeof(XmlText).GetHashCode();
 
-	internal const string TextName = "#text";
+	private const string TextName = "#text";
 
 	public string Name => TextName;
 	public string? Value { get; }

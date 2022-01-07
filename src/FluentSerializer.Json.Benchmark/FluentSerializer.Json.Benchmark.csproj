@@ -2,25 +2,27 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-		<TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>Preview</LangVersion>
+    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
+    <LangVersion>10</LangVersion>
     <StartupObject>FluentSerializer.Json.Benchmark.Program</StartupObject>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
+    <PackageIconUrl />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.1.0">
+    <PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
   </ItemGroup>
-
+  
 </Project>

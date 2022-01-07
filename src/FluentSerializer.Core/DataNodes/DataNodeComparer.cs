@@ -23,7 +23,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	/// Get the combined HashCode of all objects passed to this method.
 	/// This will call <see cref="GetHashCodeFor(IEnumerable{IEquatable{IDataNode}})"/> for collections
 	/// and <see cref="GetHashCodeFor(IEquatable{IDataNode}?)"/> for equatable objects.
-	/// If null this will append 0 to the hascode calculation
+	/// If null this will append 0 to the hashcode calculation
 	/// If none of the above the objects <see cref="object.GetHashCode"/> will be added to the hashcode calculation.
 	/// </summary>
 	public int GetHashCodeForAll(params object?[] objects)
@@ -54,13 +54,13 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="IEqualityComparer{IDataNode}.GetHashCode(IDataNode)"/>
-	public int GetHashCodeFor(IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
+	private int GetHashCodeFor(IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
 
 	/// <summary>
 	/// Returns a hashcode for every item in a collection
 	/// </summary>
 	/// <inheritdoc cref="IEqualityComparer{IDataNode}.GetHashCode(IDataNode)"/>
-	public int GetHashCodeFor(IEnumerable<IEquatable<IDataNode>> equatableCollection)
+	private int GetHashCodeFor(IEnumerable<IEquatable<IDataNode>>? equatableCollection)
 	{
 		if (equatableCollection is null) return 0;
 
