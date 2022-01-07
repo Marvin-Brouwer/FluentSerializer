@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
@@ -14,7 +14,7 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
-	private static string? ConvertToString(object value) => Convert.ToString(value);
+	private static string ConvertToString(object value) => Convert.ToString(value);
 
 	private static object? ConvertToNullableDataType(string? currentValue, Type targetType)
 	{
@@ -41,7 +41,6 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
 	{
 		var stringValue = ConvertToString(objectToSerialize);
-		if (stringValue is null) return null;
 
 		var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
 		return Attribute(attributeName, stringValue);
@@ -50,7 +49,6 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
 	{
 		var stringValue = ConvertToString(objectToSerialize);
-		if (stringValue is null) return null;
 
 		var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
 		return Element(elementName, Text(stringValue));
@@ -59,7 +57,6 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	IXmlText? IConverter<IXmlText>.Serialize(object objectToSerialize, ISerializerContext context)
 	{
 		var stringValue = ConvertToString(objectToSerialize);
-		if (stringValue is null) return null;
 
 		return Text(stringValue);
 	}
