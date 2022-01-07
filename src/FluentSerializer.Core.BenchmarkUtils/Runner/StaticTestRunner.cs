@@ -1,5 +1,4 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
@@ -17,11 +16,8 @@ using System.Linq;
 using BenchmarkDotNet.Columns;
 using System.Threading;
 using System.Globalization;
-using BenchmarkDotNet.ConsoleArguments;
 using Microsoft.Extensions.PlatformAbstractions;
 using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Toolchains.CsProj;
-using BenchmarkDotNet.Toolchains.Roslyn;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -83,7 +79,6 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.WithMaxRelativeError(0.01)
 				// Make sure the compile projects have access to the correct build tool
                 .WithNuGet("Microsoft.Net.Compilers.Toolset")
-                //.WithToolchain(RoslynToolchain.Instance)
                 .WithId(typeof(BenchmarkRunner).Assembly.FullName)
 				.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects") ?? "0")
 				.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects") ?? "0")
