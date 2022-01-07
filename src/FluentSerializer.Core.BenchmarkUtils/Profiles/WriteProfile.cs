@@ -42,14 +42,7 @@ public abstract class WriteProfile
 
 	public string Write(TestCase<IDataNode> testCase)
 	{
-		// We don't care about comparing the difference between these to atm, this only makes the benchmark run longer
-		// whilst we already know the outcome.
-		// Remark: Add a note about this when adding benchmarks to the readme or make it a run param.
-		var stringBuilderPool = testCase.Count > 1000
-			? TestStringBuilderPool.Default
-			: TestStringBuilderPool.NoArrayPool;
-
-		testCase.GetData().WriteTo(stringBuilderPool, true);
+		testCase.GetData().WriteTo(TestStringBuilderPool.Default, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());

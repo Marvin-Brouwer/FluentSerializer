@@ -9,7 +9,7 @@ namespace FluentSerializer.Json.Benchmark.Profiles;
 
 public class JsonWriteProfile : WriteProfile
 {
-	public IEnumerable<TestCase<IDataNode>> Values() => JsonDataCollection.Default.ObjectTestData;
+	public static IEnumerable<TestCase<IDataNode>> Values() => JsonDataCollection.Default.ObjectTestData;
 
 	[ParamsSource(nameof(Values))]
 	public TestCase<IDataNode> Value { get; set; }

@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Benchmark.Profiles;
 
 public class XmlWriteProfile : WriteProfile
 {
-	public IEnumerable<TestCase<IDataNode>> Values() => XmlDataCollection.Default.ObjectTestData;
+	public static IEnumerable<TestCase<IDataNode>> Values() => XmlDataCollection.Default.ObjectTestData;
 
 	[ParamsSource(nameof(Values))]
 	public TestCase<IDataNode> Value { get; set; }

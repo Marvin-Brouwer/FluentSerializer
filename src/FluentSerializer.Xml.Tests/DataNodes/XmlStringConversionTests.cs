@@ -40,7 +40,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
 			var expected = format ? _testXmlFormatted : _testXmlSlim;
 
 			// Act
-			var result = _testObject.WriteTo(TestStringBuilderPool.NoArrayPool, format);
+			var result = _testObject.WriteTo(TestStringBuilderPool.Default, format);
 
 			// Assert
 			result.ShouldBeBinaryEquatableTo(expected);
