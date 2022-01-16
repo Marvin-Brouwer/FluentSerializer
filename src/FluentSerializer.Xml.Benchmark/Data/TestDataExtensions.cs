@@ -22,7 +22,7 @@ public static class TestDataExtensions
 		return Element(nameof(ResidentialArea), children);
 	}
 
-	public static IXmlContainer ToXmlElement(this House house)
+	private static IXmlContainer ToXmlElement(this House house)
 	{
 		var children = new List<IXmlNode> {
 			Attribute("type", house.Type),
@@ -48,20 +48,24 @@ public static class TestDataExtensions
 		return Element(nameof(House), children);
 	}
 
-	public static IXmlContainer ToXmlElement(this Person person)
+	private static IXmlContainer ToXmlElement(this Person person)
 	{
-		var details = string.IsNullOrEmpty(person.MiddleName) ? new List<IXmlNode>
-		{
-			Element("firstName", Text(person.FirstName)),
-			Element("lastName", Text(person.LastName))
-		} : new List<IXmlNode>
-		{
-			Element("firstName", Text(person.FirstName)),
-			Element("middleName", Text(person.MiddleName)),
-			Element("lastName", Text(person.LastName))
-		};
+		var details = string.IsNullOrEmpty(person.MiddleName)
+			? new List<IXmlElement>
+			{
+				Element("firstName", Text(person.FirstName)),
+				Element("lastName", Text(person.LastName))
 
-		details.AddRange(new List<IXmlNode> {
+			}
+			: new List<IXmlElement>
+			{
+				Element("firstName", Text(person.FirstName)),
+				Element("middleName", Text(person.MiddleName)),
+				Element("lastName", Text(person.LastName))
+			};
+
+		details.AddRange(new List<IXmlElement>
+		{
 			Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
 			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
 		});

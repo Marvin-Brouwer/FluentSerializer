@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
@@ -21,6 +21,7 @@ public readonly struct XmlBuilder
 		return new XmlElement(name, childNodes);
 	}
 	/// <param name="childNodes">A collection of <see cref="IXmlNode"/> as children of this element.</param>
+	/// <param name="name">A valid property name, will throw if given anything other than word characters.</param>
 	/// <inheritdoc cref="Element(string, IXmlNode[])"/>
 	public static IXmlElement Element(string name, IEnumerable<IXmlNode> childNodes)
 	{

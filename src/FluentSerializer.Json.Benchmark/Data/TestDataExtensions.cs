@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.BenchmarkUtils.TestData;
+using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.DataNodes;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ public static class TestDataExtensions
 		return Object(properties);
 	}
 
-	public static IJsonObject ToJsonElement(this House house)
+	private static IJsonObject ToJsonElement(this House house)
 	{
 		var properties = new List<IJsonProperty> {
 			Property("type", StringValue(house.Type)),
@@ -43,8 +43,27 @@ public static class TestDataExtensions
 		return Object(properties);
 	}
 
-	public static IJsonObject ToJsonElement(this Person person)
+	private static IJsonObject ToJsonElement(this Person person)
 	{
+		var details = string.IsNullOrEmpty(person.MiddleName)
+			? new List<IJsonProperty>
+			{
+				Property("firstName", StringValue(person.FirstName)),
+				Property("lastName", StringValue(person.LastName))
+			}
+			: new List<IJsonProperty>
+			{
+				Property("firstName", StringValue(person.FirstName)),
+				Property("middleName", StringValue(person.MiddleName)),
+				Property("lastName", StringValue(person.LastName))
+			};
+
+		details.AddRange(new List<IJsonProperty>
+		{
+			Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
+			Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))
+		});
+
 		var properties = new List<IJsonProperty> {
 			Property("fullName", StringValue(
 				person.MiddleName is null 
@@ -53,11 +72,7 @@ public static class TestDataExtensions
 
 			Property("details",
 				Object(
-					Property("firstName", StringValue(person.FirstName)),
-					Property("middleName", string.IsNullOrEmpty(person.MiddleName) ? null : StringValue(person.MiddleName)),
-					Property("lastName", StringValue(person.LastName)),
-					Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
-					Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))
+					details
 				)
 			)
 		};

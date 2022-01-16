@@ -6,7 +6,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using System.Reflection;
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
-using BenchmarkDotNet.Environments;
 using System.Security.Permissions;
 using System.Diagnostics;
 using System.Security.Principal;
@@ -27,29 +26,29 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 namespace FluentSerializer.Core.BenchmarkUtils.Runner
 {
 	public abstract class StaticTestRunner
-    {
-		public static CultureInfo AppCulture = new(CultureInfo.InvariantCulture.Name)
+	{
+		public static readonly CultureInfo AppCulture = new(CultureInfo.InvariantCulture.Name)
 		{
 			NumberFormat = NumberFormatInfo.InvariantInfo
 		};
 
-        private static ManualConfig CreateConfig()
-        {
+		private static ManualConfig CreateConfig(string[] arguments)
+		{
 			Environment.SetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", "1");
 			Environment.SetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", "1");
 
 			Thread.CurrentThread.CurrentCulture = AppCulture;
 			Thread.CurrentThread.CurrentUICulture = AppCulture;
-
+			
 			var config = ManualConfig.Create(DefaultConfig.Instance)
-                .WithOrderer(new ValueSizeTestOrderer())
-                .AddJob(CreateJob(CoreRuntime.Core50))
+				.WithOrderer(new ValueSizeTestOrderer())
+				.AddJob(CreateJob(arguments))
 				.WithCultureInfo(AppCulture)
-                .AddExporter(MarkdownExporter.Console)
+				.AddExporter(MarkdownExporter.Console)
 				.WithSummaryStyle(SummaryStyle.Default
 					.WithCultureInfo(AppCulture)
 					// We'd actually like it to grow when the size grows but this doesn't seem to be consistent between
-					// the XML and JSON bencmarks so we set it to a constant metric.
+					// the XML and JSON benchmarks so we set it to a constant metric.
 					.WithSizeUnit(SizeUnit.MB)
 					.WithTimeUnit(TimeUnit.Millisecond));
 
@@ -62,39 +61,55 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
             config = config.WithOptions(ConfigOptions.DisableOptimizationsValidator);
 #endif
 			return config;
-        }
+		}
 
-        private static Job CreateJob(Runtime runtime)
-        {
-            return Job.Dry
+		private static Job CreateJob(string[] parameters)
+		{
+			var quickRun = parameters.Contains("--quick=true");
+			return CreateBasicJob(quickRun)
 #if (DEBUG)
-                .WithLaunchCount(1)
-                .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
-#else
-                .WithLaunchCount(5)
-                .WithWarmupCount(3)
+				.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
 #endif
-				.WithIterationCount(1)
 				.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 				.WithMinIterationCount(1)
-				.WithMaxRelativeError(0.01)
-                .WithId(typeof(BenchmarkRunner).Assembly.FullName)
-				.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects"))
-				.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects"))
+				.WithMaxRelativeError(0.0001)
+				// Make sure the compile projects have access to the correct build tool
+				.WithNuGet("Microsoft.Net.Compilers.Toolset")
+				.WithId(typeof(BenchmarkRunner).Assembly.FullName)
+				.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects") ?? "0")
+				.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects") ?? "0")
 				.WithGcForce(true)
-				// This is set to false until the new benchmarkdotnet version is released:
+				// This is set to false until the new benchmark dotnet version is released:
 				// https://github.com/dotnet/BenchmarkDotNet/issues/1519
 				.WithGcAllowVeryLargeObjects(false);
-        }
+		}
+
+		private static Job CreateBasicJob(bool quickRun)
+		{
+#if DEBUG
+			return Job.Dry
+				.WithLaunchCount(1)
+				.WithIterationCount(1);
+#else
+			if (quickRun) return Job.Dry
+                .WithLaunchCount(1)
+                .WithIterationCount(1);
+
+			return Job.Dry
+				.WithWarmupCount(32)
+				.WithLaunchCount(4)
+				.WithIterationCount(8);
+#endif
+		}
 
 		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-		public static void Run(Assembly assembly, string dataType)
+		public static void Run(Assembly assembly, string[] arguments, string dataType)
 		{
 			RequireElevatedPermissions();
 
-			var config = CreateConfig();
+			var config = CreateConfig(arguments);
 
-			Console.ForegroundColor = ConsoleColor.Cyan;
+				Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.WriteLine("Starting benchmark runner...");
 			Console.ResetColor();
 			Console.WriteLine();
@@ -105,9 +120,8 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 		}
 
 		/// <summary>
-		/// Manually fix filenames, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
+		/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 		/// </summary>
-		/// <param name="dataType"></param>
 		private static void FixFileNames(string dataType, ManualConfig config)
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
@@ -117,9 +131,20 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 
 			var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
 			var markdownSummaryFile = resultsDir
-				.GetFiles("*.md")
+				.GetFiles("*-report-console.md")
 				.OrderByDescending(directory => directory.CreationTimeUtc)
 				.FirstOrDefault();
+
+			if (markdownSummaryFile is null)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("No summary found with pattern \"*-report-console.md\"");
+				Console.ResetColor();
+				Console.WriteLine();
+				return;
+			}
+
+			var oldName = markdownSummaryFile.FullName;
 
 			var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 			var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
@@ -127,14 +152,16 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 				.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
 				.Replace("-report-console", string.Empty);
 
-			Console.WriteLine($"Renaming report to \"{readableFileName}\"");
+			Console.WriteLine("Renaming report");
+			Console.WriteLine($"  from: \"{oldName}\"");
+			Console.WriteLine($"  to: \"{readableFileName}\"");
 			Console.WriteLine();
 			markdownSummaryFile.MoveTo(readableFileName);
 		}
 
 		public static void RequireElevatedPermissions()
 		{
-			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !IsAdministrator()) Elevate();
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !IsAdministrator()) Elevate();
 		}
 
 		private static void Elevate()
