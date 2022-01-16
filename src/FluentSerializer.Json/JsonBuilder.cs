@@ -28,7 +28,7 @@ public readonly struct JsonBuilder
 	/// <inheritdoc cref="Property(string, IJsonPropertyContent)"/>
 	/// <param name="name">A valid property name, will throw if given anything other than word characters.</param>
 	/// <param name="jsonArray">The array node assigned to this property's value</param>
-	public static IJsonProperty Property(string name, IJsonArray jsonArray)
+	public static IJsonProperty Property(string name, IJsonArray? jsonArray)
 	{
 		Guard.Against.InvalidName(name, nameof(name));
 
@@ -37,7 +37,7 @@ public readonly struct JsonBuilder
 	/// <inheritdoc cref="Property(string, IJsonPropertyContent)"/>
 	/// <param name="name">A valid property name, will throw if given anything other than word characters.</param>
 	/// <param name="jsonObject">The object node assigned to this property's value</param>
-	public static IJsonProperty Property(string name, IJsonObject jsonObject)
+	public static IJsonProperty Property(string name, IJsonObject? jsonObject)
 	{
 		Guard.Against.InvalidName(name, nameof(name));
 
@@ -46,7 +46,7 @@ public readonly struct JsonBuilder
 	/// <inheritdoc cref="Property(string, IJsonPropertyContent)"/>
 	/// <param name="name">A valid property name, will throw if given anything other than word characters.</param>
 	/// <param name="jsonValue">The value container assigned to this property's value</param>
-	public static IJsonProperty Property(string name, IJsonValue jsonValue)
+	public static IJsonProperty Property(string name, IJsonValue? jsonValue)
 	{
 		Guard.Against.InvalidName(name, nameof(name));
 

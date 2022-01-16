@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
@@ -92,6 +92,7 @@ public readonly struct XmlElement : IXmlElement
 
 		foreach (var node in childNodes)
 		{
+			if (node is null) continue;
 			if (node is XmlAttribute attribute) _attributes.Add(attribute);
 			else _children.Add(node);
 		}
