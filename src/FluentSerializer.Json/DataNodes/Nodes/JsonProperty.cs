@@ -47,7 +47,7 @@ public readonly struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = new IJsonNode[] { value };
+		_children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value };
 	}
 
 	/// <inheritdoc cref="IJsonObject"/>
