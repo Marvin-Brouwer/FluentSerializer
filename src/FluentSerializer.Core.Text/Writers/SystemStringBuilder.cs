@@ -51,6 +51,12 @@ namespace FluentSerializer.Core.Text.Writers
 			_stringBuilder.Append(TextConfiguration.NewLine);
 			return this;
 		}
+
+		public override string ToString()
+		{
+			return _stringBuilder.ToString();
+		}
+
 		public Span<byte> AsSpan() => TextConfiguration.Encoding
 			.GetBytes(_stringBuilder.ToString())
 			.AsSpan(0, _stringBuilder.Length);
