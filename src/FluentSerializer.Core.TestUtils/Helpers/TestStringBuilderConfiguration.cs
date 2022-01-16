@@ -15,6 +15,7 @@ internal readonly struct TestStringBuilderConfiguration : ITextConfiguration
 	}
 
 	public Encoding Encoding => Encoding.UTF8;
+	public bool UseSystemBuilder => false;
 	public string NewLine => LineEndings.LineFeed;
 	public bool UseWriteArrayPool { get; }
 }

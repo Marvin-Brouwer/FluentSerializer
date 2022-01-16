@@ -7,6 +7,7 @@ namespace FluentSerializer.Core.Configuration;
 
 public abstract class SerializerConfiguration : ITextConfiguration, ISerializerConfiguration
 {
+	public bool UseSystemBuilder { get; set; } = false;
 	public bool FormatOutput { get; set; } = true;
 	public bool WriteNull { get; set; } = false;
 	public bool UseWriteArrayPool { get; set; } = true;

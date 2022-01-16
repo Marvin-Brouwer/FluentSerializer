@@ -40,9 +40,13 @@ public abstract class WriteProfile
 		_writeStream = null;
 	}
 
-	public string Write(TestCase<IDataNode> testCase)
+	public string Write(TestCase<IDataNode> testCase, bool useSystemPool)
 	{
-		testCase.GetData().WriteTo(TestStringBuilderPool.Default, true);
+		var stringBuilderPool = useSystemPool
+			? TestStringBuilderPool.System
+			: TestStringBuilderPool.Default;
+
+		testCase.GetData().WriteTo(stringBuilderPool, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());

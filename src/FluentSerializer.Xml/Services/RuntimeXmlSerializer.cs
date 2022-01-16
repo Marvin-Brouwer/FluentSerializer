@@ -33,7 +33,9 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 
 		_serializer = new XmlTypeSerializer(mappings);
 		_deserializer = new XmlTypeDeserializer(mappings);
-		_stringBuilderPool = objectPoolProvider.CreateLowAllocationStringBuilderPool(configuration);
+		_stringBuilderPool = configuration.UseSystemBuilder
+			? objectPoolProvider.CreateSystemStringBuilderPool(configuration)
+			: objectPoolProvider.CreateLowAllocationStringBuilderPool(configuration);
 
 		XmlConfiguration = configuration;
 	}

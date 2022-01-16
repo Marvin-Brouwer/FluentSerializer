@@ -30,7 +30,9 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 		_serializer = new JsonTypeSerializer(mappings);
 		_deserializer = new JsonTypeDeserializer(mappings);
-		_stringBuilderPool = objectPoolProvider.CreateLowAllocationStringBuilderPool(configuration);
+		_stringBuilderPool = configuration.UseSystemBuilder
+			? objectPoolProvider.CreateSystemStringBuilderPool(configuration)
+			: objectPoolProvider.CreateLowAllocationStringBuilderPool(configuration);
 
 		JsonConfiguration = configuration;
 	}
