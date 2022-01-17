@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Json.Converter.DefaultJson.Converting.Converters;
+using FluentSerializer.Json.Converter.DefaultJson.Converting.Converters;
 using FluentSerializer.Json.Converting;
 
 namespace FluentSerializer.Json.Converter.DefaultJson.Extensions;

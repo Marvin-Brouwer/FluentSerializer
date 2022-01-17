@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using BenchmarkDotNet.Attributes;
+using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Helpers;
 
@@ -39,9 +40,9 @@ public abstract class WriteProfile
 		_writeStream = null;
 	}
 
-	public string Write(IDataNode value)
+	public string Write(TestCase<IDataNode> testCase)
 	{
-		value.WriteTo(TestStringBuilderPool.StringBuilderPool, _streamWriter!, true);
+		testCase.GetData().WriteTo(TestStringBuilderPool.Default, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());

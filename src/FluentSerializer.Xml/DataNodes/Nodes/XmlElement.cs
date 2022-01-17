@@ -1,13 +1,13 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
-using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Xml.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -234,25 +234,9 @@ public readonly struct XmlElement : IXmlElement
 		}
 	}
 
-	public override string ToString()
-	{
-		var stringBuilder = new StringBuilder();
-		AppendTo(stringBuilder, false);
-		return stringBuilder.ToString();
-	}
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
-	public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-	{
-		var stringBuilder = stringBuilders.Get();
-
-		stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-		writer.Write(stringBuilder);
-
-		stringBuilder.Clear();
-		stringBuilders.Return(stringBuilder);
-	}
-
-	public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		const char spacer = ' ';
 

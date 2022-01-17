@@ -11,7 +11,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 {
 	private readonly IReadOnlyList<TScanFor> _storedDataTypes;
 #if (!DEBUG)
-	private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
+        private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
 #endif
 
 	protected ScanList(IReadOnlyList<TScanFor> dataTypes)

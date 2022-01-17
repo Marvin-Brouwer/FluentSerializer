@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Json.DataNodes;
+namespace FluentSerializer.Json.DataNodes;
 
 /// <summary>
 /// Constants class containing all the characters used for parsing and writing JSON.

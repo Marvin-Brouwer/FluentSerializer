@@ -1,13 +1,13 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
-using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Json.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -47,7 +47,7 @@ public readonly struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = new IJsonNode[] { value };
+		_children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value };
 	}
 
 	/// <inheritdoc cref="IJsonObject"/>
@@ -121,27 +121,9 @@ public readonly struct JsonProperty : IJsonProperty
 		HasValue = jsonValue.HasValue;
 	}
 
-	public override string ToString()
-	{
-		var stringBuilder = new StringBuilder();
-		stringBuilder = AppendTo(stringBuilder);
-		return stringBuilder.ToString();
-	}
+	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
-	public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-	{
-		Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
-
-		var stringBuilder = stringBuilders.Get();
-
-		stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-		writer.Write(stringBuilder);
-
-		stringBuilder.Clear();
-		stringBuilders.Return(stringBuilder);
-	}
-
-	public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
 

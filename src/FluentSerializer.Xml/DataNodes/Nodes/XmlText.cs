@@ -1,9 +1,9 @@
 using FluentSerializer.Core.DataNodes;
-using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -49,21 +49,9 @@ public readonly struct XmlText : IXmlText
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
-	public override string ToString()
-	{
-		var stringBuilder = new StringBuilder();
-		stringBuilder = AppendTo(stringBuilder);
-		return stringBuilder.ToString();
-	}
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
-	public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-	{
-		var stringBuilder = stringBuilders.Get();
-		writer.Write(AppendTo(stringBuilder, format, indent, writeNull));
-		stringBuilders.Return(stringBuilder);
-	}
-
-	public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		// This should never happen because null tags are self-closing but just to be sure this check is here
 		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;

@@ -1,20 +1,15 @@
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.DataNodes;
-using Microsoft.Extensions.ObjectPool;
 using System;
-using System.IO;
-using System.Text;
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
+using FluentSerializer.Core.TestUtils.Helpers;
 
 namespace FluentSerializer.Json.Tests.DataNodes
 {
-    public sealed class JsonStringConversionTests
+	public sealed class JsonStringConversionTests
     {
-        private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
-        public static readonly ObjectPool<StringBuilder> StringBuilderPool = ObjectPoolProvider.CreateStringBuilderPool();
-
         private readonly IJsonObject _testObjectFormatted;
         private readonly IJsonObject _testObjectSlim;
         private readonly string _testJsonFormatted;
@@ -83,13 +78,8 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testObjectFormatted : _testObjectSlim;
 
             // Act
-            using var stream = new MemoryStream();
-            using var writer = new StreamWriter(stream);
-
-            input.WriteTo(StringBuilderPool, writer, format);
-            writer.Flush();
-            var result = Encoding.UTF8.GetString(stream.ToArray()).FixNewLine();
-
+            var result = input.WriteTo(TestStringBuilderPool.Default, format);
+            
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);
         }

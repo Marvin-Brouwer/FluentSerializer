@@ -1,9 +1,10 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -26,32 +27,30 @@ public readonly struct XmlDocument : IXmlDocument
 		RootElement = root;
 	}
 
-	public override string ToString()
-	{
-		var stringBuilder = new StringBuilder();
-		AppendTo(stringBuilder, false);
-		return stringBuilder.ToString();
-	}
+	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
-	public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
+	public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
 	{
 		var stringBuilder = stringBuilders.Get();
 
-		var encoding = writer.Encoding;
-		stringBuilder
-			.Append($"<?xml version=\"1.0\" encoding=\"{encoding.WebName}\"?>")
-			.AppendOptionalNewline(format);
+		try
+		{
+			stringBuilder
+				.Append($"<?xml version=\"1.0\" encoding=\"{stringBuilder.TextConfiguration.Encoding.WebName}\"?>")
+				.AppendOptionalNewline(format);
 
-		stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-		writer.Write(stringBuilder);
-
-		stringBuilder.Clear();
-		stringBuilders.Return(stringBuilder);
+			AppendTo(ref stringBuilder, format, indent, writeNull);
+			return stringBuilder.ToString();
+		}
+		finally
+		{
+			stringBuilders.Return(stringBuilder);
+		}
 	}
 
-	public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
-		return RootElement?.AppendTo(stringBuilder, format, indent, writeNull) ?? stringBuilder;
+		return RootElement?.AppendTo(ref stringBuilder, format, indent, writeNull) ?? stringBuilder;
 	}
 
 	#region IEquatable

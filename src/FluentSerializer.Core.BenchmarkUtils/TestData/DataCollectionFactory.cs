@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using FluentSerializer.Core.TestUtils.Helpers;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;
 
@@ -13,7 +14,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 #if (RELEASE)
 	protected virtual int[] ItemCount => new [] { 20, 200, 2000, 20000 };
 #else
-        protected virtual int[] ItemCount =>  new[] { 10, 20 };
+	protected virtual int[] ItemCount =>  new[] { 10, 20 };
 #endif
 
 	public void GenerateTestCaseFiles()
@@ -35,10 +36,18 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 		Console.ForegroundColor = ConsoleColor.DarkYellow;
 		Console.WriteLine($"Data composition: {dataCount:N0}/{houseCount:N0}/{peopleCount:N0}; Total unique items: {dataCount + houseCount + peopleCount :N0}");
 		Console.ResetColor();
-		Console.WriteLine($"Writing bogus to \"{filePath}\"");
 
-		var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
-		WriteStringContent(objectData, filePath);
+		try
+		{
+			Console.Write($"Writing bogus to \"{filePath}\"");
+
+			var objectData = ConvertToData(data, dataCount, houseCount, peopleCount);
+			WriteStringContent(objectData, filePath);
+		}
+		finally
+		{
+			Console.WriteLine();
+		}
 	}
 
 	private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
@@ -46,14 +55,19 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 
 	private void WriteStringContent(TData data, string filePath)
 	{
-		using var writer = File.CreateText(filePath);
-		var stringBuilder = new StringBuilder();
+		using var fileStream = File.Create(filePath);
+		using var bufferedStream = new BufferedStream(fileStream);
+		var stringBuilder = TestStringBuilderPool.Default.Get();
 
-		data.AppendTo(stringBuilder, true, 0, false);
-		writer.Write(stringBuilder);
+		data.AppendTo(ref stringBuilder, true, 0, false);
+		Console.Write('.');
+		bufferedStream.Write(stringBuilder.AsSpan());
 
-		writer.Flush();
-		writer.Close();
+		Console.Write('.');
+		bufferedStream.Flush();
+		bufferedStream.Close();
+		TestStringBuilderPool.Default.Return(stringBuilder);
+		Console.Write('.');
 	}
 
 	/// <summary>

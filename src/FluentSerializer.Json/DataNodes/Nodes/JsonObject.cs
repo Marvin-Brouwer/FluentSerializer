@@ -1,13 +1,13 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
-using Microsoft.Extensions.ObjectPool;
+using FluentSerializer.Json.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -108,25 +108,9 @@ public readonly struct JsonObject : IJsonObject
 		offset++;
 	}
 
-	public override string ToString()
-	{
-		var stringBuilder = new StringBuilder();
-		stringBuilder = AppendTo(stringBuilder);
-		return stringBuilder.ToString();
-	}
+	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
-	public void WriteTo(ObjectPool<StringBuilder> stringBuilders, TextWriter writer, bool format = true, bool writeNull = true, int indent = 0)
-	{
-		var stringBuilder = stringBuilders.Get();
-
-		stringBuilder = AppendTo(stringBuilder, format, indent, writeNull);
-		writer.Write(stringBuilder);
-
-		stringBuilder.Clear();
-		stringBuilders.Return(stringBuilder);
-	}
-
-	public StringBuilder AppendTo(StringBuilder stringBuilder, bool format = true, int indent = 0, bool writeNull = true)
+	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
 		var currentPropertyIndex = 0uL;
@@ -144,7 +128,7 @@ public readonly struct JsonObject : IJsonObject
 				.AppendNode(child, format, childIndent, writeNull);
                 
 			// Make sure the last item does not append a comma to confirm to JSON spec.
-			if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex)) 
+			if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
 				stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
 			currentPropertyIndex++;

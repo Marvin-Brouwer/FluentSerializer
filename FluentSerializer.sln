@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31727.386
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json", "src\FluentSerializer.Json\FluentSerializer.Json.csproj", "{1980EA69-E4F7-4E00-AF4A-80050BCFF6D3}"
 EndProject
@@ -51,6 +51,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Converter.DefaultXml", "src\FluentSerializer.Xml.Converter.DefaultXml\FluentSerializer.Xml.Converter.DefaultXml.csproj", "{66B04BC9-C43E-49B0-BD4B-8C04A1CA67F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Converter.DefaultJson", "src\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj", "{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.Core.Text", "src\FluentSerializer.Core.Text\FluentSerializer.Core.Text.csproj", "{A719ACA4-5880-4523-921D-149658C95DF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +112,10 @@ Global
 		{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A719ACA4-5880-4523-921D-149658C95DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A719ACA4-5880-4523-921D-149658C95DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A719ACA4-5880-4523-921D-149658C95DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A719ACA4-5880-4523-921D-149658C95DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{2CD835E4-5E03-4358-AF7D-B0DE533861A2} = {A3D13BDF-78FF-4674-BD80-01681DFA9B07}
 		{66B04BC9-C43E-49B0-BD4B-8C04A1CA67F9} = {A3D13BDF-78FF-4674-BD80-01681DFA9B07}
 		{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6} = {D72D19A6-99CD-4916-A737-64B1A2D729A9}
+		{A719ACA4-5880-4523-921D-149658C95DF2} = {6AE18568-4F61-4920-9D44-140C013B2F66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5248BDA1-F7C6-438C-B359-C7A2B9C18EED}

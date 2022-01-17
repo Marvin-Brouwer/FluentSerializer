@@ -1,16 +1,16 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
-using FluentSerializer.Xml.Exceptions;
-using System;
-using System.Collections;
-using System.Text;
-using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
+using FluentSerializer.Xml.Exceptions;
 using Microsoft.Extensions.ObjectPool;
+using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -18,7 +18,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 {
 	private readonly XmlTypeSerializer _serializer;
 	private readonly XmlTypeDeserializer _deserializer;
-	private readonly ObjectPool<StringBuilder> _stringBuilderPool;
+	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
 	public XmlSerializerConfiguration XmlConfiguration { get; }
 	public SerializerConfiguration Configuration => XmlConfiguration;
@@ -33,7 +33,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 
 		_serializer = new XmlTypeSerializer(mappings);
 		_deserializer = new XmlTypeDeserializer(mappings);
-		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
+		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		XmlConfiguration = configuration;
 	}
@@ -67,18 +67,11 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		where TModel : new()
 	{
 		if (model is null) return string.Empty;
-
 		if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
+
 		var document = SerializeToDocument(model);
 
-		var stringBuilder = _stringBuilderPool.Get();
-
-		using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-		document.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
-		writer.Flush();
-
-		var stringValue = stringBuilder.ToString();
-		_stringBuilderPool.Return(stringBuilder);
+		var stringValue = document.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
 		return stringValue;
 	}

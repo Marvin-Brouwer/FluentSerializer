@@ -1,15 +1,13 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
-using System;
-using System.Text;
 using FluentSerializer.Json.Configuration;
-using FluentSerializer.Core.Services;
 using FluentSerializer.Json.DataNodes;
-
-using static FluentSerializer.Json.JsonBuilder;
 using Microsoft.Extensions.ObjectPool;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Text;
+using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.Services;
 
@@ -17,7 +15,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 {
 	private readonly JsonTypeSerializer _serializer;
 	private readonly JsonTypeDeserializer _deserializer;
-	private readonly ObjectPool<StringBuilder> _stringBuilderPool;
+	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
 	public JsonSerializerConfiguration JsonConfiguration { get; }
 	public SerializerConfiguration Configuration => JsonConfiguration;
@@ -32,7 +30,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 		_serializer = new JsonTypeSerializer(mappings);
 		_deserializer = new JsonTypeDeserializer(mappings);
-		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool();
+		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		JsonConfiguration = configuration;
 	}
@@ -50,7 +48,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 		return _deserializer.DeserializeFromNode(element, modelType,  this);
 	}
-
+	
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData) where TModel : new()
 	{
 		if (string.IsNullOrEmpty(stringData)) return default;
@@ -64,14 +62,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		var container = SerializeToContainer(model);
 		if (container is null) return string.Empty;
 
-		var stringBuilder = _stringBuilderPool.Get();
-
-		using var writer = new ConfigurableStringWriter(stringBuilder, Configuration.Encoding);
-		container.WriteTo(_stringBuilderPool, writer, Configuration.FormatOutput, Configuration.WriteNull);
-		writer.Flush();
-
-		var stringValue = stringBuilder.ToString();
-		_stringBuilderPool.Return(stringBuilder);
+		var stringValue =  container.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
 		return stringValue;
 	}
@@ -80,7 +71,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	{
 		if (model is null) return default;
 		var token = _serializer.SerializeToNode(model, typeof(TModel), this);
-		if (token is null) return Object();
+		if (token is null) return JsonBuilder.Object();
 		if (token is IJsonContainer container) return container;
 
 		throw new NotSupportedException();
