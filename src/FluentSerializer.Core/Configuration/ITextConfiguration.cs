@@ -4,7 +4,9 @@ namespace FluentSerializer.Core.Configuration;
 
 public interface ITextConfiguration
 {
-	bool UseSystemBuilder { get; }
+	int StringBuilderInitialCapacity { get; }
+	int StringBuilderMaximumRetainedCapacity { get; }
+	
 	Encoding Encoding { get; }
 	string NewLine { get; }
 	bool UseWriteArrayPool { get; }

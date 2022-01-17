@@ -1,12 +1,17 @@
 using FluentSerializer.Core.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace FluentSerializer.Core.Text.Writers
 {
-	public sealed class SystemStringBuilder : ITextWriter
+	/// <summary>
+	/// Internal implementation of <see cref="ITextWriter"/> using <see cref="System.Text.StringBuilder"/><br />
+	/// The reason we're using a custom implementation: <br />
+	/// - Having a pluggable implementation<br />
+	/// - Having control over the newline characters<br />
+	/// - Having a clear definition of which methods to use when building any serializer library
+	/// </summary>
+	internal sealed class SystemStringBuilder : ITextWriter
 	{
 		public ITextConfiguration TextConfiguration { get; }
 
@@ -52,23 +57,31 @@ namespace FluentSerializer.Core.Text.Writers
 			return this;
 		}
 
-		public override string ToString()
-		{
-			return _stringBuilder.ToString();
-		}
-
-		public Span<byte> AsSpan() => TextConfiguration.Encoding
-			.GetBytes(_stringBuilder.ToString())
-			.AsSpan(0, _stringBuilder.Length);
-
-		public Memory<byte> AsMemory() => TextConfiguration.Encoding
-			.GetBytes(_stringBuilder.ToString())
-			.AsMemory(0, _stringBuilder.Length);
-
 		public ITextWriter Clear()
 		{
 			_stringBuilder.Clear();
 			return this;
 		}
+
+		public override string ToString()
+		{
+			return _stringBuilder.ToString();
+		}
+
+		#region DirectByteAccess
+		private byte[] GetBytes()
+		{
+			var bytes = new char[_stringBuilder.Length];
+			_stringBuilder.CopyTo(0, bytes, _stringBuilder.Length);
+
+			return TextConfiguration.Encoding.GetBytes(bytes);
+		}
+
+		public Span<byte> AsSpan() => GetBytes()
+			.AsSpan(0, _stringBuilder.Length);
+
+		public Memory<byte> AsMemory() => GetBytes()
+			.AsMemory(0, _stringBuilder.Length);
+		#endregion
 	}
 }

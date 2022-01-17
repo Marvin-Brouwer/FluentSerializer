@@ -14,8 +14,10 @@ internal readonly struct TestStringBuilderConfiguration : ITextConfiguration
 		UseWriteArrayPool = useWriteArrayPool;
 	}
 
+	public int StringBuilderInitialCapacity => 100;
+	public int StringBuilderMaximumRetainedCapacity => 4096;
+
 	public Encoding Encoding => Encoding.UTF8;
-	public bool UseSystemBuilder => false;
 	public string NewLine => LineEndings.LineFeed;
 	public bool UseWriteArrayPool { get; }
 }

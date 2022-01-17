@@ -9,8 +9,5 @@ public readonly struct TestStringBuilderPool
 	private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
 
 	public static readonly ObjectPool<ITextWriter> Default =
-		ObjectPoolProvider.CreateLowAllocationStringBuilderPool(TestStringBuilderConfiguration.Default);
-
-	public static readonly ObjectPool<ITextWriter> System =
-		ObjectPoolProvider.CreateSystemStringBuilderPool(TestStringBuilderConfiguration.Default);
+		ObjectPoolProvider.CreateStringBuilderPool(TestStringBuilderConfiguration.Default);
 }
