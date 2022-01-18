@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="800"
@@ -21,6 +22,26 @@
    inkscape:export-ydpi="119.999">
   <defs
      id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2420">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.39215687"
+         offset="0"
+         id="stop2416" />
+      <stop
+         id="stop2430"
+         offset="0.33333334"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         id="stop2424"
+         offset="0.66666669"
+         style="stop-color:#ffffff;stop-opacity:0.39215687" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="1"
+         id="stop2426" />
+    </linearGradient>
     <style
        id="style4543">.cls-1{fill:#f1734d;}.cls-1,.cls-2{fill-rule:evenodd;}.cls-2{fill:#9293a5;}.cls-3{fill:#f94060;}.cls-4{fill:#96ccee;}</style>
     <style
@@ -33,17 +54,55 @@
        id="style4543-1">.cls-1{fill:#f1734d;}.cls-1,.cls-2{fill-rule:evenodd;}.cls-2{fill:#9293a5;}.cls-3{fill:#f94060;}.cls-4{fill:#96ccee;}</style>
     <style
        id="style4620-5">.cls-1{fill:#5c2d91;}.cls-2,.cls-3{fill:#fff;}.cls-2{opacity:0.1;}</style>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2420"
+       id="linearGradient2422"
+       x1="17.439337"
+       y1="221.22908"
+       x2="18.475008"
+       y2="222.26476"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect"
+       gradientTransform="matrix(3.7795276,0,0,3.7795276,-65.912454,-836.14141)" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="36.870568"
+       height="36.870568"
+       patternTransform="matrix(0.26458333,0,0,0.26458333,17.439337,221.22908)"
+       id="pattern2432">
+      <rect
+         y="0"
+         x="0"
+         height="36.870567"
+         width="36.870567"
+         id="rect2414"
+         style="opacity:1;vector-effect:none;fill:url(#linearGradient2422);fill-opacity:1;stroke:none;stroke-width:0.50199997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+    </pattern>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2550"
+       x="-0.0013242827"
+       width="1.0026486"
+       y="-0.012786489"
+       height="1.025573">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.078245008"
+         id="feGaussianBlur2552" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#0d1117"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="307.58922"
-     inkscape:cy="83.025175"
+     inkscape:zoom="0.7"
+     inkscape:cx="395.84065"
+     inkscape:cy="-218.68183"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -53,7 +112,8 @@
      inkscape:window-height="1001"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:lockguides="true" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -62,7 +122,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -553,7 +613,7 @@
          sodipodi:role="line"
          x="51.59375"
          y="280.44803"
-         style="font-size:7.05555534px;stroke-width:0.13282083;fill:#00163f;fill-opacity:1;stroke:none;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-size:7.05555534px;stroke-width:0.13282083;fill:#673ab7;fill-opacity:1;stroke:none;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
          id="tspan5248">A different take on serializing for dotnet</tspan></text>
   </g>
 </svg>
