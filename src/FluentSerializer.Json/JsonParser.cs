@@ -1,7 +1,7 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
+using FluentSerializer.Core.Text.Readers;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
-using System;
 
 namespace FluentSerializer.Json;
 
@@ -21,16 +21,7 @@ public readonly struct JsonParser
 	{
 		Guard.Against.NullOrWhiteSpace(value, nameof(value));
 
-		return Parse(value.AsSpan());
-	}
-
-	/// <inheritdoc cref="Parse(string)"/>
-	public static IJsonObject Parse(ReadOnlySpan<char> value)
-	{
-		Guard.Against.Zero(value.Length, nameof(value));
-		Guard.Against.InvalidInput(value.IsEmpty, nameof(value), isEmpty => !isEmpty);
-
-		var offset = 0;
-		return new JsonObject(value, ref offset);
+		// Todo objectpool
+		return new JsonObject(new SimpleTextReader(value));
 	}
 }

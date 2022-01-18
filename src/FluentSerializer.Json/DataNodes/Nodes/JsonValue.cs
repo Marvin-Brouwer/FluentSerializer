@@ -32,32 +32,30 @@ public readonly struct JsonValue : IJsonValue
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonValue(ReadOnlySpan<char> text, ref int offset)
+	public JsonValue(in ITextReader reader)
 	{
 		var stringValue = false;
 
-		var valueStartOffset = offset;
-		var valueEndOffset = offset;
+		var valueStartOffset = reader.Offset;
+		var valueEndOffset = reader.Offset;
 
-		while (offset < text.Length)
+		while (reader.CanAdvance())
 		{
-			valueEndOffset = offset;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter) && stringValue) break; 
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.DividerCharacter) && !stringValue) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			var character = text[offset];
-			offset++;
+			reader.Advance();
+			valueEndOffset = reader.Offset;
 
-			if (character == JsonCharacterConstants.PropertyWrapCharacter && stringValue) break; 
-			if (character == JsonCharacterConstants.DividerCharacter && !stringValue) break;
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
-
-			if (character == JsonCharacterConstants.PropertyWrapCharacter) stringValue = true; 
-			if (!stringValue && char.IsWhiteSpace(character)) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true; 
+			if (!stringValue && reader.HasWhitespaceAtOffset()) break;
 		}
 
 		// Append a '"' if it started with a '"'
 		if (stringValue) valueEndOffset++;
-		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+		Value = reader.ReadAbsolute(valueStartOffset..valueEndOffset).ToString().Trim();
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);

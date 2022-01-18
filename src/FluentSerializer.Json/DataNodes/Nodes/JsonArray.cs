@@ -1,7 +1,5 @@
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -59,30 +57,28 @@ public readonly struct JsonArray : IJsonArray
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonArray(ReadOnlySpan<char> text, ref int offset)
+	public JsonArray(in ITextReader reader)
 	{
 		_children = new List<IJsonNode>();
 		_lastNonCommentChildIndex = null;
 		var currentChildIndex = 0uL;
 
-		offset++;
+		reader.Advance();
 
-		while (offset < text.Length)
+		while (reader.CanAdvance())
 		{
-			var character = text[offset];
-
-			if (character == JsonCharacterConstants.ObjectStartCharacter)
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectStartCharacter))
 			{
-				var jsonObject = new JsonObject(text, ref offset);
+				var jsonObject = new JsonObject(reader);
 				_children.Add(jsonObject);
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
 				continue;
 			}
-			if (character == JsonCharacterConstants.ArrayStartCharacter)
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayStartCharacter))
 			{
-				var jsonArray = new JsonArray(text, ref offset);
+				var jsonArray = new JsonArray(reader);
 				_children.Add(jsonArray);
 				_lastNonCommentChildIndex = currentChildIndex;
 
@@ -90,27 +86,27 @@ public readonly struct JsonArray : IJsonArray
 				continue;
 			}
 
-			if (character == JsonCharacterConstants.PropertyWrapCharacter) break;
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter)) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
+			if (reader.HasStringAtOffset(JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(text, ref offset));
+				_children.Add(new JsonCommentSingleLine(reader));
 
 				currentChildIndex++;
 				continue;
 			}
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
+			if (reader.HasStringAtOffset(JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(text, ref offset));
+				_children.Add(new JsonCommentMultiLine(reader));
 
 				currentChildIndex++;
 				continue;
 			}
-			offset++;
+			reader.Advance();
 		}
-		offset++;
+		if (reader.CanAdvance()) reader.Advance();
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);

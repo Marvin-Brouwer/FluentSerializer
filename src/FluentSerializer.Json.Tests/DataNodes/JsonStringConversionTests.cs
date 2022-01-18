@@ -1,6 +1,5 @@
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.DataNodes;
-using System;
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -94,7 +93,7 @@ namespace FluentSerializer.Json.Tests.DataNodes
             var input = format ? _testJsonFormatted : _testJsonSlim;
 
             // Act
-            var result = JsonParser.Parse(input.AsSpan());
+            var result = JsonParser.Parse(input);
 
             // Assert
             result.Should().BeEquatableTo(expected);

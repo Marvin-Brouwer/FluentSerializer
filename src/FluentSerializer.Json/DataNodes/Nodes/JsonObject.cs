@@ -67,45 +67,40 @@ public readonly struct JsonObject : IJsonObject
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(ReadOnlySpan<char> text, ref int offset)
+	public JsonObject(in ITextReader reader)
 	{
 		_children = new List<IJsonNode>();
 		_lastPropertyIndex = null;
 		var currentPropertyIndex = 0uL;
 
-		offset++;
-		while (offset < text.Length)
+		while (reader.CanAdvance())
 		{
-			var character = text[offset];
-                
-			if (character == JsonCharacterConstants.ObjectStartCharacter) break;
-			if (character == JsonCharacterConstants.ArrayStartCharacter) break;
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
+			if (reader.HasStringAtOffset(JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(text, ref offset));
+				_children.Add(new JsonCommentSingleLine(reader));
 				currentPropertyIndex++;
 				continue;
 			}
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
+			if (reader.HasStringAtOffset(JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(text, ref offset));
+				_children.Add(new JsonCommentMultiLine(reader));
 				currentPropertyIndex++;
 				continue;
 			}
-
-			offset++;
-			if (character == JsonCharacterConstants.PropertyWrapCharacter)
+			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter))
 			{
-				var jsonProperty = new JsonProperty(text, ref offset);
+				var jsonProperty = new JsonProperty(reader);
 				_children.Add(jsonProperty);
 				_lastPropertyIndex = currentPropertyIndex;
 				currentPropertyIndex++;
 			}
+
+			if (reader.CanAdvance()) reader.Advance();
 		}
-		offset++;
+		if (reader.CanAdvance()) reader.Advance();
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
