@@ -67,7 +67,7 @@ public readonly struct JsonObject : IJsonObject
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(in ITextReader reader)
+	public JsonObject(in ITokenReader reader)
 	{
 		_children = new List<IJsonNode>();
 		_lastPropertyIndex = null;

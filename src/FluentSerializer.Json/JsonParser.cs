@@ -17,11 +17,10 @@ public readonly struct JsonParser
 	/// <remarks>
 	/// This parser will not parse values to C# types, they will all be represented as string.
 	/// </remarks>
-	public static IJsonObject Parse(string value)
+	public static IJsonObject Parse(in string value)
 	{
 		Guard.Against.NullOrWhiteSpace(value, nameof(value));
 
-		// Todo objectpool
-		return new JsonObject(new SimpleTextReader(value));
+		return new JsonObject(new StringTokenReader(value));
 	}
 }

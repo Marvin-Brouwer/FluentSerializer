@@ -81,22 +81,22 @@ namespace FluentSerializer.Json.Tests.DataNodes
             
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);
-        }
+		}
 
-        [Theory,
-            Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"), 
-            InlineData(true), InlineData(false)]
-        public void StringToObject(bool format)
-        {
-            // Arrange
-            var expected = format ? _testObjectFormatted : _testObjectSlim;
-            var input = format ? _testJsonFormatted : _testJsonSlim;
+		[Theory,
+			Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+			InlineData(true), InlineData(false)]
+		public void StringToObject(bool format)
+		{
+			// Arrange
+			var expected = format ? _testObjectFormatted : _testObjectSlim;
+			var input = format ? _testJsonFormatted : _testJsonSlim;
 
-            // Act
-            var result = JsonParser.Parse(input);
+			// Act
+			var result = JsonParser.Parse(input);
 
-            // Assert
-            result.Should().BeEquatableTo(expected);
-        }
-    }
+			// Assert
+			result.Should().BeEquatableTo(expected);
+		}
+	}
 }

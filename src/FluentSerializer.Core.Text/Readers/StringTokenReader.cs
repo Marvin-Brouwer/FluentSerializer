@@ -3,11 +3,11 @@ using System;
 
 namespace FluentSerializer.Core.Text.Readers
 {
-	public sealed class SimpleTextReader : ITextReader
+	public struct StringTokenReader : ITokenReader
 	{
 		private readonly string _text;
 
-		public SimpleTextReader(in string text)
+		public StringTokenReader(in string text)
 		{
 			_text = text;
 		}
@@ -38,10 +38,10 @@ namespace FluentSerializer.Core.Text.Readers
 			return CharacterAtOffset.Equals(character);
 		}
 
-		public bool HasStringAtOffset(in string characters)
+		public bool HasStringAtOffset(in ReadOnlySpan<char> characters)
 		{
-			return _text[Offset..(Offset + characters.Length)]?
-				.Equals(characters, StringComparison.OrdinalIgnoreCase) ?? false;
+			return _text[Offset..(Offset + characters.Length)]?.AsSpan()
+				.Contains(characters, StringComparison.OrdinalIgnoreCase) ?? false;
 		}
 
 		public bool HasWhitespaceAtOffset()
@@ -49,12 +49,9 @@ namespace FluentSerializer.Core.Text.Readers
 			return char.IsWhiteSpace(CharacterAtOffset);
 		}
 
-		public string ReadAbsolute(Range range)
+		public ReadOnlySpan<char> ReadAbsolute(Range range)
 		{
 			return _text[range];
 		}
-
-		// todo debug value
-		public ReadOnlySpan<char> AsCharSpan => _text.AsSpan();
 	}
 }

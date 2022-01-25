@@ -53,7 +53,7 @@ public readonly struct JsonProperty : IJsonProperty
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(in ITextReader reader)
+	public JsonProperty(in ITokenReader reader)
 	{
 		HasValue = false;
 

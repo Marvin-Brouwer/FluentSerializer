@@ -32,7 +32,7 @@ public readonly struct JsonValue : IJsonValue
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonValue(in ITextReader reader)
+	public JsonValue(in ITokenReader reader)
 	{
 		var stringValue = false;
 

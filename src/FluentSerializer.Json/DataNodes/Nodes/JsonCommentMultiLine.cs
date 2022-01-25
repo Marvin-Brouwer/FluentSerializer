@@ -31,7 +31,7 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentMultiLine(in ITextReader reader)
+	public JsonCommentMultiLine(in ITokenReader reader)
 	{
 		reader.Advance(JsonCharacterConstants.MultiLineCommentStart.Length);
 

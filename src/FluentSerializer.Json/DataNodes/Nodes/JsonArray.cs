@@ -57,7 +57,7 @@ public readonly struct JsonArray : IJsonArray
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonArray(in ITextReader reader)
+	public JsonArray(in ITokenReader reader)
 	{
 		_children = new List<IJsonNode>();
 		_lastNonCommentChildIndex = null;
