@@ -30,7 +30,7 @@ public sealed class SystemStringBuilderPolicy : PooledObjectPolicy<ITextWriter>
 			throw new NotSupportedException($"The type of {obj.GetType().FullName} is not assignable to {nameof(SystemStringBuilder)}");
 
 		// Reuse system stringbuilder policy to determine whether to clear
-		var returned = _stringBuilderPolicy.Return(stringBuilder._stringBuilder);
+		var returned = _stringBuilderPolicy.Return(stringBuilder.StringBuilder);
 		if (returned) obj.Clear();
 		return returned;
 	}

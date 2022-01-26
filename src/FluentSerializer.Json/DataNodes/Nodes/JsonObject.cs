@@ -20,7 +20,7 @@ public readonly struct JsonObject : IJsonObject
 	private const string ObjectName = "{ }";
 	public string Name => ObjectName;
         
-	private readonly ulong? _lastPropertyIndex;
+	private readonly int? _lastPropertyIndex;
 	private readonly List<IJsonNode> _children;
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
@@ -52,7 +52,7 @@ public readonly struct JsonObject : IJsonObject
 		}
 		else
 		{
-			var currentPropertyIndex = 0uL;
+			var currentPropertyIndex = 0;
 			_children = new List<IJsonNode>();
 			foreach (var property in properties)
 			{
@@ -67,45 +67,41 @@ public readonly struct JsonObject : IJsonObject
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(ReadOnlySpan<char> text, ref int offset)
+	public JsonObject(in ReadOnlySpan<char> text, ref int offset)
 	{
 		_children = new List<IJsonNode>();
 		_lastPropertyIndex = null;
-		var currentPropertyIndex = 0uL;
+		var currentPropertyIndex = 0;
 
-		offset++;
-		while (offset < text.Length)
+		offset.AdjustForToken(JsonCharacterConstants.ObjectStartCharacter);
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-                
-			if (character == JsonCharacterConstants.ObjectStartCharacter) break;
-			if (character == JsonCharacterConstants.ArrayStartCharacter) break;
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(text, ref offset));
+				_children.Add(new JsonCommentSingleLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(text, ref offset));
+				_children.Add(new JsonCommentMultiLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
-
-			offset++;
-			if (character == JsonCharacterConstants.PropertyWrapCharacter)
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter))
 			{
-				var jsonProperty = new JsonProperty(text, ref offset);
+				var jsonProperty = new JsonProperty(in text, ref offset);
 				_children.Add(jsonProperty);
 				_lastPropertyIndex = currentPropertyIndex;
 				currentPropertyIndex++;
 			}
+
+			offset++;
 		}
-		offset++;
+		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
@@ -113,7 +109,7 @@ public readonly struct JsonObject : IJsonObject
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
-		var currentPropertyIndex = 0uL;
+		var currentPropertyIndex = 0;
 
 		stringBuilder
 			.Append(JsonCharacterConstants.ObjectStartCharacter);
@@ -123,9 +119,9 @@ public readonly struct JsonObject : IJsonObject
 			if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
 
 			stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(childIndent, format)
-				.AppendNode(child, format, childIndent, writeNull);
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in childIndent, in format)
+				.AppendNode(child, in format, in childIndent, in writeNull);
                 
 			// Make sure the last item does not append a comma to confirm to JSON spec.
 			if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
@@ -135,8 +131,8 @@ public readonly struct JsonObject : IJsonObject
 		}
 
 		stringBuilder
-			.AppendOptionalNewline(format)
-			.AppendOptionalIndent(indent, format)
+			.AppendOptionalNewline(in format)
+			.AppendOptionalIndent(indent, in format)
 			.Append(JsonCharacterConstants.ObjectEndCharacter);
 
 		return stringBuilder;

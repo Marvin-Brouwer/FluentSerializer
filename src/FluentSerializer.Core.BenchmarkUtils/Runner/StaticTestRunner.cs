@@ -87,6 +87,8 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 		private static Job CreateBasicJob(bool quickRun)
 		{
 #if DEBUG
+			_ = quickRun;
+
 			return Job.Dry
 				.WithLaunchCount(1)
 				.WithIterationCount(1);

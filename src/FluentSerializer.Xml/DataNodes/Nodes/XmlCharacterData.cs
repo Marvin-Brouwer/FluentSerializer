@@ -1,5 +1,4 @@
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;
@@ -31,19 +30,19 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 	/// <remarks>
 	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlCharacterData(ReadOnlySpan<char> text, ref int offset)
+	public XmlCharacterData(in ReadOnlySpan<char> text, ref int offset)
 	{
-		offset += XmlCharacterConstants.CharacterDataStart.Length;
+		offset.AdjustForToken(XmlCharacterConstants.CharacterDataStart);
 
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
             
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
 			valueEndOffset = offset;
-			if (text.HasStringAtOffset(offset, XmlCharacterConstants.CharacterDataEnd))
+			if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CharacterDataEnd))
 			{
-				offset += XmlCharacterConstants.CharacterDataEnd.Length;
+				offset.AdjustForToken(XmlCharacterConstants.CharacterDataEnd);
 				break;
 			}
                 

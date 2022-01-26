@@ -1,7 +1,7 @@
+using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
-using System;
 using System.Diagnostics;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Core.Text.Extensions;
@@ -32,21 +32,20 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentSingleLine(ReadOnlySpan<char> text, ref int offset)
+	public JsonCommentSingleLine(in ReadOnlySpan<char> text, ref int offset)
 	{
-		offset += JsonCharacterConstants.SingleLineCommentMarker.Length;
+		offset.AdjustForToken(JsonCharacterConstants.SingleLineCommentMarker);
 
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
-			valueEndOffset = offset;
-			var character = text[offset];
 			offset++;
+			valueEndOffset = offset;
 
-			if (character == JsonCharacterConstants.LineReturnCharacter) break;
-			if (character == JsonCharacterConstants.NewLineCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.LineReturnCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.NewLineCharacter)) break;
 		}
 
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();

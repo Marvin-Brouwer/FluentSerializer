@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System;
+using System.IO;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Core.Text.Extensions;
@@ -34,56 +35,63 @@ public readonly struct XmlAttribute : IXmlAttribute
 	/// <remarks>
 	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlAttribute(ReadOnlySpan<char> text, ref int offset)
+	public XmlAttribute(in ReadOnlySpan<char> text, ref int offset)
 	{
 		var nameStartOffset = offset;
 		var nameEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagTerminationCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagEndCharacter)) break;
 			nameEndOffset = offset;
 
-			var character = text[offset];
-
-			if (character == XmlCharacterConstants.TagTerminationCharacter) break;
-			if (character == XmlCharacterConstants.TagEndCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.PropertyAssignmentCharacter)) break;
 			offset++;
-			if (character == XmlCharacterConstants.PropertyAssignmentCharacter) break;
 		}
 
 		Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
-		while (offset < text.Length)
+		offset.AdjustForToken(XmlCharacterConstants.PropertyAssignmentCharacter);
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-
-			if (character == XmlCharacterConstants.TagTerminationCharacter) break;
-			if (character == XmlCharacterConstants.TagStartCharacter) break;
-			if (character == XmlCharacterConstants.PropertyWrapCharacter)
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagTerminationCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.PropertyWrapCharacter))
 			{
-				offset++;
+				offset.AdjustForToken(XmlCharacterConstants.PropertyWrapCharacter);
 				break;
 			}
-			if (!char.IsWhiteSpace(character)) break;
+			if (!text.HasWhitespaceAtOffset(in offset)) break;
 			offset++;
 		}
             
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagTerminationCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter)) break;
 			valueEndOffset = offset;
 
-			var character = text[offset];
-
-			if (character == XmlCharacterConstants.TagTerminationCharacter) break;
-			if (character == XmlCharacterConstants.TagStartCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.PropertyWrapCharacter)) break;
 			offset++;
-			if (character == XmlCharacterConstants.PropertyWrapCharacter) break;
 		}
             
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+		while (text.WithinCapacity(in offset))
+		{
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagTerminationCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.PropertyWrapCharacter))
+			{
+				offset.AdjustForToken(XmlCharacterConstants.PropertyWrapCharacter);
+				break;
+			}
+			if (text.HasWhitespaceAtOffset(in offset)) continue;
+			throw new InvalidDataException("Attribute incorrectly terminated");
+		}
 	}
 
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);

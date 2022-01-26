@@ -1,7 +1,7 @@
-﻿using Ardalis.GuardClauses;
+using System;
+using Ardalis.GuardClauses;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
-using System;
 
 namespace FluentSerializer.Json;
 
@@ -17,20 +17,11 @@ public readonly struct JsonParser
 	/// <remarks>
 	/// This parser will not parse values to C# types, they will all be represented as string.
 	/// </remarks>
-	public static IJsonObject Parse(string value)
+	public static IJsonObject Parse(in string value)
 	{
 		Guard.Against.NullOrWhiteSpace(value, nameof(value));
 
-		return Parse(value.AsSpan());
-	}
-
-	/// <inheritdoc cref="Parse(string)"/>
-	public static IJsonObject Parse(ReadOnlySpan<char> value)
-	{
-		Guard.Against.Zero(value.Length, nameof(value));
-		Guard.Against.InvalidInput(value.IsEmpty, nameof(value), isEmpty => !isEmpty);
-
-		var offset = 0;
-		return new JsonObject(value, ref offset);
+		int offset = 0;
+		return new JsonObject(value.AsSpan(), ref offset);
 	}
 }

@@ -1,7 +1,6 @@
-using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Json.Configuration;
 using System;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Json.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,7 +18,7 @@ public readonly struct JsonArray : IJsonArray
 	private const string ArrayName = "[ ]";
 	public string Name => ArrayName;
 
-	private readonly ulong? _lastNonCommentChildIndex;
+	private readonly int? _lastNonCommentChildIndex;
 	private readonly List<IJsonNode> _children;
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
@@ -44,7 +43,7 @@ public readonly struct JsonArray : IJsonArray
 		else
 		{
 			_children = new List<IJsonNode>();
-			var currentChildIndex = 0uL;
+			var currentChildIndex = 0;
 			foreach (var property in elements)
 			{
 				_children.Add(property);
@@ -59,58 +58,53 @@ public readonly struct JsonArray : IJsonArray
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonArray(ReadOnlySpan<char> text, ref int offset)
+	public JsonArray(in ReadOnlySpan<char> text, ref int offset)
 	{
 		_children = new List<IJsonNode>();
 		_lastNonCommentChildIndex = null;
-		var currentChildIndex = 0uL;
+		var currentChildIndex = 0;
 
-		offset++;
-
-		while (offset < text.Length)
+		offset.AdjustForToken(JsonCharacterConstants.ArrayStartCharacter);
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-
-			if (character == JsonCharacterConstants.ObjectStartCharacter)
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				var jsonObject = new JsonObject(text, ref offset);
-				_children.Add(jsonObject);
+				_children.Add(new JsonObject(in text, ref offset));
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
 				continue;
 			}
-			if (character == JsonCharacterConstants.ArrayStartCharacter)
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				var jsonArray = new JsonArray(text, ref offset);
-				_children.Add(jsonArray);
+				_children.Add(new JsonArray(in text, ref offset));
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
 				continue;
 			}
 
-			if (character == JsonCharacterConstants.PropertyWrapCharacter) break;
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.SingleLineCommentMarker))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(text, ref offset));
+				_children.Add(new JsonCommentSingleLine(in text, ref offset));
 
 				currentChildIndex++;
 				continue;
 			}
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentStart))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(text, ref offset));
+				_children.Add(new JsonCommentMultiLine(in text, ref offset));
 
 				currentChildIndex++;
 				continue;
 			}
 			offset++;
 		}
-		offset++;
+		offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
@@ -118,7 +112,7 @@ public readonly struct JsonArray : IJsonArray
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
-		var currentChildIndex = 0uL;
+		var currentChildIndex = 0;
 
 		stringBuilder
 			.Append(JsonCharacterConstants.ArrayStartCharacter);
@@ -126,9 +120,9 @@ public readonly struct JsonArray : IJsonArray
 		foreach (var child in Children)
 		{
 			stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(childIndent, format)
-				.AppendNode(child, format, childIndent, writeNull);
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in childIndent, in format)
+				.AppendNode(child, in format, in childIndent, in writeNull);
 
 			// Make sure the last item does not append a comma to confirm to JSON spec.
 			if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex))
@@ -138,8 +132,8 @@ public readonly struct JsonArray : IJsonArray
 		}
 
 		stringBuilder
-			.AppendOptionalNewline(format)
-			.AppendOptionalIndent(indent, format)
+			.AppendOptionalNewline(in format)
+			.AppendOptionalIndent(in indent, format)
 			.Append(JsonCharacterConstants.ArrayEndCharacter);
 
 		return stringBuilder;

@@ -37,9 +37,9 @@ public readonly struct XmlDocument : IXmlDocument
 		{
 			stringBuilder
 				.Append($"<?xml version=\"1.0\" encoding=\"{stringBuilder.TextConfiguration.Encoding.WebName}\"?>")
-				.AppendOptionalNewline(format);
+				.AppendOptionalNewline(in format);
 
-			AppendTo(ref stringBuilder, format, indent, writeNull);
+			AppendTo(ref stringBuilder, in format, in indent, in writeNull);
 			return stringBuilder.ToString();
 		}
 		finally
@@ -50,7 +50,7 @@ public readonly struct XmlDocument : IXmlDocument
 
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
-		return RootElement?.AppendTo(ref stringBuilder, format, indent, writeNull) ?? stringBuilder;
+		return RootElement?.AppendTo(ref stringBuilder, in format, in indent, in writeNull) ?? stringBuilder;
 	}
 
 	#region IEquatable

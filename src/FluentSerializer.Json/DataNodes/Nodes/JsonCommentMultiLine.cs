@@ -1,8 +1,7 @@
+using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using System;
 using System.Diagnostics;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Core.Text.Extensions;
@@ -33,23 +32,23 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentMultiLine(ReadOnlySpan<char> text, ref int offset)
+	public JsonCommentMultiLine(in ReadOnlySpan<char> text, ref int offset)
 	{
-		offset += JsonCharacterConstants.MultiLineCommentStart.Length;
+		offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
 			valueEndOffset = offset;
 
-			if (text.HasStringAtOffset(offset, JsonCharacterConstants.MultiLineCommentEnd)) 
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentEnd)) 
 			{
-				offset += JsonCharacterConstants.MultiLineCommentEnd.Length;
+				offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 				break;
 			}
-                
+
 			offset++;
 		}
 

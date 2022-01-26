@@ -1,8 +1,8 @@
+using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -47,77 +47,82 @@ public readonly struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value };
+		_children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value };
 	}
 
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(ReadOnlySpan<char> text, ref int offset)
+	public JsonProperty(in ReadOnlySpan<char> text, ref int offset)
 	{
 		HasValue = false;
+		offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
 
 		var nameStartOffset = offset;
 		var nameEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
-			nameEndOffset = offset;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) break;
 
-			var character = text[offset];
-
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 			offset++;
-			if (character == JsonCharacterConstants.DividerCharacter) break;
-			if (character == JsonCharacterConstants.PropertyWrapCharacter) break;
+			nameEndOffset = offset;
 		}
-            
+
 		Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-
-			if (character == JsonCharacterConstants.ObjectEndCharacter) break;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) break;
 			offset++;
-			if (character == JsonCharacterConstants.DividerCharacter) break;
-			if (char.IsWhiteSpace(character)) continue;
 
-			if (character == JsonCharacterConstants.PropertyAssignmentCharacter) break;
+			// Just pretend it's null if no value has been provided
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
+			{
+				_children = Array.Empty<IJsonNode>();
+				offset++;
+				return;
+			}
+			if (text.HasWhitespaceAtOffset(in offset)) continue;
+
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyAssignmentCharacter)) break;
 		}
 
-		_children = new IJsonNode[1];
-
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-
-			if (character == JsonCharacterConstants.ObjectEndCharacter) return;
-			if (character == JsonCharacterConstants.ArrayEndCharacter) return;
-
-			if (character == JsonCharacterConstants.ObjectStartCharacter)
+			offset++;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				_children[0] = new JsonObject(text, ref offset);
+				_children = new IJsonNode[]{
+					new JsonObject(in text, ref offset)
+				};
 				HasValue = true;
 				return;
 			}
-			if (character == JsonCharacterConstants.ArrayStartCharacter)
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				_children[0] = new JsonArray(text, ref offset);
+				_children = new IJsonNode[] {
+					new JsonArray(in text, ref offset)
+				};
 				HasValue = true;
 				return;
 			}
 
-			if (!char.IsWhiteSpace(character)) break;
-			offset++;
-			if (character == JsonCharacterConstants.DividerCharacter) return;
+			if (!text.HasWhitespaceAtOffset(in offset)) break;
+			// Just pretend it's null if no value has been provided
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
+			{
+				_children = Array.Empty<IJsonNode>();
+				offset++;
+				return;
+			}
 		}
 
-		var jsonValue = new JsonValue(text, ref offset);
-		_children[0] = jsonValue;
+		var jsonValue = new JsonValue(in text, ref offset);
+		_children = new IJsonNode[]
+		{
+			jsonValue
+		};
 		HasValue = jsonValue.HasValue;
 	}
 
@@ -142,7 +147,7 @@ public readonly struct JsonProperty : IJsonProperty
 		if (format) stringBuilder.Append(spacer);
 
 		if (childValue is null) stringBuilder.Append(JsonCharacterConstants.NullValue);
-		else stringBuilder.AppendNode(childValue, format, indent, writeNull);
+		else stringBuilder.AppendNode(childValue, in format, in indent, in writeNull);
 
 		return stringBuilder;
 	}
