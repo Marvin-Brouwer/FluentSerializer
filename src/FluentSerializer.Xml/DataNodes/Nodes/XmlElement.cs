@@ -102,23 +102,24 @@ public readonly struct XmlElement : IXmlElement
 	/// <remarks>
 	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlElement(ReadOnlySpan<char> text, ref int offset)
+	public XmlElement(in ReadOnlySpan<char> text, ref int offset)
 	{
 		// If we encounter a declaration just ignore it, if this becomes a problem we can start the parse in
 		// the document. For now this is fine.
-		if (text.HasStringAtOffset(offset, XmlCharacterConstants.DeclarationStart))
+		if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.DeclarationStart))
 		{
-			while (offset < text.Length && !text.HasStringAtOffset(offset, XmlCharacterConstants.DeclarationEnd))
-			{
-				offset++;
-			}
-			while (offset < text.Length && text[offset] != XmlCharacterConstants.TagStartCharacter)
+			while (text.WithinCapacity(in offset) && !text.HasCharactersAtOffset(in offset, XmlCharacterConstants.DeclarationEnd))
 			{
 				offset++;
 			}
 		}
+		// Ignore whitespace
+		while (text.WithinCapacity(in offset) && !text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter))
+		{
+			offset++;
+		}
 
-		offset++;
+		offset.AdjustForToken(XmlCharacterConstants.TagStartCharacter);
 
 		_attributes = new List<IXmlAttribute>();
 		_children = new List<IXmlNode>();
@@ -130,29 +131,31 @@ public readonly struct XmlElement : IXmlElement
 		var tagFinished = false;
 		var nameFinished = false;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
 			nameEndOffset = offset;
-			var character = text[offset];
 
-			if (character == XmlCharacterConstants.TagTerminationCharacter && text[offset + 1] == XmlCharacterConstants.TagEndCharacter)
+			if (text.HasCharactersAtOffset(in offset,
+			    XmlCharacterConstants.TagTerminationCharacter,
+			    XmlCharacterConstants.TagEndCharacter))
 			{
 				elementClosed = true;
-				offset++;
+				offset.AdjustForToken(XmlCharacterConstants.TagTerminationCharacter);
 				tagFinished = true;
-				offset++;
+				offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 				break;
 			}
-			if (character == XmlCharacterConstants.TagEndCharacter)
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagEndCharacter))
 			{
 				tagFinished = true;
-				offset++;
+				offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 				break;
 			}
 
 			if (nameFinished) break;
+
 			offset++;
-			if (char.IsWhiteSpace(character))
+			if (text.HasWhitespaceAtOffset(in offset))
 			{
 				nameFinished = true;
 			}
@@ -160,78 +163,77 @@ public readonly struct XmlElement : IXmlElement
             
 		Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
-		if (!tagFinished)
-			while (offset < text.Length)
-			{
-				var character = text[offset];
-
-				if (character == XmlCharacterConstants.TagTerminationCharacter && text[offset + 1] == XmlCharacterConstants.TagEndCharacter)
-				{
-					offset++;
-					elementClosed = true;
-					offset++;
-					break;
-				}
-				if (character == XmlCharacterConstants.TagEndCharacter)
-				{
-					offset++;
-					break;
-				}
-
-				if (char.IsWhiteSpace(character))
-				{
-					offset++;
-					continue;
-				}
-
-				_attributes.Add(new XmlAttribute(text, ref offset));
-			}
-
-		if (elementClosed) return;
-
-		while (offset < text.Length)
+		while (!tagFinished && text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
-
-			if (character == XmlCharacterConstants.TagStartCharacter && text[offset + 1] == XmlCharacterConstants.TagTerminationCharacter)
+			if (text.HasCharactersAtOffset(in offset,
+				    XmlCharacterConstants.TagTerminationCharacter,
+				    XmlCharacterConstants.TagEndCharacter))
 			{
-				offset += 2;
+				offset.AdjustForToken(XmlCharacterConstants.TagTerminationCharacter);
+				elementClosed = true;
+				offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
+				break;
+			}
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagEndCharacter))
+			{
+				offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 				break;
 			}
 
-			if (character == XmlCharacterConstants.TagStartCharacter)
-			{
-				if (text.HasStringAtOffset(offset, XmlCharacterConstants.CommentStart))
-				{
-					_children.Add(new XmlComment(text, ref offset));
-					continue;
-				}
-				if (text.HasStringAtOffset(offset, XmlCharacterConstants.CharacterDataStart))
-				{
-					_children.Add(new XmlCharacterData(text, ref offset));
-					continue;
-				}
-
-				_children.Add(new XmlElement(text, ref offset));
-				continue;
-			}
-			if (char.IsWhiteSpace(character))
+			if (text.HasWhitespaceAtOffset(in offset))
 			{
 				offset++;
 				continue;
 			}
 
-			_children.Add(new XmlText(text, ref offset));
+			_attributes.Add(new XmlAttribute(in text, ref offset));
+		}
+
+		if (elementClosed) return;
+
+		while (text.WithinCapacity(in offset))
+		{
+			if (text.HasCharactersAtOffset(in offset,
+				    XmlCharacterConstants.TagStartCharacter,
+				    XmlCharacterConstants.TagTerminationCharacter))
+			{
+				offset.AdjustForToken(XmlCharacterConstants.TagStartCharacter);
+				offset.AdjustForToken(XmlCharacterConstants.TagTerminationCharacter);
+				break;
+			}
+			
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter))
+			{
+				if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CommentStart))
+				{
+					_children.Add(new XmlComment(in text, ref offset));
+					continue;
+				}
+				if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CharacterDataStart))
+				{
+					_children.Add(new XmlCharacterData(in text, ref offset));
+					continue;
+				}
+
+				_children.Add(new XmlElement(in text, ref offset));
+				continue;
+			}
+			if (text.HasWhitespaceAtOffset(in offset))
+			{
+				offset++;
+				continue;
+			}
+
+			_children.Add(new XmlText(in text, ref offset));
 		}
 
 		// Walk to the end of the current closing tag
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
-			var character = text[offset];
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagEndCharacter)) break;
 			offset++;
-
-			if (character == XmlCharacterConstants.TagEndCharacter) return;
 		}
+		offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 	}
 
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
@@ -257,10 +259,10 @@ public readonly struct XmlElement : IXmlElement
 		foreach (var attribute in _attributes)
 		{
 			stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(indent, format)
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in indent, in format)
 				.Append(spacer)
-				.AppendNode(attribute, format, childIndent, writeNull);
+				.AppendNode(attribute, in format, in childIndent, in writeNull);
 		}
 		stringBuilder
 			.Append(XmlCharacterConstants.TagEndCharacter);
@@ -275,11 +277,11 @@ public readonly struct XmlElement : IXmlElement
 				firstTextNode = true;
 
 				stringBuilder
-					.AppendOptionalNewline(format)
-					.AppendOptionalIndent(childIndent, format);
+					.AppendOptionalNewline(in format)
+					.AppendOptionalIndent(in childIndent, in format);
 
 				stringBuilder
-					.AppendNode(childElement, format, childIndent, writeNull);
+					.AppendNode(childElement, in format, in childIndent, in writeNull);
 
 				continue;
 			}
@@ -289,45 +291,45 @@ public readonly struct XmlElement : IXmlElement
 				{
 					firstTextNode = false;
 					if (!textOnly) stringBuilder
-						.AppendOptionalNewline(format)
-						.AppendOptionalIndent(childIndent, format);
+						.AppendOptionalNewline(in format)
+						.AppendOptionalIndent(in childIndent, in format);
 
 					stringBuilder
-						.AppendNode(textNode, true, childIndent, writeNull);
+						.AppendNode(textNode, true, in childIndent, in writeNull);
 
 					continue;
 				}
 
 				stringBuilder
-					.AppendNode(textNode, false, childIndent, writeNull);
+					.AppendNode(textNode, false, in childIndent, in writeNull);
 
 				continue;
 			}
 			if (child is IXmlComment commentNode)
 			{
 				stringBuilder
-					.AppendOptionalNewline(format)
-					.AppendOptionalIndent(childIndent, format);
+					.AppendOptionalNewline(in format)
+					.AppendOptionalIndent(in childIndent, in format);
 
 				stringBuilder
-					.AppendNode(commentNode, true, childIndent, writeNull);
+					.AppendNode(commentNode, true, in childIndent, in writeNull);
 
 				continue;
 			}
 			if (child is IXmlCharacterData cDataNode)
 			{
 				stringBuilder
-					.AppendOptionalNewline(format)
-					.AppendOptionalIndent(childIndent, format);
+					.AppendOptionalNewline(in format)
+					.AppendOptionalIndent(in childIndent, in format);
 
 				stringBuilder
-					.AppendNode(cDataNode, true, childIndent, writeNull);
+					.AppendNode(cDataNode, true, in childIndent, in writeNull);
 			}
 		}
 
 		if (!textOnly) stringBuilder
-			.AppendOptionalNewline(format)
-			.AppendOptionalIndent(indent, format);
+			.AppendOptionalNewline(in format)
+			.AppendOptionalIndent(in indent, in format);
 
 		stringBuilder
 			.Append(XmlCharacterConstants.TagStartCharacter)

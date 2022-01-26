@@ -31,9 +31,9 @@ public readonly struct XmlComment : IXmlComment
 	/// <remarks>
 	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlComment(ReadOnlySpan<char> text, ref int offset)
+	public XmlComment(in ReadOnlySpan<char> text, ref int offset)
 	{
-		offset += XmlCharacterConstants.CommentStart.Length;
+		offset.AdjustForToken(XmlCharacterConstants.CommentStart);
 
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
@@ -41,9 +41,9 @@ public readonly struct XmlComment : IXmlComment
 		while (offset < text.Length)
 		{
 			valueEndOffset = offset;
-			if (text.HasStringAtOffset(offset, XmlCharacterConstants.CommentEnd))
+			if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CommentEnd))
 			{
-				offset += XmlCharacterConstants.CommentEnd.Length;
+				offset.AdjustForToken(XmlCharacterConstants.CommentEnd);
 				break;
 			}
                 

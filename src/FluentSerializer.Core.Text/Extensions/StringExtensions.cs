@@ -25,7 +25,15 @@ namespace FluentSerializer.Core.Text.Extensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static bool HasCharactersAtOffset(in this ReadOnlySpan<char> text, in int offset, in ReadOnlySpan<char> characters) =>
-			text[offset..(offset+characters.Length)].Equals(characters, StringComparison.OrdinalIgnoreCase);
+			text[offset..(offset + characters.Length)].Equals(characters, StringComparison.OrdinalIgnoreCase);
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static bool HasCharactersAtOffset(in this ReadOnlySpan<char> text, in int offset, in char character1, in char character2) =>
+			HasCharacterAtOffset(in text, in offset, in character1) &&
+			HasCharacterAtOffset(in text, offset +1, in character2);
 #if NET6_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else

@@ -34,7 +34,6 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 	/// </remarks>
 	public JsonCommentSingleLine(in ReadOnlySpan<char> text, ref int offset)
 	{
-		// todo for all of them
 		offset.AdjustForToken(JsonCharacterConstants.SingleLineCommentMarker);
 
 		var valueStartOffset = offset;

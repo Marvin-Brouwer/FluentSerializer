@@ -31,17 +31,15 @@ public readonly struct XmlText : IXmlText
 	/// <remarks>
 	/// <b>Please use <see cref="XmlParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlText(ReadOnlySpan<char> text, ref int offset)
+	public XmlText(in ReadOnlySpan<char> text, ref int offset)
 	{
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
 
-		while (offset < text.Length)
+		while (text.WithinCapacity(in offset))
 		{
 			valueEndOffset = offset;
-
-			var character = text[offset];
-			if (character == XmlCharacterConstants.TagStartCharacter) break;
+			if (text.HasCharacterAtOffset(in offset, XmlCharacterConstants.TagStartCharacter)) break;
 
 			offset++;
 		}

@@ -49,11 +49,11 @@ public readonly struct XmlFragment : IXmlElement
 		foreach (var child in _innerElement.Children)
 		{
 			if (!firstNode) stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(childIndent, format);
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in childIndent, format);
 
 			stringBuilder
-				.AppendNode(child, format, childIndent, writeNull);
+				.AppendNode(child, in format, in childIndent, in writeNull);
 
 			firstNode = false;
 		}
