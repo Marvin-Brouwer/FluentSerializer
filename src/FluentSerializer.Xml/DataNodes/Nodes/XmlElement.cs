@@ -35,7 +35,13 @@ public readonly struct XmlElement : IXmlElement
 	{
 		Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
-		return _attributes.FirstOrDefault(attribute => attribute.Name.Equals(name, StringComparison.Ordinal));
+		foreach (var attribute in _attributes)
+		{
+			if (string.IsNullOrEmpty(name) || attribute.Name.Equals(name, StringComparison.Ordinal))
+				return attribute;
+		}
+
+		return default;
 	}
 
 	public IEnumerable<IXmlElement> GetChildElements(string? name = null)
@@ -51,19 +57,29 @@ public readonly struct XmlElement : IXmlElement
 	{
 		Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
-		return GetChildElements(name).FirstOrDefault();
+		foreach (var child in _children)
+		{
+			if (child is not IXmlElement element) continue;
+			if (string.IsNullOrEmpty(name) || element.Name.Equals(name, StringComparison.Ordinal))
+				return element;
+		}
+
+		return default;
 	}
 
 	public string? GetTextValue()
 	{
-		var textValues = _children
-			.Where(child => child is IXmlText)
-			.Select(child => ((IXmlText)child).Value ?? string.Empty)
-			.ToList();
+		string? returnValue = null;
+		foreach (var child in _children)
+		{
+			if (child is not IXmlText element) continue;
+			if (string.IsNullOrEmpty(element.Value)) continue;
 
-		if (!textValues.Any()) return default;
+			returnValue ??= string.Empty;
+			returnValue += element.Value;
+		}
 
-		return string.Join(string.Empty, textValues);
+		return returnValue;
 	}
 
 	/// <inheritdoc cref="XmlBuilder.Element"/>
