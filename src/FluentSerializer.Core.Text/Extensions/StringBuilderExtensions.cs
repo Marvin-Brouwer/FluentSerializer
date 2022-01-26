@@ -8,8 +8,11 @@ namespace FluentSerializer.Core.Text.Extensions;
 
 public static class StringBuilderExtensions
 {
+	/// <summary>
+	/// Append this node's text content to the current text
+	/// </summary>
 #if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -18,8 +21,14 @@ public static class StringBuilderExtensions
 		return node.AppendTo(ref stringBuilder, format, format ? indent : 0, writeNull);
 	}
 
+	/// <summary>
+	/// Append a new line when <paramref name="newLine"/> is set to true
+	/// </summary>
+	/// <remarks>
+	/// This is mainly useful for chaining calls
+	/// </remarks>
 #if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -29,8 +38,16 @@ public static class StringBuilderExtensions
 
 		return stringBuilder.AppendLineEnding();
 	}
+
+	/// <summary>
+	/// Append an indent the amount of times specified by <paramref name="indent"/>
+	/// when <paramref name="format"/> is set to true
+	/// </summary>
+	/// <remarks>
+	/// This is mainly useful for chaining calls
+	/// </remarks>
 #if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -42,8 +59,11 @@ public static class StringBuilderExtensions
 		return stringBuilder.Append(indentChar, indent);
 	}
 
+	/// <summary>
+	/// ToString override by extension method because readonly structs don't support base classes
+	/// </summary>
 #if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
