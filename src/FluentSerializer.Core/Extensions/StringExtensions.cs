@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace FluentSerializer.Core.Text.Extensions
+namespace FluentSerializer.Core.Extensions
 {
 	public static class StringExtensions
 	{

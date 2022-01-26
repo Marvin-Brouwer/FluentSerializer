@@ -1,6 +1,6 @@
+using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Core.TestUtils.Helpers;
 

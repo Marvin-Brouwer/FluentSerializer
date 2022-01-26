@@ -9,8 +9,8 @@ using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.Services;
 

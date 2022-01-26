@@ -1,8 +1,8 @@
+using System;
 using FluentSerializer.Core.Configuration;
 using Microsoft.Extensions.ObjectPool;
-using System;
 
-namespace FluentSerializer.Core.Text.Writers;
+namespace FluentSerializer.Core.Text;
 
 public sealed class SystemStringBuilderPolicy : PooledObjectPolicy<ITextWriter>
 {

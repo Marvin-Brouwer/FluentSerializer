@@ -6,8 +6,8 @@ using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.Services;
 

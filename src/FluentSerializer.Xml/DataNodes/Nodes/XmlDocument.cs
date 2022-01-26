@@ -3,8 +3,8 @@ using FluentSerializer.Xml.Configuration;
 using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Diagnostics;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

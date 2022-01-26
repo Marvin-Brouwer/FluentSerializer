@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
+using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Text.Writers;
-using System.Text;
+using FluentSerializer.Core.Text;
 
-namespace FluentSerializer.Core.Text.Extensions;
+namespace FluentSerializer.Core.Extensions;
 
 public static class StringBuilderExtensions
 {

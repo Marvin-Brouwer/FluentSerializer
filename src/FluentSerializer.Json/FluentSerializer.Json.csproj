@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
-    <ProjectReference Include="..\FluentSerializer.Core.Text\FluentSerializer.Core.Text.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,8 +2,8 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
 using System;
 using System.Diagnostics;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
