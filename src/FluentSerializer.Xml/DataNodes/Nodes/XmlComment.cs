@@ -2,8 +2,8 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Core.Text.Extensions;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
