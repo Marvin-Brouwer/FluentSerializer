@@ -119,9 +119,9 @@ public readonly struct JsonObject : IJsonObject
 			if (!writeNull && child is IJsonProperty jsonProperty && !jsonProperty.HasValue) continue;
 
 			stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(childIndent, format)
-				.AppendNode(child, format, childIndent, writeNull);
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in childIndent, in format)
+				.AppendNode(child, in format, in childIndent, in writeNull);
                 
 			// Make sure the last item does not append a comma to confirm to JSON spec.
 			if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
@@ -131,8 +131,8 @@ public readonly struct JsonObject : IJsonObject
 		}
 
 		stringBuilder
-			.AppendOptionalNewline(format)
-			.AppendOptionalIndent(indent, format)
+			.AppendOptionalNewline(in format)
+			.AppendOptionalIndent(indent, in format)
 			.Append(JsonCharacterConstants.ObjectEndCharacter);
 
 		return stringBuilder;

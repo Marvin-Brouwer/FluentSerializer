@@ -147,7 +147,7 @@ public readonly struct JsonProperty : IJsonProperty
 		if (format) stringBuilder.Append(spacer);
 
 		if (childValue is null) stringBuilder.Append(JsonCharacterConstants.NullValue);
-		else stringBuilder.AppendNode(childValue, format, indent, writeNull);
+		else stringBuilder.AppendNode(childValue, in format, in indent, in writeNull);
 
 		return stringBuilder;
 	}

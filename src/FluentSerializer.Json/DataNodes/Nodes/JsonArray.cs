@@ -120,9 +120,9 @@ public readonly struct JsonArray : IJsonArray
 		foreach (var child in Children)
 		{
 			stringBuilder
-				.AppendOptionalNewline(format)
-				.AppendOptionalIndent(childIndent, format)
-				.AppendNode(child, format, childIndent, writeNull);
+				.AppendOptionalNewline(in format)
+				.AppendOptionalIndent(in childIndent, in format)
+				.AppendNode(child, in format, in childIndent, in writeNull);
 
 			// Make sure the last item does not append a comma to confirm to JSON spec.
 			if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex))
@@ -132,8 +132,8 @@ public readonly struct JsonArray : IJsonArray
 		}
 
 		stringBuilder
-			.AppendOptionalNewline(format)
-			.AppendOptionalIndent(indent, format)
+			.AppendOptionalNewline(in format)
+			.AppendOptionalIndent(in indent, format)
 			.Append(JsonCharacterConstants.ArrayEndCharacter);
 
 		return stringBuilder;

@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Configuration;
 using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace FluentSerializer.Core.Text.Writers
@@ -15,73 +16,123 @@ namespace FluentSerializer.Core.Text.Writers
 	{
 		public ITextConfiguration TextConfiguration { get; }
 
-		internal readonly StringBuilder _stringBuilder;
+		internal readonly StringBuilder StringBuilder;
 
 		public SystemStringBuilder(ITextConfiguration textConfiguration, StringBuilder stringBuilder)
 		{
 			TextConfiguration = textConfiguration;
-			_stringBuilder = stringBuilder;
+			StringBuilder = stringBuilder;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter Append(in char value)
 		{
-			_stringBuilder.Append(value);
+			StringBuilder.Append(value);
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter Append(in char value, in int repeat)
 		{
-			_stringBuilder.Append(value, repeat);
+			StringBuilder.Append(value, repeat);
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter Append(in string? value)
 		{
 			if (value is null) return this;
 
-			_stringBuilder.Append(value);
+			StringBuilder.Append(value);
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter Append(in ReadOnlySpan<char> value)
 		{
 			if (value.IsEmpty) return this;
 
-			_stringBuilder.Append(value);
+			StringBuilder.Append(value);
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter AppendLineEnding()
 		{
-			_stringBuilder.Append(TextConfiguration.NewLine);
+			StringBuilder.Append(TextConfiguration.NewLine);
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public ITextWriter Clear()
 		{
-			_stringBuilder.Clear();
+			StringBuilder.Clear();
 			return this;
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public override string ToString()
 		{
-			return _stringBuilder.ToString();
+			return StringBuilder.ToString();
 		}
 
 		#region DirectByteAccess
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private byte[] GetBytes()
 		{
-			var bytes = new char[_stringBuilder.Length];
-			_stringBuilder.CopyTo(0, bytes, _stringBuilder.Length);
+			var bytes = new char[StringBuilder.Length];
+			StringBuilder.CopyTo(0, bytes, StringBuilder.Length);
 
 			return TextConfiguration.Encoding.GetBytes(bytes);
 		}
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public Span<byte> AsSpan() => GetBytes()
-			.AsSpan(0, _stringBuilder.Length);
+			.AsSpan(0, StringBuilder.Length);
 
+#if NET6_OR_GREATER
+		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public Memory<byte> AsMemory() => GetBytes()
-			.AsMemory(0, _stringBuilder.Length);
+			.AsMemory(0, StringBuilder.Length);
 		#endregion
 	}
 }
