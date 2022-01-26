@@ -1,5 +1,4 @@
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Configuration;
 using System;
 using System.Diagnostics;

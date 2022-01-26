@@ -24,13 +24,13 @@ public readonly struct JsonArray : IJsonArray
 
 	/// <inheritdoc cref="JsonBuilder.Array(IJsonArrayContent[])"/>
 	/// <remarks>
-	/// <b>Please use <see cref="Array"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
 	/// </remarks>
 	public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
 
 	/// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="Array"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
 	/// </remarks>
 	public JsonArray(IEnumerable<IJsonArrayContent>? elements)
 	{
