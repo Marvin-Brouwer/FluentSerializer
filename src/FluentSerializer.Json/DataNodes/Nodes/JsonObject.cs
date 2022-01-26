@@ -20,7 +20,7 @@ public readonly struct JsonObject : IJsonObject
 	private const string ObjectName = "{ }";
 	public string Name => ObjectName;
         
-	private readonly ulong? _lastPropertyIndex;
+	private readonly int? _lastPropertyIndex;
 	private readonly List<IJsonNode> _children;
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
@@ -52,7 +52,7 @@ public readonly struct JsonObject : IJsonObject
 		}
 		else
 		{
-			var currentPropertyIndex = 0uL;
+			var currentPropertyIndex = 0;
 			_children = new List<IJsonNode>();
 			foreach (var property in properties)
 			{
@@ -67,40 +67,41 @@ public readonly struct JsonObject : IJsonObject
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(in ITokenReader reader)
+	public JsonObject(in ReadOnlySpan<char> text, ref int offset)
 	{
 		_children = new List<IJsonNode>();
 		_lastPropertyIndex = null;
-		var currentPropertyIndex = 0uL;
+		var currentPropertyIndex = 0;
 
-		while (reader.CanAdvance())
+		offset.AdjustForToken(JsonCharacterConstants.ObjectStartCharacter);
+		while (text.WithinCapacity(in offset))
 		{
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectEndCharacter)) break;
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			if (reader.HasStringAtOffset(JsonCharacterConstants.SingleLineCommentMarker))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(reader));
+				_children.Add(new JsonCommentSingleLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
-			if (reader.HasStringAtOffset(JsonCharacterConstants.MultiLineCommentStart))
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(reader));
+				_children.Add(new JsonCommentMultiLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter))
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter))
 			{
-				var jsonProperty = new JsonProperty(reader);
+				var jsonProperty = new JsonProperty(in text, ref offset);
 				_children.Add(jsonProperty);
 				_lastPropertyIndex = currentPropertyIndex;
 				currentPropertyIndex++;
 			}
 
-			if (reader.CanAdvance()) reader.Advance();
+			offset++;
 		}
-		if (reader.CanAdvance()) reader.Advance();
+		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
@@ -108,7 +109,7 @@ public readonly struct JsonObject : IJsonObject
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
-		var currentPropertyIndex = 0uL;
+		var currentPropertyIndex = 0;
 
 		stringBuilder
 			.Append(JsonCharacterConstants.ObjectStartCharacter);

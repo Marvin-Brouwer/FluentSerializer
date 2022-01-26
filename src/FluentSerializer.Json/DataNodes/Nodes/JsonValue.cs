@@ -32,30 +32,30 @@ public readonly struct JsonValue : IJsonValue
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonValue(in ITokenReader reader)
+	public JsonValue(in ReadOnlySpan<char> text, ref int offset)
 	{
 		var stringValue = false;
 
-		var valueStartOffset = reader.Offset;
-		var valueEndOffset = reader.Offset;
+		var valueStartOffset = offset;
+		var valueEndOffset = offset;
 
-		while (reader.CanAdvance())
+		while (text.WithinCapacity(in offset))
 		{
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter) && stringValue) break; 
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.DividerCharacter) && !stringValue) break;
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectEndCharacter)) break;
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter) && stringValue) break; 
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter) && !stringValue) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
-			reader.Advance();
-			valueEndOffset = reader.Offset;
+			offset++;
+			valueEndOffset = offset;
 
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true; 
-			if (!stringValue && reader.HasWhitespaceAtOffset()) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true; 
+			if (!stringValue && text.HasWhitespaceAtOffset(in offset)) break;
 		}
 
 		// Append a '"' if it started with a '"'
 		if (stringValue) valueEndOffset++;
-		Value = reader.ReadAbsolute(valueStartOffset..valueEndOffset).ToString().Trim();
+		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);

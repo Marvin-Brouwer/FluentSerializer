@@ -15,6 +15,6 @@ public class JsonReadProfile : ReadProfile
 	[ParamsSource(nameof(Values))]
 	public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }
 
-	[Benchmark, BenchmarkCategory(nameof(ReadJsonString))]
-	public IJsonObject ReadJsonString() => JsonParser.Parse(CaseReader.ReadToEnd());
+	[Benchmark, BenchmarkCategory(nameof(ReadJson))]
+	public IJsonObject ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
 }

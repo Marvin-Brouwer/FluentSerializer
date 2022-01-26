@@ -1,3 +1,4 @@
+using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
@@ -46,80 +47,79 @@ public readonly struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = value is null ? new IJsonNode[0] : new IJsonNode[1] { value };
+		_children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[1] { value };
 	}
 
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(in ITokenReader reader)
+	public JsonProperty(in ReadOnlySpan<char> text, ref int offset)
 	{
 		HasValue = false;
+		offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
 
-		reader.Advance();
+		var nameStartOffset = offset;
+		var nameEndOffset = offset;
 
-		var nameStartOffset = reader.Offset;
-		var nameEndOffset = reader.Offset;
-
-		while (reader.CanAdvance())
+		while (text.WithinCapacity(in offset))
 		{
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyWrapCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) break;
 
-			reader.Advance();
-			nameEndOffset = reader.Offset;
+			offset++;
+			nameEndOffset = offset;
 		}
 
-		Name = reader.ReadAbsolute(nameStartOffset..nameEndOffset).ToString().Trim();
+		Name = text[nameStartOffset..nameEndOffset].ToString().Trim();
 
-		while (reader.CanAdvance())
+		while (text.WithinCapacity(in offset))
 		{
-			reader.Advance();
+			offset++;
 
 			// Just pretend it's null if no value has been provided
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.DividerCharacter))
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
 			{
-				_children = new IJsonNode[0];
-				reader.Advance();
+				_children = Array.Empty<IJsonNode>();
+				offset++;
 				return;
 			}
-			if (reader.HasWhitespaceAtOffset()) continue;
+			if (text.HasWhitespaceAtOffset(in offset)) continue;
 
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.PropertyAssignmentCharacter)) break;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyAssignmentCharacter)) break;
 		}
 
-		while (reader.CanAdvance())
+		while (text.WithinCapacity(in offset))
 		{
-			reader.Advance();
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ObjectStartCharacter))
+			offset++;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				_children = new IJsonNode[1]{
-					new JsonObject(reader)
+				_children = new IJsonNode[]{
+					new JsonObject(in text, ref offset)
 				};
 				HasValue = true;
 				return;
 			}
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.ArrayStartCharacter))
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				_children = new IJsonNode[1] {
-					new JsonArray(reader)
+				_children = new IJsonNode[] {
+					new JsonArray(in text, ref offset)
 				};
 				HasValue = true;
 				return;
 			}
 
-			if (!reader.HasWhitespaceAtOffset()) break;
+			if (!text.HasWhitespaceAtOffset(in offset)) break;
 			// Just pretend it's null if no value has been provided
-			if (reader.HasCharacterAtOffset(JsonCharacterConstants.DividerCharacter))
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
 			{
-				_children = new IJsonNode[0];
-				reader.Advance();
+				_children = Array.Empty<IJsonNode>();
+				offset++;
 				return;
 			}
 		}
 
-		var jsonValue = new JsonValue(reader);
-		_children = new IJsonNode[1]
+		var jsonValue = new JsonValue(in text, ref offset);
+		_children = new IJsonNode[]
 		{
 			jsonValue
 		};

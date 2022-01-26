@@ -1,3 +1,4 @@
+using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
@@ -31,27 +32,27 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 	/// <remarks>
 	/// <b>Please use <see cref="JsonParser.Parse"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentMultiLine(in ITokenReader reader)
+	public JsonCommentMultiLine(in ReadOnlySpan<char> text, ref int offset)
 	{
-		reader.Advance(JsonCharacterConstants.MultiLineCommentStart.Length);
+		offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 
-		var valueStartOffset = reader.Offset;
-		var valueEndOffset = reader.Offset;
+		var valueStartOffset = offset;
+		var valueEndOffset = offset;
 
-		while (reader.CanAdvance())
+		while (text.WithinCapacity(in offset))
 		{
-			valueEndOffset = reader.Offset;
+			valueEndOffset = offset;
 
-			if (reader.HasStringAtOffset(JsonCharacterConstants.MultiLineCommentEnd)) 
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentEnd)) 
 			{
-				reader.Advance(JsonCharacterConstants.MultiLineCommentEnd.Length);
+				offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 				break;
 			}
-                
-			reader.Advance();
+
+			offset++;
 		}
 
-		Value = reader.ReadAbsolute(valueStartOffset..valueEndOffset).ToString().Trim();
+		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);

@@ -1,5 +1,5 @@
+using System;
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Text.Readers;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
 
@@ -21,6 +21,7 @@ public readonly struct JsonParser
 	{
 		Guard.Against.NullOrWhiteSpace(value, nameof(value));
 
-		return new JsonObject(new StringTokenReader(value));
+		int offset = 0;
+		return new JsonObject(value.AsSpan(), ref offset);
 	}
 }
