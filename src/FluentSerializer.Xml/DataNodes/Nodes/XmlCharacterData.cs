@@ -14,14 +14,16 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 	private static readonly int TypeHashCode = typeof(XmlCharacterData).GetHashCode();
 
 	private const string CharacterDataName = "<![CDATA[ ]]>";
+	/// <inheritdoc />
 	public string Name => CharacterDataName;
+	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="XmlBuilder.CData(string)"/>
+	/// <inheritdoc cref="XmlBuilder.CData(in string)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.CData"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlCharacterData(string? value = null)
+	public XmlCharacterData(in string? value = null)
 	{
 		Value = value;
 	}
@@ -52,8 +54,10 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 		Value = text[valueStartOffset..valueEndOffset].ToString();
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
@@ -66,12 +70,16 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
 	#endregion

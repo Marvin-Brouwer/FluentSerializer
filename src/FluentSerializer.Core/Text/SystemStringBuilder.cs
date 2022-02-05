@@ -5,20 +5,15 @@ using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Text
 {
-	/// <summary>
-	/// Internal implementation of <see cref="ITextWriter"/> using <see cref="System.Text.StringBuilder"/><br />
-	/// The reason we're using a custom implementation: <br />
-	/// - Having a pluggable implementation<br />
-	/// - Having control over the newline characters<br />
-	/// - Having a clear definition of which methods to use when building any serializer library
-	/// </summary>
+	/// <inheritdoc />
 	internal sealed class SystemStringBuilder : ITextWriter
 	{
 		public ITextConfiguration TextConfiguration { get; }
 
 		internal readonly StringBuilder StringBuilder;
 
-		public SystemStringBuilder(ITextConfiguration textConfiguration, StringBuilder stringBuilder)
+		/// <inheritdoc />
+		public SystemStringBuilder(in ITextConfiguration textConfiguration, in StringBuilder stringBuilder)
 		{
 			TextConfiguration = textConfiguration;
 			StringBuilder = stringBuilder;

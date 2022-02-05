@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FluentSerializer.Core.DependencyInjection.NetCoreDefault\FluentSerializer.Core.DependencyInjection.NetCoreDefault.csproj" />
+    <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
+  </ItemGroup>
+
+</Project>

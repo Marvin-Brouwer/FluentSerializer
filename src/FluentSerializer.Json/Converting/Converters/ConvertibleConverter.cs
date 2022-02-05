@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
@@ -7,21 +7,27 @@ using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters;
 
+/// <summary>
+/// Converts types that implement <see cref="IConvertible"/>
+/// </summary>
 public sealed class ConvertibleConverter : IJsonConverter
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
-	private static string? ConvertToString(object value) => Convert.ToString(value);
+	private static string? ConvertToString(in object value) => Convert.ToString(value);
 
-	private static object? ConvertToNullableDataType(string? currentValue, Type targetType)
+	private static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
 		return Convert.ChangeType(currentValue, targetType);
 	}
 
-	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	/// <inheritdoc />
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is string stringToSerialize)
 			return Value($"\"{stringToSerialize}\"");
@@ -30,10 +36,11 @@ public sealed class ConvertibleConverter : IJsonConverter
 
 		return stringValue is null 
 			? null 
-			: Value(stringValue);
+			: Value(in stringValue);
 	}
 
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	/// <inheritdoc />
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (objectToDeserialize is not IDataValue data) return default;
 		if (context.PropertyType == typeof(string) && data.Value?.Length > 2)

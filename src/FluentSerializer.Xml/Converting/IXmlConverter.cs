@@ -4,12 +4,18 @@ using FluentSerializer.Xml.DataNodes;
 
 namespace FluentSerializer.Xml.Converting;
 
+/// <summary>
+/// A more specific interface for <see cref="IXmlConverter"/> with an overload to allow for parent access
+/// </summary>
 public interface IXmlConverter<TDataContainer> : IConverter<TDataContainer>, IXmlConverter
 	where TDataContainer : IXmlNode
 {
-	object? Deserialize(TDataContainer objectToDeserialize, IXmlElement? parent, ISerializerContext context) => 
+	/// <inheritdoc cref="IConverter{TDataContainer}.Deserialize(in TDataContainer, in ISerializerContext)"/>
+	object? Deserialize(in TDataContainer objectToDeserialize, in IXmlElement? parent, in ISerializerContext context) => 
 		Deserialize(objectToDeserialize, context);
 }
+
+/// <inheritdoc />
 public interface IXmlConverter : IConverter
 {
 }

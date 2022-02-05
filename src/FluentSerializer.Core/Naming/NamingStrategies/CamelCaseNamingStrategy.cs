@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Context;
@@ -6,25 +6,37 @@ using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
+/// <summary>
+/// Convert class and property names to camelCase <br />
+/// <example>
+/// SomeName => someName
+/// </example>
+/// </summary>
 public class CamelCaseNamingStrategy : INamingStrategy
 {
-	public virtual string GetName(PropertyInfo property, INamingContext namingContext) => GetName(property.Name);
-	public virtual string GetName(Type classType, INamingContext namingContext) => GetName(classType.Name);
-	protected virtual string GetName(string name)
+	/// <inheritdoc />
+	public virtual string GetName(in PropertyInfo property, in INamingContext namingContext) => GetName(property.Name);
+	/// <inheritdoc />
+	public virtual string GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
+
+	/// <summary>
+	/// Convert a string value to camelCase
+	/// </summary>
+	protected virtual string GetName(in string name)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(in name);
 
 		var properClassName = name.Split('`')[0];
 
 		return string.Create(properClassName.Length, properClassName, ConvertCasing);
 	}
+
 	private static void ConvertCasing(Span<char> characterSpan, string originalString)
 	{
 		var sourceSpan = originalString.AsSpan();
 		sourceSpan.CopyTo(characterSpan);
 		ConvertCasing(characterSpan);
 	}
-
 
 	/// <remarks>
 	/// This is based on the <see><cref>System.Text.Json.JsonCamelCaseNamingPolicy</cref></see> but,

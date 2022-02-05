@@ -14,14 +14,16 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 {
 	private static readonly int TypeHashCode = typeof(JsonCommentSingleLine).GetHashCode();
 
+	/// <inheritdoc />
 	public string Name => JsonCharacterConstants.SingleLineCommentMarker;
+	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="JsonBuilder.Comment(string)"/>
+	/// <inheritdoc cref="JsonBuilder.Comment(in string)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Comment"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentSingleLine(string value)
+	public JsonCommentSingleLine(in string value)
 	{
 		Guard.Against.NullOrEmpty(value, nameof(value));
 
@@ -51,8 +53,10 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		// JSON does not support empty property assignment or array members
@@ -77,12 +81,16 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
 	#endregion

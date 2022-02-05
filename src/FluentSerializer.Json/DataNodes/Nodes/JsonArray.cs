@@ -3,7 +3,6 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 
@@ -16,23 +15,19 @@ public readonly struct JsonArray : IJsonArray
 	private static readonly int TypeHashCode = typeof(JsonArray).GetHashCode();
 
 	private const string ArrayName = "[ ]";
+	/// <inheritdoc />
 	public string Name => ArrayName;
 
 	private readonly int? _lastNonCommentChildIndex;
 	private readonly List<IJsonNode> _children;
+	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-	/// <inheritdoc cref="JsonBuilder.Array(IJsonArrayContent[])"/>
+	/// <inheritdoc cref="JsonBuilder.Array(in IEnumerable{IJsonArrayContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Array(in IEnumerable{IJsonArrayContent})"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
-
-	/// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent})"/>
-	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Array"/> method instead of this constructor</b>
-	/// </remarks>
-	public JsonArray(IEnumerable<IJsonArrayContent>? elements)
+	public JsonArray(in IEnumerable<IJsonArrayContent>? elements)
 	{
 		_lastNonCommentChildIndex = null;
 
@@ -107,8 +102,10 @@ public readonly struct JsonArray : IJsonArray
 		offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
@@ -141,12 +138,16 @@ public readonly struct JsonArray : IJsonArray
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, _children);
 
 	#endregion

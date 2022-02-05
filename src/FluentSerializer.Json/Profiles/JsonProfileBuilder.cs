@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
@@ -11,13 +11,15 @@ using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Profiles;
 
+/// <inheritdoc />
 public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	where TModel : new()
 {
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
-        
-	public JsonProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
+
+	/// <inheritdoc />
+	public JsonProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
 		Guard.Against.Null(propertyMap, nameof(propertyMap));
@@ -26,15 +28,16 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 		_propertyMap = propertyMap;
 	}
 
+	/// <inheritdoc />
 	public IJsonProfileBuilder<TModel> Property<TProperty>(
-		Expression<Func<TModel, TProperty>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IJsonConverter>? converter = null
+		in Expression<Func<TModel, TProperty>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IJsonConverter>? converter = null
 	)
 	{
 		_propertyMap.Add(new PropertyMap(
-			direction,
+			in direction,
 			typeof(IJsonProperty),
 			propertySelector.GetProperty(),
 			namingStrategy ?? _defaultNamingStrategy,

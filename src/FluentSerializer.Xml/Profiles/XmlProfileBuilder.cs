@@ -11,13 +11,15 @@ using FluentSerializer.Xml.DataNodes;
 
 namespace FluentSerializer.Xml.Profiles;
 
+/// <inheritdoc />
 public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 	where TModel : new()
 {
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
-        
-	public XmlProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
+
+	/// <inheritdoc />
+	public XmlProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
 		Guard.Against.Null(propertyMap, nameof(propertyMap));
@@ -26,15 +28,16 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 		_propertyMap = propertyMap;
 	}
 
+	/// <inheritdoc />
 	public IXmlProfileBuilder<TModel> Attribute<TAttribute>(
-		Expression<Func<TModel, TAttribute>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IXmlConverter<IXmlAttribute>>? converter = null
+		in Expression<Func<TModel, TAttribute>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IXmlConverter<IXmlAttribute>>? converter = null
 	)
 	{
 		_propertyMap.Add(new PropertyMap(
-			direction,
+			in direction,
 			typeof(IXmlAttribute),
 			propertySelector.GetProperty(),
 			namingStrategy ?? _defaultNamingStrategy,
@@ -43,16 +46,17 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 
 		return this;
 	}
-        
-	public IXmlProfileBuilder<TModel> Child<TAttribute>(
-		Expression<Func<TModel, TAttribute>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IXmlConverter<IXmlElement>>? converter = null
+
+	/// <inheritdoc />
+	public IXmlProfileBuilder<TModel> Child<TElement>(
+		in Expression<Func<TModel, TElement>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IXmlConverter<IXmlElement>>? converter = null
 	)
 	{
 		_propertyMap.Add(new PropertyMap(
-			direction,
+			in direction,
 			typeof(IXmlElement),
 			propertySelector.GetProperty(),
 			namingStrategy ?? _defaultNamingStrategy,
@@ -66,17 +70,17 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 	/// XML Elements can only have one text node so this should be set last and doesn't return a <see cref="XmlProfileBuilder{TModel}"/>
 	/// </remarks>
 	public void Text<TText>(
-		Expression<Func<TModel, TText>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<IXmlConverter<IXmlText>>? converter = null
+		in Expression<Func<TModel, TText>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<IXmlConverter<IXmlText>>? converter = null
 	)
 	{
 		_propertyMap.Add(new PropertyMap(
-			direction,
+			in direction,
 			typeof(IXmlText),
 			propertySelector.GetProperty(),
 			// This isn't used but setting it to null requires a lot more code.
-			() => TextNamingStrategy.Instance,
+			in TextNamingStrategy.Default,
 			converter
 		));
 	}

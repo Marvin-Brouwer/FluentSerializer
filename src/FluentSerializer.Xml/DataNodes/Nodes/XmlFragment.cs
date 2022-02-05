@@ -15,30 +15,41 @@ namespace FluentSerializer.Xml.DataNodes.Nodes;
 public readonly struct XmlFragment : IXmlElement
 {
 	private readonly IXmlElement _innerElement;
+	/// <inheritdoc />
 	public IReadOnlyList<IXmlNode> Children => _innerElement.Children;
 
 	private const string FragmentName = "</>";
+	/// <inheritdoc />
 	public string Name => FragmentName;
 
+	/// <inheritdoc />
 
-	public IXmlAttribute? GetChildAttribute(string name) => _innerElement.GetChildAttribute(name);
+	public IXmlAttribute? GetChildAttribute(in string name) => _innerElement.GetChildAttribute(in name);
 
+	/// <inheritdoc />
 	public IEnumerable<IXmlElement> GetChildElements(string? name = null) => _innerElement.GetChildElements(name);
-	public IXmlElement? GetChildElement(string name) => _innerElement.GetChildElement(name);
+	/// <inheritdoc />
+	public IXmlElement? GetChildElement(in string name) => _innerElement.GetChildElement(in name);
 
+	/// <inheritdoc />
 	public string? GetTextValue() => _innerElement.GetTextValue();
 
 	/// <inheritdoc cref="XmlFragment"/>
-	public XmlFragment(IEnumerable<IXmlNode> childNodes)
+	public XmlFragment(in IEnumerable<IXmlNode> childNodes)
 	{
-		_innerElement = new XmlElement(nameof(XmlFragment), childNodes);
+		_innerElement = XmlBuilder.Element(nameof(XmlFragment), in childNodes);
 	}
 
 	/// <inheritdoc cref="XmlFragment"/>
-	public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
+	public XmlFragment(in IXmlNode childNode)
+	{
+		_innerElement = XmlBuilder.Element(nameof(XmlFragment), in childNode);
+	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = format ? indent + 1 : 0;
@@ -63,12 +74,16 @@ public readonly struct XmlFragment : IXmlElement
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => _innerElement.GetHashCode();
 
 	#endregion

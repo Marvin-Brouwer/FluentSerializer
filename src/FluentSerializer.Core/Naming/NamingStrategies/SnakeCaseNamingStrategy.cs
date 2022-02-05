@@ -1,13 +1,20 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
+/// <summary>
+/// Convert class and property names to snake_case <br />
+/// <example>
+/// SomeName => some_name
+/// </example>
+/// </summary>
 public class SnakeCaseNamingStrategy : CamelCaseNamingStrategy
 {
-	// Just use the camelCase logic here
-	protected override string GetName(string name)
+	/// <inheritdoc />
+	protected override string GetName(in string name)
 	{
-		var camelCaseName = base.GetName(name);
+		// Just use the camelCase logic here
+		var camelCaseName = base.GetName(in name);
 
 		return string.Join(string.Empty, camelCaseName
 			.AsEnumerable()

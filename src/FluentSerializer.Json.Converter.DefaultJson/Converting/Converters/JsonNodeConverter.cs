@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Json.Converting;
@@ -6,12 +6,18 @@ using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Converter.DefaultJson.Converting.Converters;
 
+/// <summary>
+/// Converts any raw <see cref="IJsonNode"/>
+/// </summary>
 public sealed class JsonNodeConverter : IJsonConverter
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	public bool CanConvert(Type targetType) => typeof(IJsonNode).IsAssignableFrom(targetType);
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => typeof(IJsonNode).IsAssignableFrom(targetType);
 
-	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	/// <inheritdoc />
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is IJsonNode element) return element;
 
@@ -19,7 +25,8 @@ public sealed class JsonNodeConverter : IJsonConverter
 			$"Type of '${objectToSerialize.GetType().FullName}' could not be converted");
 	}
 
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	/// <inheritdoc />
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (context.PropertyType.IsInstanceOfType(objectToDeserialize))
 			throw new NotSupportedException(

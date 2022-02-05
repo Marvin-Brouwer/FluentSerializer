@@ -5,7 +5,6 @@ using FluentSerializer.Json.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
@@ -17,31 +16,31 @@ public readonly struct JsonObject : IJsonObject
 	private static readonly int TypeHashCode = typeof(JsonObject).GetHashCode();
 
 	private const string ObjectName = "{ }";
+
+	/// <inheritdoc />
 	public string Name => ObjectName;
-        
+
 	private readonly int? _lastPropertyIndex;
 	private readonly List<IJsonNode> _children;
+	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-	public IJsonProperty? GetProperty(string name)
+	/// <inheritdoc />
+	public IJsonProperty? GetProperty(in string name)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
-		return _children.FirstOrDefault(child => 
-			child.Name.Equals(name, StringComparison.Ordinal)) as IJsonProperty;
+		foreach (var child in Children)
+			if (child.Name.Equals(name, StringComparison.Ordinal)) return child as IJsonProperty;
+
+		return null;
 	}
 
-	/// <inheritdoc cref="JsonBuilder.Object(IJsonObjectContent[])"/>
+	/// <inheritdoc cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
-
-	/// <inheritdoc cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/>
-	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object"/> method instead of this constructor</b>
-	/// </remarks>
-	public JsonObject(IEnumerable<IJsonObjectContent>? properties)
+	public JsonObject(in IEnumerable<IJsonObjectContent>? properties)
 	{
 		_lastPropertyIndex = null;
 
@@ -103,8 +102,10 @@ public readonly struct JsonObject : IJsonObject
 		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
@@ -139,12 +140,16 @@ public readonly struct JsonObject : IJsonObject
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, _children);
 
 	#endregion

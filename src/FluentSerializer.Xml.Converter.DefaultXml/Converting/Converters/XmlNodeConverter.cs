@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
@@ -7,13 +7,19 @@ using System;
 
 namespace FluentSerializer.Xml.Converter.DefaultXml.Converting.Converters;
 
+/// <summary>
+/// Converts any raw <see cref="IXmlNode"/>
+/// </summary>
 public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 
-	public bool CanConvert(Type targetType) => typeof(IXmlNode).IsAssignableFrom(targetType);
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => typeof(IXmlNode).IsAssignableFrom(targetType);
 
-	public object? Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+	/// <inheritdoc />
+	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
 	{
 		if (context.PropertyType.IsInstanceOfType(objectToDeserialize)) 
 			throw new NotSupportedException($"Type of '${objectToDeserialize.GetType().FullName}' is not assignable to {context.PropertyType}");
@@ -21,7 +27,8 @@ public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 		return objectToDeserialize;
 	}
 
-	public IXmlElement? Serialize(object objectToSerialize, ISerializerContext context)
+	/// <inheritdoc />
+	public IXmlElement? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is IXmlNode element) return new XmlFragment(element);
 

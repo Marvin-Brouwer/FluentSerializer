@@ -4,11 +4,13 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Core.Text;
 
+/// <inheritdoc />
 public sealed class SystemStringBuilderPolicy : PooledObjectPolicy<ITextWriter>
 {
 	private readonly ITextConfiguration _textConfiguration;
 	private readonly StringBuilderPooledObjectPolicy _stringBuilderPolicy;
 
+	/// <inheritdoc />
 	public SystemStringBuilderPolicy(in ITextConfiguration textConfiguration)
 	{
 		_textConfiguration = textConfiguration;
@@ -19,11 +21,13 @@ public sealed class SystemStringBuilderPolicy : PooledObjectPolicy<ITextWriter>
 		};
 	}
 
+	/// <inheritdoc />
 	public override ITextWriter Create() =>
 		new SystemStringBuilder(_textConfiguration,
 		_stringBuilderPolicy.Create()
 	);
 
+	/// <inheritdoc />
 	public override bool Return(ITextWriter obj)
 	{
 		if (obj is not SystemStringBuilder stringBuilder)

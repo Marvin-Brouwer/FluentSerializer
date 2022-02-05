@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,17 +12,37 @@ using FluentSerializer.Xml.Services;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 
+/// <summary>
+/// Converts most dotnet collections and does NOT wrap in a property name tag
+/// <code>
+/// <![CDATA[
+/// class Example {
+///	  public IEnumerabble<ExampleProp> Prop { get; set; }
+/// }
+/// ]]>
+/// </code>
+/// <code>
+/// <![CDATA[
+/// <Example>
+///   <ExampleProp />
+///   <ExampleProp />
+/// </Example>
+/// ]]>
+/// </code>
+/// </summary>
 public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	public bool CanConvert(Type targetType) => targetType.IsEnumerable();
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
-	object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
 	{
 		throw new NotSupportedException();
 	}
 
-	object? IXmlConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, IXmlElement? parent, ISerializerContext context)
+	object? IXmlConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in IXmlElement? parent, in ISerializerContext context)
 	{
 		if (parent is null) throw new NotSupportedException("You cannot deserialize a non-wrapped selection at root level");
 
@@ -33,7 +53,7 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
 			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
 
-		var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
+		var itemNamingStrategy = context.FindNamingStrategy(in genericTargetType)
 		                         ?? context.NamingStrategy;
 
 		var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
@@ -48,7 +68,7 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 
 		return instance;
 	}
-	IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
+	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize)
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");

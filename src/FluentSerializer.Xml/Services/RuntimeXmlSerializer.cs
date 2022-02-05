@@ -11,89 +11,101 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Xml.Profiles;
 
 namespace FluentSerializer.Xml.Services;
 
+/// <inheritdoc />
 public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 {
 	private readonly XmlTypeSerializer _serializer;
 	private readonly XmlTypeDeserializer _deserializer;
 	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
+	/// <inheritdoc />
 	public XmlSerializerConfiguration XmlConfiguration { get; }
+	/// <inheritdoc />
 	public SerializerConfiguration Configuration => XmlConfiguration;
 
+	/// <inheritdoc />
 	public RuntimeXmlSerializer(
-		IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+		IClassMapScanList<XmlSerializerProfile> mappings, 
 		XmlSerializerConfiguration configuration,
 		ObjectPoolProvider objectPoolProvider)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));
 
-		_serializer = new XmlTypeSerializer(mappings);
-		_deserializer = new XmlTypeDeserializer(mappings);
+		_serializer = new XmlTypeSerializer(in mappings);
+		_deserializer = new XmlTypeDeserializer(in mappings);
 		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		XmlConfiguration = configuration;
 	}
 
-	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IXmlElement? element)
+	/// <inheritdoc />
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] in IXmlElement? element)
 		where TModel : new()
 	{
 		if (element is null) return default;
 
 		if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
-		return _deserializer.DeserializeFromElement<TModel>(element, this);
+		return _deserializer.DeserializeFromElement<TModel>(in element, this);
 	}
 
-	public object? Deserialize([MaybeNull, AllowNull] IXmlElement? element, Type modelType)
+	/// <inheritdoc />
+	public object? Deserialize([MaybeNull, AllowNull] in IXmlElement? element, in Type modelType)
 	{
 		if (element is null) return default;
 
-		return _deserializer.DeserializeFromElement(element, modelType,  this);
+		return _deserializer.DeserializeFromElement(in element, in modelType,  this);
 	}
 
-	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData)
+	/// <inheritdoc />
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] in string? stringData)
 		where TModel : new()
 	{
 		if (string.IsNullOrWhiteSpace(stringData)) return default;
 
-		var rootElement = XmlParser.Parse(stringData);
-		return Deserialize<TModel>(rootElement);
+		var rootElement = XmlParser.Parse(in stringData);
+		return Deserialize<TModel>(in rootElement);
 	}
 
-	public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model)
+	/// <inheritdoc />
+	public string Serialize<TModel>([MaybeNull, AllowNull] in TModel? model)
 		where TModel : new()
 	{
 		if (model is null) return string.Empty;
 		if (model is IEnumerable) throw new MalConfiguredRootNodeException(model.GetType());
 
-		var document = SerializeToDocument(model);
+		var document = SerializeToDocument(in model);
 
-		var stringValue = document.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
+		var stringValue = document.WriteTo(in _stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
 		return stringValue;
 	}
 
-	public IXmlDocument SerializeToDocument<TModel>([MaybeNull, AllowNull] TModel? model)
+	/// <inheritdoc />
+	public IXmlDocument SerializeToDocument<TModel>([MaybeNull, AllowNull] in TModel? model)
 	{
-		var rootElement = SerializeToElement(model);
+		var rootElement = SerializeToElement(in model);
 
-		return new XmlDocument(rootElement);
+		return new XmlDocument(in rootElement);
 	}
 
-	public IXmlElement? SerializeToElement<TModel>([MaybeNull, AllowNull] TModel? model)
+	/// <inheritdoc />
+	public IXmlElement? SerializeToElement<TModel>([MaybeNull, AllowNull] in TModel? model)
 	{
 		if (model is null) return default;
 
 		return _serializer.SerializeToElement(model, typeof(TModel), this);
 	}
 
-	public IXmlElement? SerializeToElement([MaybeNull, AllowNull] object? model, Type modelType)
+	/// <inheritdoc />
+	public IXmlElement? SerializeToElement([MaybeNull, AllowNull] in object? model, in Type modelType)
 	{
 		if (model is null) return default;
 
-		return _serializer.SerializeToElement(model, modelType, this);
+		return _serializer.SerializeToElement(in model, in modelType, this);
 	}
 }

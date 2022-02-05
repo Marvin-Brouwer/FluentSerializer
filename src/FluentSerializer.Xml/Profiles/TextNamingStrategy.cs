@@ -12,11 +12,13 @@ namespace FluentSerializer.Xml.Profiles;
 internal sealed class TextNamingStrategy : INamingStrategy
 {
 	internal static readonly INamingStrategy Instance = new TextNamingStrategy();
+	internal static readonly Func<INamingStrategy> Default = () => Instance;
+
 	private static readonly NotSupportedException UsingException = new(
 		"This INamingStrategy is not supposed to be used outside of elements that don't require a name!"
 	);
 
 	private TextNamingStrategy() { }
-	public string GetName(PropertyInfo property, INamingContext namingContext) => throw UsingException;
-	public string GetName(Type classType, INamingContext namingContext) => throw UsingException;
+	public string GetName(in PropertyInfo property, in INamingContext namingContext) => throw UsingException;
+	public string GetName(in Type classType, in INamingContext namingContext) => throw UsingException;
 }

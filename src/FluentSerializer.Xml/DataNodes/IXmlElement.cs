@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.DataNodes;
 
@@ -12,7 +12,7 @@ public interface IXmlElement : IXmlContainer<IXmlElement>
 	/// <summary>
 	/// Find an attribute by name if present
 	/// </summary>
-	IXmlAttribute? GetChildAttribute(string name);
+	IXmlAttribute? GetChildAttribute(in string name);
 
 	/// <summary>
 	/// List all children with a given name
@@ -21,7 +21,7 @@ public interface IXmlElement : IXmlContainer<IXmlElement>
 	/// <summary>
 	/// Find an element by name if present
 	/// </summary>
-	IXmlElement? GetChildElement(string name);
+	IXmlElement? GetChildElement(in string name);
 
 	/// <summary>
 	/// Get the combined text value of all text nodes

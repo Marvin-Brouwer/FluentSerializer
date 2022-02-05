@@ -3,36 +3,32 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
-using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.TestUtils.Extensions;
-using FluentSerializer.Json.Configuration;
+using FluentSerializer.Json.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 using FluentSerializer.Json.Converting;
-using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.UseCase.Mavenlink.Models;
-using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace FluentSerializer.UseCase.Mavenlink
 {
 	public sealed partial class MavenlinkTests
     {
-        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
-        private readonly JsonSerializerConfiguration _configuration;
+		private readonly IServiceProvider _serviceProvider;
 
-        public MavenlinkTests()
+		public MavenlinkTests()
         {
-            _configuration = JsonSerializerConfiguration.Default;
-            _configuration.DefaultConverters.Add(Converter.For.Json());
-			_configuration.NewLine = LineEndings.LineFeed;
-
-
-			_mappings = ProfileScanner.FindClassMapsInAssembly<JsonSerializerProfile>(typeof(MavenlinkTests).Assembly, _configuration);
-        }
+			_serviceProvider = new ServiceCollection()
+				.AddFluentJsonSerializer<MavenlinkTests>(static configuration =>
+				{
+					configuration.DefaultConverters.Add(Converter.For.Json());
+					configuration.NewLine = LineEndings.LineFeed;
+				})
+				.BuildServiceProvider();
+		}
 
         [Fact,
             Trait("Category", "UseCase")]
@@ -42,7 +38,7 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = await File.ReadAllTextAsync("./MavenlinkTests.Serialize.json");
             var example = ProjectRequestExample;
 
-            var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
+            var sut = _serviceProvider.GetService<RuntimeJsonSerializer>()!;
 
             // Act
             var result = sut.Serialize(example);
@@ -59,10 +55,10 @@ namespace FluentSerializer.UseCase.Mavenlink
             var expected = UserResponseExample;
             var example = await File.ReadAllTextAsync("./MavenlinkTests.Deserialize.json");
 
-            var sut = new RuntimeJsonSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
+			var sut = _serviceProvider.GetService<RuntimeJsonSerializer>()!;
 
-            // Act
-            var result = sut.Deserialize<Response<User>>(example);
+			// Act
+			var result = sut.Deserialize<Response<User>>(example);
 
             // Assert
             result.Should().BeEquivalentTo(expected);

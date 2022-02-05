@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Services;
@@ -11,26 +11,34 @@ using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Mapping;
 
+/// <inheritdoc />
 public sealed class PropertyMap : IPropertyMap 
 {
 
 	private readonly Func<INamingStrategy> _namingStrategy;
 	private readonly Func<IConverter>? _customConverter;
 
+	/// <inheritdoc />
 	public INamingStrategy NamingStrategy => _namingStrategy();
+	/// <inheritdoc />
 	public IConverter? CustomConverter => _customConverter?.Invoke();
 
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; }
+	/// <inheritdoc />
 	public PropertyInfo Property { get; }
+	/// <inheritdoc />
 	public Type ConcretePropertyType { get; }
+	/// <inheritdoc />
 	public Type ContainerType { get; }
 
+	/// <inheritdoc />
 	public PropertyMap(
-		SerializerDirection direction,
-		Type containerType,
-		PropertyInfo property,
-		Func<INamingStrategy> namingStrategy,
-		Func<IConverter>? customConverter)
+		in SerializerDirection direction,
+		in Type containerType,
+		in PropertyInfo property,
+		in Func<INamingStrategy> namingStrategy,
+		in Func<IConverter>? customConverter)
 	{
 		_namingStrategy = namingStrategy;
 		_customConverter = customConverter;
@@ -41,8 +49,9 @@ public sealed class PropertyMap : IPropertyMap
 		ContainerType = containerType;
 	}
 
+	/// <inheritdoc />
 	public IConverter<TDataContainer>? GetConverter<TDataContainer>(
-		SerializerDirection direction, ISerializer currentSerializer)
+		SerializerDirection direction, in ISerializer currentSerializer)
 		where TDataContainer : IDataNode
 	{
 		Guard.Against.Null(direction, nameof(direction));

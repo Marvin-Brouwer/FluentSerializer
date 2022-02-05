@@ -25,23 +25,27 @@ public readonly struct JsonProperty : IJsonProperty
 		return value.Name;
 	}
 
+	/// <inheritdoc />
 	public string Name { get; }
 
 	private readonly IJsonNode[] _children;
 
+	/// <inheritdoc />
 	public bool HasValue { get; }
 
+	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children;
 
+	/// <inheritdoc />
 	public IJsonNode? Value => _children.FirstOrDefault();
 
-	/// <inheritdoc cref="JsonBuilder.Property(string, IJsonPropertyContent)"/>
+	/// <inheritdoc cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Property"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(string name, IJsonPropertyContent? value)
+	public JsonProperty(in string name, in IJsonPropertyContent? value)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(in name);
 
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
@@ -125,8 +129,10 @@ public readonly struct JsonProperty : IJsonProperty
 		HasValue = jsonValue.HasValue;
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The property was is an illegal state, it contains no Name");
@@ -154,12 +160,16 @@ public readonly struct JsonProperty : IJsonProperty
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _children);
 
 	#endregion

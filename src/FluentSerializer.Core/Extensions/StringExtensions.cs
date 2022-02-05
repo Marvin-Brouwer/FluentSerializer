@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Extensions
 {
+	/// <summary>
+	/// Extens to make checking characters and positioning in sring values slightly more readable
+	/// </summary>
 	public static class StringExtensions
 	{
 		/// <summary>

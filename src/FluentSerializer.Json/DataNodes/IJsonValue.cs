@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Json.DataNodes;
 
@@ -10,5 +10,8 @@ namespace FluentSerializer.Json.DataNodes;
 /// </summary>
 public interface IJsonValue : IDataValue, IJsonNode, IJsonPropertyContent
 {
+	/// <summary>
+	/// Property indicating whether the value is null or empty
+	/// </summary>
 	bool HasValue { get; }
 }

@@ -1,4 +1,6 @@
-﻿namespace FluentSerializer.Json.DataNodes;
+using FluentSerializer.Core.DataNodes;
+
+namespace FluentSerializer.Json.DataNodes;
 
 /// <summary>
 /// A representation of a JSON property <br/>
@@ -7,7 +9,11 @@
 /// </see> <br/><br/>
 /// <code>"name": value,</code>
 /// </summary>
-public interface IJsonProperty : IJsonContainer<IJsonProperty>, IJsonObjectContent { 
+public interface IJsonProperty : IJsonContainer<IJsonProperty>, IJsonObjectContent {
+
+	/// <inheritdoc cref="IDataValue.Value" />
 	IJsonNode? Value { get; }
+
+	/// <inheritdoc cref="IJsonValue.HasValue" />
 	bool HasValue { get; }
 }

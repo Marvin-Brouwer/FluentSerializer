@@ -1,4 +1,4 @@
-﻿namespace FluentSerializer.Json.DataNodes;
+namespace FluentSerializer.Json.DataNodes;
 
 /// <summary>
 /// A representation of a JSON object <br/>
@@ -9,5 +9,8 @@
 /// </summary>
 public interface IJsonObject : IJsonContainer<IJsonObject>, IJsonArrayContent, IJsonPropertyContent
 {
-	IJsonProperty? GetProperty(string name);
+	/// <summary>
+	/// Get a property by <paramref name="name"/>
+	/// </summary>
+	IJsonProperty? GetProperty(in string name);
 }
