@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
+using FluentSerializer.Json.Converting.Converters;
 
 namespace FluentSerializer.Json.Services;
 
@@ -51,8 +52,12 @@ public sealed class JsonTypeDeserializer
 		Guard.Against.Null(classType, nameof(classType));
 		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
-		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotImplementedException("Todo");
-		if (dataObject is not IJsonObject jsonObject)  throw new NotImplementedException("Todo");
+		if (typeof(IEnumerable).IsAssignableFrom(classType))
+		{
+			if (dataObject is not IJsonArray array) throw new ContainerNotSupportedException(in classType);
+			return CollectionConverter.DeserializeCollection(in array, in classType, currentSerializer);
+		}
+		if (dataObject is not IJsonObject jsonObject) throw new ContainerNotSupportedException(in classType);
 
 		var classMap = _mappings.Scan((classType, SerializerDirection.Deserialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);

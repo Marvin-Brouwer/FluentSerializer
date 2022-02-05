@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 using static FluentSerializer.Json.JsonBuilder;
 using FluentSerializer.Json.Profiles;
+using FluentSerializer.Json.Converting.Converters;
 
 namespace FluentSerializer.Json.Services;
 
@@ -39,7 +40,11 @@ public sealed class JsonTypeSerializer
 		Guard.Against.Null(classType, nameof(classType));
 		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
-		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotImplementedException("Todo");
+		if (typeof(IEnumerable).IsAssignableFrom(classType))
+		{
+			if (dataModel is not IEnumerable enumerable) throw new ContainerNotSupportedException(in classType);
+			return CollectionConverter.SerializeCollection(in enumerable, currentSerializer);
+		}
 
 		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);

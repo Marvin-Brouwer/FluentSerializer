@@ -14,12 +14,16 @@ namespace FluentSerializer.Core.Profiles;
 /// </summary>
 public static class ProfileScanner
 {
-	// todo remove linq
-	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(in Assembly assembly) where TSerializerProfile : ISerializerProfile =>
-		assembly.GetTypes()
-			.Where(type => typeof(TSerializerProfile).IsAssignableFrom(type))
-			.Where(type => !type.IsAbstract)
-			.Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
+	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile
+	{
+		foreach (var type in assembly.GetTypes())
+		{
+			if (type.IsAbstract) continue;
+			if (!typeof(TSerializerProfile).IsAssignableFrom(type)) continue;
+
+			yield return (ISerializerProfile)Activator.CreateInstance(type)!;
+		}
+	}
 
 	/// <summary>
 	/// Find all profiles of type <typeparamref name="TSerializerProfile"/> in the given <paramref name="assembly"/>,
@@ -32,7 +36,7 @@ public static class ProfileScanner
 		Guard.Against.Null(assembly, nameof(assembly));
 		Guard.Against.Null(configuration, nameof(configuration));
 
-		var profiles = ScanAssembly<TSerializerProfile>(in assembly);
+		var profiles = ScanAssembly<TSerializerProfile>(assembly);
 		var classMaps = FindClassMapsInProfiles(profiles, configuration).ToList();
 
 		return new ClassMapScanList<TSerializerProfile>(classMaps);

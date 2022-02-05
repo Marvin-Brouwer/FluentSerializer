@@ -8,7 +8,6 @@ namespace FluentSerializer.Core.Configuration;
 /// </summary>
 public interface ISerializerConfiguration
 {
-	// todo override
 	/// <summary>
 	/// The converters used by the serializer when no property specific converter is applied. <br />
 	/// <example>
