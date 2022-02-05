@@ -8,6 +8,9 @@ using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.Profiles;
 
+/// <summary>
+/// Helper class to find <see cref="ISerializerProfile"/>s
+/// </summary>
 public static class ProfileScanner
 {
 	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile =>
@@ -16,6 +19,10 @@ public static class ProfileScanner
 			.Where(type => !type.IsAbstract)
 			.Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
 
+	/// <summary>
+	/// Find all profiles of type <typeparamref name="TSerializerProfile"/> in the given <paramref name="assembly"/>,
+	/// generate the profile definitions and push into a <see cref="ClassMapScanList"/>
+	/// </summary>
 	public static ClassMapScanList FindClassMapsInAssembly<TSerializerProfile>(
 		Assembly assembly, SerializerConfiguration configuration)
 		where TSerializerProfile : ISerializerProfile

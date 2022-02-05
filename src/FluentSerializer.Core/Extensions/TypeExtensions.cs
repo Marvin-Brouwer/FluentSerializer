@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,12 +8,18 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Extensions;
 
+/// <summary>
+/// Extension methods to help reflecting addtional type information
+/// </summary>
 public static class TypeExtensions
 {
 	private const int NullableArgumentType = 2;
 	private const string NullableAttributeName = "System.Runtime.CompilerServices.NullableAttribute";
 	private const string NullableContextAttributeName = "System.Runtime.CompilerServices.NullableContextAttribute";
 
+	/// <summary>
+	/// Check wheter types equal, ignoring generics by pretending they are open generic types
+	/// </summary>
 	public static bool EqualsTopLevel(this Type type, Type typeToEqual)
 	{
 		Guard.Against.Null(typeToEqual, nameof(typeToEqual));
@@ -32,6 +38,9 @@ public static class TypeExtensions
 		return genericType.IsAssignableFrom(genericClassType);
 	}
 
+	/// <summary>
+	/// Check whether a type implements an interface of type
+	/// </summary>
 	public static bool Implements(this Type type, Type interfaceType)
 	{
 		if (interfaceType.IsAssignableFrom(type)) return true;
@@ -39,6 +48,12 @@ public static class TypeExtensions
 			.Any(typeInterface => typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition() == interfaceType);
 	}
 
+	/// <summary>
+	/// Create a new instance of <see cref="IList"/> that matches the passed <paramref name="type"/> most closely
+	/// </summary>
+	/// <param name="type"></param>
+	/// <returns></returns>
+	/// <exception cref="NotSupportedException"></exception>
 	public static IList GetEnumerableInstance(this Type type)
 	{
 		if (type.EqualsTopLevel(typeof(Array))) return (IList)Activator.CreateInstance(type)!;
@@ -54,19 +69,26 @@ public static class TypeExtensions
 
 		throw new NotSupportedException($"Unable to create an enumerable collection of '{type.FullName}'");
 	}
+
+	/// <summary>
+	/// Check if a type is Enumerable but not a string.
+	/// </summary>
 	public static bool IsEnumerable(this Type type) => 
 		!typeof(string).IsAssignableFrom(type) &&
 		type.Implements(typeof(IEnumerable));
 
+	/// <inheritdoc cref="IsNullable(Type)"/>
 	public static bool IsNullable(this PropertyInfo property) =>
 		IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);
-
+	/// <inheritdoc cref="IsNullable(Type)"/>
 	public static bool IsNullable(this FieldInfo field) =>
 		IsNullableHelper(field.FieldType, field.DeclaringType, field.CustomAttributes);
-        
+    /// <inheritdoc cref="IsNullable(Type)"/>
 	public static bool IsNullable(this ParameterInfo parameter) =>
 		IsNullableHelper(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
-
+	/// <summary>
+	/// Check whether this type is attributed to allow null values
+	/// </summary>
 	public static bool IsNullable(this Type type) =>
 		IsNullableHelper(type, null, type.CustomAttributes);
 

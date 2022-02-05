@@ -24,7 +24,7 @@ public readonly struct XmlAttribute : IXmlAttribute
 	/// </remarks>
 	public XmlAttribute(string name, string? value = null)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		Name = name;
 		Value = value;

@@ -1,12 +1,14 @@
-﻿using FluentSerializer.Core.Extensions;
+using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping;
 
+/// <inheritdoc />
 public sealed class PropertyMapScanList : ScanList<PropertyInfo, IPropertyMap>
 {
+	/// <inheritdoc />
 	public PropertyMapScanList(IReadOnlyList<IPropertyMap> dataTypes) : base(dataTypes) { }
 
 	/// <remarks>

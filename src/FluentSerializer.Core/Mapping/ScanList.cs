@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
         private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
 #endif
 
+	/// <inheritdoc />
 	protected ScanList(IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
@@ -22,6 +23,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 		_storedDataTypes = dataTypes;
 	}
 
+	/// <inheritdoc />
 	public TScanFor? Scan(TScanBy key)
 	{
 		Guard.Against.Null(key, nameof(key));
@@ -37,14 +39,18 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 		return matchingType;
 	}
 
+	/// <inheritdoc />
 	protected abstract bool Compare(TScanBy compareTo, TScanFor dataType);
 
 	#region IReadonlyList<T>
 
+	/// <inheritdoc />
 	public TScanFor this[int index] => _storedDataTypes[index];
 
+	/// <inheritdoc />
 	public int Count => _storedDataTypes.Count;
 
+	/// <inheritdoc />
 	public IEnumerator<TScanFor> GetEnumerator() => _storedDataTypes.GetEnumerator();
 	IEnumerator IEnumerable.GetEnumerator() => _storedDataTypes.GetEnumerator();
 

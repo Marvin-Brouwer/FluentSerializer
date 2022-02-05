@@ -25,7 +25,7 @@ public readonly struct JsonObject : IJsonObject
 
 	public IJsonProperty? GetProperty(string name)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return _children.FirstOrDefault(child => 
 			child.Name.Equals(name, StringComparison.Ordinal)) as IJsonProperty;

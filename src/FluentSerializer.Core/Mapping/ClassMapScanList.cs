@@ -5,10 +5,13 @@ using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Mapping;
 
+/// <inheritdoc />
 public sealed class ClassMapScanList : ScanList<(Type type, SerializerDirection direction), IClassMap>
 {
+	/// <inheritdoc />
 	public ClassMapScanList(IReadOnlyList<IClassMap> dataTypes) : base(dataTypes) { }
 
+	/// <inheritdoc />
 	protected override bool Compare((Type type, SerializerDirection direction) compareTo, IClassMap dataType)
 	{
 		if (!MatchDirection(compareTo.direction, dataType.Direction)) return false;
@@ -25,6 +28,9 @@ public sealed class ClassMapScanList : ScanList<(Type type, SerializerDirection 
 		return searchDirection == mapDirection;
 	}
 
+	/// <summary>
+	/// Join the data of two <see cref="ClassMapScanList"/>s
+	/// </summary>
 	public ClassMapScanList Append(ClassMapScanList classMaps)
 	{
 		var dataTypes = new List<IClassMap>();

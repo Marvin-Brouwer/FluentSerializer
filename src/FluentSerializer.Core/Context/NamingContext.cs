@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
 using System;
 using System.Reflection;
@@ -12,11 +12,13 @@ public class NamingContext : INamingContext
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _classMappings;
 
+	/// <inheritdoc />
 	public NamingContext(IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
 	{
 		_classMappings = classMappings;
 	}
 
+	/// <inheritdoc />
 	public INamingStrategy? FindNamingStrategy(Type classType, PropertyInfo property)
 	{
 		Guard.Against.Null(classType, nameof(classType));
@@ -28,6 +30,7 @@ public class NamingContext : INamingContext
 		return FindNamingStrategy(classMap.PropertyMaps, property);
 	}
 
+	/// <inheritdoc />
 	protected INamingStrategy? FindNamingStrategy(IScanList<PropertyInfo, IPropertyMap> propertyMapping, PropertyInfo property)
 	{
 		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
@@ -36,6 +39,7 @@ public class NamingContext : INamingContext
 		return propertyMapping.Scan(property)?.NamingStrategy;
 	}
 
+	/// <inheritdoc />
 	public INamingStrategy? FindNamingStrategy(Type type)
 	{
 		Guard.Against.Null(type, nameof(type));

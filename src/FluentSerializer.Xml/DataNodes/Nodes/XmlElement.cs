@@ -99,7 +99,7 @@ public readonly struct XmlElement : IXmlElement
 	/// </remarks>
 	public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		Name = name;
 		_attributes = new List<IXmlAttribute>();

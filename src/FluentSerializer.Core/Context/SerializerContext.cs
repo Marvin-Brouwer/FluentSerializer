@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
@@ -12,16 +12,18 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 {
 	private readonly IScanList<PropertyInfo, IPropertyMap> _propertyMappings;
 
+	/// <inheritdoc />
 	public PropertyInfo Property { get; }
-
+	/// <inheritdoc />
 	public Type PropertyType { get; }
-
+	/// <inheritdoc />
 	public Type ClassType { get; }
-
+	/// <inheritdoc />
 	public INamingStrategy NamingStrategy  { get; }
-
+	/// <inheritdoc />
 	public ISerializer CurrentSerializer  { get; }
 
+	/// <inheritdoc />
 	public SerializerContext(
 		PropertyInfo property, Type classType, 
 		INamingStrategy namingStrategy, ISerializer currentSerializer,
@@ -38,5 +40,6 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 		CurrentSerializer = currentSerializer;
 	}
 
+	/// <inheritdoc />
 	public INamingStrategy? FindNamingStrategy(PropertyInfo property) => FindNamingStrategy(_propertyMappings, property);
 }

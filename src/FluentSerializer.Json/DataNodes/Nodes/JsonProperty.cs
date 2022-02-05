@@ -41,7 +41,7 @@ public readonly struct JsonProperty : IJsonProperty
 	/// </remarks>
 	public JsonProperty(string name, IJsonPropertyContent? value)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;

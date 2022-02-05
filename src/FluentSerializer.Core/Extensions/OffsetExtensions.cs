@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Extensions;
 
+/// <summary>
+/// Extensions to make adjusting integer offsets slightly more readable
+/// </summary>
 public static class OffsetExtensions
 {
 	/// <summary>

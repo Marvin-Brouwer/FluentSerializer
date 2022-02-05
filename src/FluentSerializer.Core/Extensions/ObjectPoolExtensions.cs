@@ -4,6 +4,9 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Core.Extensions;
 
+/// <summary>
+/// Extensions to initialize a custom StringBuilderPool
+/// </summary>
 public static class ObjectPoolExtensions
 {
 	/// <returns>A custom <see cref="ObjectPool{T}"/> of <see cref="ITextWriter"/> implementation that uses the <see cref="System.Text.StringBuilder"/> internally</returns>

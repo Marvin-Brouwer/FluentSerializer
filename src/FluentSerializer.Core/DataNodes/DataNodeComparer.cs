@@ -4,12 +4,17 @@ using System.Collections.Generic;
 namespace FluentSerializer.Core.DataNodes;
 
 /// <summary>
-/// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="IEquatable{IDataNode}.GetHashCode()"/>
+/// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="GetHashCode"/>
 /// </summary>
 public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode>>
 {
+	/// <summary>
+	/// Static default implementation
+	/// </summary>
 	public static readonly DataNodeComparer Default = new();
 
+
+	/// <inheritdoc />
 	public bool Equals(IEquatable<IDataNode>? x, IEquatable<IDataNode>? y)
 	{
 		if (x is null) return y is null;
@@ -17,6 +22,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 		return x.GetHashCode().Equals(y?.GetHashCode());
 	}
 
+	/// <inheritdoc />
 	public int GetHashCode(IEquatable<IDataNode>? obj) => obj?.GetHashCode() ?? 0;
 
 	/// <summary>

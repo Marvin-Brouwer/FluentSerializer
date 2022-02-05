@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Mapping;
 
@@ -11,5 +11,8 @@ namespace FluentSerializer.Core.Mapping;
 public interface IScanList<in TScanBy, out TScanFor> : IReadOnlyList<TScanFor>
 	where TScanFor : class
 {
+	/// <summary>
+	/// Scan this list for a <typeparamref name="TScanFor"/> by checking <typeparamref name="TScanBy"/>
+	/// </summary>
 	TScanFor? Scan(TScanBy key);
 }

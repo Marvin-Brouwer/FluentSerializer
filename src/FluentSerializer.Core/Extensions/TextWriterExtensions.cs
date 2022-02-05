@@ -6,7 +6,10 @@ using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Core.Extensions;
 
-public static class StringBuilderExtensions
+/// <summary>
+/// Extensions for the <see cref="ITextWriter"/> specifically for appending <see cref="IDataNode"/>s serialized values
+/// </summary>
+public static class TextWriterExtensions
 {
 	/// <summary>
 	/// Append this node's text content to the current text

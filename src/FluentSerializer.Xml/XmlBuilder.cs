@@ -16,7 +16,7 @@ public readonly struct XmlBuilder
 	/// <param name="childNodes">A parameters list of <see cref="IXmlNode"/> as children of this element.</param>
 	public static IXmlElement Element(string name, params IXmlNode[] childNodes)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new XmlElement(name, childNodes);
 	}
@@ -25,7 +25,7 @@ public readonly struct XmlBuilder
 	/// <inheritdoc cref="Element(string, IXmlNode[])"/>
 	public static IXmlElement Element(string name, IEnumerable<IXmlNode> childNodes)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new XmlElement(name, childNodes);
 	}
@@ -35,7 +35,7 @@ public readonly struct XmlBuilder
 	/// <param name="value">The value assigned to the attribute</param>
 	public static IXmlAttribute Attribute(string name, string? value)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new XmlAttribute(name, value);
 	}

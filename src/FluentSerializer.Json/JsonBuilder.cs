@@ -30,7 +30,7 @@ public readonly struct JsonBuilder
 	/// <param name="jsonArray">The array node assigned to this property's value</param>
 	public static IJsonProperty Property(string name, IJsonArray? jsonArray)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new JsonProperty(name, jsonArray);
 	}
@@ -39,7 +39,7 @@ public readonly struct JsonBuilder
 	/// <param name="jsonObject">The object node assigned to this property's value</param>
 	public static IJsonProperty Property(string name, IJsonObject? jsonObject)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new JsonProperty(name, jsonObject);
 	}
@@ -48,7 +48,7 @@ public readonly struct JsonBuilder
 	/// <param name="jsonValue">The value container assigned to this property's value</param>
 	public static IJsonProperty Property(string name, IJsonValue? jsonValue)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new JsonProperty(name, jsonValue);
 	}
@@ -57,7 +57,7 @@ public readonly struct JsonBuilder
 	/// <param name="jsonPropertyItem">The node that carries the value of this property</param>
 	public static IJsonProperty Property(string name, IJsonPropertyContent jsonPropertyItem)
 	{
-		Guard.Against.InvalidName(name, nameof(name));
+		Guard.Against.InvalidName(name);
 
 		return new JsonProperty(name, jsonPropertyItem);
 	}
