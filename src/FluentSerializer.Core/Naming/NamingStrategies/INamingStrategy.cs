@@ -12,9 +12,9 @@ public interface INamingStrategy
 	/// <summary>
 	/// Return a valid serializable name value for this <paramref name="property"/>
 	/// </summary>
-	public string GetName(PropertyInfo property, INamingContext namingContext);
+	public string GetName(in PropertyInfo property, in INamingContext namingContext);
 	/// <summary>
 	/// Return a valid serializable name value for this <paramref name="classType"/>
 	/// </summary>
-	public string GetName(Type classType, INamingContext namingContext);
+	public string GetName(in Type classType, in INamingContext namingContext);
 }

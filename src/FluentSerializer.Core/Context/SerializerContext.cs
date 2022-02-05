@@ -25,11 +25,11 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 
 	/// <inheritdoc />
 	public SerializerContext(
-		PropertyInfo property, Type classType, 
-		INamingStrategy namingStrategy, ISerializer currentSerializer,
-		IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-		IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings) :
-		base(classMappings)
+		in PropertyInfo property, in Type classType, 
+		in INamingStrategy namingStrategy, in ISerializer currentSerializer,
+		in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
+		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings) :
+		base(in classMappings)
 	{
 		_propertyMappings = propertyMappings;
 
@@ -41,5 +41,5 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 	}
 
 	/// <inheritdoc />
-	public INamingStrategy? FindNamingStrategy(PropertyInfo property) => FindNamingStrategy(_propertyMappings, property);
+	public INamingStrategy? FindNamingStrategy(in PropertyInfo property) => FindNamingStrategy(in _propertyMappings, property);
 }

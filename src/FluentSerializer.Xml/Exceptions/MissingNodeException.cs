@@ -17,7 +17,7 @@ public sealed class MissingNodeException : OperationNotSupportedException
 	public Type AttemptedType { get; }
 
 	/// <inheritdoc />
-	public MissingNodeException(Type attemptedType, string nodeName) : base(
+	public MissingNodeException(in Type attemptedType, in string nodeName) : base(
 		$"Cannot find node with name '{nodeName}' for type '{attemptedType.FullName}'")
 	{
 		AttemptedType = attemptedType;

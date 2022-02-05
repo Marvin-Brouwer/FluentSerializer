@@ -20,7 +20,7 @@ public static class TypeExtensions
 	/// <summary>
 	/// Check wheter types equal, ignoring generics by pretending they are open generic types
 	/// </summary>
-	public static bool EqualsTopLevel(this Type type, Type typeToEqual)
+	public static bool EqualsTopLevel(this Type type, in Type typeToEqual)
 	{
 		Guard.Against.Null(typeToEqual, nameof(typeToEqual));
 
@@ -45,7 +45,7 @@ public static class TypeExtensions
 	{
 		if (interfaceType.IsAssignableFrom(type)) return true;
 		return type.GetInterfaces()
-			.Any(typeInterface => typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition() == interfaceType);
+			.Any(typeInterface => typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition().Equals(interfaceType));
 	}
 
 	/// <summary>
@@ -90,9 +90,9 @@ public static class TypeExtensions
 	/// Check whether this type is attributed to allow null values
 	/// </summary>
 	public static bool IsNullable(this Type type) =>
-		IsNullableHelper(type, null, type.CustomAttributes);
+		IsNullableHelper(in type, null, type.CustomAttributes);
 
-	private static bool IsNullableHelper(Type memberType, MemberInfo? declaringType, IEnumerable<CustomAttributeData> customAttributes)
+	private static bool IsNullableHelper(in Type memberType, in MemberInfo? declaringType, in IEnumerable<CustomAttributeData> customAttributes)
 	{
 		if (memberType.IsValueType)
 			return Nullable.GetUnderlyingType(memberType) != null;

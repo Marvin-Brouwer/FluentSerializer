@@ -24,7 +24,7 @@ public sealed class CustomNamingStrategy : INamingStrategy
 	}
 
 	/// <inheritdoc />
-	public string GetName(PropertyInfo property, INamingContext namingContext) => _name;
+	public string GetName(in PropertyInfo property, in INamingContext namingContext) => _name;
 	/// <inheritdoc />
-	public string GetName(Type classType, INamingContext namingContext) => _name;
+	public string GetName(in Type classType, in INamingContext namingContext) => _name;
 }

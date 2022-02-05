@@ -10,7 +10,7 @@ namespace FluentSerializer.Core.SerializerException;
 public abstract class SerializerException : Exception
 {
 	/// <inheritdoc />
-	protected SerializerException(SerializationInfo info, StreamingContext context) : base(info, context){ }
+	protected SerializerException(in SerializationInfo info, in StreamingContext context) : base(info, context){ }
 	/// <inheritdoc />
-	protected SerializerException(string message) : base(message) { }
+	protected SerializerException(in string message) : base(message) { }
 }

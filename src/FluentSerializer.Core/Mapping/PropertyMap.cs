@@ -34,11 +34,11 @@ public sealed class PropertyMap : IPropertyMap
 
 	/// <inheritdoc />
 	public PropertyMap(
-		SerializerDirection direction,
-		Type containerType,
-		PropertyInfo property,
-		Func<INamingStrategy> namingStrategy,
-		Func<IConverter>? customConverter)
+		in SerializerDirection direction,
+		in Type containerType,
+		in PropertyInfo property,
+		in Func<INamingStrategy> namingStrategy,
+		in Func<IConverter>? customConverter)
 	{
 		_namingStrategy = namingStrategy;
 		_customConverter = customConverter;
@@ -51,7 +51,7 @@ public sealed class PropertyMap : IPropertyMap
 
 	/// <inheritdoc />
 	public IConverter<TDataContainer>? GetConverter<TDataContainer>(
-		SerializerDirection direction, ISerializer currentSerializer)
+		SerializerDirection direction, in ISerializer currentSerializer)
 		where TDataContainer : IDataNode
 	{
 		Guard.Against.Null(direction, nameof(direction));

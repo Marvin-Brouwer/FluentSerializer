@@ -19,11 +19,11 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="XmlBuilder.CData(string)"/>
+	/// <inheritdoc cref="XmlBuilder.CData(in string)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.CData"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlCharacterData(string? value = null)
+	public XmlCharacterData(in string? value = null)
 	{
 		Value = value;
 	}

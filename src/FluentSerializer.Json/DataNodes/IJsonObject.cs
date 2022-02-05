@@ -12,5 +12,5 @@ public interface IJsonObject : IJsonContainer<IJsonObject>, IJsonArrayContent, I
 	/// <summary>
 	/// Get a property by <paramref name="name"/>
 	/// </summary>
-	IJsonProperty? GetProperty(string name);
+	IJsonProperty? GetProperty(in string name);
 }

@@ -11,11 +11,11 @@ public interface IAdvancedJsonSerializer : IJsonSerializer
 	/// <summary>
 	/// Serialize <paramref name="model"/> to a node representation
 	/// </summary>
-	TContainer? SerializeToContainer<TContainer>(object? model, Type modelType)
+	TContainer? SerializeToContainer<TContainer>(in object? model, in Type modelType)
 		where TContainer : IJsonContainer;
 
 	/// <summary>
 	/// Deserialize <paramref name="element"/> from a node representation to an object
 	/// </summary>
-	object? Deserialize(IJsonContainer element, Type modelType);
+	object? Deserialize(in IJsonContainer element, in Type modelType);
 }

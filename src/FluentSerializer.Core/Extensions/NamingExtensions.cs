@@ -16,10 +16,10 @@ public static class NamingExtensions
 	/// Get the converted name for this <paramref name="property"/> using the applied <paramref name="namingStrategy"/>
 	/// and validating the name
 	/// </summary>
-	public static string SafeGetName(this INamingStrategy namingStrategy, PropertyInfo property, INamingContext namingContext)
+	public static string SafeGetName(this INamingStrategy namingStrategy, in PropertyInfo property, in INamingContext namingContext)
 	{
-		var resolvedName = namingStrategy.GetName(property, namingContext);
-		Guard.Against.InvalidName(resolvedName);
+		var resolvedName = namingStrategy.GetName(in property, in namingContext);
+		Guard.Against.InvalidName(in resolvedName);
 
 		return resolvedName;
 	}
@@ -28,7 +28,7 @@ public static class NamingExtensions
 	/// Get the converted name for this <paramref name="classType"/> using the applied <paramref name="namingStrategy"/>
 	/// and validating the name
 	/// </summary>
-	public static string SafeGetName(this INamingStrategy namingStrategy, Type classType, INamingContext namingContext)
+	public static string SafeGetName(this INamingStrategy namingStrategy, in Type classType, in INamingContext namingContext)
 	{
 		var resolvedName = namingStrategy.GetName(classType, namingContext);
 		Guard.Against.InvalidName(resolvedName);
@@ -39,7 +39,7 @@ public static class NamingExtensions
 	/// <summary>
 	/// Make sure the <paramref name="value"/> passed contains only valid characters.
 	/// </summary>
-	public static void InvalidName(this IGuardClause guard, string? value, [CallerArgumentExpression("value")] string name = "") {
+	public static void InvalidName(this IGuardClause guard, in string? value, [CallerArgumentExpression("value")] string name = "") {
 
 		guard.NullOrWhiteSpace(value, name);
 		guard.InvalidFormat(value, name, @"^[\w_\-+]*$");

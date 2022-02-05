@@ -23,7 +23,7 @@ public readonly struct XmlComment : IXmlComment
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Comment"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlComment(string? value = null)
+	public XmlComment(in string? value = null)
 	{
 		Value = value;
 	}

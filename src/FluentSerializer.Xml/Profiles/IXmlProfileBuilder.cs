@@ -34,10 +34,10 @@ public interface IXmlProfileBuilder<TModel>
 	///	</param>
 	/// <returns></returns>
 	public IXmlProfileBuilder<TModel> Attribute<TAttribute>(
-		Expression<Func<TModel, TAttribute>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IXmlConverter<IXmlAttribute>>? converter = null
+		in Expression<Func<TModel, TAttribute>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IXmlConverter<IXmlAttribute>>? converter = null
 	);
 
 	/// <summary>
@@ -59,10 +59,10 @@ public interface IXmlProfileBuilder<TModel>
 	///	</param>
 	/// <returns></returns>
 	public IXmlProfileBuilder<TModel> Child<TElement>(
-		Expression<Func<TModel, TElement>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IXmlConverter<IXmlElement>>? converter = null
+		in Expression<Func<TModel, TElement>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IXmlConverter<IXmlElement>>? converter = null
 	);
 
 	/// <summary>
@@ -79,8 +79,8 @@ public interface IXmlProfileBuilder<TModel>
 	///	</param>
 	/// <returns></returns>
 	public void Text<TText>(
-		Expression<Func<TModel, TText>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<IXmlConverter<IXmlText>>? converter = null
+		in Expression<Func<TModel, TText>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<IXmlConverter<IXmlText>>? converter = null
 	);
 }

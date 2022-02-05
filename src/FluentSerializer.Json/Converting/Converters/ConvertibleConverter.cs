@@ -15,11 +15,11 @@ public sealed class ConvertibleConverter : IJsonConverter
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
+	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
-	private static string? ConvertToString(object value) => Convert.ToString(value);
+	private static string? ConvertToString(in object value) => Convert.ToString(value);
 
-	private static object? ConvertToNullableDataType(string? currentValue, Type targetType)
+	private static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
@@ -27,7 +27,7 @@ public sealed class ConvertibleConverter : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is string stringToSerialize)
 			return Value($"\"{stringToSerialize}\"");
@@ -36,11 +36,11 @@ public sealed class ConvertibleConverter : IJsonConverter
 
 		return stringValue is null 
 			? null 
-			: Value(stringValue);
+			: Value(in stringValue);
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (objectToDeserialize is not IDataValue data) return default;
 		if (context.PropertyType == typeof(string) && data.Value?.Length > 2)

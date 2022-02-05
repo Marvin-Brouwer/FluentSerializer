@@ -33,9 +33,9 @@ public interface IJsonProfileBuilder<TModel>
 	///	</param>
 	/// <returns></returns>
 	public IJsonProfileBuilder<TModel> Property<TProperty>(
-		Expression<Func<TModel, TProperty>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IJsonConverter>? converter = null
+		in Expression<Func<TModel, TProperty>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IJsonConverter>? converter = null
 	);
 }

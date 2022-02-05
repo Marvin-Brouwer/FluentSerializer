@@ -11,10 +11,10 @@ public interface IAdvancedXmlSerializer : IXmlSerializer
 	/// <summary>
 	/// Serialize <paramref name="model"/> to a node representation
 	/// </summary>
-	IXmlElement? SerializeToElement(object? model, Type modelType);
+	IXmlElement? SerializeToElement(in object? model, in Type modelType);
 
 	/// <summary>
 	/// Deserialize <paramref name="element"/> from a node representation to an object
 	/// </summary>
-	object? Deserialize(IXmlElement element, Type modelType);
+	object? Deserialize(in IXmlElement element, in Type modelType);
 }

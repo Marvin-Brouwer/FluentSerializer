@@ -25,7 +25,7 @@ public readonly struct XmlDocument : IXmlDocument
 
 	/// <inheritdoc cref="IXmlDocument"/>
 	/// <param name="root">The root element to represent the actual document</param>
-	public XmlDocument(IXmlElement? root)
+	public XmlDocument(in IXmlElement? root)
 	{
 		RootElement = root;
 	}

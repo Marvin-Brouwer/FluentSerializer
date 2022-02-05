@@ -14,10 +14,10 @@ public sealed class JsonNodeConverter : IJsonConverter
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public bool CanConvert(Type targetType) => typeof(IJsonNode).IsAssignableFrom(targetType);
+	public bool CanConvert(in Type targetType) => typeof(IJsonNode).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is IJsonNode element) return element;
 
@@ -26,7 +26,7 @@ public sealed class JsonNodeConverter : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (context.PropertyType.IsInstanceOfType(objectToDeserialize))
 			throw new NotSupportedException(

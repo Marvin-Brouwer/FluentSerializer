@@ -23,7 +23,7 @@ public sealed class ContainerNotFoundException : OperationNotSupportedException
 	public string TargetName { get; }
 
 	/// <inheritdoc />
-	public ContainerNotFoundException(Type propertyType, Type containerType, string targetName) : base(
+	public ContainerNotFoundException(in Type propertyType, in Type containerType, in string targetName) : base(
 		$"Container '{targetName}' of type '{containerType.Name}' was not found and '{targetName}' is not nullable")
 	{
 		PropertyType = propertyType;
@@ -32,7 +32,7 @@ public sealed class ContainerNotFoundException : OperationNotSupportedException
 	}
 
 	#region Serializable
-	private ContainerNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+	private ContainerNotFoundException(in SerializationInfo info, in StreamingContext context) : base(in info, in context)
 	{
 		PropertyType = (Type)info.GetValue(nameof(PropertyType), typeof(Type))!;
 		ContainerType = (Type)info.GetValue(nameof(ContainerType), typeof(Type))!;

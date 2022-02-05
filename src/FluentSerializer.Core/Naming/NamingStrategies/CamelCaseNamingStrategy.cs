@@ -15,16 +15,16 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public class CamelCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public virtual string GetName(PropertyInfo property, INamingContext namingContext) => GetName(property.Name);
+	public virtual string GetName(in PropertyInfo property, in INamingContext namingContext) => GetName(property.Name);
 	/// <inheritdoc />
-	public virtual string GetName(Type classType, INamingContext namingContext) => GetName(classType.Name);
+	public virtual string GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
 
 	/// <summary>
 	/// Convert a string value to camelCase
 	/// </summary>
-	protected virtual string GetName(string name)
+	protected virtual string GetName(in string name)
 	{
-		Guard.Against.InvalidName(name);
+		Guard.Against.InvalidName(in name);
 
 		var properClassName = name.Split('`')[0];
 

@@ -19,11 +19,11 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="JsonBuilder.MultilineComment(string)"/>
+	/// <inheritdoc cref="JsonBuilder.MultilineComment(in string)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.MultilineComment"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentMultiLine(string value)
+	public JsonCommentMultiLine(in string value)
 	{
 		Guard.Against.NullOrEmpty(value, nameof(value));
 

@@ -16,10 +16,10 @@ public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 
 	/// <inheritdoc />
-	public bool CanConvert(Type targetType) => typeof(IXmlNode).IsAssignableFrom(targetType);
+	public bool CanConvert(in Type targetType) => typeof(IXmlNode).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public object? Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
 	{
 		if (context.PropertyType.IsInstanceOfType(objectToDeserialize)) 
 			throw new NotSupportedException($"Type of '${objectToDeserialize.GetType().FullName}' is not assignable to {context.PropertyType}");
@@ -28,7 +28,7 @@ public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 	}
 
 	/// <inheritdoc />
-	public IXmlElement? Serialize(object objectToSerialize, ISerializerContext context)
+	public IXmlElement? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is IXmlNode element) return new XmlFragment(element);
 

@@ -24,6 +24,6 @@ public interface IUseXmlConverters
 	/// Converts most DotNet collections
 	/// </summary>
 	/// <param name="wrapCollection">When true, wraps the collection in a tag of the property name</param>
-	Func<IXmlConverter<IXmlElement>> Collection(bool wrapCollection = true);
+	Func<IXmlConverter<IXmlElement>> Collection(in bool wrapCollection = true);
 
 }

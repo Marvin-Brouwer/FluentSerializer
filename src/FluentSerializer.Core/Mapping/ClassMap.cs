@@ -24,10 +24,10 @@ public sealed class ClassMap : IClassMap
 
 	/// <inheritdoc />
 	public ClassMap(
-		Type classType,
-		SerializerDirection direction,
-		Func<INamingStrategy> namingStrategy,
-		IReadOnlyList<IPropertyMap> propertyMap)
+		in Type classType,
+		in SerializerDirection direction,
+		in Func<INamingStrategy> namingStrategy,
+		in IReadOnlyList<IPropertyMap> propertyMap)
 	{
 		_namingStrategy = namingStrategy;
 		_propertyMap = propertyMap;

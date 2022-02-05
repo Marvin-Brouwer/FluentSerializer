@@ -11,10 +11,10 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public class SnakeCaseNamingStrategy : CamelCaseNamingStrategy
 {
 	/// <inheritdoc />
-	protected override string GetName(string name)
+	protected override string GetName(in string name)
 	{
 		// Just use the camelCase logic here
-		var camelCaseName = base.GetName(name);
+		var camelCaseName = base.GetName(in name);
 
 		return string.Join(string.Empty, camelCaseName
 			.AsEnumerable()

@@ -46,6 +46,6 @@ public interface IPropertyMap
 	/// a <see cref="SerializerException.ConverterNotSupportedException"/> should be thrown
 	/// </remarks>
 	IConverter<TDataContainer>? GetConverter<TDataContainer>(
-		SerializerDirection direction, ISerializer currentSerializer)
+		SerializerDirection direction, in ISerializer currentSerializer)
 		where TDataContainer : IDataNode;
 }

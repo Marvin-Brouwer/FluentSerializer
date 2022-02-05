@@ -28,39 +28,63 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	/// <summary>
 	/// Get the combined HashCode of all objects passed to this method.
 	/// This will call <see cref="GetHashCodeFor(IEnumerable{IEquatable{IDataNode}})"/> for collections
-	/// and <see cref="GetHashCodeFor(IEquatable{IDataNode}?)"/> for equatable objects.
+	/// and <see cref="GetHashCodeFor(in IEquatable{IDataNode}?)"/> for equatable objects.
 	/// If null this will append 0 to the hashcode calculation
 	/// If none of the above the objects <see cref="object.GetHashCode"/> will be added to the hashcode calculation.
 	/// </summary>
 	public int GetHashCodeForAll(params object?[] objects)
 	{
 		var hashCode = new HashCode();
-		foreach(var obj in objects)
-		{
-			if (obj is null)
-			{
-				hashCode.Add(0);
-				continue;
-			}
-			if (obj is IEnumerable<IEquatable<IDataNode>> equatableCollection)
-			{
-				hashCode.Add(GetHashCodeFor(equatableCollection));
-				continue;
-			}
-			if (obj is IEquatable<IDataNode> equatable)
-			{
-				hashCode.Add(GetHashCodeFor(equatable));
-				continue;
-			}
-
-			hashCode.Add(obj.GetHashCode());
-		}
+		foreach (var obj in objects)
+			hashCode.Add(GetHashCodeForObject(in obj));
 
 		return hashCode.ToHashCode();
 	}
 
+	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+	public int GetHashCodeForAll<TObj1>(in TObj1 obj1)
+	{
+		return GetHashCodeForObject(in obj1);
+	}
+
+	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+	public int GetHashCodeForAll<TObj1, TObj2>(in TObj1 obj1, in TObj2 obj2)
+	{
+		var hashCode = new HashCode();
+
+		hashCode.Add(GetHashCodeForObject(in obj1));
+		hashCode.Add(GetHashCodeForObject(in obj2));
+
+		return hashCode.ToHashCode();
+	}
+
+	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+	public int GetHashCodeForAll<TObj1, TObj2, TObj3>(in TObj1 obj1, in TObj2 obj2, in TObj3 obj3)
+	{
+		var hashCode = new HashCode();
+
+		hashCode.Add(GetHashCodeForObject(in obj1));
+		hashCode.Add(GetHashCodeForObject(in obj2));
+		hashCode.Add(GetHashCodeForObject(in obj3));
+
+		return hashCode.ToHashCode();
+	}
+
+	private int GetHashCodeForObject<TObj>(in TObj? obj)
+	{
+		if (obj is null)
+			return 0;
+		if (obj is IEnumerable<IEquatable<IDataNode>> equatableCollection)
+			return GetHashCodeFor(equatableCollection);
+		if (obj is IEquatable<IDataNode> equatable)
+			return GetHashCodeFor(equatable);
+		
+
+		return obj.GetHashCode();
+	}
+
 	/// <inheritdoc cref="IEqualityComparer{IDataNode}.GetHashCode(IDataNode)"/>
-	private int GetHashCodeFor(IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
+	private int GetHashCodeFor(in IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
 
 	/// <summary>
 	/// Returns a hashcode for every item in a collection

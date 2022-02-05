@@ -13,13 +13,13 @@ public class NamingContext : INamingContext
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _classMappings;
 
 	/// <inheritdoc />
-	public NamingContext(IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
+	public NamingContext(in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
 	{
 		_classMappings = classMappings;
 	}
 
 	/// <inheritdoc />
-	public INamingStrategy? FindNamingStrategy(Type classType, PropertyInfo property)
+	public INamingStrategy? FindNamingStrategy(in Type classType, in PropertyInfo property)
 	{
 		Guard.Against.Null(classType, nameof(classType));
 		Guard.Against.Null(property, nameof(property));
@@ -27,11 +27,11 @@ public class NamingContext : INamingContext
 		var classMap = _classMappings.Scan((classType, SerializerDirection.Both));
 		if (classMap is null) return null;
 
-		return FindNamingStrategy(classMap.PropertyMaps, property);
+		return FindNamingStrategy(classMap.PropertyMaps, in property);
 	}
 
 	/// <inheritdoc />
-	protected INamingStrategy? FindNamingStrategy(IScanList<PropertyInfo, IPropertyMap> propertyMapping, PropertyInfo property)
+	protected INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
 	{
 		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
 		Guard.Against.Null(property, nameof(property));
@@ -40,7 +40,7 @@ public class NamingContext : INamingContext
 	}
 
 	/// <inheritdoc />
-	public INamingStrategy? FindNamingStrategy(Type type)
+	public INamingStrategy? FindNamingStrategy(in Type type)
 	{
 		Guard.Against.Null(type, nameof(type));
 

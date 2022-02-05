@@ -16,14 +16,14 @@ public sealed class ContainerNotSupportedException : OperationNotSupportedExcept
 	public Type ContainerType { get; }
 
 	/// <inheritdoc />
-	public ContainerNotSupportedException(Type containerType) : base(
+	public ContainerNotSupportedException(in Type containerType) : base(
 		$"The serial container of type '{containerType.Name}' is not supported by this ISerializer")
 	{
 		ContainerType = containerType;
 	}
 
 	#region Serializable
-	private ContainerNotSupportedException(SerializationInfo info, StreamingContext context) : base(info, context)
+	private ContainerNotSupportedException(in SerializationInfo info, in StreamingContext context) : base(in info, in context)
 	{
 		ContainerType = (Type)info.GetValue(nameof(ContainerType), typeof(Type))!;
 	}

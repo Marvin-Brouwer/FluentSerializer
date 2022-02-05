@@ -22,11 +22,11 @@ public readonly struct JsonValue : IJsonValue
 	/// <inheritdoc />
 	public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
 
-	/// <inheritdoc cref="JsonBuilder.Value(string?)"/>
+	/// <inheritdoc cref="JsonBuilder.Value(in string?)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Value"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonValue(string? value)
+	public JsonValue(in string? value)
 	{
 		Value = value;
 	}

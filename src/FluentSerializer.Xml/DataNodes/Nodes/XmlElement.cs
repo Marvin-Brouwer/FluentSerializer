@@ -33,7 +33,7 @@ public readonly struct XmlElement : IXmlElement
 		}
 	}
 	/// <inheritdoc />
-	public IXmlAttribute? GetChildAttribute(string name)
+	public IXmlAttribute? GetChildAttribute(in string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
@@ -57,7 +57,7 @@ public readonly struct XmlElement : IXmlElement
 		}
 	}
 	/// <inheritdoc />
-	public IXmlElement? GetChildElement(string name)
+	public IXmlElement? GetChildElement(in string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name, nameof(name));
 
@@ -87,25 +87,25 @@ public readonly struct XmlElement : IXmlElement
 		return returnValue;
 	}
 
-	/// <inheritdoc cref="XmlBuilder.Element(string, IXmlNode[])"/>
+	/// <inheritdoc cref="XmlBuilder.Element(in string)"/>
 	/// <remarks>
-	/// <b>Please use <see cref="XmlBuilder.Element(string, IXmlNode[])"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="XmlBuilder.Element(in string)"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlElement(string name) : this(name, new List<IXmlNode>(0)) { }
+	public XmlElement(in string name) : this(in name, new List<IXmlNode>(0)) { }
 
-	/// <inheritdoc cref="XmlBuilder.Element(string, IXmlNode[])"/>
+	/// <inheritdoc cref="XmlBuilder.Element(in string)"/>
 	/// <remarks>
-	/// <b>Please use <see cref="XmlBuilder.Element(string, IXmlNode[])"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="XmlBuilder.Element(in string, in IXmlNode)"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlElement(string name, params IXmlNode[] childNodes) : this(name, childNodes.AsEnumerable()) { }
+	public XmlElement(in string name, in IXmlNode childNode) : this(in name, new List<IXmlNode>(1) { childNode }) { }
 
-	/// <inheritdoc cref="XmlBuilder.Element(string, IEnumerable{IXmlNode})"/>
+	/// <inheritdoc cref="XmlBuilder.Element(in string, in IEnumerable{IXmlNode})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="XmlBuilder.Element(string, IXmlNode[])"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="XmlBuilder.Element(in string, in IEnumerable{IXmlNode})"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlElement(string name, IEnumerable<IXmlNode> childNodes)
+	public XmlElement(in string name, in IEnumerable<IXmlNode> childNodes)
 	{
-		Guard.Against.InvalidName(name);
+		Guard.Against.InvalidName(in name);
 
 		Name = name;
 		_attributes = new List<IXmlAttribute>();

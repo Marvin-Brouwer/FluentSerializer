@@ -19,11 +19,11 @@ public readonly struct JsonCommentSingleLine : IJsonComment
 	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="JsonBuilder.Comment(string)"/>
+	/// <inheritdoc cref="JsonBuilder.Comment(in string)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="JsonBuilder.Comment"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonCommentSingleLine(string value)
+	public JsonCommentSingleLine(in string value)
 	{
 		Guard.Against.NullOrEmpty(value, nameof(value));
 

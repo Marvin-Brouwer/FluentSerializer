@@ -15,7 +15,7 @@ public sealed class ClassMapNotFoundException : SerializerException
 	public Type TargetType { get; }
 
 	/// <inheritdoc />
-	public ClassMapNotFoundException(Type targetType) : base(
+	public ClassMapNotFoundException(in Type targetType) : base(
 		$"No ClassMap found for '{targetType.FullName}' \n" +
 		"Make sure you've created a profile for it.")
 	{
@@ -23,7 +23,7 @@ public sealed class ClassMapNotFoundException : SerializerException
 	}
 
 	#region Serializable
-	private ClassMapNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+	private ClassMapNotFoundException(in SerializationInfo info, in StreamingContext context) : base(in info, in context)
 	{
 		TargetType = (Type)info.GetValue(nameof(TargetType), typeof(Type))!;
 	}

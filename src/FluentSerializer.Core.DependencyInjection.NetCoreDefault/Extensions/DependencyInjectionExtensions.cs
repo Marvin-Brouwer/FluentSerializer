@@ -37,17 +37,18 @@ public static class DependencyInjectionExtensions
 	/// If there already are <typeparamref name="TSerializerProfile"/>s present, they will be appended to.
 	/// </summary>
 	public static IServiceCollection AddFluentSerializerProfiles<TSerializerProfile, TConfiguration>(
-		this IServiceCollection serviceCollection, in Assembly assembly, TConfiguration configuration)
+		this IServiceCollection serviceCollection, in Assembly assembly, in TConfiguration configuration)
 		where TSerializerProfile : class, ISerializerProfile
 		where TConfiguration : SerializerConfiguration
 	{
-		var existingMappings = serviceCollection.FindRegistrationFor<ClassMapScanList>();
-		var mappings = ProfileScanner.FindClassMapsInAssembly<TSerializerProfile>(assembly, configuration);
+		var existingMappings = serviceCollection.FindRegistrationFor<IClassMapScanList<TSerializerProfile>>();
+		var mappings = ProfileScanner.FindClassMapsInAssembly<TSerializerProfile>(in assembly, configuration);
 
 		if (existingMappings is null)
 			serviceCollection.AddScoped(_ => mappings);
 		else
-			serviceCollection.AddScoped(_ => existingMappings.Append(mappings));
+			serviceCollection.AddScoped<IClassMapScanList<TSerializerProfile>>(_ =>
+				((ClassMapScanList<TSerializerProfile>)existingMappings).Append(mappings));
 
 		return serviceCollection;
 	}

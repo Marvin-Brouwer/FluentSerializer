@@ -24,24 +24,27 @@ public readonly struct XmlFragment : IXmlElement
 
 	/// <inheritdoc />
 
-	public IXmlAttribute? GetChildAttribute(string name) => _innerElement.GetChildAttribute(name);
+	public IXmlAttribute? GetChildAttribute(in string name) => _innerElement.GetChildAttribute(in name);
 
 	/// <inheritdoc />
 	public IEnumerable<IXmlElement> GetChildElements(string? name = null) => _innerElement.GetChildElements(name);
 	/// <inheritdoc />
-	public IXmlElement? GetChildElement(string name) => _innerElement.GetChildElement(name);
+	public IXmlElement? GetChildElement(in string name) => _innerElement.GetChildElement(in name);
 
 	/// <inheritdoc />
 	public string? GetTextValue() => _innerElement.GetTextValue();
 
 	/// <inheritdoc cref="XmlFragment"/>
-	public XmlFragment(IEnumerable<IXmlNode> childNodes)
+	public XmlFragment(in IEnumerable<IXmlNode> childNodes)
 	{
-		_innerElement = new XmlElement(nameof(XmlFragment), childNodes);
+		_innerElement = XmlBuilder.Element(nameof(XmlFragment), in childNodes);
 	}
 
 	/// <inheritdoc cref="XmlFragment"/>
-	public XmlFragment(params IXmlNode[] childNodes) : this(childNodes.AsEnumerable()) { }
+	public XmlFragment(in IXmlNode childNode)
+	{
+		_innerElement = XmlBuilder.Element(nameof(XmlFragment), in childNode);
+	}
 
 	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);

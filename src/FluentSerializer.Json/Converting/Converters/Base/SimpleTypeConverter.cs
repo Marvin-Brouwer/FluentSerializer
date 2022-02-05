@@ -16,42 +16,42 @@ public abstract class SimpleTypeConverter<TObject> : IJsonConverter
 	/// <inheritdoc />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
+	public virtual bool CanConvert(in Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
 	/// <summary>
 	/// Abstract placeholder for converting to string logic
 	/// </summary>
-	protected abstract string ConvertToString(TObject value);
+	protected abstract string ConvertToString(in TObject value);
 	/// <summary>
 	/// Abstract placeholder for converting to object logic
 	/// </summary>
-	protected abstract TObject ConvertToDataType(string currentValue);
+	protected abstract TObject ConvertToDataType(in string currentValue);
 
 	/// <summary>
-	/// Wrapper around <see cref="ConvertToDataType(string)"/> to support nullable values
+	/// Wrapper around <see cref="ConvertToDataType(in string)"/> to support nullable values
 	/// </summary>
-	protected virtual TObject? ConvertToNullableDataType(string? currentValue)
+	protected virtual TObject? ConvertToNullableDataType(in string? currentValue)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
-		return ConvertToDataType(currentValue);
+		return ConvertToDataType(in currentValue);
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (objectToDeserialize is not IDataValue dataValue) return default;
 
 		var stringValue = dataValue.Value;
-		return ConvertToNullableDataType(stringValue);
+		return ConvertToNullableDataType(in stringValue);
 	}
 
 	/// <inheritdoc />
-	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		var value = (TObject)objectToSerialize;
-		var stringValue = ConvertToString(value);
+		var stringValue = ConvertToString(in value);
 
-		return Value(stringValue);
+		return Value(in stringValue);
 	}
 }

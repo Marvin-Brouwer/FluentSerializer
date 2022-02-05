@@ -60,7 +60,7 @@ public static class DependencyInjectionExtensions
 
 		return serviceCollection
 			.AddFluentSerializerServices(configuration)
-			.AddFluentSerializerProfiles<XmlSerializerProfile, XmlSerializerConfiguration>(assembly, configuration)
+			.AddFluentSerializerProfiles<XmlSerializerProfile, XmlSerializerConfiguration>(in assembly, in configuration)
 			.AddRuntimeXmlSerializer();
 	}
 
@@ -71,7 +71,7 @@ public static class DependencyInjectionExtensions
 		serviceCollection
 			.Add(RuntimeSerializerDescriptor);
 		return serviceCollection
-			.AddTransient<IAdvancedXmlSerializer, RuntimeXmlSerializer>(resolver => resolver.GetService<RuntimeXmlSerializer>()!)
-			.AddTransient<IXmlSerializer, RuntimeXmlSerializer>(resolver => resolver.GetService<RuntimeXmlSerializer>()!);
+			.AddTransient<IAdvancedXmlSerializer, RuntimeXmlSerializer>(static resolver => resolver.GetService<RuntimeXmlSerializer>()!)
+			.AddTransient<IXmlSerializer, RuntimeXmlSerializer>(static resolver => resolver.GetService<RuntimeXmlSerializer>()!);
 	}
 }

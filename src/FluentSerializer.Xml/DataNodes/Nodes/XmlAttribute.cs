@@ -20,13 +20,13 @@ public readonly struct XmlAttribute : IXmlAttribute
 	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="XmlBuilder.Attribute(string, string?)"/>
+	/// <inheritdoc cref="XmlBuilder.Attribute(in string, in string?)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Attribute"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlAttribute(string name, string? value = null)
+	public XmlAttribute(in string name, in string? value = null)
 	{
-		Guard.Against.InvalidName(name);
+		Guard.Against.InvalidName(in name);
 
 		Name = name;
 		Value = value;

@@ -38,11 +38,9 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public bool CanConvert(Type targetType) =>
-		!typeof(string).IsAssignableFrom(targetType) &&
-		targetType.Implements(typeof(IEnumerable<>));
-       
-	object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
+
+	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
 	{
 		var targetType = context.PropertyType;
 		var instance = targetType.GetEnumerableInstance();
@@ -51,8 +49,7 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
 			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
 
-		var itemNamingStrategy = context.FindNamingStrategy(genericTargetType)
-		                         ?? context.NamingStrategy;
+		var itemNamingStrategy = context.FindNamingStrategy(in genericTargetType) ?? context.NamingStrategy;
 
 		var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
 		var elementsToDeserialize = objectToDeserialize.GetChildElements(itemName);
@@ -68,7 +65,7 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 		return instance;
 	}
 
-	IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
+	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize) 
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
@@ -76,7 +73,7 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 		var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
 
 		var elements = GetArrayElements((IAdvancedXmlSerializer)context.CurrentSerializer, enumerableToSerialize);
-		return Element(elementName, elements) ;
+		return Element(in elementName, elements) ;
 	}
 
 	private static IEnumerable<IXmlElement> GetArrayElements(IAdvancedXmlSerializer serializer, IEnumerable enumerableToSerialize)

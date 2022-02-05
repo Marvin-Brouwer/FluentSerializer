@@ -27,7 +27,7 @@ public abstract class XmlSerializerProfile : ISerializerProfile
 	/// </remarks>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> ISerializerProfile.Configure(SerializerConfiguration configuration)
+	IReadOnlyList<IClassMap> ISerializerProfile.Configure(in SerializerConfiguration configuration)
 	{
 		_configuration = (XmlSerializerConfiguration)configuration;
 		Configure();
@@ -49,22 +49,22 @@ public abstract class XmlSerializerProfile : ISerializerProfile
 	/// </param>
 	/// <returns></returns>
 	protected IXmlProfileBuilder<TModel> For<TModel>(
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? tagNamingStrategy = null,
-		Func<INamingStrategy>? attributeNamingStrategy = null)
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? tagNamingStrategy = null,
+		in Func<INamingStrategy>? attributeNamingStrategy = null)
 		where TModel : new()
 	{
 		var classType = typeof(TModel);
 		var propertyMap = new List<IPropertyMap>();
 		var builder = new XmlProfileBuilder<TModel>(
 			attributeNamingStrategy ?? _configuration.DefaultPropertyNamingStrategy,
-			propertyMap
+			in propertyMap
 		);
 
 		// Store in a tuple for lazy evaluation
 		_classMaps.Add(new ClassMap(
-			classType, 
-			direction,
+			in classType, 
+			in direction,
 			tagNamingStrategy ?? _configuration.DefaultClassNamingStrategy, 
 			propertyMap.AsReadOnly()));
 

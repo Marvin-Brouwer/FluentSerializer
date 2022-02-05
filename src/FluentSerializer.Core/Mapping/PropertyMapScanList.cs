@@ -9,12 +9,12 @@ namespace FluentSerializer.Core.Mapping;
 public sealed class PropertyMapScanList : ScanList<PropertyInfo, IPropertyMap>
 {
 	/// <inheritdoc />
-	public PropertyMapScanList(IReadOnlyList<IPropertyMap> dataTypes) : base(dataTypes) { }
+	public PropertyMapScanList(in IReadOnlyList<IPropertyMap> dataTypes) : base(in dataTypes) { }
 
 	/// <remarks>
 	/// Because <see cref="PropertyInfo"/> isn't comparable just check important properties.
 	/// </remarks>
-	protected override bool Compare(PropertyInfo type, IPropertyMap dataType)
+	protected override bool Compare(PropertyInfo type, in IPropertyMap dataType)
 	{
 		if (!type.Name.Equals(dataType.Property.Name, StringComparison.Ordinal)) return false;
 		if (!type.PropertyType.EqualsTopLevel(dataType.Property.PropertyType)) return false;

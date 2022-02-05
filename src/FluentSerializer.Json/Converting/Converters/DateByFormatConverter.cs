@@ -17,7 +17,7 @@ public class DateByFormatConverter : SimpleTypeConverter<DateTime>
 	/// <summary>
 	/// Converts dates based on the <paramref name="format"/> provided
 	/// </summary>
-	public DateByFormatConverter(string format, CultureInfo cultureInfo, DateTimeStyles dateTimeStyle)
+	public DateByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		Guard.Against.Null(cultureInfo, nameof(cultureInfo));
@@ -29,8 +29,8 @@ public class DateByFormatConverter : SimpleTypeConverter<DateTime>
 	}
 
 	/// <inheritdoc />
-	protected override DateTime ConvertToDataType(string currentValue) => DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
+	protected override DateTime ConvertToDataType(in string currentValue) => DateTime.ParseExact(currentValue, _format, _cultureInfo, _dateTimeStyle);
 
 	/// <inheritdoc />
-	protected override string ConvertToString(DateTime value) => value.ToString(_format, _cultureInfo);
+	protected override string ConvertToString(in DateTime value) => value.ToString(_format, _cultureInfo);
 }

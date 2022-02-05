@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Services;
+using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
 using FluentSerializer.Core.Naming.NamingStrategies;
@@ -47,5 +47,5 @@ public interface ISerializerContext : INamingContext
 	/// </summary>
 	/// <param name="property"></param>
 	/// <returns></returns>
-	INamingStrategy? FindNamingStrategy(PropertyInfo property);
+	INamingStrategy? FindNamingStrategy(in PropertyInfo property);
 }

@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Json.Profiles;
 
 namespace FluentSerializer.Json.Services;
 
@@ -25,22 +26,22 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 	/// <inheritdoc />
 	public RuntimeJsonSerializer(
-		ClassMapScanList mappings, 
+		IClassMapScanList<JsonSerializerProfile> mappings, 
 		JsonSerializerConfiguration configuration,
 		ObjectPoolProvider objectPoolProvider)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));
 
-		_serializer = new JsonTypeSerializer(mappings);
-		_deserializer = new JsonTypeDeserializer(mappings);
+		_serializer = new JsonTypeSerializer(in mappings);
+		_deserializer = new JsonTypeDeserializer(in mappings);
 		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		JsonConfiguration = configuration;
 	}
 
 	/// <inheritdoc />
-	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IJsonContainer? element) where TModel : new()
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] in IJsonContainer? element) where TModel : new()
 	{
 		if (element is null) return default;
 
@@ -48,35 +49,35 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize([MaybeNull, AllowNull] IJsonContainer? element, Type modelType)
+	public object? Deserialize([MaybeNull, AllowNull] in IJsonContainer? element, in Type modelType)
 	{
 		if (element is null) return default;
 
-		return _deserializer.DeserializeFromNode(element, modelType,  this);
+		return _deserializer.DeserializeFromNode(element, in modelType,  this);
 	}
 
 	/// <inheritdoc />
-	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData) where TModel : new()
+	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] in string? stringData) where TModel : new()
 	{
 		if (string.IsNullOrEmpty(stringData)) return default;
 
-		var jObject = JsonParser.Parse(stringData);
+		var jObject = JsonParser.Parse(in stringData);
 		return Deserialize<TModel>(jObject);
 	}
 
 	/// <inheritdoc />
-	public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model) where TModel : new()
+	public string Serialize<TModel>([MaybeNull, AllowNull] in TModel? model) where TModel : new()
 	{
-		var container = SerializeToContainer(model);
+		var container = SerializeToContainer(in model);
 		if (container is null) return string.Empty;
 
-		var stringValue =  container.WriteTo(_stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
+		var stringValue =  container.WriteTo(in _stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
 		return stringValue;
 	}
 
 	/// <inheritdoc />
-	public IJsonContainer? SerializeToContainer<TModel>(TModel? model)
+	public IJsonContainer? SerializeToContainer<TModel>(in TModel? model)
 	{
 		if (model is null) return default;
 		var token = _serializer.SerializeToNode(model, typeof(TModel), this);
@@ -87,10 +88,10 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	}
 
 	/// <inheritdoc />
-	public TContainer? SerializeToContainer<TContainer>(object? model, Type modelType) where TContainer : IJsonContainer
+	public TContainer? SerializeToContainer<TContainer>(in object? model, in Type modelType) where TContainer : IJsonContainer
 	{
 		if (model is null) return default;
-		var token = _serializer.SerializeToNode(model, modelType, this);
+		var token = _serializer.SerializeToNode(in model, in modelType, this);
 		if (token is null) return default;
 		if (token is TContainer container) return container;
 

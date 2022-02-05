@@ -14,5 +14,5 @@ public interface ISerializerProfile
 	/// </summary>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> Configure(SerializerConfiguration configuration);
+	IReadOnlyList<IClassMap> Configure(in SerializerConfiguration configuration);
 }

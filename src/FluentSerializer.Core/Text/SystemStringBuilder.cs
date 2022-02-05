@@ -13,7 +13,7 @@ namespace FluentSerializer.Core.Text
 		internal readonly StringBuilder StringBuilder;
 
 		/// <inheritdoc />
-		public SystemStringBuilder(ITextConfiguration textConfiguration, StringBuilder stringBuilder)
+		public SystemStringBuilder(in ITextConfiguration textConfiguration, in StringBuilder stringBuilder)
 		{
 			TextConfiguration = textConfiguration;
 			StringBuilder = stringBuilder;

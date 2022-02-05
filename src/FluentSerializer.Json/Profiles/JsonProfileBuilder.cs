@@ -19,7 +19,7 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	private readonly List<IPropertyMap> _propertyMap;
 
 	/// <inheritdoc />
-	public JsonProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
+	public JsonProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
 		Guard.Against.Null(propertyMap, nameof(propertyMap));
@@ -30,14 +30,14 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 
 	/// <inheritdoc />
 	public IJsonProfileBuilder<TModel> Property<TProperty>(
-		Expression<Func<TModel, TProperty>> propertySelector,
-		SerializerDirection direction = SerializerDirection.Both,
-		Func<INamingStrategy>? namingStrategy = null,
-		Func<IJsonConverter>? converter = null
+		in Expression<Func<TModel, TProperty>> propertySelector,
+		in SerializerDirection direction = SerializerDirection.Both,
+		in Func<INamingStrategy>? namingStrategy = null,
+		in Func<IJsonConverter>? converter = null
 	)
 	{
 		_propertyMap.Add(new PropertyMap(
-			direction,
+			in direction,
 			typeof(IJsonProperty),
 			propertySelector.GetProperty(),
 			namingStrategy ?? _defaultNamingStrategy,

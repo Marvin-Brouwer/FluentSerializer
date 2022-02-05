@@ -15,12 +15,12 @@ public interface IConverter<TSerialContainer> : IConverter where TSerialContaine
 	/// <summary>
 	/// Convert <paramref name="objectToSerialize"/> to <typeparamref name="TSerialContainer"/>
 	/// </summary>
-	[return: MaybeNull] TSerialContainer? Serialize(object objectToSerialize, ISerializerContext context);
+	[return: MaybeNull] TSerialContainer? Serialize(in object objectToSerialize, in ISerializerContext context);
 
 	/// <summary>
 	/// Convert <paramref name="objectToDeserialize"/> to the correct instance value
 	/// </summary>
-	[return: MaybeNull] object? Deserialize(TSerialContainer objectToDeserialize, ISerializerContext context);
+	[return: MaybeNull] object? Deserialize(in TSerialContainer objectToDeserialize, in ISerializerContext context);
 }
 
 /// <summary>
@@ -31,7 +31,7 @@ public interface IConverter
 	/// <summary>
 	/// Test whether this converter can convert <paramref name="targetType"/> 
 	/// </summary>
-	bool CanConvert(Type targetType);
+	bool CanConvert(in Type targetType);
 
 	/// <summary>
 	/// The direction(s) this converter is allowed to be applied to

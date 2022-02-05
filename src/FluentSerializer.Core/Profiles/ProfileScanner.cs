@@ -13,7 +13,8 @@ namespace FluentSerializer.Core.Profiles;
 /// </summary>
 public static class ProfileScanner
 {
-	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(Assembly assembly) where TSerializerProfile : ISerializerProfile =>
+	// todo remove linq
+	private static IEnumerable<ISerializerProfile> ScanAssembly<TSerializerProfile>(in Assembly assembly) where TSerializerProfile : ISerializerProfile =>
 		assembly.GetTypes()
 			.Where(type => typeof(TSerializerProfile).IsAssignableFrom(type))
 			.Where(type => !type.IsAbstract)
@@ -21,16 +22,34 @@ public static class ProfileScanner
 
 	/// <summary>
 	/// Find all profiles of type <typeparamref name="TSerializerProfile"/> in the given <paramref name="assembly"/>,
-	/// generate the profile definitions and push into a <see cref="ClassMapScanList"/>
+	/// generate the profile definitions and push into an <see cref="IClassMapScanList{TSerializer}"/>
 	/// </summary>
-	public static ClassMapScanList FindClassMapsInAssembly<TSerializerProfile>(
-		Assembly assembly, SerializerConfiguration configuration)
+	public static IClassMapScanList<TSerializerProfile> FindClassMapsInAssembly<TSerializerProfile>(
+		in Assembly assembly, SerializerConfiguration configuration)
 		where TSerializerProfile : ISerializerProfile
 	{
 		Guard.Against.Null(assembly, nameof(assembly));
+		Guard.Against.Null(configuration, nameof(configuration));
 
-		var profiles = ScanAssembly<TSerializerProfile>(assembly);
+		var profiles = ScanAssembly<TSerializerProfile>(in assembly);
+		var classMaps = FindClassMapsInProfiles(profiles, configuration).ToList();
 
-		return new ClassMapScanList(profiles.SelectMany(profile => profile.Configure(configuration)).ToList().AsReadOnly());
+		return new ClassMapScanList<TSerializerProfile>(classMaps);
+	}
+
+	private static IEnumerable<IClassMap> FindClassMapsInProfiles(
+		IEnumerable<ISerializerProfile> profiles, SerializerConfiguration configuration)
+	{
+		foreach (var profile in profiles)
+		{
+			var classMaps = FindClassMapsInProfile(in profile, in configuration);
+			foreach (var classMap in classMaps) yield return classMap;
+		}
+	}
+
+	private static IEnumerable<IClassMap> FindClassMapsInProfile(
+		in ISerializerProfile profile, in SerializerConfiguration configuration)
+	{
+		return profile.Configure(in configuration);
 	}
 }

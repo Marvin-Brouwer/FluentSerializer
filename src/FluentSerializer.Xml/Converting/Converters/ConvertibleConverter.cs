@@ -17,52 +17,52 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
+	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
-	private static string ConvertToString(object value) => Convert.ToString(value);
+	private static string ConvertToString(in object value) => Convert.ToString(value);
 
-	private static object? ConvertToNullableDataType(string? currentValue, Type targetType)
+	private static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
 		return Convert.ChangeType(currentValue, targetType);
 	}
 
-	object? IConverter<IXmlAttribute>.Deserialize(IXmlAttribute attributeToDeserialize, ISerializerContext context)
+	object? IConverter<IXmlAttribute>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context)
 	{
 		return ConvertToNullableDataType(attributeToDeserialize.Value, context.PropertyType);
 	}
 
-	object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)
+	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
 	{
 		return ConvertToNullableDataType(objectToDeserialize.GetTextValue(), context.PropertyType);
 	}
 
-	object? IConverter<IXmlText>.Deserialize(IXmlText objectToDeserialize, ISerializerContext context)
+	object? IConverter<IXmlText>.Deserialize(in IXmlText objectToDeserialize, in ISerializerContext context)
 	{
 		return ConvertToNullableDataType(objectToDeserialize.Value, context.PropertyType);
 	}
 
-	IXmlAttribute? IConverter<IXmlAttribute>.Serialize(object objectToSerialize, ISerializerContext context)
+	IXmlAttribute? IConverter<IXmlAttribute>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
-		var stringValue = ConvertToString(objectToSerialize);
+		var stringValue = ConvertToString(in objectToSerialize);
 
 		var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
 		return Attribute(attributeName, stringValue);
 	}
 
-	IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
+	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
-		var stringValue = ConvertToString(objectToSerialize);
+		var stringValue = ConvertToString(in objectToSerialize);
 
 		var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
-		return Element(elementName, Text(stringValue));
+		return Element(in elementName, Text(in stringValue));
 	}
 
-	IXmlText? IConverter<IXmlText>.Serialize(object objectToSerialize, ISerializerContext context)
+	IXmlText? IConverter<IXmlText>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
-		var stringValue = ConvertToString(objectToSerialize);
+		var stringValue = ConvertToString(in objectToSerialize);
 
-		return Text(stringValue);
+		return Text(in stringValue);
 	}
 }

@@ -39,13 +39,13 @@ public readonly struct JsonProperty : IJsonProperty
 	/// <inheritdoc />
 	public IJsonNode? Value => _children.FirstOrDefault();
 
-	/// <inheritdoc cref="JsonBuilder.Property(string, IJsonPropertyContent)"/>
+	/// <inheritdoc cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Property(string, IJsonPropertyContent)"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonProperty(string name, IJsonPropertyContent? value)
+	public JsonProperty(in string name, in IJsonPropertyContent? value)
 	{
-		Guard.Against.InvalidName(name);
+		Guard.Against.InvalidName(in name);
 
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;

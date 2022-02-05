@@ -24,7 +24,7 @@ public static class DependencyInjectionExtensions
 	/// </summary>
 	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(
 		this IServiceCollection serviceCollection, in Action<JsonSerializerConfiguration> configurator) =>
-		serviceCollection.AddFluentJsonSerializer(typeof(TAssemblyMarker).Assembly, configurator);
+		serviceCollection.AddFluentJsonSerializer(typeof(TAssemblyMarker).Assembly, in configurator);
 
 	/// <param name="assembly">The assembly to scan for <see cref="JsonSerializerProfile"/></param>
 	/// <param name="serviceCollection"></param>
@@ -36,7 +36,7 @@ public static class DependencyInjectionExtensions
 	{
 		var configuration = JsonSerializerConfiguration.Default;
 		configurator(configuration);
-		return serviceCollection.AddFluentJsonSerializer(assembly, configuration);
+		return serviceCollection.AddFluentJsonSerializer(in assembly, configuration);
 	}
 
 	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="JsonSerializerProfile"/></typeparam>
@@ -60,7 +60,7 @@ public static class DependencyInjectionExtensions
 
 		return serviceCollection
 			.AddFluentSerializerServices(configuration)
-			.AddFluentSerializerProfiles<JsonSerializerProfile, JsonSerializerConfiguration>(assembly, configuration)
+			.AddFluentSerializerProfiles<JsonSerializerProfile, JsonSerializerConfiguration>(in assembly, in configuration)
 			.AddRuntimeJsonSerializer();
 	}
 
@@ -71,7 +71,7 @@ public static class DependencyInjectionExtensions
 		serviceCollection
 			.Add(RuntimeSerializerDescriptor);
 		return serviceCollection
-			.AddTransient<IAdvancedJsonSerializer, RuntimeJsonSerializer>(resolver => resolver.GetService<RuntimeJsonSerializer>()!)
-			.AddTransient<IJsonSerializer, RuntimeJsonSerializer>(resolver => resolver.GetService<RuntimeJsonSerializer>()!);
+			.AddTransient<IAdvancedJsonSerializer, RuntimeJsonSerializer>(static resolver => resolver.GetService<RuntimeJsonSerializer>()!)
+			.AddTransient<IJsonSerializer, RuntimeJsonSerializer>(static resolver => resolver.GetService<RuntimeJsonSerializer>()!);
 	}
 }

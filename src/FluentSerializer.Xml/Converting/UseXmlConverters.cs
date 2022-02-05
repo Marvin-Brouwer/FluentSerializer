@@ -26,7 +26,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	}
 
 	/// <inheritdoc/>
-	public Func<IXmlConverter<IXmlElement>> Collection(bool wrapCollection = true)
+	public Func<IXmlConverter<IXmlElement>> Collection(in bool wrapCollection = true)
 	{
 		if (wrapCollection) return () => WrappedCollectionConverter;
 		return () => NonWrappedCollectionConverter;

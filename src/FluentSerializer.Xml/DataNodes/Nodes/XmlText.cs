@@ -20,11 +20,11 @@ public readonly struct XmlText : IXmlText
 	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="XmlBuilder.Text(string?)"/>
+	/// <inheritdoc cref="XmlBuilder.Text(in string?)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Text"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlText(string? value = null)
+	public XmlText(in string? value = null)
 	{
 		Value = value;
 	}

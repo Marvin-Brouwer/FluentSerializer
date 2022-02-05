@@ -25,7 +25,7 @@ public sealed class ConverterNotFoundException : SerializerException
 	public SerializerDirection Direction { get; }
 
 	/// <inheritdoc />
-	public ConverterNotFoundException(Type targetType, Type containerType, SerializerDirection direction) : base(
+	public ConverterNotFoundException(in Type targetType, in Type containerType, in SerializerDirection direction) : base(
 		$"No IConverter found for '{targetType.FullName}' \n" +
 		"Make sure you've registered or selected a converter that supports this conversion.")
 	{
@@ -35,7 +35,7 @@ public sealed class ConverterNotFoundException : SerializerException
 	}
 
 	#region Serializable
-	private ConverterNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+	private ConverterNotFoundException(in SerializationInfo info, in StreamingContext context) : base(in info, in context)
 	{
 		TargetType = (Type)info.GetValue(nameof(TargetType), typeof(Type))!;
 		ContainerType = (Type)info.GetValue(nameof(ContainerType), typeof(Type))!;

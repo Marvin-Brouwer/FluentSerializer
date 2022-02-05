@@ -16,10 +16,10 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     public class OpenAirDateConverter : IXmlConverter<IXmlElement>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public bool CanConvert(Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
+        public bool CanConvert(in Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
 
 
-        object? IConverter<IXmlElement>.Deserialize(IXmlElement elementToSerialize, ISerializerContext context)
+        object? IConverter<IXmlElement>.Deserialize(in IXmlElement elementToSerialize, in ISerializerContext context)
         {
             if (!elementToSerialize.Children.Any()) return null;
             var dateWrapper = elementToSerialize.GetChildElement("Date");
@@ -54,16 +54,16 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             );
         }
 
-        IXmlElement? IConverter<IXmlElement>.Serialize(object objectToSerialize, ISerializerContext context)
+        IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             if (objectToSerialize is not DateTime dateToSerialize)
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
             var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
-            return Element(elementName, GenerateDateObject(dateToSerialize));
+            return Element(elementName, GenerateDateObject(in dateToSerialize));
         }
 
-        private static IXmlElement GenerateDateObject(DateTime dateToSerialize)
+        private static IXmlElement GenerateDateObject(in DateTime dateToSerialize)
         {
 			var universalDate = dateToSerialize.ToUniversalTime();
 

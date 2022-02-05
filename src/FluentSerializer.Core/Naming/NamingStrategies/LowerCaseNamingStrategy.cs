@@ -13,7 +13,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public class LowerCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public string GetName(PropertyInfo property, INamingContext _) => property.Name.Split('`')[0].ToLowerInvariant();
+	public string GetName(in PropertyInfo property, in INamingContext _) => property.Name.Split('`')[0].ToLowerInvariant();
 	/// <inheritdoc />
-	public string GetName(Type classType, INamingContext _) => classType.Name.Split('`')[0].ToLowerInvariant();
+	public string GetName(in Type classType, in INamingContext _) => classType.Name.Split('`')[0].ToLowerInvariant();
 }

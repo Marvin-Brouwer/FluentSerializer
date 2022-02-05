@@ -8,7 +8,7 @@ namespace FluentSerializer.Core.SerializerException;
 public abstract class OperationNotSupportedException : SerializerException
 {
 	/// <inheritdoc />
-	protected OperationNotSupportedException(SerializationInfo info, StreamingContext context) : base(info, context){ }
+	protected OperationNotSupportedException(in SerializationInfo info, in StreamingContext context) : base(in info, in context) { }
 	/// <inheritdoc />
-	protected OperationNotSupportedException(string message) : base(message) { }
+	protected OperationNotSupportedException(in string message) : base(in message) { }
 }

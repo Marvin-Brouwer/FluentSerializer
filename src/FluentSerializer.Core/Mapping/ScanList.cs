@@ -15,7 +15,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 #endif
 
 	/// <inheritdoc />
-	protected ScanList(IReadOnlyList<TScanFor> dataTypes)
+	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
 		Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Any());
@@ -40,7 +40,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	}
 
 	/// <inheritdoc />
-	protected abstract bool Compare(TScanBy compareTo, TScanFor dataType);
+	protected abstract bool Compare(TScanBy compareTo, in TScanFor dataType);
 
 	#region IReadonlyList<T>
 

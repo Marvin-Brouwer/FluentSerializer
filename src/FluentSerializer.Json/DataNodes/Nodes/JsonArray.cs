@@ -3,7 +3,6 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 
@@ -24,17 +23,11 @@ public readonly struct JsonArray : IJsonArray
 	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-	/// <inheritdoc cref="JsonBuilder.Array(IJsonArrayContent[])"/>
+	/// <inheritdoc cref="JsonBuilder.Array(in IEnumerable{IJsonArrayContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Array(IJsonArrayContent[])"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Array(in IEnumerable{IJsonArrayContent})"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonArray(params IJsonArrayContent[] elements) : this(elements.AsEnumerable()) { }
-
-	/// <inheritdoc cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent})"/>
-	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Array(IEnumerable{IJsonArrayContent})"/> method instead of this constructor</b>
-	/// </remarks>
-	public JsonArray(IEnumerable<IJsonArrayContent>? elements)
+	public JsonArray(in IEnumerable<IJsonArrayContent>? elements)
 	{
 		_lastNonCommentChildIndex = null;
 

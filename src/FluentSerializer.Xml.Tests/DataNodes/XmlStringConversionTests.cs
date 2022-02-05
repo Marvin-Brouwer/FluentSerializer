@@ -1,6 +1,5 @@
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes;
-using System;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

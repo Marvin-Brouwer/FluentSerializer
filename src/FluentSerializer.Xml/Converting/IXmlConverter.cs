@@ -10,8 +10,8 @@ namespace FluentSerializer.Xml.Converting;
 public interface IXmlConverter<TDataContainer> : IConverter<TDataContainer>, IXmlConverter
 	where TDataContainer : IXmlNode
 {
-	/// <inheritdoc cref="IConverter{TDataContainer}.Deserialize(TDataContainer, ISerializerContext)"/>
-	object? Deserialize(TDataContainer objectToDeserialize, IXmlElement? parent, ISerializerContext context) => 
+	/// <inheritdoc cref="IConverter{TDataContainer}.Deserialize(in TDataContainer, in ISerializerContext)"/>
+	object? Deserialize(in TDataContainer objectToDeserialize, in IXmlElement? parent, in ISerializerContext context) => 
 		Deserialize(objectToDeserialize, context);
 }
 

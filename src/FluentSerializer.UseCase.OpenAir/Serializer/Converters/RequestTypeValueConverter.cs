@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
@@ -17,21 +17,21 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
     {
         public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
-        public bool CanConvert(Type targetType) => typeof(string) == targetType;
-        public object Deserialize(IXmlAttribute attributeToDeserialize, ISerializerContext context) => throw new NotSupportedException();
+        public bool CanConvert(in Type targetType) => typeof(string) == targetType;
+        public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context) => throw new NotSupportedException();
 
-        public IXmlAttribute? Serialize(object objectToSerialize, ISerializerContext context)
+        public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             // We know this to be true because of RequestObject<TModel>
             var classType = context.ClassType.GetTypeInfo().GenericTypeArguments[0];
-            var classNamingStrategy = context.FindNamingStrategy(classType);
+            var classNamingStrategy = context.FindNamingStrategy(in classType);
             if (classNamingStrategy is null)
                 throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
 
             var elementTypeString = classNamingStrategy.SafeGetName(classType, context);
             var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
 
-            return Attribute(attributeName, elementTypeString);
+            return Attribute(in attributeName, in elementTypeString);
         }
     }
 }

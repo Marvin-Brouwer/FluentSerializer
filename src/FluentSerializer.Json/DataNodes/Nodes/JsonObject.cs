@@ -5,7 +5,6 @@ using FluentSerializer.Json.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
@@ -27,25 +26,21 @@ public readonly struct JsonObject : IJsonObject
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
 	/// <inheritdoc />
-	public IJsonProperty? GetProperty(string name)
+	public IJsonProperty? GetProperty(in string name)
 	{
 		Guard.Against.InvalidName(name);
 
-		return _children.FirstOrDefault(child => 
-			child.Name.Equals(name, StringComparison.Ordinal)) as IJsonProperty;
+		foreach (var child in Children)
+			if (child.Name.Equals(name, StringComparison.Ordinal)) return child as IJsonProperty;
+
+		return null;
 	}
 
-	/// <inheritdoc cref="JsonBuilder.Object(IJsonObjectContent[])"/>
+	/// <inheritdoc cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object(IJsonObjectContent[])"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/> method instead of this constructor</b>
 	/// </remarks>
-	public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
-
-	/// <inheritdoc cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/>
-	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/> method instead of this constructor</b>
-	/// </remarks>
-	public JsonObject(IEnumerable<IJsonObjectContent>? properties)
+	public JsonObject(in IEnumerable<IJsonObjectContent>? properties)
 	{
 		_lastPropertyIndex = null;
 

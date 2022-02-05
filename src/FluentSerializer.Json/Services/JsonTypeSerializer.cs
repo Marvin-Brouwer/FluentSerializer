@@ -9,6 +9,7 @@ using FluentSerializer.Json.DataNodes;
 using System.Collections.Generic;
 
 using static FluentSerializer.Json.JsonBuilder;
+using FluentSerializer.Json.Profiles;
 
 namespace FluentSerializer.Json.Services;
 
@@ -17,10 +18,10 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeSerializer
 {
-	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
+	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
 
 	/// <inheritdoc />
-	public JsonTypeSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
+	public JsonTypeSerializer(in IClassMapScanList<JsonSerializerProfile> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
@@ -32,7 +33,7 @@ public sealed class JsonTypeSerializer
 	/// </summary>
 	/// <exception cref="NotImplementedException"></exception>
 	/// <exception cref="ClassMapNotFoundException"></exception>
-	public IJsonNode? SerializeToNode(object dataModel, Type classType, IJsonSerializer currentSerializer)
+	public IJsonNode? SerializeToNode(in object dataModel, in Type classType, in IJsonSerializer currentSerializer)
 	{
 		Guard.Against.Null(dataModel, nameof(dataModel));
 		Guard.Against.Null(classType, nameof(classType));
@@ -41,7 +42,7 @@ public sealed class JsonTypeSerializer
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new NotImplementedException("Todo");
 
 		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
-		if (classMap is null) throw new ClassMapNotFoundException(classType);
+		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		var properties = new List<IJsonObjectContent>();
 		foreach(var property in classType.GetProperties())
@@ -54,11 +55,11 @@ public sealed class JsonTypeSerializer
 			if (propertyValue is null) continue;
 
 			var serializerContext = new SerializerContext(
-				propertyMapping.Property, classType, propertyMapping.NamingStrategy, 
+				propertyMapping.Property, in classType, propertyMapping.NamingStrategy, 
 				currentSerializer,
 				classMap.PropertyMaps, _mappings);
 
-			var jsonNode = SerializeObjectContent(propertyValue, propertyMapping, currentSerializer, serializerContext);
+			var jsonNode = SerializeObjectContent(in propertyValue, in propertyMapping, in currentSerializer, in serializerContext);
 			if (jsonNode is not null) properties.Add(jsonNode);
 		}
 
@@ -66,30 +67,30 @@ public sealed class JsonTypeSerializer
 	}
 
 	private IJsonObjectContent? SerializeObjectContent(
-		object propertyValue, IPropertyMap propertyMapping,  
-		IJsonSerializer currentSerializer, SerializerContext serializerContext)
+		in object propertyValue, in IPropertyMap propertyMapping,  
+		in IJsonSerializer currentSerializer, in SerializerContext serializerContext)
 	{
 		if (typeof(IJsonProperty).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeProperty(propertyValue, propertyMapping, serializerContext, currentSerializer);
+			return SerializeProperty(in propertyValue, in propertyMapping, in serializerContext, in currentSerializer);
 		}
 
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
 	}
 
-	private IJsonObjectContent? SerializeProperty(object propertyValue, IPropertyMap propertyMapping,
-		SerializerContext serializerContext, IJsonSerializer currentSerializer)
+	private IJsonObjectContent? SerializeProperty(in object propertyValue, in IPropertyMap propertyMapping,
+		in SerializerContext serializerContext, in IJsonSerializer currentSerializer)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IJsonNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
 		var nodeValue = matchingConverter is null 
-			? SerializeToNode(propertyValue, serializerContext.PropertyType, currentSerializer) 
-			: matchingConverter.Serialize(propertyValue, serializerContext);
+			? SerializeToNode(in propertyValue, serializerContext.PropertyType, currentSerializer) 
+			: matchingConverter.Serialize(in propertyValue, serializerContext);
 		if (nodeValue is not IJsonPropertyContent jsonContent) return default;
 
 		var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property, serializerContext);
             
-		return Property(propertyName, jsonContent);
+		return Property(in propertyName, in jsonContent);
 	}
 }

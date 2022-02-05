@@ -27,7 +27,7 @@ public abstract class JsonSerializerProfile : ISerializerProfile
 	/// </remarks>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> ISerializerProfile.Configure(SerializerConfiguration configuration)
+	IReadOnlyList<IClassMap> ISerializerProfile.Configure(in SerializerConfiguration configuration)
 	{
 		_configuration = (JsonSerializerConfiguration)configuration;
 		Configure();
@@ -53,13 +53,13 @@ public abstract class JsonSerializerProfile : ISerializerProfile
 		var propertyMap = new List<IPropertyMap>();
 		var builder = new JsonProfileBuilder<TModel>(
 			namingStrategy ?? _configuration.DefaultNamingStrategy,
-			propertyMap
+			in propertyMap
 		);
 
 		// Store in a tuple for lazy evaluation
 		_classMaps.Add(new ClassMap(
-			classType, 
-			direction,
+			in classType, 
+			in direction,
 			// Not being used, but setting this to null adds much more code
 			_configuration.DefaultNamingStrategy, 
 			propertyMap.AsReadOnly()));

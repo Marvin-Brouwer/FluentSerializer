@@ -20,12 +20,10 @@ public class CollectionConverter : IJsonConverter
 	/// <inheritdoc />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc />
-	public virtual bool CanConvert(Type targetType) =>
-		!typeof(string).IsAssignableFrom(targetType) &&
-		targetType.Implements(typeof(IEnumerable<>));
+	public virtual bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
 	/// <inheritdoc />
-	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (objectToDeserialize is not IJsonArray arrayToDeserialize)
 			throw new NotSupportedException($"The json object you attempted to deserialize was not a collection");
@@ -52,7 +50,7 @@ public class CollectionConverter : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public IJsonNode Serialize(object objectToSerialize, ISerializerContext context)
+	public IJsonNode Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize)
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");

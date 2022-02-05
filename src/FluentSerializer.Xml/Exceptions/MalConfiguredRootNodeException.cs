@@ -16,7 +16,7 @@ public sealed class MalConfiguredRootNodeException : OperationNotSupportedExcept
 	public Type AttemptedType { get; }
 
 	/// <inheritdoc />
-	public MalConfiguredRootNodeException(Type attemptedType) : base(
+	public MalConfiguredRootNodeException(in Type attemptedType) : base(
 		$"Type '{attemptedType}' implements IEnumerable. \n"+
 		"XML documents require a root node, thus cannot (de)serialize collections as root node.")
 	{
