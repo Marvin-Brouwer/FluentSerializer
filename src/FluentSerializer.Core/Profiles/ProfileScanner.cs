@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
@@ -37,6 +38,11 @@ public static class ProfileScanner
 		return new ClassMapScanList<TSerializerProfile>(classMaps);
 	}
 
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private static IEnumerable<IClassMap> FindClassMapsInProfiles(
 		IEnumerable<ISerializerProfile> profiles, SerializerConfiguration configuration)
 	{
@@ -47,6 +53,11 @@ public static class ProfileScanner
 		}
 	}
 
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private static IEnumerable<IClassMap> FindClassMapsInProfile(
 		in ISerializerProfile profile, in SerializerConfiguration configuration)
 	{

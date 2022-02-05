@@ -2,6 +2,7 @@ using Ardalis.GuardClauses;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Mapping;
 
@@ -51,7 +52,17 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	public int Count => _storedDataTypes.Count;
 
 	/// <inheritdoc />
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public IEnumerator<TScanFor> GetEnumerator() => _storedDataTypes.GetEnumerator();
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	IEnumerator IEnumerable.GetEnumerator() => _storedDataTypes.GetEnumerator();
 
 	#endregion

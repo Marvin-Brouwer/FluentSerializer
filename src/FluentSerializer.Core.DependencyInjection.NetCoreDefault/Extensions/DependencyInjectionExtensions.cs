@@ -4,6 +4,7 @@ using FluentSerializer.Core.Profiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
 
@@ -53,6 +54,11 @@ public static class DependencyInjectionExtensions
 		return serviceCollection;
 	}
 
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private static bool ContainsServiceRegistrationFor<TServiceType>(this IServiceCollection serviceCollection)
 	{
 		foreach (var service in serviceCollection)
@@ -61,6 +67,11 @@ public static class DependencyInjectionExtensions
 		return false;
 	}
 
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private static TServiceType? FindRegistrationFor<TServiceType>(this IServiceCollection serviceCollection)
 		where TServiceType : class
 	{

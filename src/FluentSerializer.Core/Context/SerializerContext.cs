@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Context;
 
@@ -41,5 +42,10 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 	}
 
 	/// <inheritdoc />
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public INamingStrategy? FindNamingStrategy(in PropertyInfo property) => FindNamingStrategy(in _propertyMappings, property);
 }

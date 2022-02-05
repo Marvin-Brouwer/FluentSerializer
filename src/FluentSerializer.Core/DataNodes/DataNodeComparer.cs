@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.DataNodes;
 
@@ -32,6 +33,11 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	/// If null this will append 0 to the hashcode calculation
 	/// If none of the above the objects <see cref="object.GetHashCode"/> will be added to the hashcode calculation.
 	/// </summary>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public int GetHashCodeForAll(params object?[] objects)
 	{
 		var hashCode = new HashCode();
@@ -42,12 +48,22 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public int GetHashCodeForAll<TObj1>(in TObj1 obj1)
 	{
 		return GetHashCodeForObject(in obj1);
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public int GetHashCodeForAll<TObj1, TObj2>(in TObj1 obj1, in TObj2 obj2)
 	{
 		var hashCode = new HashCode();
@@ -59,6 +75,11 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	public int GetHashCodeForAll<TObj1, TObj2, TObj3>(in TObj1 obj1, in TObj2 obj2, in TObj3 obj3)
 	{
 		var hashCode = new HashCode();
@@ -70,6 +91,11 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 		return hashCode.ToHashCode();
 	}
 
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private int GetHashCodeForObject<TObj>(in TObj? obj)
 	{
 		if (obj is null)
@@ -83,13 +109,18 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 		return obj.GetHashCode();
 	}
 
-	/// <inheritdoc cref="IEqualityComparer{IDataNode}.GetHashCode(IDataNode)"/>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private int GetHashCodeFor(in IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
 
-	/// <summary>
-	/// Returns a hashcode for every item in a collection
-	/// </summary>
-	/// <inheritdoc cref="IEqualityComparer{IDataNode}.GetHashCode(IDataNode)"/>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 	private int GetHashCodeFor(IEnumerable<IEquatable<IDataNode>>? equatableCollection)
 	{
 		if (equatableCollection is null) return 0;
