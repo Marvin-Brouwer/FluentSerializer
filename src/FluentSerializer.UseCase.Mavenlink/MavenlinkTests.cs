@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.TestUtils.Extensions;
-using FluentSerializer.DependencyInjection.Json.NetCoreDefault.Extensions;
+using FluentSerializer.Json.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Services;

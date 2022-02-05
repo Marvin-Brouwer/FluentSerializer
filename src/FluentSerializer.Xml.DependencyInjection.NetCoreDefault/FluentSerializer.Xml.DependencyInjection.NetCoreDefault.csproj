@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentSerializer.DependencyInjection.NetCoreDefault\FluentSerializer.DependencyInjection.NetCoreDefault.csproj" />
+    <ProjectReference Include="..\FluentSerializer.Core.DependencyInjection.NetCoreDefault\FluentSerializer.Core.DependencyInjection.NetCoreDefault.csproj" />
     <ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
   </ItemGroup>
 

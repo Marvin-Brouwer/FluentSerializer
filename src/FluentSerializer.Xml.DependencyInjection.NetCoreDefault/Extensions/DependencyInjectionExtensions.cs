@@ -1,4 +1,4 @@
-using FluentSerializer.DependencyInjection.NetCoreDefault.Extensions;
+using FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 
-namespace FluentSerializer.DependencyInjection.Xml.NetCoreDefault.Extensions;
+namespace FluentSerializer.Xml.DependencyInjection.NetCoreDefault.Extensions;
 
 /// <summary>
 /// Extension class for registering the FluentSerializer for XML

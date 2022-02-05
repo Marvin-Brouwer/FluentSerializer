@@ -1,4 +1,4 @@
-# FluentSerializer.DependencyInjection.NetCoreDefault
+# FluentSerializer.Core.DependencyInjection.NetCoreDefault
 [DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
 
 This library contains some basic logic to help register the specific serializer using

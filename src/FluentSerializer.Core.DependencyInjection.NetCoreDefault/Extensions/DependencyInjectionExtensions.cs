@@ -3,10 +3,9 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
-using System.Linq;
 using System.Reflection;
 
-namespace FluentSerializer.DependencyInjection.NetCoreDefault.Extensions;
+namespace FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
 
 /// <summary>
 /// Extension class for registering FluentSerializers required services.

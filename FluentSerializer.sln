@@ -52,11 +52,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.Conver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Converter.DefaultJson", "src\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj", "{0D0EBDE7-2BFF-4172-B677-1D151E6B83A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.DependencyInjection.NetCoreDefault", "src\FluentSerializer.DependencyInjection.NetCoreDefault\FluentSerializer.DependencyInjection.NetCoreDefault.csproj", "{8E624F0B-F7AC-4E8F-8A4E-FA8302B771C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Core.DependencyInjection.NetCoreDefault", "src\FluentSerializer.Core.DependencyInjection.NetCoreDefault\FluentSerializer.Core.DependencyInjection.NetCoreDefault.csproj", "{8E624F0B-F7AC-4E8F-8A4E-FA8302B771C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.DependencyInjection.Json.NetCoreDefault", "src\FluentSerializer.DependencyInjection.Json.NetCoreDefault\FluentSerializer.DependencyInjection.Json.NetCoreDefault.csproj", "{F095FAD7-30C7-4085-902D-32DC083C944A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.DependencyInjection.NetCoreDefault", "src\FluentSerializer.Json.DependencyInjection.NetCoreDefault\FluentSerializer.Json.DependencyInjection.NetCoreDefault.csproj", "{F095FAD7-30C7-4085-902D-32DC083C944A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.DependencyInjection.Xml.NetCoreDefault", "src\FluentSerializer.DependencyInjection.Xml.NetCoreDefault\FluentSerializer.DependencyInjection.Xml.NetCoreDefault.csproj", "{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.DependencyInjection.NetCoreDefault", "src\FluentSerializer.Xml.DependencyInjection.NetCoreDefault\FluentSerializer.Xml.DependencyInjection.NetCoreDefault.csproj", "{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

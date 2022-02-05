@@ -1,4 +1,4 @@
-using FluentSerializer.DependencyInjection.NetCoreDefault.Extensions;
+using FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
 
-namespace FluentSerializer.DependencyInjection.Json.NetCoreDefault.Extensions;
+namespace FluentSerializer.Json.DependencyInjection.NetCoreDefault.Extensions;
 
 /// <summary>
 /// Extension class for registering the FluentSerializer for JSON

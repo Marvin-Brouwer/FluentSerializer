@@ -7,7 +7,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.TestUtils.Extensions;
-using FluentSerializer.DependencyInjection.Xml.NetCoreDefault.Extensions;
+using FluentSerializer.Xml.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Converter.DefaultXml.Converting.Extensions;
