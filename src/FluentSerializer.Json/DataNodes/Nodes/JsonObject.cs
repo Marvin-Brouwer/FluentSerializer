@@ -17,12 +17,16 @@ public readonly struct JsonObject : IJsonObject
 	private static readonly int TypeHashCode = typeof(JsonObject).GetHashCode();
 
 	private const string ObjectName = "{ }";
+
+	/// <inheritdoc />
 	public string Name => ObjectName;
-        
+
 	private readonly int? _lastPropertyIndex;
 	private readonly List<IJsonNode> _children;
+	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
+	/// <inheritdoc />
 	public IJsonProperty? GetProperty(string name)
 	{
 		Guard.Against.InvalidName(name);
@@ -33,13 +37,13 @@ public readonly struct JsonObject : IJsonObject
 
 	/// <inheritdoc cref="JsonBuilder.Object(IJsonObjectContent[])"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Object(IJsonObjectContent[])"/> method instead of this constructor</b>
 	/// </remarks>
 	public JsonObject(params IJsonObjectContent[] properties) : this(properties.AsEnumerable()) { }
 
 	/// <inheritdoc cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="JsonBuilder.Object(IEnumerable{IJsonObjectContent})"/> method instead of this constructor</b>
 	/// </remarks>
 	public JsonObject(IEnumerable<IJsonObjectContent>? properties)
 	{
@@ -103,8 +107,10 @@ public readonly struct JsonObject : IJsonObject
 		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		var childIndent = indent + 1;
@@ -139,12 +145,16 @@ public readonly struct JsonObject : IJsonObject
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, _children);
 
 	#endregion

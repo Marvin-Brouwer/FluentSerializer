@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,12 +10,16 @@ using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.Profiles;
 
+/// <summary>
+/// A profile for the JSON serializer to map from
+/// </summary>
 [ImplicitlyUsed]
 public abstract class XmlSerializerProfile : ISerializerProfile
 {
 	private readonly List<IClassMap> _classMaps = new();
 	private XmlSerializerConfiguration _configuration = XmlSerializerConfiguration.Default;
 
+	/// <inheritdoc />
 	protected abstract void Configure();
 
 	/// <remarks>
@@ -29,7 +33,21 @@ public abstract class XmlSerializerProfile : ISerializerProfile
 		Configure();
 		return new ReadOnlyCollection<IClassMap>(_classMaps);
 	}
-        
+
+	/// <summary>
+	/// Configure a mapping for <typeparamref name="TModel"/>
+	/// </summary>
+	/// <typeparam name="TModel"></typeparam>
+	/// <param name="direction">Override the <see cref="SerializerDirection"/> of this class mapping (defaults to Both)</param>
+	/// <param name="tagNamingStrategy">
+	///		Override the <see cref="INamingStrategy"/> for this class's tag name and element mappings. <br />
+	///		Defaults to <see cref="XmlSerializerConfiguration.DefaultClassNamingStrategy"/>
+	/// </param>
+	/// <param name="attributeNamingStrategy">
+	///		Override the <see cref="INamingStrategy"/> for this class's attribute mappings. <br />
+	///		Defaults to <see cref="XmlSerializerConfiguration.DefaultPropertyNamingStrategy"/>
+	/// </param>
+	/// <returns></returns>
 	protected IXmlProfileBuilder<TModel> For<TModel>(
 		SerializerDirection direction = SerializerDirection.Both,
 		Func<INamingStrategy>? tagNamingStrategy = null,

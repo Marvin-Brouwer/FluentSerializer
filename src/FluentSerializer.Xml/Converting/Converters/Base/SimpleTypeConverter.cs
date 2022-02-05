@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
@@ -9,14 +9,28 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Converting.Converters.Base;
 
+/// <summary>
+/// This class contains methods that are used when converting simple types
+/// </summary>
 public abstract class SimpleTypeConverter<TObject> : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
+	/// <inheritdoc />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
 	public virtual bool CanConvert(Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
+	/// <summary>
+	/// Abstract placeholder for converting to string logic
+	/// </summary>
 	protected abstract string ConvertToString(TObject value);
+	/// <summary>
+	/// Abstract placeholder for converting to object logic
+	/// </summary>
 	protected abstract TObject ConvertToDataType(string currentValue);
 
+	/// <summary>
+	/// Wrapper around <see cref="ConvertToDataType(string)"/> to support nullable values
+	/// </summary>
 	protected virtual TObject? ConvertToNullableDataType(string? currentValue)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;

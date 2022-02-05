@@ -11,12 +11,14 @@ using FluentSerializer.Xml.DataNodes;
 
 namespace FluentSerializer.Xml.Profiles;
 
+/// <inheritdoc />
 public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 	where TModel : new()
 {
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
-        
+
+	/// <inheritdoc />
 	public XmlProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
@@ -26,6 +28,7 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 		_propertyMap = propertyMap;
 	}
 
+	/// <inheritdoc />
 	public IXmlProfileBuilder<TModel> Attribute<TAttribute>(
 		Expression<Func<TModel, TAttribute>> propertySelector,
 		SerializerDirection direction = SerializerDirection.Both,
@@ -43,9 +46,10 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 
 		return this;
 	}
-        
-	public IXmlProfileBuilder<TModel> Child<TAttribute>(
-		Expression<Func<TModel, TAttribute>> propertySelector,
+
+	/// <inheritdoc />
+	public IXmlProfileBuilder<TModel> Child<TElement>(
+		Expression<Func<TModel, TElement>> propertySelector,
 		SerializerDirection direction = SerializerDirection.Both,
 		Func<INamingStrategy>? namingStrategy = null,
 		Func<IXmlConverter<IXmlElement>>? converter = null

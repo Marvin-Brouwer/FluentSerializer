@@ -15,7 +15,9 @@ public readonly struct XmlText : IXmlText
 
 	private const string TextName = "#text";
 
+	/// <inheritdoc />
 	public string Name => TextName;
+	/// <inheritdoc />
 	public string? Value { get; }
 
 	/// <inheritdoc cref="XmlBuilder.Text(string?)"/>
@@ -47,8 +49,10 @@ public readonly struct XmlText : IXmlText
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		// This should never happen because null tags are self-closing but just to be sure this check is here
@@ -59,12 +63,16 @@ public readonly struct XmlText : IXmlText
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
 	#endregion

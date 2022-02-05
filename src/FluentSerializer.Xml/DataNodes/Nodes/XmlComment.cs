@@ -14,10 +14,12 @@ public readonly struct XmlComment : IXmlComment
 	private static readonly int TypeHashCode = typeof(XmlComment).GetHashCode();
 
 	private const string CommentName = "<!-- comment -->";
+	/// <inheritdoc />
 	public string Name => CommentName;
+	/// <inheritdoc />
 	public string? Value { get; }
 
-	/// <inheritdoc cref="XmlBuilder.Comment(string)"/>
+	/// <inheritdoc cref="XmlBuilder.Comment"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Comment"/> method instead of this constructor</b>
 	/// </remarks>
@@ -52,8 +54,10 @@ public readonly struct XmlComment : IXmlComment
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
@@ -70,12 +74,16 @@ public readonly struct XmlComment : IXmlComment
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
 	#endregion

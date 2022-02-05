@@ -15,7 +15,9 @@ public readonly struct XmlAttribute : IXmlAttribute
 {
 	private static readonly int TypeHashCode = typeof(XmlAttribute).GetHashCode();
 
+	/// <inheritdoc />
 	public string Name { get; }
+	/// <inheritdoc />
 	public string? Value { get; }
 
 	/// <inheritdoc cref="XmlBuilder.Attribute(string, string?)"/>
@@ -93,8 +95,10 @@ public readonly struct XmlAttribute : IXmlAttribute
 		}
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(XmlSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
@@ -116,12 +120,16 @@ public readonly struct XmlAttribute : IXmlAttribute
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
 
 	#endregion

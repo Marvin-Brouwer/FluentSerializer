@@ -19,9 +19,7 @@ public abstract class JsonSerializerProfile : ISerializerProfile
 	private readonly List<IClassMap> _classMaps = new();
 	private JsonSerializerConfiguration _configuration = JsonSerializerConfiguration.Default;
 
-	/// <summary>
-	/// Configure mappings
-	/// </summary>
+	/// <inheritdoc />
 	protected abstract void Configure();
 
 	/// <remarks>

@@ -14,15 +14,19 @@ using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Xml.Services;
 
+/// <inheritdoc />
 public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 {
 	private readonly XmlTypeSerializer _serializer;
 	private readonly XmlTypeDeserializer _deserializer;
 	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
+	/// <inheritdoc />
 	public XmlSerializerConfiguration XmlConfiguration { get; }
+	/// <inheritdoc />
 	public SerializerConfiguration Configuration => XmlConfiguration;
 
+	/// <inheritdoc />
 	public RuntimeXmlSerializer(
 		ClassMapScanList mappings, 
 		XmlSerializerConfiguration configuration,
@@ -38,6 +42,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		XmlConfiguration = configuration;
 	}
 
+	/// <inheritdoc />
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IXmlElement? element)
 		where TModel : new()
 	{
@@ -47,6 +52,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return _deserializer.DeserializeFromElement<TModel>(element, this);
 	}
 
+	/// <inheritdoc />
 	public object? Deserialize([MaybeNull, AllowNull] IXmlElement? element, Type modelType)
 	{
 		if (element is null) return default;
@@ -54,6 +60,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return _deserializer.DeserializeFromElement(element, modelType,  this);
 	}
 
+	/// <inheritdoc />
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData)
 		where TModel : new()
 	{
@@ -63,6 +70,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return Deserialize<TModel>(rootElement);
 	}
 
+	/// <inheritdoc />
 	public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model)
 		where TModel : new()
 	{
@@ -76,6 +84,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return stringValue;
 	}
 
+	/// <inheritdoc />
 	public IXmlDocument SerializeToDocument<TModel>([MaybeNull, AllowNull] TModel? model)
 	{
 		var rootElement = SerializeToElement(model);
@@ -83,6 +92,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return new XmlDocument(rootElement);
 	}
 
+	/// <inheritdoc />
 	public IXmlElement? SerializeToElement<TModel>([MaybeNull, AllowNull] TModel? model)
 	{
 		if (model is null) return default;
@@ -90,6 +100,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		return _serializer.SerializeToElement(model, typeof(TModel), this);
 	}
 
+	/// <inheritdoc />
 	public IXmlElement? SerializeToElement([MaybeNull, AllowNull] object? model, Type modelType)
 	{
 		if (model is null) return default;

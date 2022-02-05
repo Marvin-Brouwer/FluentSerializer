@@ -14,10 +14,14 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Services;
 
-public class XmlTypeDeserializer
+/// <summary>
+/// Deserializer for XML using profiles
+/// </summary>
+public sealed class XmlTypeDeserializer
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
+	/// <inheritdoc />
 	public XmlTypeDeserializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
@@ -25,6 +29,9 @@ public class XmlTypeDeserializer
 		_mappings = mappings;
 	}
 
+	/// <summary>
+	/// Deserialize an <see cref="IXmlElement"/> to the requested object type
+	/// </summary>
 	public TModel? DeserializeFromElement<TModel>(IXmlElement dataObject, IXmlSerializer currentSerializer)
 		where TModel : new()
 	{
@@ -38,6 +45,9 @@ public class XmlTypeDeserializer
 		return (TModel)deserializedInstance;
 	}
 
+	/// <summary>
+	/// Deserialize an <see cref="IXmlElement"/> to the requested object type
+	/// </summary>
 	public object? DeserializeFromElement(IXmlElement dataObject, Type classType,  IXmlSerializer currentSerializer)
 	{
 		Guard.Against.Null(dataObject, nameof(dataObject));

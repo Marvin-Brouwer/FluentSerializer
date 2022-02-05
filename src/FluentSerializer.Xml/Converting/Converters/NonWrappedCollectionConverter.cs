@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,9 +12,29 @@ using FluentSerializer.Xml.Services;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 
+/// <summary>
+/// Converts most dotnet collections and does NOT wrap in a property name tag
+/// <code>
+/// <![CDATA[
+/// class Example {
+///	  public IEnumerabble<ExampleProp> Prop { get; set; }
+/// }
+/// ]]>
+/// </code>
+/// <code>
+/// <![CDATA[
+/// <Example>
+///   <ExampleProp />
+///   <ExampleProp />
+/// </Example>
+/// ]]>
+/// </code>
+/// </summary>
 public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
 	public bool CanConvert(Type targetType) => targetType.IsEnumerable();
 
 	object? IConverter<IXmlElement>.Deserialize(IXmlElement objectToDeserialize, ISerializerContext context)

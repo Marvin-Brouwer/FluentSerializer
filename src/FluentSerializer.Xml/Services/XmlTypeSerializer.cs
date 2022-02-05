@@ -14,10 +14,14 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Services;
 
-public class XmlTypeSerializer
+/// <summary>
+/// Serializer for JSON using profiles
+/// </summary>
+public sealed class XmlTypeSerializer
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
+	/// <inheritdoc />
 	public XmlTypeSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
@@ -25,6 +29,11 @@ public class XmlTypeSerializer
 		_mappings = mappings;
 	}
 
+	/// <summary>
+	/// Serialize an instance to an <see cref="IXmlElement"/>
+	/// </summary>
+	/// <exception cref="MalConfiguredRootNodeException"></exception>
+	/// <exception cref="ClassMapNotFoundException"></exception>
 	public IXmlElement? SerializeToElement(object dataModel, Type classType, IXmlSerializer currentSerializer)
 	{
 		Guard.Against.Null(dataModel, nameof(dataModel));

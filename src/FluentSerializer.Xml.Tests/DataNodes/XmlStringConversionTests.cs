@@ -56,7 +56,7 @@ namespace FluentSerializer.Xml.Tests.DataNodes
 			var input = format ? _testXmlFormatted : _testXmlSlim;
 
 			// Act
-			var result = XmlParser.Parse(input.AsSpan());
+			var result = XmlParser.Parse(input);
 
 			// Assert
 			result.Should().BeEquatableTo(expected);

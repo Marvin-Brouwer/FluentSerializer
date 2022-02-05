@@ -14,9 +14,12 @@ public readonly struct JsonValue : IJsonValue
 	private static readonly int TypeHashCode = typeof(JsonValue).GetHashCode();
 
 	private const string ValueName = "#value";
+	/// <inheritdoc />
 	public string Name => ValueName;
+	/// <inheritdoc />
 	public string? Value { get; }
 
+	/// <inheritdoc />
 	public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
 
 	/// <inheritdoc cref="JsonBuilder.Value(string?)"/>
@@ -58,8 +61,10 @@ public readonly struct JsonValue : IJsonValue
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
 
+	/// <inheritdoc />
 	public override string ToString() => this.ToString(JsonSerializerConfiguration.Default);
 
+	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		// JSON does not support empty property assignment or array members
@@ -68,12 +73,16 @@ public readonly struct JsonValue : IJsonValue
 
 	#region IEquatable
 
+	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
+	/// <inheritdoc />
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
+	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
 	#endregion

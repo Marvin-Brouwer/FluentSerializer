@@ -9,9 +9,14 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 
+/// <summary>
+/// Converts types that implement <see cref="IConvertible"/>
+/// </summary>
 public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
 	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
 	private static string ConvertToString(object value) => Convert.ToString(value);
