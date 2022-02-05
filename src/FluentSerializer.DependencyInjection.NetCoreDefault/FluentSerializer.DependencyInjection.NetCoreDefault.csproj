@@ -5,6 +5,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <ApplicationIcon>../../doc/logo/logo-default.ico</ApplicationIcon>
+    <PackageIcon>../../doc/logo/logo-default.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

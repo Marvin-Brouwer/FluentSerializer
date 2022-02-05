@@ -8,13 +8,29 @@ using System.Reflection;
 
 namespace FluentSerializer.DependencyInjection.Xml.NetCoreDefault.Extensions;
 
+/// <summary>
+/// Extension class for registering the FluentSerializer for XML
+/// </summary>
 public static class DependencyInjectionExtensions
 {
 	private static readonly ServiceDescriptor RuntimeSerializerDescriptor = new(typeof(RuntimeXmlSerializer), typeof(RuntimeXmlSerializer), ServiceLifetime.Transient);
 
+	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="XmlSerializerProfile"/></typeparam>
+	/// <param name="serviceCollection"></param>
+	/// <param name="configurator">A configuration lambda to configure this serializer</param>
+	/// <returns></returns>
+	/// <summary>
+	/// Register the FluentSerializer for XML
+	/// </summary>
 	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(
 		this IServiceCollection serviceCollection, in Action<XmlSerializerConfiguration> configurator) =>
 		serviceCollection.AddFluentXmlSerializer(typeof(TAssemblyMarker).Assembly, configurator);
+
+	/// <param name="assembly">The assembly to scan for <see cref="XmlSerializerProfile"/></param>
+	/// <param name="serviceCollection"></param>
+	/// <param name="configurator">A configuration lambda to configure this serializer</param>
+	/// <returns></returns>
+	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
 	public static IServiceCollection AddFluentXmlSerializer(
 		this IServiceCollection serviceCollection, in Assembly assembly, in Action<XmlSerializerConfiguration> configurator)
 	{
@@ -23,10 +39,20 @@ public static class DependencyInjectionExtensions
 		return serviceCollection.AddFluentXmlSerializer(assembly, configuration);
 	}
 
+	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="XmlSerializerProfile"/></typeparam>
+	/// <param name="serviceCollection"></param>
+	/// <param name="configuration">A configuration override for this serializer</param>
+	/// <returns></returns>
+	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
 	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(
 		this IServiceCollection serviceCollection, XmlSerializerConfiguration? configuration = null) =>
 		serviceCollection.AddFluentXmlSerializer(typeof(TAssemblyMarker).Assembly, configuration);
 
+	/// <param name="assembly">The assembly to scan for <see cref="XmlSerializerProfile"/></param>
+	/// <param name="serviceCollection"></param>
+	/// <param name="configuration">A configuration override for this serializer</param>
+	/// <returns></returns>
+	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
 	public static IServiceCollection AddFluentXmlSerializer(
 		this IServiceCollection serviceCollection, in Assembly assembly, XmlSerializerConfiguration? configuration = null)
 	{
@@ -38,7 +64,7 @@ public static class DependencyInjectionExtensions
 			.AddRuntimeXmlSerializer();
 	}
 
-	public static IServiceCollection AddRuntimeXmlSerializer(this IServiceCollection serviceCollection)
+	private static IServiceCollection AddRuntimeXmlSerializer(this IServiceCollection serviceCollection)
 	{
 		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
 

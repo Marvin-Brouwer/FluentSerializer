@@ -8,8 +8,17 @@ using System.Reflection;
 
 namespace FluentSerializer.DependencyInjection.NetCoreDefault.Extensions;
 
+/// <summary>
+/// Extension class for registering FluentSerializers required services.
+/// </summary>
 public static class DependencyInjectionExtensions
 {
+	/// <summary>
+	/// Add the services required for the FluentSerializer to work <br />
+	/// Registers the following: <br />
+	/// - The <see cref="DefaultObjectPoolProvider"/> as singleton, given there is no registration for <see cref="ObjectPoolProvider"/><br />
+	/// - The <typeparamref name="TConfiguration"/> as singleton, given it has not been registered yet.
+	/// </summary>
 	public static IServiceCollection AddFluentSerializerServices<TConfiguration>(
 		this IServiceCollection serviceCollection, TConfiguration configuration)
 		where TConfiguration : SerializerConfiguration
@@ -24,6 +33,10 @@ public static class DependencyInjectionExtensions
 		return serviceCollection;
 	}
 
+	/// <summary>
+	/// Register <typeparamref name="TSerializerProfile"/>s found in <paramref name="assembly"/>. <br />
+	/// If there already are <typeparamref name="TSerializerProfile"/>s present, they will be appended to.
+	/// </summary>
 	public static IServiceCollection AddFluentSerializerProfiles<TSerializerProfile, TConfiguration>(
 		this IServiceCollection serviceCollection, in Assembly assembly, TConfiguration configuration)
 		where TSerializerProfile : class, ISerializerProfile
@@ -47,6 +60,7 @@ public static class DependencyInjectionExtensions
 
 		return false;
 	}
+
 	private static TServiceType? FindRegistrationFor<TServiceType>(this IServiceCollection serviceCollection)
 		where TServiceType : class
 	{
