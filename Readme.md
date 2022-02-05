@@ -31,9 +31,10 @@
 
 <h3 align="center">
   
-  [Getting started](#GettingStarted) - 
-  [Basic usage](#BasicUsage) - 
-  [Advanced usage](#AdvancedUsage)
+  [Getting started](#getting-started) - 
+  [Basic usage](#basic-usage) - 
+  [Use-case examples](#use-case-examples) - 
+  [Advanced usage](#advanced-usage)
 
 </h3>
 
