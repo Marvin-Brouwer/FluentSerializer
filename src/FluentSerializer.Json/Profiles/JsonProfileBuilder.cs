@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
@@ -11,12 +11,14 @@ using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Profiles;
 
+/// <inheritdoc />
 public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	where TModel : new()
 {
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
-        
+
+	/// <inheritdoc />
 	public JsonProfileBuilder(Func<INamingStrategy> defaultNamingStrategy, List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
@@ -26,6 +28,7 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 		_propertyMap = propertyMap;
 	}
 
+	/// <inheritdoc />
 	public IJsonProfileBuilder<TModel> Property<TProperty>(
 		Expression<Func<TModel, TProperty>> propertySelector,
 		SerializerDirection direction = SerializerDirection.Both,

@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -12,10 +12,14 @@ using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Services;
 
-public class JsonTypeSerializer
+/// <summary>
+/// Serializer for JSON using profiles
+/// </summary>
+public sealed class JsonTypeSerializer
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
+	/// <inheritdoc />
 	public JsonTypeSerializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
@@ -23,6 +27,11 @@ public class JsonTypeSerializer
 		_mappings = mappings;
 	}
 
+	/// <summary>
+	/// Serialize an instance to an <see cref="IJsonNode"/>
+	/// </summary>
+	/// <exception cref="NotImplementedException"></exception>
+	/// <exception cref="ClassMapNotFoundException"></exception>
 	public IJsonNode? SerializeToNode(object dataModel, Type classType, IJsonSerializer currentSerializer)
 	{
 		Guard.Against.Null(dataModel, nameof(dataModel));

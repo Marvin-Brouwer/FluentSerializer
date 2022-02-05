@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FluentSerializer.Core.Configuration;
@@ -10,12 +10,18 @@ using FluentSerializer.Json.Configuration;
 
 namespace FluentSerializer.Json.Profiles;
 
+/// <summary>
+/// A profile for the JSON serializer to map from
+/// </summary>
 [ImplicitlyUsed]
 public abstract class JsonSerializerProfile : ISerializerProfile
 {
 	private readonly List<IClassMap> _classMaps = new();
 	private JsonSerializerConfiguration _configuration = JsonSerializerConfiguration.Default;
 
+	/// <summary>
+	/// Configure mappings
+	/// </summary>
 	protected abstract void Configure();
 
 	/// <remarks>
@@ -29,7 +35,17 @@ public abstract class JsonSerializerProfile : ISerializerProfile
 		Configure();
 		return new ReadOnlyCollection<IClassMap>(_classMaps);
 	}
-        
+
+	/// <summary>
+	/// Configure a mapping for <typeparamref name="TModel"/>
+	/// </summary>
+	/// <typeparam name="TModel"></typeparam>
+	/// <param name="direction">Override the <see cref="SerializerDirection"/> of this class mapping (defaults to Both)</param>
+	/// <param name="namingStrategy">
+	///		Override the <see cref="INamingStrategy"/> for this class mapping. <br />
+	///		Defaults to <see cref="JsonSerializerConfiguration.DefaultNamingStrategy"/>
+	/// </param>
+	/// <returns></returns>
 	protected IJsonProfileBuilder<TModel> For<TModel>(
 		SerializerDirection direction = SerializerDirection.Both,
 		Func<INamingStrategy>? namingStrategy = null)

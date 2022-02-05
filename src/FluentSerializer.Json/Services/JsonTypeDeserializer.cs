@@ -10,10 +10,14 @@ using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Services;
 
-public class JsonTypeDeserializer
+/// <summary>
+/// Deserializer for JSON using profiles
+/// </summary>
+public sealed class JsonTypeDeserializer
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
 
+	/// <inheritdoc />
 	public JsonTypeDeserializer(IScanList<(Type type, SerializerDirection direction), IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
@@ -21,6 +25,9 @@ public class JsonTypeDeserializer
 		_mappings = mappings;
 	}
 
+	/// <summary>
+	/// Deserialize an <see cref="IJsonNode"/> to the requested object type
+	/// </summary>
 	public TModel? DeserializeFromNode<TModel>(IJsonNode dataObject, IJsonSerializer currentSerializer)
 		where TModel : new()
 	{
@@ -34,6 +41,9 @@ public class JsonTypeDeserializer
 		return (TModel)deserializedInstance;
 	}
 
+	/// <summary>
+	/// Deserialize an <see cref="IJsonNode"/> to the requested object type
+	/// </summary>
 	public object? DeserializeFromNode(IJsonNode dataObject, Type classType,  IJsonSerializer currentSerializer)
 	{
 		Guard.Against.Null(dataObject, nameof(dataObject));

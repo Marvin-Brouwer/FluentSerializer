@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,13 +12,19 @@ using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters;
 
+/// <summary>
+/// Converts most dotnet collections
+/// </summary>
 public class CollectionConverter : IJsonConverter
 {
+	/// <inheritdoc />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
 	public virtual bool CanConvert(Type targetType) =>
 		!typeof(string).IsAssignableFrom(targetType) &&
 		targetType.Implements(typeof(IEnumerable<>));
 
+	/// <inheritdoc />
 	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
 	{
 		if (objectToDeserialize is not IJsonArray arrayToDeserialize)
@@ -45,6 +51,7 @@ public class CollectionConverter : IJsonConverter
 		return instance;
 	}
 
+	/// <inheritdoc />
 	public IJsonNode Serialize(object objectToSerialize, ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize)

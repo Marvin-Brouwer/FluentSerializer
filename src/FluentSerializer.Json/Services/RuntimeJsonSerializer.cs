@@ -11,15 +11,19 @@ using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Json.Services;
 
+/// <inheritdoc />
 public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 {
 	private readonly JsonTypeSerializer _serializer;
 	private readonly JsonTypeDeserializer _deserializer;
 	private readonly ObjectPool<ITextWriter> _stringBuilderPool;
 
+	/// <inheritdoc />
 	public JsonSerializerConfiguration JsonConfiguration { get; }
+	/// <inheritdoc />
 	public SerializerConfiguration Configuration => JsonConfiguration;
 
+	/// <inheritdoc />
 	public RuntimeJsonSerializer(
 		ClassMapScanList mappings, 
 		JsonSerializerConfiguration configuration,
@@ -35,6 +39,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		JsonConfiguration = configuration;
 	}
 
+	/// <inheritdoc />
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] IJsonContainer? element) where TModel : new()
 	{
 		if (element is null) return default;
@@ -42,13 +47,15 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		return _deserializer.DeserializeFromNode<TModel>(element, this);
 	}
 
+	/// <inheritdoc />
 	public object? Deserialize([MaybeNull, AllowNull] IJsonContainer? element, Type modelType)
 	{
 		if (element is null) return default;
 
 		return _deserializer.DeserializeFromNode(element, modelType,  this);
 	}
-	
+
+	/// <inheritdoc />
 	public TModel? Deserialize<TModel>([MaybeNull, AllowNull] string? stringData) where TModel : new()
 	{
 		if (string.IsNullOrEmpty(stringData)) return default;
@@ -57,6 +64,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		return Deserialize<TModel>(jObject);
 	}
 
+	/// <inheritdoc />
 	public string Serialize<TModel>([MaybeNull, AllowNull] TModel? model) where TModel : new()
 	{
 		var container = SerializeToContainer(model);
@@ -67,6 +75,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		return stringValue;
 	}
 
+	/// <inheritdoc />
 	public IJsonContainer? SerializeToContainer<TModel>(TModel? model)
 	{
 		if (model is null) return default;
@@ -77,6 +86,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		throw new NotSupportedException();
 	}
 
+	/// <inheritdoc />
 	public TContainer? SerializeToContainer<TContainer>(object? model, Type modelType) where TContainer : IJsonContainer
 	{
 		if (model is null) return default;

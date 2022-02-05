@@ -5,10 +5,21 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.Services;
 
+/// <summary>
+/// The FluentSerializer for JSON
+/// </summary>
 public interface IJsonSerializer : ISerializer
 {
+	/// <inheritdoc cref="JsonSerializerConfiguration"/>
 	JsonSerializerConfiguration JsonConfiguration { get; }
 
-	[return: MaybeNull] TModel? Deserialize<TModel>([MaybeNull, AllowNull] IJsonContainer? element) where TModel: new ();
+	/// <summary>
+	/// Serialize <paramref name="model"/> to a node representation
+	/// </summary>
 	[return: MaybeNull] IJsonContainer? SerializeToContainer<TModel>(TModel model);
+
+	/// <summary>
+	/// Deserialize <paramref name="element"/> from a node representation to an instance of <typeparamref name="TModel"/>
+	/// </summary>
+	[return: MaybeNull] TModel? Deserialize<TModel>([MaybeNull, AllowNull] IJsonContainer? element) where TModel: new ();
 }

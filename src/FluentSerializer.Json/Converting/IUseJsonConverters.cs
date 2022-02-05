@@ -1,10 +1,23 @@
-﻿using System;
+using FluentSerializer.Json.Converting.Converters;
+using System;
 using System.Globalization;
 
 namespace FluentSerializer.Json.Converting;
 
+/// <summary>
+/// Use an <see cref="IJsonConverter"/> for this mapping
+/// </summary>
+/// <remarks>
+/// For using a custom <see cref="IJsonConverter"/> create an extension method on <see cref="IUseJsonConverters"/>
+/// </remarks>
 public interface IUseJsonConverters
 {
-	Func<IJsonConverter> Dates(string? format = null, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	/// <inheritdoc cref="DefaultDateConverter" />
+	IJsonConverter Dates();
+
+	/// <inheritdoc cref="DateByFormatConverter" />
+	Func<IJsonConverter> Dates(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+
+	/// <inheritdoc cref="CollectionConverter" />
 	IJsonConverter Collection();
 }

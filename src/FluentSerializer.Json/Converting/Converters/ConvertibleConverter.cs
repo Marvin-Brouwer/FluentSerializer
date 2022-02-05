@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
@@ -7,9 +7,14 @@ using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters;
 
+/// <summary>
+/// Converts types that implement <see cref="IConvertible"/>
+/// </summary>
 public sealed class ConvertibleConverter : IJsonConverter
 {
+	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
 	public bool CanConvert(Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
 	private static string? ConvertToString(object value) => Convert.ToString(value);
@@ -21,6 +26,7 @@ public sealed class ConvertibleConverter : IJsonConverter
 		return Convert.ChangeType(currentValue, targetType);
 	}
 
+	/// <inheritdoc />
 	public IJsonNode? Serialize(object objectToSerialize, ISerializerContext context)
 	{
 		if (objectToSerialize is string stringToSerialize)
@@ -33,6 +39,7 @@ public sealed class ConvertibleConverter : IJsonConverter
 			: Value(stringValue);
 	}
 
+	/// <inheritdoc />
 	public object? Deserialize(IJsonNode objectToDeserialize, ISerializerContext context)
 	{
 		if (objectToDeserialize is not IDataValue data) return default;
