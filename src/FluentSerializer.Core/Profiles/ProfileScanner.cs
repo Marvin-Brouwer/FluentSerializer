@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +16,7 @@ public static class ProfileScanner
 			.Where(type => !type.IsAbstract)
 			.Select(type => (ISerializerProfile)Activator.CreateInstance(type)!);
 
-	public static IScanList<(Type type, SerializerDirection direction), IClassMap> FindClassMapsInAssembly<TSerializerProfile>(
+	public static ClassMapScanList FindClassMapsInAssembly<TSerializerProfile>(
 		Assembly assembly, SerializerConfiguration configuration)
 		where TSerializerProfile : ISerializerProfile
 	{

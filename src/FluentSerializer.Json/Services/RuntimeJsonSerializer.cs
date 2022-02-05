@@ -21,7 +21,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	public SerializerConfiguration Configuration => JsonConfiguration;
 
 	public RuntimeJsonSerializer(
-		IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+		ClassMapScanList mappings, 
 		JsonSerializerConfiguration configuration,
 		ObjectPoolProvider objectPoolProvider)
 	{

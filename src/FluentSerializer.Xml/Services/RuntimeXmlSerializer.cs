@@ -24,7 +24,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 	public SerializerConfiguration Configuration => XmlConfiguration;
 
 	public RuntimeXmlSerializer(
-		IScanList<(Type type, SerializerDirection direction), IClassMap> mappings, 
+		ClassMapScanList mappings, 
 		XmlSerializerConfiguration configuration,
 		ObjectPoolProvider objectPoolProvider)
 	{

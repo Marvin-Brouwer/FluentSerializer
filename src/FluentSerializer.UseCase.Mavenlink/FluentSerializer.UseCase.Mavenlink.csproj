@@ -23,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="6.4.0" />
     <PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -41,6 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FluentSerializer.Core.TestUtils\FluentSerializer.Core.TestUtils.csproj" />
+    <ProjectReference Include="..\FluentSerializer.DependencyInjection.Json.NetCoreDefault\FluentSerializer.DependencyInjection.Json.NetCoreDefault.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json.Converter.DefaultJson\FluentSerializer.Json.Converter.DefaultJson.csproj" />
     <ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
   </ItemGroup>

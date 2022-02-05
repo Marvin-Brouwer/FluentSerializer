@@ -4,39 +4,36 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
-using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
-using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.DependencyInjection.Xml.NetCoreDefault.Extensions;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
-using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Converter.DefaultXml.Converting.Extensions;
 using FluentSerializer.Xml.Converting;
-using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
-using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace FluentSerializer.UseCase.OpenAir
 {
 	public sealed partial class OpenAirTests
     {
-        private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _mappings;
-        private readonly XmlSerializerConfiguration _configuration;
+		private readonly IServiceProvider _serviceProvider;
 
-        public OpenAirTests()
+		public OpenAirTests()
         {
-            _configuration = XmlSerializerConfiguration.Default;
-            _configuration.Encoding = Encoding.UTF8;
-            _configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
-            _configuration.DefaultConverters.Add(Converter.For.Xml());
-			_configuration.NewLine = LineEndings.LineFeed;
-
-			_mappings = ProfileScanner.FindClassMapsInAssembly<XmlSerializerProfile>(typeof(OpenAirTests).Assembly, _configuration);
-        }
+			_serviceProvider = new ServiceCollection()
+				.AddFluentXmlSerializer<OpenAirTests>(static configuration =>
+				{
+					configuration.Encoding = Encoding.UTF8;
+					configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
+					configuration.DefaultConverters.Add(Converter.For.Xml());
+					configuration.NewLine = LineEndings.LineFeed;
+				})
+				.BuildServiceProvider();
+		}
 
         [Fact,
             Trait("Category", "UseCase")]
@@ -46,10 +43,10 @@ namespace FluentSerializer.UseCase.OpenAir
             var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
             var example = ProjectRequestExample;
 
-            var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
+			var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
 
-            // Act
-            var result = sut.Serialize(example);
+			// Act
+			var result = sut.Serialize(example);
 
             // Assert
             result.ShouldBeBinaryEquatableTo(expected);
@@ -62,10 +59,11 @@ namespace FluentSerializer.UseCase.OpenAir
             // Arrange
             var expected = RateCardResponseExample;
             var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
-            var sut = new RuntimeXmlSerializer(_mappings, _configuration, new DefaultObjectPoolProvider());
 
-            // Act
-            var result = sut.Deserialize<Response<RateCard>>(example);
+			var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
+
+			// Act
+			var result = sut.Deserialize<Response<RateCard>>(example);
 
             // Assert
             result.Should().BeEquivalentTo(expected);

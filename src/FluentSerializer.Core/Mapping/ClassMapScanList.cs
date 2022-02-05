@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.Extensions;
+using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using FluentSerializer.Core.Configuration;
@@ -23,5 +23,14 @@ public sealed class ClassMapScanList : ScanList<(Type type, SerializerDirection 
 		if (mapDirection == SerializerDirection.Both) return true;
 
 		return searchDirection == mapDirection;
+	}
+
+	public ClassMapScanList Append(ClassMapScanList classMaps)
+	{
+		var dataTypes = new List<IClassMap>();
+		dataTypes.AddRange(this);
+		dataTypes.AddRange(classMaps);
+
+		return new ClassMapScanList(dataTypes);
 	}
 }
