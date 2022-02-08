@@ -1,7 +1,5 @@
 [//]: # (Header)
 
-[banner]: https://raw.githubusercontent.com/Marvin-Brouwer/FluentSerializer/main/doc/logo/Banner.optimized.svg?token=GHSAT0AAAAAABQQMDKWXPCPFIILUZMEP56EYQCNWBA
-
 [package-url-xml]: https://www.nuget.org/packages/FluentSerializer.Xml/
 [package-shield-v-xml]: https://img.shields.io/nuget/v/FluentSerializer.Xml.svg?style=flat-square
 [package-shield-d-xml]: https://img.shields.io/nuget/dt/FluentSerializer.Xml.svg?style=flat-square
@@ -15,9 +13,10 @@
 [repo-stars-shield]: https://img.shields.io/github/stars/Marvin-Brouwer/FluentSerializer.svg?color=brightgreen&style=flat-square
 
 <h1 align="center">
-
-  [![Fluent Serializer][banner]](#Readme)
-
+  <a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
+    <img alt="Fluent Serializer banner"
+      src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Banner.optimized.svg" />
+  </a>
 </h1>
 
 <h3 align="center">
@@ -39,15 +38,19 @@
   [Advanced usage](#advanced-usage)
 
 </h3>
+<hr/>
 
-[//]: # (Introduction)
+[//]: # (Document)
+[mappster]: https://github.com/MapsterMapper/Mapster#readme
+[automapper]: https://github.com/AutoMapper/AutoMapper#readme
+
 `FluentSerializer` is a library to help you with serializing to-and-from C# POCOs using profiles.  
-The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.
-
-[//]: # (GettingStarted)
+The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.  
+So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mould data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.
+## Getting started
 [json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
 [xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
-## Getting started
+
 
 Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework. 
 
@@ -68,7 +71,6 @@ serviceCollection
 ```
 There are multiple overloads for overriding configurations and passing assemblies, please read the respective readme's for the `DependencyInjection` libraries.
 
-[//]: # (BasicUsage)
 ## Basic usage
 
 For the serializer to work you need to create a profile and call the serializer.
@@ -109,7 +111,6 @@ public sealed class WeirdExample : IWeirdExample {
 ```
 The serialize will automatically find the correct profile for the types that are passed or requested and (de)serialize as expected.
 
-[//]: # (UseCaseExamples)
 ## Use-case Examples
 
 To get a quick view of how this library may benefit you, check out these use-cases:
@@ -117,14 +118,12 @@ To get a quick view of how this library may benefit you, check out these use-cas
 - [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.UseCase.Mavenlink/Readme.md#readme) (`JSON`)
 - [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.UseCase.OpenAir/Readme.md#readme) (`XML`)
 
-[//]: # (AdvancedUsage)
 ## Advanced usage
 
 Here are some links to some more advanced topics:
 
 - 
 
-[//]: # (Misc)
 ## Contributing
 We are currently figuring out what the best branching model is, and what the best automated release setup is.  
 Because of that we aren't really looking for code contributions until that is in place.  
