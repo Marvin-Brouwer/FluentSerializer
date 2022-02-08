@@ -1,5 +1,7 @@
 [//]: # (Header)
 
+[banner]: https://raw.githubusercontent.com/Marvin-Brouwer/FluentSerializer/main/doc/logo/Banner.optimized.svg?token=GHSAT0AAAAAABQQMDKWXPCPFIILUZMEP56EYQCNWBA
+
 [package-url-xml]: https://www.nuget.org/packages/FluentSerializer.Xml/
 [package-shield-v-xml]: https://img.shields.io/nuget/v/FluentSerializer.Xml.svg?style=flat-square
 [package-shield-d-xml]: https://img.shields.io/nuget/dt/FluentSerializer.Xml.svg?style=flat-square
@@ -14,7 +16,7 @@
 
 <h1 align="center">
 
-  [![Fluent Serializer](./doc/logo/Banner.optimized.svg?token=GHSAT0AAAAAABNT2E5XSKNFQBQT2XRIDGS6YPD3THA)](#Readme)
+  [![Fluent Serializer][banner]](#Readme)
 
 </h1>
 
@@ -23,7 +25,7 @@
   [![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
   [![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
   [![Stars][repo-stars-shield]][repo-stars-url] 
-	[![License][license-shield]][license-url]  
+  [![License][license-shield]][license-url]  
 
 </h3>
 
