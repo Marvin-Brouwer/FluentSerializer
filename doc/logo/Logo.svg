@@ -18,13 +18,12 @@
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="Logo.svg">
   <defs
-     id="defs2"><style
-   id="style4543">.cls-1{fill:#f1734d;}.cls-1,.cls-2{fill-rule:evenodd;}.cls-2{fill:#9293a5;}.cls-3{fill:#f94060;}.cls-4{fill:#96ccee;}</style>
-<style
-   id="style4620">.cls-1{fill:#5c2d91;}.cls-2,.cls-3{fill:#fff;}.cls-2{opacity:0.1;}</style>
-
-	
-</defs>
+     id="defs2">
+    <style
+       id="style4543">.cls-1{fill:#f1734d;}.cls-1,.cls-2{fill-rule:evenodd;}.cls-2{fill:#9293a5;}.cls-3{fill:#f94060;}.cls-4{fill:#96ccee;}</style>
+    <style
+       id="style4620">.cls-1{fill:#5c2d91;}.cls-2,.cls-3{fill:#fff;}.cls-2{opacity:0.1;}</style>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -33,8 +32,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="81.151986"
-     inkscape:cy="70.96593"
+     inkscape:cx="190.4377"
+     inkscape:cy="99.537359"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -61,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -255,50 +254,35 @@
          id="g5904"
          transform="matrix(7.3532831,0,0,7.3532831,-1313.698,-1604.1317)">
         <g
-           id="g5831">
-</g>
+           id="g5831" />
         <g
-           id="g5833">
-</g>
+           id="g5833" />
         <g
-           id="g5835">
-</g>
+           id="g5835" />
         <g
-           id="g5837">
-</g>
+           id="g5837" />
         <g
-           id="g5839">
-</g>
+           id="g5839" />
         <g
-           id="g5841">
-</g>
+           id="g5841" />
         <g
-           id="g5843">
-</g>
+           id="g5843" />
         <g
-           id="g5845">
-</g>
+           id="g5845" />
         <g
-           id="g5847">
-</g>
+           id="g5847" />
         <g
-           id="g5849">
-</g>
+           id="g5849" />
         <g
-           id="g5851">
-</g>
+           id="g5851" />
         <g
-           id="g5853">
-</g>
+           id="g5853" />
         <g
-           id="g5855">
-</g>
+           id="g5855" />
         <g
-           id="g5857">
-</g>
+           id="g5857" />
         <g
-           id="g5859">
-</g>
+           id="g5859" />
       </g>
       <g
          id="g5935"
@@ -320,8 +304,8 @@
        transform="translate(-7.3705357,5.6696429)"
        style="image-rendering:optimizeQuality"
        inkscape:label="Logo-default"
-       inkscape:export-xdpi="119.999"
-       inkscape:export-ydpi="119.999">
+       inkscape:export-xdpi="30.967745"
+       inkscape:export-ydpi="30.967745">
       <title
          id="title6425">Logo-default</title>
       <g
@@ -600,64 +584,49 @@
          style="fill:#000000">
         <g
            id="g6137"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6139"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6141"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6143"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6145"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6147"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6149"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6151"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6153"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6155"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6157"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6159"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6161"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6163"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6165"
-           style="fill:#000000">
-</g>
+           style="fill:#000000" />
         <g
            id="g6417"
            transform="matrix(0.88491885,0,0,0.88491885,-54.54819,134.40149)">
@@ -757,50 +726,35 @@
            id="g6011"
            transform="matrix(7.3532831,0,0,7.3532831,-1313.698,-1604.1317)">
           <g
-             id="g5981">
-</g>
+             id="g5981" />
           <g
-             id="g5983">
-</g>
+             id="g5983" />
           <g
-             id="g5985">
-</g>
+             id="g5985" />
           <g
-             id="g5987">
-</g>
+             id="g5987" />
           <g
-             id="g5989">
-</g>
+             id="g5989" />
           <g
-             id="g5991">
-</g>
+             id="g5991" />
           <g
-             id="g5993">
-</g>
+             id="g5993" />
           <g
-             id="g5995">
-</g>
+             id="g5995" />
           <g
-             id="g5997">
-</g>
+             id="g5997" />
           <g
-             id="g5999">
-</g>
+             id="g5999" />
           <g
-             id="g6001">
-</g>
+             id="g6001" />
           <g
-             id="g6003">
-</g>
+             id="g6003" />
           <g
-             id="g6005">
-</g>
+             id="g6005" />
           <g
-             id="g6007">
-</g>
+             id="g6007" />
           <g
-             id="g6009">
-</g>
+             id="g6009" />
         </g>
         <g
            id="g6017"
@@ -823,8 +777,8 @@
        transform="translate(33.639878,5.6696429)"
        style="image-rendering:optimizeQuality"
        inkscape:label="Logo-xml"
-       inkscape:export-xdpi="119.999"
-       inkscape:export-ydpi="119.999">
+       inkscape:export-xdpi="30.967745"
+       inkscape:export-ydpi="30.967745">
       <title
          id="title6425-6">Logo-xml</title>
       <g
@@ -1296,8 +1250,8 @@
        transform="translate(74.650292,5.6696429)"
        style="image-rendering:optimizeQuality"
        inkscape:label="Logo-json"
-       inkscape:export-xdpi="119.999"
-       inkscape:export-ydpi="119.999">
+       inkscape:export-xdpi="30.967745"
+       inkscape:export-ydpi="30.967745">
       <title
          id="title6425-2">Logo-json</title>
       <g
