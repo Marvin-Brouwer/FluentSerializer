@@ -46,7 +46,7 @@
 
 `FluentSerializer` is a library to help you with serializing to-and-from C# POCOs using profiles.  
 The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.  
-So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mould data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.
+So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.
 ## Getting started
 [json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
 [xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
