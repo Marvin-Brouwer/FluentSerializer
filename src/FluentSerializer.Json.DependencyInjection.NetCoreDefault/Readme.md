@@ -18,6 +18,7 @@ This library is responsible for registering the FluentSerializer for JSON using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
+[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json/Readme.md#configuration
 
 For basic usage you can use this:  
 ```cs
@@ -36,15 +37,4 @@ serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration 
 	configuration.NewLine = LineEndings.LineFeed;
 });
 ```
-This will use the `JsonSerializerConfiguration.Default` as the applied config and allows you to change some properties.
-
-## Default Configuration
-
-- **Encoding** = `Encoding.UTF8`
-- **FormatOutput** = true
-- **WriteNull** = false
-- **DefaultNamingStrategy** = camelCase
-- **DefaultConverters**
-  - Converter that can handle DateTime objects (JSON spec compliant)
-  - Converter that can handle IConvertable types
-  - Converter to handle collection types
+This will use the `JsonSerializerConfiguration.Default` as the applied config and allows you to [change some properties][configuration-doc].

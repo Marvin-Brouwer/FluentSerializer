@@ -18,6 +18,7 @@ This library is responsible for registering the FluentSerializer for XML using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
+[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Xml/Readme.md#configuration
 
 For basic usage you can use this:  
 ```cs
@@ -36,16 +37,4 @@ serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>(static configuration =
 	configuration.NewLine = LineEndings.LineFeed;
 });
 ```
-This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you to change some properties.
-
-## Default Configuration
-
-- **Encoding** = `Encoding.Unicode` (utf-16)
-- **FormatOutput** = true
-- **WriteNull** = false
-- **DefaultClassNamingStrategy** = PascalCase
-- **DefaultPropertyNamingStrategy** = camelCase
-- **DefaultConverters**
-  - Converter that can handle DateTime objects (XML spec compliant)
-  - Converter that can handle IConvertable types
-  - Converter to handle collection types (wrapped XML collection)
+This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you to [change some properties][configuration-doc].

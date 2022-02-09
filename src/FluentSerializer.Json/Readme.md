@@ -19,9 +19,23 @@ See:
 - [JSON spec](https://www.json.org/json-en.html)
 - [JSONC spec](https://code.visualstudio.com/docs/languages/json#_json-with-comments)
 
-## Configuration
 
-TODO: Section on the configuration, link to DI package or other way around.
+## Configuration
+[configuring-di]: https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
+
+It is possible to configure the defaults of certain aspects the serializer uses.
+You can override these when [configuring the DI injection][configuring-di].
+
+By default it looks like this:
+
+- **Encoding** = `Encoding.UTF8`
+- **FormatOutput** = true
+- **WriteNull** = false
+- **DefaultNamingStrategy** = camelCase
+- **DefaultConverters**
+  - Converter that can handle DateTime objects (JSON spec compliant)
+  - Converter that can handle IConvertable types
+  - Converter to handle collection types
 
 ## Creating profiles
 

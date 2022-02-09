@@ -16,8 +16,22 @@ See:
 - [XML spec](https://www.w3.org/TR/xml)
 
 ## Configuration
+[configuring-di]: https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
 
-TODO: Section on the configuration, link to DI package or other way around
+It is possible to configure the defaults of certain aspects the serializer uses.
+You can override these when [configuring the DI injection][configuring-di].
+
+By default it looks like this:
+
+- **Encoding** = `Encoding.Unicode` (utf-16)
+- **FormatOutput** = true
+- **WriteNull** = false
+- **DefaultClassNamingStrategy** = PascalCase
+- **DefaultPropertyNamingStrategy** = camelCase
+- **DefaultConverters**
+  - Converter that can handle DateTime objects (XML spec compliant)
+  - Converter that can handle IConvertable types
+  - Converter to handle collection types (wrapped XML collection)
 ## Creating profiles
 
 For the serializer to understand how to map the data structure to and from C# Models, you need to create a profile.  
@@ -68,12 +82,14 @@ The text nodes don't have names, so this mapping has no **namingStrategy** param
 Here is a simple example to illustrate how a profile would be implemented:  
 ```xml
 <Request>
-	<Data>
-		<SomeDataEntity identifier="1">
-			<Name>someName</Name>
-			<!-- Some other properties we don't map -->
-		</SomeDataEntity>
-	<Data>
+	<data>
+		<List>
+			<SomeDataEntity identifier="1">
+				<name>someName</name>
+				<!-- Some other properties we don't map -->
+			</SomeDataEntity>
+		</List>
+	<data>
 </Request>
 ```
 
