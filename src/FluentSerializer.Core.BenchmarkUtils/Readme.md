@@ -13,4 +13,10 @@
 
 [//]: # (Body)
 
-UNDER CONSTRUCTION
+This library contains some utility methods for our custom benchmark setup.  
+In short, this is a setup to benchmark the entire serialization setup with a large data set.  
+
+Normally `BenchMarkDotNet` is not configured for this, hence we made some configuration adjustments to fit our use-case.
+
+See: 
+- [BenchMarkDotNet](https://github.com/dotnet/BenchmarkDotNet#readme)

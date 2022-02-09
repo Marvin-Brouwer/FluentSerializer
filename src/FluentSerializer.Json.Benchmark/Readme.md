@@ -6,11 +6,15 @@
 <h1>
 	<img alt="icon" width="26" height="26"
 		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.json.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json/Readme.md#readme">
-		FluentSerializer.Json
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json.Benchmark/Readme.md#readme">
+		FluentSerializer.Json.Benchmark
 	</a>
 </h1>
 
 [//]: # (Body)
 
-UNDER CONSTRUCTION
+This library is responsible for benchmarking the JSON conversion logic.  
+
+See: 
+- [FluentSerializer.Core.BenchMarkUtils](https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Core.BenchMarkUtils/Readme.md#readme)
+- [BenchMarkDotNet](https://github.com/dotnet/BenchmarkDotNet#readme)

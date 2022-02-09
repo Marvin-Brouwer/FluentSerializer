@@ -12,4 +12,9 @@
 </h1>
 
 [//]: # (Body)
-UNDER CONSTRUCTION
+
+This library contains utility methods for automated testing.  
+
+See: 
+- [XUnit](https://github.com/xunit/xunit#readme)
+- [FluentAssertions](https://github.com/fluentassertions/fluentassertions#readme)

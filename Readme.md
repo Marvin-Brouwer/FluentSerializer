@@ -86,7 +86,6 @@ You create a profile by creating a class that inherits from the serializers prof
 `FluentSerializer.Json.JsonSerializerProfile`, `FluentSerializer.Xml.JsonSerializerProfile`, and maybe others.  
  
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.  
-<!--  todo create profile readme's -->
 - [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
 - [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)  
 
