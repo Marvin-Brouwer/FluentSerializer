@@ -58,7 +58,6 @@ This library is intended for usage on more exotic data structures, if you're jus
 [json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
 [xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
 
-
 Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework. 
 
 <sub>[FluentSerializer.Json.DependencyInjection.NetCoreDefault][json-di-dotnet-readme]</sub>
@@ -88,8 +87,8 @@ You create a profile by creating a class that inherits from the serializers prof
  
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.  
 <!--  todo create profile readme's -->
-- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json/Readme.md#CreatingProfile)
-- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#CreatingProfile)  
+- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
+- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)  
 
 For illustration's sake, here's a basic example of a profile:  
 <details>
@@ -97,13 +96,11 @@ For illustration's sake, here's a basic example of a profile:
 
 ```jsonc
 { 
-	"data": [
-		{
-			"identifier": 1,
-			"name": "someName",
-			// Some other properties we don't map
-		}
-	]
+	"data": [{
+		"identifier": 1,
+		"name": "someName",
+		// Some other properties we don't map
+	}]
 }
 ```
 ```csharp

@@ -12,10 +12,96 @@
 </h1>
 
 [//]: # (Body)
+See: 
+- [XML spec](https://www.w3.org/TR/xml)
 
-This library is responsible for exposing the XML API and implementing the XML conversion logic.
-For Using this library see:
-- FluentSerializer.Xml.MicrosoftDependencyInjection
-- FluentSerializer.Xml.Autofaq
-- FluentSerializer.Xml.Ninject
-- FluentSerializer.Xml...
+## Configuration
+
+TODO: Section on the configuration, link to DI package or other way around
+## Creating profiles
+
+For the serializer to understand how to map the data structure to and from C# Models, you need to create a profile.  
+To do so create a class inheriting from `FluentSerializer.Xml.Profiles.XmlSerializerProfile`.  
+The profile needs to implement the `protected override void Configure()` method, which will be called to construct the mappings inside of this profile.  
+  
+To create a class mapping, use the `For<TModel>()` method.  
+This method has the following optional parameters:
+- **direction:** The direction for which this class mapping is valid, defaults to `Both`
+- **tagNamingStrategy:** A naming strategy for all property to element mappings, overriding the Configuration value  
+  TODO: Link to advanced concepts naming strategies  
+- **attributeNamingStrategy:** A naming strategy for all property to attribute mappings, overriding the Configuration value  
+  TODO: Link to advanced concepts naming strategies  
+
+You can create multiple class mappings per profile if that fits your use-case.
+  
+To map the properties of the C# Model, use method chaining on the `For<TModel>()` method.  
+Available options: **`Attribute<TAttribute>()`**, **`Child<TElement>()`**, **`Text<TText>()`**.
+
+### Mapping properties
+
+To create a property to attribute mapping, use the `Attribute<TAttribute>()` method.  
+This method has the following optional parameters:
+- **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
+- **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
+  TODO: Link to advanced concepts naming strategies  
+- **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
+  TODO: Link to advanced concepts converters  
+
+To create a property to element mapping, use the `Child<TElement>()` method.  
+This method has the following optional parameters:
+- **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
+- **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
+  TODO: Link to advanced concepts naming strategies  
+- **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
+  TODO: Link to advanced concepts converters  
+
+To create a property to element mapping, use the `Text<TText>()` method.  
+This method has the following optional parameters:
+- **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
+- **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
+  TODO: Link to advanced concepts converters  
+
+The text nodes don't have names, so this mapping has no **namingStrategy** parameter.  
+
+### Example
+
+Here is a simple example to illustrate how a profile would be implemented:  
+```xml
+<Request>
+	<Data>
+		<SomeDataEntity identifier="1">
+			<Name>someName</Name>
+			<!-- Some other properties we don't map -->
+		</SomeDataEntity>
+	<Data>
+</Request>
+```
+
+```csharp
+public sealed class Request<TDataEntity> where TDataEntity: IDataEntity {
+	public List<TDataEntity> Data { get; set; }
+}
+```
+
+```csharp
+public sealed class SomeDataEntity: IDataEntity {
+	public string Id { get; set; }
+	public string Name { get; set; }
+}
+```
+
+```csharp
+public sealed class RequestProfile : JsonSerializerProfile
+{
+	protected override void Configure()
+	{
+		For<Request<IDataEntity>>()
+			.Child(request => request.Data);
+		
+		For<SomeDataEntity>()
+			.Attribute(entity => entity.Id, ,
+				namingStrategy: Names.Are("identifier"))
+			.Child(entity => entity.Name);
+	}
+}
+```
