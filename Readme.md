@@ -55,8 +55,8 @@ This library is intended for usage on more exotic data structures, if you're jus
   
 
 ## Getting started
-[json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
-[xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
+[json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
+[xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
 
 Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework. 
 
@@ -86,8 +86,8 @@ You create a profile by creating a class that inherits from the serializers prof
 `FluentSerializer.Json.JsonSerializerProfile`, `FluentSerializer.Xml.JsonSerializerProfile`, and maybe others.  
  
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.  
-- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
-- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)  
+- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
+- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)  
 
 For illustration's sake, here's a basic example of a profile:  
 <details>
@@ -162,8 +162,8 @@ The serialize will automatically find the correct profile for the types that are
 
 To get a quick view of how this library may benefit you, check out these use-cases:
 
-- [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.UseCase.Mavenlink/Readme.md#readme) (`JSON`)
-- [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.UseCase.OpenAir/Readme.md#readme) (`XML`)
+- [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink/Readme.md#readme) (`JSON`)
+- [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Readme.md#readme) (`XML`)
 
 ## Advanced usage
 

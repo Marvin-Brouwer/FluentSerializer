@@ -6,7 +6,7 @@
 <h1>
 	<img alt="icon" width="26" height="26"
 		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.json.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme">
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme">
 		FluentSerializer.Json.DependencyInjection.NetCoreDefault
 	</a>
 </h1>
@@ -18,7 +18,7 @@ This library is responsible for registering the FluentSerializer for JSON using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
-[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Json/Readme.md#configuration
+[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#readme
 
 For basic usage you can use this:  
 ```cs
