@@ -45,7 +45,15 @@
 
 `FluentSerializer` is a library to help you with serializing to-and-from C# POCOs using profiles.  
 The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.  
-So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.
+So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.  
+  
+This library is intended for usage on more exotic data structures, if you're just looking for a JSON or XML serializer checkout these options:  
+- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json#readme)
+  The most commonly used dotnet JSON serializer
+- [JaxLib](https://github.com/YAXLib/YAXLib#readme)
+  An awesome XML serializer that's miles ahead of the dotnet default one.
+  
+
 ## Getting started
 [json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
 [xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
@@ -81,7 +89,51 @@ You create a profile by creating a class that inherits from the serializers prof
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.  
 <!--  todo create profile readme's -->
 - [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json/Readme.md#CreatingProfile)
-- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#CreatingProfile)
+- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml/Readme.md#CreatingProfile)  
+
+For illustration's sake, here's a basic example of a profile:  
+<details>
+  <summary>JSON structure & supporting classes</summary>
+
+```jsonc
+{ 
+	"data": [
+		{
+			"identifier": 1,
+			"name": "someName",
+			// Some other properties we don't map
+		}
+	]
+}
+```
+```csharp
+public sealed class Request<TDataEntity> where TDataEntity: IDataEntity {
+	public List<TDataEntity> Data { get; set; }
+}
+```
+```csharp
+public sealed class SomeDataEntity: IDataEntity {
+	public string Id { get; set; }
+	public string Name { get; set; }
+}
+```
+</details>
+
+```csharp
+public sealed class RequestProfile : JsonSerializerProfile
+{
+	protected override void Configure()
+	{
+		For<Request<IDataEntity>>()
+			.Property(request => request.Data);
+		
+		For<SomeDataEntity>()
+			.Property(entity => entity.Id, ,
+				namingStrategy: Names.Are("identifier"))
+			.Property(entity => entity.Name);
+	}
+}
+```
 
 ### Calling the serializer
 Once the profiles are registered all you have to do is inject the serializer into the service responsible for handling serialized application dependencies and call the serializer or deserialize method.
