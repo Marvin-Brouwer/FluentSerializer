@@ -1,4 +1,17 @@
-# FluentSerializer.Xml.DependencyInjection.NetCoreDefault
+[//]: # (Header)
+
+<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
+  View main readme
+</a><hr/>
+<h1>
+    <img alt="icon" width="26" height="26"
+        src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.xml.optimized.svg" />
+    <a href="https://github.com/Marvin-Brouwer/FluentSerializer/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme">
+      FluentSerializer.Xml.DependencyInjection.NetCoreDefault
+    </a>
+</h1>
+
+[//]: # (Body)
 [DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
 
 This library is responsible for registering the FluentSerializer for XML using
