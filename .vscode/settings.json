@@ -1,0 +1,11 @@
+{
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.renderWhitespace": "boundary",
+	"files.trimTrailingWhitespace": true,
+	"files.trimFinalNewlines": true,
+	"files.eol": "\n",
+	"[markdown]": {
+		"files.trimTrailingWhitespace": false,
+	}
+}

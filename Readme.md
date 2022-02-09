@@ -13,29 +13,28 @@
 [repo-stars-shield]: https://img.shields.io/github/stars/Marvin-Brouwer/FluentSerializer.svg?color=brightgreen&style=flat-square
 
 <h1 align="center">
-  <a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
-    <img alt="Fluent Serializer banner"
-      src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Banner.optimized.svg" />
-  </a>
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
+	<img alt="Fluent Serializer banner"
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Banner.optimized.svg" />
+	</a>
 </h1>
 
 <h3 align="center">
 
-  [![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
-  [![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
-  [![Stars][repo-stars-shield]][repo-stars-url] 
-  [![License][license-shield]][license-url]  
+[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
+[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
+[![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]  
 
 </h3>
 
 [//]: # (TOC)
 
 <h3 align="center">
-  
-  [Getting started](#getting-started) - 
-  [Basic usage](#basic-usage) - 
-  [Use-case examples](#use-case-examples) - 
-  [Advanced usage](#advanced-usage)
+
+[Getting started](#getting-started) - 
+[Basic usage](#basic-usage) - 
+[Use-case examples](#use-case-examples) - 
+[Advanced usage](#advanced-usage)
 
 </h3>
 <hr/>
@@ -66,8 +65,8 @@ dotnet add package FluentSerializer.Xml.DependencyInjection.NetCoreDefault
 And then add the serializer to the DI registration, pointing to the a type in the assembly where your profiles live.
 ```csharp
 serviceCollection
-  .AddFluentJsonSerializer<TAssemblyMarker>()
-  .AddFluentXmlSerializer<TAssemblyMarker>();
+	.AddFluentJsonSerializer<TAssemblyMarker>()
+	.AddFluentXmlSerializer<TAssemblyMarker>();
 ```
 There are multiple overloads for overriding configurations and passing assemblies, please read the respective readme's for the `DependencyInjection` libraries.
 
@@ -89,24 +88,24 @@ Once the profiles are registered all you have to do is inject the serializer int
 ```csharp
 public sealed class WeirdExample : IWeirdExample {
 
-  private readonly IWebClient _webClient;
-  private readonly IJsonSerializer _jsonSerializer;
-  private readonly IXmlSerializer _xmlSerializer;
+	private readonly IWebClient _webClient;
+	private readonly IJsonSerializer _jsonSerializer;
+	private readonly IXmlSerializer _xmlSerializer;
 
-  public WeirdExample(IWebClient webClient, IJsonSerializer jsonSerializer, IXmlSerializer xmlSerializer) {
-    _webClient = webClient;
-    _jsonSerializer = jsonSerializer;
-    _xmlSerializer = xmlSerializer;
-  }
+	public WeirdExample(IWebClient webClient, IJsonSerializer jsonSerializer, IXmlSerializer xmlSerializer) {
+		_webClient = webClient;
+		_jsonSerializer = jsonSerializer;
+		_xmlSerializer = xmlSerializer;
+	}
 
-  public TReceive DoApiCall<TSend, TReceive>(TSend sendModel) {
+	public TReceive DoApiCall<TSend, TReceive>(TSend sendModel) {
 
-    var sendXML = _xmlSerializer.Serialize(sendModel);
-    var idResponse = _webClient.Post(sendXML);
+		var sendXML = _xmlSerializer.Serialize(sendModel);
+		var idResponse = _webClient.Post(sendXML);
 
-    var otherApiJsonResponse = _webClient.Get(idResponse);
-    return _jsonSerializer.Deserialize(otherApiJsonResponse);
-  }
+		var otherApiJsonResponse = _webClient.Get(idResponse);
+		return _jsonSerializer.Deserialize(otherApiJsonResponse);
+	}
 }
 ```
 The serialize will automatically find the correct profile for the types that are passed or requested and (de)serialize as expected.
