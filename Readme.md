@@ -169,6 +169,7 @@ To get a quick view of how this library may benefit you, check out these use-cas
 
 Here are some links to some more advanced topics:
 
+<!-- TODO: Write up advanced concepts -->
 - 
 
 ## Contributing
