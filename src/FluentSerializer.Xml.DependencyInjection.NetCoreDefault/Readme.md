@@ -29,7 +29,7 @@ The type parameter of `TAssemblyMarker` will be used to scan that assembly for t
 You can call this registration multiple times with different assemblies for additional profiles.
 Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.  
   
-There are multiple overloads, for changing configuration the lambda approach is recomended:  
+There are multiple overloads, for changing configuration the lambda approach is recommended:  
 ```cs
 serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>(static configuration =>
 {
@@ -37,4 +37,5 @@ serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>(static configuration =
 	configuration.NewLine = LineEndings.LineFeed;
 });
 ```
-This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you to [change some properties][configuration-doc].
+This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you  to change some properties.  
+[See the default values][configuration-doc].
