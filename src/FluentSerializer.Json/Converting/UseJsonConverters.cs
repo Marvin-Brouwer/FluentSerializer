@@ -13,10 +13,10 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 
 	/// <inheritdoc />
-	public IJsonConverter Dates() => DefaultDateConverter;
+	public IJsonConverter DateTime() => DefaultDateConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> Dates(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);

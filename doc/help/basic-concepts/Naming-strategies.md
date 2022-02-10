@@ -80,7 +80,7 @@ public class UpperCaseNamingStrategy : INamingStrategy
 ```
 Then you create an extension method to expose this:
 ```csharp
-public static class ConverterExtensions
+public static class NamingExtensions
 {
 	private static readonly INamingStrategy UpperCaseNamingStrategy = new UpperCaseNamingStrategy()
 	public static INamingStrategy UpperCase (this IUseNamingStrategies _) => UpperCaseNamingStrategy;
@@ -93,9 +93,13 @@ This setup allows you register a naming strategy with
 both `Names.Use.CustomFieldName` for automated `{fieldName}__c` where `{fieldName}` uses the `CamelCaseNamingStrategy`  
 and `Names.Use.CustomFieldName({value})` for `{value}__c`.
 
+### INamingContext
+ 
+TODO
+
 ## Naming strategy lifetime
 
 It is generally a good idea to register your naming strategy as a static readonly instance since it only manipulates input and output.  
-However if you need a service to determine a name for any reason you can do this by providing a `Func<INamingStrategy>` in either the registration of the Di setup or on a property. The profiles themselves have access to services via the DI framework.  
+However if you need a service to determine a name for any reason you can do this by providing a `Func<INamingStrategy>` in either the registration of the DI setup or on a property. The profiles themselves have access to services via the DI framework.  
   
 If this is a scenario you need please create an issue for us to write some documentation in the [Advanced concepts](https://github.com/Marvin-Brouwer/FluentSerializer#advanced-concepts) section.

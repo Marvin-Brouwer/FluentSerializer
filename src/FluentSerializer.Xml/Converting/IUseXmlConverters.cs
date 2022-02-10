@@ -15,10 +15,10 @@ namespace FluentSerializer.Xml.Converting;
 public interface IUseXmlConverters
 {
 	/// <inheritdoc cref="DefaultDateConverter" />
-	SimpleTypeConverter<DateTime> Dates();
+	SimpleTypeConverter<DateTime> DateTime();
 
 	/// <inheritdoc cref="DateByFormatConverter" />
-	Func<SimpleTypeConverter<DateTime>> Dates(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
 
 	/// <summary>
 	/// Converts most DotNet collections

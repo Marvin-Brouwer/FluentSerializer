@@ -12,3 +12,120 @@
 </h1>
 
 [//]: # (Body)
+
+A converter is class that determines the way C# classes get converted to and from the data nodes that are part of the Serializer's format.  
+Every serializer has it's own interface on top on or more `IConverter<TSerialContainer>` where TSerial container is a DataNode that extends `IDataNode`.  
+- In the case of JSON, this is `IJsonConverter` using `IJsonNode`.
+- In the case of XML, this is `IXmlConverter<TDataNode>` where `TDataNode` is an `IXmlNode` like `IXmlAttribute`, `IXmlElement` or `IXmlText`
+- And so forth.
+
+
+## Configuring a converter  
+  
+To configure a custom converter you need to reference a `Func<I{Format}Converter>` - or a specific one that matches the property type when applicable - this has a couple of reasons.
+- It allows for type safe registration
+- It allows for a readable and extendable solution
+- It allows for a lifetime management solution outside of the DI framework.
+
+The places where you can configure these strategies is both on the serializer's configuration when you register it, or on a property itself.
+For example, you want a property to use snake case:
+```csharp
+public sealed class ExampleProfile : JsonSerializerProfile
+{
+	protected override void Configure()
+	{
+		For<SomeDataEntity>()
+			.Property(entity => entity.Id, ,
+				converter: Converters.Use.StringGuidConverter)
+			.Property(entity => entity.Name);
+	}
+}
+```
+Every converter has a check to determine if it fits the given datatype and/or direction.  
+If the converter does not match, the serializer will throw an exception.  
+  
+If you don't specify a property overload the serializer will lookup a fitting converter in the configuration's `DefaultConverters`.  
+However if it finds no suitable converters it will throw an exception.
+
+Out of the box you can expect the following converters to be present:
+- DateTime: `Converters.Use.DateTime` (Using the default DateTime.Parse)
+- DateTime with patterns: `Converters.Use.DateTime("pattern")` (Using DateTime.ParseExact)
+- Collections: `Converters.Use.Collection` 
+  (In some data formats you have different ways to do collections, for example XML has a built-in alternative to not wrap the collection)
+
+You don't need to specify these Converters they come out of the box. 
+
+## Creating a custom converter
+
+Let's just say you have a boolean represented by a `0` and a `1`, you'd like to just use booleans in code but the API gives you bits and expects bits from you.  
+This is not rare, but rare enough to not be included out of the box. 
+```csharp
+/// <summary>
+/// Depicts booleans as 0 and 1 <br />
+/// <example>
+/// true => 1
+/// false => 0
+/// 1 => false
+/// 0 => true
+/// </example>
+/// </summary>
+public class StringBitBooleanConverter : IJsonConverter
+{
+	/// <inheritdoc />
+	public SerializerDirection Direction { get; } = SerializerDirection.Both;
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => typeof(bool).IsAssignableFrom(targetType) 
+											   || typeof(bool?).IsAssignableFrom(targetType);
+
+	private static string ConvertToString(in bool currentValue) => currentValue ? "1" : "0";
+	private static bool? ConvertToBool(in string? currentValue, in bool? defaultValue)
+	{
+		if (string.IsNullOrWhiteSpace(currentValue)) return defaultValue;
+		if (currentValue.Equals("1", StringComparison.OrdinalIgnoreCase)) return true;
+		if (currentValue.Equals("0", StringComparison.OrdinalIgnoreCase)) return false;
+
+		throw new NotSupportedException($"A value of '{currentValue}' is not supported");
+	}
+
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
+	{
+		if (objectToDeserialize is not IJsonValue valueToDeserialize)
+			throw new NotSupportedException($"The json object you attempted to deserialize was not a value");
+
+		var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
+		return ConvertToBool(valueToDeserialize.Value, defaultValue);
+	}
+
+	IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
+	{
+		if (objectToSerialize is not bool booleanToSerialize)
+			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' is not a boolean");
+
+		var stringValue = ConvertToString(in booleanToSerialize);
+		return Value(in stringValue);
+	}
+}
+```
+Then you create an extension method to expose this:
+```csharp
+public static class ConverterExtensions
+{
+	private static readonly IConverter StringBitBooleanConverter = new StringBitBooleanConverter()
+	public static INamingStrategy StringBitBoolean(this IUseJsonConverters _) => StringBitBooleanConverter;
+}
+```
+And now you can use it on properties or your configuration by calling `Converter.Use.StringBitBoolean`.
+
+For a more real-world example checkout the [OpenAir use-case's StringBitBooleanConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/StringBitBooleanConverter.cs) together with [their NamingExtensions](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/ConverterExtensions.cs).  
+This setup is for XML so it shows an example of using a naming strategy in a custom converter.
+
+### ISerializerContext
+ 
+TODO
+
+## Converter lifetime
+
+It is generally a good idea to register your converter as a static readonly instance since it only manipulates input and output.  
+However if you need a service for any reason you can do this by providing a `Func<I{Format}Converter>` in either the registration of the DI setup or on a property. The profiles themselves have access to services via the DI framework.  
+  
+If this is a scenario you need please create an issue for us to write some documentation in the [Advanced concepts](https://github.com/Marvin-Brouwer/FluentSerializer#advanced-concepts) section.
