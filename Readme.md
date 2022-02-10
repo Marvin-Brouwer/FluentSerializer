@@ -178,6 +178,7 @@ Here are some links to some basic concepts:
 Here are some links to some more advanced topics:
 
 - [XML Converters with parent access](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Xml/Converters-parent-access.md#readme)
+- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-serializer.md#readme)
 
 ## Contributing
 We are currently figuring out what the best branching model is, and what the best automated release setup is.  
