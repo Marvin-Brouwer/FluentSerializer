@@ -19,7 +19,7 @@ public sealed class JsonTypeDeserializer
 {
 	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="JsonTypeDeserializer" />
 	public JsonTypeDeserializer(in IClassMapScanList<JsonSerializerProfile> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));

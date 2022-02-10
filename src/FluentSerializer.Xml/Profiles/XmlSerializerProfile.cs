@@ -19,7 +19,7 @@ public abstract class XmlSerializerProfile : ISerializerProfile
 	private readonly List<IClassMap> _classMaps = new();
 	private XmlSerializerConfiguration _configuration = XmlSerializerConfiguration.Default;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="ISerializerProfile.Configure" />
 	protected abstract void Configure();
 
 	/// <remarks>

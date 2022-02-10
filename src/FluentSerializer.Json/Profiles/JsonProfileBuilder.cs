@@ -18,7 +18,7 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	private readonly Func<INamingStrategy> _defaultNamingStrategy;
 	private readonly List<IPropertyMap> _propertyMap;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="JsonProfileBuilder{TModel}" />
 	public JsonProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));

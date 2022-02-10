@@ -24,7 +24,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	/// <inheritdoc />
 	public SerializerConfiguration Configuration => JsonConfiguration;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="RuntimeJsonSerializer" />
 	public RuntimeJsonSerializer(
 		IClassMapScanList<JsonSerializerProfile> mappings, 
 		JsonSerializerConfiguration configuration,

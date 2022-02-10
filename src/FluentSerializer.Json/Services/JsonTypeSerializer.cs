@@ -21,7 +21,7 @@ public sealed class JsonTypeSerializer
 {
 	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="JsonTypeSerializer" />
 	public JsonTypeSerializer(in IClassMapScanList<JsonSerializerProfile> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));

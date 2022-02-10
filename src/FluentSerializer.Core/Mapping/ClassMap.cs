@@ -22,7 +22,7 @@ public sealed class ClassMap : IClassMap
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; }
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="ClassMap" />
 	public ClassMap(
 		in Type classType,
 		in SerializerDirection direction,

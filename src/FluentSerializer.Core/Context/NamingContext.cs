@@ -7,12 +7,12 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context;
 
-/// <inheritdoc cref="INamingContext"/>
+/// <inheritdoc cref="INamingContext" />
 public class NamingContext : INamingContext
 {
 	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _classMappings;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="NamingContext" />
 	public NamingContext(in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
 	{
 		_classMappings = classMappings;
@@ -30,8 +30,8 @@ public class NamingContext : INamingContext
 		return FindNamingStrategy(classMap.PropertyMaps, in property);
 	}
 
-	/// <inheritdoc />
-	protected INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
+	/// <inheritdoc cref="INamingContext" />
+	protected static INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
 	{
 		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
 		Guard.Against.Null(property, nameof(property));
