@@ -47,7 +47,7 @@ To create a class mapping, use the `For<TModel>()` method.
 This method has the following optional parameters:
 - **direction:** The direction for which this class mapping is valid, defaults to `Both`
 - **namingStrategy:** A naming strategy for all properties in the mapping, overriding the Configuration value  
-  TODO: Link to advanced concepts naming strategies  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
 
 You can create multiple class mappings per profile if that fits your use-case.
   
@@ -60,9 +60,9 @@ To create a property mapping, use the `Property<TProperty>()` method.
 This method has the following optional parameters:
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
-  TODO: Link to advanced concepts naming strategies  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
 - **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
-  TODO: Link to advanced concepts converters  
+  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)  
 
 ### Example
 

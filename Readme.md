@@ -34,7 +34,8 @@
 [Getting started](#getting-started) - 
 [Basic usage](#basic-usage) - 
 [Use-case examples](#use-case-examples) - 
-[Advanced usage](#advanced-usage)
+[Basic concepts](#basic-concepts) - 
+[Advanced concepts](#advanced-concepts)
 
 </h3>
 <hr/>
@@ -165,12 +166,18 @@ To get a quick view of how this library may benefit you, check out these use-cas
 - [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink/Readme.md#readme) (`JSON`)
 - [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Readme.md#readme) (`XML`)
 
-## Advanced usage
+## Basic concepts
+
+Here are some links to some basic concepts:
+
+- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)
+- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)
+
+## Advanced concepts
 
 Here are some links to some more advanced topics:
 
-<!-- TODO: Write up advanced concepts -->
-- 
+- [XML Converters with parent access](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Xml/Converters-parent-access.md#readme)
 
 ## Contributing
 We are currently figuring out what the best branching model is, and what the best automated release setup is.  
