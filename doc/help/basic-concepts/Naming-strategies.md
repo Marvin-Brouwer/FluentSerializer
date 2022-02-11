@@ -18,7 +18,7 @@ This name is then used to map back and from serialized data.
 
 ## Configuring a naming strategy  
   
-To configure a naming strategy you need to reference a `Func<INamingStrategy>` this has a couple of reasons.
+To configure a naming strategy you need to reference a `Func<INamingStrategy>` or a method group returning `INamingStrategy` this has a couple of reasons.
 - It allows for type safe registration
 - It allows for a readable and extendable solution
 - It allows for a lifetime management solution outside of the DI framework.
@@ -83,6 +83,7 @@ Then you create an extension method to expose this:
 public static class NamingExtensions
 {
 	private static readonly INamingStrategy UpperCaseNamingStrategy = new UpperCaseNamingStrategy()
+	/// <inheritdoc cref="Example.StringBitBooleanConverter" />
 	public static INamingStrategy UpperCase (this IUseNamingStrategies _) => UpperCaseNamingStrategy;
 }
 ```
@@ -94,8 +95,13 @@ both `Names.Use.CustomFieldName` for automated `{fieldName}__c` where `{fieldNam
 and `Names.Use.CustomFieldName({value})` for `{value}__c`.
 
 ### INamingContext
- 
-TODO
+
+The naming context passed to naming strategies allows you to lookup registered naming strategies  
+either by `Type` to get the strategy for the type's name,  
+or `Type` with `Property` to get the strategy for that property on the corresponding type mapping.  
+  
+For example this can be useful in a scenario where you need your name to include the naming strategy of a generic subtype.  
+This is illustrated in the [OpenAir use-case's ResponseTypeNamingStrategy](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/ResponseTypeNamingStrategy.cs), here we need the name of the generic `Data` property as an attribute on it's `<Request>` node.
 
 ## Naming strategy lifetime
 

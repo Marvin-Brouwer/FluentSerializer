@@ -10,10 +10,21 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
-    {
-        public SerializerDirection Direction { get; } = SerializerDirection.Both;
-        public bool CanConvert(in Type targetType) => typeof(bool).IsAssignableFrom(targetType) 
+	/// <summary>
+	/// Depicts booleans as 0 and 1 <br />
+	/// <example>
+	/// true => 1,
+	/// false => 0,
+	/// 1 => false,
+	/// 0 => true
+	/// </example>
+	/// </summary>
+	public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>
+	{
+		/// <inheritdoc />
+		public SerializerDirection Direction { get; } = SerializerDirection.Both;
+		/// <inheritdoc />
+		public bool CanConvert(in Type targetType) => typeof(bool).IsAssignableFrom(targetType) 
 												   || typeof(bool?).IsAssignableFrom(targetType);
 
         private static string ConvertToString(in bool currentValue) => currentValue ? "1" : "0";
@@ -26,19 +37,22 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             throw new NotSupportedException($"A value of '{currentValue}' is not supported");
         }
 
-        object? IConverter<IXmlAttribute>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context)
+        /// <inheritdoc />
+		object? IConverter<IXmlAttribute>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context)
         {
             var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
             return ConvertToBool(attributeToDeserialize.Value, defaultValue);
         }
 
-        object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
+        /// <inheritdoc />
+		object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
         {
             var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
             return ConvertToBool(objectToDeserialize.GetTextValue(), defaultValue);
         }
 
-        IXmlAttribute? IConverter<IXmlAttribute>.Serialize(in object objectToSerialize, in ISerializerContext context)
+        /// <inheritdoc />
+		IXmlAttribute? IConverter<IXmlAttribute>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 
@@ -47,7 +61,8 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
             return Attribute(in attributeName, in attributeValue);
         }
 
-        IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+        /// <inheritdoc />
+		IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 

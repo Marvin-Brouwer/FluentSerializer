@@ -1,9 +1,15 @@
-﻿using System.Globalization;
+using System.Globalization;
 using FluentSerializer.Xml.Converting.Converters;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
-    public sealed class SimpleDateConverter : DateByFormatConverter
+	/// <summary>
+	/// Converter for simple date structures<br />
+	/// <example>
+	/// yyyy-MM-dd
+	/// </example>
+	/// </summary>
+	public sealed class SimpleDateConverter : DateByFormatConverter
     {
         private const string DateFormat = "yyyy-MM-dd";
         private static readonly CultureInfo CultureInfo = CultureInfo.InvariantCulture;

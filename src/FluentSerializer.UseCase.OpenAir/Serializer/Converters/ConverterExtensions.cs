@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.Converting;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 {
@@ -9,9 +9,13 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         private static readonly StringBitBooleanConverter StringBitBooleanConverter = new();
         private static readonly SimpleDateConverter SimpleDateConverter = new();
 
-        public static OpenAirDateConverter OpenAirDate (this IUseXmlConverters _) => OpenAirDateConverter;
-        public static RequestTypeValueConverter RequestTypeValue (this IUseXmlConverters _) => RequestTypeValueConverter;
-        public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => StringBitBooleanConverter;
-        public static SimpleDateConverter SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
+		/// <inheritdoc cref="Converters.OpenAirDateConverter"/>
+		public static OpenAirDateConverter OpenAirDate(this IUseXmlConverters _) => OpenAirDateConverter;
+		/// <inheritdoc cref="Converters.RequestTypeValueConverter"/>
+		public static RequestTypeValueConverter RequestTypeValue(this IUseXmlConverters _) => RequestTypeValueConverter;
+		/// <inheritdoc cref="Converters.StringBitBooleanConverter"/>
+		public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => StringBitBooleanConverter;
+		/// <inheritdoc cref="Converters.SimpleDateConverter"/>
+		public static SimpleDateConverter SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
     }
 }

@@ -15,12 +15,16 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
     /// OpenAir requires this value to be matched exactly on the type attribute.
     /// </summary>
     public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
-    {
-        public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
-        public bool CanConvert(in Type targetType) => typeof(string) == targetType;
-        public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context) => throw new NotSupportedException();
+	{
+		/// <inheritdoc />
+		public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
+		/// <inheritdoc />
+		public bool CanConvert(in Type targetType) => typeof(string) == targetType;
+		/// <inheritdoc />
+		public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context) => throw new NotSupportedException();
 
-        public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
+		/// <inheritdoc />
+		public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             // We know this to be true because of RequestObject<TModel>
             var classType = context.ClassType.GetTypeInfo().GenericTypeArguments[0];

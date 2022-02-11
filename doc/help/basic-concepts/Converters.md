@@ -22,7 +22,7 @@ Every serializer has it's own interface on top on or more `IConverter<TSerialCon
 
 ## Configuring a converter  
   
-To configure a custom converter you need to reference a `Func<I{Format}Converter>` - or a specific one that matches the property type when applicable - this has a couple of reasons.
+To configure a custom converter you need to reference a `Func<I{Format}Converter>`, a method group returning `I{Format}Converter` - or a specific one that matches the property type when applicable - this has a couple of reasons.
 - It allows for type safe registration
 - It allows for a readable and extendable solution
 - It allows for a lifetime management solution outside of the DI framework.
@@ -63,9 +63,9 @@ This is not rare, but rare enough to not be included out of the box.
 /// <summary>
 /// Depicts booleans as 0 and 1 <br />
 /// <example>
-/// true => 1
-/// false => 0
-/// 1 => false
+/// true => 1,
+/// false => 0,
+/// 1 => false,
 /// 0 => true
 /// </example>
 /// </summary>
@@ -87,6 +87,7 @@ public class StringBitBooleanConverter : IJsonConverter
 		throw new NotSupportedException($"A value of '{currentValue}' is not supported");
 	}
 
+	/// <inheritdoc />
 	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
 	{
 		if (objectToDeserialize is not IJsonValue valueToDeserialize)
@@ -96,6 +97,7 @@ public class StringBitBooleanConverter : IJsonConverter
 		return ConvertToBool(valueToDeserialize.Value, defaultValue);
 	}
 
+	/// <inheritdoc />
 	IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not bool booleanToSerialize)
@@ -111,6 +113,7 @@ Then you create an extension method to expose this:
 public static class ConverterExtensions
 {
 	private static readonly IConverter StringBitBooleanConverter = new StringBitBooleanConverter()
+	/// <inheritdoc cref="Example.StringBitBooleanConverter" />
 	public static INamingStrategy StringBitBoolean(this IUseJsonConverters _) => StringBitBooleanConverter;
 }
 ```
@@ -120,9 +123,13 @@ For a more real-world example checkout the [OpenAir use-case's StringBitBooleanC
 This setup is for XML so it shows an example of using a naming strategy in a custom converter.
 
 ### ISerializerContext
+[naming-strategy]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#inamingstrategy
  
-TODO
-
+The serializer context passed to converters is a container holding essential information for converting custom data models.  
+It contains access to the Property being serialized, the type of that Property The class type of the type holding the property, the naming strategy assigned to the property, a reference to the current serializer.  
+  
+It also implements the `INamingStrategy` ([discussed here][naming-strategy]) with an additional overload that accepts just a type for the class map currently being converted.  
+  
 ## Converter lifetime
 
 It is generally a good idea to register your converter as a static readonly instance since it only manipulates input and output.  
