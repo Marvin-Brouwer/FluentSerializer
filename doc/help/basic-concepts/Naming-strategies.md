@@ -31,7 +31,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	protected override void Configure()
 	{
 		For<SomeDataEntity>()
-			.Property(entity => entity.Id, ,
+			.Property(entity => entity.Id,
 				namingStrategy: Names.Use.SnakeCase)
 			.Property(entity => entity.Name);
 	}
@@ -44,7 +44,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	protected override void Configure()
 	{
 		For<SomeDataEntity>()
-			.Property(entity => entity.Id, ,
+			.Property(entity => entity.Id,
 				namingStrategy: Names.Are("identifier"))
 			.Property(entity => entity.Name);
 	}

@@ -48,7 +48,10 @@
 The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.  
 So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.  
   
-This library is intended for usage on more exotic data structures, if you're just looking for a JSON or XML serializer checkout these options:  
+Next to a clear overview of how the data looks, this library provides you with serializing methods for multiple data formats with a similar api.  
+So when you're required to tie XML and JSON together at least the code for serializing looks similar across your solution.  
+  
+If you're just looking for a simple JSON or XML serializer checkout these options:  
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json#readme)
   The most commonly used dotnet JSON serializer
 - [JaxLib](https://github.com/YAXLib/YAXLib#readme)
@@ -125,7 +128,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 			.Property(request => request.Data);
 		
 		For<SomeDataEntity>()
-			.Property(entity => entity.Id, ,
+			.Property(entity => entity.Id,
 				namingStrategy: Names.Are("identifier"))
 			.Property(entity => entity.Name);
 	}

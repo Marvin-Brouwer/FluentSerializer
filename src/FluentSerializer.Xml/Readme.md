@@ -115,7 +115,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 			.Child(request => request.Data);
 		
 		For<SomeDataEntity>()
-			.Attribute(entity => entity.Id, ,
+			.Attribute(entity => entity.Id,
 				namingStrategy: Names.Are("identifier"))
 			.Child(entity => entity.Name);
 	}

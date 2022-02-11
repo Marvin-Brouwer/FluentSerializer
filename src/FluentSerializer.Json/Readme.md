@@ -99,7 +99,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 			.Property(request => request.Data);
 		
 		For<SomeDataEntity>()
-			.Property(entity => entity.Id, ,
+			.Property(entity => entity.Id,
 				namingStrategy: Names.Are("identifier"))
 			.Property(entity => entity.Name);
 	}

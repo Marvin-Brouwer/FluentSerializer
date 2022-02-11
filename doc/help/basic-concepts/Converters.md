@@ -35,7 +35,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	protected override void Configure()
 	{
 		For<SomeDataEntity>()
-			.Property(entity => entity.Id, ,
+			.Property(entity => entity.Id,
 				converter: Converters.Use.StringGuidConverter)
 			.Property(entity => entity.Name);
 	}
