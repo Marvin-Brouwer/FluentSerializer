@@ -65,6 +65,6 @@ namespace FluentSerializer.UseCase.Mavenlink
         }
 
         private static DateTime CreateDate(string dateString) => DateTime.ParseExact(
-            dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+            dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
     }
 }
