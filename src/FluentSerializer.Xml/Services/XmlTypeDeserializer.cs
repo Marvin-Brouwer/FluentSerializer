@@ -22,7 +22,7 @@ public sealed class XmlTypeDeserializer
 {
 	private readonly IClassMapScanList<XmlSerializerProfile> _mappings;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="XmlTypeDeserializer" />
 	public XmlTypeDeserializer(in IClassMapScanList<XmlSerializerProfile> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));

@@ -27,7 +27,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 	/// <inheritdoc />
 	public SerializerConfiguration Configuration => XmlConfiguration;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="RuntimeXmlSerializer" />
 	public RuntimeXmlSerializer(
 		IClassMapScanList<XmlSerializerProfile> mappings, 
 		XmlSerializerConfiguration configuration,

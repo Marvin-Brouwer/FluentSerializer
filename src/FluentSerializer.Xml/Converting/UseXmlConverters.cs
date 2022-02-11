@@ -16,10 +16,10 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
 
 	/// <inheritdoc/>
-	public SimpleTypeConverter<DateTime> Dates() => DefaultDateConverter;
+	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateConverter;
 
 	/// <inheritdoc/>
-	public Func<SimpleTypeConverter<DateTime>> Dates(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);

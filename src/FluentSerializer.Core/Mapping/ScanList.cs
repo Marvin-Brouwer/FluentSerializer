@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Mapping;
 
-/// <inheritdoc cref="IScanList{TScanBy,TScanFor}"/>
+/// <inheritdoc cref="IScanList{TScanBy,TScanFor}" />
 public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor> 
 	where TScanFor : class
 {
@@ -15,7 +15,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
         private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
 #endif
 
-	/// <inheritdoc />
+	/// <inheritdoc  cref="IScanList{TScanBy,TScanFor}" />
 	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
@@ -40,7 +40,9 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 		return matchingType;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Implement the selector logic here
+	/// </summary>
 	protected abstract bool Compare(TScanBy compareTo, in TScanFor dataType);
 
 	#region IReadonlyList<T>

@@ -32,7 +32,7 @@ public sealed class PropertyMap : IPropertyMap
 	/// <inheritdoc />
 	public Type ContainerType { get; }
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="PropertyMap" />
 	public PropertyMap(
 		in SerializerDirection direction,
 		in Type containerType,

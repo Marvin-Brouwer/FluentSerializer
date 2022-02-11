@@ -18,7 +18,7 @@ This library is responsible for registering the FluentSerializer for JSON using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
-[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#readme
+[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#configuration
 
 For basic usage you can use this:  
 ```cs
@@ -29,7 +29,7 @@ The type parameter of `TAssemblyMarker` will be used to scan that assembly for t
 You can call this registration multiple times with different assemblies for additional profiles.
 Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.  
   
-There are multiple overloads, for changing configuration the lambda approach is recomended:  
+There are multiple overloads, for changing configuration the lambda approach is recommended:  
 ```cs
 serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration =>
 {
@@ -37,4 +37,5 @@ serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration 
 	configuration.NewLine = LineEndings.LineFeed;
 });
 ```
-This will use the `JsonSerializerConfiguration.Default` as the applied config and allows you to [change some properties][configuration-doc].
+This will use the `JsonSerializerConfiguration.Default` as the applied config and allows you to change some properties.  
+[See the default values][configuration-doc].

@@ -6,6 +6,9 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies
 {
+	/// <summary>
+	/// Get's the name of the current response's data type
+	/// </summary>
     internal class ResponseTypeNamingStrategy : INamingStrategy
     {
         public string GetName(in PropertyInfo property, in INamingContext namingContext)

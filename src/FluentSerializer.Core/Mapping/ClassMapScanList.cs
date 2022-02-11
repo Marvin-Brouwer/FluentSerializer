@@ -6,7 +6,7 @@ using FluentSerializer.Core.Profiles;
 
 namespace FluentSerializer.Core.Mapping;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IClassMapScanList{TSerializerProfile}" />
 public sealed class ClassMapScanList<TSerializerProfile> :
 	ScanList<(Type type, SerializerDirection direction), IClassMap>, IClassMapScanList<TSerializerProfile>
 	where TSerializerProfile : ISerializerProfile
