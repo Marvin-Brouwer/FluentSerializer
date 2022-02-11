@@ -28,38 +28,38 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 		return Convert.ChangeType(currentValue, targetType);
 	}
 
-	object? IConverter<IXmlAttribute>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context)
+	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(attributeToDeserialize.Value, context.PropertyType);
 	}
 
-	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
+	object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(objectToDeserialize.GetTextValue(), context.PropertyType);
 	}
 
-	object? IConverter<IXmlText>.Deserialize(in IXmlText objectToDeserialize, in ISerializerContext context)
+	object? IConverter<IXmlText, IXmlNode>.Deserialize(in IXmlText objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(objectToDeserialize.Value, context.PropertyType);
 	}
 
-	IXmlAttribute? IConverter<IXmlAttribute>.Serialize(in object objectToSerialize, in ISerializerContext context)
+	IXmlAttribute? IConverter<IXmlAttribute, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		var stringValue = ConvertToString(in objectToSerialize);
 
-		var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
+		var attributeName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 		return Attribute(attributeName, stringValue);
 	}
 
-	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+	IXmlElement? IConverter<IXmlElement, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		var stringValue = ConvertToString(in objectToSerialize);
 
-		var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
+		var elementName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 		return Element(in elementName, Text(in stringValue));
 	}
 
-	IXmlText? IConverter<IXmlText>.Serialize(in object objectToSerialize, in ISerializerContext context)
+	IXmlText? IConverter<IXmlText, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		var stringValue = ConvertToString(in objectToSerialize);
 

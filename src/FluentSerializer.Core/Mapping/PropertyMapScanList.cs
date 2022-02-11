@@ -17,8 +17,9 @@ public sealed class PropertyMapScanList : ScanList<PropertyInfo, IPropertyMap>
 	protected override bool Compare(PropertyInfo type, in IPropertyMap dataType)
 	{
 		if (!type.Name.Equals(dataType.Property.Name, StringComparison.Ordinal)) return false;
-		if (!type.PropertyType.EqualsTopLevel(dataType.Property.PropertyType)) return false;
+		if (type.PropertyType.EqualsTopLevel(dataType.Property.PropertyType)) return true;
+		if (type.PropertyType.Implements(dataType.Property.PropertyType)) return true;
 
-		return true;
+		return false;
 	}
 }

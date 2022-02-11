@@ -18,3 +18,18 @@ Meaning that the models used may not be production code but it's validating agai
 
 > **Important:** It's important that these examples are based on public api's that share public documentation so it's both verifiable by documentation
 > and we're not exposing things that aren't public by design.
+
+## Mavenlink
+
+This is a usecase for (de)serializing data returned from the (Mavenlink REST API)[https://developer.mavenlink.com/beta/]
+The example portraid is not complete and is only intended to illustrate how to (de)serialize the structure of the JSON API into a C# model.
+This does not include code to:
+- Map error responses
+
+### The use-case
+This is mostly standard rest however there's one interesting quirk to this data structure.
+You can `include` certain data types when requesting an entity. So for example when requesting a user,
+you can include an account membership. And because of that the flat data list becomes somewhat difficult to map
+unless you know about this structure up-front, which the rest of your solution shouldn't know about.
+
+This usecase is purely interesting for the deserializing part, the serializing to post/put is pretty straight forward.

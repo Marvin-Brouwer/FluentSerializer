@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Services;
 using System;
 using System.Reflection;
+using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context;
@@ -48,4 +49,15 @@ public interface ISerializerContext : INamingContext
 	/// <param name="property"></param>
 	/// <returns></returns>
 	INamingStrategy? FindNamingStrategy(in PropertyInfo property);
+}
+
+/// <summary>
+/// Current context for serializing data
+/// </summary>
+public interface ISerializerContext<TDataNode> : ISerializerContext where TDataNode : IDataNode
+{
+	/// <summary>
+	/// Get the parent node
+	/// </summary>
+	public TDataNode? ParentNode { get; }
 }

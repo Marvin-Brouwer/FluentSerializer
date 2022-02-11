@@ -15,7 +15,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public class CamelCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public virtual string GetName(in PropertyInfo property, in INamingContext namingContext) => GetName(property.Name);
+	public virtual string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(property.Name);
 	/// <inheritdoc />
 	public virtual string GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
 

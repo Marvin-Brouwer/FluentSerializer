@@ -26,7 +26,7 @@ public sealed class JsonNodeConverter : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (context.PropertyType.IsInstanceOfType(objectToDeserialize))
 			throw new NotSupportedException(

@@ -58,7 +58,7 @@ public sealed class XmlTypeSerializer
 			if (propertyValue is null) continue;
 
 			var serializerContext = new SerializerContext(
-				propertyMapping.Property, in classType, propertyMapping.NamingStrategy, 
+				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
 				currentSerializer,
 				classMap.PropertyMaps, _mappings);
 
@@ -96,7 +96,7 @@ public sealed class XmlTypeSerializer
 		in SerializerContext serializerContext)
 		where TNode : IXmlNode
 	{
-		var matchingConverter = propertyMapping.GetConverter<TNode>(
+		var matchingConverter = propertyMapping.GetConverter<TNode, IXmlNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 		if (matchingConverter is null) throw new ConverterNotFoundException(
 			propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Serialize);
@@ -107,7 +107,7 @@ public sealed class XmlTypeSerializer
 	private IXmlElement? SerializeXElement(in object propertyValue, in IPropertyMap propertyMapping,
 		in SerializerContext serializerContext, in IXmlSerializer currentSerializer)
 	{
-		var matchingConverter = propertyMapping.GetConverter<IXmlElement>(
+		var matchingConverter = propertyMapping.GetConverter<IXmlElement, IXmlNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
 		return matchingConverter is null 

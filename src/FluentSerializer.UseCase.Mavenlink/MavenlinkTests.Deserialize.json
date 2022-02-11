@@ -1,10 +1,43 @@
 {
 	"count": 1,
-	"data": [
+	"meta": {
+		"count": 1,
+		"page_count": 1,
+		"page_number": 1,
+		"page_size": 200
+	},
+	"results": [
+		{
+			"id": "U1",
+			"key": "users"
+		},
+		{
+			"id": "U2",
+			"key": "users"
+		}
+	],
+	"users": [
 		{
 			"id": "U1",
 			"name": "John Doe",
-			"age": 22
+			"age": 22,
+			"account_membership_id": "UA1"
+		},
+		{
+			"id": "U2",
+			"name": "Jane Doe",
+			"age": 22,
+			"account_membership_id": "UA1"
+		}
+	],
+	"account_memberships": [
+		{
+			"id": "UA1",
+			"account_membership_id": "UA1"
+		},
+		{
+			"id": "UA2",
+			"account_membership_id": null
 		}
 	]
 }

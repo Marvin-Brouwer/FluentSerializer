@@ -45,7 +45,8 @@ public interface IPropertyMap
 	/// If no match is found in both this propertymap and the default converters,
 	/// a <see cref="SerializerException.ConverterNotSupportedException"/> should be thrown
 	/// </remarks>
-	IConverter<TDataContainer>? GetConverter<TDataContainer>(
+	IConverter<TDataContainer, TDataNode>? GetConverter<TDataContainer, TDataNode>(
 		SerializerDirection direction, in ISerializer currentSerializer)
-		where TDataContainer : IDataNode;
+		where TDataContainer : IDataNode
+		where TDataNode : IDataNode;
 }

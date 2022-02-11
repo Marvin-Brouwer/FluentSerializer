@@ -10,7 +10,9 @@ namespace FluentSerializer.Core.Converting;
 /// <summary>
 /// A service implementation responsible for converting Text to and from <typeparamref name="TSerialContainer"/>
 /// </summary>
-public interface IConverter<TSerialContainer> : IConverter where TSerialContainer : IDataNode
+public interface IConverter<TSerialContainer, TDataNode> : IConverter
+	where TSerialContainer : IDataNode
+	where TDataNode : IDataNode
 {
 	/// <summary>
 	/// Convert <paramref name="objectToSerialize"/> to <typeparamref name="TSerialContainer"/>
@@ -20,7 +22,7 @@ public interface IConverter<TSerialContainer> : IConverter where TSerialContaine
 	/// <summary>
 	/// Convert <paramref name="objectToDeserialize"/> to the correct instance value
 	/// </summary>
-	[return: MaybeNull] object? Deserialize(in TSerialContainer objectToDeserialize, in ISerializerContext context);
+	[return: MaybeNull] object? Deserialize(in TSerialContainer objectToDeserialize, in ISerializerContext<TDataNode> context);
 }
 
 /// <summary>

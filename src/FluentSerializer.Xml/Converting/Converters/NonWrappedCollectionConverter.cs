@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
@@ -37,14 +36,11 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
-	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
+	/// <inheritdoc />
+	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
-		throw new NotSupportedException();
-	}
-
-	object? IXmlConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in IXmlElement? parent, in ISerializerContext context)
-	{
-		if (parent is null) throw new NotSupportedException("You cannot deserialize a non-wrapped selection at root level");
+		if (context.ParentNode is null) throw new NotSupportedException("You cannot deserialize a non-wrapped selection at root level");
+		if (context.ParentNode is not IXmlElement parent) throw new NotSupportedException("Only IXmlElement nodes are useful parents for this converter");
 
 		var targetType = context.PropertyType;
 		var instance = targetType.GetEnumerableInstance();
@@ -68,7 +64,9 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 
 		return instance;
 	}
-	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+
+	/// <inheritdoc />
+	public IXmlElement? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize)
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");

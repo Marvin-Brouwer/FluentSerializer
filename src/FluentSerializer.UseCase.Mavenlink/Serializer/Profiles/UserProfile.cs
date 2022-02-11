@@ -1,4 +1,5 @@
-﻿using FluentSerializer.Json.Profiles;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Json.Profiles;
 using FluentSerializer.UseCase.Mavenlink.Models;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles
@@ -7,8 +8,12 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles
     {
         protected override void Configure()
         {
-            For<User>()
-                .Property(project => project.Id);
+            For<User>(
+	            direction: SerializerDirection.Deserialize
+            )
+				.Property(user => user.Id)
+				.Property(user => user.Name)
+				.Property(user => user.Age);
         }
     }
 }

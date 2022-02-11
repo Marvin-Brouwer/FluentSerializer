@@ -21,7 +21,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 		/// <inheritdoc />
 		public bool CanConvert(in Type targetType) => typeof(string) == targetType;
 		/// <inheritdoc />
-		public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context) => throw new NotSupportedException();
+		public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
 
 		/// <inheritdoc />
 		public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
@@ -33,7 +33,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
                 throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
 
             var elementTypeString = classNamingStrategy.SafeGetName(classType, context);
-            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
+            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 
             return Attribute(in attributeName, in elementTypeString);
         }

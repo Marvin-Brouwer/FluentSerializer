@@ -46,11 +46,14 @@ public sealed class JsonTypeSerializer
 			return CollectionConverter.SerializeCollection(in enumerable, currentSerializer);
 		}
 
-		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
+		var instanceType = dataModel.GetType();
+		var classMap =
+			_mappings.Scan((instanceType, SerializerDirection.Serialize)) ??
+			_mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		var properties = new List<IJsonObjectContent>();
-		foreach(var property in classType.GetProperties())
+		foreach(var property in instanceType.GetProperties())
 		{
 			var propertyMapping = classMap.PropertyMaps.Scan(property);
 			if (propertyMapping is null) continue;
@@ -60,7 +63,7 @@ public sealed class JsonTypeSerializer
 			if (propertyValue is null) continue;
 
 			var serializerContext = new SerializerContext(
-				propertyMapping.Property, in classType, propertyMapping.NamingStrategy, 
+				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
 				currentSerializer,
 				classMap.PropertyMaps, _mappings);
 
@@ -86,15 +89,15 @@ public sealed class JsonTypeSerializer
 	private IJsonObjectContent? SerializeProperty(in object propertyValue, in IPropertyMap propertyMapping,
 		in SerializerContext serializerContext, in IJsonSerializer currentSerializer)
 	{
-		var matchingConverter = propertyMapping.GetConverter<IJsonNode>(
+		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
 		var nodeValue = matchingConverter is null 
 			? SerializeToNode(in propertyValue, serializerContext.PropertyType, currentSerializer) 
 			: matchingConverter.Serialize(in propertyValue, serializerContext);
 		if (nodeValue is not IJsonPropertyContent jsonContent) return default;
-
-		var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property, serializerContext);
+		
+		var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property, serializerContext.PropertyType, serializerContext);
             
 		return Property(in propertyName, in jsonContent);
 	}

@@ -11,16 +11,16 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies
 	/// </summary>
     internal class ResponseTypeNamingStrategy : INamingStrategy
     {
-        public string GetName(in PropertyInfo property, in INamingContext namingContext)
+        public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
         {
-            var genericTargetType = property.PropertyType.IsGenericType
-                   ? property.PropertyType.GetTypeInfo().GenericTypeArguments[0]
-                   : property.PropertyType;
+            var genericTargetType = propertyType.IsGenericType
+                   ? propertyType.GetTypeInfo().GenericTypeArguments[0]
+                   : propertyType;
 
             var itemNamingStrategy = namingContext.FindNamingStrategy(in genericTargetType)
                 ?? throw new NotSupportedException("Cannot support a type that is has no registered naming strategy");
 
-            return itemNamingStrategy.SafeGetName(property, namingContext);
+            return itemNamingStrategy.SafeGetName(property, propertyType, namingContext);
         }
 
         public string GetName(in Type classType, in INamingContext namingContext)

@@ -1,4 +1,4 @@
-﻿[//]: # (Header)
+[//]: # (Header)
 
 <a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
 	View main readme
@@ -27,4 +27,12 @@ This does not include code to:
 - Build the Authentication neatly by config
 - Custom logic to split out clearing custom fields [Modify, custom equal to](https://www.openair.com/download/OpenAirXMLAPIGuide.pdf#page=56)
 - Flatten out the responses into a single list of items
-- Handle of error codes
+- Map error responses
+
+### The use-case
+OpenAir exposes a highly flexible API which allows you to POST multiple types of request through data representation.
+In short, you can CRUD in one request and the types you're deleting don't need to match the type you're updating.
+To keep this connection a bit more sane it may be worth sticking to a single entity type and a single type of mutation per request,
+so that's what this example sticks to.
+In addition to this flexible structure the error responses are somewhat exotic and incostent between types of errors, but those are considered out of scope.  
+Finally OpenAir uses a different DateTime structure than most api's and we'll use that to illustrate a good use of a custom converter.  

@@ -40,7 +40,7 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
-	object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
+	object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		var targetType = context.PropertyType;
 		var instance = targetType.GetEnumerableInstance();
@@ -65,12 +65,12 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 		return instance;
 	}
 
-	IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+	IXmlElement? IConverter<IXmlElement, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize) 
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
-		var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
+		var elementName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 
 		var elements = GetArrayElements((IAdvancedXmlSerializer)context.CurrentSerializer, enumerableToSerialize);
 		return Element(in elementName, elements) ;

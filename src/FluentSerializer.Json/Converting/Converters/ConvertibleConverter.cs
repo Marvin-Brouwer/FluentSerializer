@@ -40,7 +40,7 @@ public sealed class ConvertibleConverter : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IDataValue data) return default;
 		if (context.PropertyType == typeof(string) && data.Value?.Length > 2)

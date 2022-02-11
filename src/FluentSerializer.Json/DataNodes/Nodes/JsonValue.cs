@@ -49,10 +49,11 @@ public readonly struct JsonValue : IJsonValue
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true;
+
 			offset++;
 			valueEndOffset = offset;
 
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true; 
 			if (!stringValue && text.HasWhitespaceAtOffset(in offset)) break;
 		}
 

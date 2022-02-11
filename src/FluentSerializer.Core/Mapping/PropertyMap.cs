@@ -50,22 +50,23 @@ public sealed class PropertyMap : IPropertyMap
 	}
 
 	/// <inheritdoc />
-	public IConverter<TDataContainer>? GetConverter<TDataContainer>(
+	public IConverter<TDataContainer, TDataNode>? GetConverter<TDataContainer, TDataNode>(
 		SerializerDirection direction, in ISerializer currentSerializer)
 		where TDataContainer : IDataNode
+		where TDataNode : IDataNode
 	{
 		Guard.Against.Null(direction, nameof(direction));
 		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
 
 		var converter = CustomConverter ?? currentSerializer.Configuration.DefaultConverters
-			.Where(converter => converter is IConverter<TDataContainer>)
+			.Where(converter => converter is IConverter<TDataContainer, TDataNode>)
 			.Where(converter => converter.Direction == SerializerDirection.Both || converter.Direction == direction)
 			.FirstOrDefault(converter => converter.CanConvert(ConcretePropertyType));
 		if (converter is null) return null;
 
 		if (!converter.CanConvert(ConcretePropertyType))
 			throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);
-		if (converter is IConverter<TDataContainer> specificConverter)
+		if (converter is IConverter<TDataContainer, TDataNode> specificConverter)
 			return specificConverter;
 
 		throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);

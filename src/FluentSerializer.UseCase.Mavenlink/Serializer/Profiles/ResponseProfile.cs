@@ -1,5 +1,8 @@
-﻿using FluentSerializer.Json.Profiles;
+using FluentSerializer.Core.Naming;
+using FluentSerializer.Json.Converting;
+using FluentSerializer.Json.Profiles;
 using FluentSerializer.UseCase.Mavenlink.Models;
+using FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles
 {
@@ -9,7 +12,18 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles
         {
             For<Response<IMavenlinkEntity>>()
                 .Property(project => project.Count)
-                .Property(project => project.Data);
+                .Property(project => project.PageCount,
+	                namingStrategy: Names.Are("meta"),
+					converter: Converter.For.MavenlinkResponsePageCount
+	            )
+                .Property(project => project.CurrentPage,
+	                namingStrategy: Names.Are("meta"),
+					converter: Converter.For.MavenlinkResponseCurrentPage
+	            )
+                .Property(project => project.Data,
+	                namingStrategy: Names.Are("results"),
+	                converter: Converter.For.MavenlinkResponseData
+	            );
         }
     }
 }

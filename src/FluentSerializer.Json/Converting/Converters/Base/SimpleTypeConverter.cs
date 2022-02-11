@@ -38,7 +38,7 @@ public abstract class SimpleTypeConverter<TObject> : IJsonConverter
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext context)
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IDataValue dataValue) return default;
 

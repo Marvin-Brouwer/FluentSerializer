@@ -38,35 +38,35 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         }
 
         /// <inheritdoc />
-		object? IConverter<IXmlAttribute>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext context)
+		object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
         {
             var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
             return ConvertToBool(attributeToDeserialize.Value, defaultValue);
         }
 
         /// <inheritdoc />
-		object? IConverter<IXmlElement>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext context)
+		object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
         {
             var defaultValue = context.Property.IsNullable() ? default(bool?) : default(bool);
             return ConvertToBool(objectToDeserialize.GetTextValue(), defaultValue);
         }
 
         /// <inheritdoc />
-		IXmlAttribute? IConverter<IXmlAttribute>.Serialize(in object objectToSerialize, in ISerializerContext context)
+		IXmlAttribute? IConverter<IXmlAttribute, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 
-            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context);
+            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
             var attributeValue = ConvertToString(in objectBoolean);
             return Attribute(in attributeName, in attributeValue);
         }
 
         /// <inheritdoc />
-		IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+		IXmlElement? IConverter<IXmlElement, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             var objectBoolean = (bool)objectToSerialize;
 
-            var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
+            var elementName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
             var elementValue = ConvertToString(in objectBoolean);
             return Element(in elementName, Text(in elementValue));
         }

@@ -16,9 +16,9 @@ public static class NamingExtensions
 	/// Get the converted name for this <paramref name="property"/> using the applied <paramref name="namingStrategy"/>
 	/// and validating the name
 	/// </summary>
-	public static string SafeGetName(this INamingStrategy namingStrategy, in PropertyInfo property, in INamingContext namingContext)
+	public static string SafeGetName(this INamingStrategy namingStrategy, in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
 	{
-		var resolvedName = namingStrategy.GetName(in property, in namingContext);
+		var resolvedName = namingStrategy.GetName(in property, in propertyType, in namingContext);
 		Guard.Against.InvalidName(in resolvedName);
 
 		return resolvedName;

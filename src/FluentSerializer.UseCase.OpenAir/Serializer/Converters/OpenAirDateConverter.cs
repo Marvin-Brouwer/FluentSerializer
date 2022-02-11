@@ -26,7 +26,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
 
 
 		/// <inheritdoc />
-		object? IConverter<IXmlElement>.Deserialize(in IXmlElement elementToSerialize, in ISerializerContext context)
+		object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement elementToSerialize, in ISerializerContext<IXmlNode> context)
         {
             if (!elementToSerialize.Children.Any()) return null;
             var dateWrapper = elementToSerialize.GetChildElement("Date");
@@ -62,12 +62,12 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
         }
 
 		/// <inheritdoc />
-		IXmlElement? IConverter<IXmlElement>.Serialize(in object objectToSerialize, in ISerializerContext context)
+		IXmlElement? IConverter<IXmlElement, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
         {
             if (objectToSerialize is not DateTime dateToSerialize)
                 throw new NotSupportedException($"Cannot convert type '{objectToSerialize.GetType()}'");
 
-            var elementName = context.NamingStrategy.SafeGetName(context.Property, context);
+            var elementName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
             return Element(elementName, GenerateDateObject(in dateToSerialize));
         }
 

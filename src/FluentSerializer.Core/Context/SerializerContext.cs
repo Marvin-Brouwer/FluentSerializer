@@ -5,11 +5,12 @@ using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using System.Runtime.CompilerServices;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Context;
 
 /// <inheritdoc cref="ISerializerContext"/>
-public sealed class SerializerContext : NamingContext, ISerializerContext
+public class SerializerContext : NamingContext, ISerializerContext
 {
 	private readonly IScanList<PropertyInfo, IPropertyMap> _propertyMappings;
 
@@ -26,7 +27,7 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 
 	/// <inheritdoc />
 	public SerializerContext(
-		in PropertyInfo property, in Type classType, 
+		in PropertyInfo property, in Type propertyType, in Type classType,
 		in INamingStrategy namingStrategy, in ISerializer currentSerializer,
 		in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
 		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings) :
@@ -35,7 +36,7 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 		_propertyMappings = propertyMappings;
 
 		Property = property;
-		PropertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+		PropertyType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 		ClassType = Nullable.GetUnderlyingType(classType) ?? classType;
 		NamingStrategy = namingStrategy;
 		CurrentSerializer = currentSerializer;
@@ -48,4 +49,20 @@ public sealed class SerializerContext : NamingContext, ISerializerContext
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public INamingStrategy? FindNamingStrategy(in PropertyInfo property) => FindNamingStrategy(in _propertyMappings, property);
+}
+
+/// <inheritdoc cref="ISerializerContext"/>
+public sealed class SerializerContext<TSerialContainer> : SerializerContext, ISerializerContext<TSerialContainer>
+	where TSerialContainer : IDataNode
+{
+	/// <inheritdoc />
+	public SerializerContext(in PropertyInfo property, in Type propertyType, in Type classType, in INamingStrategy namingStrategy,
+		in ISerializer currentSerializer, in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
+		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
+		: base(property, propertyType, classType, namingStrategy, currentSerializer, propertyMappings, classMappings)
+	{
+	}
+
+	/// <inheritdoc />
+	public TSerialContainer? ParentNode { get; init; } = default!;
 }
