@@ -23,7 +23,13 @@ This can be useful for the following scenarios:
 
 ## Usage
 
-To use this functionality you need to register as converter for it (or reference it on a property mapping).
+To use this feature you need to install a separate NuGet package:
+
+```txt
+dotnet add package FluentSerializer.Json.Converter.DefaultJson
+```
+
+Next you need to register as converter for it (or reference it on a property mapping).
 
 ```csharp
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
@@ -87,7 +93,7 @@ private void ExampleWorkaround(ExampleModel model)
 
 And the result will generate this:
 
-```json
+```jsonc
 {
 	"exampleProperty": {
 		// Comments can be used now!

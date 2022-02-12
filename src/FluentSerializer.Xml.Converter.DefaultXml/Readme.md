@@ -23,7 +23,13 @@ This can be useful for the following scenarios:
 
 ## Usage
 
-To use this functionality you need to register as converter for it (or reference it on a property mapping).
+To use this feature you need to install a separate NuGet package:
+
+```txt
+dotnet add package FluentSerializer.Xml.Converter.DefaultXml
+```
+
+Next you need to register as converter for it (or reference it on a property mapping).
 
 ```csharp
 using FluentSerializer.Xml.Converter.DefaultXml.Extensions;
