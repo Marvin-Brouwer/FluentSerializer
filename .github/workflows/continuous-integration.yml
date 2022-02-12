@@ -18,6 +18,8 @@ jobs:
     ###
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        lfs: true
     ###
     # 🧰 Setup .Net
     #
@@ -27,7 +29,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -44,7 +46,7 @@ jobs:
     # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release" 
+      run: dotnet build --no-restore --nologo --configuration "Release"
     ###
     # 🗃 Publish 'library-binaries' artifacts
     ###
@@ -111,7 +113,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -142,22 +144,22 @@ jobs:
         path: ./src
     ###
     # 🗃 Restore 'test-binaries'
-    ###   
+    ###
     - name: 🗃 Restore 'test-binaries'
       uses: actions/download-artifact@v2
       with:
         name: test-binaries
-        path: ./src  
+        path: ./src
     ###
     # 🗃 Restore 'benchmark-binaries'
     #
-    # Because `dotnet test` tries to load all csproj files, we need these dlls. 
+    # Because `dotnet test` tries to load all csproj files, we need these dlls.
     ###
     - name: 🗃 Restore 'benchmark-binaries'
       uses: actions/download-artifact@v2
       with:
         name: benchmark-binaries
-        path: ./src   
+        path: ./src
     ###
     # 🧪 Run unit tests
     #
@@ -182,12 +184,12 @@ jobs:
         /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln";
-        
+
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
-      working-directory: ${{github.workspace}} 
+      working-directory: ${{github.workspace}}
     ###
     # 🧪 Run use-case tests
     #
@@ -195,7 +197,7 @@ jobs:
     # This is basically a kind of integration test.
     ###
     - name: 🧪 Run use-case tests
-      run:  >- 
+      run:  >-
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -236,7 +238,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -262,7 +264,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: benchmark-binaries
-        path: ./src  
+        path: ./src
     ###
     # ⏱ Benchmark XML serializer
     #
@@ -270,9 +272,9 @@ jobs:
     ###
     - name: ⏱ Benchmark XML serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark 
-        sudo ./net5.0/FluentSerializer.Xml.Benchmark 
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate 
+        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
+        sudo ./net5.0/FluentSerializer.Xml.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # ⏱ Benchmark JSON serializer
@@ -281,9 +283,9 @@ jobs:
     ###
     - name: ⏱ Benchmark JSON serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark 
-        sudo ./net5.0/FluentSerializer.Json.Benchmark 
-        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate 
+        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
+        sudo ./net5.0/FluentSerializer.Json.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
