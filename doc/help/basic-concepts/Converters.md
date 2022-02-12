@@ -14,7 +14,7 @@
 [//]: # (Body)
 
 A converter is class that determines the way C# classes get converted to and from the data nodes that are part of the Serializer's format.  
-Every serializer has it's own interface on top on or more `IConverter<TSerialContainer>` where TSerial container is a DataNode that extends `IDataNode`.  
+Every serializer has it's own interface on top on or more `IConverter<TSerialContainer, TDataNode>` where TSerial container is a DataNode that extends `IDataNode`.  
 
 - In the case of JSON, this is `IJsonConverter` using `IJsonNode`.
 - In the case of XML, this is `IXmlConverter<TDataNode>` where `TDataNode` is an `IXmlNode` like `IXmlAttribute`, `IXmlElement` or `IXmlText`
