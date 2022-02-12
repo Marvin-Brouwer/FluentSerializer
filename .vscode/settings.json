@@ -24,6 +24,7 @@
 	},
 	"markdown.preview.breaks": true,
 	"cSpell.words": [
+		"deserialization",
 		"Mavenlink",
 		"Newtonsoft"
 	]
