@@ -17,14 +17,10 @@ namespace FluentSerializer.Xml.Tests.ObjectMother
 		/// </summary>
 		internal static Mock<ISerializerContext<TDataNode>> SetupDefault<TDataNode, TSerializer>(
 			this Mock<ISerializerContext<TDataNode>> contextMock,
-			Mock<TSerializer> serializerMock,
-			Func<INamingStrategy> namingStrategy)
+			Mock<TSerializer> serializerMock)
 			where TDataNode : IDataNode
 			where TSerializer : class, ISerializer
 		{
-			contextMock
-				.Setup(context => context.NamingStrategy)
-				.Returns(namingStrategy);
 			contextMock
 				.Setup(context => context.CurrentSerializer)
 				.Returns(serializerMock.Object);
@@ -82,6 +78,21 @@ namespace FluentSerializer.Xml.Tests.ObjectMother
 			contextMock
 				.Setup(context => context.ParentNode)
 				.Returns(parent);
+
+			return contextMock;
+		}
+
+		/// <summary>
+		/// TODO Move to shared
+		/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+		/// </summary>
+		internal static Mock<ISerializerContext<TDataNode>> WithNamingStrategy<TDataNode>(
+			this Mock<ISerializerContext<TDataNode>> contextMock, Func<INamingStrategy> namingStrategy)
+			where TDataNode : IDataNode
+		{
+			contextMock
+				.Setup(context => context.NamingStrategy)
+				.Returns(namingStrategy);
 
 			return contextMock;
 		}

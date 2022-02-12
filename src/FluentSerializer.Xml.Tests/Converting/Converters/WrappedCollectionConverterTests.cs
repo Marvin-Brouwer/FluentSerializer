@@ -44,7 +44,8 @@ public sealed class WrappedCollectionConverterTests
 		_sut = new WrappedCollectionConverter();
 		_serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
-			.SetupDefault(_serializerMock, Names.Are(ListName));
+			.SetupDefault(_serializerMock)
+			.WithNamingStrategy(Names.Are(ListName));
 	}
 
 	#region Failing checks
@@ -140,7 +141,7 @@ public sealed class WrappedCollectionConverterTests
 		var input = Element(ListName);
 
 		_contextMock
-			.WithFindNamingStrategy(Names.Are("child"))
+			.WithFindNamingStrategy(Names.Are(ListItemName))
 			.WithPropertyType(expected.GetType());
 
 		// Act
