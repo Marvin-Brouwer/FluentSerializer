@@ -49,7 +49,8 @@ public sealed class WrappedCollectionConverterTests
 	}
 
 	#region Failing checks
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -67,7 +68,8 @@ public sealed class WrappedCollectionConverterTests
 			.WithMessage("Type 'System.Boolean' does not implement IEnumerable");
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -90,7 +92,8 @@ public sealed class WrappedCollectionConverterTests
 	#endregion
 
 	#region Serialize
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -106,7 +109,8 @@ public sealed class WrappedCollectionConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_ListOfIXmlElement()
 	{
 		// Arrange
@@ -133,7 +137,8 @@ public sealed class WrappedCollectionConverterTests
 	#endregion
 
 	#region Deserialize
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -153,7 +158,8 @@ public sealed class WrappedCollectionConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_ListOfIXmlElement()
 	{
 		// Arrange

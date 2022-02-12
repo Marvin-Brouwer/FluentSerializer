@@ -5,8 +5,11 @@ using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
-namespace FluentSerializer.Xml.Tests.DataNodes;
+namespace FluentSerializer.Xml.Tests;
 
+/// <summary>
+/// Testing all nodes combined for both the <see cref="XmlBuilder"/> and the <see cref="XmlParser"/>
+/// </summary>
 public sealed class XmlStringConversionTests
 {
 	private readonly IXmlElement _testObject;

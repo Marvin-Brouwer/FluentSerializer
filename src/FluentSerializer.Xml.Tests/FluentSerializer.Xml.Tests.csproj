@@ -49,4 +49,8 @@
 		<ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="DataNodes\" />
+	</ItemGroup>
+
 </Project>

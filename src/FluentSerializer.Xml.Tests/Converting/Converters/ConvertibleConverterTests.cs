@@ -41,7 +41,8 @@ public sealed class ConvertibleConverterTests
 	}
 
 	#region Serialize
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_NullOrEmpty_ReturnsEmptyString()
 	{
 		// Arrange
@@ -66,7 +67,8 @@ public sealed class ConvertibleConverterTests
 		resultNull.Should().BeEquivalentTo(expected);
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_NonConvertible_ReturnsToString()
 	{
 		// Arrange
@@ -82,7 +84,9 @@ public sealed class ConvertibleConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	[Theory, MemberData(nameof(GenerateConvertibleData))]
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializeAttributeConvertible_ReturnsString(object input, string expectedValue)
 	{
 		// Arrange
@@ -99,7 +103,9 @@ public sealed class ConvertibleConverterTests
 	#endregion
 
 	#region Deserialize
-	[Theory, MemberData(nameof(GenerateConvertibleData))]
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_EmptyValue_ReturnsDefault(object requested, string unused)
 	{
 		_ = unused;
@@ -120,7 +126,9 @@ public sealed class ConvertibleConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	[Theory, MemberData(nameof(GenerateConvertibleData))]
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertable_ReturnsValue(object expected, string inputValue)
 	{
 		// Arrange
@@ -138,7 +146,8 @@ public sealed class ConvertibleConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_Convertable_IncorrectFormat_Throws()
 	{
 		// Arrange
@@ -156,7 +165,8 @@ public sealed class ConvertibleConverterTests
 			.WithMessage("Input string was not in a correct format.");
 	}
 
-	[Fact]
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_NonConvertable_Throws()
 	{
 		// Arrange
