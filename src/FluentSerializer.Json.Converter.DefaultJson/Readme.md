@@ -98,4 +98,5 @@ And the result will generate this:
 ```
 
 **Be advised** these data structures are very bare bone. Even though the interface structure tries to prevent you from passing nodes you shouldn't you are building the data structure yourself so be careful.  
+It's recommended to always start from the `IJsonObject` or `IJsonArray` when using this technique.  
 Also because of how we built the serializer there are no value types, everything is string so you'll have to wrap text with quotes yourself. Alternatively you can use the `WrapString()` extension method from `FluentSerializer.Json.Converter.DefaultJson.Extensions` as shown in the example above.
