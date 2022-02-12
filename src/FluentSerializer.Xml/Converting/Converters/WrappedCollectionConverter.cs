@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
@@ -24,12 +23,12 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// </code>
 /// <code>
 /// <![CDATA[
-/// <Example>
-///   <Prop>
-///		<ExampleProp />
-///		<ExampleProp />
-///	  </Prop>
-/// </Example>
+/// <Class>
+///   <propertyName>
+///		<ItemClass />
+///		<ItemClass />
+///	  </propertyName>
+/// </Class>
 /// ]]>
 /// </code>
 /// </summary>
@@ -40,7 +39,8 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
-	object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
+	/// <inheritdoc />
+	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		var targetType = context.PropertyType;
 		var instance = targetType.GetEnumerableInstance();
@@ -65,7 +65,8 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 		return instance;
 	}
 
-	IXmlElement? IConverter<IXmlElement, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
+	/// <inheritdoc />
+	public IXmlElement? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
 		if (objectToSerialize is not IEnumerable enumerableToSerialize) 
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
