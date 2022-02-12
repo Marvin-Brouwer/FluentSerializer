@@ -31,11 +31,7 @@
 
 <h3 align="center">
 
-[Getting started](#getting-started) -
-[Basic usage](#basic-usage) -
-[Use-case examples](#use-case-examples) -
-[Basic concepts](#basic-concepts) -
-[Advanced concepts](#advanced-concepts)
+[Getting started](#getting-started) - [Basic usage](#basic-usage) - [Use-case examples](#use-case-examples) - [Basic concepts](#basic-concepts) - [Advanced concepts](#advanced-concepts)
 
 </h3>
 <hr/>
