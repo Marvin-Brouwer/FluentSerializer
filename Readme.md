@@ -21,8 +21,8 @@
 
 <h3 align="center">
 
-[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]
-[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]
+[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
+[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
 [![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]
 
 </h3>
