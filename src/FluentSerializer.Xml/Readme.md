@@ -6,7 +6,7 @@
 <h1>
 	<img alt="icon" width="26" height="26"
 		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.xml.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#readme">
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml#readme">
 		FluentSerializer.Xml
 	</a>
 </h1>
@@ -18,7 +18,7 @@ See:
 
 ## Configuration
 
-[configuring-di]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
+[configuring-di]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
 
 It is possible to configure the defaults of certain aspects the serializer uses.
 You can override these when [configuring the DI injection][configuring-di].

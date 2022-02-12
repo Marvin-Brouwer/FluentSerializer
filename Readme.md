@@ -60,8 +60,8 @@ If you're just looking for a simple JSON or XML serializer checkout these option
 
 ## Getting started
 
-[json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
-[xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
+[json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
+[xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
 
 Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework.
 
@@ -180,8 +180,8 @@ The serialize will automatically find the correct profile for the types that are
 
 To get a quick view of how this library may benefit you, check out these use-cases:
 
-- [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink/Readme.md#readme) (`JSON`)
-- [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Readme.md#readme) (`XML`)
+- [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink#readme) (`JSON`)
+- [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir#readme) (`XML`)
 
 ## Basic concepts
 
