@@ -1,36 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>10</LangVersion>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <ApplicationIcon>../../doc/logo/logo-json.ico</ApplicationIcon>
-    <PackageIcon>../../doc/logo/logo-json.ico</PackageIcon>
-    <PackageIconUrl />
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>10</LangVersion>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<ApplicationIcon>..\..\doc\logo\NuGetIcon.json.ico</ApplicationIcon>
+		<PackageIcon>NuGetIcon.json.png</PackageIcon>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>N/A</Company>
+		<Copyright>Apache-2.0</Copyright>
+		<PackageProjectUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</RepositoryUrl>
+		<Version>1.0.0-alpha.0</Version>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\doc\logo\NuGetIcon.json.png" Visible="false">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants />
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Ardalis.GuardClauses" Version="4.0.0" />
-    <PackageReference Include="IsExternalInit" Version="1.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Ardalis.GuardClauses" Version="4.0.0" />
+		<PackageReference Include="IsExternalInit" Version="1.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
+	</ItemGroup>
 
 </Project>

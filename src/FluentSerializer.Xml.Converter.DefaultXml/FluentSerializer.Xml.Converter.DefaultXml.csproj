@@ -1,19 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>10</LangVersion>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <ApplicationIcon>../../doc/logo/logo-xml.ico</ApplicationIcon>
-    <PackageIcon>../../doc/logo/logo-xml.ico</PackageIcon>
-    <PackageIconUrl />
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>10</LangVersion>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<ApplicationIcon>..\..\doc\logo\NuGetIcon.xml.ico</ApplicationIcon>
+		<PackageIcon>NuGetIcon.xml.png</PackageIcon>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>N/A</Company>
+		<Copyright>Apache-2.0</Copyright>
+		<PackageProjectUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</RepositoryUrl>
+		<Version>1.0.0-alpha.0</Version>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
-    <ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\doc\logo\NuGetIcon.xml.png" Visible="false">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
+		<ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
+	</ItemGroup>
 
 </Project>

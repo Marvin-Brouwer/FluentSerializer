@@ -21,9 +21,9 @@
 
 <h3 align="center">
 
-[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
-[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
-[![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]  
+[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]
+[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]
+[![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]
 
 </h3>
 
@@ -31,10 +31,10 @@
 
 <h3 align="center">
 
-[Getting started](#getting-started) - 
-[Basic usage](#basic-usage) - 
-[Use-case examples](#use-case-examples) - 
-[Basic concepts](#basic-concepts) - 
+[Getting started](#getting-started) -
+[Basic usage](#basic-usage) -
+[Use-case examples](#use-case-examples) -
+[Basic concepts](#basic-concepts) -
 [Advanced concepts](#advanced-concepts)
 
 </h3>
@@ -44,41 +44,47 @@
 [mappster]: https://github.com/MapsterMapper/Mapster#readme
 [automapper]: https://github.com/AutoMapper/AutoMapper#readme
 
-`FluentSerializer` is a library to help you with serializing to-and-from C# POCOs using profiles.  
-The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.  
-So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.  
-  
-Next to a clear overview of how the data looks, this library provides you with serializing methods for multiple data formats with a similar api.  
-So when you're required to tie XML and JSON together at least the code for serializing looks similar across your solution.  
-  
-If you're just looking for a simple JSON or XML serializer checkout these options:  
+`FluentSerializer` is a library to help you with serializing to-and-from C# POCOs using profiles.
+The use of profiles helps making it easier to understand how the data vs the code looks in a single glance.
+So instead of needing a library like [Mappster][mappster] or [AutoMapper][automapper] to mold data into your code structure, you can now map that same data into a clean data representation and use the mapping frameworks for what their intended, to translate data.
+
+Next to a clear overview of how the data looks, this library provides you with serializing methods for multiple data formats with a similar api.
+So when you're required to tie XML and JSON together at least the code for serializing looks similar across your solution.
+
+If you're just looking for a simple JSON or XML serializer checkout these options:
+
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json#readme)
   The most commonly used dotnet JSON serializer
 - [JaxLib](https://github.com/YAXLib/YAXLib#readme)
   An awesome XML serializer that's miles ahead of the dotnet default one.
-  
 
 ## Getting started
+
 [json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault/Readme.md#readme
 [xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
 
-Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework. 
+Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework.
 
 <sub>[FluentSerializer.Json.DependencyInjection.NetCoreDefault][json-di-dotnet-readme]</sub>
+
 ```txt
 dotnet add package FluentSerializer.Json.DependencyInjection.NetCoreDefault
-```  
+```
+
 <sub>[FluentSerializer.Xml.DependencyInjection.NetCoreDefault][xml-di-dotnet-readme]</sub>
+
 ```txt
 dotnet add package FluentSerializer.Xml.DependencyInjection.NetCoreDefault
 ```
 
 And then add the serializer to the DI registration, pointing to the a type in the assembly where your profiles live.
+
 ```csharp
 serviceCollection
 	.AddFluentJsonSerializer<TAssemblyMarker>()
 	.AddFluentXmlSerializer<TAssemblyMarker>();
 ```
+
 There are multiple overloads for overriding configurations and passing assemblies, please read the respective readme's for the `DependencyInjection` libraries.
 
 ## Basic usage
@@ -86,19 +92,21 @@ There are multiple overloads for overriding configurations and passing assemblie
 For the serializer to work you need to create a profile and call the serializer.
 
 ### Creating profiles
-You create a profile by creating a class that inherits from the serializers profile class.  
-`FluentSerializer.Json.JsonSerializerProfile`, `FluentSerializer.Xml.JsonSerializerProfile`, and maybe others.  
- 
-When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.  
-- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
-- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)  
 
-For illustration's sake, here's a basic example of a profile:  
+You create a profile by creating a class that inherits from the serializers profile class.
+`FluentSerializer.Json.JsonSerializerProfile`, `FluentSerializer.Xml.JsonSerializerProfile`, and maybe others.
+
+When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.
+
+- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
+- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)
+
+For illustration's sake, here's a basic example of a profile:
 <details>
   <summary>JSON structure & supporting classes</summary>
 
 ```jsonc
-{ 
+{
 	"data": [{
 		"identifier": 1,
 		"name": "someName",
@@ -106,17 +114,20 @@ For illustration's sake, here's a basic example of a profile:
 	}]
 }
 ```
+
 ```csharp
 public sealed class Request<TDataEntity> where TDataEntity: IDataEntity {
 	public List<TDataEntity> Data { get; set; }
 }
 ```
+
 ```csharp
 public sealed class SomeDataEntity: IDataEntity {
 	public string Id { get; set; }
 	public string Name { get; set; }
 }
 ```
+
 </details>
 
 ```csharp
@@ -126,7 +137,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 	{
 		For<Request<IDataEntity>>()
 			.Property(request => request.Data);
-		
+
 		For<SomeDataEntity>()
 			.Property(entity => entity.Id,
 				namingStrategy: Names.Are("identifier"))
@@ -136,7 +147,9 @@ public sealed class RequestProfile : JsonSerializerProfile
 ```
 
 ### Calling the serializer
+
 Once the profiles are registered all you have to do is inject the serializer into the service responsible for handling serialized application dependencies and call the serializer or deserialize method.
+
 ```csharp
 public sealed class WeirdExample : IWeirdExample {
 
@@ -160,6 +173,7 @@ public sealed class WeirdExample : IWeirdExample {
 	}
 }
 ```
+
 The serialize will automatically find the correct profile for the types that are passed or requested and (de)serialize as expected.
 
 ## Use-case Examples
@@ -185,7 +199,8 @@ Here are some links to some more advanced topics:
 - [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme)
 
 ## Contributing
-We are currently figuring out what the best branching model is, and what the best automated release setup is.  
-Because of that we aren't really looking for code contributions until that is in place.  
-  
-Suggestions on how to do this are very welcome.  
+
+We are currently figuring out what the best branching model is, and what the best automated release setup is.
+Because of that we aren't really looking for code contributions until that is in place.
+
+Suggestions on how to do this are very welcome.

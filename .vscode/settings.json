@@ -7,5 +7,9 @@
 	"files.eol": "\n",
 	"[markdown]": {
 		"files.trimTrailingWhitespace": false,
+	},
+	"markdownlint.config": {
+		"no-inline-html": false,
+		"no-hard-tabs": false
 	}
 }
