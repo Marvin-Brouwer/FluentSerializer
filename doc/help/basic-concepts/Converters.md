@@ -15,20 +15,22 @@
 
 A converter is class that determines the way C# classes get converted to and from the data nodes that are part of the Serializer's format.  
 Every serializer has it's own interface on top on or more `IConverter<TSerialContainer>` where TSerial container is a DataNode that extends `IDataNode`.  
+
 - In the case of JSON, this is `IJsonConverter` using `IJsonNode`.
 - In the case of XML, this is `IXmlConverter<TDataNode>` where `TDataNode` is an `IXmlNode` like `IXmlAttribute`, `IXmlElement` or `IXmlText`
 - And so forth.
 
-
 ## Configuring a converter  
   
 To configure a custom converter you need to reference a `Func<I{Format}Converter>`, a method group returning `I{Format}Converter` - or a specific one that matches the property type when applicable - this has a couple of reasons.
+
 - It allows for type safe registration
 - It allows for a readable and extendable solution
 - It allows for a lifetime management solution outside of the DI framework.
 
 The places where you can configure these strategies is both on the serializer's configuration when you register it, or on a property itself.
 For example, you want a property to use snake case:
+
 ```csharp
 public sealed class ExampleProfile : JsonSerializerProfile
 {
@@ -41,6 +43,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	}
 }
 ```
+
 Every converter has a check to determine if it fits the given datatype and/or direction.  
 If the converter does not match, the serializer will throw an exception.  
   
@@ -48,17 +51,19 @@ If you don't specify a property overload the serializer will lookup a fitting co
 However if it finds no suitable converters it will throw an exception.
 
 Out of the box you can expect the following converters to be present:
+
 - DateTime: `Converters.Use.DateTime` (Using the default DateTime.Parse)
 - DateTime with patterns: `Converters.Use.DateTime("pattern")` (Using DateTime.ParseExact)
 - Collections: `Converters.Use.Collection` 
   (In some data formats you have different ways to do collections, for example XML has a built-in alternative to not wrap the collection)
 
-You don't need to specify these Converters they come out of the box. 
+You don't need to specify these Converters they come out of the box.
 
 ## Creating a custom converter
 
 Let's just say you have a boolean represented by a `0` and a `1`, you'd like to just use booleans in code but the API gives you bits and expects bits from you.  
-This is not rare, but rare enough to not be included out of the box. 
+This is not rare, but rare enough to not be included out of the box.
+
 ```csharp
 /// <summary>
 /// Depicts booleans as 0 and 1 <br />
@@ -108,7 +113,9 @@ public class StringBitBooleanConverter : IJsonConverter
 	}
 }
 ```
+
 Then you create an extension method to expose this:
+
 ```csharp
 public static class ConverterExtensions
 {
@@ -117,12 +124,14 @@ public static class ConverterExtensions
 	public static INamingStrategy StringBitBoolean(this IUseJsonConverters _) => StringBitBooleanConverter;
 }
 ```
+
 And now you can use it on properties or your configuration by calling `Converter.Use.StringBitBoolean`.
 
 For a more real-world example checkout the [OpenAir use-case's StringBitBooleanConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/StringBitBooleanConverter.cs) together with [their NamingExtensions](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/ConverterExtensions.cs).  
 This setup is for XML so it shows an example of using a naming strategy in a custom converter.
 
 ### ISerializerContext
+
 [naming-strategy]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#inamingstrategy
  
 The serializer context passed to converters is a container holding essential information for converting custom data models.  

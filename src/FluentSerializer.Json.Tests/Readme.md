@@ -13,4 +13,4 @@
 
 [//]: # (Body)
 
-This project contains the unit-tests to verify the internal JSON conversion logic
+This project contains the unit-tests to verify the internal JSON conversion logic.

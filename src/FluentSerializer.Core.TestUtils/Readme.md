@@ -13,8 +13,9 @@
 
 [//]: # (Body)
 
-This library contains utility methods for automated testing.  
+This library contains utility methods for automated testing.
+  
+See:
 
-See: 
 - [XUnit](https://github.com/xunit/xunit#readme)
 - [FluentAssertions](https://github.com/fluentassertions/fluentassertions#readme)

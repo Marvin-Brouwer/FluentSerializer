@@ -19,12 +19,14 @@ This name is then used to map back and from serialized data.
 ## Configuring a naming strategy  
   
 To configure a naming strategy you need to reference a `Func<INamingStrategy>` or a method group returning `INamingStrategy` this has a couple of reasons.
+
 - It allows for type safe registration
 - It allows for a readable and extendable solution
 - It allows for a lifetime management solution outside of the DI framework.
 
-The places where you can configure these strategies is both on the serializer's configuration when you register it, or on a property itself.
+The places where you can configure these strategies is both on the serializer's configuration when you register it, or on a property itself.  
 For example, you want a property to use snake case:
+
 ```csharp
 public sealed class ExampleProfile : JsonSerializerProfile
 {
@@ -37,7 +39,9 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	}
 }
 ```
-Of you want to statically map a property mapping to a given string value:
+
+Or you want to statically map a property mapping to a given string value:
+
 ```csharp
 public sealed class ExampleProfile : JsonSerializerProfile
 {
@@ -52,6 +56,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 ```
 
 Out of the box you can use the following naming strategies:
+
 - Hard coded strings `Names.Are("identifier")`
 - CamelCase: `Names.Use.CamelCase`
 - KebabCase: `Names.Use.KebabCase`
@@ -60,9 +65,11 @@ Out of the box you can use the following naming strategies:
 - SnakeCase: `Names.Use.SnakeCase`
 
 ## Creating a custom naming strategy
+
 Let's just say you want to shout at your api.
 
 If you want all your properties to be UpperCase you can do the following:
+
 ```csharp
 /// <summary>
 /// SHOUTS all properties <br />
@@ -78,7 +85,9 @@ public class UpperCaseNamingStrategy : INamingStrategy
 	public string GetName(in Type classType, in INamingContext _) => classType.Name.Split('`')[0].ToUpperInvariant();
 }
 ```
+
 Then you create an extension method to expose this:
+
 ```csharp
 public static class NamingExtensions
 {
@@ -87,6 +96,7 @@ public static class NamingExtensions
 	public static INamingStrategy UpperCase (this IUseNamingStrategies _) => UpperCaseNamingStrategy;
 }
 ```
+
 And now you can use it on properties or your configuration by calling `Names.Use.UpperCase`.
 
 For a more real-world example checkout the [OpenAir use-case's CustomFieldNamingStrategy](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/CustomFieldNamingStrategy.cs) together with [their NamingExtensions](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/NamingExtensions.cs).  

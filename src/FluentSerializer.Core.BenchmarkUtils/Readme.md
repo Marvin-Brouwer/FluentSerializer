@@ -18,5 +18,6 @@ In short, this is a setup to benchmark the entire serialization setup with a lar
 
 Normally `BenchMarkDotNet` is not configured for this, hence we made some configuration adjustments to fit our use-case.
 
-See: 
+See:
+
 - [BenchMarkDotNet](https://github.com/dotnet/BenchmarkDotNet#readme)

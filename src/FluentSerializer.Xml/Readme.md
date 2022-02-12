@@ -12,10 +12,12 @@
 </h1>
 
 [//]: # (Body)
-See: 
+See:
+
 - [XML spec](https://www.w3.org/TR/xml)
 
 ## Configuration
+
 [configuring-di]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault/Readme.md#readme
 
 It is possible to configure the defaults of certain aspects the serializer uses.
@@ -32,6 +34,7 @@ By default it looks like this:
   - Converter that can handle DateTime objects (XML spec compliant)
   - Converter that can handle IConvertable types
   - Converter to handle collection types (wrapped XML collection)
+  
 ## Creating profiles
 
 For the serializer to understand how to map the data structure to and from C# Models, you need to create a profile.  
@@ -40,6 +43,7 @@ The profile needs to implement the `protected override void Configure()` method,
   
 To create a class mapping, use the `For<TModel>()` method.  
 This method has the following optional parameters:
+
 - **direction:** The direction for which this class mapping is valid, defaults to `Both`
 - **tagNamingStrategy:** A naming strategy for all property to element mappings, overriding the Configuration value  
   See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
@@ -55,6 +59,7 @@ Available options: **`Attribute<TAttribute>()`**, **`Child<TElement>()`**, **`Te
 
 To create a property to attribute mapping, use the `Attribute<TAttribute>()` method.  
 This method has the following optional parameters:
+
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
   See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
@@ -63,6 +68,7 @@ This method has the following optional parameters:
 
 To create a property to element mapping, use the `Child<TElement>()` method.  
 This method has the following optional parameters:
+
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
   See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
@@ -71,6 +77,7 @@ This method has the following optional parameters:
 
 To create a property to element mapping, use the `Text<TText>()` method.  
 This method has the following optional parameters:
+
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
   See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)  
@@ -79,7 +86,8 @@ The text nodes don't have names, so this mapping has no **namingStrategy** param
 
 ### Example
 
-Here is a simple example to illustrate how a profile would be implemented:  
+Here is a simple example to illustrate how a profile would be implemented:
+
 ```xml
 <Request>
 	<data>

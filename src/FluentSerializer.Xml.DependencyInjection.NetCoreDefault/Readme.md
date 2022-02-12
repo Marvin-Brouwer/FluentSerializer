@@ -18,24 +18,29 @@ This library is responsible for registering the FluentSerializer for XML using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
+
 [configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#configuration
 
-For basic usage you can use this:  
-```cs
+For basic usage you can use this:
+
+```csharp
 serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>();
 ```
+
 This will use the `XmlSerializerConfiguration.Default` as the applied config.
 The type parameter of `TAssemblyMarker` will be used to scan that assembly for the profiles associated with this serializer.
 You can call this registration multiple times with different assemblies for additional profiles.
-Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.  
-  
-There are multiple overloads, for changing configuration the lambda approach is recommended:  
-```cs
+Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.
+
+There are multiple overloads, for changing configuration the lambda approach is recommended:
+
+```csharp
 serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>(static configuration =>
 {
 	// Change configuration values
 	configuration.NewLine = LineEndings.LineFeed;
 });
 ```
-This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you  to change some properties.  
+
+This will use the `XmlSerializerConfiguration.Default` as the applied config and allows you  to change some properties.
 [See the default values][configuration-doc].

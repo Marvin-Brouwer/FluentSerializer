@@ -7,9 +7,24 @@
 	"files.eol": "\n",
 	"[markdown]": {
 		"files.trimTrailingWhitespace": false,
+		"editor.trimAutoWhitespace": false,
+		"editor.renderWhitespace": "all"
+	},
+	"[md]": {
+		"files.trimTrailingWhitespace": false,
+		"editor.trimAutoWhitespace": false,
+		"editor.renderWhitespace": "all"
 	},
 	"markdownlint.config": {
 		"no-inline-html": false,
-		"no-hard-tabs": false
-	}
+		"no-hard-tabs": false,
+		"no-trailing-spaces": {
+			"br_spaces": 2
+		}
+	},
+	"markdown.preview.breaks": true,
+	"cSpell.words": [
+		"Mavenlink",
+		"Newtonsoft"
+	]
 }

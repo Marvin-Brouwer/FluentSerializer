@@ -93,7 +93,7 @@ For the serializer to work you need to create a profile and call the serializer.
 
 ### Creating profiles
 
-You create a profile by creating a class that inherits from the serializers profile class.
+You create a profile by creating a class that inherits from the serializer's profile class.
 `FluentSerializer.Json.JsonSerializerProfile`, `FluentSerializer.Xml.JsonSerializerProfile`, and maybe others.
 
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.

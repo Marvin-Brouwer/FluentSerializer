@@ -8,10 +8,10 @@ Obviously there will be differences.
 ## Setting up the serializer
 
 Because of how this serializer will work we'll need to register the serializer profiles on startup, similar to AutoMapper.
-```cs
+```csharp
     services.AddFluentSerializer<IAssemblyMarker>();
 ```
-```cs
+```csharp
 public class SomeJsonProfile : JsonSerializerProfile {
 
     public override void Configure() {
@@ -23,7 +23,7 @@ public class SomeJsonProfile : JsonSerializerProfile {
             .Member(t => t.Age,
                 direction: Direction.Serialize,
                 namingStrategy: CustomNamingStrategy("userAge"))
-            .Member(t => t.BirthDate, 
+            .Member(t => t.BirthDate,
                 customSerializer: typeof(DateSerializer))
             .Member(t => t.Skills)
     }
@@ -37,10 +37,10 @@ public class SomeXmlProfile : XmlSerializerProfile {
             defaultNamingStrategy: PascalCaseNamingStrategy
         )
             .Attribute(t => t.Name)
-            .Attribute(t => t.Age, 
+            .Attribute(t => t.Age,
                 direction: Direction.Serialize,
                 namingStrategy: CustomNamingStrategy("userAge"))
-            .Attribute(t => t.BirthDate, 
+            .Attribute(t => t.BirthDate,
                 customSerializer: typeof(DateSerializer))
             .Child(t => t.Skills)
     }
@@ -56,21 +56,21 @@ To keep the api consistency every serializer should implement ISerializer, which
 The way to inject the serializer shall be with a specific type to distinguish between the two may your project call multiple api's with different serializations.
 
 For example:
-```cs
+```csharp
 public interface ISerializer {
-    
+
     string Serialize<TData>(TData dataObject);
     TData DeSerialize<TData>(string dataObject);
 }
 ```
 (This may benefit from overload with span and stringreaders etc.)
-```cs
+```csharp
 public interface IJsonSerializer : ISerializer {
     string Serialize(JObject dataObject);
     JObject DeSerializeToJObject(string dataObject);
 }
 ```
-```cs
+```csharp
 public interface IXmlSerializer : ISerializer {
     string Serialize(XObject dataObject);
     XObject DeSerializeToXObject(string dataObject);
