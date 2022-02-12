@@ -192,7 +192,7 @@ Here are some links to some more advanced topics:
 
 ### General
 
-- [Parent access](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Parent-access.md#readme)
+- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Converter-parent-access.md#readme)
 - [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-serializer.md#readme)
 - [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme)
 

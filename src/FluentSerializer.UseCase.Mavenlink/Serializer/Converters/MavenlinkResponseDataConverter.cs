@@ -55,10 +55,11 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 		public override object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 		{
 			if (objectToDeserialize is not IJsonArray arrayToDeserialize) throw new NotSupportedException();
-			if (!arrayToDeserialize.Children.Any()) return context.PropertyType.GetEnumerableInstance();
 
 			// Get name of current property type from data
-			var firstChild = (IJsonObject)arrayToDeserialize.Children.First();
+			var firstChild = (IJsonObject?)arrayToDeserialize.Children?[0];
+			if (firstChild is null) return context.PropertyType.GetEnumerableInstance();
+
 			var collectionKeyProperty = (IJsonValue?)firstChild.GetProperty("key")?.Value;
 			var collectionName = collectionKeyProperty?.Value?[1..^1];
 			Guard.Against.NullOrEmpty(collectionName, nameof(collectionName));
