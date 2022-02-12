@@ -3,6 +3,7 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.DataNodes.Nodes;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
@@ -16,38 +17,40 @@ namespace FluentSerializer.Xml.Tests.Converting.Converters;
 
 /// <summary>
 /// Test the converting between <see cref="List{T}"/> and a collection of XML elements.
-/// In general most XML formats wrap collections in a named element looking like this:
+/// In general most XML formats wrap collections in a named element, however sometimes there is no wrapper
+/// looking like this:
 /// <code>
 /// <![CDATA[
 /// <ParentElement>
-///		<list>
-///			<ListItem />
-///			<ListItem />
-///			<ListItem />
-///		</list>
+///		<ListItem />
+///		<ListItem />
+///		<ListItem />
 /// </ParentElement>
 /// ]]>
 /// </code>
 /// These tests compare a named element with children to a list to validate the converter is doing it's job.
 /// </summary>
-public sealed class WrappedCollectionConverterTests
+/// TODO exception message assert
+public sealed class NonWrappedCollectionConverterTests
 {
+	private const string ParentName = "ParentElement";
 	private const string ListName = "list";
 	private const string ListItemName = "ListItem";
 
-	private readonly WrappedCollectionConverter _sut;
+	private readonly NonWrappedCollectionConverter _sut;
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
 	private readonly Mock<IAdvancedXmlSerializer> _serializerMock;
 
-	public WrappedCollectionConverterTests()
+	public NonWrappedCollectionConverterTests()
 	{
-		_sut = new WrappedCollectionConverter();
+		_sut = new NonWrappedCollectionConverter();
 		_serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
 			.SetupDefault(_serializerMock, Names.Are(ListName));
 	}
 
 	#region Failing checks
+
 	[Fact]
 	public void Serialize_NotEnumerable_Throws()
 	{
@@ -67,12 +70,50 @@ public sealed class WrappedCollectionConverterTests
 	}
 
 	[Fact]
+	public void Deserialize_NoParent_Throws()
+	{
+		// Arrange
+		var input = Element(ListName);
+
+		// Act
+		var canConvert = _sut.CanConvert(input.GetType());
+		var result = () => _sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		canConvert.Should().BeFalse();
+		result.Should()
+			.ThrowExactly<NotSupportedException>()
+			.WithMessage("You cannot deserialize a non-wrapped selection at root level");
+	}
+
+	[Fact]
+	public void Deserialize_IncorrectParent_Throws()
+	{
+		// Arrange
+		var input = Element(ListName);
+
+		_contextMock
+			.WithParentNode(Text(ParentName));
+
+		// Act
+		var canConvert = _sut.CanConvert(input.GetType());
+		var result = () => _sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		canConvert.Should().BeFalse();
+		result.Should()
+			.ThrowExactly<NotSupportedException>()
+			.WithMessage("Only 'IXmlElement' nodes are useful parents for this converter");
+	}
+
+	[Fact]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
 		var input = Element(ListName);
 
 		_contextMock
+			.WithParentNode(Element(ParentName))
 			// Give it any arbitrary type that doesn't implement IEnumerable
 			.WithPropertyType<bool>();
 
@@ -93,7 +134,7 @@ public sealed class WrappedCollectionConverterTests
 	public void Serialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
-		var expected = Element(ListName);
+		var expected = new XmlFragment(Array.Empty<IXmlElement>());
 		var input = new List<IXmlElement>(0);
 
 		// Act
@@ -109,10 +150,10 @@ public sealed class WrappedCollectionConverterTests
 	public void Serialize_ListOfIXmlElement()
 	{
 		// Arrange
-		var expected = Element(ListName,
+		var expected = new XmlFragment(new[] {
 			Element(ListItemName, Text("1")),
 			Element(ListItemName, Text("2"))
-		);
+		});
 		var input = new List<IXmlElement> {
 			Element(ListItemName, Text("1")),
 			Element(ListItemName, Text("2"))
@@ -141,7 +182,8 @@ public sealed class WrappedCollectionConverterTests
 
 		_contextMock
 			.WithFindNamingStrategy(Names.Are("child"))
-			.WithPropertyType(expected.GetType());
+			.WithPropertyType(expected.GetType())
+			.WithParentNode(Element(ParentName));
 
 		// Act
 		var canConvert = _sut.CanConvert(expected.GetType());
@@ -160,16 +202,20 @@ public sealed class WrappedCollectionConverterTests
 			Element(ListItemName, Text("1")),
 			Element(ListItemName, Text("2"))
 		};
-		var input = Element(ListName,
+		var input = new XmlFragment(new[] {
 			Element(ListItemName, Text("1")),
 			Element(ListItemName, Text("2"))
-		);
+		});
 
 		_serializerMock
 			.WithDeserialize();
 		_contextMock
 			.WithFindNamingStrategy(Names.Are(ListItemName))
-			.WithPropertyType(expected.GetType());
+			.WithPropertyType(expected.GetType())
+			.WithParentNode(Element(ParentName,
+				Element(ListItemName, Text("1")),
+				Element(ListItemName, Text("2"))
+			));
 
 		// Act
 		var canConvert = _sut.CanConvert(expected.GetType());

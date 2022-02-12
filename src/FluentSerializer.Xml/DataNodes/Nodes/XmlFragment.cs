@@ -86,5 +86,17 @@ public readonly struct XmlFragment : IXmlElement
 	/// <inheritdoc />
 	public override int GetHashCode() => _innerElement.GetHashCode();
 
+	/// <inheritdoc />
+	public static bool operator ==(XmlFragment left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlFragment left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlFragment right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlFragment right) => !left.Equals(right);
+
 	#endregion
 }

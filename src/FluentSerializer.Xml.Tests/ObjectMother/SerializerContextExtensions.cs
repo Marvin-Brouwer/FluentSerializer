@@ -49,7 +49,7 @@ namespace FluentSerializer.Xml.Tests.ObjectMother
 
 		/// <summary>
 		/// TODO Move to shared
-		/// Make the <see cref="ISerializerContext.FindNamingStrategy"/> return
+		/// Make the <see cref="ISerializerContext.FindNamingStrategy"/> return <paramref name="namingStrategy"/>
 		/// </summary>
 		internal static Mock<ISerializerContext<TDataNode>> WithFindNamingStrategy<TDataNode>(
 			this Mock<ISerializerContext<TDataNode>> contextMock, Func<INamingStrategy> namingStrategy)
@@ -64,10 +64,26 @@ namespace FluentSerializer.Xml.Tests.ObjectMother
 
 			return contextMock;
 		}
+
 		/// <summary>
 		/// Make the <see cref="ISerializerContext.PropertyType"/> return type of <typeparamref name="TProperty"/>
 		/// </summary>
 		internal static Mock<ISerializerContext<IXmlNode>> WithPropertyType<TProperty>(this Mock<ISerializerContext<IXmlNode>> contextMock) =>
 			contextMock.WithPropertyType<IXmlNode>(typeof(TProperty));
+
+		/// <summary>
+		/// TODO Move to shared
+		/// Make the <see cref="ISerializerContext.ParentNode"/> return <paramref name="parent"/>
+		/// </summary>
+		internal static Mock<ISerializerContext<TDataNode>> WithParentNode<TDataNode>(
+			this Mock<ISerializerContext<TDataNode>> contextMock, TDataNode parent)
+			where TDataNode : IDataNode
+		{
+			contextMock
+				.Setup(context => context.ParentNode)
+				.Returns(parent);
+
+			return contextMock;
+		}
 	}
 }
