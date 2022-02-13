@@ -57,9 +57,6 @@
 	  <None Update="Tests\AllXmlNodes.Formatted.xml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Tests\AllXmlNodes.Slim.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 
 </Project>
