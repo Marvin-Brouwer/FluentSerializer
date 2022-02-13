@@ -50,10 +50,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Tests\DataNodes\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Update="Tests\AllXmlNodes.Formatted.xml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

@@ -23,16 +23,16 @@ public static class AssertionExtensions
 	/// by default FluentAssertions will not understand that.
 	/// </summary>
 	[CustomAssertion]
-	public static EquatableAssertions<TEquatable> Should<TEquatable>(this TEquatable assertions)
-		where TEquatable : IEquatable<TEquatable>
+	public static NodeAssertions Should<TDataNode>(this TDataNode assertions)
+		where TDataNode : IDataNode
 	{
-		return new EquatableAssertions<TEquatable>(assertions);
+		return new NodeAssertions(assertions);
 	}
 
 	/// <inheritdoc cref="FluentAssertions.AssertionExtensions.Should{T}(System.IComparable{T})"/>
 	[CustomAssertion]
-	public static EquatableAssertions<IDataNode> Should(this IDataNode assertions)
+	public static NodeAssertions Should(this IDataNode assertions)
 	{
-		return new EquatableAssertions<IDataNode>(assertions);
+		return new NodeAssertions(assertions);
 	}
 }

@@ -58,6 +58,7 @@ public readonly struct XmlBuilder
 	{
 		Guard.Against.InvalidName(in name);
 
+		if (value is null) return new XmlAttribute(in name, in string.Empty);
 		return new XmlAttribute(in name, in value);
 	}
 

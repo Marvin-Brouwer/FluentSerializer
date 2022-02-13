@@ -18,13 +18,13 @@ public readonly struct XmlAttribute : IXmlAttribute
 	/// <inheritdoc />
 	public string Name { get; }
 	/// <inheritdoc />
-	public string? Value { get; }
+	public string Value { get; }
 
 	/// <inheritdoc cref="XmlBuilder.Attribute(in string, in string?)"/>
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Attribute"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlAttribute(in string name, in string? value = null)
+	public XmlAttribute(in string name, in string value)
 	{
 		Guard.Against.InvalidName(in name);
 
@@ -103,7 +103,7 @@ public readonly struct XmlAttribute : IXmlAttribute
 	{
 		Guard.Against.NullOrWhiteSpace(Name, nameof(Name), "The attribute was is an illegal state, it contains no Name");
 
-		if (!writeNull && Value is null) return stringBuilder;
+		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
 		stringBuilder
 			.Append(Name)
@@ -131,6 +131,18 @@ public readonly struct XmlAttribute : IXmlAttribute
 
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
+
+	/// <inheritdoc />
+	public static bool operator ==(XmlAttribute left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlAttribute left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlAttribute right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlAttribute right) => !left.Equals(right);
 
 	#endregion
 }
