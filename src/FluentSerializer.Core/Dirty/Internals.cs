@@ -1,2 +1,2 @@
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FluentSerializer.Xml.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FluentSerializer.Core.TestUtils")]

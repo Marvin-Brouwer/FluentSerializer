@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes.Nodes;
 using System;
 using Xunit;
@@ -18,8 +18,7 @@ public sealed class XmlAttributeTests
 
 	public XmlAttributeTests()
 	{
-		_textWriter = new SystemStringBuilder(
-			XmlSerializerConfiguration.Default, new System.Text.StringBuilder());
+		_textWriter = TestStringBuilderPool.CreateSingleInstance();
 	}
 
 	#region Parse
