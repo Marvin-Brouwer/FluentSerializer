@@ -14,7 +14,6 @@ public class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 {
 	public NodeAssertions(IDataNode instance) : base(instance) { }
 
-
 	protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
 	public AndConstraint<NodeAssertions> BeEquatableTo(

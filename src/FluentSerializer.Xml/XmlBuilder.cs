@@ -29,7 +29,7 @@ public readonly struct XmlBuilder
 	{
 		Guard.Against.InvalidName(in name);
 
-		return new XmlElement(in name, in childNode);
+		return new XmlElement(in name, new List<IXmlNode>(1) { childNode });
 	}
 
 	/// <inheritdoc cref="IXmlElement"/>

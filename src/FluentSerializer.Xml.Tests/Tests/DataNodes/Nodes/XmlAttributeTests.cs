@@ -102,7 +102,8 @@ public sealed class XmlAttributeTests
 		var result2 = new XmlAttribute(input2, ref offset2);
 
 		// Assert
-		// These have an invalid name so the serializer will pick this up and throw
+		// These have an invalid name this will result in properties not being found
+		// instead of throwing parsing errors
 		result1.Name.Should().Be("attribute\"\" attribute2");
 		result1.Should().HaveInvalidName();
 		result2.Name.Should().Be("attribute\"\"");
