@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
@@ -40,7 +41,9 @@ public sealed class XmlAttributeTests
 
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
-		InlineData(" "), InlineData("  "), InlineData("\t")]
+		InlineData(" "), InlineData("  "), InlineData("\t"),
+		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
+		InlineData(LineEndings.ReturnLineFeed)]
 	public void ParseXml_ValidWithWhiteSpace_ReturnsAttribute(string space)
 	{
 		// Arrange

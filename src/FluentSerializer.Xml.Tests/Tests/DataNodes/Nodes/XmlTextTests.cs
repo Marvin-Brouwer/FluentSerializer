@@ -4,19 +4,18 @@ using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.DataNodes.Nodes;
-using System;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
-public sealed class XmlCommentTests
+public sealed class XmlTextTests
 {
-	private const string XmlCommentValue = "69\n69";
+	private const string XmlTextValue = "69\n69";
 
 	private ITextWriter _textWriter;
 
-	public XmlCommentTests()
+	public XmlTextTests()
 	{
 		_textWriter = TestStringBuilderPool.CreateSingleInstance();
 	}
@@ -24,15 +23,15 @@ public sealed class XmlCommentTests
 	#region Parse
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void ParseXml_Valid_ReturnsComment()
+	public void ParseXml_Valid_ReturnsText()
 	{
 		// Arrange
-		var expected = Comment(XmlCommentValue);
-		var input = $"<!-- {XmlCommentValue} -->";
+		var expected = Text(XmlTextValue);
+		var input = $"{XmlTextValue}<";
 
 		// Act
 		var offset = 0;
-		var result = new XmlComment(input, ref offset);
+		var result = new XmlText(input, ref offset);
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
@@ -43,15 +42,15 @@ public sealed class XmlCommentTests
 		InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
-	public void ParseXml_ValidWithWhiteSpace_ReturnsComment(string space)
+	public void ParseXml_ValidWithWhiteSpace_ReturnsText(string space)
 	{
 		// Arrange
-		var expected = Comment(XmlCommentValue);
-		var input = $"<!--{space}{XmlCommentValue}{space}-->{space}";
+		var expected = Text(XmlTextValue);
+		var input = $"{space}{XmlTextValue}{space}<";
 
 		// Act
 		var offset = 0;
-		var result = new XmlComment(input, ref offset);
+		var result = new XmlText(input, ref offset);
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
@@ -59,35 +58,18 @@ public sealed class XmlCommentTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void ParseXml_Empty_ReturnsComment()
+	public void ParseXml_Empty_ReturnsText()
 	{
 		// Arrange
-		var expected = Comment(string.Empty);
-		var input = "<!--  -->";
+		var expected = Text(string.Empty);
+		var input = "<";
 
 		// Act
 		var offset = 0;
-		var result = new XmlComment(input, ref offset);
+		var result = new XmlText(input, ref offset);
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
-	}
-
-	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void ParseXml_Incomplete_Throws()
-	{
-		// Arrange
-		var expected = Comment(string.Empty);
-		var input = $"<!-- {XmlCommentValue}";
-
-		// Act
-		var offset = 0;
-		var result = () => new XmlComment(input, ref offset);
-
-		// Assert
-		result.Should()
-			.ThrowExactly<ArgumentOutOfRangeException>();
 	}
 	#endregion
 
@@ -97,8 +79,8 @@ public sealed class XmlCommentTests
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
-		var input = Comment(XmlCommentValue);
-		var expected = $"<!-- {XmlCommentValue} -->";
+		var input = Text(XmlTextValue);
+		var expected = XmlTextValue;
 
 		// Act
 		input.AppendTo(ref _textWriter, true, 0, true);
@@ -110,11 +92,11 @@ public sealed class XmlCommentTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyComment()
+	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyText()
 	{
 		// Arrange
-		var input = Comment(string.Empty);
-		var expected = "<!--  -->";
+		var input = Text(null);
+		var expected = string.Empty;
 
 		// Act
 		input.AppendTo(ref _textWriter, true, 0, true);
@@ -129,7 +111,7 @@ public sealed class XmlCommentTests
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange
-		var input = Comment(string.Empty);
+		var input = Text(null);
 		var expected = string.Empty;
 
 		// Act
