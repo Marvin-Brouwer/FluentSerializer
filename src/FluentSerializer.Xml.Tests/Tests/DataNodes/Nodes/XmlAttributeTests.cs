@@ -28,7 +28,7 @@ public sealed class XmlAttributeTests
 	{
 		// Arrange
 		var expected = Attribute(XmlAttributeName, XmlAttributeValue);
-		var input = "attribute=\"69\"";
+		var input = $"attribute=\"{XmlAttributeValue}\"";
 
 		// Act
 		var offset = 0;
@@ -45,7 +45,7 @@ public sealed class XmlAttributeTests
 	{
 		// Arrange
 		var expected = Attribute(XmlAttributeName, XmlAttributeValue);
-		var input = $"{space}attribute{space}={space}\"69\"{space}";
+		var input = $"{space}attribute{space}={space}\"{XmlAttributeValue}\"{space}";
 
 		// Act
 		var offset = 0;
@@ -134,7 +134,7 @@ public sealed class XmlAttributeTests
 	{
 		// Arrange
 		var input = Attribute(XmlAttributeName, XmlAttributeValue);
-		var expected = "attribute=\"69\"";
+		var expected = $"attribute=\"{XmlAttributeValue}\"";
 
 		// Act
 		input.AppendTo(ref _textWriter, true, 0, true);
