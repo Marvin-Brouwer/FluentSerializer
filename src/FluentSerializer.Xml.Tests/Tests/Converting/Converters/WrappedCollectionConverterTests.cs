@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.TestUtils.ObjectMother;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;

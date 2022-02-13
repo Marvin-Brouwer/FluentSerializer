@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.TestUtils.ObjectMother;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
@@ -30,7 +31,6 @@ namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 /// </code>
 /// These tests compare a named element with children to a list to validate the converter is doing it's job.
 /// </summary>
-/// TODO exception message assert
 public sealed class NonWrappedCollectionConverterTests
 {
 	private const string ParentName = "ParentElement";

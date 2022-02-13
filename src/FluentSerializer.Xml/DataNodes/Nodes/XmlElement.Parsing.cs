@@ -27,12 +27,7 @@ public readonly partial struct XmlElement
 			offset++;
 		}
 		offset.AdjustForToken(XmlCharacterConstants.TagStartCharacter);
-
-		// Ignore more whitespace
-		while (text.WithinCapacity(in offset) && text.HasWhitespaceAtOffset(in offset))
-		{
-			offset++;
-		}
+		offset.AdjustForWhiteSpace(in text);
 
 		_attributes = new List<IXmlAttribute>();
 		_children = new List<IXmlNode>();

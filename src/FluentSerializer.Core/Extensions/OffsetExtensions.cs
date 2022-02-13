@@ -35,4 +35,20 @@ public static class OffsetExtensions
 		_ = token;
 		offset++;
 	}
+
+	/// <summary>
+	/// Adjust the offset by the amount of whitespace found after the current <paramref name="offset"/>
+	/// </summary>
+#if NET6_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	public static void AdjustForWhiteSpace(ref this int offset, in ReadOnlySpan<char> text)
+	{
+		while (text.WithinCapacity(in offset) && text.HasWhitespaceAtOffset(in offset))
+		{
+			offset++;
+		}
+	}
 }
