@@ -40,7 +40,7 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		if (context.ParentNode is null) throw new NotSupportedException("You cannot deserialize a non-wrapped selection at root level");
-		if (context.ParentNode is not IXmlElement parent) throw new NotSupportedException("Only IXmlElement nodes are useful parents for this converter");
+		if (context.ParentNode is not IXmlElement parent) throw new NotSupportedException("Only 'IXmlElement' nodes are useful parents for this converter");
 
 		var targetType = context.PropertyType;
 		var instance = targetType.GetEnumerableInstance();

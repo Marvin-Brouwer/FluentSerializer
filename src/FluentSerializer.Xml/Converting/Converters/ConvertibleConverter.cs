@@ -19,7 +19,7 @@ public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlCon
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
-	private static string ConvertToString(in object value) => Convert.ToString(value);
+	private static string ConvertToString(in object value) => Convert.ToString(value)!;
 
 	private static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{

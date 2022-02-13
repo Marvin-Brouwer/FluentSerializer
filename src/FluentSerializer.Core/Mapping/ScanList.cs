@@ -8,6 +8,7 @@ namespace FluentSerializer.Core.Mapping;
 
 /// <inheritdoc cref="IScanList{TScanBy,TScanFor}" />
 public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor> 
+	where TScanBy : notnull
 	where TScanFor : class
 {
 	private readonly IReadOnlyList<TScanFor> _storedDataTypes;

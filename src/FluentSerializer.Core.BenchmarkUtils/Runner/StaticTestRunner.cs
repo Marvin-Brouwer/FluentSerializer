@@ -104,7 +104,9 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 #endif
 		}
 
+#if (!NET6_0_OR_GREATER)
 		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+#endif
 		public static void Run(Assembly assembly, string[] arguments, string dataType)
 		{
 			RequireElevatedPermissions();
@@ -173,7 +175,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 			Console.WriteLine("Restarting process with admin permissions.");
 
 			// Restart program and run as admin
-			var exeName = Process.GetCurrentProcess().MainModule.FileName;
+			string? exeName = GetProcessFileName();
 			var startInfo = new ProcessStartInfo(exeName)
 			{
 				UseShellExecute = true,
@@ -183,6 +185,13 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 			Process.Start(startInfo);
 			Environment.Exit(0);
 		}
+
+#if (NET6_0_OR_GREATER)
+		private static string GetProcessFileName() => Environment.ProcessPath!;
+#else
+		private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
+#endif
+
 
 		private static bool IsAdministrator()
 		{

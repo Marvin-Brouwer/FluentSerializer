@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;

@@ -10,4 +10,9 @@ public readonly struct TestStringBuilderPool
 
 	public static readonly ObjectPool<ITextWriter> Default =
 		ObjectPoolProvider.CreateStringBuilderPool(TestStringBuilderConfiguration.Default);
+
+	public static ITextWriter CreateSingleInstance() => new SystemStringBuilder(
+		TestStringBuilderConfiguration.Default,
+		new System.Text.StringBuilder()
+	);
 }
