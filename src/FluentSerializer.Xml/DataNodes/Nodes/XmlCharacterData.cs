@@ -82,5 +82,17 @@ public readonly struct XmlCharacterData : IXmlCharacterData
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
+	/// <inheritdoc />
+	public static bool operator ==(XmlCharacterData left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlCharacterData left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlCharacterData right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlCharacterData right) => !left.Equals(right);
+
 	#endregion
 }

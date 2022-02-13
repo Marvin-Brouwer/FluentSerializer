@@ -377,5 +377,17 @@ public readonly struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _attributes, _children);
 
+	/// <inheritdoc />
+	public static bool operator ==(XmlElement left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlElement left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlElement right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlElement right) => !left.Equals(right);
+
 	#endregion
 }

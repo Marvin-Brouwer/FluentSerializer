@@ -73,5 +73,17 @@ public readonly struct XmlDocument : IXmlDocument
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, RootElement);
 
+	/// <inheritdoc />
+	public static bool operator ==(XmlDocument left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlDocument left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlDocument right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlDocument right) => !left.Equals(right);
+
 	#endregion
 }

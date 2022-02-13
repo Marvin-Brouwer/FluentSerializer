@@ -86,5 +86,17 @@ public readonly struct XmlComment : IXmlComment
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
+	/// <inheritdoc />
+	public static bool operator ==(XmlComment left, IDataNode right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(XmlComment left, IDataNode right) => !left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator ==(IDataNode left, XmlComment right) => left.Equals(right);
+
+	/// <inheritdoc />
+	public static bool operator !=(IDataNode left, XmlComment right) => !left.Equals(right);
+
 	#endregion
 }
