@@ -73,6 +73,7 @@ jobs:
         path: |
           ./src/**/obj/Release/*/*.*
           ./src/*.Tests/bin/Release/*/*.*
+          ./src/*.Tests/bin/Release/Tests/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
           ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1

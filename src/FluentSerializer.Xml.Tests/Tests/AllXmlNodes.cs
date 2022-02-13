@@ -14,13 +14,6 @@ internal readonly struct AllXmlNodes
 		Text("text here")
 	);
 	internal static string GetXml(bool format) => format ?
-		ReadSourceFile("./Tests/AllXmlNodes.Formatted.xml") : 
-		ReadSourceFile("./Tests/AllXmlNodes.Slim.xml");
-
-	private static string ReadSourceFile(string path)
-	{
-		using var fileStream = File.OpenRead(path);
-		using var streamReader = new StreamReader(fileStream);
-		return streamReader.ReadToEnd();
-	}
+		File.ReadAllText("./Tests/AllXmlNodes.Formatted.xml") :
+		File.ReadAllText("./Tests/AllXmlNodes.Slim.xml");
 }
