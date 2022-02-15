@@ -12,7 +12,7 @@ public sealed class JsonBuilderTests
 	[Theory,
 		Trait("Category", "IntegrationTest"), Trait("DataFormat", "JSON"),
 		InlineData(true), InlineData(false)]
-	public void AllElements_EqualsExpectedTextData(bool format)
+	public void AllObjects_EqualsExpectedTextData(bool format)
 	{
 		// Arrange
 		var expected = AllJsonNodes.GetJson(format);

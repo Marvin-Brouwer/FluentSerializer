@@ -22,7 +22,7 @@ public sealed class JsonValueTests
 	#region Parse
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
-	public void ParseJson_Valid_ReturnsElement()
+	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
 		var expected = Value("test");
@@ -41,7 +41,7 @@ public sealed class JsonValueTests
 		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
-	public void ParseJson_ValidWithWhiteSpace_ReturnsElement(string space)
+	public void ParseJson_ValidWithWhiteSpace_ReturnsObject(string space)
 	{
 		// Arrange
 		var expected = Value("true");
@@ -73,7 +73,7 @@ public sealed class JsonValueTests
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		InlineData(",", ""), InlineData("null,", null)]
-	public void ParseJson_Empty_ReturnsElement(string? input, string? expectedValue)
+	public void ParseJson_Empty_ReturnsObject(string? input, string? expectedValue)
 	{
 		// Arrange
 		var expected = Value(expectedValue);

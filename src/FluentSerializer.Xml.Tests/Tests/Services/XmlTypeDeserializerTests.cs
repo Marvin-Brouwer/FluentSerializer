@@ -108,6 +108,32 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void DeserializeFromNode_NonNullableValueIsEmpty_Throws()
+	{
+		// Arrange
+		var input = Element(nameof(TestClass));
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlElement);
+		var property = type.GetProperty(nameof(TestClass.Value));
+		_classMap
+			.WithBasicProppertyMapping(TestDirection, containerType, property!);
+		_scanList
+			.WithClassMap(type, _classMap);
+
+		var sut = new XmlTypeDeserializer(_scanList.Object);
+
+		// Act
+		var result = () => sut.DeserializeFromElement(input, type, _serializerMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ContainerNotFoundException>()
+			.Which.ContainerType.Should().Be(containerType);
+	}
+
+	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_NoPropertiesMapped_ReturnsEmptyNode()
 	{

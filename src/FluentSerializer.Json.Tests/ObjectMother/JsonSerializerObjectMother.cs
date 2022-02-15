@@ -8,8 +8,8 @@ namespace FluentSerializer.Json.Tests.ObjectMother;
 internal static class JsonSerializerObjectMother
 {
 	/// <summary>
-	/// Setup <see cref="IAdvancedJsonSerializer.SerializeToElement(in object?, in Type)"/>
-	/// to simply return the IJsonElement passed in.
+	/// Setup <see cref="IAdvancedJsonSerializer.SerializeToNode(in object?, in Type)"/>
+	/// to simply return the IJsonObject passed in.
 	/// </summary>
 	/// <param name="serializerMock"></param>
 	/// <returns></returns>
@@ -25,8 +25,8 @@ internal static class JsonSerializerObjectMother
 	}
 
 	/// <summary>
-	/// Setup <see cref="IAdvancedJsonSerializer.Deserialize(in IJsonElement, in Type)"/>
-	/// to simply return the IJsonElement passed in.
+	/// Setup <see cref="IAdvancedJsonSerializer.Deserialize(in IJsonObject, in Type)"/>
+	/// to simply return the IJsonObject passed in.
 	/// </summary>
 	/// <param name="serializerMock"></param>
 	/// <returns></returns>
