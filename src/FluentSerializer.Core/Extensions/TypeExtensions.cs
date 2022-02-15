@@ -60,7 +60,7 @@ public static class TypeExtensions
 		if (type.EqualsTopLevel(typeof(ArrayList))) return (IList)Activator.CreateInstance(type)!;
 		if (type.EqualsTopLevel(typeof(List<>))) return (IList)Activator.CreateInstance(type)!;
 
-		if (type.IsInterface && type.IsAssignableFrom(typeof(IEnumerable<>)))
+		if (type.IsInterface && typeof(IEnumerable).IsAssignableFrom(type))
 		{
 			var listType = typeof(List<>);
 			var genericType = type.GetTypeInfo().GenericTypeArguments;

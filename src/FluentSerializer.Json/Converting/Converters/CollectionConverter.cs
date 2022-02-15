@@ -81,7 +81,7 @@ public class CollectionConverter : IJsonConverter
 		foreach (var collectionItem in enumerableToSerialize)
 		{
 			if (collectionItem is null) continue;
-			var itemValue = serializer.SerializeToContainer<IJsonContainer>(collectionItem, collectionItem.GetType());
+			var itemValue = serializer.SerializeToContainer<IJsonContainer>(in collectionItem, collectionItem.GetType());
 			if (itemValue is not IJsonArrayContent arrayItem) continue;
 
 			yield return arrayItem;

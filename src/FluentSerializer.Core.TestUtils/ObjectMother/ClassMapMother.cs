@@ -58,6 +58,7 @@ namespace FluentSerializer.Core.TestUtils.ObjectMother
 				.WithBasicProppertyMapping(direction, containerType, targetProperty, assignedConverter);
 
 			return classMapMock
+				//.WithPropertyType(targetProperty.PropertyType)
 				.WithPropertyMaps(propertyMap.Object);
 		}
 	}

@@ -59,7 +59,10 @@ public readonly struct JsonValue : IJsonValue
 
 		// Append a '"' if it started with a '"'
 		if (stringValue) valueEndOffset++;
+
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+		if (Value.Equals(JsonCharacterConstants.NullValue, StringComparison.OrdinalIgnoreCase))
+			Value = null;
 	}
 
 	/// <inheritdoc />
