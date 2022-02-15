@@ -189,7 +189,7 @@ jobs:
         -noshadow;
 
         reportgenerator
-        -reports:"coverage.cobertura.xml"
+        -reports:"${{github.workspace}}/**/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:MarkdownSummary\;Html\;HtmlSummary\;Cobertura
         -verbosity: Verbose;
@@ -241,7 +241,7 @@ jobs:
         name: unit-test-coverage
         path: |
           ./test-results/coverage
-          ${{github.workspace}}/**/test-results/*/coverage.cobertura.xml
+          ${{github.workspace}}/**/test-results
         retention-days: 1
     ###
     # 🗃 Cancel after test failure
