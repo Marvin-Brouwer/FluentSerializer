@@ -179,12 +179,14 @@ jobs:
         --results-directory:"${{github.workspace}}/test-results"
         --filter:"Category=UnitTest"
         /p:CollectCoverage="true"
-        /p:CoverletOutputFormat="opencover"
+        /p:CoverletOutputFormat=opencover
         /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
         /p:MergeWith="${{github.workspace}}/test-results/coverage/"
         /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
         /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
+        "${{github.workspace}}/FluentSerializer.sln" --
+        -parallel all
+        -noshadow;
 
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
@@ -205,7 +207,8 @@ jobs:
         --logger:"GitHubActions"
         --filter:"Category=IntegrationTest"
         /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
+        "${{github.workspace}}/FluentSerializer.sln" --
+        -parallel all;
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run use-case tests
@@ -222,7 +225,8 @@ jobs:
         --logger:"GitHubActions"
         --filter:"Category=UseCase"
         /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
+        "${{github.workspace}}/FluentSerializer.sln" --
+        -parallel all;
       working-directory: ${{github.workspace}}
     ###
     # 🗃 Publish 'unit-test-coverage' artifacts
