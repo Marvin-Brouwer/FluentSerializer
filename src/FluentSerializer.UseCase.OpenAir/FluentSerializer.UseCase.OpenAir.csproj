@@ -27,7 +27,6 @@
 		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="6.5.1" />
 		<PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />

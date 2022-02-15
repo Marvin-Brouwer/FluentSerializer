@@ -32,10 +32,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.CodeAnalysis" Version="4.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\FluentSerializer.Core\FluentSerializer.Core.csproj" />
 		<ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
 	</ItemGroup>

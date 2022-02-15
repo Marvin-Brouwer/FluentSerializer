@@ -183,13 +183,14 @@ jobs:
         /p:CoverletOutputFormat=opencover
         /p:CoverletOutput="test-results/coverage/"
         /p:MergeWith="test-results/coverage/"
+        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln" --
         -parallel all
         -noshadow;
 
         reportgenerator
-        -reports:"${{github.workspace}}/**/test-results/*/coverage.cobertura.xml"
+        -reports:"${{github.workspace}}/**/test-results/*/coverage.*.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:MarkdownSummary\;Html\;HtmlSummary\;Cobertura
         -verbosity: Verbose;
