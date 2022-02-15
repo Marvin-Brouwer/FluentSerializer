@@ -51,6 +51,7 @@ jobs:
     # 🗃 Publish 'library-binaries' artifacts
     ###
     - name: 🗃 Publish 'library-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: library-binaries
@@ -62,11 +63,11 @@ jobs:
           !./src/*.Benchmark
           !./src/*.BenchmarkUtils
         retention-days: 1
-      if: ${{ always() }}
     ###
     # 🗃 Publish 'test-binaries' artifacts
     ###
     - name: 🗃 Publish 'test-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: test-binaries
@@ -77,11 +78,11 @@ jobs:
           ./src/*.TestUtils/bin/Release/*/*.*
           ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1
-      if: ${{ always() }}
     ###
     # 🗃 Publish 'benchmark-binaries' artifacts
     ###
     - name: 🗃 Publish 'benchmark-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: benchmark-binaries
@@ -92,7 +93,6 @@ jobs:
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
-      if: ${{ always() }}
 
   test:
 
@@ -212,12 +212,26 @@ jobs:
     # 🗃 Publish 'unit-test-coverage' artifacts
     ###
     - name: 🗃 Publish 'unit-test-coverage' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
-      if: ${{ always() }}
+    ###
+    # 🗃 Cancel after test
+    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
+    ###
+    - name: 🗃 Cancel after test
+      if: ${{ failure() }}
+      uses: actions/github-script@v4
+      with:
+          script: |
+              github.actions.cancelWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: context.runId
+              })
 
   benchmark:
 
