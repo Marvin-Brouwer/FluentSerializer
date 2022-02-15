@@ -182,7 +182,7 @@ jobs:
         /p:CoverletOutputFormat=opencover
         /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
         /p:MergeWith="${{github.workspace}}/test-results/coverage/"
-        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
+        /p:Exclude="[*Tests]*,[*TestUtils]*,[*UseCase*]*"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln" --
         -parallel all
