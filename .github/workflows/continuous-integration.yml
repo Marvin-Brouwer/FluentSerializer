@@ -189,9 +189,10 @@ jobs:
         -noshadow;
 
         reportgenerator
-        -reports:"${{github.workspace}}/**/test-results/*/coverage.cobertura.xml"
+        -reports:"coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
-        -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
+        -reporttypes:MarkdownSummary\;Html\;HtmlSummary\;Cobertura
+        -verbosity: Verbose;
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -238,7 +239,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: unit-test-coverage
-        path: ./test-results/coverage
+        path: |
+          ./test-results/coverage
+          ${{github.workspace}}/**/test-results/*/coverage.cobertura.xml
         retention-days: 1
     ###
     # 🗃 Cancel after test failure
