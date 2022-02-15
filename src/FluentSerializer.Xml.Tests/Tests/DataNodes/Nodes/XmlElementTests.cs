@@ -52,12 +52,12 @@ public sealed class XmlElementTests
 		var expectedEmptyPlain = Element(XmlElementName);
 		var expectedWithAttribute = Element(XmlElementName, Attribute("attribute", "test"), XmlElementValue);
 		var expectedEmptyWithAttribute = Element(XmlElementName, Attribute("attribute", "test"));
-		var input1 = $"<{space}Element{space}>{XmlElementValue}</{space}Element{space}>";
-		var input2 = $"<{space}Element{space}></{space}Element{space}>";
-		var input3 = $"<{space}Element{space}/>";
-		var input4 = $"<{space}Element{space}attribute=\"test\"{space}>{XmlElementValue}</{space}Element{space}>";
-		var input5 = $"<{space}Element{space}attribute=\"test\"{space}></{space}Element{space}>";
-		var input6 = $"<{space}Element{space}attribute=\"test\"{space}/>";
+		var input1 = $"<{space}Element{space}>{XmlElementValue}</{space}Element{space}>{space}";
+		var input2 = $"<{space}Element{space}></{space}Element{space}>{space}";
+		var input3 = $"<{space}Element{space}/>{space}";
+		var input4 = $"<{space}Element{space}attribute=\"test\"{space}>{XmlElementValue}</{space}Element{space}>{space}";
+		var input5 = $"<{space}Element{space}attribute=\"test\"{space}></{space}Element{space}>{space}";
+		var input6 = $"<{space}Element{space}attribute=\"test\"{space}/>{space}";
 
 		// Act
 		var offset1 = 0;

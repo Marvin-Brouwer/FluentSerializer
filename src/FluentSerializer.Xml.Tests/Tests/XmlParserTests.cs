@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Tests.Tests;
 public sealed class XmlParserTests
 {
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "IntegrationTest"), Trait("DataFormat", "XML"),
 		InlineData(true), InlineData(false)]
 	public void AllElements_EqualsExpectedInstanceTree(bool format)
 	{

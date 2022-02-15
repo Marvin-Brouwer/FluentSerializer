@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.TestUtils.ObjectMother;
 
-public static class SerializerContextExtensions
+public static class SerializerContextMother
 {
 	/// <summary>
 	/// Create a minimal context mock for testing

@@ -5,7 +5,7 @@ using Moq;
 
 namespace FluentSerializer.Xml.Tests.ObjectMother;
 
-internal static class SerializerContextExtensions
+internal static class SerializerContextMother
 {
 	/// <summary>
 	/// Make the <see cref="ISerializerContext.PropertyType"/> return type of <typeparamref name="TProperty"/>
