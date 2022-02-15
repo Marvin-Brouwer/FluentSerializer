@@ -177,19 +177,19 @@ jobs:
         --logger "trx;LogFileName=test-results.trx"
         --collect "DotnetCodeCoverage"
         --collect "XPlat Code coverage"
-        --results-directory:"${{github.workspace}}/test-results"
+        --results-directory:"test-results"
         --filter:"Category=UnitTest"
         /p:CollectCoverage="true"
         /p:CoverletOutputFormat=opencover
-        /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
-        /p:MergeWith="${{github.workspace}}/test-results/coverage/"
+        /p:CoverletOutput="test-results/coverage/"
+        /p:MergeWith="test-results/coverage/"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln" --
         -parallel all
         -noshadow;
 
         reportgenerator
-        -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
+        -reports:"${{github.workspace}}/**/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
       working-directory: ${{github.workspace}}
