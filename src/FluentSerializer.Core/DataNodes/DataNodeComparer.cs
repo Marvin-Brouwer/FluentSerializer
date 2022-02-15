@@ -100,6 +100,10 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	{
 		if (obj is null)
 			return 0;
+		if (obj is IDataValue value && value.Value is null)
+			return 0;
+		if (obj is string stringValue && stringValue is null)
+			return 0;
 		if (obj is IEnumerable<IEquatable<IDataNode>> equatableCollection)
 			return GetHashCodeFor(equatableCollection);
 		if (obj is IEquatable<IDataNode> equatable)

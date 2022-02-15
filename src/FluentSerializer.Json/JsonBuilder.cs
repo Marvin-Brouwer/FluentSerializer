@@ -13,14 +13,14 @@ public readonly struct JsonBuilder
 {
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <param name="properties">A parameters list of <see cref="IJsonObjectContent"/> as children of this object node.</param>
-	public static IJsonObject Object(params IJsonObjectContent[] properties) => new JsonObject(properties);
+	public static IJsonObject Object(params IJsonObjectContent[] properties) => new JsonObject(properties ?? new IJsonObjectContent[0]);
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <param name="properties">A collection of <see cref="IJsonObjectContent"/> as children of this object node.</param>
 	public static IJsonObject Object(in IEnumerable<IJsonObjectContent> properties) => new JsonObject(in properties);
 
 	/// <inheritdoc cref="IJsonArray"/>
 	/// <param name="elements">A parameters list of <see cref="IJsonArrayContent"/> as children of this array node.</param>
-	public static IJsonArray Array(params IJsonArrayContent[] elements) => new JsonArray(elements);
+	public static IJsonArray Array(params IJsonArrayContent[] elements) => new JsonArray(elements ?? new IJsonArrayContent[0]);
 	/// <inheritdoc cref="IJsonArray"/>
 	/// <param name="elements">A collection of <see cref="IJsonArrayContent"/> as children of this array node.</param>
 	public static IJsonArray Array(in IEnumerable<IJsonArrayContent> elements) => new JsonArray(in elements);
@@ -75,6 +75,7 @@ public readonly struct JsonBuilder
 	public static IJsonComment Comment(in string value)
 	{
 		Guard.Against.NullOrEmpty(value, nameof(value));
+		Guard.Against.InvalidFormat(value, nameof(value), @"^([^#\r\n]?.*)", "A single line comment cannot contain newline characters");
 
 		return new JsonCommentSingleLine(in value);
 	}

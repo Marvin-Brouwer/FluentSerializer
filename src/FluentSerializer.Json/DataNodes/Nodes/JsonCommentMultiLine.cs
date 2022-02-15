@@ -1,5 +1,4 @@
 using System;
-using Ardalis.GuardClauses;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
 using System.Diagnostics;
@@ -25,8 +24,6 @@ public readonly struct JsonCommentMultiLine : IJsonComment
 	/// </remarks>
 	public JsonCommentMultiLine(in string value)
 	{
-		Guard.Against.NullOrEmpty(value, nameof(value));
-
 		Value = value;
 	}
 

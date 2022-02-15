@@ -28,7 +28,7 @@ internal readonly struct AllJsonNodes
             )),
             Property("prop3", Value("1")),
             Property("prop4", Value("true")),
-            Property("prop5", Value("null"))
+            Property("prop5", Value(null))
         ))
     );
 
