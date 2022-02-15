@@ -16,8 +16,12 @@
 		<Version>1.0.0-alpha.0</Version>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<DefineConstants>TRACE;DEBUG</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>

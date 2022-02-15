@@ -9,7 +9,13 @@
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.default.ico</ApplicationIcon>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<DefineConstants>TRACE;DEBUG</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
