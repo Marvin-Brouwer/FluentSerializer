@@ -43,4 +43,13 @@
 		<ProjectReference Include="..\FluentSerializer.Json\FluentSerializer.Json.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Tests\AllJsonNodes.Formatted.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Tests\AllJsonNodes.Slim.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

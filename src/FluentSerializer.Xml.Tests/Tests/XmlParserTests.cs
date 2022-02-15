@@ -21,6 +21,6 @@ public sealed class XmlParserTests
 		var result = XmlParser.Parse(input);
 
 		// Assert
-		result.Should().BeEquatableTo(expected);
+		result.Should().BeEquatableTo(expected, format);
 	}
 }

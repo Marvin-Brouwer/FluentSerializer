@@ -17,14 +17,15 @@ public class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 	protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
 	public AndConstraint<NodeAssertions> BeEquatableTo(
-		IDataNode expectation, string because = "", params object[] becauseArgs)
+		IDataNode expectation, bool format = false, string because = "", params object[] becauseArgs)
 	{
 		Execute.Assertion
 			.BecauseOf(because, becauseArgs)
 			.Given(() => Subject.Equals(expectation))
 			.ForCondition(result => result)
 			.FailWith("Expected result to be {0}, but found {1}.",
-				_ => expectation.ToString(), _ => Subject.ToString());
+				_ => expectation.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0),
+				_ => Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0));
 
 		return new AndConstraint<NodeAssertions>(this);
 	}
