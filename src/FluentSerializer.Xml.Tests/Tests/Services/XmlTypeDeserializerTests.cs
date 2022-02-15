@@ -15,7 +15,7 @@ using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
-namespace FluentSerializer.Xml.Tests.Services;
+namespace FluentSerializer.Xml.Tests.Tests.Services;
 
 public sealed class XmlTypeDeserializerTests
 {
@@ -48,7 +48,7 @@ public sealed class XmlTypeDeserializerTests
 		var type = typeof(IEnumerable<int>);
 		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
 
-		var sut  = new XmlTypeDeserializer(in scanList);
+		var sut = new XmlTypeDeserializer(in scanList);
 
 		// Act
 		var result = () => sut.DeserializeFromElement(input, type, _serializerMock.Object);

@@ -10,7 +10,7 @@ namespace FluentSerializer.Xml.Tests.Tests;
 public sealed class XmlBuilderTests
 {
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "IntegrationTest"), Trait("DataFormat", "XML"),
 		InlineData(true), InlineData(false)]
 	public void AllElements_EqualsExpectedTextData(bool format)
 	{

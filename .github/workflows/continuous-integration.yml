@@ -192,6 +192,22 @@ jobs:
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
       working-directory: ${{github.workspace}}
     ###
+    # 🧪 Run integration tests
+    #
+    # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
+    ###
+    - name: 🧪 Run integration tests
+      run:  >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=IntegrationTest"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
+    ###
     # 🧪 Run use-case tests
     #
     # Run the unit tests of category `UseCase` to illustrate the library still works as intended.
