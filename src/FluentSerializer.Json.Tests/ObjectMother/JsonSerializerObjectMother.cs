@@ -13,14 +13,13 @@ internal static class JsonSerializerObjectMother
 	/// </summary>
 	/// <param name="serializerMock"></param>
 	/// <returns></returns>
-	internal static Mock<IAdvancedJsonSerializer> WithSerializeToContainer<TContainer>(
+	internal static Mock<IAdvancedJsonSerializer> WithSerializeToContainer(
 		this Mock<IAdvancedJsonSerializer> serializerMock)
-		where TContainer: IJsonContainer
 	{
 		serializerMock
 			.Setup(serializer => serializer
-				.SerializeToContainer<TContainer>(in It.Ref<object?>.IsAny, in It.Ref<Type>.IsAny))
-			.Returns((object? element, Type _) => (TContainer?)element);
+				.SerializeToContainer<IJsonContainer>(in It.Ref<object?>.IsAny, in It.Ref<Type>.IsAny))
+			.Returns((object? element, Type _) => element as IJsonContainer);
 
 		return serializerMock;
 	}
