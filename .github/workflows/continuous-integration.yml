@@ -171,6 +171,7 @@ jobs:
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
+        --framework="net6.0"
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
         --logger "trx;LogFileName=test-results.trx"
@@ -202,6 +203,7 @@ jobs:
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
+        --framework="net6.0"
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
         --filter:"Category=IntegrationTest"
@@ -220,6 +222,7 @@ jobs:
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
+        --framework="net6.0"
         --logger:"console;verbosity=detailed"
         --logger:"GitHubActions"
         --filter:"Category=UseCase"
