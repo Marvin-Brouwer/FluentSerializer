@@ -219,10 +219,10 @@ jobs:
         path: ./test-results/coverage
         retention-days: 1
     ###
-    # 🗃 Cancel after test
+    # 🗃 Cancel after test failure
     # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
     ###
-    - name: 🗃 Cancel after test
+    - name: 🗃 Cancel after test failure
       if: ${{ failure() }}
       uses: actions/github-script@v4
       with:
@@ -325,10 +325,10 @@ jobs:
         path: ${{github.workspace}}/benchmark-results
         retention-days: 1
     ###
-    # 🗃 Cancel after benchmark
+    # 🗃 Cancel after benchmark failure
     # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
     ###
-    - name: 🗃 Cancel after benchmark
+    - name: 🗃 Cancel after benchmark failure
       if: ${{ failure() }}
       uses: actions/github-script@v4
       with:

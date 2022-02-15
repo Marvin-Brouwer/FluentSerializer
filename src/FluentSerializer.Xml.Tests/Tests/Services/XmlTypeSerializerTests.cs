@@ -17,15 +17,15 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.Services;
 
-public sealed class XmlTypeDeserializerTests
+public sealed class XmlTypeSerializerTests
 {
-	private const SerializerDirection TestDirection = SerializerDirection.Deserialize;
+	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
 	private readonly Mock<IAdvancedXmlSerializer> _serializerMock;
 	private readonly Mock<IClassMapScanList<XmlSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
-	public XmlTypeDeserializerTests()
+	public XmlTypeSerializerTests()
 	{
 		_serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
@@ -40,18 +40,18 @@ public sealed class XmlTypeDeserializerTests
 	/// </summary>
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_TypeIsEnumerable_Throws()
+	public void SerializeToElement_TypeIsEnumerable_Throws()
 	{
 		// Arrange
-		var input = Element("PlaceHolder");
+		var input = new List<int>();
 
 		var type = typeof(IEnumerable<int>);
 		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
 
-		var sut  = new XmlTypeDeserializer(in scanList);
+		var sut  = new XmlTypeSerializer(in scanList);
 
 		// Act
-		var result = () => sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should()
@@ -60,22 +60,22 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	/// <summary>
-	/// We need a profile to deserialize
+	/// We need a profile to serialize
 	/// </summary>
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_TypeIsNotRegistered_Throws()
+	public void SerializeToElement_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
-		var input = Element("PlaceHolder");
+		var input = new TestClass();
 
 		var type = typeof(TestClass);
 		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
 
-		var sut = new XmlTypeDeserializer(in scanList);
+		var sut = new XmlTypeSerializer(in scanList);
 
 		// Act
-		var result = () => sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should()
@@ -83,57 +83,39 @@ public sealed class XmlTypeDeserializerTests
 			.Which.TargetType.Should().Be(type);
 	}
 
-	/// <summary>
-	/// We need a node to get values
-	/// </summary>
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_NodeIsNotPresent_Throws()
+	public void SerializeToElement_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
-		var type = typeof(TestClass);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeDeserializer(_scanList.Object);
-
-		// Act
-		var result = () => sut.DeserializeFromElement(
-			Element("IncorrectName"), type, _serializerMock.Object);
-
-		// Assert
-		result.Should()
-			.ThrowExactly<MissingNodeException>()
-			.Which.AttemptedType.Should().Be(type);
-	}
-
-	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_NoPropertiesMapped_ReturnsEmptyNode()
-	{
-		// Arrange
-		var input = Element(nameof(TestClass));
+		var expected = Element(nameof(TestClass));
+		var input = new TestClass
+		{
+			Value = "Never used"
+		};
 
 		var type = typeof(TestClass);
 		_scanList
 			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
-		result.Should().NotBeNull();
-		result.Should().BeOfType(type);
+		result.Should().BeEquivalentTo(expected);
 	}
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_InvalidPropertyMapping_Throws()
+	public void SerializeToElement_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
-		var input = Element(nameof(TestClass));
+		var input = new TestClass
+		{
+			Value = "Never used"
+		};
 		var type = typeof(TestClass);
 
 		// Any arbitrary type here
@@ -144,10 +126,10 @@ public sealed class XmlTypeDeserializerTests
 		_scanList
 			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should()
@@ -157,16 +139,16 @@ public sealed class XmlTypeDeserializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromElement_ElementPropertyMapping_ReturnsValue()
+	public void SerializeToElement_ElementPropertyMapping_ReturnsValue()
 	{
 		// Arrange
-		var expected = new TestClass
+		var expected = Element(nameof(TestClass),
+			Element(nameof(TestClass.Value), Text("test"))
+		);
+		var input = new TestClass
 		{
 			Value = "test"
 		};
-		var input = Element(nameof(TestClass),
-			Element(nameof(TestClass.Value), Text("test"))
-		);
 
 		var type = typeof(TestClass);
 		var containerType = typeof(IXmlElement);
@@ -176,10 +158,10 @@ public sealed class XmlTypeDeserializerTests
 		_scanList
 			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -187,16 +169,16 @@ public sealed class XmlTypeDeserializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromAttribute_AttributePropertyMapping_ReturnsValue()
+	public void SerializeFromAttribute_AttributePropertyMapping_ReturnsValue()
 	{
 		// Arrange
-		var expected = new TestClass
+		var expected = Element(nameof(TestClass),
+			Attribute(nameof(TestClass.Value), "test")
+		);
+		var input = new TestClass
 		{
 			Value = "test"
 		};
-		var input = Element(nameof(TestClass),
-			Attribute(nameof(TestClass.Value), "test")
-		);
 
 		var type = typeof(TestClass);
 		var containerType = typeof(IXmlAttribute);
@@ -206,10 +188,10 @@ public sealed class XmlTypeDeserializerTests
 		_scanList
 			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -217,16 +199,16 @@ public sealed class XmlTypeDeserializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void DeserializeFromText_TextPropertyMapping_ReturnsValue()
+	public void SerializeFromText_TextPropertyMapping_ReturnsValue()
 	{
 		// Arrange
-		var expected = new TestClass
+		var expected = Element(nameof(TestClass),
+			Text("test")
+		);
+		var input = new TestClass
 		{
 			Value = "test"
 		};
-		var input = Element(nameof(TestClass),
-			Text("test")
-		);
 
 		var type = typeof(TestClass);
 		var containerType = typeof(IXmlText);
@@ -236,10 +218,10 @@ public sealed class XmlTypeDeserializerTests
 		_scanList
 			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
