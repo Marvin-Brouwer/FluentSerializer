@@ -240,7 +240,7 @@ jobs:
     ###
     - name: 🗃 Cancel after test failure
       if: ${{ failure() }}
-      uses: actions/github-script@v4
+      uses: actions/github-script@v6
       with:
           script: |
               github.actions.cancelWorkflowRun({
@@ -346,7 +346,7 @@ jobs:
     ###
     - name: 🗃 Cancel after benchmark failure
       if: ${{ failure() }}
-      uses: actions/github-script@v4
+      uses: actions/github-script@v6
       with:
           script: |
               github.actions.cancelWorkflowRun({
