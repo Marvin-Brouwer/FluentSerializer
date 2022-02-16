@@ -180,7 +180,7 @@ jobs:
         --results-directory:"test-results"
         --filter:"Category=UnitTest"
         /p:CollectCoverage="true"
-        /p:CoverletOutputFormat="opencover,lcov,cobertura"
+        /p:CoverletOutputFormat="opencover,cobertura"
         /p:CoverletOutput="test-results/coverage/"
         /p:MergeWith="test-results/coverage/"
         /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
