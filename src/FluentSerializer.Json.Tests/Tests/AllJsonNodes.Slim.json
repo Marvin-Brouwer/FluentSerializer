@@ -1,0 +1,3 @@
+{/* object level comment *//* object level comment
+With a new line */"prop":"Test","prop2":{"array":[/* array level comment *//* array level comment
+With a new line */{},[]],"prop3":1,"prop4":true,"prop5":null}}

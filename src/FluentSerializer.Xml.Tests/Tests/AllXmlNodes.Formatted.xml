@@ -1,0 +1,9 @@
+<Class
+ someAttribute="1">
+	<!-- Comment -->
+	<![CDATA[<p>some xml data here</p>]]>
+	<someProperty>
+		<AnotherClass />
+	</someProperty>
+	text here
+</Class>

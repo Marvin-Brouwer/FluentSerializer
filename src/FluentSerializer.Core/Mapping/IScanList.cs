@@ -9,6 +9,7 @@ namespace FluentSerializer.Core.Mapping;
 /// <typeparam name="TScanBy">The type of object required by the scan logic</typeparam>
 /// <typeparam name="TScanFor">The collection to store</typeparam>
 public interface IScanList<TScanBy, out TScanFor> : IReadOnlyList<TScanFor>
+	where TScanBy : notnull
 	where TScanFor : class
 {
 	/// <summary>

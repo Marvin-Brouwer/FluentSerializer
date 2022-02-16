@@ -18,6 +18,8 @@ jobs:
     ###
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        lfs: true
     ###
     # 🧰 Setup .Net
     #
@@ -27,7 +29,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -44,11 +46,12 @@ jobs:
     # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release" 
+      run: dotnet build --no-restore --nologo --configuration "Release"
     ###
     # 🗃 Publish 'library-binaries' artifacts
     ###
     - name: 🗃 Publish 'library-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: library-binaries
@@ -60,25 +63,26 @@ jobs:
           !./src/*.Benchmark
           !./src/*.BenchmarkUtils
         retention-days: 1
-      if: ${{ always() }}
     ###
     # 🗃 Publish 'test-binaries' artifacts
     ###
     - name: 🗃 Publish 'test-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: test-binaries
         path: |
           ./src/**/obj/Release/*/*.*
           ./src/*.Tests/bin/Release/*/*.*
+          ./src/*.Tests/bin/Release/*/Tests/**/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
           ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1
-      if: ${{ always() }}
     ###
     # 🗃 Publish 'benchmark-binaries' artifacts
     ###
     - name: 🗃 Publish 'benchmark-binaries' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: benchmark-binaries
@@ -89,7 +93,6 @@ jobs:
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
-      if: ${{ always() }}
 
   test:
 
@@ -111,7 +114,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -142,22 +145,22 @@ jobs:
         path: ./src
     ###
     # 🗃 Restore 'test-binaries'
-    ###   
+    ###
     - name: 🗃 Restore 'test-binaries'
       uses: actions/download-artifact@v2
       with:
         name: test-binaries
-        path: ./src  
+        path: ./src
     ###
     # 🗃 Restore 'benchmark-binaries'
     #
-    # Because `dotnet test` tries to load all csproj files, we need these dlls. 
+    # Because `dotnet test` tries to load all csproj files, we need these dlls.
     ###
     - name: 🗃 Restore 'benchmark-binaries'
       uses: actions/download-artifact@v2
       with:
         name: benchmark-binaries
-        path: ./src   
+        path: ./src
     ###
     # 🧪 Run unit tests
     #
@@ -182,12 +185,28 @@ jobs:
         /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln";
-        
+
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
-      working-directory: ${{github.workspace}} 
+      working-directory: ${{github.workspace}}
+    ###
+    # 🧪 Run integration tests
+    #
+    # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
+    ###
+    - name: 🧪 Run integration tests
+      run:  >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=IntegrationTest"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
     ###
     # 🧪 Run use-case tests
     #
@@ -195,7 +214,7 @@ jobs:
     # This is basically a kind of integration test.
     ###
     - name: 🧪 Run use-case tests
-      run:  >- 
+      run:  >-
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -209,12 +228,26 @@ jobs:
     # 🗃 Publish 'unit-test-coverage' artifacts
     ###
     - name: 🗃 Publish 'unit-test-coverage' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
-      if: ${{ always() }}
+    ###
+    # 🗃 Cancel after test failure
+    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
+    ###
+    - name: 🗃 Cancel after test failure
+      if: ${{ failure() }}
+      uses: actions/github-script@v4
+      with:
+          script: |
+              github.actions.cancelWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: context.runId
+              })
 
   benchmark:
 
@@ -236,7 +269,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         include-prerelease: true
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
           5.0.x
           6.0.x
@@ -262,7 +295,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: benchmark-binaries
-        path: ./src  
+        path: ./src
     ###
     # ⏱ Benchmark XML serializer
     #
@@ -270,9 +303,9 @@ jobs:
     ###
     - name: ⏱ Benchmark XML serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark 
-        sudo ./net5.0/FluentSerializer.Xml.Benchmark 
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate 
+        sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
+        sudo ./net5.0/FluentSerializer.Xml.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # ⏱ Benchmark JSON serializer
@@ -281,14 +314,15 @@ jobs:
     ###
     - name: ⏱ Benchmark JSON serializer
       run: |-
-        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark 
-        sudo ./net5.0/FluentSerializer.Json.Benchmark 
-        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate 
+        sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
+        sudo ./net5.0/FluentSerializer.Json.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
     ###
     - name: 🗃 Collect benchmark reports
+      if: ${{ always() }}
       run: |-
         sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
@@ -296,14 +330,27 @@ jobs:
         cd ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
         sudo mv ./json-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
-      if: ${{ always() }}
     ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: benchmark-results
         path: ${{github.workspace}}/benchmark-results
         retention-days: 1
-      if: ${{ always() }}
+    ###
+    # 🗃 Cancel after benchmark failure
+    # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
+    ###
+    - name: 🗃 Cancel after benchmark failure
+      if: ${{ failure() }}
+      uses: actions/github-script@v4
+      with:
+          script: |
+              github.actions.cancelWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: context.runId
+              })
