@@ -55,13 +55,13 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	public int Count => _storedDataTypes.Count;
 
 	/// <inheritdoc />
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public IEnumerator<TScanFor> GetEnumerator() => _storedDataTypes.GetEnumerator();
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

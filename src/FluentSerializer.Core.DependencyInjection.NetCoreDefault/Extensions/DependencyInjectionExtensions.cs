@@ -54,7 +54,7 @@ public static class DependencyInjectionExtensions
 		return serviceCollection;
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,7 +67,7 @@ public static class DependencyInjectionExtensions
 		return false;
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -14,7 +14,7 @@ public static class TextWriterExtensions
 	/// <summary>
 	/// Append this node's text content to the current text
 	/// </summary>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,7 +30,7 @@ public static class TextWriterExtensions
 	/// <remarks>
 	/// This is mainly useful for chaining calls
 	/// </remarks>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,7 +49,7 @@ public static class TextWriterExtensions
 	/// <remarks>
 	/// This is mainly useful for chaining calls
 	/// </remarks>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,7 +65,7 @@ public static class TextWriterExtensions
 	/// <summary>
 	/// ToString override by extension method because readonly structs don't support base classes
 	/// </summary>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

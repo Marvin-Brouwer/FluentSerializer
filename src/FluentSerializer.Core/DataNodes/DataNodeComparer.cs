@@ -33,7 +33,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	/// If null this will append 0 to the hashcode calculation
 	/// If none of the above the objects <see cref="object.GetHashCode"/> will be added to the hashcode calculation.
 	/// </summary>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -48,7 +48,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,7 +59,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +75,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	}
 
 	/// <inheritdoc cref="GetHashCodeForAll(object?[])"/>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +91,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 		return hashCode.ToHashCode();
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -113,14 +113,14 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 		return obj.GetHashCode();
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	private int GetHashCodeFor(in IEquatable<IDataNode>? equatable) => equatable is null ? 0 : GetHashCode(equatable);
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

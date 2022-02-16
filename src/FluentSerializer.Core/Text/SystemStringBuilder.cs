@@ -19,7 +19,7 @@ namespace FluentSerializer.Core.Text
 			StringBuilder = stringBuilder;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,7 +30,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +41,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,7 +67,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,7 +78,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -89,7 +89,7 @@ namespace FluentSerializer.Core.Text
 			return this;
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace FluentSerializer.Core.Text
 		}
 
 		#region DirectByteAccess
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -113,7 +113,7 @@ namespace FluentSerializer.Core.Text
 			return TextConfiguration.Encoding.GetBytes(bytes);
 		}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -121,7 +121,7 @@ namespace FluentSerializer.Core.Text
 		public Span<byte> AsSpan() => GetBytes()
 			.AsSpan(0, StringBuilder.Length);
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
