@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;

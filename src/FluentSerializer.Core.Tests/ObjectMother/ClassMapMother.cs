@@ -6,7 +6,7 @@ using Moq;
 using System;
 using System.Reflection;
 
-namespace FluentSerializer.Core.TestUtils.ObjectMother
+namespace FluentSerializer.Core.Tests.ObjectMother
 {
 	public static class ClassMapMother
 	{

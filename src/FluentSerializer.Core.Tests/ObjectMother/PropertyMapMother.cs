@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace FluentSerializer.Core.TestUtils.ObjectMother
+namespace FluentSerializer.Core.Tests.ObjectMother
 {
 	public static class PropertyMapMother
 	{
@@ -20,7 +20,7 @@ namespace FluentSerializer.Core.TestUtils.ObjectMother
 		{
 			propertyMapMock
 				.Setup(propertyMap => propertyMap.GetEnumerator())
-				.Returns(new List<IPropertyMap> (0).GetEnumerator());
+				.Returns(new List<IPropertyMap>(0).GetEnumerator());
 			propertyMapMock
 				.Setup(propertyMap => propertyMap.Scan(It.IsAny<PropertyInfo>()))
 				.Returns((IPropertyMap?)null);

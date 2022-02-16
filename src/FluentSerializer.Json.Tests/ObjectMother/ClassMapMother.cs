@@ -1,6 +1,6 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using Moq;
 using System;
 using System.Reflection;
@@ -15,7 +15,7 @@ namespace FluentSerializer.Json.Tests.ObjectMother
 		/// This mapping has a custom converter of <see cref="ConvertibleConverter"/> because that makes mocking a lot easier,
 		/// the part where the serializer looks up a matching converter can be tested in isolation.
 		/// </remarks>
-		/// <inheritdoc cref="Core.TestUtils.ObjectMother.ClassMapMother.WithBasicProppertyMapping"/>
+		/// <inheritdoc cref="Core.Tests.ObjectMother.ClassMapMother.WithBasicProppertyMapping"/>
 		public static Mock<IClassMap> WithBasicProppertyMapping(
 			this Mock<IClassMap> classMapMock,
 			SerializerDirection direction, Type containerType, PropertyInfo targetProperty)
