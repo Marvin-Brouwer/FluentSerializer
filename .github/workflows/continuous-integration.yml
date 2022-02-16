@@ -180,14 +180,15 @@ jobs:
         --results-directory:"test-results"
         --filter:"Category=UnitTest"
         /p:CollectCoverage="true"
-        /p:CoverletOutputFormat="opencover,cobertura"
+        /p:CoverletOutputFormat=cobertura
         /p:CoverletOutput="test-results/coverage/"
         /p:MergeWith="test-results/coverage/"
         /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln" --
         -parallel all
-        -noshadow;
+        -noshadow
+        DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura;
 
         reportgenerator
         -reports:"${{github.workspace}}/**/test-results/*/coverage.*.xml"
