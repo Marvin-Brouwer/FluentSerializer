@@ -1,7 +1,4 @@
-using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.Configuration;
-using System;
-using System.Diagnostics;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 

@@ -6,7 +6,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using System.Reflection;
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
-using System.Security.Permissions;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
@@ -105,7 +104,8 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 		}
 
 #if (!NET6_0_OR_GREATER)
-		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+		[System.Security.Permissions.PrincipalPermission(
+			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
 		public static void Run(Assembly assembly, string[] arguments, string dataType)
 		{

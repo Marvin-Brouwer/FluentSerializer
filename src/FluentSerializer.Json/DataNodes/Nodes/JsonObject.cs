@@ -1,11 +1,9 @@
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
-using FluentSerializer.Json.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FluentSerializer.Core.Text;
+using System.Linq;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -23,15 +21,17 @@ public readonly partial struct JsonObject : IJsonObject
 	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
 
-	/// <inheritdoc cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/>
+	/// <inheritdoc cref="object"/>
 	/// <remarks>
-	/// <b>Please use <see cref="JsonBuilder.Object(in IEnumerable{IJsonObjectContent})"/> method instead of this constructor</b>
+	/// <b>Please use <see cref="object"/> method instead of this constructor</b>
 	/// </remarks>
 	public JsonObject(in IEnumerable<IJsonObjectContent>? properties)
 	{
 		_lastPropertyIndex = null;
 
-		if (properties is null)
+		if (properties is null
+		    || properties.Equals(Enumerable.Empty<IJsonObjectContent>())
+		    || properties.Equals(Array.Empty<IJsonObjectContent>()))
 		{
 			_children = new List<IJsonNode>(0);
 		}

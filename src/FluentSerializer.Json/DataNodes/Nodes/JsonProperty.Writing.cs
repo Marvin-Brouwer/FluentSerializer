@@ -1,11 +1,6 @@
-using System;
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Configuration;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
@@ -24,7 +19,7 @@ public readonly partial struct JsonProperty
 
 		if (!writeNull && !HasValue) return stringBuilder;
 
-		var childValue = Children.FirstOrDefault();
+		var childValue = Children[0];
 
 		stringBuilder
 			.Append(JsonCharacterConstants.PropertyWrapCharacter)

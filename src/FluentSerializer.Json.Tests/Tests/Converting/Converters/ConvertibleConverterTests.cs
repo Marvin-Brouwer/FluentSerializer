@@ -4,7 +4,6 @@ using FluentSerializer.Core.TestUtils.ObjectMother;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
-using FluentSerializer.Json.Tests.ObjectMother;
 using Moq;
 using System;
 using System.Collections.Generic;

@@ -1,11 +1,7 @@
 using System;
-using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Json.Configuration;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Core.Text;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -30,7 +26,9 @@ public readonly partial struct JsonArray : IJsonArray
 	{
 		_lastNonCommentChildIndex = null;
 
-		if (elements is null || elements.Equals(Enumerable.Empty<IJsonArrayContent>()))
+		if (elements is null
+		    || elements.Equals(Enumerable.Empty<IJsonArrayContent>())
+		    || elements.Equals(Array.Empty<IJsonArrayContent>()))
 		{
 			_children = new List<IJsonNode>(0);
 		}
