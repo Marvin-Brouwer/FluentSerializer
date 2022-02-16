@@ -88,8 +88,8 @@ jobs:
         name: benchmark-binaries
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
-          ./src/*.Benchmark/bin/Release/*/ref/*.*
-          ./src/*.Benchmark/obj/Release/*/apphost
+          ./src/*/bin/Release/*/ref/*.*
+          ./src/*/obj/Release/*/apphost
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
@@ -304,7 +304,7 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net5.0/FluentSerializer.Xml.Benchmark
+        sudo ./net6.0/FluentSerializer.Xml.Benchmark
         sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
@@ -315,7 +315,7 @@ jobs:
     - name: ⏱ Benchmark JSON serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
-        sudo ./net5.0/FluentSerializer.Json.Benchmark
+        sudo ./net6.0/FluentSerializer.Json.Benchmark
         sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
