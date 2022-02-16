@@ -194,6 +194,8 @@ jobs:
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;HtmlInline\;Cobertura
         -verbosity: Verbose;
+
+        tree /a ${{github.workspace}} > ${{github.workspace}}/tree.txt
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -243,6 +245,7 @@ jobs:
         path: |
           ./test-results/coverage
           ${{github.workspace}}/**/test-results
+          ${{github.workspace}}/tree.txt
         retention-days: 1
     ###
     # 🗃 Cancel after test failure
