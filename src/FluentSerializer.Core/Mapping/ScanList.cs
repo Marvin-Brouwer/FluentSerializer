@@ -1,7 +1,6 @@
 using Ardalis.GuardClauses;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Mapping;
@@ -20,7 +19,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
-		Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Any());
+		Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Count > 0);
 
 		_storedDataTypes = dataTypes;
 	}
@@ -33,7 +32,13 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 		if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
 #endif
 
-		var matchingType = _storedDataTypes.FirstOrDefault(dataType => Compare(key, dataType));
+		var matchingType = (TScanFor?)null;
+		foreach(var dataType in _storedDataTypes)
+		{
+			if (!Compare(key, dataType)) continue;
+			matchingType = dataType;
+		}
+
 #if (!DEBUG)
 		_cachedMappings[key] = matchingType;
 #endif
