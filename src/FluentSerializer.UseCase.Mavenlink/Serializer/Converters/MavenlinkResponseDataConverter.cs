@@ -87,7 +87,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 				// This will skip comments
 				if (item is not IJsonContainer container) continue;
 
-				var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType);
+				var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType, context);
 				if (itemValue is null) continue;
 
 				instance.Add(itemValue);

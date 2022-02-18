@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.DataNodes;
 using System.Collections.Generic;
 
 using static FluentSerializer.Xml.XmlBuilder;

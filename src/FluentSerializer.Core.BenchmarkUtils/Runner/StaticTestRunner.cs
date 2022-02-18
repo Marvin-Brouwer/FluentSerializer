@@ -104,7 +104,8 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 		}
 
 #if (!NET6_0_OR_GREATER)
-		[PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+		[System.Security.Permissions.PrincipalPermission(
+			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
 		public static void Run(Assembly assembly, string[] arguments, string dataType)
 		{

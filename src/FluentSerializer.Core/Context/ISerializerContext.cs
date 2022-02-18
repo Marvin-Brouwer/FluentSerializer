@@ -1,6 +1,9 @@
 using FluentSerializer.Core.Services;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -9,7 +12,7 @@ namespace FluentSerializer.Core.Context;
 /// <summary>
 /// Current context for serializing data
 /// </summary>
-public interface ISerializerContext : INamingContext
+public interface ISerializerContext : ISerializerCoreContext, INamingContext
 {
 	/// <summary>
 	/// The original propertyInfo used to define this mapping
@@ -38,11 +41,6 @@ public interface ISerializerContext : INamingContext
 	INamingStrategy NamingStrategy { get; }
 
 	/// <summary>
-	/// The current serializer being used
-	/// </summary>
-	ISerializer CurrentSerializer { get; }
-
-	/// <summary>
 	/// Find the <see cref="INamingStrategy"/>  for any property of the current <see cref="ClassType"/> if registered
 	/// This can be useful when unpacking collections to a different data structure
 	/// </summary>
@@ -54,10 +52,12 @@ public interface ISerializerContext : INamingContext
 /// <summary>
 /// Current context for serializing data
 /// </summary>
-public interface ISerializerContext<TDataNode> : ISerializerContext where TDataNode : IDataNode
+public interface ISerializerContext<out TDataNode> : ISerializerContext, ISerializerCoreContext<TDataNode>
+	where TDataNode : IDataNode
 {
+
 	/// <summary>
 	/// Get the parent node
 	/// </summary>
-	public TDataNode? ParentNode { get; }
+	TDataNode? ParentNode { get; }
 }

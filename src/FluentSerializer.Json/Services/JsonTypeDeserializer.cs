@@ -17,6 +17,7 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeDeserializer
 {
+	// todo rootnode xml
 	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
 
 	/// <inheritdoc cref="JsonTypeDeserializer" />
@@ -30,14 +31,14 @@ public sealed class JsonTypeDeserializer
 	/// <summary>
 	/// Deserialize an <see cref="IJsonNode"/> to the requested object type
 	/// </summary>
-	public TModel? DeserializeFromNode<TModel>(in IJsonNode dataObject, in IJsonSerializer currentSerializer)
+	public TModel? DeserializeFromNode<TModel>(in IJsonNode dataObject, in ISerializerCoreContext<IJsonNode> coreContext)
 		where TModel : new()
 	{
 		Guard.Against.Null(dataObject, nameof(dataObject));
-		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+		Guard.Against.Null(coreContext, nameof(coreContext));
 
 		var classType = typeof(TModel);
-		var deserializedInstance = DeserializeFromNode(in dataObject, in classType, in currentSerializer);
+		var deserializedInstance = DeserializeFromNode(in dataObject, in classType, in coreContext);
 		if (deserializedInstance is null) return default;
 
 		return (TModel)deserializedInstance;
@@ -46,19 +47,21 @@ public sealed class JsonTypeDeserializer
 	/// <summary>
 	/// Deserialize an <see cref="IJsonNode"/> to the requested object type
 	/// </summary>
-	public object? DeserializeFromNode(in IJsonNode dataObject, in Type classType,  in IJsonSerializer currentSerializer)
+	public object? DeserializeFromNode(in IJsonNode dataObject, in Type classType, in ISerializerCoreContext<IJsonNode> coreContext)
 	{
 		Guard.Against.Null(dataObject, nameof(dataObject));
 		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+		Guard.Against.Null(coreContext, nameof(coreContext));
 
+		var currentCoreContext = coreContext.WithPathSegment(classType);
 		if (typeof(IEnumerable).IsAssignableFrom(classType))
 		{
 			// The way this works loses the parent context when deserializing collections.
 			// Currently, there is no reason to support this and since it'll cause a parent to be passed around
 			// through the serializer method chain we figured we skip this feature.
 			if (dataObject is not IJsonArray array) throw new ContainerNotSupportedException(in classType);
-			return CollectionConverter.DeserializeCollection(in array, in classType, currentSerializer);
+			return CollectionConverter.DeserializeCollection(in array, in classType,
+				currentCoreContext.WithPathSegment(typeof(IEnumerable)));
 		}
 		if (dataObject is not IJsonObject jsonObject) throw new ContainerNotSupportedException(in classType);
 
@@ -66,14 +69,16 @@ public sealed class JsonTypeDeserializer
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		if (classType == typeof(string)) return dataObject.ToString();
-			
+		
 		var instance = Activator.CreateInstance(classType)!;
 		foreach (var propertyMapping in classMap.PropertyMaps)
 		{
+			if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
+
 			var realPropertyInfo = classType.GetProperty(propertyMapping.Property.Name)!;
 			var serializerContext = new SerializerContext<IJsonNode>(
+				currentCoreContext.WithPathSegment(propertyMapping.Property),
 				in realPropertyInfo, realPropertyInfo.PropertyType, in classType, propertyMapping.NamingStrategy, 
-				currentSerializer,
 				classMap.PropertyMaps, _mappings)
 			{
 				ParentNode = dataObject
@@ -81,9 +86,8 @@ public sealed class JsonTypeDeserializer
 			
 			var concretePropertyType = Nullable.GetUnderlyingType(realPropertyInfo.PropertyType) ?? realPropertyInfo.PropertyType;
 			var propertyName = propertyMapping.NamingStrategy.SafeGetName(in realPropertyInfo, in concretePropertyType, serializerContext);
-			if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
-
-			DeserializeProperty(in jsonObject, in propertyName, in propertyMapping, in instance, in currentSerializer, in serializerContext);
+			
+			DeserializeProperty(in jsonObject, in propertyName, in propertyMapping, in instance, in serializerContext);
 		}
 
 		return instance;
@@ -91,22 +95,21 @@ public sealed class JsonTypeDeserializer
 
 	private void DeserializeProperty(
 		in IJsonObject dataObject, in string propertyName, in IPropertyMap propertyMapping, in object instance, 
-		in IJsonSerializer currentSerializer, in SerializerContext<IJsonNode> serializerContext)
+		in SerializerContext<IJsonNode> serializerContext)
 	{
 		if (propertyMapping.ContainerType == typeof(IJsonProperty))
 		{
 			var jsonProperty = dataObject.GetProperty(in propertyName);
 			var propertyValue = jsonProperty?.Value;
-			DeserializeJsonNode(in propertyValue, in propertyName, in propertyMapping, in instance, in currentSerializer, in serializerContext);
+			DeserializeJsonNode(in propertyValue, in propertyName, in propertyMapping, in instance, serializerContext);
 			return;
 		}
-
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
 	}
 
 	private void DeserializeJsonNode(
 		in IJsonNode? propertyValue, in string propertyName, in IPropertyMap propertyMapping, in object instance, 
-		in IJsonSerializer currentSerializer, in SerializerContext<IJsonNode> serializerContext)
+		in SerializerContext<IJsonNode> serializerContext)
 	{
 		var empty = propertyValue is null || propertyValue is IJsonValue jsonValue && string.IsNullOrEmpty(jsonValue.Value);
 		// Collections may be empty
@@ -120,10 +123,10 @@ public sealed class JsonTypeDeserializer
 			return;
 		}
 
-		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(SerializerDirection.Deserialize, currentSerializer);
+		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(SerializerDirection.Deserialize, serializerContext.CurrentSerializer);
 		if (matchingConverter is null)
 		{
-			var deserializedInstance = DeserializeFromNode(in propertyValue!, propertyMapping.Property.PropertyType, in currentSerializer);
+			var deserializedInstance = DeserializeFromNode(in propertyValue!, propertyMapping.Property.PropertyType, serializerContext);
 			if (deserializedInstance is null && !propertyMapping.Property.IsNullable())
 				throw new NullValueNotAllowedException(propertyMapping.Property.PropertyType, in propertyName);
 

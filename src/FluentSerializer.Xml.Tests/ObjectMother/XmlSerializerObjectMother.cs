@@ -2,6 +2,7 @@ using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
 using Moq;
 using System;
+using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Xml.Tests.ObjectMother;
 
@@ -35,7 +36,8 @@ internal static class XmlSerializerObjectMother
 	{
 		serializerMock
 			.Setup(serializer => serializer
-				.Deserialize(in It.Ref<IXmlElement>.IsAny, in It.Ref<Type>.IsAny))
+				.Deserialize(in It.Ref<IXmlElement>.IsAny, in It.Ref<Type>.IsAny,
+					It.Ref<ISerializerCoreContext<IXmlNode>>.IsAny))
 			.Returns((IXmlElement element, Type _) => element);
 
 		return serializerMock;

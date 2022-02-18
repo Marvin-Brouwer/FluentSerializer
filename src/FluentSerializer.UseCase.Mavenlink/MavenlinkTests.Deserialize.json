@@ -27,7 +27,13 @@
 			"id": "U2",
 			"name": "Jane Doe",
 			"age": 22,
-			"account_membership_id": "UA1"
+			"account_membership_id": "UA2"
+		},
+		"U3": {
+			"id": "U3",
+			"name": "Janet Doe",
+			"age": 22,
+			"account_membership_id": "UA3"
 		}
 	},
 	"account_memberships": {
@@ -37,7 +43,11 @@
 		},
 		"UA2": {
 			"id": "UA2",
-			"account_membership_id": null
+			"line_manager_id": null
+		},
+		"UA3": {
+			"id": "UA3",
+			"line_manager_id": "U5"
 		}
 	}
 }

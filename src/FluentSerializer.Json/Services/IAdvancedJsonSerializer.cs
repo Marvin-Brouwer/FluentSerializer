@@ -1,4 +1,5 @@
 using System;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Json.DataNodes;
 
 namespace FluentSerializer.Json.Services;
@@ -17,5 +18,5 @@ public interface IAdvancedJsonSerializer : IJsonSerializer
 	/// <summary>
 	/// Deserialize <paramref name="element"/> from a node representation to an object
 	/// </summary>
-	object? Deserialize(in IJsonContainer element, in Type modelType);
+	object? Deserialize(in IJsonContainer element, in Type modelType, in ISerializerCoreContext<IJsonNode> context);
 }

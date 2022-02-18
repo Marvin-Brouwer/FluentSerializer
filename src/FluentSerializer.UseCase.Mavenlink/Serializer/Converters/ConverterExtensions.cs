@@ -9,6 +9,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 		private static readonly MavenlinkResponseMetaDataConverter MavenlinkResponsePageCountConverter = new("page_count");
 		private static readonly MavenlinkResponseMetaDataConverter MavenlinkResponseCurrentPageConverter = new("page_number");
 		private static readonly MavenlinkResponseDataConverter MavenlinkResponseDataConverter = new();
+		private static readonly MavenlinkReferenceConverter MavenlinkReferenceConverter = new();
 
 		/// <summary>
 		/// Pull the page count out of the metadata object
@@ -22,10 +23,8 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 		/// <inheritdoc cref="Converters.MavenlinkResponseDataConverter"/>
 		public static IJsonConverter MavenlinkResponseData(this IUseJsonConverters _) => MavenlinkResponseDataConverter;
 
-		/// <inheritdoc cref="MavenlinkReferenceConverter{TClass}"/>
-		public static Func<IReferenceConverter<TClass>> ReferenceTo<TClass>(this IUseJsonConverters _,
-			Expression<Func<TClass, object?>> referenceField)
-			where TClass : notnull => () => new MavenlinkReferenceConverter<TClass>(referenceField);
+		/// <inheritdoc cref="Converters.MavenlinkReferenceConverter"/>
+		public static IJsonConverter Reference(this IUseJsonConverters _) => MavenlinkReferenceConverter;
 
 	}
 }

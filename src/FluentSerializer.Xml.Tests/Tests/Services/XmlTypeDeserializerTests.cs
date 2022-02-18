@@ -11,6 +11,7 @@ using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
 using System.Collections.Generic;
+using FluentSerializer.Core.Context;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -21,13 +22,13 @@ public sealed class XmlTypeDeserializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Deserialize;
 
-	private readonly Mock<IAdvancedXmlSerializer> _serializerMock;
+	private readonly Mock<ISerializerCoreContext<IXmlNode>> _serializerMock;
 	private readonly Mock<IClassMapScanList<XmlSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public XmlTypeDeserializerTests()
 	{
-		_serializerMock = new Mock<IAdvancedXmlSerializer>();
+		_serializerMock = new Mock<ISerializerCoreContext<IXmlNode>>();
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)

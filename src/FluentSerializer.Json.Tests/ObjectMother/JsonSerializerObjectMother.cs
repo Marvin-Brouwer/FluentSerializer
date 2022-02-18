@@ -2,6 +2,7 @@ using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 using Moq;
 using System;
+using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Json.Tests.ObjectMother;
 
@@ -35,7 +36,8 @@ internal static class JsonSerializerObjectMother
 	{
 		serializerMock
 			.Setup(serializer => serializer
-				.Deserialize(in It.Ref<IJsonContainer>.IsAny, in It.Ref<Type>.IsAny))
+				.Deserialize(in It.Ref<IJsonContainer>.IsAny, in It.Ref<Type>.IsAny,
+					in It.Ref<ISerializerCoreContext<IJsonNode>>.IsAny))
 			.Returns((IJsonContainer element, Type _) => element);
 
 		return serializerMock;

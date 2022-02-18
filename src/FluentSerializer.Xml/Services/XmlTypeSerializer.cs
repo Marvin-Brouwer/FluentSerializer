@@ -35,17 +35,18 @@ public sealed class XmlTypeSerializer
 	/// </summary>
 	/// <exception cref="MalConfiguredRootNodeException"></exception>
 	/// <exception cref="ClassMapNotFoundException"></exception>
-	public IXmlElement? SerializeToElement(in object dataModel, in Type classType, in IXmlSerializer currentSerializer)
+	public IXmlElement? SerializeToElement(in object dataModel, in Type classType, in ISerializerCoreContext coreContext)
 	{
 		Guard.Against.Null(dataModel, nameof(dataModel));
 		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+		Guard.Against.Null(coreContext, nameof(coreContext));
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
 
 		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
+		var currentCoreContext = coreContext.WithPathSegment(classType);
 		var elementName = classMap.NamingStrategy.SafeGetName(in classType, new NamingContext(_mappings));
 		var childNodes = new List<IXmlNode>();
 		foreach(var property in classType.GetProperties())
@@ -58,11 +59,11 @@ public sealed class XmlTypeSerializer
 			if (propertyValue is null) continue;
 
 			var serializerContext = new SerializerContext(
-				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
-				currentSerializer,
+				currentCoreContext.WithPathSegment(property),
+				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy,
 				classMap.PropertyMaps, _mappings);
 
-			var childNode = SerializeProperty(in propertyValue, in propertyMapping, in currentSerializer, in serializerContext);
+			var childNode = SerializeProperty(in propertyValue, in propertyMapping, in serializerContext);
 			if (childNode is not null) childNodes.Add(childNode);
 		}
 
@@ -70,8 +71,7 @@ public sealed class XmlTypeSerializer
 	}
 
 	private IXmlNode? SerializeProperty(
-		in object propertyValue, in IPropertyMap propertyMapping,  
-		in IXmlSerializer currentSerializer, in SerializerContext serializerContext)
+		in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
 	{
 		if (typeof(IXmlText).IsAssignableFrom(propertyMapping.ContainerType))
 		{
@@ -85,7 +85,7 @@ public sealed class XmlTypeSerializer
 
 		if (typeof(IXmlElement).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeXElement(in propertyValue, in propertyMapping, in serializerContext, in currentSerializer);
+			return SerializeXElement(in propertyValue, in propertyMapping, in serializerContext);
 		}
 
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
@@ -104,14 +104,13 @@ public sealed class XmlTypeSerializer
 		return matchingConverter.Serialize(in propertyValue, serializerContext);
 	}
 
-	private IXmlElement? SerializeXElement(in object propertyValue, in IPropertyMap propertyMapping,
-		in SerializerContext serializerContext, in IXmlSerializer currentSerializer)
+	private IXmlElement? SerializeXElement(in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IXmlElement, IXmlNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
 		return matchingConverter is null 
-			? SerializeToElement(in propertyValue, serializerContext.PropertyType, currentSerializer) 
+			? SerializeToElement(in propertyValue, serializerContext.PropertyType, serializerContext) 
 			: matchingConverter.Serialize(in propertyValue, serializerContext);
 	}
 }

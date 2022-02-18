@@ -10,6 +10,7 @@ using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Tests.ObjectMother;
 using Moq;
 using System.Collections.Generic;
+using FluentSerializer.Core.Context;
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -20,13 +21,13 @@ public sealed class JsonTypeSerializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
-	private readonly Mock<IAdvancedJsonSerializer> _serializerMock;
+	private readonly Mock<ISerializerCoreContext<IJsonNode>> _serializerMock;
 	private readonly Mock<IClassMapScanList<JsonSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public JsonTypeSerializerTests()
 	{
-		_serializerMock = new Mock<IAdvancedJsonSerializer>();
+		_serializerMock = new Mock<ISerializerCoreContext<IJsonNode>>();
 		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)

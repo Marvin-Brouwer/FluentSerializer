@@ -56,7 +56,7 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 		var elementsToDeserialize = parent.GetChildElements(itemName);
 		foreach (var item in elementsToDeserialize)
 		{
-			var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
+			var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType, context);
 			if (itemValue is null) continue;
 
 			instance.Add(itemValue);

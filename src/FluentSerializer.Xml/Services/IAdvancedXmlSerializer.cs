@@ -1,5 +1,6 @@
 using FluentSerializer.Xml.DataNodes;
 using System;
+using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -16,5 +17,5 @@ public interface IAdvancedXmlSerializer : IXmlSerializer
 	/// <summary>
 	/// Deserialize <paramref name="element"/> from a node representation to an object
 	/// </summary>
-	object? Deserialize(in IXmlElement element, in Type modelType);
+	object? Deserialize(in IXmlElement element, in Type modelType, in ISerializerCoreContext<IXmlNode> context);
 }
