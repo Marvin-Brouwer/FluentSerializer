@@ -5,7 +5,6 @@ using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
-using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
 using System;
 using System.Collections.Generic;

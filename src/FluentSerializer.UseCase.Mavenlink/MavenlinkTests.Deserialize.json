@@ -16,28 +16,28 @@
 			"key": "users"
 		}
 	],
-	"users": [
-		{
+	"users": {
+		"U1": {
 			"id": "U1",
 			"name": "John Doe",
 			"age": 22,
 			"account_membership_id": "UA1"
 		},
-		{
+		"U2": {
 			"id": "U2",
 			"name": "Jane Doe",
 			"age": 22,
 			"account_membership_id": "UA1"
 		}
-	],
-	"account_memberships": [
-		{
+	},
+	"account_memberships": {
+		"UA1": {
 			"id": "UA1",
-			"account_membership_id": "UA1"
+			"line_manager_id": "U2"
 		},
-		{
+		"UA2": {
 			"id": "UA2",
 			"account_membership_id": null
 		}
-	]
+	}
 }

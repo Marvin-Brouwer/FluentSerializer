@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using FluentSerializer.Json.Converting;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
@@ -19,6 +21,11 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 
 		/// <inheritdoc cref="Converters.MavenlinkResponseDataConverter"/>
 		public static IJsonConverter MavenlinkResponseData(this IUseJsonConverters _) => MavenlinkResponseDataConverter;
-	
-    }
+
+		/// <inheritdoc cref="MavenlinkReferenceConverter{TClass}"/>
+		public static Func<IReferenceConverter<TClass>> ReferenceTo<TClass>(this IUseJsonConverters _,
+			Expression<Func<TClass, object?>> referenceField)
+			where TClass : notnull => () => new MavenlinkReferenceConverter<TClass>(referenceField);
+
+	}
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Json.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.Json.Converter.DefaultJson.Extensions;
@@ -24,6 +25,7 @@ namespace FluentSerializer.UseCase.Mavenlink
 			_serviceProvider = new ServiceCollection()
 				.AddFluentJsonSerializer<MavenlinkTests>(static configuration =>
 				{
+					configuration.DefaultNamingStrategy = Names.Use.SnakeCase;
 					configuration.DefaultConverters.Add(Converter.For.Json());
 					configuration.NewLine = LineEndings.LineFeed;
 				})

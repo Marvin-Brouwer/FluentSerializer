@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;

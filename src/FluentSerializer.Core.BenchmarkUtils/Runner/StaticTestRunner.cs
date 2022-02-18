@@ -6,7 +6,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using System.Reflection;
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
-using System.Security.Permissions;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Runtime.InteropServices;

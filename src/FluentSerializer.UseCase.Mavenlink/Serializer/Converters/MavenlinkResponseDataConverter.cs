@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
-using FluentSerializer.Json.Converting.Converters;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
+using FluentSerializer.Json.Services;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 {
@@ -39,19 +42,19 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 	/// }
 	/// ]]>
 	/// </example>
-	internal sealed class MavenlinkResponseDataConverter : CollectionConverter
+	internal sealed class MavenlinkResponseDataConverter : IJsonConverter
 	{
 		/// <inheritdoc />
-		public override SerializerDirection Direction => SerializerDirection.Deserialize;
+		public SerializerDirection Direction => SerializerDirection.Deserialize;
 		/// <inheritdoc />
-		public override bool CanConvert(in Type targetType) => targetType.IsEnumerable();
+		public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
 		/// <inheritdoc />
-		public override IJsonNode Serialize(in object objectToSerialize, in ISerializerContext context) =>
+		public IJsonNode Serialize(in object objectToSerialize, in ISerializerContext context) =>
 			throw new NotSupportedException();
 
 		/// <inheritdoc />
-		public override object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
+		public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 		{
 			if (objectToDeserialize is not IJsonArray arrayToDeserialize) throw new NotSupportedException();
 
@@ -65,11 +68,32 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 
 			// Find nodes from root
 			var parent = (IJsonObject)context.ParentNode!;
-			var targetCollection = parent.GetProperty(collectionName)?.Value;
+			var targetCollection = parent.GetProperty(collectionName)?.Value as IJsonObject;
 			Guard.Against.Null(targetCollection, nameof(targetCollection));
 
-			// We don't care about the order so just return the targetCollection
-			return base.Deserialize(in targetCollection, context);
+			var flattenedCollection = targetCollection.Children
+				.Cast<IJsonProperty>()
+				.Select(child => child.Value as IJsonObject)
+				.Where(child => child is not null);
+
+			var instance = context.PropertyType.GetEnumerableInstance();
+			
+			var genericTargetType = context.PropertyType.IsGenericType
+				? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
+				: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+
+			foreach (var item in flattenedCollection)
+			{
+				// This will skip comments
+				if (item is not IJsonContainer container) continue;
+
+				var itemValue = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(container, genericTargetType);
+				if (itemValue is null) continue;
+
+				instance.Add(itemValue);
+			}
+
+			return instance;
 		}
 	}
 }

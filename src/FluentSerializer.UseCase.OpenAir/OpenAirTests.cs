@@ -16,60 +16,59 @@ using FluentSerializer.Xml.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace FluentSerializer.UseCase.OpenAir
+namespace FluentSerializer.UseCase.OpenAir;
+
+public sealed partial class OpenAirTests
 {
-	public sealed partial class OpenAirTests
-    {
-		private readonly IServiceProvider _serviceProvider;
+	private readonly IServiceProvider _serviceProvider;
 
-		public OpenAirTests()
-        {
-			_serviceProvider = new ServiceCollection()
-				.AddFluentXmlSerializer<OpenAirTests>(static configuration =>
-				{
-					configuration.Encoding = Encoding.UTF8;
-					configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
-					configuration.DefaultConverters.Add(Converter.For.Xml());
-					configuration.NewLine = LineEndings.LineFeed;
-				})
-				.BuildServiceProvider();
-		}
+	public OpenAirTests()
+	{
+		_serviceProvider = new ServiceCollection()
+			.AddFluentXmlSerializer<OpenAirTests>(static configuration =>
+			{
+				configuration.Encoding = Encoding.UTF8;
+				configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
+				configuration.DefaultConverters.Add(Converter.For.Xml());
+				configuration.NewLine = LineEndings.LineFeed;
+			})
+			.BuildServiceProvider();
+	}
 
-        [Fact,
-            Trait("Category", "UseCase")]
-        public async Task Serialize()
-        {
-            // Arrange
-            var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
-            var example = ProjectRequestExample;
+	[Fact,
+	 Trait("Category", "UseCase")]
+	public async Task Serialize()
+	{
+		// Arrange
+		var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
+		var example = ProjectRequestExample;
 
-			var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
+		var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
 
-			// Act
-			var result = sut.Serialize(example);
+		// Act
+		var result = sut.Serialize(example);
 
-            // Assert
-            result.ShouldBeBinaryEquatableTo(expected);
-        }
+		// Assert
+		result.ShouldBeBinaryEquatableTo(expected);
+	}
 
-        [Fact,
-            Trait("Category", "UseCase")]
-        public async Task Deserialize()
-        {
-            // Arrange
-            var expected = RateCardResponseExample;
-            var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
+	[Fact,
+	 Trait("Category", "UseCase")]
+	public async Task Deserialize()
+	{
+		// Arrange
+		var expected = RateCardResponseExample;
+		var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
 
-			var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
+		var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
 
-			// Act
-			var result = sut.Deserialize<Response<RateCard>>(example);
+		// Act
+		var result = sut.Deserialize<Response<RateCard>>(example);
 
-            // Assert
-            result.Should().BeEquivalentTo(expected);
-        }
+		// Assert
+		result.Should().BeEquivalentTo(expected);
+	}
 
-        private static DateTime CreateDate(string dateString) => DateTime.ParseExact(
-            dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-    }
+	private static DateTime CreateDate(string dateString) => DateTime.ParseExact(
+		dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 }

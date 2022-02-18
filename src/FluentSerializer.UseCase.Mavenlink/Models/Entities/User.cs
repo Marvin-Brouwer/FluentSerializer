@@ -6,7 +6,11 @@ namespace FluentSerializer.UseCase.Mavenlink.Models
 		public string Name { get; init; } = string.Empty;
 		public int Age { get; init; } = default!;
 
-		// todo accountmembership with reference converter
+		public string? AccountMembershipId { get; set; }
+
+		// todo referenceConverter
+		public AccountMembership? AccountMembership { get; set; }
+
 		// todo custom fields with reference converter
 	}
 }
