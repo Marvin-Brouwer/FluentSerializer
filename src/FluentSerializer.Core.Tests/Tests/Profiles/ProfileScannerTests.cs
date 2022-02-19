@@ -1,0 +1,70 @@
+using FluentAssertions;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Profiles;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Xunit;
+
+namespace FluentSerializer.Core.Tests.Tests.Profiles
+{
+	public sealed class ProfileScannerTests
+	{
+		private readonly Mock<SerializerConfiguration> _configurationMock = new();
+		private readonly Mock<Assembly> _assemblyMock;
+
+		public ProfileScannerTests()
+		{
+			_assemblyMock = new();
+		}
+
+		[Fact,
+			Trait("Category", "UnitTest")]
+		public void ScanAssembliesForType_NotPresent_ReturnsEmptyList()
+		{
+			// Arrange
+			_assemblyMock
+				.Setup(assembly => assembly.GetTypes())
+				.Returns(Array.Empty<Type>());
+
+			// Act
+			var result = ProfileScanner
+				.FindClassMapsInAssembly<ISerializerProfile>(_assemblyMock.Object, _configurationMock.Object);
+
+			// Assert
+			result.Should().BeEmpty();
+		}
+
+		[Fact,
+			Trait("Category", "UnitTest")]
+		public void ScanAssembliesForType_Present_ReturnsProfile()
+		{
+			// Arrange
+			_assemblyMock
+				.Setup(assembly => assembly.GetTypes())
+				.Returns(new Type[] { typeof(SerializerProfileFake) });
+
+			// Act
+			var result = ProfileScanner
+				.FindClassMapsInAssembly<ISerializerProfile>(_assemblyMock.Object, _configurationMock.Object);
+
+			// Assert
+			result.Should().NotBeEmpty();
+		}
+
+		private sealed class SerializerProfileFake : ISerializerProfile
+		{
+			private static readonly List<IClassMap> ClassMaps = new()
+			{
+				Mock.Of<IClassMap>()
+			};
+
+			public IReadOnlyList<IClassMap> Configure(in SerializerConfiguration configuration)
+			{
+				return ClassMaps;
+			}
+		}
+	}
+}

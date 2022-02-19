@@ -40,6 +40,10 @@ public sealed class PropertyMap : IPropertyMap
 		in Func<INamingStrategy> namingStrategy,
 		in Func<IConverter>? customConverter)
 	{
+		Guard.Against.Null(containerType, nameof(containerType));
+		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(namingStrategy, nameof(namingStrategy));
+
 		_namingStrategy = namingStrategy;
 		_customConverter = customConverter;
 

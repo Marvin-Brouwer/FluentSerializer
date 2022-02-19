@@ -19,7 +19,6 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
-		Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Count > 0);
 
 		_storedDataTypes = dataTypes;
 	}
@@ -28,6 +27,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	public TScanFor? Scan(TScanBy key)
 	{
 		Guard.Against.Null(key, nameof(key));
+		if (_storedDataTypes.Count == 0) return null;
 #if (!DEBUG)
 		if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
 #endif
