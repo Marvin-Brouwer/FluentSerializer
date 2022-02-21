@@ -175,7 +175,7 @@ namespace FluentSerializer.Core.BenchmarkUtils.Runner
 			Console.WriteLine("Restarting process with admin permissions.");
 
 			// Restart program and run as admin
-			string? exeName = GetProcessFileName();
+			var exeName = GetProcessFileName();
 			var startInfo = new ProcessStartInfo(exeName)
 			{
 				UseShellExecute = true,

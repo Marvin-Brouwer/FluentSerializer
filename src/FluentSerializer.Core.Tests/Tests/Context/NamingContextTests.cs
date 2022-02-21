@@ -8,107 +8,106 @@ using FluentSerializer.Core.Tests.ObjectMother;
 using Moq;
 using Xunit;
 
-namespace FluentSerializer.Core.Tests.Tests.Context
+namespace FluentSerializer.Core.Tests.Tests.Context;
+
+public sealed class NamingContextTests
 {
-	public sealed class NamingContextTests
+	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+
+	private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
+	private readonly Mock<IClassMap> _classMapMock;
+
+	public NamingContextTests()
 	{
-		private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
+		_classMapMock = new Mock<IClassMap>()
+			.WithoutPropertyMaps();
+	}
 
-		private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
-		private readonly Mock<IClassMap> _classMapMock;
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForType_ReturnsStrategy()
+	{
+		// Arrange
+		var type = typeof(TestClass);
 
-		public NamingContextTests()
-		{
-			_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
-			_classMapMock = new Mock<IClassMap>()
-				.WithoutPropertyMaps();
-		}
+		_classMapMock
+			.WithNamingStrategy(Names.Use.CamelCase);
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForType_ReturnsStrategy()
-		{
-			// Arrange
-			var type = typeof(TestClass);
+		var sut = new NamingContext(_scanListMock.Object);
 
-			_classMapMock
-				.WithNamingStrategy(Names.Use.CamelCase);
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in type);
 
-			var sut = new NamingContext(_scanListMock.Object);
+		// Assert
+		result.Should().BeEquivalentTo(Names.Use.CamelCase());
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in type);
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForType_NotFound_ReturnsNull()
+	{
+		// Arrange
+		var type = typeof(TestClass);
 
-			// Assert
-			result.Should().BeEquivalentTo(Names.Use.CamelCase());
-		}
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForType_NotFound_ReturnsNull()
-		{
-			// Arrange
-			var type = typeof(TestClass);
+		var sut = new NamingContext(_scanListMock.Object);
 
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in type);
 
-			var sut = new NamingContext(_scanListMock.Object);
+		// Assert
+		result.Should().BeNull();
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in type);
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForProperty_ReturnsStrategy()
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-			// Assert
-			result.Should().BeNull();
-		}
+		_classMapMock
+			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForProperty_ReturnsStrategy()
-		{
-			// Arrange
-			var type = typeof(TestClass);
-			var property = type.GetProperty(nameof(TestClass.Id))!;
+		var sut = new NamingContext(_scanListMock.Object);
 
-			_classMapMock
-				.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in type, in property);
 
-			var sut = new NamingContext(_scanListMock.Object);
+		// Assert
+		result.Should().BeEquivalentTo(Names.Use.PascalCase());
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in type, in property);
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-			// Assert
-			result.Should().BeEquivalentTo(Names.Use.PascalCase());
-		}
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
-		{
-			// Arrange
-			var type = typeof(TestClass);
-			var property = type.GetProperty(nameof(TestClass.Id))!;
+		var sut = new NamingContext(_scanListMock.Object);
 
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in type, in property);
 
-			var sut = new NamingContext(_scanListMock.Object);
+		// Assert
+		result.Should().BeNull();
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in type, in property);
-
-			// Assert
-			result.Should().BeNull();
-		}
-
-		private sealed class TestClass
-		{
-			public int Id { get; set; } = default!;
-		}
+	private sealed class TestClass
+	{
+		public int Id { get; set; } = default!;
 	}
 }

@@ -102,7 +102,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 			return 0;
 		if (obj is IDataValue value && value.Value is null)
 			return 0;
-		if (obj is string stringValue && stringValue is null)
+		if (obj is string stringValue && string.IsNullOrEmpty(stringValue))
 			return 0;
 		if (obj is IEnumerable<IEquatable<IDataNode>> equatableCollection)
 			return GetHashCodeFor(equatableCollection);

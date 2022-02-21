@@ -13,14 +13,14 @@ public readonly struct JsonBuilder
 {
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <param name="properties">A parameters list of <see cref="IJsonObjectContent"/> as children of this object node.</param>
-	public static IJsonObject Object(params IJsonObjectContent[] properties) => new JsonObject(properties ?? System.Array.Empty<IJsonObjectContent>());
+	public static IJsonObject Object(params IJsonObjectContent[] properties) => new JsonObject(properties);
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <param name="properties">A collection of <see cref="IJsonObjectContent"/> as children of this object node.</param>
 	public static IJsonObject Object(in IEnumerable<IJsonObjectContent> properties) => new JsonObject(in properties);
 
 	/// <inheritdoc cref="IJsonArray"/>
 	/// <param name="elements">A parameters list of <see cref="IJsonArrayContent"/> as children of this array node.</param>
-	public static IJsonArray Array(params IJsonArrayContent[] elements) => new JsonArray(elements ?? System.Array.Empty<IJsonArrayContent>());
+	public static IJsonArray Array(params IJsonArrayContent[] elements) => new JsonArray(elements);
 	/// <inheritdoc cref="IJsonArray"/>
 	/// <param name="elements">A collection of <see cref="IJsonArrayContent"/> as children of this array node.</param>
 	public static IJsonArray Array(in IEnumerable<IJsonArrayContent> elements) => new JsonArray(in elements);

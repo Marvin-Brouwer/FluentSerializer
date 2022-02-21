@@ -146,7 +146,6 @@ public sealed class XmlElementTests
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
-		var expected = Element(XmlElementName, Text(null));
 		var input = "Element";
 
 		// Act

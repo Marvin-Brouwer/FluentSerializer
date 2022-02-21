@@ -4,9 +4,9 @@ using FluentSerializer.Core.Configuration;
 namespace FluentSerializer.Core.Text;
 
 /// <summary>
-/// Internal implementation of <see cref="ITextWriter"/> using <see cref="System.Text.StringBuilder"/><br />
+/// Internal implementation of a string appending class<br />
 /// The reason we're using a custom implementation: <br />
-/// - Having a pluggable implementation<br />
+/// - Having a plug-able implementation<br />
 /// - Having control over the newline characters<br />
 /// - Having a clear definition of which methods to use when building any serializer library
 /// </summary>

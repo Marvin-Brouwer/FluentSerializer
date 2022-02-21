@@ -17,7 +17,7 @@ namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 /// <summary>
 /// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
 /// and <see cref="Convert.ChangeType(object?, Type)"/>
-/// </remarks>
+/// </summary>
 public sealed class ConvertibleConverterTests
 {
 	private readonly ConvertibleConverter _sut;

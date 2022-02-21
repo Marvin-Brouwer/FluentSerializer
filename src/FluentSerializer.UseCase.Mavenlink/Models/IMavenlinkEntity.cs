@@ -1,7 +1,6 @@
-namespace FluentSerializer.UseCase.Mavenlink.Models
+namespace FluentSerializer.UseCase.Mavenlink.Models;
+
+internal interface IMavenlinkEntity
 {
-    internal interface IMavenlinkEntity
-    {
-        string Id { get; }
-    }
+	string Id { get; }
 }

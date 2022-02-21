@@ -9,87 +9,86 @@ using Moq;
 using System;
 using Xunit;
 
-namespace FluentSerializer.Core.Tests.Tests.Context
+namespace FluentSerializer.Core.Tests.Tests.Context;
+
+public sealed class SerializerContextTests
 {
-	public sealed class SerializerContextTests
+	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+
+	private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
+	private readonly Mock<IClassMap> _classMapMock;
+
+	public SerializerContextTests()
 	{
-		private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
+		_classMapMock = new Mock<IClassMap>()
+			.WithoutPropertyMaps();
+	}
 
-		private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
-		private readonly Mock<IClassMap> _classMapMock;
+	[Theory,
+	 Trait("Category", "UnitTest"),
+	 InlineData(typeof(int)), InlineData(typeof(int?))]
+	public void FindNamingStrategy_Constructor(Type input)
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-		public SerializerContextTests()
-		{
-			_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
-			_classMapMock = new Mock<IClassMap>()
-				.WithoutPropertyMaps();
-		}
+		// Act
+		var result = new SerializerContext(property, input, type,
+			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
-		[Theory,
-			Trait("Category", "UnitTest"),
-			InlineData(typeof(int)), InlineData(typeof(int?))]
-		public void FindNamingStrategy_Constructor(Type input)
-		{
-			// Arrange
-			var type = typeof(TestClass);
-			var property = type.GetProperty(nameof(TestClass.Id))!;
+		// Assert
+		result.ClassType.Should().Be(typeof(TestClass));
+		result.PropertyType.Should().Be(typeof(int));
+	}
 
-			// Act
-			var result = new SerializerContext(property, input, type,
-				Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForProperty_ReturnsStrategy()
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-			// Assert
-			result.ClassType.Should().Be(typeof(TestClass));
-			result.PropertyType.Should().Be(typeof(int));
-		}
+		_classMapMock
+			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForProperty_ReturnsStrategy()
-		{
-			// Arrange
-			var type = typeof(TestClass);
-			var property = type.GetProperty(nameof(TestClass.Id))!;
+		var sut = new SerializerContext(property, property.PropertyType, type,
+			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
-			_classMapMock
-				.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in property);
 
-			var sut = new SerializerContext(property, property.PropertyType, type,
-				Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+		// Assert
+		result.Should().BeEquivalentTo(Names.Use.PascalCase());
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in property);
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-			// Assert
-			result.Should().BeEquivalentTo(Names.Use.PascalCase());
-		}
+		_scanListMock
+			.WithClassMap(type, _classMapMock);
 
-		[Fact,
-			Trait("Category", "UnitTest")]
-		public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
-		{
-			// Arrange
-			var type = typeof(TestClass);
-			var property = type.GetProperty(nameof(TestClass.Id))!;
+		var sut = new SerializerContext(property, property.PropertyType, type,
+			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
-			_scanListMock
-				.WithClassMap(type, _classMapMock);
+		// Act
+		var result = sut.FindNamingStrategy(in property);
 
-			var sut = new SerializerContext(property, property.PropertyType, type,
-				Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+		// Assert
+		result.Should().BeNull();
+	}
 
-			// Act
-			var result = sut.FindNamingStrategy(in property);
-
-			// Assert
-			result.Should().BeNull();
-		}
-
-		private sealed class TestClass
-		{
-			public int Id { get; set; } = default!;
-		}
+	private sealed class TestClass
+	{
+		public int Id { get; set; } = default!;
 	}
 }
