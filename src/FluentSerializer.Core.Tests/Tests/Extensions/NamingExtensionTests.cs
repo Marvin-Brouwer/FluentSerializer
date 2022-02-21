@@ -66,7 +66,7 @@ public sealed class NamingExtensionTests
 
 	private sealed class TestClass {
 		public int Field = default!;
-		public int Id { get; set; } = default!;
+		public int Id { get; init; } = default!;
 		public int GetId() => Id;
 	}
 }

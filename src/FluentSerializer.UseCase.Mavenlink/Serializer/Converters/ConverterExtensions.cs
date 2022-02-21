@@ -1,5 +1,3 @@
-using System;
-using System.Linq.Expressions;
 using FluentSerializer.Json.Converting;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
@@ -9,6 +7,7 @@ public static class ConverterExtensions
 	private static readonly MavenlinkResponseMetaDataConverter MavenlinkResponsePageCountConverter = new("page_count");
 	private static readonly MavenlinkResponseMetaDataConverter MavenlinkResponseCurrentPageConverter = new("page_number");
 	private static readonly MavenlinkResponseDataConverter MavenlinkResponseDataConverter = new();
+	private static readonly MavenlinkReferenceConverter MavenlinkReferenceConverter = new();
 
 	/// <summary>
 	/// Pull the page count out of the metadata object
@@ -21,5 +20,8 @@ public static class ConverterExtensions
 
 	/// <inheritdoc cref="Converters.MavenlinkResponseDataConverter"/>
 	public static IJsonConverter MavenlinkResponseData(this IUseJsonConverters _) => MavenlinkResponseDataConverter;
+
+	/// <inheritdoc cref="Converters.MavenlinkReferenceConverter"/>
+	public static IJsonConverter Reference(this IUseJsonConverters _) => MavenlinkReferenceConverter;
 
 }

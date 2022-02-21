@@ -11,16 +11,11 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 /// </summary>
 internal class RequestEntityNameStrategy : INamingStrategy
 {
-	/// <summary>
-	/// Gets the name of the current request's data type
-	/// </summary>
-    internal class RequestEntityNameStrategy : INamingStrategy
+	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
 	{
-        public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
-        {
-	        var typeName = propertyType.Name;
-	        return EntityMappings.GetDataItemName(typeName);
-        }
+	    var typeName = propertyType.Name;
+	    return EntityMappings.GetDataItemName(typeName);
+	}
 
 	public string GetName(in Type classType, in INamingContext namingContext)
 	{

@@ -1,14 +1,12 @@
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Services;
 using System;
-using System.Collections;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using System.Runtime.CompilerServices;
 using FluentSerializer.Core.DataNodes;
 using System.Collections.Generic;
-using System.Linq;
 using FluentSerializer.Core.Converting;
 
 namespace FluentSerializer.Core.Context;

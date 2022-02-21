@@ -26,6 +26,7 @@ public sealed partial class MavenlinkTests
 		_serviceProvider = new ServiceCollection()
 			.AddFluentJsonSerializer<MavenlinkTests>(static configuration =>
 			{
+				configuration.DefaultNamingStrategy = Names.Use.SnakeCase;
 				configuration.DefaultConverters.Add(Converter.For.Json());
 				configuration.NewLine = LineEndings.LineFeed;
 			})

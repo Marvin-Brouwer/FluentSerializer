@@ -26,7 +26,7 @@ internal static class XmlSerializerObjectMother
 	}
 
 	/// <summary>
-	/// Setup <see cref="IAdvancedXmlSerializer.Deserialize(in IXmlElement, in Type)"/>
+	/// Setup <see cref="IAdvancedXmlSerializer.Deserialize(in IXmlElement, in Type, in ISerializerCoreContext{TDataNode})"/>
 	/// to simply return the IXmlElement passed in.
 	/// </summary>
 	/// <param name="serializerMock"></param>
@@ -38,7 +38,7 @@ internal static class XmlSerializerObjectMother
 			.Setup(serializer => serializer
 				.Deserialize(in It.Ref<IXmlElement>.IsAny, in It.Ref<Type>.IsAny,
 					It.Ref<ISerializerCoreContext<IXmlNode>>.IsAny))
-			.Returns((IXmlElement element, Type _) => element);
+			.Returns((IXmlElement element, Type _, ISerializerCoreContext _) => element);
 
 		return serializerMock;
 	}

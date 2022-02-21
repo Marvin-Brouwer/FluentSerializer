@@ -26,7 +26,7 @@ internal static class JsonSerializerObjectMother
 	}
 
 	/// <summary>
-	/// Setup <see cref="IAdvancedJsonSerializer.Deserialize(in IJsonObject, in Type)"/>
+	/// Setup <see cref="IAdvancedJsonSerializer.Deserialize(in IJsonObject, in Type, in ISerializerCoreContext{TDataNode})"/>
 	/// to simply return the IJsonObject passed in.
 	/// </summary>
 	/// <param name="serializerMock"></param>
@@ -38,7 +38,7 @@ internal static class JsonSerializerObjectMother
 			.Setup(serializer => serializer
 				.Deserialize(in It.Ref<IJsonContainer>.IsAny, in It.Ref<Type>.IsAny,
 					in It.Ref<ISerializerCoreContext<IJsonNode>>.IsAny))
-			.Returns((IJsonContainer element, Type _) => element);
+			.Returns((IJsonContainer element, Type _, ISerializerCoreContext _) => element);
 
 		return serializerMock;
 	}

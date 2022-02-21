@@ -1,11 +1,9 @@
 using FluentSerializer.Core.Services;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.DataNodes;
-using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context;
 

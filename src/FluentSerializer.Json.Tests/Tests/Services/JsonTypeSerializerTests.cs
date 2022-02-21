@@ -21,13 +21,13 @@ public sealed class JsonTypeSerializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
-	private readonly Mock<ISerializerCoreContext<IJsonNode>> _serializerMock;
+	private readonly ISerializerCoreContext<IJsonNode> _coreContextStub;
 	private readonly Mock<IClassMapScanList<JsonSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public JsonTypeSerializerTests()
 	{
-		_serializerMock = new Mock<ISerializerCoreContext<IJsonNode>>();
+		_coreContextStub = new SerializerCoreContext<IJsonNode>(Mock.Of<IAdvancedJsonSerializer>());
 		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)
@@ -50,7 +50,7 @@ public sealed class JsonTypeSerializerTests
 		var sut = new JsonTypeSerializer(in scanList);
 
 		// Act
-		var result = () => sut.SerializeToNode(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -76,7 +76,7 @@ public sealed class JsonTypeSerializerTests
 		var sut = new JsonTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToNode(input, type, _serializerMock.Object);
+		var result = sut.SerializeToNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -104,7 +104,7 @@ public sealed class JsonTypeSerializerTests
 		var sut = new JsonTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.SerializeToNode(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -136,7 +136,7 @@ public sealed class JsonTypeSerializerTests
 		var sut = new JsonTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToNode(input, type, _serializerMock.Object);
+		var result = sut.SerializeToNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -156,7 +156,7 @@ public sealed class JsonTypeSerializerTests
 		var sut = new JsonTypeSerializer(in scanList);
 
 		// Act
-		var result = sut.SerializeToNode(input, type, _serializerMock.Object);
+		var result = sut.SerializeToNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -164,6 +164,6 @@ public sealed class JsonTypeSerializerTests
 
 	private sealed class TestClass
 	{
-		public string Value { get; set; } = default!;
+		public string Value { get; init; } = default!;
 	}
 }

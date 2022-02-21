@@ -1,12 +1,6 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;

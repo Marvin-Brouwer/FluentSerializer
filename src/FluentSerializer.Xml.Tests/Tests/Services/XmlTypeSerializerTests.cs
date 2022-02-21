@@ -22,13 +22,13 @@ public sealed class XmlTypeSerializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
-	private readonly Mock<ISerializerCoreContext<IXmlNode>> _serializerMock;
+	private readonly ISerializerCoreContext<IXmlNode> _coreContextStub;
 	private readonly Mock<IClassMapScanList<XmlSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public XmlTypeSerializerTests()
 	{
-		_serializerMock = new Mock<ISerializerCoreContext<IXmlNode>>();
+		_coreContextStub = new SerializerCoreContext<IXmlNode>(Mock.Of<IAdvancedXmlSerializer>());
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)
@@ -52,7 +52,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(in scanList);
 
 		// Act
-		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -76,7 +76,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(in scanList);
 
 		// Act
-		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -102,7 +102,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -130,7 +130,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -162,7 +162,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -192,7 +192,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -222,7 +222,7 @@ public sealed class XmlTypeSerializerTests
 		var sut = new XmlTypeSerializer(_scanList.Object);
 
 		// Act
-		var result = sut.SerializeToElement(input, type, _serializerMock.Object);
+		var result = sut.SerializeToElement(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -230,6 +230,6 @@ public sealed class XmlTypeSerializerTests
 
 	private sealed class TestClass
 	{
-		public string Value { get; set; } = default!;
+		public string Value { get; init; } = default!;
 	}
 }

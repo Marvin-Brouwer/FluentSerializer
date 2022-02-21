@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentSerializer.UseCase.Mavenlink.Extensions;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink.Models;
 
@@ -10,6 +11,7 @@ internal readonly struct EntityMappings
 	// Our code base doesn't contain any of these, otherwise nameof(WorkspaceStatus) would've been used.
 	private static readonly Dictionary<string, string> SingularOverrides = new()
 	{
+		[nameof(Project)] = "workspace",
 		["WorkspaceStatus"] = "workspace_status_change"
 	};
 	private static readonly Dictionary<string, string> PluralOverrides = new()

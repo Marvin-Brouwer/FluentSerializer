@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
@@ -21,13 +22,13 @@ public sealed class JsonTypeDeserializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Deserialize;
 
-	private readonly Mock<ISerializerCoreContext<IJsonNode>> _serializerMock;
+	private readonly ISerializerCoreContext<IJsonNode> _coreContextStub;
 	private readonly Mock<IClassMapScanList<JsonSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public JsonTypeDeserializerTests()
 	{
-		_serializerMock = new Mock<ISerializerCoreContext<IJsonNode>>();
+		_coreContextStub = new SerializerCoreContext<IJsonNode>(Mock.Of<IAdvancedJsonSerializer>());
 		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)
@@ -50,7 +51,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(in scanList);
 
 		// Act
-		var result = () => sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -79,7 +80,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -105,7 +106,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -127,7 +128,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().NotBeNull();
@@ -153,7 +154,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = () => sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should()
@@ -185,7 +186,7 @@ public sealed class JsonTypeDeserializerTests
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = sut.DeserializeFromNode(input, type, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -206,15 +207,25 @@ public sealed class JsonTypeDeserializerTests
 			Object()
 		);
 
-		var type = typeof(IEnumerable<IJsonObject>);
-		// todo fix tests
-		//_serializerMock
-		//	.WithDeserialize();
+		var type = typeof(IJsonObject);
+		_scanList
+			.WithClassMap(type, _classMap);
+		// todo objectmother
+		var serializerMock = new Mock<IAdvancedJsonSerializer>();
+		serializerMock
+			.Setup(serializer => serializer.Deserialize(It.Ref<IJsonContainer>.IsAny, It.Ref<Type>.IsAny,
+				in It.Ref<ISerializerCoreContext<IJsonNode>>.IsAny))
+			.Returns((IJsonContainer node, Type _, ISerializerCoreContext<IJsonNode> _) => node);
+		var contextMock = new Mock<ISerializerCoreContext<IJsonNode>>()
+			.WithAutoPathSegment();
+		contextMock
+			.Setup(context => context.CurrentSerializer)
+			.Returns(serializerMock.Object);
 
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
 		// Act
-		var result = sut.DeserializeFromNode(input, type, _serializerMock.Object);
+		var result = sut.DeserializeFromNode(input, typeof(IEnumerable<IJsonObject>), contextMock.Object);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
@@ -222,6 +233,6 @@ public sealed class JsonTypeDeserializerTests
 
 	private sealed class TestClass
 	{
-		public string Value { get; set; } = default!;
+		public string Value { get; init; } = default!;
 	}
 }

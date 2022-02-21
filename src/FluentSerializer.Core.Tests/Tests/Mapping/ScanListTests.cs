@@ -88,6 +88,6 @@ public sealed class ScanListTests
 
 	private sealed  class TestClass {
 		public int Id { get; set; }
-		public string Name { get; set; } = default!;
+		public string Name { get; init; } = default!;
 	}
 }
