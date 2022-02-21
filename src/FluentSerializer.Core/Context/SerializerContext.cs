@@ -21,7 +21,7 @@ public class SerializerContext : ISerializerContext
 	private readonly INamingContext _namingContext;
 
 	private readonly ISerializerCoreContext _coreContext;
-		 
+
 	/// <inheritdoc />
 	public PropertyInfo Property { get; }
 	/// <inheritdoc />
@@ -43,7 +43,7 @@ public class SerializerContext : ISerializerContext
 		in PropertyInfo property, in Type propertyType, in Type classType,
 		in INamingStrategy namingStrategy,
 		in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings) 
+		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
 	{
 		_propertyMappings = propertyMappings;
 
@@ -129,7 +129,7 @@ public sealed class SerializerContext<TSerialContainer> : SerializerContext, ISe
 
 	/// <inheritdoc />
 	public TSerialContainer? ParentNode { get; init; }
-	
+
 
 	/// <inheritdoc />
 #if NET6_0_OR_GREATER

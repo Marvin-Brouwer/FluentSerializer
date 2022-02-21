@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink.Models;
 

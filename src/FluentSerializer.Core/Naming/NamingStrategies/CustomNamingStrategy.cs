@@ -1,8 +1,6 @@
 using System;
 using System.Reflection;
-using Ardalis.GuardClauses;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -18,8 +16,6 @@ public sealed class CustomNamingStrategy : INamingStrategy
 	/// </summary>
 	public CustomNamingStrategy(in string name)
 	{
-		Guard.Against.InvalidName(name);
-
 		_name = name;
 	}
 

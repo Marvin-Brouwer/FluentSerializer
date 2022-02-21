@@ -18,15 +18,25 @@ public readonly partial struct XmlComment
 	/// <inheritdoc />
 	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
 
-	/// <inheritdoc />
+	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
+	/// <param name="left">The left side object to compare with this object.</param>
+	/// <param name="right">The right side object to compare with this object.</param>
+	/// <returns>
+	/// <see langword="true" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
+	/// otherwise, <see langword="false" />.</returns>
 	public static bool operator ==(XmlComment left, IDataNode right) => left.Equals(right);
 
-	/// <inheritdoc />
+	/// <summary>Indicates whether the current object is <strong>not</strong> equal to another object of the same interface.</summary>
+	/// <param name="left">The left side object to compare with this object.</param>
+	/// <param name="right">The right side object to compare with this object.</param>
+	/// <returns>
+	/// <see langword="false" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
+	/// otherwise, <see langword="true" />.</returns>
 	public static bool operator !=(XmlComment left, IDataNode right) => !left.Equals(right);
 
-	/// <inheritdoc />
-	public static bool operator ==(IDataNode left, XmlComment right) => left.Equals(right);
+	/// <inheritdoc cref="op_Equality(XmlComment, IDataNode)"/>
+	public static bool operator ==(IDataNode left, XmlComment right) => Equals(left, right);
 
-	/// <inheritdoc />
-	public static bool operator !=(IDataNode left, XmlComment right) => !left.Equals(right);
+	/// <inheritdoc cref="op_Inequality(XmlComment, IDataNode)" />
+	public static bool operator !=(IDataNode left, XmlComment right) => Equals(left, right);
 }

@@ -1,4 +1,4 @@
-namespace FluentSerializer.UseCase.Mavenlink.Models;
+namespace FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 internal interface IMavenlinkEntity
 {

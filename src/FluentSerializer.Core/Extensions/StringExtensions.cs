@@ -11,8 +11,8 @@ public static class StringExtensions
 	/// <summary>
 	/// Check whether the current <paramref name="offset"/> fits within the <paramref name="text"/> size
 	/// </summary>
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -21,8 +21,8 @@ public static class StringExtensions
 	/// <summary>
 	/// Check if the <paramref name="text"/> contains this <paramref name="character"/> at the current <paramref name="offset"/>
 	/// </summary>
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -32,8 +32,8 @@ public static class StringExtensions
 	/// <summary>
 	/// Check if the <paramref name="text"/> contains these <paramref name="characters"/> at the current <paramref name="offset"/>
 	/// </summary>
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -46,8 +46,8 @@ public static class StringExtensions
 	/// <remarks>
 	/// Special overload because XML requires 2 char tokens sometimes
 	/// </remarks>
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -58,8 +58,8 @@ public static class StringExtensions
 	/// <summary>
 	/// Check if the <paramref name="text"/> contains whitespace at the current <paramref name="offset"/>
 	/// </summary>
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif

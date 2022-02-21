@@ -9,13 +9,46 @@ using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 
-namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
+namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
+
+/// <summary>
+/// A custom converter since Mavenlink returns a list of id's with a reference to a collection instead of the nested object.
+/// </summary>
+/// <remarks>
+/// Because the <see cref="System.Collections.Generic.List{T}" /> will always contain one type we can just pick the first item in the list
+/// to determine the collection to resolve.
+/// </remarks>
+/// <example>
+/// <![CDATA[
+/// {
+///     "results": [
+///         {
+///             "key": "users",
+///             "id": "9770395"
+///         },
+///         {
+///             "key": "users",
+///             "id": "9770335"
+///         }
+///     },
+///     "users": {
+///         "9770395": {
+///             ....
+///         },
+///         "9770335": {
+///             ....
+///         }
+///     ]
+/// }
+/// ]]>
+/// </example>
+internal sealed class MavenlinkResponseDataConverter : CollectionConverter
 {
 	/// <summary>
 	/// A custom converter since Mavenlink returns a list of id's with a reference to a collection instead of the nested object.
 	/// </summary>
 	/// <remarks>
-	/// Because the <see cref="System.Collections.Generic.List{T}" /> will always contain one type we can just pick the first item in the list 
+	/// Because the <see cref="System.Collections.Generic.List{T}" /> will always contain one type we can just pick the first item in the list
 	/// to determine the collection to resolve.
 	/// </remarks>
 	/// <example>
@@ -58,9 +91,10 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 		{
 			if (objectToDeserialize is not IJsonArray arrayToDeserialize) throw new NotSupportedException();
 
-			// Get name of current property type from data
-			var firstChild = (IJsonObject?)arrayToDeserialize.Children?[0];
-			if (firstChild is null) return context.PropertyType.GetEnumerableInstance();
+		// Find nodes from root
+		var parent = (IJsonObject)context.ParentNode!;
+		var targetCollection = parent.GetProperty(collectionName)?.Value;
+		Guard.Against.Null(targetCollection, nameof(targetCollection));
 
 			var collectionKeyProperty = (IJsonValue?)firstChild.GetProperty("key")?.Value;
 			var collectionName = collectionKeyProperty?.Value?[1..^1];
@@ -77,7 +111,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters
 				.Where(child => child is not null);
 
 			var instance = context.PropertyType.GetEnumerableInstance();
-			
+
 			var genericTargetType = context.PropertyType.IsGenericType
 				? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
 				: instance.GetEnumerator().Current?.GetType() ?? typeof(object);

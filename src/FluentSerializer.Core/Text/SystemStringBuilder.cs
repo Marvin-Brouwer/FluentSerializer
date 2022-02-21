@@ -5,22 +5,28 @@ using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Text;
 
-/// <inheritdoc />
+/// <summary>
+/// Internal implementation of <see cref="ITextWriter"/> using <see cref="System.Text.StringBuilder"/><br />
+/// The reason we're using a custom implementation: <br />
+/// - Having a plug-able implementation<br />
+/// - Having control over the newline characters<br />
+/// - Having a clear definition of which methods to use when building any serializer library
+/// </summary>
 internal sealed class SystemStringBuilder : ITextWriter
 {
 	public ITextConfiguration TextConfiguration { get; }
 
 	internal readonly StringBuilder StringBuilder;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="SystemStringBuilder" />
 	public SystemStringBuilder(in ITextConfiguration textConfiguration, in StringBuilder stringBuilder)
 	{
 		TextConfiguration = textConfiguration;
 		StringBuilder = stringBuilder;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -30,8 +36,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -41,8 +47,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -54,8 +60,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -67,8 +73,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -78,8 +84,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -89,8 +95,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return this;
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -100,8 +106,8 @@ internal sealed class SystemStringBuilder : ITextWriter
 	}
 
 	#region DirectByteAccess
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -113,16 +119,16 @@ internal sealed class SystemStringBuilder : ITextWriter
 		return TextConfiguration.Encoding.GetBytes(bytes);
 	}
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public Span<byte> AsSpan() => GetBytes()
 		.AsSpan(0, StringBuilder.Length);
 
-#if NET6_OR_GREATER
-		[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif

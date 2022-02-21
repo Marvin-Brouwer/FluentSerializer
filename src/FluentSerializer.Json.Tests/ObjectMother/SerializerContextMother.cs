@@ -1,5 +1,5 @@
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.DataNodes;
 using Moq;
 

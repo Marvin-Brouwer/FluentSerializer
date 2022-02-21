@@ -4,7 +4,7 @@ using FluentSerializer.Core.Profiles;
 using Moq;
 using System;
 
-namespace FluentSerializer.Core.TestUtils.ObjectMother;
+namespace FluentSerializer.Core.Tests.ObjectMother;
 
 public static class ScanListObjectMother
 {

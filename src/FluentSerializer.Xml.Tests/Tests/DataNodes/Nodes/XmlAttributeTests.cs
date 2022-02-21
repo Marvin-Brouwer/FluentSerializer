@@ -118,7 +118,6 @@ public sealed class XmlAttributeTests
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
-		var expected = Attribute(XmlAttributeName, null);
 		var input = "attribute";
 
 		// Act

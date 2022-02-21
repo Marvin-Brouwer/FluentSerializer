@@ -39,9 +39,11 @@ public static class NamingExtensions
 	/// <summary>
 	/// Make sure the <paramref name="value"/> passed contains only valid characters.
 	/// </summary>
-	public static void InvalidName(this IGuardClause guard, in string? value, [CallerArgumentExpression("value")] string name = "") {
+	public static void InvalidName(this IGuardClause guard, in string? value, [CallerArgumentExpression("value")] string name = "")
+	{
+		const string invalidCharactersMatch = @"^[\w_\-+]*$";
 
 		guard.NullOrWhiteSpace(value, name);
-		guard.InvalidFormat(value, name, @"^[\w_\-+]*$");
+		guard.InvalidFormat(value, name, invalidCharactersMatch);
 	}
 }

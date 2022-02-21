@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Extensions;
 using Microsoft.Extensions.ObjectPool;
 using FluentSerializer.Core.Text;
+using System.Text;
 
 namespace FluentSerializer.Core.TestUtils.Helpers;
 
@@ -11,8 +12,8 @@ public readonly struct TestStringBuilderPool
 	public static readonly ObjectPool<ITextWriter> Default =
 		ObjectPoolProvider.CreateStringBuilderPool(TestStringBuilderConfiguration.Default);
 
-	public static ITextWriter CreateSingleInstance() => new SystemStringBuilder(
+	public static ITextWriter CreateSingleInstance(StringBuilder? stringBuilder = null) => new SystemStringBuilder(
 		TestStringBuilderConfiguration.Default,
-		new System.Text.StringBuilder()
+		stringBuilder ?? new StringBuilder()
 	);
 }

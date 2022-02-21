@@ -55,6 +55,7 @@ public class CollectionConverter : IJsonConverter
 			instance.Add(itemValue);
 		}
 
+		if (targetType.IsArray) return instance.ToArray();
 		return instance;
 	}
 

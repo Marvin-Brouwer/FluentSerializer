@@ -4,7 +4,12 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.UseCase.Mavenlink.Models;
 
-namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies
+namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
+
+/// <summary>
+/// Get's the name of the current request's data type
+/// </summary>
+internal class RequestEntityNameStrategy : INamingStrategy
 {
 	/// <summary>
 	/// Gets the name of the current request's data type
@@ -17,9 +22,8 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies
 	        return EntityMappings.GetDataItemName(typeName);
         }
 
-        public string GetName(in Type classType, in INamingContext namingContext)
-        {
-            throw new NotSupportedException("This converter is meant for properties only.");
-        }
-    }
+	public string GetName(in Type classType, in INamingContext namingContext)
+	{
+		throw new NotSupportedException("This converter is meant for properties only.");
+	}
 }

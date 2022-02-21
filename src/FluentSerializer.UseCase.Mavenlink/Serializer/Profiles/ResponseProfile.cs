@@ -3,6 +3,7 @@ using FluentSerializer.Core.Naming;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.UseCase.Mavenlink.Models;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 using FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles;

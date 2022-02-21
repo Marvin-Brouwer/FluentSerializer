@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace FluentSerializer.Core.TestUtils.ObjectMother;
+namespace FluentSerializer.Core.Tests.ObjectMother;
 
 public static class PropertyMapMother
 {
@@ -20,7 +20,7 @@ public static class PropertyMapMother
 	{
 		propertyMapMock
 			.Setup(propertyMap => propertyMap.GetEnumerator())
-			.Returns(new List<IPropertyMap> (0).GetEnumerator());
+			.Returns(new List<IPropertyMap>(0).GetEnumerator());
 		propertyMapMock
 			.Setup(propertyMap => propertyMap.Scan(It.IsAny<PropertyInfo>()))
 			.Returns((IPropertyMap?)null);
@@ -49,7 +49,7 @@ public static class PropertyMapMother
 	/// Create a simple representation of a <see cref="PropertyMap"/>
 	/// </summary>
 	/// <remarks>
-	/// <see cref="INamingStrategy"/> is set to <see cref="Names.Use.PascalCase"/> because this essentially is a one-to-one mapping
+	/// <see cref="Naming.NamingStrategies.INamingStrategy"/> is set to <see cref="Names.Use.PascalCase"/> because this essentially is a one-to-one mapping
 	/// when using C# coding conventions so it saves us writing a TestNamingStrategy.
 	/// </remarks>
 	public static Mock<IScanList<PropertyInfo, IPropertyMap>> WithBasicProppertyMapping(

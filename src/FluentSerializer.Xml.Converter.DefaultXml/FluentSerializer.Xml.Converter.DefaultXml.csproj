@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.xml.ico</ApplicationIcon>

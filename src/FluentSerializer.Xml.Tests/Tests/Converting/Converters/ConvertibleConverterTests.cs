@@ -1,6 +1,6 @@
 using FluentAssertions;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
@@ -18,19 +18,18 @@ namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 /// <summary>
 /// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
 /// and <see cref="Convert.ChangeType(object?, Type)"/>
-/// </remarks>
+/// </summary>
 public sealed class ConvertibleConverterTests
 {
 	private readonly ConvertibleConverter _sut;
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
-	private readonly Mock<IAdvancedXmlSerializer> _serializerMock;
 
 	public ConvertibleConverterTests()
 	{
 		_sut = new ConvertibleConverter();
-		_serializerMock = new Mock<IAdvancedXmlSerializer>();
+		var serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
-			.SetupDefault(_serializerMock);
+			.SetupDefault(serializerMock);
 	}
 
 	private static IEnumerable<object[]> GenerateConvertibleData()

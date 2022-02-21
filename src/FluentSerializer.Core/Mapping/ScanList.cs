@@ -1,7 +1,6 @@
 using Ardalis.GuardClauses;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Mapping;
@@ -20,7 +19,6 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
-		Guard.Against.InvalidInput(dataTypes, nameof(dataTypes), input => input.Any());
 
 		_storedDataTypes = dataTypes;
 	}
@@ -29,11 +27,18 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	public TScanFor? Scan(TScanBy key)
 	{
 		Guard.Against.Null(key, nameof(key));
+		if (_storedDataTypes.Count == 0) return null;
 #if (!DEBUG)
 		if (_cachedMappings.ContainsKey(key)) return _cachedMappings[key];
 #endif
 
-		var matchingType = _storedDataTypes.FirstOrDefault(dataType => Compare(key, dataType));
+		var matchingType = (TScanFor?)null;
+		foreach(var dataType in _storedDataTypes)
+		{
+			if (!Compare(key, dataType)) continue;
+			matchingType = dataType;
+		}
+
 #if (!DEBUG)
 		_cachedMappings[key] = matchingType;
 #endif
@@ -55,13 +60,13 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	public int Count => _storedDataTypes.Count;
 
 	/// <inheritdoc />
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public IEnumerator<TScanFor> GetEnumerator() => _storedDataTypes.GetEnumerator();
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -62,6 +62,7 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 			instance.Add(itemValue);
 		}
 
+		if (targetType.IsArray) return instance.ToArray();
 		return instance;
 	}
 

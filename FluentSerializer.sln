@@ -58,6 +58,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Json.Depen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentSerializer.Xml.DependencyInjection.NetCoreDefault", "src\FluentSerializer.Xml.DependencyInjection.NetCoreDefault\FluentSerializer.Xml.DependencyInjection.NetCoreDefault.csproj", "{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentSerializer.Core.Tests", "src\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj", "{62406F9F-5D1A-4CD1-BB26-7E1515182091}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,10 @@ Global
 		{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62406F9F-5D1A-4CD1-BB26-7E1515182091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62406F9F-5D1A-4CD1-BB26-7E1515182091}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62406F9F-5D1A-4CD1-BB26-7E1515182091}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62406F9F-5D1A-4CD1-BB26-7E1515182091}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{8E624F0B-F7AC-4E8F-8A4E-FA8302B771C4} = {6AE18568-4F61-4920-9D44-140C013B2F66}
 		{F095FAD7-30C7-4085-902D-32DC083C944A} = {D72D19A6-99CD-4916-A737-64B1A2D729A9}
 		{E6669DEB-2A4A-4819-9A5F-18B8CAD5DA2F} = {A3D13BDF-78FF-4674-BD80-01681DFA9B07}
+		{62406F9F-5D1A-4CD1-BB26-7E1515182091} = {6AE18568-4F61-4920-9D44-140C013B2F66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5248BDA1-F7C6-438C-B359-C7A2B9C18EED}
