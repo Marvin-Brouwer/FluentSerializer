@@ -15,7 +15,7 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// <summary>
 /// Converts most dotnet collections
 /// </summary>
-public class CollectionConverter : BaseCollectionConverter, IJsonConverter
+public class CollectionConverter : CollectionConverterBase, IJsonConverter
 {
 	/// <inheritdoc />
 	public virtual object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)

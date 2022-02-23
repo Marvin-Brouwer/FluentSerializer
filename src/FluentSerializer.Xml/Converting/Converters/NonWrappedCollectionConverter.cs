@@ -30,7 +30,7 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// ]]>
 /// </code>
 /// </summary>
-public class NonWrappedCollectionConverter : BaseCollectionConverter, IXmlConverter<IXmlElement>
+public class NonWrappedCollectionConverter : CollectionConverterBase, IXmlConverter<IXmlElement>
 {
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;

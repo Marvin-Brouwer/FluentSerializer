@@ -10,11 +10,11 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// <summary>
 /// Converts most dotnet collections
 /// </summary>
-public abstract class BaseCollectionConverter {
+public abstract class CollectionConverterBase {
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
+	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public virtual bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
 	/// <summary>

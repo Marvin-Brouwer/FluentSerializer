@@ -94,19 +94,19 @@ public sealed class BaseCollectionConverterTests
 	}
 
 	/// <inheritdoc />
-	private class TestConverter : BaseCollectionConverter
+	private class TestConverter : CollectionConverterBase
 	{
 
 		/// <inheritdoc />
 		public new IList GetEnumerableInstance(in Type targetType)
 		{
-			return BaseCollectionConverter.GetEnumerableInstance(in targetType);
+			return CollectionConverterBase.GetEnumerableInstance(in targetType);
 		}
 
 		/// <inheritdoc />
 		public new IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
 		{
-			return BaseCollectionConverter.FinalizeEnumerableInstance(in collection, in targetType);
+			return CollectionConverterBase.FinalizeEnumerableInstance(in collection, in targetType);
 		}
 	}
 }

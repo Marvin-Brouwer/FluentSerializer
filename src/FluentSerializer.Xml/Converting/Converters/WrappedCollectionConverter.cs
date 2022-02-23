@@ -32,7 +32,7 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// ]]>
 /// </code>
 /// </summary>
-public class WrappedCollectionConverter : BaseCollectionConverter, IXmlConverter<IXmlElement>
+public class WrappedCollectionConverter : CollectionConverterBase, IXmlConverter<IXmlElement>
 {
 	/// <inheritdoc />
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
