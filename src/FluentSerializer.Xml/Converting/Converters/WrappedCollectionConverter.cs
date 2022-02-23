@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
@@ -32,22 +32,17 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// ]]>
 /// </code>
 /// </summary>
-public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
+public class WrappedCollectionConverter : BaseCollectionConverter, IXmlConverter<IXmlElement>
 {
-	/// <inheritdoc />
-	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
-	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
-
 	/// <inheritdoc />
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		var targetType = context.PropertyType;
-		var instance = targetType.GetEnumerableInstance();
+		var collection = GetEnumerableInstance(in targetType);
 
 		var genericTargetType = context.PropertyType.IsGenericType
 			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
-			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+			: collection.GetEnumerator().Current?.GetType() ?? typeof(object);
 
 		var itemNamingStrategy = context.FindNamingStrategy(in genericTargetType) ?? context.NamingStrategy;
 
@@ -59,11 +54,10 @@ public class WrappedCollectionConverter : IXmlConverter<IXmlElement>
 			var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
 			if (itemValue is null) continue;
 
-			instance.Add(itemValue);
+			collection.Add(itemValue);
 		}
 
-		if (targetType.IsArray) return instance.ToArray();
-		return instance;
+		return FinalizeEnumerableInstance(in collection, in targetType);
 	}
 
 	/// <inheritdoc />

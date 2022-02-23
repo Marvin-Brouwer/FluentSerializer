@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
@@ -29,7 +30,7 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// ]]>
 /// </code>
 /// </summary>
-public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
+public class NonWrappedCollectionConverter : BaseCollectionConverter, IXmlConverter<IXmlElement>
 {
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -43,11 +44,11 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 		if (context.ParentNode is not IXmlElement parent) throw new NotSupportedException("Only 'IXmlElement' nodes are useful parents for this converter");
 
 		var targetType = context.PropertyType;
-		var instance = targetType.GetEnumerableInstance();
+		var collection = GetEnumerableInstance(in targetType);
 
 		var genericTargetType = context.PropertyType.IsGenericType
 			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
-			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+			: collection.GetEnumerator().Current?.GetType() ?? typeof(object);
 
 		var itemNamingStrategy = context.FindNamingStrategy(in genericTargetType)
 		                         ?? context.NamingStrategy;
@@ -59,11 +60,10 @@ public class NonWrappedCollectionConverter : IXmlConverter<IXmlElement>
 			var itemValue = ((IAdvancedXmlSerializer)context.CurrentSerializer).Deserialize(item, genericTargetType);
 			if (itemValue is null) continue;
 
-			instance.Add(itemValue);
+			collection.Add(itemValue);
 		}
 
-		if (targetType.IsArray) return instance.ToArray();
-		return instance;
+		return FinalizeEnumerableInstance(in collection, in targetType);
 	}
 
 	/// <inheritdoc />

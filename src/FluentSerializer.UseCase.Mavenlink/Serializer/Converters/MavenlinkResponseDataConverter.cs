@@ -2,7 +2,6 @@ using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 
@@ -43,8 +42,6 @@ internal sealed class MavenlinkResponseDataConverter : CollectionConverter
 {
 	/// <inheritdoc />
 	public override SerializerDirection Direction => SerializerDirection.Deserialize;
-	/// <inheritdoc />
-	public override bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
 	/// <inheritdoc />
 	public override IJsonNode Serialize(in object objectToSerialize, in ISerializerContext context) =>
@@ -54,7 +51,8 @@ internal sealed class MavenlinkResponseDataConverter : CollectionConverter
 	public override object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IJsonArray arrayToDeserialize) throw new NotSupportedException();
-		if (arrayToDeserialize.Children.Count == 0) return context.PropertyType.GetEnumerableInstance();
+		if (arrayToDeserialize.Children.Count == 0) return FinalizeEnumerableInstance(
+			GetEnumerableInstance(context.PropertyType), context.PropertyType);
 
 		// Get name of current property type from data
 		var firstChild = (IJsonObject)arrayToDeserialize.Children[0];

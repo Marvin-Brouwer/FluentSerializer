@@ -70,31 +70,6 @@ public sealed class TypeExtensionTests
 
 	[Fact,
 	 Trait("Category", "UnitTest")]
-	public void GetEnumerableInstance()
-	{
-		// Arrange
-		var input1 = typeof(IEnumerable);
-		var input2 = typeof(int[]);
-		var input3 = typeof(List<int>);
-		var input4 = typeof(ArrayList);
-
-		// Act
-		var result1 = input1.GetEnumerableInstance();
-		var result2 = input2.GetEnumerableInstance();
-		var result3 = input3.GetEnumerableInstance();
-		var result4 = input4.GetEnumerableInstance();
-
-		// Assert
-		result1.Should().BeOfType<List<object>>();
-		result2.Should().BeOfType<List<int>>();
-		input2.IsArray.Should().BeTrue();
-		result2.ToArray().Should().BeOfType<int[]>();
-		result3.Should().BeOfType<List<int>>();
-		result4.Should().BeOfType<ArrayList>();
-	}
-
-	[Fact,
-	 Trait("Category", "UnitTest")]
 	public void IsEnumerable()
 	{
 		// Arrange
