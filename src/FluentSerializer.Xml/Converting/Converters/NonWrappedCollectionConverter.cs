@@ -33,11 +33,6 @@ namespace FluentSerializer.Xml.Converting.Converters;
 public class NonWrappedCollectionConverter : CollectionConverterBase, IXmlConverter<IXmlElement>
 {
 	/// <inheritdoc />
-	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
-	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
-
-	/// <inheritdoc />
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		if (context.ParentNode is null) throw new NotSupportedException("You cannot deserialize a non-wrapped selection at root level");
