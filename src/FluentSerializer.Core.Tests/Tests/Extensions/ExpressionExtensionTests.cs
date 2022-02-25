@@ -14,7 +14,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class ExpressionExtensionTests
 {
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 MemberData(nameof(ValidCharacters))]
 	public void SafeGetName_NameValid_ReturnsName(string input)
 	{
@@ -37,7 +37,7 @@ public sealed class ExpressionExtensionTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 MemberData(nameof(InvalidCharacters))]
 	public void SafeGetName_NameInValid_Throws(string input)
 	{
@@ -66,7 +66,7 @@ public sealed class ExpressionExtensionTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(""), InlineData(" "), InlineData("\t"), InlineData("\r"), InlineData("\n")]
 	public void SafeGetName_NameNullOrWitheSpace_Throws(string input)
 	{
@@ -95,7 +95,7 @@ public sealed class ExpressionExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void SafeGetName_NameNull_Throws()
 	{
 		// Arrange

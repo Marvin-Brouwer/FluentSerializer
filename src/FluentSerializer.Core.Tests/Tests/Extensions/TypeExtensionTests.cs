@@ -10,7 +10,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class TypeExtensionTests
 {
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void EqualsTopLevel_Equals_ReturnsTrue()
 	{
 		// Arrange
@@ -32,7 +32,7 @@ public sealed class TypeExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void EqualsTopLevel_NotEquals_ReturnsFalse()
 	{
 		// Arrange
@@ -51,7 +51,7 @@ public sealed class TypeExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void Implements()
 	{
 		// Arrange
@@ -69,7 +69,7 @@ public sealed class TypeExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void IsEnumerable()
 	{
 		// Arrange
@@ -89,7 +89,7 @@ public sealed class TypeExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void IsNullable()
 	{
 		// Arrange

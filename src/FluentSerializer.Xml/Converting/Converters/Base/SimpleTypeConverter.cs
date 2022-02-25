@@ -1,5 +1,3 @@
-using System;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;

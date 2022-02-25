@@ -21,7 +21,7 @@ public sealed class JsonCommentMultiLineTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
@@ -37,7 +37,7 @@ public sealed class JsonCommentMultiLineTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -61,7 +61,7 @@ public sealed class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
 	{
 		// Arrange
@@ -77,7 +77,7 @@ public sealed class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange
@@ -95,7 +95,7 @@ public sealed class JsonCommentMultiLineTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentMultiLine_FormatWriteNull_ReturnsCommentMultiLine()
 	{
 		// Arrange
@@ -111,7 +111,7 @@ public sealed class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentMultiLine_FormatWriteNull_ReturnsEmptyCommentMultiLine()
 	{
 		// Arrange
@@ -127,7 +127,7 @@ public sealed class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentMultiLine_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

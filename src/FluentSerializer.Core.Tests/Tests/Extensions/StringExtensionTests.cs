@@ -8,7 +8,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class StringExtensionTests
 {
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void WithinCapacity_InCapacity_ReturnsTrue()
 	{
 		// Arrange
@@ -23,7 +23,7 @@ public sealed class StringExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void WithinCapacity_NotInCapacity_ReturnsFalse()
 	{
 		// Arrange
@@ -39,7 +39,7 @@ public sealed class StringExtensionTests
 
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData('y', 0, true), InlineData('y', 2, false), InlineData('n', 0, false)]
 	public void HasCharacterAtOffset_ReturnsBoolean(char input, int offset, bool expectation)
 	{
@@ -54,7 +54,7 @@ public sealed class StringExtensionTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData('y', 'e', 0, true), InlineData('y', 'e', 1, false), InlineData('y', 'n', 0, false)]
 	public void HasCharactersAtOffset_ReturnsBoolean(char input1, char input2, int offset, bool expectation)
 	{
@@ -73,7 +73,7 @@ public sealed class StringExtensionTests
 
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(0, false), InlineData(1, true), InlineData(3, true)]
 	public void HasWhiteSpaceAtOffset_ReturnsBoolean(int offset, bool expectation)
 	{

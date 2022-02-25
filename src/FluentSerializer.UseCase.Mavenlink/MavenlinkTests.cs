@@ -31,7 +31,7 @@ public sealed partial class MavenlinkTests
 	}
 
 	[Fact,
-	 Trait("Category", "UseCase")]
+		Trait("Category", "UseCase")]
 	public async Task Serialize()
 	{
 		// Arrange
@@ -48,7 +48,7 @@ public sealed partial class MavenlinkTests
 	}
 
 	[Fact,
-	 Trait("Category", "UseCase")]
+		Trait("Category", "UseCase")]
 	public async Task Deserialize()
 	{
 		// Arrange

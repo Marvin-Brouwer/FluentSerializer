@@ -27,7 +27,7 @@ public sealed class ScanListTests
 	};
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ClassMapScan_NoMatch_ReturnsNone()
 	{
 		// Arrange
@@ -42,7 +42,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ClassMapScan_Match_ReturnsClassMap()
 	{
 		// Arrange
@@ -57,7 +57,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void PropertyMapScan_NoMatch_ReturnsNone()
 	{
 		// Arrange
@@ -72,7 +72,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void PropertyMapScan_Match_ReturnsClassMap()
 	{
 		// Arrange

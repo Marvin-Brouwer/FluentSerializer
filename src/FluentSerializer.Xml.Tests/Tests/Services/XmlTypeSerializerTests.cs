@@ -39,7 +39,7 @@ public sealed class XmlTypeSerializerTests
 	/// XML specs that a file cannot have more than one root node.
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeToElement_TypeIsEnumerable_Throws()
 	{
 		// Arrange
@@ -63,7 +63,7 @@ public sealed class XmlTypeSerializerTests
 	/// We need a profile to serialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeToElement_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -84,7 +84,7 @@ public sealed class XmlTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeToElement_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -108,7 +108,7 @@ public sealed class XmlTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeToElement_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -138,7 +138,7 @@ public sealed class XmlTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeToElement_ElementPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -168,7 +168,7 @@ public sealed class XmlTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeFromAttribute_AttributePropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -198,7 +198,7 @@ public sealed class XmlTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void SerializeFromText_TextPropertyMapping_ReturnsValue()
 	{
 		// Arrange

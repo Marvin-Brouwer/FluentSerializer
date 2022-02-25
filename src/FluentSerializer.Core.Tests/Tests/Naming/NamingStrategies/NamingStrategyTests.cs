@@ -13,7 +13,7 @@ public sealed class NamingStrategyTests
 	private static readonly Mock<INamingContext> _namingContextMock = new();
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 MemberData(nameof(ValidNamingRequests))]
 	public void ValidString_GetName_ConvertsName(in INamingStrategy sut, in string expectedClassName, in string expectedPropertyName)
 	{

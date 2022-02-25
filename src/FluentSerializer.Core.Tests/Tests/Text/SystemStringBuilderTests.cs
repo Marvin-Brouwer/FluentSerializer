@@ -15,7 +15,7 @@ public sealed class SystemStringBuilderTests
 	private static StringBuilder StringBuilderSpy => new();
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void TextWriter_AllMethods_ForwardToStringBuilderWithConfigValues()
 	{
 		// Arrange

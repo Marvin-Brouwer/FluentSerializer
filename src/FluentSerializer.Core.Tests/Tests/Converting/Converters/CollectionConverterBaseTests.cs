@@ -7,7 +7,7 @@ using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
 
-public sealed class BaseCollectionConverterTests
+public sealed class CollectionConverterBaseTests
 {
 	[Theory,
 		Trait("Category", "UnitTest"),
@@ -28,7 +28,7 @@ public sealed class BaseCollectionConverterTests
 	[Theory,
 		Trait("Category", "UnitTest"),
 		InlineData(typeof(bool)), InlineData(typeof(int)), InlineData(typeof(string))]
-	public void CanConvert_IsNotEnumerableOrIsString_ReturnsTrue(Type input)
+	public void CanConvert_IsNotEnumerableOrIsString_ReturnsFalse(Type input)
 	{
 		// Arrange
 		var sut = new TestConverter();
@@ -96,14 +96,13 @@ public sealed class BaseCollectionConverterTests
 	/// <inheritdoc />
 	private class TestConverter : CollectionConverterBase
 	{
-
-		/// <inheritdoc />
+		/// <inheritdoc cref="CollectionConverterBase.GetEnumerableInstance" />
 		public new IList GetEnumerableInstance(in Type targetType)
 		{
 			return CollectionConverterBase.GetEnumerableInstance(in targetType);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc cref="CollectionConverterBase.FinalizeEnumerableInstance" />
 		public new IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
 		{
 			return CollectionConverterBase.FinalizeEnumerableInstance(in collection, in targetType);
