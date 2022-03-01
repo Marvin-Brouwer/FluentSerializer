@@ -26,7 +26,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |
@@ -111,7 +111,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |
@@ -266,7 +266,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |
