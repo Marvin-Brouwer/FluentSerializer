@@ -89,6 +89,8 @@ jobs:
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
           ./src/*/bin/Release/*/ref/*.*
+          ./src/*/obj/Release/*/ref/*.*
+          ./src/*/bin/Release/*/apphost
           ./src/*/obj/Release/*/apphost
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
