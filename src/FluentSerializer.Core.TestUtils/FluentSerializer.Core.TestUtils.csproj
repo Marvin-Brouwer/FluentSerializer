@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<IsPackable>false</IsPackable>
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.default.ico</ApplicationIcon>
@@ -18,9 +19,9 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="6.5.1" />
-		<PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+		<PackageReference Include="GitHubActionsTestLogger" Version="1.3.0" />
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.2" />
-		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="Moq" Version="4.17.1" />
 	</ItemGroup>
 
 	<ItemGroup>

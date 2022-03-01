@@ -32,7 +32,7 @@ By default it looks like this:
 - **DefaultPropertyNamingStrategy** = camelCase
 - **DefaultConverters**
   - Converter that can handle DateTime objects (XML spec compliant)
-  - Converter that can handle IConvertable types
+  - Converter that can handle IConvertible types
   - Converter to handle collection types (wrapped XML collection)
   
 ## Creating profiles

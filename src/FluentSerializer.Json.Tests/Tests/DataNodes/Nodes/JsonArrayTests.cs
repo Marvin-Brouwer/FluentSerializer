@@ -21,7 +21,7 @@ public sealed class JsonArrayTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
@@ -37,7 +37,7 @@ public sealed class JsonArrayTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -61,7 +61,7 @@ public sealed class JsonArrayTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
 	{
 		// Arrange
@@ -77,7 +77,7 @@ public sealed class JsonArrayTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange
@@ -95,7 +95,7 @@ public sealed class JsonArrayTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -111,7 +111,7 @@ public sealed class JsonArrayTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyArray()
 	{
 		// Arrange
@@ -127,7 +127,7 @@ public sealed class JsonArrayTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyArray()
 	{
 		// Arrange

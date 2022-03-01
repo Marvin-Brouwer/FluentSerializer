@@ -32,6 +32,7 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 		DefaultNamingStrategy = Names.Use.CamelCase;
 		DefaultConverters = new List<IConverter>
 		{
+			UseJsonConverters.DefaultEnumConverter,
 			UseJsonConverters.DefaultDateConverter,
 			UseJsonConverters.ConvertibleConverter,
 

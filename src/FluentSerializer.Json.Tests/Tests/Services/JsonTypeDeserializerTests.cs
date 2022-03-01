@@ -3,7 +3,7 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
@@ -37,7 +37,7 @@ public sealed class JsonTypeDeserializerTests
 	/// We need a profile to deserialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -61,7 +61,7 @@ public sealed class JsonTypeDeserializerTests
 	/// We need a node to get values
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NodeIsNotPresent_Throws()
 	{
 		// Arrange
@@ -87,7 +87,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NonNullableValueIsNull_Throws()
 	{
 		// Arrange
@@ -113,7 +113,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -134,7 +134,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -161,7 +161,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_ObjectPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -191,7 +191,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_TypeIsEnumerable_ReturnsEnumerable()
 	{
 		// Arrange

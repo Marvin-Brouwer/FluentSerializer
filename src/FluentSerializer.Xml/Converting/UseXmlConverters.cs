@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters.Base;
 using FluentSerializer.Xml.DataNodes;
@@ -12,8 +13,9 @@ public sealed class UseXmlConverters : IUseXmlConverters
 {
 	internal static readonly SimpleTypeConverter<DateTime> DefaultDateConverter = new DefaultDateConverter();
 	internal static readonly IXmlConverter<IXmlElement> WrappedCollectionConverter = new WrappedCollectionConverter();
-	internal static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
+	private static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
+	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormat.Default);
 
 	/// <inheritdoc/>
 	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateConverter;
@@ -30,5 +32,13 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	{
 		if (wrapCollection) return () => WrappedCollectionConverter;
 		return () => NonWrappedCollectionConverter;
+	}
+
+	/// <inheritdoc />
+	public IXmlConverter Enum() => DefaultEnumConverter;
+	/// <inheritdoc />
+	public Func<IXmlConverter> Enum(EnumFormat format)
+	{
+		return () => new EnumConverter(format);
 	}
 }

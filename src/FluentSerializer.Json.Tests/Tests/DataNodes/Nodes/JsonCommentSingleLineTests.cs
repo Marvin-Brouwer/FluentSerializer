@@ -20,7 +20,7 @@ public sealed class JsonCommentSingleLineTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
@@ -36,7 +36,7 @@ public sealed class JsonCommentSingleLineTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(" "), InlineData("  "), InlineData("\t")]
 	public void ParseJson_ValidWithWhiteSpace_ReturnsObject(string space)
 	{
@@ -58,7 +58,7 @@ public sealed class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
 	{
 		// Arrange
@@ -74,7 +74,7 @@ public sealed class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange
@@ -92,7 +92,7 @@ public sealed class JsonCommentSingleLineTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentSingleLine_FormatWriteNull_ReturnsCommentSingleLine()
 	{
 		// Arrange
@@ -108,7 +108,7 @@ public sealed class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentSingleLine_FormatWriteNull_ReturnsEmptyCommentSingleLine()
 	{
 		// Arrange
@@ -124,7 +124,7 @@ public sealed class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentSingleLine_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange
@@ -141,7 +141,7 @@ public sealed class JsonCommentSingleLineTests
 
 	// Special case, when formatting is turned of this should print the multiline syntax as a safeguard
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentSingleLine_NoFormatWriteNull_ReturnsCommentMultiLine()
 	{
 		// Arrange

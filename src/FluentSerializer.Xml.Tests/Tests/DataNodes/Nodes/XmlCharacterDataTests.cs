@@ -23,7 +23,7 @@ public sealed class XmlCharacterDataTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Valid_ReturnsCharacterData()
 	{
 		// Arrange
@@ -39,7 +39,7 @@ public sealed class XmlCharacterDataTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -59,7 +59,7 @@ public sealed class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Empty_ReturnsCharacterData()
 	{
 		// Arrange
@@ -75,7 +75,7 @@ public sealed class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
@@ -94,7 +94,7 @@ public sealed class XmlCharacterDataTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -110,7 +110,7 @@ public sealed class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyCharacterData()
 	{
 		// Arrange
@@ -126,7 +126,7 @@ public sealed class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

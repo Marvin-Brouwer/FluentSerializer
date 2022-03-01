@@ -25,7 +25,7 @@ public sealed class JsonPropertyTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsProperty()
 	{
 		// Arrange
@@ -41,7 +41,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -65,7 +65,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange
@@ -81,7 +81,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_InvalidName_ReturnsPropertyWithInvalidName()
 	{
 		// Arrange
@@ -97,7 +97,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_InvalidStructure_ReturnsPropertysWithInvalidName()
 	{
 		// Arrange
@@ -122,7 +122,7 @@ public sealed class JsonPropertyTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -138,7 +138,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsNullValue()
 	{
 		// Arrange
@@ -154,7 +154,7 @@ public sealed class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

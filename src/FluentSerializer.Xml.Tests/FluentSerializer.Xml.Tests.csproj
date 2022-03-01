@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<IsPackable>false</IsPackable>
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.xml.ico</ApplicationIcon>
@@ -26,9 +27,9 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="6.5.1" />
-		<PackageReference Include="GitHubActionsTestLogger" Version="1.2.0" />
+		<PackageReference Include="GitHubActionsTestLogger" Version="1.3.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="Moq" Version="4.17.1" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.console" Version="2.4.1">
 			<PrivateAssets>all</PrivateAssets>
@@ -45,6 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\FluentSerializer.Core.Tests\FluentSerializer.Core.Tests.csproj" />
 		<ProjectReference Include="..\FluentSerializer.Core.TestUtils\FluentSerializer.Core.TestUtils.csproj" />
 		<ProjectReference Include="..\FluentSerializer.Xml\FluentSerializer.Xml.csproj" />
 	</ItemGroup>

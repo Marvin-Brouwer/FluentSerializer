@@ -37,6 +37,7 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 		DefaultPropertyNamingStrategy = Names.Use.CamelCase;
 		DefaultConverters = new List<IConverter>
 		{
+			UseXmlConverters.DefaultEnumConverter,
 			UseXmlConverters.DefaultDateConverter,
 			UseXmlConverters.ConvertibleConverter,
 

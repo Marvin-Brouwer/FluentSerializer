@@ -1,7 +1,6 @@
-﻿namespace FluentSerializer.UseCase.OpenAir.Models.Base
+﻿namespace FluentSerializer.UseCase.OpenAir.Models.Base;
+
+internal abstract class OpenAirEntity
 {
-    internal abstract class OpenAirEntity
-    {
-        public string Id { get; set; } = string.Empty;
-    }
+	public string Id { get; set; } = string.Empty;
 }

@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.json.ico</ApplicationIcon>
@@ -42,7 +43,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.2" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

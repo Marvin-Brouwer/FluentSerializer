@@ -11,7 +11,7 @@ public static class OffsetExtensions
 	/// <summary>
 	/// Adjust the offset by the length of the provided token
 	/// </summary>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -25,7 +25,7 @@ public static class OffsetExtensions
 	/// <remarks>
 	/// This overload is mainly for readability since the length of a single char is always 1
 	/// </remarks>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +39,7 @@ public static class OffsetExtensions
 	/// <summary>
 	/// Adjust the offset by the amount of whitespace found after the current <paramref name="offset"/>
 	/// </summary>
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

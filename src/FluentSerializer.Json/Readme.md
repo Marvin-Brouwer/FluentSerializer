@@ -35,7 +35,7 @@ By default it looks like this:
 - **DefaultNamingStrategy** = camelCase
 - **DefaultConverters**
   - Converter that can handle DateTime objects (JSON spec compliant)
-  - Converter that can handle IConvertable types
+  - Converter that can handle IConvertible types
   - Converter to handle collection types
 
 ## Creating profiles

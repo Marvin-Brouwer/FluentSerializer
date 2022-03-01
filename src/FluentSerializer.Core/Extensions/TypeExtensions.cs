@@ -49,28 +49,6 @@ public static class TypeExtensions
 	}
 
 	/// <summary>
-	/// Create a new instance of <see cref="IList"/> that matches the passed <paramref name="type"/> most closely
-	/// </summary>
-	/// <param name="type"></param>
-	/// <returns></returns>
-	/// <exception cref="NotSupportedException"></exception>
-	public static IList GetEnumerableInstance(this Type type)
-	{
-		if (type.EqualsTopLevel(typeof(Array))) return (IList)Activator.CreateInstance(type)!;
-		if (type.EqualsTopLevel(typeof(ArrayList))) return (IList)Activator.CreateInstance(type)!;
-		if (type.EqualsTopLevel(typeof(List<>))) return (IList)Activator.CreateInstance(type)!;
-
-		if (type.IsInterface && typeof(IEnumerable).IsAssignableFrom(type))
-		{
-			var listType = typeof(List<>);
-			var genericType = type.GetTypeInfo().GenericTypeArguments;
-			return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
-		}
-
-		throw new NotSupportedException($"Unable to create an enumerable collection of '{type.FullName}'");
-	}
-
-	/// <summary>
 	/// Check if a type is Enumerable but not a string.
 	/// </summary>
 	public static bool IsEnumerable(this Type type) => 

@@ -43,7 +43,7 @@ public class SerializerContext : NamingContext, ISerializerContext
 	}
 
 	/// <inheritdoc />
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

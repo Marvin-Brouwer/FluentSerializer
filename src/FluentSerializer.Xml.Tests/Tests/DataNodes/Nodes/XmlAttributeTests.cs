@@ -24,7 +24,7 @@ public sealed class XmlAttributeTests
 
 	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Valid_ReturnsAttribute()
 	{
 		// Arrange
@@ -40,7 +40,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -59,7 +59,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Empty_ReturnsAttribute()
 	{
 		// Arrange
@@ -75,7 +75,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_InvalidName_ReturnsAttributeWithInvalidName()
 	{
 		// Arrange
@@ -91,7 +91,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_InvalidStructure_ReturnsAttributeWithInvalidName()
 	{
 		// Arrange
@@ -114,11 +114,10 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
-		var expected = Attribute(XmlAttributeName, null);
 		var input = "attribute";
 
 		// Act
@@ -133,7 +132,7 @@ public sealed class XmlAttributeTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -149,7 +148,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyAttribute()
 	{
 		// Arrange
@@ -165,7 +164,7 @@ public sealed class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

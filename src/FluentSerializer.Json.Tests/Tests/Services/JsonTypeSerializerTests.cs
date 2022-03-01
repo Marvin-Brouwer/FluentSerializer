@@ -3,7 +3,7 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
@@ -37,7 +37,7 @@ public sealed class JsonTypeSerializerTests
 	/// We need a profile to serialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void SerializeToNode_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -58,7 +58,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void SerializeToNode_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -82,7 +82,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void SerializeToNode_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -112,7 +112,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void SerializeToNode_ObjectPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -142,7 +142,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void SerializeToNode_TypeIsEnumerable_ReturnsArray()
 	{
 		// Arrange

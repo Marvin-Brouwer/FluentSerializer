@@ -1,10 +1,9 @@
 using FluentAssertions;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.TestUtils.ObjectMother;
+using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
-using FluentSerializer.Json.Tests.ObjectMother;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -18,19 +17,18 @@ namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 /// <summary>
 /// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
 /// and <see cref="Convert.ChangeType(object?, Type)"/>
-/// </remarks>
+/// </summary>
 public sealed class ConvertibleConverterTests
 {
 	private readonly ConvertibleConverter _sut;
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
-	private readonly Mock<IAdvancedJsonSerializer> _serializerMock;
 
 	public ConvertibleConverterTests()
 	{
 		_sut = new ConvertibleConverter();
-		_serializerMock = new Mock<IAdvancedJsonSerializer>();
+		var serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
-			.SetupDefault(_serializerMock);
+			.SetupDefault(serializerMock);
 	}
 
 	private static IEnumerable<object[]> GenerateConvertibleData()
@@ -43,7 +41,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Serialize
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(null, ""), InlineData("", "\"\"")]
 	public void Serialize_NullOrEmpty_ReturnsEmptyString(string input, string expectedValue)
 	{
@@ -60,7 +58,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Serialize_NonConvertible_ReturnsToString()
 	{
 		// Arrange
@@ -77,7 +75,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializeAttributeConvertible_ReturnsString(object input, string expectedValue)
 	{
@@ -96,7 +94,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_EmptyValue_ReturnsDefault(object requested, string unused)
 	{
@@ -119,9 +117,9 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void Deserialize_Convertable_ReturnsValue(object expected, string inputValue)
+	public void Deserialize_Convertible_ReturnsValue(object expected, string inputValue)
 	{
 		// Arrange
 		var input = Value(inputValue);
@@ -139,8 +137,8 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
-	public void Deserialize_Convertable_IncorrectFormat_Throws()
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange
 		var input = Value("SomeText");
@@ -158,8 +156,8 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
-	public void Deserialize_NonConvertable_Throws()
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+	public void Deserialize_NonConvertible_Throws()
 	{
 		// Arrange
 		var input = Value("Doesn't matter");

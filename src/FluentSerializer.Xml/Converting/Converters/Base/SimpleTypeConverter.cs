@@ -1,7 +1,6 @@
-using System;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 
@@ -12,32 +11,8 @@ namespace FluentSerializer.Xml.Converting.Converters.Base;
 /// <summary>
 /// This class contains methods that are used when converting simple types
 /// </summary>
-public abstract class SimpleTypeConverter<TObject> : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
+public abstract class SimpleTypeConverter<TObject> : SimpleTypeConverterBase<TObject>, IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
-	/// <inheritdoc />
-	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
-	public virtual bool CanConvert(in Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
-
-	/// <summary>
-	/// Abstract placeholder for converting to string logic
-	/// </summary>
-	protected abstract string ConvertToString(in TObject value);
-	/// <summary>
-	/// Abstract placeholder for converting to object logic
-	/// </summary>
-	protected abstract TObject ConvertToDataType(in string currentValue);
-
-	/// <summary>
-	/// Wrapper around <see cref="ConvertToDataType(in string)"/> to support nullable values
-	/// </summary>
-	protected virtual TObject? ConvertToNullableDataType(in string? currentValue)
-	{
-		if (string.IsNullOrWhiteSpace(currentValue)) return default;
-
-		return ConvertToDataType(in currentValue);
-	}
-
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(attributeToDeserialize.Value);

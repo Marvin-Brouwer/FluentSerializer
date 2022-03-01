@@ -1,6 +1,7 @@
 using FluentSerializer.Json.Converting.Converters;
 using System;
 using System.Globalization;
+using FluentSerializer.Core.Converting.Converters;
 
 namespace FluentSerializer.Json.Converting;
 
@@ -20,4 +21,9 @@ public interface IUseJsonConverters
 
 	/// <inheritdoc cref="CollectionConverter" />
 	IJsonConverter Collection();
+
+	/// <inheritdoc cref="EnumConverter" />
+	IJsonConverter Enum();
+	/// <inheritdoc cref="EnumConverter(in EnumFormat, in bool)" />
+	Func<IJsonConverter> Enum(EnumFormat format, bool writeNumbersAsString = true);
 }

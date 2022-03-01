@@ -42,7 +42,7 @@ public static class ProfileScanner
 		return new ClassMapScanList<TSerializerProfile>(classMaps);
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -57,7 +57,7 @@ public static class ProfileScanner
 		}
 	}
 
-#if NET6_OR_GREATER
+#if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

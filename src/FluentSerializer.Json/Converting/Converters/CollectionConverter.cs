@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Services;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
@@ -16,13 +15,8 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// <summary>
 /// Converts most dotnet collections
 /// </summary>
-public class CollectionConverter : IJsonConverter
+public class CollectionConverter : CollectionConverterBase, IJsonConverter
 {
-	/// <inheritdoc />
-	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
-	public virtual bool CanConvert(in Type targetType) => targetType.IsEnumerable();
-
 	/// <inheritdoc />
 	public virtual object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
@@ -38,11 +32,11 @@ public class CollectionConverter : IJsonConverter
 	/// <exception cref="NotSupportedException"></exception>
 	public static object? DeserializeCollection(in IJsonArray arrayToDeserialize, in Type targetType, in ISerializer jsonSerializer)
 	{
-		var instance = targetType.GetEnumerableInstance();
+		var collection = GetEnumerableInstance(in targetType);
 
 		var genericTargetType = targetType.IsGenericType
 			? targetType.GetTypeInfo().GenericTypeArguments[0]
-			: instance.GetEnumerator().Current?.GetType() ?? typeof(object);
+			: collection.GetEnumerator().Current?.GetType() ?? typeof(object);
 
 		foreach (var item in arrayToDeserialize.Children)
 		{
@@ -52,10 +46,10 @@ public class CollectionConverter : IJsonConverter
 			var itemValue = ((IAdvancedJsonSerializer)jsonSerializer).Deserialize(container, genericTargetType);
 			if (itemValue is null) continue;
 
-			instance.Add(itemValue);
+			collection.Add(itemValue);
 		}
 
-		return instance;
+		return FinalizeEnumerableInstance(in collection, in targetType);
 	}
 
 	/// <inheritdoc />

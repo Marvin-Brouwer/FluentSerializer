@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<IsPackable>false</IsPackable>
 		<ApplicationIcon>..\..\doc\logo\NuGetIcon.default.ico</ApplicationIcon>
@@ -25,7 +26,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
+		<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.1.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

@@ -8,34 +8,33 @@ using FluentSerializer.Xml.DataNodes;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
-namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters
+namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
+
+/// <summary>
+/// The RequestTypeValueConverter is used to reflect out the element name of the data passed.
+/// OpenAir requires this value to be matched exactly on the type attribute.
+/// </summary>
+public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
 {
-    /// <summary>
-    /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.
-    /// OpenAir requires this value to be matched exactly on the type attribute.
-    /// </summary>
-    public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
+	/// <inheritdoc />
+	public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
+	/// <inheritdoc />
+	public bool CanConvert(in Type targetType) => typeof(string) == targetType;
+	/// <inheritdoc />
+	public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
+
+	/// <inheritdoc />
+	public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
-		/// <inheritdoc />
-		public SerializerDirection Direction { get; } = SerializerDirection.Serialize;
-		/// <inheritdoc />
-		public bool CanConvert(in Type targetType) => typeof(string) == targetType;
-		/// <inheritdoc />
-		public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
+		// We know this to be true because of RequestObject<TModel>
+		var classType = context.ClassType.GetTypeInfo().GenericTypeArguments[0];
+		var classNamingStrategy = context.FindNamingStrategy(in classType);
+		if (classNamingStrategy is null)
+			throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
 
-		/// <inheritdoc />
-		public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)
-        {
-            // We know this to be true because of RequestObject<TModel>
-            var classType = context.ClassType.GetTypeInfo().GenericTypeArguments[0];
-            var classNamingStrategy = context.FindNamingStrategy(in classType);
-            if (classNamingStrategy is null)
-                throw new NotSupportedException($"Unable to find a NamingStrategy for '{classType.FullName}'");
+		var elementTypeString = classNamingStrategy.SafeGetName(classType, context);
+		var attributeName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 
-            var elementTypeString = classNamingStrategy.SafeGetName(classType, context);
-            var attributeName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
-
-            return Attribute(in attributeName, in elementTypeString);
-        }
-    }
+		return Attribute(in attributeName, in elementTypeString);
+	}
 }
