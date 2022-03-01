@@ -17,7 +17,7 @@ public static class ResponseBaseProfile
 	{
 		builder 
 			.Attribute(responseObject => responseObject.StatusCode,
-				namingStrategy: Names.Are("status"))
+				namingStrategy: Names.Equal("status"))
 			.Child(response => response.Data,
 				namingStrategy: Names.Use.ResponseTypeName,
 				converter: Converter.For.Collection(false));

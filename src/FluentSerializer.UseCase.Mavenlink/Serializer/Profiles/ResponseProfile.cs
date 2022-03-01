@@ -13,15 +13,15 @@ public sealed class ResponseProfile : JsonSerializerProfile
 		For<Response<IMavenlinkEntity>>()
 			.Property(project => project.Count)
 			.Property(project => project.PageCount,
-				namingStrategy: Names.Are("meta"),
+				namingStrategy: Names.Equal("meta"),
 				converter: Converter.For.MavenlinkResponsePageCount
 			)
 			.Property(project => project.CurrentPage,
-				namingStrategy: Names.Are("meta"),
+				namingStrategy: Names.Equal("meta"),
 				converter: Converter.For.MavenlinkResponseCurrentPage
 			)
 			.Property(project => project.Data,
-				namingStrategy: Names.Are("results"),
+				namingStrategy: Names.Equal("results"),
 				converter: Converter.For.MavenlinkResponseData
 			);
 	}

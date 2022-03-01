@@ -14,7 +14,7 @@ namespace FluentSerializer.Core.Tests.Tests.Mapping;
 public sealed class ScanListTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
-	private static readonly Func<INamingStrategy> TestNames = Names.Are("Test");
+	private static readonly Func<INamingStrategy> TestNames = Names.Equal("Test");
 	private static readonly PropertyInfo CorrectProperty = typeof(TestClass).GetProperty(nameof(TestClass.Id))!;
 
 	private static readonly List<IPropertyMap> PropertyMaps = new ()

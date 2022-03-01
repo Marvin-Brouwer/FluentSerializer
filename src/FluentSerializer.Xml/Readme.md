@@ -124,7 +124,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 		
 		For<SomeDataEntity>()
 			.Attribute(entity => entity.Id,
-				namingStrategy: Names.Are("identifier"))
+				namingStrategy: Names.Equal("identifier"))
 			.Child(entity => entity.Name);
 	}
 }

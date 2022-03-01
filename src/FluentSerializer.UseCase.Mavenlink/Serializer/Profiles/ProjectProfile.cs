@@ -20,7 +20,7 @@ public sealed class ProjectProfile : JsonSerializerProfile
 			.Property(project => project.Id)
 			.Property(project => project.Name)
 			.Property(project => project.LastUpdate,
-				namingStrategy: Names.Are("updated_at"),
+				namingStrategy: Names.Equal("updated_at"),
 				converter: Converter.For.DateTime("dd/MM/yyyy HH:mm:ss"));
 	}
 }

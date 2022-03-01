@@ -17,39 +17,39 @@ public sealed class ResponseProfile : XmlSerializerProfile
 				tagNamingStrategy: Names.Use.LowerCase
 			)
 			.Child(response => response.ReadResponses,
-				namingStrategy: Names.Are("Read"),
+				namingStrategy: Names.Equal("Read"),
 				converter: Converter.For.Collection(false))
 			.Child(response => response.AddResponses,
-				namingStrategy: Names.Are("Add"),
+				namingStrategy: Names.Equal("Add"),
 				converter: Converter.For.Collection(false))
 			.Child(response => response.ModifyResponses,
-				namingStrategy: Names.Are("Modify"),
+				namingStrategy: Names.Equal("Modify"),
 				converter: Converter.For.Collection(false))
 			.Child(response => response.DeleteResponses,
-				namingStrategy: Names.Are("Delete"),
+				namingStrategy: Names.Equal("Delete"),
 				converter: Converter.For.Collection(false));
 
 		For<ReadResponse<OpenAirEntity>>(
 				direction: SerializerDirection.Deserialize,
-				tagNamingStrategy: Names.Are("Read")
+				tagNamingStrategy: Names.Equal("Read")
 			)
 			.UseBase();
 
 		For<AddResponse<OpenAirEntity>>(
 				direction: SerializerDirection.Deserialize,
-				tagNamingStrategy: Names.Are("Add")
+				tagNamingStrategy: Names.Equal("Add")
 			)
 			.UseBase();
 
 		For<ModifyResponse<OpenAirEntity>>(
 				direction: SerializerDirection.Deserialize,
-				tagNamingStrategy: Names.Are("Modify")
+				tagNamingStrategy: Names.Equal("Modify")
 			)
 			.UseBase();
 
 		For<DeleteResponse<OpenAirEntity>>(
 				direction: SerializerDirection.Deserialize,
-				tagNamingStrategy: Names.Are("Delete")
+				tagNamingStrategy: Names.Equal("Delete")
 			)
 			.UseBase();
 	}

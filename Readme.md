@@ -136,7 +136,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 
 		For<SomeDataEntity>()
 			.Property(entity => entity.Id,
-				namingStrategy: Names.Are("identifier"))
+				namingStrategy: Names.Equal("identifier"))
 			.Property(entity => entity.Name);
 	}
 }

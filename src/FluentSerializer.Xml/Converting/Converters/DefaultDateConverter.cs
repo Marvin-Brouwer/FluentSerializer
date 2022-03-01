@@ -12,7 +12,7 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// </summary>
 public sealed class DefaultDateConverter : SimpleTypeConverter<DateTime>
 {
-	private const string IsoDateFormat = "yyyy-MM-ddTHH:mm:ssK";
+	private const string IsoDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
 
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue) => DateTime.Parse(currentValue, CultureInfo.CurrentCulture, DateTimeStyles.NoCurrentDateDefault);
