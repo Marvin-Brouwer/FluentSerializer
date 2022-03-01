@@ -36,7 +36,7 @@ using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 
 serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration =>
 {
-	configuration.DefaultConverters.Add(Converter.For.Json());
+	configuration.DefaultConverters.Use(Converter.For.Json());
 });
 ```
 

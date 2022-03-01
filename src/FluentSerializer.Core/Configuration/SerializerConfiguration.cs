@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Converting;
@@ -23,7 +22,7 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	public bool WriteNull { get; set; } = false;
 
 	/// <inheritdoc />
-	public List<IConverter> DefaultConverters { get; set; } = new();
+	public IConfigurationStack<IConverter> DefaultConverters { get; set; } = new ConfigurationStack<IConverter>();
 	/// <inheritdoc />
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	/// <inheritdoc />

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting;
@@ -11,11 +11,8 @@ namespace FluentSerializer.Xml.Extensions;
 public static class UseXmlExtensions
 {
 	/// <inheritdoc cref="IUseXmlConverters.Enum(EnumFormat)"/>
-	public static List<IConverter> ReplaceEnumConverter(this List<IConverter> converters, in EnumFormat format)
+	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormat format)
 	{
-		var index = converters.IndexOf(UseXmlConverters.DefaultEnumConverter);
-		converters[index] = Converter.For.Enum(format)();
-
-		return converters;
+		return converters.Use(Converter.For.Enum(format)());
 	}
 }

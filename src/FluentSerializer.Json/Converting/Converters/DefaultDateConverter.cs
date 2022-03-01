@@ -24,4 +24,7 @@ public sealed class DefaultDateConverter : SimpleTypeConverter<DateTime>
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToString(CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
+
+	/// <inheritdoc />
+	public override int GetHashCode() => DateTime.MinValue.GetHashCode();
 }

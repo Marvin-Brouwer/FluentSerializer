@@ -44,4 +44,7 @@ public class DateByFormatConverter : SimpleTypeConverter<DateTime>
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
+
+	/// <inheritdoc />
+	public override int GetHashCode() => DateTime.MinValue.GetHashCode();
 }

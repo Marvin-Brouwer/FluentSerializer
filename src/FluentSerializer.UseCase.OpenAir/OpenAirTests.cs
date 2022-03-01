@@ -29,7 +29,7 @@ public sealed partial class OpenAirTests
 			{
 				configuration.Encoding = Encoding.UTF8;
 				configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
-				configuration.DefaultConverters.Add(Converter.For.Xml());
+				configuration.DefaultConverters.Use(Converter.For.Xml());
 				configuration.NewLine = LineEndings.LineFeed;
 			})
 			.BuildServiceProvider();
