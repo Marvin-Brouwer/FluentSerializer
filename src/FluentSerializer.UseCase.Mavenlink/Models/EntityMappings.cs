@@ -34,7 +34,17 @@ internal readonly struct EntityMappings
 
 		return string.Concat(GetDataItemName(in entityName), 's');
 	}
-		
+
+	internal static string GetDataReferenceName(in string entityName)
+	{
+		return string.Concat(GetDataItemName(in entityName), "_id");
+	}
+
+	internal static string GetDataReferenceGroupName(in string entityName)
+	{
+		return string.Concat(GetDataItemName(in entityName), "_ids");
+	}
+
 	private static string ConvertName(in string originalName)
 	{
 		const char separator = '_';

@@ -41,7 +41,7 @@ public sealed partial class MavenlinkTests
 		var expected = await File.ReadAllTextAsync("./MavenlinkTests.Serialize.json");
 		var example = ProjectRequestExample;
 
-		var sut = _serviceProvider.GetService<RuntimeJsonSerializer>()!;
+		var sut = _serviceProvider.GetService<IJsonSerializer>()!;
 
 		// Act
 		var result = sut.Serialize(example);
@@ -58,7 +58,7 @@ public sealed partial class MavenlinkTests
 		var expected = UserResponseExample;
 		var example = await File.ReadAllTextAsync("./MavenlinkTests.Deserialize.json");
 
-		var sut = _serviceProvider.GetService<RuntimeJsonSerializer>()!;
+		var sut = _serviceProvider.GetService<IJsonSerializer>()!;
 
 		// Act
 		var result = sut.Deserialize<Response<User>>(example);

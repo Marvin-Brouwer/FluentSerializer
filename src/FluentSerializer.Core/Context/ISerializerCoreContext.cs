@@ -7,7 +7,6 @@ using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Context;
 
-// todo perhaps TSerializer?
 /// <summary>
 /// Current core context for serializing data
 /// </summary>

@@ -35,3 +35,11 @@ you can include an account membership. And because of that the flat data list be
 unless you know about this structure up-front, which the rest of your solution shouldn't know about.  
   
 This use-case is mostly interesting for the deserializing part, the serializing to post/put is pretty straight forward though has some interesting logic as well.
+
+Arguably, this can be done differently.  
+This example explores the use of the "data" node to determine the main requested resource and track back referencing dependencies in the data.  
+However, since you usually know which type you're requesting in code. You could also create a response type per api call containing all its 
+includable types to be deserialized automatically and then reference them in a separate step afterwards.  
+The pro of that solution would be that it's a more robust solution for recursive dependencies.
+However, the con is that it's less flexible than the aproach used in this example.  
+Either way this example is just an example to show how you **could** solve these kind of dependencies but, it's probably not how you _should_.

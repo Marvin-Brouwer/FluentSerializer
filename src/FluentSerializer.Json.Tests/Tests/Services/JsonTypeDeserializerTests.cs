@@ -85,7 +85,7 @@ public sealed class JsonTypeDeserializerTests
 		// Assert
 		result.Should()
 			.ThrowExactly<ContainerNotFoundException>()
-			.Which.ContainerType.Should().Be(containerType);
+			.Which.TargetType.Should().Be(type);
 	}
 
 	[Fact,
@@ -111,7 +111,7 @@ public sealed class JsonTypeDeserializerTests
 		// Assert
 		result.Should()
 			.ThrowExactly<ContainerNotFoundException>()
-			.Which.ContainerType.Should().Be(containerType);
+			.Which.TargetType.Should().Be(type);
 	}
 
 	[Fact,

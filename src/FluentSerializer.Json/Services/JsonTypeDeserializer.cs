@@ -17,7 +17,6 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeDeserializer
 {
-	// todo rootnode xml
 	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
 
 	/// <inheritdoc cref="JsonTypeDeserializer" />
@@ -116,7 +115,7 @@ public sealed class JsonTypeDeserializer
 		if (empty && propertyMapping.Property.PropertyType.IsEnumerable()) return;
 
 		if (empty && !propertyMapping.Property.IsNullable())
-			throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, propertyMapping.ContainerType, in propertyName);
+			throw new ContainerNotFoundException(propertyMapping.Property.PropertyType, instance.GetType(), in propertyName);
 		if (empty)
 		{
 			SetPropertyValue(in instance, in propertyMapping, null);

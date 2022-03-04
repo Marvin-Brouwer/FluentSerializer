@@ -5,48 +5,39 @@ using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 using FluentSerializer.UseCase.Mavenlink.Models;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
 /// <summary>
-/// A custom converter since Mavenlink returns a list of id's with a reference to a collection instead of the nested object.
+/// A custom converter since Mavenlink returns a reference to an include for nested data structures.
 /// </summary>
-/// <remarks>
-/// Because the <see cref="System.Collections.Generic.List{T}" /> will always contain one type we can just pick the first item in the list 
-/// to determine the collection to resolve.
-/// </remarks>
 /// <example>
 /// <![CDATA[
 /// {
-///     "results": [
-///         {
-///             "key": "users",
-///             "id": "9770395"
-///         },
-///         {
-///             "key": "users",
-///             "id": "9770335"
-///         }
-///     },
 ///     "users": {
 ///         "9770395": {
-///             ....
+///             "some_field_id": "some_field_1"
 ///         },
 ///         "9770335": {
 ///             ....
 ///         }
-///     ]
+///     ],
+///     "some_fields": {
+///			"some_field_1": {
+///             ....
+///         }
+///     }
 /// }
 /// ]]>
-/// TODO
 /// </example>
-internal sealed class MavenlinkReferenceConverter : IJsonConverter
+internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 {
 	/// <inheritdoc />
 	public SerializerDirection Direction => SerializerDirection.Deserialize;
 
 	/// <inheritdoc />
-	public bool CanConvert(in Type targetType) => true; //todo
+	public bool CanConvert(in Type targetType) => typeof(IMavenlinkEntity).IsAssignableFrom(targetType);
 
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 		throw new NotSupportedException();
@@ -62,7 +53,7 @@ internal sealed class MavenlinkReferenceConverter : IJsonConverter
 		if (context.Path.Count > 4) return default;
 
 		// Prevent parsing the same node twice
-		var hasCalculatedStore = context.Data<MavenlinkReferenceConverter, bool>();
+		var hasCalculatedStore = context.Data<MavenlinkIdReferenceConverter, bool>();
 		if (hasCalculatedStore.TryGetValue(stringValue, out bool hasCalculated) && hasCalculated) return default;
 
 		var targetNodeCollectionName = EntityMappings.GetDataGroupName(context.PropertyType.Name);

@@ -32,7 +32,8 @@ public readonly partial struct JsonValue
 		}
 
 		// Append a '"' if it started with a '"'
-		if (stringValue) valueEndOffset++;
+		if (stringValue) offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
+		valueEndOffset = offset;
 
 		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
 		if (Value.Equals(JsonCharacterConstants.NullValue, StringComparison.OrdinalIgnoreCase))
