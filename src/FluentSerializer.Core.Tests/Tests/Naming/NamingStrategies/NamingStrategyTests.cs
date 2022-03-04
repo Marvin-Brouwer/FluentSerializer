@@ -13,7 +13,7 @@ public sealed class NamingStrategyTests
 	private static readonly Mock<INamingContext> _namingContextMock = new();
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 MemberData(nameof(ValidNamingRequests))]
 	public void ValidString_GetName_ConvertsName(in INamingStrategy sut, in string expectedClassName, in string expectedPropertyName)
 	{
@@ -48,7 +48,7 @@ public sealed class NamingStrategyTests
 			Names.Use.SnakeCase(), "class_name_with_multiple_parts", "property_name_with_multiple_parts"
 		};
 
-		yield return new object[] { Names.Are("Override")(), "Override", "Override" };
+		yield return new object[] { Names.Equal("Override")(), "Override", "Override" };
 	}
 
 	private sealed class ClassNameWithMultipleParts

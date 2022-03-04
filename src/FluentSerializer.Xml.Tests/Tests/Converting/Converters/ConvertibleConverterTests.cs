@@ -41,7 +41,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Serialize
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		InlineData(null), InlineData("")]
 	public void Serialize_NullOrEmpty_ReturnsEmptyString(string input)
 	{
@@ -58,7 +58,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Serialize_NonConvertible_ReturnsToString()
 	{
 		// Arrange
@@ -75,7 +75,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializeAttributeConvertible_ReturnsString(object input, string expectedValue)
 	{
@@ -94,7 +94,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_EmptyValue_ReturnsDefault(object requested, string unused)
 	{
@@ -117,9 +117,9 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void Deserialize_Convertable_ReturnsValue(object expected, string inputValue)
+	public void Deserialize_Convertible_ReturnsValue(object expected, string inputValue)
 	{
 		// Arrange
 		var input = Text(inputValue);
@@ -137,8 +137,8 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void Deserialize_Convertable_IncorrectFormat_Throws()
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange
 		var input = Text("SomeText");
@@ -156,8 +156,8 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
-	public void Deserialize_NonConvertable_Throws()
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+	public void Deserialize_NonConvertible_Throws()
 	{
 		// Arrange
 		var input = Text("Doesn't matter");

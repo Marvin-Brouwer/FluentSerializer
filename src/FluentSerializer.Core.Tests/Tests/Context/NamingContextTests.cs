@@ -25,7 +25,7 @@ public sealed class NamingContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForType_ReturnsStrategy()
 	{
 		// Arrange
@@ -46,7 +46,7 @@ public sealed class NamingContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForType_NotFound_ReturnsNull()
 	{
 		// Arrange
@@ -65,7 +65,7 @@ public sealed class NamingContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForProperty_ReturnsStrategy()
 	{
 		// Arrange
@@ -87,7 +87,7 @@ public sealed class NamingContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
 	{
 		// Arrange

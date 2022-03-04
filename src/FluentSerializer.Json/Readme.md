@@ -35,7 +35,7 @@ By default it looks like this:
 - **DefaultNamingStrategy** = camelCase
 - **DefaultConverters**
   - Converter that can handle DateTime objects (JSON spec compliant)
-  - Converter that can handle IConvertable types
+  - Converter that can handle IConvertible types
   - Converter to handle collection types
 
 ## Creating profiles
@@ -104,7 +104,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 
 		For<SomeDataEntity>()
 			.Property(entity => entity.Id,
-				namingStrategy: Names.Are("identifier"))
+				namingStrategy: Names.Equal("identifier"))
 			.Property(entity => entity.Name);
 	}
 }

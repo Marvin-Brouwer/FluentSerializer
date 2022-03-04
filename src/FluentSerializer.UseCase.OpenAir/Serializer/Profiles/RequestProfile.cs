@@ -27,26 +27,26 @@ public sealed class RequestProfile : XmlSerializerProfile
 
 		For<ReadRequest<object>>(
 				direction: SerializerDirection.Serialize,
-				tagNamingStrategy: Names.Are("Read")
+				tagNamingStrategy: Names.Equal("Read")
 			)
 			.UseBase()
 			.Attribute(responseObject => responseObject.Filter);
 
 		For<AddRequest<object>>(
 				direction: SerializerDirection.Serialize,
-				tagNamingStrategy: Names.Are("Add")
+				tagNamingStrategy: Names.Equal("Add")
 			)
 			.UseBase();
 
 		For<ModifyRequest<object>>(
 				direction: SerializerDirection.Serialize,
-				tagNamingStrategy: Names.Are("Modify")
+				tagNamingStrategy: Names.Equal("Modify")
 			)
 			.UseBase();
 
 		For<DeleteRequest<object>>(
 				direction: SerializerDirection.Serialize,
-				tagNamingStrategy: Names.Are("Delete")
+				tagNamingStrategy: Names.Equal("Delete")
 			)
 			.UseBase();
 	}

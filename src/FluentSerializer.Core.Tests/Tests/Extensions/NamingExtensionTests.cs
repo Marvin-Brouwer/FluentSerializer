@@ -9,7 +9,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class NamingExtensionTests
 {
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void GetProperty_PropertyExpression_ReturnsPropertyInfo()
 	{
 		// Arrange
@@ -23,7 +23,7 @@ public sealed class NamingExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void GetProperty_FieldExpression_Throws()
 	{
 		// Arrange
@@ -37,7 +37,7 @@ public sealed class NamingExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void GetProperty_MethodExpression_Throws()
 	{
 		// Arrange
@@ -51,7 +51,7 @@ public sealed class NamingExtensionTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void GetProperty_AssigningExpression_Throws()
 	{
 		// Arrange
@@ -65,6 +65,7 @@ public sealed class NamingExtensionTests
 	}
 
 	private sealed class TestClass {
+
 		public int Field = default!;
 		public int Id { get; init; } = default!;
 		public int GetId() => Id;

@@ -36,7 +36,7 @@ using FluentSerializer.Xml.Converter.DefaultXml.Extensions;
 
 serviceCollection.AddFluentXmlSerializer<TAssemblyMarker>(static configuration =>
 {
-	configuration.DefaultConverters.Add(Converter.For.Xml());
+	configuration.DefaultConverters.Use(Converter.For.Xml());
 });
 ```
 

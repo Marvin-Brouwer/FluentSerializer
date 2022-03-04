@@ -1,0 +1,46 @@
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting.Converters;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Json.DataNodes;
+
+using static FluentSerializer.Json.JsonBuilder;
+
+namespace FluentSerializer.Json.Converting.Converters;
+
+/// <inheritdoc cref="EnumConverter(in EnumFormat, in bool)" />
+public sealed class EnumConverter : EnumConverterBase, IJsonConverter
+{
+	private readonly bool _writeNumbersAsString;
+
+	/// <summary>
+	/// Converter for <c>enum</c>s with specialized settings
+	/// </summary>
+	/// <paramref name="enumFormat">The format to use when reading and writing serialized <c>enum</c> values</paramref>
+	/// <paramref name="writeNumbersAsString">Configure whether to wrap numbers in quotes ("")</paramref>
+	public EnumConverter(in EnumFormat enumFormat, in bool writeNumbersAsString) : base(enumFormat)
+	{
+		_writeNumbersAsString = writeNumbersAsString;
+	}
+
+	/// <inheritdoc />
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
+	{
+		var convertedValue = ConvertToString(objectToSerialize, context.PropertyType);
+
+		if (convertedValue is null) return null;
+		var (stringValue, isNumeric) = convertedValue.Value;
+
+		if (!_writeNumbersAsString && EnumFormat.HasFlag(EnumFormat.UseNumberValue) && isNumeric)
+			return Value(in stringValue);
+
+		return Value($"\"{stringValue}\"");
+	}
+
+	/// <inheritdoc />
+	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
+	{
+		if (objectToDeserialize is not IDataValue data) return default;
+
+		return ConvertToEnum(data.Value, context.PropertyType);
+	}
+}

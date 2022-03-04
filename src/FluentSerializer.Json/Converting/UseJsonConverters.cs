@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Ardalis.GuardClauses;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting.Converters;
 
 namespace FluentSerializer.Json.Converting;
@@ -11,6 +12,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter DefaultDateConverter = new DefaultDateConverter();
 	internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
+	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormat.Default, true);
 
 	/// <inheritdoc />
 	public IJsonConverter DateTime() => DefaultDateConverter;
@@ -24,4 +26,12 @@ public sealed class UseJsonConverters : IUseJsonConverters
 
 	/// <inheritdoc />
 	public IJsonConverter Collection() => CollectionConverter;
+
+	/// <inheritdoc />
+	public IJsonConverter Enum() => DefaultEnumConverter;
+	/// <inheritdoc />
+	public Func<IJsonConverter> Enum(EnumFormat format, bool writeNumbersAsString = false)
+	{
+		return () => new EnumConverter(format, writeNumbersAsString);
+	}
 }

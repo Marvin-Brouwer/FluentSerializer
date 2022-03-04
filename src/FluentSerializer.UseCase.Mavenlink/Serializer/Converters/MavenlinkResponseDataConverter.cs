@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
@@ -42,13 +41,8 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 /// }
 /// ]]>
 /// </example>
-internal sealed class MavenlinkResponseDataConverter : IJsonConverter
+internal sealed class MavenlinkResponseDataConverter : CollectionConverterBase, IJsonConverter
 {
-	/// <inheritdoc />
-	public SerializerDirection Direction => SerializerDirection.Deserialize;
-	/// <inheritdoc />
-	public bool CanConvert(in Type targetType) => targetType.IsEnumerable();
-
 	/// <inheritdoc />
 	public IJsonNode Serialize(in object objectToSerialize, in ISerializerContext context) =>
 		throw new NotSupportedException();
@@ -57,7 +51,8 @@ internal sealed class MavenlinkResponseDataConverter : IJsonConverter
 	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IJsonArray arrayToDeserialize) throw new NotSupportedException();
-		if (arrayToDeserialize.Children.Count == 0) return null;
+		if (arrayToDeserialize.Children.Count == 0) return FinalizeEnumerableInstance(
+			GetEnumerableInstance(context.PropertyType), context.PropertyType);
 
 		var firstChild = arrayToDeserialize.Children[0] as IJsonObject;
 		Guard.Against.Null(firstChild, nameof(firstChild));
@@ -76,7 +71,7 @@ internal sealed class MavenlinkResponseDataConverter : IJsonConverter
 			.Select(child => child.Value as IJsonObject)
 			.Where(child => child is not null);
 
-		var instance = context.PropertyType.GetEnumerableInstance();
+		var instance = GetEnumerableInstance(context.PropertyType);
 
 		var genericTargetType = context.PropertyType.IsGenericType
 			? context.PropertyType.GetTypeInfo().GenericTypeArguments[0]
@@ -93,6 +88,6 @@ internal sealed class MavenlinkResponseDataConverter : IJsonConverter
 			instance.Add(itemValue);
 		}
 
-		return instance;
+		return FinalizeEnumerableInstance(in instance, context.PropertyType);
 	}
 }

@@ -26,7 +26,7 @@ public sealed class SerializerContextTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(typeof(int)), InlineData(typeof(int?))]
 	public void FindNamingStrategy_Constructor(Type input)
 	{
@@ -45,7 +45,7 @@ public sealed class SerializerContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForProperty_ReturnsStrategy()
 	{
 		// Arrange
@@ -69,7 +69,7 @@ public sealed class SerializerContextTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_ForProperty_NotFound_ReturnsNull()
 	{
 		// Arrange

@@ -26,7 +26,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |
@@ -89,6 +89,8 @@ jobs:
         path: |
           ./src/*.Benchmark/bin/Release/*/*.*
           ./src/*/bin/Release/*/ref/*.*
+          ./src/*/obj/Release/*/ref/*.*
+          ./src/*/bin/Release/*/apphost
           ./src/*/obj/Release/*/apphost
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
@@ -111,7 +113,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |
@@ -266,7 +268,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         include-prerelease: true
         dotnet-version: |

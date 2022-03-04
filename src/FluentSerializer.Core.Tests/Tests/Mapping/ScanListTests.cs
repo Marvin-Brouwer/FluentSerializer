@@ -14,7 +14,7 @@ namespace FluentSerializer.Core.Tests.Tests.Mapping;
 public sealed class ScanListTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
-	private static readonly Func<INamingStrategy> TestNames = Names.Are("Test");
+	private static readonly Func<INamingStrategy> TestNames = Names.Equal("Test");
 	private static readonly PropertyInfo CorrectProperty = typeof(TestClass).GetProperty(nameof(TestClass.Id))!;
 
 	private static readonly List<IPropertyMap> PropertyMaps = new ()
@@ -27,7 +27,7 @@ public sealed class ScanListTests
 	};
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ClassMapScan_NoMatch_ReturnsNone()
 	{
 		// Arrange
@@ -42,7 +42,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ClassMapScan_Match_ReturnsClassMap()
 	{
 		// Arrange
@@ -57,7 +57,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void PropertyMapScan_NoMatch_ReturnsNone()
 	{
 		// Arrange
@@ -72,7 +72,7 @@ public sealed class ScanListTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void PropertyMapScan_Match_ReturnsClassMap()
 	{
 		// Arrange

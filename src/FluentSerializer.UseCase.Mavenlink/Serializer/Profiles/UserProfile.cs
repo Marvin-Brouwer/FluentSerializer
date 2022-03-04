@@ -18,7 +18,7 @@ public sealed class UserProfile : JsonSerializerProfile
 	        .Property(user => user.Age)
 	        .Property(user => user.AccountMembershipId)
 	        .Property(user => user.AccountMembership,
-		        namingStrategy: Names.Are(EntityMappings.GetDataItemName(nameof(User.AccountMembershipId))),
+		        namingStrategy: Names.Equal(EntityMappings.GetDataItemName(nameof(User.AccountMembershipId))),
 		        converter: Converter.For.Reference,
 		        direction: SerializerDirection.Deserialize
 	        );
@@ -27,7 +27,7 @@ public sealed class UserProfile : JsonSerializerProfile
 			.Property(account => account.Id)
 			.Property(account => account.LineManagerId)
 			.Property(account => account.LineManager,
-				namingStrategy: Names.Are(EntityMappings.GetDataItemName(nameof(AccountMembership.LineManagerId))),
+				namingStrategy: Names.Equal(EntityMappings.GetDataItemName(nameof(AccountMembership.LineManagerId))),
 				converter: Converter.For.Reference,
 				direction: SerializerDirection.Deserialize
 			);

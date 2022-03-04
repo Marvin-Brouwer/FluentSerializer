@@ -26,7 +26,7 @@ public sealed class XmlDocumentTests
 
 	#region ToString
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -42,7 +42,7 @@ public sealed class XmlDocumentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void WriteTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange

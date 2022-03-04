@@ -47,13 +47,13 @@ public sealed class NonWrappedCollectionConverterTests
 		_serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
 			.SetupDefault(_serializerMock)
-			.WithNamingStrategy(Names.Are(ListName));
+			.WithNamingStrategy(Names.Equal(ListName));
 	}
 
 	#region Failing checks
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Serialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -72,7 +72,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Deserialize_NoParent_Throws()
 	{
 		// Arrange
@@ -90,7 +90,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Deserialize_IncorrectParent_Throws()
 	{
 		// Arrange
@@ -111,7 +111,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -136,7 +136,7 @@ public sealed class NonWrappedCollectionConverterTests
 
 	#region Serialize
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Serialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -153,7 +153,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Serialize_ListOfIXmlElement()
 	{
 		// Arrange
@@ -181,7 +181,7 @@ public sealed class NonWrappedCollectionConverterTests
 
 	#region Deserialize
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Deserialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -189,7 +189,7 @@ public sealed class NonWrappedCollectionConverterTests
 		var input = Element(ListName);
 
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListItemName))
+			.WithFindNamingStrategy(Names.Equal(ListItemName))
 			.WithPropertyType(expected.GetType())
 			.WithParentNode(Element(ParentName));
 
@@ -203,7 +203,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void Deserialize_ListOfIXmlElement()
 	{
 		// Arrange
@@ -219,7 +219,7 @@ public sealed class NonWrappedCollectionConverterTests
 		_serializerMock
 			.WithDeserialize();
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListItemName))
+			.WithFindNamingStrategy(Names.Equal(ListItemName))
 			.WithPropertyType(expected.GetType())
 			.WithParentNode(Element(ParentName,
 				Element(ListItemName, Text("1")),

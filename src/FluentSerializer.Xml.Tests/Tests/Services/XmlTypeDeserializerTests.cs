@@ -40,7 +40,7 @@ public sealed class XmlTypeDeserializerTests
 	/// XML specs that a file cannot have more than one root node.
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_TypeIsEnumerable_Throws()
 	{
 		// Arrange
@@ -64,7 +64,7 @@ public sealed class XmlTypeDeserializerTests
 	/// We need a profile to deserialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -88,7 +88,7 @@ public sealed class XmlTypeDeserializerTests
 	/// We need a node to get values
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_NodeIsNotPresent_Throws()
 	{
 		// Arrange
@@ -109,7 +109,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NonNullableValueIsEmpty_Throws()
 	{
 		// Arrange
@@ -135,7 +135,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -156,7 +156,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -183,7 +183,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromElement_ElementPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -213,7 +213,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromAttribute_AttributePropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -243,7 +243,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromText_TextPropertyMapping_ReturnsValue()
 	{
 		// Arrange

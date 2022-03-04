@@ -145,3 +145,24 @@ It is generally a good idea to register your converter as a static readonly inst
 However if you need a service for any reason you can do this by providing a `Func<I{Format}Converter>` in either the registration of the DI setup or on a property. The profiles themselves have access to services via the DI framework.  
   
 If this is a scenario you need please create an issue for us to write some documentation in the [Advanced concepts](https://github.com/Marvin-Brouwer/FluentSerializer#advanced-concepts) section.
+
+## Converter identification
+
+In some specific scenarios you may need to override a converter in the configuration's `DefaultConverters`, for example when picking a different converter for `IEnumerable` types.  
+By default the `IConverter` interface has a default implementation simply looking at the `object.GetHashCode()` to identify uniqueness when configuring.  
+All the converters that are shipped with this library simply calculate the HashCode of the type it's supposed to serialize.  
+So when building a custom collection converter you can override the existing by overriding the `GetHashCode` method:
+
+```csharp
+/// <inheritdoc />
+public override int GetHashCode() => typeof(IEnumerable).GetHashCode();
+```
+
+When using that, you can simply register it like normal, and the `IConfigurationStack` will replace the existing collection converter:  
+
+```csharp
+serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration =>
+{
+	configuration.DefaultConverters.UseEnum(EnumFormat.UseNumberValue, true);
+})
+```

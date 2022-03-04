@@ -21,7 +21,7 @@ public sealed class ProfileScannerTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ScanAssembliesForType_NotPresent_ReturnsEmptyList()
 	{
 		// Arrange
@@ -38,7 +38,7 @@ public sealed class ProfileScannerTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ScanAssembliesForType_Present_ReturnsProfile()
 	{
 		// Arrange

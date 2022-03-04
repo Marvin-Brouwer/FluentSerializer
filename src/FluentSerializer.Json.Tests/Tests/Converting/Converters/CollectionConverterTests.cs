@@ -44,12 +44,12 @@ public sealed class CollectionConverterTests
 		_serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(_serializerMock)
-			.WithNamingStrategy(Names.Are(ListName));
+			.WithNamingStrategy(Names.Equal(ListName));
 	}
 
 	#region Failing checks
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Serialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -68,7 +68,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -90,7 +90,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Deserialize_NotArray_Throws()
 	{
 		// Arrange
@@ -114,7 +114,7 @@ public sealed class CollectionConverterTests
 
 	#region Serialize
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Serialize_EmptyListOfIJsonObject()
 	{
 		// Arrange
@@ -131,7 +131,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Serialize_ListOfIJsonObject()
 	{
 		// Arrange
@@ -159,7 +159,7 @@ public sealed class CollectionConverterTests
 
 	#region Deserialize
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Deserialize_EmptyListOfIJsonObject()
 	{
 		// Arrange
@@ -167,7 +167,7 @@ public sealed class CollectionConverterTests
 		var input = Array();
 
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListName))
+			.WithFindNamingStrategy(Names.Equal(ListName))
 			.WithPropertyType(expected.GetType());
 
 		// Act
@@ -180,7 +180,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void Deserialize_ListOfIJsonObject()
 	{
 		// Arrange
@@ -196,7 +196,7 @@ public sealed class CollectionConverterTests
 		_serializerMock
 			.WithDeserialize();
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListName))
+			.WithFindNamingStrategy(Names.Equal(ListName))
 			.WithPropertyType(expected.GetType());
 
 		// Act

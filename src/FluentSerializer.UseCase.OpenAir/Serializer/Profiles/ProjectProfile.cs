@@ -15,7 +15,7 @@ public sealed class ProjectProfile : XmlSerializerProfile
 			.Child(project => project.Id)
 			.Child(project => project.Name)
 			.Child(project => project.LastUpdate,
-				namingStrategy: Names.Are("updated"),
+				namingStrategy: Names.Equal("updated"),
 				converter: Converter.For.OpenAirDate
 			)
 			.Child(project => project.Active,

@@ -1,7 +1,7 @@
 using System;
-using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 
@@ -12,22 +12,8 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// <summary>
 /// Converts types that implement <see cref="IConvertible"/>
 /// </summary>
-public sealed class ConvertibleConverter : IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
+public sealed class ConvertibleConverter : ConvertibleConverterBase, IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
-	/// <inheritdoc />
-	public SerializerDirection Direction { get; } = SerializerDirection.Both;
-	/// <inheritdoc />
-	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
-
-	private static string ConvertToString(in object value) => Convert.ToString(value)!;
-
-	private static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
-	{
-		if (string.IsNullOrWhiteSpace(currentValue)) return default;
-
-		return Convert.ChangeType(currentValue, targetType);
-	}
-
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(attributeToDeserialize.Value, context.PropertyType);

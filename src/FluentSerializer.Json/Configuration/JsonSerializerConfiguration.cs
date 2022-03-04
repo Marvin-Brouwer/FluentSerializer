@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
@@ -30,11 +29,12 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 		FormatOutput = true;
 		WriteNull = false;
 		DefaultNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new List<IConverter>
+		DefaultConverters = new ConfigurationStack<IConverter>
 		{
-			UseJsonConverters.DefaultDateConverter,
+			// Built-in converters
 			UseJsonConverters.ConvertibleConverter,
-
+			UseJsonConverters.DefaultEnumConverter,
+			UseJsonConverters.DefaultDateConverter,
 			// Collection converters
 			UseJsonConverters.CollectionConverter
 		};

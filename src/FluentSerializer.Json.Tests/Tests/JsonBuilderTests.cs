@@ -10,7 +10,7 @@ namespace FluentSerializer.Json.Tests.Tests;
 public sealed class JsonBuilderTests
 {
 	[Theory,
-		Trait("Category", "IntegrationTest"), Trait("DataFormat", "JSON"),
+		Trait("Category", "IntegrationTest"),	Trait("DataFormat", "JSON"),
 		InlineData(true), InlineData(false)]
 	public void AllObjects_EqualsExpectedTextData(bool format)
 	{

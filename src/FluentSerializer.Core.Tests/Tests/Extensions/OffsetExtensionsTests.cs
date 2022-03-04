@@ -7,7 +7,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class OffsetExtensionsTests
 {
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData("", 69), InlineData("a", 69 + 1), InlineData("bb", 69 + 2)]
 	public void AdjustForToken_String_AddsToOffset(string input, int expected)
 	{
@@ -22,7 +22,7 @@ public sealed class OffsetExtensionsTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void AdjustForToken_Char_AddsToOffset()
 	{
 		// Arrange
@@ -39,7 +39,7 @@ public sealed class OffsetExtensionsTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(" a", 0 + 1), InlineData("  b", 0 + 2), InlineData("   c", 0 + 3)]
 	public void AdjustForWhitespace_AddsToOffset(string input, int expected)
 	{

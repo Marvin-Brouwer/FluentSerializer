@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.Tests.Tests.Extensions;
 public sealed class TextWriterExtensionsTests
 {
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void AppendNode()
 	{
 		// Arrange
@@ -33,7 +33,7 @@ public sealed class TextWriterExtensionsTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(true, "test\ntest"), InlineData(false, "testtest")]
 	public void AppendOptionalNewline(bool format, string expected)
 	{
@@ -52,7 +52,7 @@ public sealed class TextWriterExtensionsTests
 	}
 
 	[Theory,
-	 Trait("Category", "UnitTest"),
+		Trait("Category", "UnitTest"),
 	 InlineData(true, "test\ttest"), InlineData(false, "testtest")]
 	public void AppendOptionalIndent(bool format, string expected)
 	{
@@ -71,7 +71,7 @@ public sealed class TextWriterExtensionsTests
 	}
 
 	[Fact,
-	 Trait("Category", "UnitTest")]
+		Trait("Category", "UnitTest")]
 	public void ToString_Returns_NodeAppendTo()
 	{
 		// Arrange

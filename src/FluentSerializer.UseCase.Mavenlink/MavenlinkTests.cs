@@ -27,14 +27,14 @@ public sealed partial class MavenlinkTests
 			.AddFluentJsonSerializer<MavenlinkTests>(static configuration =>
 			{
 				configuration.DefaultNamingStrategy = Names.Use.SnakeCase;
-				configuration.DefaultConverters.Add(Converter.For.Json());
+				configuration.DefaultConverters.Use(Converter.For.Json());
 				configuration.NewLine = LineEndings.LineFeed;
 			})
 			.BuildServiceProvider();
 	}
 
 	[Fact,
-	 Trait("Category", "UseCase")]
+		Trait("Category", "UseCase")]
 	public async Task Serialize()
 	{
 		// Arrange
@@ -51,7 +51,7 @@ public sealed partial class MavenlinkTests
 	}
 
 	[Fact,
-	 Trait("Category", "UseCase")]
+		Trait("Category", "UseCase")]
 	public async Task Deserialize()
 	{
 		// Arrange

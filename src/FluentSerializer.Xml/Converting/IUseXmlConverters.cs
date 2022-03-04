@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters.Base;
 using FluentSerializer.Xml.DataNodes;
@@ -26,4 +27,8 @@ public interface IUseXmlConverters
 	/// <param name="wrapCollection">When true, wraps the collection in a tag of the property name</param>
 	Func<IXmlConverter<IXmlElement>> Collection(in bool wrapCollection = true);
 
+	/// <inheritdoc cref="EnumConverter" />
+	IXmlConverter Enum();
+	/// <inheritdoc cref="EnumConverter(in EnumFormat)" />
+	Func<IXmlConverter> Enum(EnumFormat format);
 }
