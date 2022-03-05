@@ -1,3 +1,5 @@
+using FluentSerializer.Json;
+using FluentSerializer.Json.Converter.DefaultJson.Extensions;
 using FluentSerializer.UseCase.Mavenlink.Models;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
@@ -16,6 +18,31 @@ public sealed partial class MavenlinkTests
 		{
 			Id = "UA1",
 			LineManagerId = "U2"
+		},
+		CustomFields = new()
+		{
+			new CustomFieldValue
+			{
+				CustomFieldId = "C9",
+				CustomFieldName = "nickname",
+				DisplayValue = "JD",
+				Id = "CV1",
+				SubjectId = "U1",
+				SubjectType = CustomFieldSubjectType.User,
+				Type = "string",
+				Value = JsonBuilder.Value("JD".WrapString())
+			},
+			new CustomFieldValue
+			{
+				CustomFieldId = "C1",
+				CustomFieldName = "Office",
+				DisplayValue = "HQ",
+				Id = "CV3",
+				SubjectId = "U1",
+				SubjectType = CustomFieldSubjectType.User,
+				Type = "string",
+				Value = JsonBuilder.Value("HQ".WrapString())
+			}
 		}
 	};
 

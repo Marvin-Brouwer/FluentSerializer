@@ -24,7 +24,10 @@ public sealed class UserProfile : JsonSerializerProfile
 		        converter: Converter.For.Reference,
 		        direction: SerializerDirection.Deserialize
 			)
-			// todo add some custom field data and test it
+			/// Because of the custom fields allowing different types of values you don't know up front,
+			/// you'll have to use a value of <see cref="IJsonValue"/>. <br />
+			/// Therefore, it's provably better to specifically target custom field values. <br />
+			/// Chances exist you know what you're looking for up front anyway.
 			.Property(user => user.CustomFields,
 		        // todo references namingstrategy
 				namingStrategy: Names.Equal(EntityMappings.GetDataReferenceGroupName(nameof(CustomFieldValue))),

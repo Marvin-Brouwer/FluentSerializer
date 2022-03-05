@@ -45,7 +45,13 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IJsonValue jsonValueToDeserialize) throw new NotSupportedException();
-			
+
+		var targetNodeCollectionName = EntityMappings.GetDataGroupName(context.PropertyType.Name);
+		return DeserializeReference(in jsonValueToDeserialize, in targetNodeCollectionName, context.PropertyType, in context);
+	}
+
+	public static object? DeserializeReference(in IJsonValue jsonValueToDeserialize, in string targetNodeCollectionName, in Type targetType, in ISerializerContext<IJsonNode> context)
+	{
 		var stringValue = jsonValueToDeserialize.Value?[1..^1];
 		if (stringValue is null) return default;
 
@@ -56,7 +62,6 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 		var hasCalculatedStore = context.Data<MavenlinkIdReferenceConverter, bool>();
 		if (hasCalculatedStore.TryGetValue(stringValue, out bool hasCalculated) && hasCalculated) return default;
 
-		var targetNodeCollectionName = EntityMappings.GetDataGroupName(context.PropertyType.Name);
 		var targetNodeReferenceCollection = (context.RootNode as IJsonObject)!
 			.GetProperty(targetNodeCollectionName)?
 			.Value as IJsonObject;
@@ -67,7 +72,7 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 			return default;
 		}
 		var targetReferenceNode = targetNodeReferenceCollection.GetProperty(stringValue)?.Value as IJsonObject;
-			
+
 		if (targetReferenceNode is null)
 		{
 			hasCalculatedStore.Add(stringValue, true);
@@ -75,8 +80,7 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 		}
 
 		hasCalculatedStore.Add(stringValue, true);
-		var deserializedInstance = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(targetReferenceNode, context.PropertyType, context);
-		
+		var deserializedInstance = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(targetReferenceNode, targetType, context);
 
 		return deserializedInstance;
 	}

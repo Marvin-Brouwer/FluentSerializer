@@ -1,3 +1,5 @@
+using FluentSerializer.Json.Converter.DefaultJson.Extensions;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
@@ -14,7 +16,9 @@ public sealed class CustomFieldProfile : JsonSerializerProfile
 		    .Property(user => user.CustomFieldName)
 		    .Property(user => user.SubjectType)
 		    .Property(user => user.SubjectId)
-		    .Property(user => user.Value)
+		    .Property(user => user.Value,
+				converter: Converter.For.Json
+			)
 		    .Property(user => user.DisplayValue);
     }
 }

@@ -21,7 +21,7 @@ public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 	/// <inheritdoc />
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
-		if (context.PropertyType.IsInstanceOfType(objectToDeserialize)) 
+		if (objectToDeserialize.GetType().IsAssignableFrom(context.PropertyType))
 			throw new NotSupportedException($"Type of '${objectToDeserialize.GetType().FullName}' is not assignable to {context.PropertyType}");
 
 		return objectToDeserialize;

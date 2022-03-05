@@ -1,3 +1,5 @@
+using FluentSerializer.Json.DataNodes;
+
 namespace FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 internal sealed class CustomFieldValue : IMavenlinkEntity
@@ -7,7 +9,7 @@ internal sealed class CustomFieldValue : IMavenlinkEntity
 	/// <summary>
 	/// If <see cref="Type"/> is of value 'string', this is a string. If it is of value 'single', it is an array of id's
 	/// </summary>
-	public object? Value { get; init; }
+	public IJsonValue? Value { get; init; }
 	public string DisplayValue { get; init; } = default!;
 	public string Type { get; init; } = default!;
 

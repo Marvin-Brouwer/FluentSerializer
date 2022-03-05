@@ -5,6 +5,7 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
+using FluentSerializer.UseCase.Mavenlink.Models;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
@@ -33,8 +34,6 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 /// </example>
 internal sealed class MavenlinkIdListReferenceConverter : CollectionConverterBase, IJsonConverter
 {
-	private static readonly MavenlinkIdReferenceConverter ReferenceConverter = new ();
-
 	/// <inheritdoc cref="CollectionConverterBase.Direction" />
 	public override SerializerDirection Direction => SerializerDirection.Deserialize;
 
@@ -49,9 +48,13 @@ internal sealed class MavenlinkIdListReferenceConverter : CollectionConverterBas
 		if (objectToDeserialize is not IJsonArray jsonArrayToDeserialize) throw new NotSupportedException();
 
 		var referenceCollection = GetEnumerableInstance(context.PropertyType);
+		var itemType = context.PropertyType.GetGenericArguments()[0];
+		var targetNodeCollectionName = EntityMappings.GetDataGroupName(itemType.Name);
+
 		foreach (var child in jsonArrayToDeserialize.Children)
 		{
-			var item = ReferenceConverter.Deserialize(in child, in context);
+			if (child is not IJsonValue value) continue;
+			var item = MavenlinkIdReferenceConverter.DeserializeReference(in value, in targetNodeCollectionName, in itemType, in context);
 			if (item is null) continue;
 
 			referenceCollection.Add(item);

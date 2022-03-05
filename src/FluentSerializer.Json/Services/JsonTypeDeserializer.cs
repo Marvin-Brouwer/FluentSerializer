@@ -68,7 +68,7 @@ public sealed class JsonTypeDeserializer
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		if (classType == typeof(string)) return dataObject.ToString();
-		
+
 		var instance = Activator.CreateInstance(classType)!;
 		foreach (var propertyMapping in classMap.PropertyMaps)
 		{
