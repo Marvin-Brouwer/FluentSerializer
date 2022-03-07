@@ -1,4 +1,6 @@
+using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Converting;
+using System;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
@@ -27,5 +29,8 @@ public static class ConverterExtensions
 
 	/// <inheritdoc cref="MavenlinkIdListReferenceConverter"/>
 	public static IJsonConverter References(this IUseJsonConverters _) => MavenlinkIdListReferenceConverter;
+
+	/// <inheritdoc cref="MavenlinkCustomFieldReferenceConverter"/>
+	public static Func<IJsonConverter> CustomFieldReference(this IUseJsonConverters _, Func<INamingStrategy> namingStrategy) => () => new MavenlinkCustomFieldReferenceConverter(namingStrategy);
 
 }

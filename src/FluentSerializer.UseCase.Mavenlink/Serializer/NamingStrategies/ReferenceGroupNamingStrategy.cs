@@ -7,18 +7,18 @@ using FluentSerializer.UseCase.Mavenlink.Models;
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 
 /// <summary>
-/// Get's the name of the current request's data type
+/// Get's the name of the reference group pointer for this reference
 /// </summary>
-internal class RequestEntityNameStrategy : INamingStrategy
+internal class ReferenceGroupNamingStrategy : INamingStrategy
 {
 	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
 	{
 	    var typeName = propertyType.Name;
-	    return EntityMappings.GetDataItemName(in typeName);
+	    return EntityMappings.GetDataReferenceGroupName(in typeName);
 	}
 
 	public string GetName(in Type classType, in INamingContext namingContext)
 	{
-		throw new NotSupportedException("This converter is meant for properties only.");
+		return EntityMappings.GetDataReferenceGroupName(classType.Name);
 	}
 }
