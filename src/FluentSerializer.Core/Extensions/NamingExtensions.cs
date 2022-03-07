@@ -19,7 +19,12 @@ public static class NamingExtensions
 	public static string SafeGetName(this INamingStrategy namingStrategy, in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
 	{
 		var resolvedName = namingStrategy.GetName(in property, in propertyType, in namingContext);
-		Guard.Against.InvalidName(in resolvedName);
+
+		try { Guard.Against.InvalidName(in resolvedName); }
+		catch(Exception ex)
+		{
+			throw;
+		};
 
 		return resolvedName;
 	}

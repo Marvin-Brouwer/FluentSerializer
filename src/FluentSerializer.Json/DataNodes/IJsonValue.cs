@@ -1,5 +1,4 @@
 using FluentSerializer.Core.DataNodes;
-using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.DataNodes;
 
