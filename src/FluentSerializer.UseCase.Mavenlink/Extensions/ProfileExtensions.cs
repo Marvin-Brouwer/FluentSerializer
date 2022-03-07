@@ -12,6 +12,9 @@ using FluentSerializer.UseCase.Mavenlink.Models;
 
 namespace FluentSerializer.UseCase.Mavenlink.Extensions;
 
+/// <summary>
+/// Extension class for ease of profile use
+/// </summary>
 internal static class ProfileExtensions
 {
 	private static readonly Func<INamingStrategy> CustomFieldsNamingStrategy = Names.Equal(EntityMappings.GetDataReferenceGroupName(nameof(CustomFieldValue)));

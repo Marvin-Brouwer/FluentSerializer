@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
@@ -210,17 +209,11 @@ public sealed class JsonTypeDeserializerTests
 		var type = typeof(IJsonObject);
 		_scanList
 			.WithClassMap(type, _classMap);
-		// todo objectmother
-		var serializerMock = new Mock<IAdvancedJsonSerializer>();
-		serializerMock
-			.Setup(serializer => serializer.Deserialize(It.Ref<IJsonContainer>.IsAny, It.Ref<Type>.IsAny,
-				in It.Ref<ISerializerCoreContext<IJsonNode>>.IsAny))
-			.Returns((IJsonContainer node, Type _, ISerializerCoreContext<IJsonNode> _) => node);
+		var serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.WithDeserialize();
 		var contextMock = new Mock<ISerializerCoreContext<IJsonNode>>()
-			.WithAutoPathSegment();
-		contextMock
-			.Setup(context => context.CurrentSerializer)
-			.Returns(serializerMock.Object);
+			.WithAutoPathSegment()
+			.WithSerializer(serializerMock);
 
 		var sut = new JsonTypeDeserializer(_scanList.Object);
 
