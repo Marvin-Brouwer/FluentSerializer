@@ -49,7 +49,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 	{
 		For<SomeDataEntity>()
 			.Property(entity => entity.Id,
-				namingStrategy: Names.Are("identifier"))
+				namingStrategy: Names.Equal("identifier"))
 			.Property(entity => entity.Name);
 	}
 }
@@ -57,7 +57,7 @@ public sealed class ExampleProfile : JsonSerializerProfile
 
 Out of the box you can use the following naming strategies:
 
-- Hard coded strings `Names.Are("identifier")`
+- Hard coded strings `Names.Equal("identifier")`
 - CamelCase: `Names.Use.CamelCase`
 - KebabCase: `Names.Use.KebabCase`
 - LowerCase: `Names.Use.LowerCase`

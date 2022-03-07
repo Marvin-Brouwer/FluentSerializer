@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
@@ -35,12 +34,12 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 		WriteNull = false;
 		DefaultClassNamingStrategy = Names.Use.PascalCase;
 		DefaultPropertyNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new List<IConverter>
+		DefaultConverters = new ConfigurationStack<IConverter>
 		{
+			// Built-in converters
+			UseXmlConverters.ConvertibleConverter,
 			UseXmlConverters.DefaultEnumConverter,
 			UseXmlConverters.DefaultDateConverter,
-			UseXmlConverters.ConvertibleConverter,
-
 			// Collection converters
 			UseXmlConverters.WrappedCollectionConverter
 		};

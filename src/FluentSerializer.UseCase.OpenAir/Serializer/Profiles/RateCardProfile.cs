@@ -11,12 +11,12 @@ public sealed class RateCardProfile : XmlSerializerProfile
 	protected override void Configure()
 	{
 		For<RateCard>(
-				tagNamingStrategy: Names.Are("Ratecard")
+				tagNamingStrategy: Names.Equal("Ratecard")
 			)
 			.Child(rateCard => rateCard.Id)
 			.Child(rateCard => rateCard.Name)
 			.Child(project => project.LastUpdate,
-				namingStrategy: Names.Are("updated"),
+				namingStrategy: Names.Equal("updated"),
 				converter: Converter.For.OpenAirDate);
 	}
 }

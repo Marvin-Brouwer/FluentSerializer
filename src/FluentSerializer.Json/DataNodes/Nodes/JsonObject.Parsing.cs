@@ -39,7 +39,9 @@ public readonly partial struct JsonObject
 				var jsonProperty = new JsonProperty(in text, ref offset);
 				_children.Add(jsonProperty);
 				_lastPropertyIndex = currentPropertyIndex;
+
 				currentPropertyIndex++;
+				continue;
 			}
 
 			offset++;

@@ -33,10 +33,11 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
+		var coreContext = new SerializerCoreContext(default!);
 
 		// Act
-		var result = new SerializerContext(property, input, type,
-			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+		var result = new SerializerContext(coreContext, property, input, type,
+			Names.Use.KebabCase(), _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
 		// Assert
 		result.ClassType.Should().Be(typeof(TestClass));
@@ -50,14 +51,15 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
+		var coreContext = new SerializerCoreContext(default!);
 
 		_classMapMock
 			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
 		_scanListMock
 			.WithClassMap(type, _classMapMock);
 
-		var sut = new SerializerContext(property, property.PropertyType, type,
-			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+		var sut = new SerializerContext(coreContext, property, property.PropertyType, type,
+			Names.Use.KebabCase(), _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in property);
@@ -73,12 +75,13 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
+		var coreContext = new SerializerCoreContext(default!);
 
 		_scanListMock
 			.WithClassMap(type, _classMapMock);
 
-		var sut = new SerializerContext(property, property.PropertyType, type,
-			Names.Use.KebabCase(), null!, _classMapMock.Object.PropertyMaps, _scanListMock.Object);
+		var sut = new SerializerContext(coreContext, property, property.PropertyType, type,
+			Names.Use.KebabCase(), _classMapMock.Object.PropertyMaps, _scanListMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in property);
@@ -89,6 +92,6 @@ public sealed class SerializerContextTests
 
 	private sealed class TestClass
 	{
-		public int Id { get; set; } = default!;
+		public int Id { get; init; } = default!;
 	}
 }

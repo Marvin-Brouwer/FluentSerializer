@@ -91,4 +91,7 @@ public abstract class CollectionConverterBase {
 		var genericType = type.GetTypeInfo().GenericTypeArguments;
 		return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
 	}
+
+	/// <inheritdoc />
+	public override int GetHashCode() => typeof(IEnumerable).GetHashCode();
 }

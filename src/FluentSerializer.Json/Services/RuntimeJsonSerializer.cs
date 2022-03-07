@@ -6,6 +6,7 @@ using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Json.Profiles;
@@ -45,15 +46,19 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	{
 		if (element is null) return default;
 
-		return _deserializer.DeserializeFromNode<TModel>(element, this);
+		var coreContext = new SerializerCoreContext<IJsonNode>(this)
+		{
+			RootNode = element
+		};
+		return _deserializer.DeserializeFromNode<TModel>(element, coreContext);
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize([MaybeNull, AllowNull] in IJsonContainer? element, in Type modelType)
+	public object? Deserialize([MaybeNull, AllowNull] in IJsonContainer? element, in Type modelType, in ISerializerCoreContext<IJsonNode> context)
 	{
 		if (element is null) return default;
-
-		return _deserializer.DeserializeFromNode(element, in modelType,  this);
+		
+		return _deserializer.DeserializeFromNode(element, in modelType, in context);
 	}
 
 	/// <inheritdoc />
@@ -80,7 +85,8 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	public IJsonContainer? SerializeToContainer<TModel>(in TModel? model)
 	{
 		if (model is null) return default;
-		var token = _serializer.SerializeToNode(model, typeof(TModel), this);
+		var coreContext = new SerializerCoreContext(this);
+		var token = _serializer.SerializeToNode(model, typeof(TModel), coreContext);
 		if (token is null) return JsonBuilder.Object();
 		if (token is IJsonContainer container) return container;
 
@@ -91,7 +97,8 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	public TContainer? SerializeToContainer<TContainer>(in object? model, in Type modelType) where TContainer : IJsonContainer
 	{
 		if (model is null) return default;
-		var token = _serializer.SerializeToNode(in model, in modelType, this);
+		var coreContext = new SerializerCoreContext(this);
+		var token = _serializer.SerializeToNode(in model, in modelType, coreContext);
 		if (token is null) return default;
 		if (token is TContainer container) return container;
 

@@ -16,5 +16,16 @@ With a new line */
 		"prop3": 1,
 		"prop4": true,
 		"prop5": null
-	}
+	},
+	"prop6": {
+		"prop7": {
+		},
+		"prop8": {
+		}
+	},
+	"prop9": [
+		true,
+		"value",
+		96
+	]
 }

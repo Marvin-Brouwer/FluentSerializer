@@ -31,7 +31,7 @@ public class NamingContext : INamingContext
 	}
 
 	/// <inheritdoc cref="INamingContext" />
-	protected static INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
+	public static INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
 	{
 		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
 		Guard.Against.Null(property, nameof(property));

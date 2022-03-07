@@ -10,9 +10,10 @@ namespace FluentSerializer.Core.Converting.Converters;
 public enum EnumFormat
 {
 	/// <summary>
-	/// Use the <see cref="DescriptionAttribute" /> to read and write and fallback to the name if not present
+	/// Use the <see cref="DescriptionAttribute" /> to read and write, read and write to name if not found, read from underlying number as fallback
 	/// </summary>
-	Default = UseDescription | UseName,
+	[Description("Use the most flexible format, using all EnumFormats combined")]
+	Default = UseDescription | UseName | UseNumberValue,
 
 	/// <summary>
 	/// Use the <see cref="DescriptionAttribute" /> to read and write
@@ -20,12 +21,12 @@ public enum EnumFormat
 	[Description("Use the System.ComponentModel.DescriptionAttribute to write out")]
 	UseDescription = 0x1,
 	/// <summary>
-	/// Use the name to read and write
+	/// Use the member name to read and write
 	/// </summary>
 	[Description("Use the name to write out")]
 	UseName = 0x2,
 	/// <summary>
-	/// Use the name to read and write
+	/// Use the underlying number type to read and write
 	/// </summary>
 	[Description("Use the number value to write out")]
 	UseNumberValue = 0x4

@@ -6,10 +6,15 @@ using FluentSerializer.Json.DataNodes;
 namespace FluentSerializer.Json.Converting.Converters;
 
 /// <summary>
-/// Converts dates based on DotNet's default, using <see cref="CultureInfo.CurrentCulture"/>
+/// Converts dates <br/>
+/// Using <see cref="DateTime.Parse(string, IFormatProvider?)"/> with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
+/// Using <c>DateTime.ToUniversalTime().ToString(IsoDateFormat, CultureInfo.CurrentCulture)</c> for serializing
+/// with a format like yyyy-MM-ddTHH:mm:ssK
 /// </summary>
 public sealed class DefaultDateConverter : SimpleTypeConverter<DateTime>
 {
+	private const string IsoDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
+
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue)
 	{
@@ -22,6 +27,9 @@ public sealed class DefaultDateConverter : SimpleTypeConverter<DateTime>
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateTime value) =>
 		JsonCharacterConstants.PropertyWrapCharacter + 
-		value.ToString(CultureInfo.CurrentCulture) +
+		value.ToUniversalTime().ToString(IsoDateFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
+
+	/// <inheritdoc />
+	public override int GetHashCode() => DateTime.MinValue.GetHashCode();
 }

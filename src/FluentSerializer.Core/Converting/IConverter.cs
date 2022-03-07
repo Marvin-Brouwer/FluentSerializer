@@ -28,7 +28,7 @@ public interface IConverter<TSerialContainer, TDataNode> : IConverter
 /// <summary>
 /// A service implementation responsible for converting Text to and from a specific datatype
 /// </summary>
-public interface IConverter
+public interface IConverter : IComparable
 {
 	/// <summary>
 	/// Test whether this converter can convert <paramref name="targetType"/> 
@@ -39,4 +39,6 @@ public interface IConverter
 	/// The direction(s) this converter is allowed to be applied to
 	/// </summary>
 	SerializerDirection Direction { get; }
+
+	int IComparable.CompareTo(object? obj) => obj?.GetHashCode() ?? 0;
 }

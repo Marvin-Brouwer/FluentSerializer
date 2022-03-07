@@ -28,7 +28,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter Append(in char value)
 	{
@@ -39,7 +39,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter Append(in char value, in int repeat)
 	{
@@ -50,7 +50,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter Append(in string? value)
 	{
@@ -63,7 +63,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter Append(in ReadOnlySpan<char> value)
 	{
@@ -76,7 +76,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter AppendLineEnding()
 	{
@@ -87,7 +87,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public ITextWriter Clear()
 	{
@@ -98,7 +98,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public override string ToString()
 	{
@@ -109,7 +109,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	private byte[] GetBytes()
 	{
@@ -122,7 +122,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public Span<byte> AsSpan() => GetBytes()
 		.AsSpan(0, StringBuilder.Length);
@@ -130,7 +130,7 @@ internal sealed class SystemStringBuilder : ITextWriter
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public Memory<byte> AsMemory() => GetBytes()
 		.AsMemory(0, StringBuilder.Length);

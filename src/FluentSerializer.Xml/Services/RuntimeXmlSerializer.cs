@@ -9,6 +9,7 @@ using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.Profiles;
@@ -48,17 +49,21 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		where TModel : new()
 	{
 		if (element is null) return default;
-
 		if (typeof(IEnumerable).IsAssignableFrom(typeof(TModel))) throw new MalConfiguredRootNodeException(typeof(TModel));
-		return _deserializer.DeserializeFromElement<TModel>(in element, this);
+
+		var context = new SerializerCoreContext<IXmlNode>(this)
+		{
+			RootNode = element
+		};
+		return _deserializer.DeserializeFromElement<TModel>(in element, context);
 	}
 
 	/// <inheritdoc />
-	public object? Deserialize([MaybeNull, AllowNull] in IXmlElement? element, in Type modelType)
+	public object? Deserialize([MaybeNull, AllowNull] in IXmlElement? element, in Type modelType, in ISerializerCoreContext<IXmlNode> context)
 	{
 		if (element is null) return default;
 
-		return _deserializer.DeserializeFromElement(in element, in modelType,  this);
+		return _deserializer.DeserializeFromElement(in element, in modelType,  in context);
 	}
 
 	/// <inheritdoc />
@@ -98,7 +103,8 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 	{
 		if (model is null) return default;
 
-		return _serializer.SerializeToElement(model, typeof(TModel), this);
+		var context = new SerializerCoreContext(this);
+		return _serializer.SerializeToElement(model, typeof(TModel), context);
 	}
 
 	/// <inheritdoc />
@@ -106,6 +112,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 	{
 		if (model is null) return default;
 
-		return _serializer.SerializeToElement(in model, in modelType, this);
+		var context = new SerializerCoreContext(this);
+		return _serializer.SerializeToElement(in model, in modelType, context);
 	}
 }

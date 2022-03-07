@@ -136,7 +136,7 @@ public sealed class RequestProfile : JsonSerializerProfile
 
 		For<SomeDataEntity>()
 			.Property(entity => entity.Id,
-				namingStrategy: Names.Are("identifier"))
+				namingStrategy: Names.Equal("identifier"))
 			.Property(entity => entity.Name);
 	}
 }
@@ -185,6 +185,7 @@ Here are some links to some basic concepts:
 
 - [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)
 - [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)
+- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters-EnumConverter.md#readme)
 
 ## Advanced concepts
 

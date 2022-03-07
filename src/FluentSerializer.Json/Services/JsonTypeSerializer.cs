@@ -34,16 +34,17 @@ public sealed class JsonTypeSerializer
 	/// </summary>
 	/// <exception cref="NotImplementedException"></exception>
 	/// <exception cref="ClassMapNotFoundException"></exception>
-	public IJsonNode? SerializeToNode(in object dataModel, in Type classType, in IJsonSerializer currentSerializer)
+	public IJsonNode? SerializeToNode(in object dataModel, in Type classType, in ISerializerCoreContext coreContext)
 	{
 		Guard.Against.Null(dataModel, nameof(dataModel));
 		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+		Guard.Against.Null(coreContext, nameof(coreContext));
 
+		var currentCoreContext = coreContext.WithPathSegment(classType);
 		if (typeof(IEnumerable).IsAssignableFrom(classType))
 		{
 			if (dataModel is not IEnumerable enumerable) throw new ContainerNotSupportedException(in classType);
-			return CollectionConverter.SerializeCollection(in enumerable, currentSerializer);
+			return CollectionConverter.SerializeCollection(in enumerable, currentCoreContext.WithPathSegment(typeof(IEnumerable)));
 		}
 
 		var instanceType = dataModel.GetType();
@@ -63,11 +64,11 @@ public sealed class JsonTypeSerializer
 			if (propertyValue is null) continue;
 
 			var serializerContext = new SerializerContext(
+				currentCoreContext.WithPathSegment(propertyMapping.Property),
 				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
-				currentSerializer,
 				classMap.PropertyMaps, _mappings);
 
-			var jsonNode = SerializeObjectContent(in propertyValue, in propertyMapping, in currentSerializer, in serializerContext);
+			var jsonNode = SerializeObjectContent(in propertyValue, in propertyMapping, in serializerContext);
 			if (jsonNode is not null) properties.Add(jsonNode);
 		}
 
@@ -75,25 +76,24 @@ public sealed class JsonTypeSerializer
 	}
 
 	private IJsonObjectContent? SerializeObjectContent(
-		in object propertyValue, in IPropertyMap propertyMapping,  
-		in IJsonSerializer currentSerializer, in SerializerContext serializerContext)
+		in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
 	{
 		if (typeof(IJsonProperty).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeProperty(in propertyValue, in propertyMapping, in serializerContext, in currentSerializer);
+			return SerializeProperty(in propertyValue, in propertyMapping, in serializerContext);
 		}
 
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
 	}
 
 	private IJsonObjectContent? SerializeProperty(in object propertyValue, in IPropertyMap propertyMapping,
-		in SerializerContext serializerContext, in IJsonSerializer currentSerializer)
+		in SerializerContext serializerContext)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
 		var nodeValue = matchingConverter is null 
-			? SerializeToNode(in propertyValue, serializerContext.PropertyType, currentSerializer) 
+			? SerializeToNode(in propertyValue, serializerContext.PropertyType, serializerContext) 
 			: matchingConverter.Serialize(in propertyValue, serializerContext);
 		if (nodeValue is not IJsonPropertyContent jsonContent) return default;
 		

@@ -47,7 +47,7 @@ public sealed class NonWrappedCollectionConverterTests
 		_serializerMock = new Mock<IAdvancedXmlSerializer>();
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
 			.SetupDefault(_serializerMock)
-			.WithNamingStrategy(Names.Are(ListName));
+			.WithNamingStrategy(Names.Equal(ListName));
 	}
 
 	#region Failing checks
@@ -189,7 +189,7 @@ public sealed class NonWrappedCollectionConverterTests
 		var input = Element(ListName);
 
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListItemName))
+			.WithFindNamingStrategy(Names.Equal(ListItemName))
 			.WithPropertyType(expected.GetType())
 			.WithParentNode(Element(ParentName));
 
@@ -219,7 +219,7 @@ public sealed class NonWrappedCollectionConverterTests
 		_serializerMock
 			.WithDeserialize();
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListItemName))
+			.WithFindNamingStrategy(Names.Equal(ListItemName))
 			.WithPropertyType(expected.GetType())
 			.WithParentNode(Element(ParentName,
 				Element(ListItemName, Text("1")),

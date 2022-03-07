@@ -28,4 +28,7 @@ public abstract class ConvertibleConverterBase
 
 		return Convert.ChangeType(currentValue, targetType);
 	}
+
+	/// <inheritdoc />
+	public override int GetHashCode() => typeof(IConvertible).GetHashCode();
 }

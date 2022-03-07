@@ -40,7 +40,11 @@ public sealed class EnumConverter : EnumConverterBase, IJsonConverter
 	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
 	{
 		if (objectToDeserialize is not IDataValue data) return default;
+		if (string.IsNullOrWhiteSpace(data.Value)) return default;
 
-		return ConvertToEnum(data.Value, context.PropertyType);
+		var value = data.Value.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+			? data.Value[1..^1]
+			: data.Value;
+		return ConvertToEnum(value, context.PropertyType);
 	}
 }

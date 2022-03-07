@@ -44,7 +44,7 @@ public sealed class CollectionConverterTests
 		_serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(_serializerMock)
-			.WithNamingStrategy(Names.Are(ListName));
+			.WithNamingStrategy(Names.Equal(ListName));
 	}
 
 	#region Failing checks
@@ -167,7 +167,7 @@ public sealed class CollectionConverterTests
 		var input = Array();
 
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListName))
+			.WithFindNamingStrategy(Names.Equal(ListName))
 			.WithPropertyType(expected.GetType());
 
 		// Act
@@ -196,7 +196,7 @@ public sealed class CollectionConverterTests
 		_serializerMock
 			.WithDeserialize();
 		_contextMock
-			.WithFindNamingStrategy(Names.Are(ListName))
+			.WithFindNamingStrategy(Names.Equal(ListName))
 			.WithPropertyType(expected.GetType());
 
 		// Act

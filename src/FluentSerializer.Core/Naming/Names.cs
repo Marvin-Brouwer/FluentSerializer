@@ -12,10 +12,10 @@ namespace FluentSerializer.Core.Naming;
 public readonly struct Names
 {
 	/// <summary>
-	/// All names are the explicit <paramref name="name"/> value for this mapping
+	/// All names equal the explicit <paramref name="name"/> value for this mapping
 	/// </summary>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Func<INamingStrategy> Are(string name)
+	public static Func<INamingStrategy> Equal(string name)
 	{
 		Guard.Against.InvalidName(name);
 

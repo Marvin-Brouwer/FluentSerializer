@@ -84,4 +84,47 @@ public static class SerializerContextMother
 
 		return contextMock;
 	}
+
+	/// <summary>
+	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// </summary>
+	public static Mock<ISerializerCoreContext<TDataNode>> WithSerializer<TDataNode, TSerializer>(
+		this Mock<ISerializerCoreContext<TDataNode>> contextMock, TSerializer serializer)
+		where TDataNode : IDataNode
+		where TSerializer : ISerializer
+	{
+		contextMock
+			.Setup(context => context.CurrentSerializer)
+			.Returns(serializer);
+
+		return contextMock;
+	}
+
+	/// <summary>
+	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// </summary>
+	public static Mock<ISerializerCoreContext<TDataNode>> WithSerializer<TDataNode, TSerializer>(
+		this Mock<ISerializerCoreContext<TDataNode>> contextMock, IMock<TSerializer> serializer)
+		where TDataNode : IDataNode
+		where TSerializer : class, ISerializer
+	{
+		return contextMock.WithSerializer(serializer.Object);
+	}
+
+	/// <summary>
+	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// </summary>
+	public static Mock<ISerializerCoreContext<TDataNode>> WithAutoPathSegment<TDataNode>(
+		this Mock<ISerializerCoreContext<TDataNode>> contextMock)
+		where TDataNode : IDataNode
+	{
+		contextMock
+			.Setup(context => context.WithPathSegment(It.Ref<PropertyInfo>.IsAny))
+			.Returns((PropertyInfo _) => contextMock.Object);
+		contextMock
+			.Setup(context => context.WithPathSegment(It.Ref<Type>.IsAny))
+			.Returns((Type _) => contextMock.Object);
+
+		return contextMock;
+	}
 }

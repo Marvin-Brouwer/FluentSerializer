@@ -48,7 +48,7 @@ public sealed class NamingStrategyTests
 			Names.Use.SnakeCase(), "class_name_with_multiple_parts", "property_name_with_multiple_parts"
 		};
 
-		yield return new object[] { Names.Are("Override")(), "Override", "Override" };
+		yield return new object[] { Names.Equal("Override")(), "Override", "Override" };
 	}
 
 	private sealed class ClassNameWithMultipleParts

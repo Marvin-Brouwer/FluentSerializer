@@ -1,6 +1,6 @@
 using System;
 
-namespace FluentSerializer.UseCase.Mavenlink.Models;
+namespace FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 internal sealed class Project : IMavenlinkEntity
 {

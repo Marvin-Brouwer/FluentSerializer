@@ -108,6 +108,6 @@ public sealed class NamingContextTests
 
 	private sealed class TestClass
 	{
-		public int Id { get; set; } = default!;
+		public int Id { get; init; } = default!;
 	}
 }

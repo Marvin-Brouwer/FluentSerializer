@@ -18,7 +18,7 @@ public sealed class CustomFieldNamingStrategy : INamingStrategy
 	/// </summary>
 	public CustomFieldNamingStrategy(in string name)
 	{
-		_innerNamingStrategy = Names.Are(name)();
+		_innerNamingStrategy = Names.Equal(name)();
 	}
 
 	/// <summary>

@@ -29,8 +29,17 @@ internal readonly struct AllJsonNodes
             Property("prop3", Value("1")),
             Property("prop4", Value("true")),
             Property("prop5", Value(null))
-        ))
-    );
+        )),
+		Property("prop6", Object(
+			Property("prop7", Object()),
+			Property("prop8", Object())
+		)),
+		Property("prop9", Array(
+			Value("true"),
+			Value("\"value\""),
+			Value("96"))
+		)
+	);
 
 	internal static string GetJson(bool format) => format ?
 		File.ReadAllText("./Tests/AllJsonNodes.Formatted.json") :

@@ -1,4 +1,5 @@
 using FluentSerializer.UseCase.Mavenlink.Models;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink;
 

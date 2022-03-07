@@ -16,28 +16,71 @@
 			"key": "users"
 		}
 	],
-	"users": [
-		{
+	"users": {
+		"U1": {
 			"id": "U1",
 			"name": "John Doe",
 			"age": 22,
-			"account_membership_id": "UA1"
+			"account_membership_id": "UA1",
+			"custom_field_value_ids": [ "CV1", "CV3" ]
 		},
-		{
+		"U2": {
 			"id": "U2",
 			"name": "Jane Doe",
 			"age": 22,
-			"account_membership_id": "UA1"
-		}
-	],
-	"account_memberships": [
-		{
-			"id": "UA1",
-			"account_membership_id": "UA1"
+			"account_membership_id": "UA2"
 		},
-		{
-			"id": "UA2",
-			"account_membership_id": null
+		"U3": {
+			"id": "U3",
+			"name": "Janet Doe",
+			"age": 22,
+			"account_membership_id": "UA3"
 		}
-	]
+	},
+	"account_memberships": {
+		"UA1": {
+			"id": "UA1",
+			"line_manager_id": "U2"
+		},
+		"UA2": {
+			"id": "UA2",
+			"line_manager_id": null
+		},
+		"UA3": {
+			"id": "UA3",
+			"line_manager_id": "U5"
+		}
+	},
+	"custom_field_values": {
+		"CV1": {
+			"id": "CV1",
+			"type": "string",
+			"custom_field_id": "C9",
+			"custom_field_name": "nickname",
+			"subject_type": "User",
+			"subject_id": "U1",
+			"value": "JD",
+			"display_value": "JD"
+		},
+		"CV2": {
+			"id": "CV2",
+			"type": "string",
+			"custom_field_id": "C9",
+			"custom_field_name": "nickname",
+			"subject_type": "User",
+			"subject_id": "U99",
+			"value": "Bullseye",
+			"display_value": "Bullseye"
+		},
+		"CV3": {
+			"id": "CV3",
+			"type": "string",
+			"custom_field_id": "C1",
+			"custom_field_name": "Office",
+			"subject_type": "User",
+			"subject_id": "U1",
+			"value": "HQ",
+			"display_value": "HQ"
+		}
+	}
 }

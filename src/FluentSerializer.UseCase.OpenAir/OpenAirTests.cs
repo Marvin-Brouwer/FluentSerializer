@@ -29,7 +29,7 @@ public sealed partial class OpenAirTests
 			{
 				configuration.Encoding = Encoding.UTF8;
 				configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
-				configuration.DefaultConverters.Add(Converter.For.Xml());
+				configuration.DefaultConverters.Use(Converter.For.Xml());
 				configuration.NewLine = LineEndings.LineFeed;
 			})
 			.BuildServiceProvider();
@@ -43,7 +43,7 @@ public sealed partial class OpenAirTests
 		var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
 		var example = ProjectRequestExample;
 
-		var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
+		var sut = _serviceProvider.GetService<IXmlSerializer>()!;
 
 		// Act
 		var result = sut.Serialize(example);
@@ -60,7 +60,7 @@ public sealed partial class OpenAirTests
 		var expected = RateCardResponseExample;
 		var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
 
-		var sut = _serviceProvider.GetService<RuntimeXmlSerializer>()!;
+		var sut = _serviceProvider.GetService<IXmlSerializer>()!;
 
 		// Act
 		var result = sut.Deserialize<Response<RateCard>>(example);

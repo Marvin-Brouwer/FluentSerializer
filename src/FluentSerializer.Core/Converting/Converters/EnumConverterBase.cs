@@ -151,8 +151,7 @@ public abstract class EnumConverterBase
 
 			// This should really never happen:
 			_ => throw UnknownEnumFormatException(EnumFormat.ToString())
-			// This is very possible though:
-		} ?? throw ValueNotFoundException(in targetType, in currentValue); 
+		}; 
 	}
 	
 	private static object? GetEnumFromDescription(in string currentValue, in Type targetType)
@@ -211,4 +210,7 @@ public abstract class EnumConverterBase
 			return default;
 		}
 	}
+
+	/// <inheritdoc />
+	public override int GetHashCode() => typeof(System.Enum).GetHashCode();
 }

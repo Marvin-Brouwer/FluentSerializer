@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using FluentSerializer.Core.Converting.Converters;
 using Xunit;
@@ -30,11 +29,11 @@ public sealed partial class EnumConverterBaseTests
 
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
-		var result2 = () => sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
 		// Assert
 		result1.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
-		result2.Should().ThrowExactly<NotSupportedException>();
+		result2.Should().BeNull();
 	}
 
 	[Fact,
@@ -46,13 +45,13 @@ public sealed partial class EnumConverterBaseTests
 
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result2 = () => sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
-		var result3 = () => sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
 		// Assert
 		result1.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
-		result2.Should().ThrowExactly<NotSupportedException>();
-		result3.Should().ThrowExactly<NotSupportedException>();
+		result2.Should().BeNull();
+		result3.Should().BeNull();
 	}
 
 	[Fact,
@@ -64,12 +63,12 @@ public sealed partial class EnumConverterBaseTests
 		
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithoutDescriptionValue.ToString(), typeof(TestEnum));
-		var result2 = () => sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 
 		// Assert
 		result1.Should().BeEquivalentTo(TestEnum.MemberWithoutDescription);
-		result2.Should().ThrowExactly<NotSupportedException>();
+		result2.Should().BeNull();
 		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
 	}
 
@@ -83,12 +82,12 @@ public sealed partial class EnumConverterBaseTests
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result3 = () => sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
 		// Assert
 		result1.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
 		result2.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
-		result3.Should().ThrowExactly<NotSupportedException>();
+		result3.Should().BeNull();
 	}
 
 	[Fact,
@@ -100,12 +99,12 @@ public sealed partial class EnumConverterBaseTests
 
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
-		var result2 = () => sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 
 		// Assert
 		result1.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
-		result2.Should().ThrowExactly<NotSupportedException>();
+		result2.Should().BeNull();
 		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
 	}
 
@@ -117,13 +116,13 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseName | EnumFormat.UseNumberValue);
 
 		// Act
-		var result1 = () => sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 		var result4 = sut.ConvertToEnum(MemberWithExplicitValueName, typeof(TestEnum));
 
 		// Assert
-		result1.Should().ThrowExactly<NotSupportedException>();
+		result1.Should().BeNull();
 		result2.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
 		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
 		result4.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);

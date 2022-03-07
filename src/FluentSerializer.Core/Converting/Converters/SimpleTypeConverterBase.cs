@@ -31,4 +31,7 @@ public abstract class SimpleTypeConverterBase<TObject>
 
 		return ConvertToDataType(in currentValue);
 	}
+
+	/// <inheritdoc />
+	public override int GetHashCode() => typeof(TObject).GetHashCode();
 }

@@ -19,6 +19,9 @@ public readonly partial struct JsonArray
 		offset.AdjustForToken(JsonCharacterConstants.ArrayStartCharacter);
 		while (text.WithinCapacity(in offset))
 		{
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
+				offset.AdjustForToken(JsonCharacterConstants.DividerCharacter);
+
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
 				_children.Add(new JsonObject(in text, ref offset));
@@ -36,8 +39,6 @@ public readonly partial struct JsonArray
 				continue;
 			}
 
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) break;
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
 
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
@@ -50,6 +51,14 @@ public readonly partial struct JsonArray
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
 				_children.Add(new JsonCommentMultiLine(in text, ref offset));
+
+				currentChildIndex++;
+				continue;
+			}
+			if (!text.HasWhitespaceAtOffset(in offset))
+			{
+				_children.Add(new JsonValue(in text, ref offset));
+				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
 				continue;
