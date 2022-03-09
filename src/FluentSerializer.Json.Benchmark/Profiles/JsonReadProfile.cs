@@ -17,7 +17,4 @@ public class JsonReadProfile : ReadProfile
 
 	[Benchmark, BenchmarkCategory(nameof(ReadJson))]
 	public IJsonObject ReadJson() => JsonParser.Parse(CaseReader.ReadToEnd());
-
-	[Benchmark, BenchmarkCategory(nameof(ReadJson))]
-	public IJsonObject ReadJson2() => JsonParser.Parse(CaseReader.ReadToEnd());
 }
