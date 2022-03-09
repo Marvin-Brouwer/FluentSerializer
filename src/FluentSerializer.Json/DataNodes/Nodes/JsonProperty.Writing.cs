@@ -29,7 +29,7 @@ public readonly partial struct JsonProperty
 		stringBuilder.Append(JsonCharacterConstants.PropertyAssignmentCharacter);
 		if (format) stringBuilder.Append(spacer);
 
-		if (childValue is null) stringBuilder.Append(JsonCharacterConstants.NullValue);
+		if (!HasValue) stringBuilder.Append(JsonCharacterConstants.NullValue);
 		else stringBuilder.AppendNode(childValue, in format, in indent, in writeNull);
 
 		return stringBuilder;

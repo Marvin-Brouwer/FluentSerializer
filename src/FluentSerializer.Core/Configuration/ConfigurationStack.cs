@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Configuration;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IConfigurationStack{T}" />
 public sealed class ConfigurationStack<T> : SortedSet<T>, IConfigurationStack<T>
 {
 
