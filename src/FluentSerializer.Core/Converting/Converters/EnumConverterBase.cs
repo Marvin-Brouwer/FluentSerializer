@@ -164,8 +164,8 @@ public abstract class EnumConverterBase
 				var valueAttributes = memberInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
 				if (valueAttributes.Length == 0) continue;
 
-				var description = ((DescriptionAttribute)valueAttributes[0])?.Description;
-				if (description is null) continue;
+				var description = ((DescriptionAttribute)valueAttributes[0]).Description;
+				if (string.IsNullOrWhiteSpace(description)) continue;
 
 				if (description.Equals(currentValue, StringComparison.OrdinalIgnoreCase))
 					return Enum.Parse(targetType, memberInfo.Name);
@@ -212,5 +212,5 @@ public abstract class EnumConverterBase
 	}
 
 	/// <inheritdoc />
-	public override int GetHashCode() => typeof(System.Enum).GetHashCode();
+	public override int GetHashCode() => typeof(Enum).GetHashCode();
 }
