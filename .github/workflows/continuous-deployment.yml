@@ -77,34 +77,6 @@ jobs:
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
     ###
-    # 🧰 Setup .Net
-    #
-    # Configure the pipeline to use the correct .Net sdk versions
-    ###
-    - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        include-prerelease: true
-        dotnet-version: |
-          3.1.x
-          5.0.x
-          6.0.x
-    ###
-    # 🗃 Restore dependencies
-    #
-    # Fill the NuGet store with necessary libraries
-    ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    ###
-    # 🗃 Restore 'library-binaries'
-    ###
-    - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v2
-      with:
-        name: library-binaries
-        path: ./src
-    ###
     # 🗳 Push package
     #
     # Pack and push the package
