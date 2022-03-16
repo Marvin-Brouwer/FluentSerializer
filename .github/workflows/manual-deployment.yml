@@ -1,4 +1,4 @@
-name: Continuous Deployment
+name: Manual Deployment
 
 on:
   workflow_dispatch:
