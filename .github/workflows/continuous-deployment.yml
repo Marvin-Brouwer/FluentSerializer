@@ -21,10 +21,14 @@ on:
         - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
 
 jobs:
-  build:
-    name: "Build binaries"
+  dotnet-push:
+    name: "Push to NuGet.org"
 
     runs-on: ubuntu-latest
+
+    environment:
+      name: NuGet
+      url: "https://www.nuget.org/packages/${{ github.event.inputs.package }}/${{ github.event.inputs.version }}"
 
     steps:
     ###
@@ -72,29 +76,6 @@ jobs:
     ###
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
-    ###
-    # 🗃 Publish 'library-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'library-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: library-binaries
-        path: |
-          ./src/${{ github.event.inputs.package }}/bin/Release/*/*.*
-        retention-days: 1
-
-  dotnet-push:
-    name: "Push to NuGet.org"
-
-    runs-on: ubuntu-latest
-    needs: build
-
-    environment:
-      name: NuGet
-      url: "https://www.nuget.org/packages/${{ github.event.inputs.package }}/${{ github.event.inputs.version }}"
-
-    steps:
     ###
     # 🧰 Setup .Net
     #
