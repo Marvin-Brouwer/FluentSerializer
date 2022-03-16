@@ -75,7 +75,7 @@ jobs:
     # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release"
+      run: dotnet build --no-restore --nologo --configuration "Release" -p:Version=${{ github.event.inputs.version }}
     ###
     # 🗳 Push package
     #
@@ -83,8 +83,6 @@ jobs:
     ###
     - name: 🗳 Push package
       run: >-
-        sudo dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
-
         sudo dotnet pack ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
         --configuration Release
         --no-build
