@@ -56,7 +56,7 @@ jobs:
       uses: Mudlet/xmlstarlet-action@master
       with:
         args: >-
-          xmlstarlet edit
+          edit
           --update "//Project/PropertyGroup/Version"
           --value '${{ github.event.inputs.version }}'
           ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
