@@ -82,15 +82,8 @@ jobs:
     # Pack and push the package
     ###
     - name: 🗳 Push package
-      run: >-
-        sudo dotnet pack ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
-        --configuration Release
-        --no-build
-        --nologo
-        --output "${{github.workspace}}/src"
-        -p:PackageVersion=${{ github.event.inputs.version }}
-
-        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}-${{ github.event.inputs.version }}.nupkg
+      run: >#!
+        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}/bin/release/${{ github.event.inputs.version }}.${{ github.event.inputs.package }}.nupkg
         --api-key ${{ secrets.NUGET_TOKEN }}
         --source https://api.nuget.org/v3/index.json
       working-directory: ${{github.workspace}}/src/${{ github.event.inputs.package }}
