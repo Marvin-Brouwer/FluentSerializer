@@ -48,28 +48,16 @@ jobs:
           5.0.x
           6.0.x
     ###
-    # 🔧 Fix csproj line-endings
-    ###
-    - name: 🔧 Fix csproj line-endings
-      run: >-
-        sudo apt-get install -y dos2unix
-
-        dos2unix
-        ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
-      working-directory: ${{github.workspace}}/src/${{ github.event.inputs.package }}
-    ###
     # 🔧 Fix version
     #
     # Override the libraries version info
     ###
     - name: 🔧 Fix version
-      uses: Mudlet/xmlstarlet-action@master
-      with:
-        args: >-
-          edit
-          --update "//Project/PropertyGroup/Version"
-          --value '${{ github.event.inputs.version }}'
-          ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
+      shell: pwsh
+      run: |-
+        ${{github.workspace}}/.github/workflows/update-version.ps1 `
+          -Version "${{ github.event.inputs.version }}" `
+          -File "${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj";
     ###
     # 🗃 Restore dependencies
     #
