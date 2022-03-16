@@ -2,26 +2,27 @@ name: Continuous Deployment
 
 on:
   workflow_dispatch:
-    version:
-      description: 'Define the version to be published (SemVer)'
-      required: true
-      type: string
-    package:
-      description: 'Select which package to stage for publish'
-      required: true
-      default: 'warning'
-      type: choice
-      options:
-      - FluentSerializer.Core
-      - FluentSerializer.Core.DependencyInjection.NetCoreDefault
-      - FluentSerializer.Json
-      - FluentSerializer.Json.DependencyInjection.NetCoreDefault
-      - FluentSerializer.Xml
-      - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
-    branch:
-      description: 'Define branch name'
-      required: true
-      default: 'main'
+    inputs:
+      version:
+        description: 'Define the version to be published (SemVer)'
+        required: true
+        type: string
+      package:
+        description: 'Select which package to stage for publish'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - FluentSerializer.Core
+        - FluentSerializer.Core.DependencyInjection.NetCoreDefault
+        - FluentSerializer.Json
+        - FluentSerializer.Json.DependencyInjection.NetCoreDefault
+        - FluentSerializer.Xml
+        - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
+      branch:
+        description: 'Define branch name'
+        required: true
+        default: 'main'
 
 jobs:
   build:
