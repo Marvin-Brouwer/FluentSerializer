@@ -19,10 +19,6 @@ on:
         - FluentSerializer.Json.DependencyInjection.NetCoreDefault
         - FluentSerializer.Xml
         - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
-      branch:
-        description: 'Define branch name'
-        required: true
-        default: 'main'
 
 jobs:
   build:
@@ -59,7 +55,7 @@ jobs:
     - name: 🧰 Fix version
       uses: Mudlet/xmlstarlet-action@master
       with:
-        args: |
+        args: >-
           xmlstarlet edit
           --update "//Project/PropertyGroup/Version"
           --value '${{ github.event.inputs.version }}'
@@ -135,7 +131,7 @@ jobs:
     # Pack and push the package
     ###
     - name: 🗳 Push package
-      run:  >-
+      run: >-
         sudo dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
 
         sudo dotnet pack ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
