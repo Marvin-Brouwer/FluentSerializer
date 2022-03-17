@@ -8,9 +8,9 @@ Write-Host "Updating version in $file to $version" -ForegroundColor DarkYellow;
 [xml]$xmlDoc = Get-Content $File;
 
 try {
-	$xmlDoc.Project.PropertyGroup[0].Version = $Version;
+	$xmlDoc.Project.PropertyGroup[0].Version = [String]$Version;
 } catch {
-	$xmlDoc.Project.PropertyGroup.Version = $Version;
+	$xmlDoc.Project.PropertyGroup.Version = [String]$Version;
 }
 
 $xmlDoc.Save($File);
