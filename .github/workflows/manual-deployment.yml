@@ -89,7 +89,7 @@ jobs:
     ###
     - name: 🗳 Push package
       run: >-
-        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}/bin/release/${{ github.event.inputs.package }}.${{ github.event.inputs.version }}.nupkg
+        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}/bin/Release/${{ github.event.inputs.package }}.${{ github.event.inputs.version }}.nupkg
         --api-key ${{ secrets.NUGET_TOKEN }}
         --source https://api.nuget.org/v3/index.json
       working-directory: ${{github.workspace}}/src/${{ github.event.inputs.package }}
