@@ -75,15 +75,21 @@ jobs:
     # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release" -p:Version=${{ github.event.inputs.version }}
+      run: >-
+        dotnet build
+        "${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj"
+        --no-restore
+        --nologo
+        --configuration "Release"
+        -p:Version=${{ github.event.inputs.version }}
     ###
     # 🗳 Push package
     #
     # Pack and push the package
     ###
     - name: 🗳 Push package
-      run: >#!
-        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}/bin/release/${{ github.event.inputs.version }}.${{ github.event.inputs.package }}.nupkg
+      run: >-
+        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}/bin/release/${{ github.event.inputs.package }}.${{ github.event.inputs.version }}.nupkg
         --api-key ${{ secrets.NUGET_TOKEN }}
         --source https://api.nuget.org/v3/index.json
       working-directory: ${{github.workspace}}/src/${{ github.event.inputs.package }}
