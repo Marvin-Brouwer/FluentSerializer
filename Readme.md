@@ -1,9 +1,11 @@
 [//]: # (Header)
 
 [package-url-xml]: https://www.nuget.org/packages/FluentSerializer.Xml/
+[package-shield-i-xml]: https://img.shields.io/badge/-XML-lightgrey?style=flat-square
 [package-shield-v-xml]: https://img.shields.io/nuget/v/FluentSerializer.Xml.svg?style=flat-square
 [package-shield-d-xml]: https://img.shields.io/nuget/dt/FluentSerializer.Xml.svg?style=flat-square
 [package-url-json]: https://www.nuget.org/packages/FluentSerializer.Json/
+[package-shield-i-Json]: https://img.shields.io/badge/-JSON-lightgrey?style=flat-square
 [package-shield-v-json]: https://img.shields.io/nuget/v/FluentSerializer.Json.svg?style=flat-square
 [package-shield-d-json]: https://img.shields.io/nuget/dt/FluentSerializer.Json.svg?style=flat-square
 
@@ -21,8 +23,9 @@
 
 <h3 align="center">
 
-[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
-[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
+[![XML][package-shield-i-xml] ![XML Nuget][package-shield-v-xml] ![XML Downloads][package-shield-d-xml]][package-url-xml]  
+[![JSON][package-shield-i-json] ![JSON Nuget][package-shield-v-json] ![JSON Downloads][package-shield-d-Json]][package-url-json]  
+
 [![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]
 
 </h3>
