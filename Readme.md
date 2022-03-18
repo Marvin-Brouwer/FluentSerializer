@@ -15,7 +15,7 @@
 <h1 align="center">
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
 	<img alt="Fluent Serializer banner"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Banner.optimized.svg" />
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Banner.optimized.svg" />
 	</a>
 </h1>
 
@@ -183,9 +183,9 @@ To get a quick view of how this library may benefit you, check out these use-cas
 
 Here are some links to some basic concepts:
 
-- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)
-- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)
-- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters-EnumConverter.md#readme)
+- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)
+- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)
+- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters-EnumConverter.md#readme)
 
 ## Advanced concepts
 
@@ -193,10 +193,10 @@ Here are some links to some more advanced topics:
 
 ### General
 
-- [Recursive references](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Recursive-references.md#readme)
-- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Converter-parent-access.md#readme)
-- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-serializer.md#readme)
-- [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme)
+- [Recursive references](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Recursive-references.md#readme)
+- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Converter-parent-access.md#readme)
+- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-serializer.md#readme)
+- [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-use-case.md#readme)
 
 ### JSON
 

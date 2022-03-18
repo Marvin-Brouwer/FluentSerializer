@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Converter-parent-access.md">
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Converter-parent-access.md">
 		Documentation: Custom converters and accessing parent nodes
 	</a>
 </h1>
@@ -29,4 +29,4 @@ An example of a real world example needing parent access would be a data format 
 ## Root node reference
 
 Currently there is no access to the root node as a reference, if you need one please request a feature and include your use-case so we can use this as an example.  
-See: [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme).
+See: [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-use-case.md#readme).
