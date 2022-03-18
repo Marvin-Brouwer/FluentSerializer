@@ -7,7 +7,7 @@
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<IsPackable>false</IsPackable>
-		<ApplicationIcon>..\..\doc\logo\NuGetIcon.xml.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\docs\logo\NuGetIcon.xml.ico</ApplicationIcon>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>

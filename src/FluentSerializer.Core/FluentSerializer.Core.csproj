@@ -7,7 +7,7 @@
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion>10</LangVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<ApplicationIcon>..\..\doc\logo\NuGetIcon.default.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\docs\logo\NuGetIcon.default.ico</ApplicationIcon>
 		<PackageIcon>NuGetIcon.default.png</PackageIcon>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Company>N/A</Company>
@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\doc\logo\NuGetIcon.default.png" Visible="false">
+		<None Include="..\..\docs\logo\NuGetIcon.default.png" Visible="false">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
