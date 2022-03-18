@@ -1,0 +1,150 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+    version:
+      description: 'Define the version to be published (SemVer)'
+      required: true
+      type: string
+    package:
+      description: 'Select which package to stage for publish'
+      required: true
+      default: 'warning'
+      type: choice
+      options:
+      - FluentSerializer.Core
+      - FluentSerializer.Core.DependencyInjection.NetCoreDefault
+      - FluentSerializer.Json
+      - FluentSerializer.Json.DependencyInjection.NetCoreDefault
+      - FluentSerializer.Xml
+      - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
+    branch:
+      description: 'Define branch name'
+      required: true
+      default: 'main'
+
+jobs:
+  build:
+    name: "Build binaries"
+
+    runs-on: ubuntu-latest
+
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          5.0.x
+          6.0.x
+    ###
+    # 🧰 Fix version
+    #
+    # Override the libraries version info
+    ###
+    - name: 🧰 Fix version
+      uses: Mudlet/xmlstarlet-action@master
+      with:
+        args: |
+          xmlstarlet edit
+          --update "//Project/PropertyGroup/Version"
+          --value '${{ github.event.inputs.version }}'
+          ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🛠 Build
+    #
+    # Build the library code for later use
+    ###
+    - name: 🛠 Build
+      run: dotnet build --no-restore --nologo --configuration "Release"
+    ###
+    # 🗃 Publish 'library-binaries' artifacts
+    ###
+    - name: 🗃 Publish 'library-binaries' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: library-binaries
+        path: |
+          ./src/${{ github.event.inputs.package }}/bin/Release/*/*.*
+        retention-days: 1
+
+  dotnet-push:
+    name: "Push to NuGet.org"
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    environment:
+      name: NuGet
+      url: "https://www.nuget.org/packages/${{ github.event.inputs.package }}/${{ github.event.inputs.version }}"
+
+    steps:
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          5.0.x
+          6.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
+    - name: 🗃 Restore 'library-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: library-binaries
+        path: ./src
+    ###
+    # 🗳 Push package
+    #
+    # Pack and push the package
+    ###
+    - name: 🗳 Push package
+      run:  >-
+        sudo dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+
+        sudo dotnet pack ${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj
+        --configuration Release
+        --no-build
+        --nologo
+        --output "${{github.workspace}}/src"
+        -p:PackageVersion=${{ github.event.inputs.version }}
+
+        sudo dotnet nuget push ${{github.workspace}}/src/${{ github.event.inputs.package }}-${{ github.event.inputs.version }}.nupkg
+        --api-key ${{ secrets.NUGET_TOKEN }}
+        --source https://api.nuget.org/v3/index.json
+      working-directory: ${{github.workspace}}/src/${{ github.event.inputs.package }}

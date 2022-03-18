@@ -7,7 +7,7 @@
 		<StartupObject>FluentSerializer.Json.Benchmark.Program</StartupObject>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<ApplicationIcon>..\..\doc\logo\NuGetIcon.json.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\docs\logo\NuGetIcon.json.ico</ApplicationIcon>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>

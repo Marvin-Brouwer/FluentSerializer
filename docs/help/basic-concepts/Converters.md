@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme">
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme">
 		Documentation: Converters
 	</a>
 </h1>
@@ -132,7 +132,7 @@ This setup is for XML so it shows an example of using a naming strategy in a cus
 
 ### ISerializerContext
 
-[naming-strategy]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#inamingstrategy
+[naming-strategy]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#inamingstrategy
  
 The serializer context passed to converters is a container holding essential information for converting custom data models.  
 It contains access to the Property being serialized, the type of that Property The class type of the type holding the property, the naming strategy assigned to the property, a reference to the current serializer.  
