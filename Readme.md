@@ -52,7 +52,7 @@ If you're just looking for a simple JSON or XML serializer checkout these option
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json#readme)
   The most commonly used dotnet JSON serializer
 - [JaxLib](https://github.com/YAXLib/YAXLib#readme)
-  An awesome XML serializer that's miles ahead of the dotnet default one.
+  An awesome XML serializer that's miles ahead of the DotNet default one.
 
 ## Getting started
 
@@ -213,3 +213,7 @@ Suggestions on how to do this are very welcome.
 
 If you want to help out the project, you are very welcome to.  
 Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) before starting.
+
+For maintainers we have a separate [Maintenance guide](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Maintaining.md#readme).  
+Maintainers are responsible for the release cycles.
+However, if you register a bug blocking your development you can request an alpha package version for your branch to be deployed while the code is in review.
