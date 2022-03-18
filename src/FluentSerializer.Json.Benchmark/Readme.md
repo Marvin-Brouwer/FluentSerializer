@@ -5,7 +5,7 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.json.optimized.svg" />
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.json.optimized.svg" />
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.Benchmark#readme">
 		FluentSerializer.Json.Benchmark
 	</a>

@@ -5,7 +5,7 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.xml.optimized.svg" />
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.xml.optimized.svg" />
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml#readme">
 		FluentSerializer.Xml
 	</a>
@@ -46,9 +46,9 @@ This method has the following optional parameters:
 
 - **direction:** The direction for which this class mapping is valid, defaults to `Both`
 - **tagNamingStrategy:** A naming strategy for all property to element mappings, overriding the Configuration value  
-  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)  
 - **attributeNamingStrategy:** A naming strategy for all property to attribute mappings, overriding the Configuration value  
-  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)  
 
 You can create multiple class mappings per profile if that fits your use-case.
   
@@ -62,25 +62,25 @@ This method has the following optional parameters:
 
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
-  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)  
 - **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
-  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)  
+  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)  
 
 To create a property to element mapping, use the `Child<TElement>()` method.  
 This method has the following optional parameters:
 
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **namingStrategy:** A naming strategy for this property mapping, overriding the Configuration value and the parents strategy  
-  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)  
+  See: [Basic concepts/Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)  
 - **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
-  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)  
+  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)  
 
 To create a property to element mapping, use the `Text<TText>()` method.  
 This method has the following optional parameters:
 
 - **direction:** The direction for which this property mapping is valid, defaults to the class mapping's value.
 - **converter:** A custom converter for this property mapping, overriding the logic that normally looks up a converter in the default converters  
-  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)  
+  See: [Basic concepts/Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)  
 
 The text nodes don't have names, so this mapping has no **namingStrategy** parameter.  
 

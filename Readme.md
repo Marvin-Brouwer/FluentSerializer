@@ -15,7 +15,7 @@
 <h1 align="center">
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
 	<img alt="Fluent Serializer banner"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Banner.optimized.svg" />
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Banner.optimized.svg" />
 	</a>
 </h1>
 
@@ -52,7 +52,7 @@ If you're just looking for a simple JSON or XML serializer checkout these option
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json#readme)
   The most commonly used dotnet JSON serializer
 - [JaxLib](https://github.com/YAXLib/YAXLib#readme)
-  An awesome XML serializer that's miles ahead of the dotnet default one.
+  An awesome XML serializer that's miles ahead of the DotNet default one.
 
 ## Getting started
 
@@ -183,9 +183,9 @@ To get a quick view of how this library may benefit you, check out these use-cas
 
 Here are some links to some basic concepts:
 
-- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Naming-strategies.md#readme)
-- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters.md#readme)
-- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/basic-concepts/Converters-EnumConverter.md#readme)
+- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)
+- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)
+- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters-EnumConverter.md#readme)
 
 ## Advanced concepts
 
@@ -193,10 +193,10 @@ Here are some links to some more advanced topics:
 
 ### General
 
-- [Recursive references](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Recursive-references.md#readme)
-- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Converter-parent-access.md#readme)
-- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-serializer.md#readme)
-- [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme)
+- [Recursive references](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Recursive-references.md#readme)
+- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Converter-parent-access.md#readme)
+- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-serializer.md#readme)
+- [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-use-case.md#readme)
 
 ### JSON
 
@@ -208,7 +208,12 @@ Here are some links to some more advanced topics:
 
 ## Contributing
 
-We are currently figuring out what the best branching model is, and what the best automated release setup is.
-Because of that we aren't really looking for code contributions until that is in place.
+We are currently figuring out what the best branching model is, and we're still fleshing out release, contribution and development guidelines.  
+Suggestions on how to do this are very welcome.  
 
-Suggestions on how to do this are very welcome.
+If you want to help out the project, you are very welcome to.  
+Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) before starting.
+
+For maintainers we have a separate [Maintenance guide](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Maintaining.md#readme).  
+Maintainers are responsible for the release cycles.
+However, if you register a bug blocking your development you can request an alpha package version for your branch to be deployed while the code is in review.

@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/doc/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-serializer.md#readme">
+		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
+	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-serializer.md#readme">
 		Documentation: Adding a serializer
 	</a>
 </h1>
@@ -75,7 +75,7 @@ When you add a serializer you're requested to structure your solution like so:
 
 If there's no use-case for this serializer we can't accept it into our repository.  
 We aren't supporting data types for the sake of it, we're trying to help developers in their needs.  
-So if you write a serializer, please also refer to [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/doc/help/advanced-concepts/Adding-a-use-case.md#readme).
+So if you write a serializer, please also refer to [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-use-case.md#readme).
 
 ## In need of help
 

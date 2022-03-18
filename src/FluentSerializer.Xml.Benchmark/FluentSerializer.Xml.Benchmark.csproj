@@ -7,7 +7,7 @@
 		<StartupObject>FluentSerializer.Xml.Benchmark.Program</StartupObject>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<ApplicationIcon>..\..\doc\logo\NuGetIcon.xml.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\docs\logo\NuGetIcon.xml.ico</ApplicationIcon>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
