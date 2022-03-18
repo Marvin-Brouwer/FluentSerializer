@@ -49,8 +49,8 @@ There is always a `release` branch and a [milestone](https://github.com/Marvin-B
 
 Once the release is ready, packages need to be deployed.  
 Currently this works with a [manual deploy pipeline](https://github.com/Marvin-Brouwer/FluentSerializer/actions/workflows/manual-deployment.yml).  
-Just select the package containing the changes and the [semantic version]() you'd like the next package to be.  
-Please make sure you adhere to the SemVer Guidelines, ask the team of maintainers for help if you have questions.
+Just select the package containing the changes and the [semantic version](https://semver.org/) you'd like the next package to be.  
+Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
 
 Every release has an owner appointed at the start, who is responsible for versioning and publishing.
 
