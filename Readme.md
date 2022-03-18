@@ -208,7 +208,8 @@ Here are some links to some more advanced topics:
 
 ## Contributing
 
-We are currently figuring out what the best branching model is, and what the best automated release setup is.
-Because of that we aren't really looking for code contributions until that is in place.
+We are currently figuring out what the best branching model is, and we're still fleshing out release, contribution and development guidelines.  
+Suggestions on how to do this are very welcome.  
 
-Suggestions on how to do this are very welcome.
+If you want to help out the project, you are very welcome to.  
+Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) before starting.
