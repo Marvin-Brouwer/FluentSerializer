@@ -144,6 +144,16 @@ jobs:
           5.0.x
           6.0.x
     ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
+    ###
     # 🗃 Restore dependencies
     #
     # Fill the NuGet store with necessary libraries
@@ -167,12 +177,10 @@ jobs:
         name: github-codeql
         path: /home/runner/work/_temp/codeql_databases/csharp
     ###
-    # 🔎 Perform CodeQL Analysis
+    # 🔬 Perform CodeQL Analysis
     ###
-    - name: 🔎 Perform CodeQL Analysis
+    - name: 🔬 Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      with:
-        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
     ###
     # 🗃 Cancel after test failure
     # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
