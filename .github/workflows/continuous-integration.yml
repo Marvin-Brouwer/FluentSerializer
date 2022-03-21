@@ -109,8 +109,6 @@ jobs:
     ###
     - name: Checkout repository
       uses: actions/checkout@v3
-      with:
-        lfs: true
     ###
     # 🧰 Initialize CodeQL
     #
@@ -120,6 +118,34 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: 'csharp'
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          5.0.x
+          6.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
+    - name: 🗃 Restore 'library-binaries'
+      uses: actions/download-artifact@v2
+      with:
+        name: library-binaries
+        path: ./src
     ###
     # 🔎 Perform CodeQL Analysis
     ###
@@ -286,7 +312,7 @@ jobs:
     name: "Benchmark (XML)"
 
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
 
     steps:
     ###
@@ -380,7 +406,7 @@ jobs:
     name: "Benchmark (JSON)"
 
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
 
     steps:
     ###
