@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme">
+		src="/docs/logo/Logo.default.optimized.svg" />
+	<a href="/docs/help/basic-concepts/Converters.md#readme">
 		Documentation: Converters
 	</a>
 </h1>
@@ -127,12 +127,12 @@ public static class ConverterExtensions
 
 And now you can use it on properties or your configuration by calling `Converter.Use.StringBitBoolean`.
 
-For a more real-world example checkout the [OpenAir use-case's StringBitBooleanConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/StringBitBooleanConverter.cs) together with [their NamingExtensions](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/ConverterExtensions.cs).  
+For a more real-world example checkout the [OpenAir use-case's StringBitBooleanConverter](/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/StringBitBooleanConverter.cs) together with [their NamingExtensions](/src/FluentSerializer.UseCase.OpenAir/Serializer/Converters/ConverterExtensions.cs).  
 This setup is for XML so it shows an example of using a naming strategy in a custom converter.
 
 ### ISerializerContext
 
-[naming-strategy]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#inamingstrategy
+[naming-strategy]: /docs/help/basic-concepts/Naming-strategies.md#inamingstrategy
  
 The serializer context passed to converters is a container holding essential information for converting custom data models.  
 It contains access to the Property being serialized, the type of that Property The class type of the type holding the property, the naming strategy assigned to the property, a reference to the current serializer.  

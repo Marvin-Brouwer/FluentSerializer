@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/Code_of_conduct.md#readme">
+		src="/docs/logo/Logo.default.optimized.svg" />
+	<a href="/docs/help/Code_of_conduct.md#readme">
 		Documentation: Contributor Covenant Code of Conduct
 	</a>
 </h1>
