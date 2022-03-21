@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme">
+		src="/docs/logo/Logo.default.optimized.svg" />
+	<a href="/docs/help/basic-concepts/Naming-strategies.md#readme">
 		Documentation: Naming strategies
 	</a>
 </h1>
@@ -99,7 +99,7 @@ public static class NamingExtensions
 
 And now you can use it on properties or your configuration by calling `Names.Use.UpperCase`.
 
-For a more real-world example checkout the [OpenAir use-case's CustomFieldNamingStrategy](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/CustomFieldNamingStrategy.cs) together with [their NamingExtensions](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/NamingExtensions.cs).  
+For a more real-world example checkout the [OpenAir use-case's CustomFieldNamingStrategy](/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/CustomFieldNamingStrategy.cs) together with [their NamingExtensions](/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/NamingExtensions.cs).  
 This setup allows you register a naming strategy with  
 both `Names.Use.CustomFieldName` for automated `{fieldName}__c` where `{fieldName}` uses the `CamelCaseNamingStrategy`  
 and `Names.Use.CustomFieldName({value})` for `{value}__c`.
@@ -111,7 +111,7 @@ either by `Type` to get the strategy for the type's name,
 or `Type` with `Property` to get the strategy for that property on the corresponding type mapping.  
   
 For example this can be useful in a scenario where you need your name to include the naming strategy of a generic subtype.  
-This is illustrated in the [OpenAir use-case's ResponseTypeNamingStrategy](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/ResponseTypeNamingStrategy.cs), here we need the name of the generic `Data` property as an attribute on it's `<Request>` node.
+This is illustrated in the [OpenAir use-case's ResponseTypeNamingStrategy](/src/FluentSerializer.UseCase.OpenAir/Serializer/NamingStrategies/ResponseTypeNamingStrategy.cs), here we need the name of the generic `Data` property as an attribute on it's `<Request>` node.
 
 ## Naming strategy lifetime
 

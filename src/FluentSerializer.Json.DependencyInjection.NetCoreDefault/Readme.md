@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.json.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme">
+		src="/docs/logo/Logo.json.optimized.svg" />
+	<a href="/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme">
 		FluentSerializer.Json.DependencyInjection.NetCoreDefault
 	</a>
 </h1>
@@ -19,7 +19,7 @@ This library is responsible for registering the FluentSerializer for JSON using
 
 ## Usage
 
-[configuration-doc]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#configuration
+[configuration-doc]: /src/FluentSerializer.Json/Readme.md#configuration
 
 For basic usage you can use this:
 

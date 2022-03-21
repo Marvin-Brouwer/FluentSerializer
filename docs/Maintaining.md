@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/Maintaining.md#readme">
+		src="/docs/logo/Logo.default.optimized.svg" />
+	<a href="/docs/help/Maintaining.md#readme">
 		Documentation: Maintenance guide
 	</a>
 </h1>
@@ -32,7 +32,7 @@ Have a look at the benchmarking results and make sure no large performance degra
 Pull-requests need at least these requirements:
 
 - An issue has to be created prior to PR
-- The branch has to adhere to the [branching guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/Contributing.md#pull-requests)
+- The branch has to adhere to the [branching guidelines](/docs/help/Contributing.md#pull-requests)
   - Correct source branch
   - Correct target branch
   - Correct branch naming
