@@ -215,7 +215,7 @@ We are currently figuring out what the best branching model is, and we're still 
 Suggestions on how to do this are very welcome.  
 
 If you want to help out the project, you are very welcome to.  
-Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) before starting.
+Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) and [contributor covenant's code of conduct](https://www.contributor-covenant.org) before starting.
 
 For maintainers we have a separate [Maintenance guide](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Maintaining.md#readme).  
 Maintainers are responsible for the release cycles.
