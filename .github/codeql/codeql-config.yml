@@ -2,5 +2,5 @@ name: "CodeQL config"
 paths:
   - src
 paths-ignore:
-  - *.Test*
-  - *.Benchmark*
+  - '*.Test*'
+  - '*.Benchmark*'
