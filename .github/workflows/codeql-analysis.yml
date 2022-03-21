@@ -9,14 +9,11 @@
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
 #
-name: "GitHub Code QL"
+name: "GitHub CodeQL"
 
 on:
-  push:
-    branches: [ main, feature/*, release/* ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ feature/* ]
+    branches: [ main, feature/*, release/* ]
   schedule:
     - cron: '18 16 * * 0'
 
@@ -45,8 +42,12 @@ jobs:
       with:
         lfs: true
 
+    ###
+    # 🧰 Initialize CodeQL
+    #
     # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
+    ###
+    - name: 🧰 Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
@@ -82,10 +83,8 @@ jobs:
     ###
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Debug"
-
-    #- run: |
-    #   make bootstrap
-    #   make release
-
-    - name: Perform CodeQL Analysis
+    ###
+    # 🔎 Perform CodeQL Analysis
+    ###
+    - name: 🔎 Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
