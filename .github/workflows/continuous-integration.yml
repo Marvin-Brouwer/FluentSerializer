@@ -97,6 +97,35 @@ jobs:
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
 
+  quality-check:
+    name: "Static Quality Analyses"
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: 'csharp'
+    ###
+    # 🔎 Perform CodeQL Analysis
+    ###
+    - name: 🔎 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
+
   test:
     name: "Test"
 
