@@ -1,13 +1,15 @@
 [//]: # (Header)
 
 [package-url-xml]: https://www.nuget.org/packages/FluentSerializer.Xml/
+[package-shield-i-xml]: https://img.shields.io/badge/-XML-lightgrey?style=flat-square
 [package-shield-v-xml]: https://img.shields.io/nuget/v/FluentSerializer.Xml.svg?style=flat-square
 [package-shield-d-xml]: https://img.shields.io/nuget/dt/FluentSerializer.Xml.svg?style=flat-square
 [package-url-json]: https://www.nuget.org/packages/FluentSerializer.Json/
+[package-shield-i-Json]: https://img.shields.io/badge/-JSON-lightgrey?style=flat-square
 [package-shield-v-json]: https://img.shields.io/nuget/v/FluentSerializer.Json.svg?style=flat-square
 [package-shield-d-json]: https://img.shields.io/nuget/dt/FluentSerializer.Json.svg?style=flat-square
 
-[license-url]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/License.md#readme
+[license-url]: /License.md#readme
 [license-shield]: https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square
 [repo-stars-url]: https://github.com/Marvin-Brouwer/FluentSerializer/stargazers
 [repo-stars-shield]: https://img.shields.io/github/stars/Marvin-Brouwer/FluentSerializer.svg?color=brightgreen&style=flat-square
@@ -15,14 +17,15 @@
 <h1 align="center">
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
 	<img alt="Fluent Serializer banner"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Banner.optimized.svg" />
+		src="/docs/logo/Banner.optimized.svg" />
 	</a>
 </h1>
 
 <h3 align="center">
 
-[![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
-[![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
+[![XML][package-shield-i-xml] ![XML Nuget][package-shield-v-xml] ![XML Downloads][package-shield-d-xml]][package-url-xml]  
+[![JSON][package-shield-i-json] ![JSON Nuget][package-shield-v-json] ![JSON Downloads][package-shield-d-Json]][package-url-json]  
+
 [![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]
 
 </h3>
@@ -56,8 +59,8 @@ If you're just looking for a simple JSON or XML serializer checkout these option
 
 ## Getting started
 
-[json-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
-[xml-di-dotnet-readme]: https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
+[json-di-dotnet-readme]: /src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
+[xml-di-dotnet-readme]: /src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
 
 Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework.
 
@@ -94,8 +97,8 @@ You create a profile by creating a class that inherits from the serializer's pro
 
 When these profiles are created in an assembly that has been registered in the DI startup the startup will find the correct profiles for the correct serializer. Each profile has it's own builder methods but follow a similar style.
 
-- [Creating a JSON profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Json/Readme.md#creating-profiles)
-- [Creating an XML profile](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml/Readme.md#creating-profiles)
+- [Creating a JSON profile](/src/FluentSerializer.Json/Readme.md#creating-profiles)
+- [Creating an XML profile](/src/FluentSerializer.Xml/Readme.md#creating-profiles)
 
 For illustration's sake, here's a basic example of a profile:
 <details>
@@ -176,16 +179,16 @@ The serialize will automatically find the correct profile for the types that are
 
 To get a quick view of how this library may benefit you, check out these use-cases:
 
-- [Mavenlink](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink#readme) (`JSON`)
-- [OpenAir](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.OpenAir#readme) (`XML`)
+- [Mavenlink](/src/FluentSerializer.UseCase.Mavenlink#readme) (`JSON`)
+- [OpenAir](/src/FluentSerializer.UseCase.OpenAir#readme) (`XML`)
 
 ## Basic concepts
 
 Here are some links to some basic concepts:
 
-- [Naming strategies](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Naming-strategies.md#readme)
-- [Converters](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters.md#readme)
-- [Converters, EnumConverter](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/basic-concepts/Converters-EnumConverter.md#readme)
+- [Naming strategies](/docs/help/basic-concepts/Naming-strategies.md#readme)
+- [Converters](/docs/help/basic-concepts/Converters.md#readme)
+- [Converters, EnumConverter](/docs/help/basic-concepts/Converters-EnumConverter.md#readme)
 
 ## Advanced concepts
 
@@ -193,18 +196,18 @@ Here are some links to some more advanced topics:
 
 ### General
 
-- [Recursive references](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Recursive-references.md#readme)
-- [Custom converters and accessing parent nodes](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Converter-parent-access.md#readme)
-- [Adding a serializer](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-serializer.md#readme)
-- [Adding a use-case](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/help/advanced-concepts/Adding-a-use-case.md#readme)
+- [Recursive references](/docs/help/advanced-concepts/Recursive-references.md#readme)
+- [Custom converters and accessing parent nodes](/docs/help/advanced-concepts/Converter-parent-access.md#readme)
+- [Adding a serializer](/docs/help/advanced-concepts/Adding-a-serializer.md#readme)
+- [Adding a use-case](/docs/help/advanced-concepts/Adding-a-use-case.md#readme)
 
 ### JSON
 
-- [Using raw JSON](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.Converter.DefaultJson#readme)
+- [Using raw JSON](/src/FluentSerializer.Json.Converter.DefaultJson#readme)
 
 ### XML
 
-- [Using raw XML](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Xml.Converter.DefaultXml#readme)
+- [Using raw XML](/src/FluentSerializer.Xml.Converter.DefaultXml#readme)
 
 ## Contributing
 
@@ -212,8 +215,8 @@ We are currently figuring out what the best branching model is, and we're still 
 Suggestions on how to do this are very welcome.  
 
 If you want to help out the project, you are very welcome to.  
-Please read our [Contribution guidelines](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Contributing.md#readme) before starting.
+Please read our [Contribution guidelines](/docs/Contributing.md#readme) and [contributor covenant's code of conduct](https://www.contributor-covenant.org) before starting.
 
-For maintainers we have a separate [Maintenance guide](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/docs/Maintaining.md#readme).  
+For maintainers we have a separate [Maintenance guide](/docs/Maintaining.md#readme).  
 Maintainers are responsible for the release cycles.
 However, if you register a bug blocking your development you can request an alpha package version for your branch to be deployed while the code is in review.

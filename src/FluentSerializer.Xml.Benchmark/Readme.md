@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.xml.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Xml.Benchmark#readme">
+		src="/docs/logo/Logo.xml.optimized.svg" />
+	<a href="/src/FluentSerializer.Xml.Benchmark#readme">
 		FluentSerializer.Xml.Benchmark
 	</a>
 </h1>
@@ -17,5 +17,5 @@ This library is responsible for benchmarking the XML conversion logic.
 
 See:
 
-- [FluentSerializer.Core.BenchMarkUtils](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.Core.BenchMarkUtils#readme)
+- [FluentSerializer.Core.BenchMarkUtils](/src/FluentSerializer.Core.BenchMarkUtils#readme)
 - [BenchMarkDotNet](https://github.com/dotnet/BenchmarkDotNet#readme)

@@ -5,8 +5,8 @@
 </a><hr/>
 <h1>
 	<img alt="icon" width="26" height="26"
-		src="https://github.com/Marvin-Brouwer/FluentSerializer/raw/main/docs/logo/Logo.default.optimized.svg" />
-	<a href="https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/src/FluentSerializer.UseCase.Mavenlink#readme">
+		src="/docs/logo/Logo.default.optimized.svg" />
+	<a href="/src/FluentSerializer.UseCase.Mavenlink#readme">
 		FluentSerializer.UseCase.Mavenlink
 	</a>
 </h1>
