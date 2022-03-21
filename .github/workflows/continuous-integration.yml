@@ -7,6 +7,10 @@ on:
     types: [opened, edited, synchronize, reopened, review_requested, auto_merge_enabled]
   workflow_dispatch:
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: "Build binaries"
@@ -169,9 +173,9 @@ jobs:
         name: library-binaries
         path: ./src
     ###
-    # 🗃 Restore 'Code QL'
+    # 🗃 Restore 'github-codeql'
     ###
-    - name: 🗃 Restore 'Code QL'
+    - name: 🗃 Restore 'github-codeql'
       uses: actions/download-artifact@v2
       with:
         name: github-codeql
