@@ -22,6 +22,15 @@ jobs:
       with:
         lfs: true
     ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: 'csharp'
+    ###
     # 🧰 Setup .Net
     #
     # Configure the pipeline to use the correct .Net sdk versions
@@ -110,15 +119,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     ###
-    # 🧰 Initialize CodeQL
-    #
-    # Initializes the CodeQL tools for scanning.
-    ###
-    - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: 'csharp'
-    ###
     # 🧰 Setup .Net
     #
     # Configure the pipeline to use the correct .Net sdk versions
@@ -151,6 +151,20 @@ jobs:
     ###
     - name: 🔎 Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+    ###
+    # 🗃 Cancel after test failure
+    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
+    ###
+    - name: 🗃 Cancel after test failure
+      if: ${{ failure() }}
+      uses: actions/github-script@v6
+      with:
+          script: |
+              github.actions.cancelWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: context.runId
+              })
 
   test:
     name: "Test"
@@ -312,7 +326,7 @@ jobs:
     name: "Benchmark (XML)"
 
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, quality-check]
 
     steps:
     ###
@@ -406,7 +420,7 @@ jobs:
     name: "Benchmark (JSON)"
 
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, quality-check]
 
     steps:
     ###
