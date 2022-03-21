@@ -79,15 +79,18 @@ Adhering to the following this process is the best way to get your work merged:
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout main
-   git pull upstream main
+   git checkout release/<your release milestone>
+   git pull upstream release/<your release milestone>
    ```
 
-3. Create a new topic branch (off the main project main branch) to contain your feature, change, or fix:
+3. Create a new topic branch (off the main project `release/*` branch) to contain your feature, change, or fix:
 
    ```bash
    git checkout -b feature/<issue-number>-<friendly-description>
    ```
+
+   You should pick a `release/*` branch based on the [milestone](/milestones) your issue is in.  
+   Once you base, pull in, rebase from a `release/*` branch, you cannot merge into another `release/*` branch.
 
    It's probably easiest to use the title of the issue as the `<friendly description>`.
    We don't distinguish between features and buts at the moment, everything is a feature.  
@@ -97,10 +100,10 @@ Adhering to the following this process is the best way to get your work merged:
    Please Proceed all your commit messages with `<issue-number>: `, you will see older commit messages with `#<issue-number> ` but that turned out to be difficult with merge conflict messages and `git commit --amend`.  
    Use Git's [interactive rebase](https://help.github.com/articles/interactive-rebase) feature to tidy up your commits before making them public.
 
-5. Locally merge (or rebase) the upstream `release` branch into your topic branch:
+5. Locally merge (or rebase) the upstream `release/*` branch into your topic branch:
 
    ```bash
-   git pull [--rebase] upstream release
+   git pull [--rebase] upstream release/<your release milestone>
    ```
 
 6. Push your topic branch up to your fork:
@@ -110,6 +113,6 @@ Adhering to the following this process is the best way to get your work merged:
    ```
 
 7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
-   The target branch should be the active `release` branch.  
+   The target branch should be the active `release/*` branch matching your issues [milestone](/milestones).  
    **Never** merge directly into `main`, unless you're instructed to do so by a maintainer.  
-   Please just use automatic merge and don't squash. We value the merge history. 
+   Please just use automatic merge and don't squash. We value the merge history.
