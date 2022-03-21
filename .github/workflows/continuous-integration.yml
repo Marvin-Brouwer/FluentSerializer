@@ -105,6 +105,17 @@ jobs:
           ./src/*.BenchmarkUtils/bin/Release/*/*.*
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
+    ###
+    # 🗃 Publish 'CodeQL' artifacts
+    ###
+    - name: 🗃 Publish 'CodeQL' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: github-codeql
+        path: |
+          /home/runner/work/_temp/codeql_databases/csharp
+        retention-days: 1
 
   quality-check:
     name: "Static Quality Analyses"
@@ -146,6 +157,14 @@ jobs:
       with:
         name: library-binaries
         path: ./src
+    ###
+    # 🗃 Restore 'Code QL'
+    ###
+    - name: 🗃 Restore 'Code QL'
+      uses: actions/download-artifact@v2
+      with:
+        name: github-codeql
+        path: /home/runner/work/_temp/codeql_databases/csharp
     ###
     # 🔎 Perform CodeQL Analysis
     ###
