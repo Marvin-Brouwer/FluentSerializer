@@ -7,6 +7,12 @@ assignees: ''
 
 ---
 
+**Package+Version:**
+Describe the NuGet Package name and version, alternatively just paste a link to the version on nuget.org.
+
+**Framework version:**
+Describe the framework version(s) to which this bug applies.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -22,9 +28,6 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
-
-**Package+Version:**
-Describe the NuGet Package name and version, alternatively just paste a link to the version on nuget.org.
 
 **Additional context**
 Add any other context about the problem here.
