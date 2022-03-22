@@ -1,0 +1,67 @@
+name: "Scheduled GitHub CodeQL"
+
+on:
+  schedule:
+    - cron: '18 16 * * 0'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+
+    ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
+
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          5.0.x
+          6.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🛠 Build
+    #
+    # Build the library code for later use
+    ###
+    - name: 🛠 Build
+      run: dotnet build --no-restore --nologo --configuration "Debug"
+    ###
+    # 🔬 Perform CodeQL Analysis
+    ###
+    - name: 🔬 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
