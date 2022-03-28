@@ -211,12 +211,16 @@ Here are some links to some more advanced topics:
 
 ## Contributing
 
-We are currently figuring out what the best branching model is, and we're still fleshing out release, contribution and development guidelines.  
-Suggestions on how to do this are very welcome.  
-
+> We are currently figuring out what the best branching model is, and we're still fleshing out release, contribution and development guidelines.  
+> **Suggestions on how to do this are very welcome.**  
+  
 If you want to help out the project, you are very welcome to.  
 Please read our [Contribution guidelines](/docs/Contributing.md#readme) and [contributor covenant's code of conduct](https://www.contributor-covenant.org) before starting.
-
 For maintainers we have a separate [Maintenance guide](/docs/Maintaining.md#readme).  
+
+### Release management
+
 Maintainers are responsible for the release cycles.
 However, if you register a bug blocking your development you can request an alpha package version for your branch to be deployed while the code is in review.
+
+For more information, review the [Maintenance guides Release management chapter](/docs/Maintaining.md#release-management).  
