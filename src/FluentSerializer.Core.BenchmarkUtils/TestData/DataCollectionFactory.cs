@@ -53,7 +53,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 	private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
 	private string GetFilePath(string directory, int dataCount) => Path.Join(directory, GetStringFileName(dataCount));
 
-	private void WriteStringContent(TData data, string filePath)
+	private static void WriteStringContent(TData data, string filePath)
 	{
 		using var fileStream = File.Create(filePath);
 		using var bufferedStream = new BufferedStream(fileStream);
