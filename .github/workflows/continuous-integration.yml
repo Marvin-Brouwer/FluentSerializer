@@ -67,7 +67,7 @@ jobs:
     ###
     - name: 🗃 Publish 'library-binaries' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: library-binaries
         path: |
@@ -83,7 +83,7 @@ jobs:
     ###
     - name: 🗃 Publish 'test-binaries' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: test-binaries
         path: |
@@ -98,7 +98,7 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-binaries' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: benchmark-binaries
         path: |
@@ -115,7 +115,7 @@ jobs:
     ###
     - name: 🗃 Publish 'CodeQL' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: github-codeql
         path: |
@@ -336,7 +336,7 @@ jobs:
     ###
     - name: 🗃 Publish 'unit-test-coverage' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: unit-test-coverage
         path: ./test-results/coverage
@@ -430,7 +430,7 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: benchmark-results-xml
         path: ${{github.workspace}}/benchmark-results
@@ -524,7 +524,7 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: benchmark-results-json
         path: ${{github.workspace}}/benchmark-results
