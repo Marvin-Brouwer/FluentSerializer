@@ -42,7 +42,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.3" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.4" />
 		<PackageReference Include="System.Runtime" Version="4.3.1" />
 	</ItemGroup>
 
