@@ -168,7 +168,7 @@ jobs:
     # 🗃 Restore 'library-binaries'
     ###
     - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: library-binaries
         path: ./src
@@ -176,7 +176,7 @@ jobs:
     # 🗃 Restore 'github-codeql'
     ###
     - name: 🗃 Restore 'github-codeql'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: github-codeql
         path: /home/runner/work/_temp/codeql_databases/csharp
@@ -246,7 +246,7 @@ jobs:
     # 🗃 Restore 'library-binaries'
     ###
     - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: library-binaries
         path: ./src
@@ -254,7 +254,7 @@ jobs:
     # 🗃 Restore 'test-binaries'
     ###
     - name: 🗃 Restore 'test-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: test-binaries
         path: ./src
@@ -264,7 +264,7 @@ jobs:
     # Because `dotnet test` tries to load all csproj files, we need these dlls.
     ###
     - name: 🗃 Restore 'benchmark-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: benchmark-binaries
         path: ./src
@@ -392,7 +392,7 @@ jobs:
     # 🗃 Restore 'library-binaries'
     ###
     - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: library-binaries
         path: ./src
@@ -400,7 +400,7 @@ jobs:
     # 🗃 Restore 'benchmark-binaries'
     ###
     - name: 🗃 Restore 'benchmark-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: benchmark-binaries
         path: ./src
@@ -486,7 +486,7 @@ jobs:
     # 🗃 Restore 'library-binaries'
     ###
     - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: library-binaries
         path: ./src
@@ -494,7 +494,7 @@ jobs:
     # 🗃 Restore 'benchmark-binaries'
     ###
     - name: 🗃 Restore 'benchmark-binaries'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: benchmark-binaries
         path: ./src
