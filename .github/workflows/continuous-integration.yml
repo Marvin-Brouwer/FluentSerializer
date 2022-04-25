@@ -31,7 +31,7 @@ jobs:
     # Initializes the CodeQL tools for scanning.
     ###
     - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       with:
         config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
         languages: 'csharp'
@@ -153,7 +153,7 @@ jobs:
     # Initializes the CodeQL tools for scanning.
     ###
     - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       with:
         config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
         languages: 'csharp'
@@ -184,7 +184,7 @@ jobs:
     # 🔬 Perform CodeQL Analysis
     ###
     - name: 🔬 Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2
     ###
     # 🗃 Cancel after test failure
     # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
