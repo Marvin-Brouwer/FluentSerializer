@@ -54,65 +54,96 @@ Feature requests are welcome. But take a moment to find out whether your idea fi
 It's up to *you* to make a strong case to convince the developers of the merits of this feature. 
 Please provide as much detail and context as possible.
 
-## Pull requests
+## Contribution flow
 
-Good pull requests - patches, improvements, new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits.
+The contribution flow is loosely based on [Scott Chacon's GitHub flow](http://scottchacon.com/2011/08/31/github-flow.html).
+Following this process is the best way to get your work merged:
 
-**Please ask first** before embarking on any significant pull request (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project.
+**Please ask first** before embarking on any significant code change (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project.
 
-Please adhere to the coding conventions used throughout the project (indentation, comments, etc.).
+### Anything in the master branch is deployable
 
-Adhering to the following this process is the best way to get your work merged:
+Make sure your code is deploy ready.
+Everything is thoroughly tested by unit-tests and code inspection.
+However, if you're not sure you can and should deploy an alpha version and manually test before merging.
 
-1. [Fork](http://help.github.com/fork-a-repo/) the repo, clone your fork,
-   and configure the remotes:
+### Create descriptive branches off of master
 
-   ```bash
-   # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/<repo-name>
-   # Navigate to the newly cloned directory
-   cd <repo-name>
-   # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/<upsteam-owner>/<repo-name>
-   ```
+<details>
+   <summary>(Optional) Fork</summary>
+   <br/>
 
-2. If you cloned a while ago, get the latest changes from upstream:
+[Fork](http://help.github.com/fork-a-repo/) the repo, clone your fork, and configure the remotes:
 
-   ```bash
-   git checkout release/<your release milestone>
-   git pull upstream release/<your release milestone>
-   ```
+```bash
+# Clone your fork of the repo into the current directory
+git clone https://github.com/<your-username>/<repo-name>
+# Navigate to the newly cloned directory
+cd <repo-name>
+# Assign the original repo to a remote called "upstream"
+git remote add upstream https://github.com/<upsteam-owner>/<repo-name>
+```
 
-3. Create a new topic branch (off the main project `release/*` branch) to contain your feature, change, or fix:
+**If you cloned a while ago,** get the latest changes from upstream:
 
-   ```bash
-   git checkout -b feature/<issue-number>-<friendly-description>
-   ```
+```bash
+git checkout main
+git pull upstream main
+```
 
-   You should pick a `release/*` branch based on the [milestone](/milestones) your issue is in.  
-   Once you base, pull in, rebase from a `release/*` branch, you cannot merge into another `release/*` branch.
-
-   It's probably easiest to use the title of the issue as the `<friendly description>`.
-   We don't distinguish between features and buts at the moment, everything is a feature.  
+</details>
   
-4. Commit your changes in logical chunks.  
-   Please adhere to these [git commit message guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) or your code is unlikely be merged into the main project.  
-   Please Proceed all your commit messages with `<issue-number>: `, you will see older commit messages with `#<issue-number> ` but that turned out to be difficult with merge conflict messages and `git commit --amend`.  
-   Use Git's [interactive rebase](https://help.github.com/articles/interactive-rebase) feature to tidy up your commits before making them public.
+Create a new topic branch (off the `main` branch) to contain your feature, change, or fix:
 
-5. Locally merge (or rebase) the upstream `release/*` branch into your topic branch:
+```bash
+git checkout -b <issue-number>-<friendly-description>
+```
+
+_It's probably easiest to use the title of the issue as the `<friendly description>`._
+
+_**Or** (if you're not forked)_ you can use the GitHub UI:
+
+<details>
+	<summary>Using the GitHub UI</summary>
+
+![Create a branch form an issue](./images/github-create-branch.png)  
+![Create a branch form an issue wizard](./images/github-create-branch-wizard.png)  
+
+</details>  
+
+### Push to named branches constantly
+
+Commit your changes in logical chunks, make your change's intent clear in the message.  
+
+Please adhere to these [git commit message guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) or your code is unlikely be merged into the main project.  
+Please prepend all your commit messages with `[#<issue-number>]<space>`;  
+You will see older commit messages but that turned out to be difficult with merge conflict messages and `git commit --amend` or it didn't link easily.  
+
+Push often, make sure other contributors can see your progress.
+
+Regularly rebase the upstream `main` branch into your topic branch, preferably before pushing:
 
    ```bash
-   git pull [--rebase] upstream release/<your release milestone>
+   git pull --rebase upstream main
    ```
 
-6. Push your topic branch up to your fork:
+Use Git's [interactive rebase](https://help.github.com/articles/interactive-rebase) feature to tidy up your commits before making them public.
 
-   ```bash
-   git push origin feature/<issue-number>-<friendly-description>
-   ```
+### Open a pull request at any time
 
-7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
-   The target branch should be the active `release/*` branch matching your issues [milestone](/milestones).  
-   **Never** merge directly into `main`, unless you're instructed to do so by a maintainer.  
-   Please just use automatic merge and don't squash. We value the merge history.
+Good pull requests - patches, improvements, new features - are a fantastic help.  
+They should remain focused in scope and avoid containing unrelated commits.
+
+Your changes do not have to be ready to open a pull request.  
+However if you don't intend it to be merged, please state so in your PR.  
+If you do intend it to be merged, please use the auto-merge functionality.  
+Please don't squash, we care about the merge history.  
+
+[Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
+The target branch should be the `main` branch unless you're instructed to use a different branch by a maintainer.  
+
+### Release management
+
+Once your feature is merged a maintainer will take over.  
+A deploy will be scheduled and once the deploy is done the maintainer will close the issue.  
+See: [Maintaining: Release management](./Maintaining.md#release-management)

@@ -45,13 +45,13 @@ Pull-requests need at least these requirements:
 ## Release management
 
 Release management is pretty straight forward.  
-There is always a `release` branch and a [milestone](https://github.com/Marvin-Brouwer/FluentSerializer/milestones) containing issues for an upcoming release.
+After a merge, or set of merges we need to release.  
 
-Once the release is ready, packages need to be deployed.  
+To release the library, packages need to be deployed.  
 Currently this works with a [manual deploy pipeline](https://github.com/Marvin-Brouwer/FluentSerializer/actions/workflows/manual-deployment.yml).  
 Just select the package containing the changes and the [semantic version](https://semver.org/) you'd like the next package to be.  
 Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
 
 Every release has an owner appointed at the start, who is responsible for versioning and publishing.
 
-After releasing, merge the `release` branch into the `main` branch.
+After releasing, you can close the issues that have been merged.
