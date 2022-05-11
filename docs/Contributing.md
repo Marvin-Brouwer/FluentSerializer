@@ -10,13 +10,14 @@
 		Documentation: Contribution guide
 	</a>
 </h1>
-<sub><i>
+<sub>
+<i>
 
-This guide is based on [github.com/roots/guidelines/CONTRIBUTING.md](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md).
+This guide is based on [github.com/roots/guidelines/CONTRIBUTING.md](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md).  
 
-</i></sub>
-
-<p>&nbsp;</p>
+<br/>
+</i>
+</sub>
 
 [//]: # (Body)
 
