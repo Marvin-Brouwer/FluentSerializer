@@ -40,9 +40,12 @@ Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
-1. **Use the GitHub issue search** check if the issue has already been reported.
-2. **Check if the issue has been fixed** try to reproduce it using the latest `master` or development branch in the repository.
-3. **Isolate the problem** make sure that the code in the repository is _definitely_ responsible for the issue.
+1. **Use the GitHub issue search**  
+   Check if the issue has already been reported.
+2. **Check if the issue has been fixed**  
+   Try to reproduce it using the latest `master` or development branch in the repository.
+3. **Isolate the problem**  
+   Make sure that the code in the repository is _definitely_ responsible for the issue.
 
 A good bug report shouldn't leave others needing to chase you up for more
 information. Please try to be as detailed as possible in your report.
