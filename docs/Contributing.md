@@ -16,59 +16,57 @@ This guide is based on [github.com/roots/guidelines/CONTRIBUTING.md](https://git
 
 </i></sub>
 
+<p>&nbsp;</p>
+
 [//]: # (Body)
 
 Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 
-Following these guidelines helps to communicate that you respect the time of
-the developers managing and developing this open source project. In return,
-they should reciprocate that respect in addressing your issue or assessing
-patches and features.
+Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open  source project.
+In return, they should reciprocate that respect in addressing your issue or assessing patches and features.
 
-## Using the issue tracker
+## Using the issue tracker  
+  
+The issue tracker is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests), but please respect the following restrictions:  
+  
+* Please **do not** derail or troll issues.
+* Keep the discussion on topic and respect the opinions of others.
 
-The issue tracker is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests), but please respect the following restrictions:
-
-* Please **do not** derail or troll issues. Keep the discussion on topic and
-  respect the opinions of others.
-
-## Bug reports
-
+## Bug reports  
+  
 A bug is a _demonstrable problem_ that is caused by the code in the repository.
 Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
 1. **Use the GitHub issue search** check if the issue has already been reported.
-
 2. **Check if the issue has been fixed** try to reproduce it using the latest `master` or development branch in the repository.
-
 3. **Isolate the problem** make sure that the code in the repository is _definitely_ responsible for the issue.
 
 A good bug report shouldn't leave others needing to chase you up for more
 information. Please try to be as detailed as possible in your report.
 
-## Feature requests
-
+## Feature requests  
+  
 Feature requests are welcome. But take a moment to find out whether your idea fits with the scope and aims of the project.  
-It's up to *you* to make a strong case to convince the developers of the merits of this feature. 
+It's up to *you* to make a strong case to convince the developers of the merits of this feature.  
 Please provide as much detail and context as possible.
 
-## Contribution flow
-
+## Contribution flow  
+  
 The contribution flow is loosely based on [Scott Chacon's GitHub flow](http://scottchacon.com/2011/08/31/github-flow.html).
 Following this process is the best way to get your work merged:
 
 **Please ask first** before embarking on any significant code change (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project.
 
-### Anything in the master branch is deployable
-
+### Anything in the master branch is deployable  
+  
 Make sure your code is deploy ready.
 Everything is thoroughly tested by unit-tests and code inspection.
 However, if you're not sure you can and should deploy an alpha version and manually test before merging.
 
-### Create descriptive branches off of master
-
+### Create descriptive branches off of master  
+  
 <details>
    <summary>(Optional) Fork</summary>
    <br/>
@@ -111,8 +109,8 @@ _**Or** (if you're not forked)_ you can use the GitHub UI:
 
 </details>  
 
-### Push to named branches constantly
-
+### Push to named branches constantly  
+  
 Commit your changes in logical chunks, make your change's intent clear in the message.  
 
 Please adhere to these [git commit message guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) or your code is unlikely be merged into the main project.  
@@ -129,8 +127,8 @@ Regularly rebase the upstream `main` branch into your topic branch, preferably b
 
 Use Git's [interactive rebase](https://help.github.com/articles/interactive-rebase) feature to tidy up your commits before making them public.
 
-### Open a pull request at any time
-
+### Open a pull request at any time  
+  
 Good pull requests - patches, improvements, new features - are a fantastic help.  
 They should remain focused in scope and avoid containing unrelated commits.
 
@@ -142,8 +140,8 @@ Please don't squash, we care about the merge history.
 [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
 The target branch should be the `main` branch unless you're instructed to use a different branch by a maintainer.  
 
-### Release management
-
+### Release management  
+  
 Once your feature is merged a maintainer will take over.  
 A deploy will be scheduled and once the deploy is done the maintainer will close the issue.  
 See: [Maintaining: Release management](./Maintaining.md#release-management)
