@@ -1,3 +1,8 @@
+[//]: # (Links)
+
+[github-contribution-guide]: https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md
+[github-flow]: http://scottchacon.com/2011/08/31/github-flow.html
+
 [//]: # (Header)
 
 <a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
@@ -10,14 +15,11 @@
 		Documentation: Contribution guide
 	</a>
 </h1>
-<sub>
-<i>
 
-This guide is based on [github.com/roots/guidelines/CONTRIBUTING.md](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md).  
+_This guide is based on [GitHub's example contribution guide][github-contribution-guide] 
+and [Scott Chacon's GitHub flow article][github-flow]._  
 
 <br/>
-</i>
-</sub>
 
 [//]: # (Body)
 
@@ -58,7 +60,7 @@ Please provide as much detail and context as possible.
 
 ## Contribution flow  
   
-The contribution flow is loosely based on [Scott Chacon's GitHub flow](http://scottchacon.com/2011/08/31/github-flow.html).
+The contribution flow is loosely based on [Scott Chacon's GitHub flow article][github-flow].
 Following this process is the best way to get your work merged:
 
 **Please ask first** before embarking on any significant code change (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project.
