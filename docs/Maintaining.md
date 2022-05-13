@@ -46,12 +46,25 @@ Pull-requests need at least these requirements:
 
 Release management is pretty straight forward.  
 After a merge, or set of merges we need to release.  
-
-To release the library, packages need to be deployed.  
+  
+Maintainers are responsible for releases and should coordinate weekly if there are changes to be released.  
+If yes, a maintainer will be appointed `release coordinator` and will be responsible for the release.  
+  
+The release coordinator will be responsible for determining which packages need to be pushed and calculating the correct [semantic version](https://semver.org/) for each package.  
 Currently this works with a [manual deploy pipeline](https://github.com/Marvin-Brouwer/FluentSerializer/actions/workflows/manual-deployment.yml).  
 Just select the package containing the changes and the [semantic version](https://semver.org/) you'd like the next package to be.  
 Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
+  
+The release coordinator will also be responsible for closing issues after the release has been pushed completely.  
+  
+Current maintainers eligible for release coordination:
 
-Every release has an owner appointed at the start, who is responsible for versioning and publishing.
-
-After releasing, you can close the issues that have been merged.
+- <a href="https://github.com/Marvin-Brouwer" class="mr-2" data-hovercard-type="user" data-hovercard-url="/users/Marvin-Brouwer/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
+    <img src="https://avatars.githubusercontent.com/u/5499778?s=32&amp;v=4" alt="@Marvin-Brouwer" size="32" height="32" width="32" data-view-component="true" class="avatar circle">
+  </a>
+  <span data-view-component="true" class="flex-self-center min-width-0 css-truncate css-truncate-overflow width-fit flex-auto">
+    <a href="https://github.com/Marvin-Brouwer" class="Link--primary no-underline flex-self-center">
+      <strong>Marvin-Brouwer</strong>
+      <span class="color-fg-muted">Marvin Brouwer</span>
+    </a>
+  </span>

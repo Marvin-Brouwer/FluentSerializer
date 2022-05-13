@@ -225,3 +225,11 @@ Maintainers are responsible for the release cycles.
 However, if you register a bug blocking your development you can request an alpha package version for your branch to be deployed while the code is in review.
 
 For more information, review the [Maintenance guides Release management chapter](/docs/Maintaining.md#release-management).  
+
+### Contributors
+
+<a href="https://github.com/Marvin-Brouwer/FluentSerializer/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Marvin-Brouwer/FluentSerializer" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
