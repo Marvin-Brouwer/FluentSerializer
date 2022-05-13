@@ -22,7 +22,7 @@ patches and features.
 
 ## Current Maintainers
 
-- [Marvin Brouwer](https://github.com/Marvin-Brouwer)
+- [**Marvin-Brouwer** Marvin Brouwer](https://github.com/Marvin-Brouwer)
 
 ## Verifying pull-requests
 
@@ -56,15 +56,4 @@ Just select the package containing the changes and the [semantic version](https:
 Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
   
 The release coordinator will also be responsible for closing issues after the release has been pushed completely.  
-  
-Current maintainers eligible for release coordination:
-
-- <a href="https://github.com/Marvin-Brouwer" class="mr-2" data-hovercard-type="user" data-hovercard-url="/users/Marvin-Brouwer/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self">
-    <img src="https://avatars.githubusercontent.com/u/5499778?s=32&amp;v=4" alt="@Marvin-Brouwer" size="32" height="32" width="32" data-view-component="true" class="avatar circle">
-  </a>
-  <span data-view-component="true" class="flex-self-center min-width-0 css-truncate css-truncate-overflow width-fit flex-auto">
-    <a href="https://github.com/Marvin-Brouwer" class="Link--primary no-underline flex-self-center">
-      <strong>Marvin-Brouwer</strong>
-      <span class="color-fg-muted">Marvin Brouwer</span>
-    </a>
-  </span>
+> _Currently there is only one maintainer, so the need for the weekly coordination is not required._
