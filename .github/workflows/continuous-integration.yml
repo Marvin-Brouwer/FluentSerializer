@@ -3,10 +3,12 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - 'main'
+      - '**'
   pull_request:
-    branches-ignore:
-      - 'dependabot/**'
+    branches:
+      - '**'
+      - '!main'
+      - '!dependabot/**'
   workflow_dispatch:
 
 concurrency:
