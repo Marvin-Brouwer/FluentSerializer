@@ -5,6 +5,8 @@ using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
 
+// TODO: Add EnumMemberTests
+// TODO: Add AllOptionsTests
 public sealed partial class EnumConverterBaseTests
 {
 	[Fact,

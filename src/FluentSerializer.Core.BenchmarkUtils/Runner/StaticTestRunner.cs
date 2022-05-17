@@ -165,11 +165,13 @@ public abstract class StaticTestRunner
 
 	public static void RequireElevatedPermissions()
 	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !IsAdministrator()) Elevate();
+		if (!IsWindowsAdministrator()) ElevateWindowsApp();
 	}
 
-	private static void Elevate()
+	private static void ElevateWindowsApp()
 	{
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
+
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine();
 		Console.WriteLine("Restarting process with admin permissions.");
@@ -193,8 +195,10 @@ public abstract class StaticTestRunner
 #endif
 
 
-	private static bool IsAdministrator()
+	private static bool IsWindowsAdministrator()
 	{
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return false;
+
 		try
 		{
 			var user = WindowsIdentity.GetCurrent();
