@@ -133,7 +133,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -256,7 +255,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -349,7 +347,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
