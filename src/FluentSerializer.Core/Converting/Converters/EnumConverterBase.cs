@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.Serialization;
 using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Converting.Converters;
+
+// TODO: Update documentation
 
 /// <summary>
 /// Converts <see cref="Enum"/>
 /// </summary>
 public abstract class EnumConverterBase
 {
-	private static InvalidCastException UnknownEnumFormatException(in string value) => new InvalidCastException(
+	private static InvalidCastException UnknownEnumFormatException(in string value) => new(
 		$"The value provided '{value}' was not present in the enum");
-
-	private static NotSupportedException DescriptionNotFoundException(in Type enumType, in string member) =>
-		new NotSupportedException(
-			$"The value of '{member}' on '{enumType.FullName}' does not have a description");
+	
 	private static NotSupportedException ValueNotFoundException(in Type enumType, in string member) =>
-		new NotSupportedException(
+		new(
 			$"The value '{member}' was not found on enum '{enumType.FullName}'");
 
 	/// <summary>
@@ -48,6 +48,29 @@ public abstract class EnumConverterBase
 		var enumMemberNameValue = (nameValue: memberName, false);
 		return EnumFormat switch
 		{
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				GetEnumDescription(in memberName, in enumType) ??
+				enumMemberNameValue,
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				GetEnumDescription(in memberName, in enumType) ??
+				GetEnumUnderlyingValue(value),
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				GetEnumDescription(in memberName, in enumType) ??
+				enumMemberNameValue,
+
+			EnumFormat.UseEnumMember | EnumFormat.UseName =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				enumMemberNameValue,
+			EnumFormat.UseEnumMember | EnumFormat.UseNumberValue =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				GetEnumUnderlyingValue(value),
+			EnumFormat.UseEnumMember | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				enumMemberNameValue,
+
 			EnumFormat.UseDescription | EnumFormat.UseName =>
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
@@ -57,11 +80,16 @@ public abstract class EnumConverterBase
 			EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
+
 			EnumFormat.UseName | EnumFormat.UseNumberValue =>
 				enumMemberNameValue,
+
+			EnumFormat.UseEnumMember =>
+				GetEnumMemberValue(in memberName, in enumType) ??
+				throw ValueNotFoundException(value.GetType(), in memberName),
 			EnumFormat.UseDescription =>
 				GetEnumDescription(in memberName, in enumType) ??
-				throw DescriptionNotFoundException(value.GetType(), in memberName),
+				throw ValueNotFoundException(value.GetType(), in memberName),
 			EnumFormat.UseName =>
 				enumMemberNameValue,
 			EnumFormat.UseNumberValue =>
@@ -83,6 +111,25 @@ public abstract class EnumConverterBase
 	private static string GetEnumNameValue(in object value)
 	{
 		return value.ToString()!;
+	}
+
+	private static (string value, bool isNumeric)? GetEnumMemberValue(in string name, in Type enumType)
+	{
+		try
+		{
+			var memberInfo = GetEnumMemberInfo(in name, in enumType);
+			if (memberInfo is null) return null;
+
+			var valueAttributes = memberInfo.GetCustomAttributes(typeof(EnumMemberAttribute), false);
+			var enumMemberValue = ((EnumMemberAttribute)valueAttributes[0]).Value;
+			if (enumMemberValue is null) return null;
+
+			return (enumMemberValue, false);
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	private static (string value, bool isNumeric)? GetEnumDescription(in string name, in Type enumType)
@@ -131,29 +178,81 @@ public abstract class EnumConverterBase
 
 		return EnumFormat switch
 		{
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromDescription(in currentValue, in targetType) ??
+				GetEnumFromName(in currentValue, in targetType),
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromDescription(in currentValue, in targetType) ??
+				GetEnumFromNumber(in currentValue, in targetType),
+			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromDescription(in currentValue, in targetType) ??
+				GetEnumFromName(in currentValue, in targetType) ??
+				GetEnumFromNumber(in currentValue, in targetType),
+
+			EnumFormat.UseEnumMember | EnumFormat.UseName =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromName(in currentValue, in targetType),
+			EnumFormat.UseEnumMember | EnumFormat.UseNumberValue =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromNumber(in currentValue, in targetType),
+			EnumFormat.UseEnumMember | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+				GetEnumFromEnumMember(in currentValue, in targetType) ??
+				GetEnumFromName(in currentValue, in targetType) ??
+				GetEnumFromNumber(in currentValue, in targetType),
+
 			EnumFormat.UseDescription | EnumFormat.UseName =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType),
 			EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
-			EnumFormat.UseName | EnumFormat.UseNumberValue =>
-				GetEnumFromName(in currentValue, in targetType) ??
-				GetEnumFromNumber(in currentValue, in targetType),
 			EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
 
+			EnumFormat.UseName | EnumFormat.UseNumberValue =>
+				GetEnumFromName(in currentValue, in targetType) ??
+				GetEnumFromNumber(in currentValue, in targetType),
+
+			EnumFormat.UseEnumMember => GetEnumFromEnumMember(in currentValue, in targetType),
 			EnumFormat.UseDescription => GetEnumFromDescription(in currentValue, in targetType),
 			EnumFormat.UseName => GetEnumFromName(in currentValue, in targetType),
 			EnumFormat.UseNumberValue => GetEnumFromNumber(in currentValue, in targetType),
 
 			// This should really never happen:
 			_ => throw UnknownEnumFormatException(EnumFormat.ToString())
-		}; 
+		};
 	}
-	
+
+	private static object? GetEnumFromEnumMember(in string currentValue, in Type targetType)
+	{
+		try
+		{
+			var memberInfos = GetEnumMemberInfos(targetType);
+			foreach (var memberInfo in memberInfos)
+			{
+				var valueAttributes = memberInfo.GetCustomAttributes(typeof(EnumMemberAttribute), false);
+				if (valueAttributes.Length == 0) continue;
+
+				var description = ((EnumMemberAttribute)valueAttributes[0]).Value;
+				if (string.IsNullOrWhiteSpace(description)) continue;
+
+				if (description.Equals(currentValue, StringComparison.OrdinalIgnoreCase))
+					return Enum.Parse(targetType, memberInfo.Name);
+			}
+
+			return default;
+		}
+		catch
+		{
+			return default;
+		}
+	}
+
 	private static object? GetEnumFromDescription(in string currentValue, in Type targetType)
 	{
 		try
