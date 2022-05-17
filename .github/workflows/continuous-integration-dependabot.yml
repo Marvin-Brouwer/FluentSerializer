@@ -1,4 +1,4 @@
-name: Continuous Integration `dependabot`
+name: Continuous DependaBot
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ dependabot/** ]
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}[dependabot]
   cancel-in-progress: true
 
 jobs:
@@ -35,7 +35,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -134,7 +133,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -257,7 +255,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -350,7 +347,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies

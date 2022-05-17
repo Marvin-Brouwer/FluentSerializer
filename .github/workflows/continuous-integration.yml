@@ -2,13 +2,17 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ main, release/*, feature/* ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ feature/* ]
+    branches:
+      - '**'
+      - '!main'
+      - '!dependabot/**'
   workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}${{ github.event_name == 'workflow_dispatch' && '[dispatch]' || '' }}
   cancel-in-progress: true
 
 jobs:
@@ -46,7 +50,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -145,7 +148,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🧰 Initialize CodeQL
@@ -223,7 +225,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🧰 Setup .Net tools
@@ -379,7 +380,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies
@@ -473,7 +473,6 @@ jobs:
         include-prerelease: true
         dotnet-version: |
           3.1.x
-          5.0.x
           6.0.x
     ###
     # 🗃 Restore dependencies

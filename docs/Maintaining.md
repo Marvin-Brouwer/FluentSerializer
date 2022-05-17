@@ -22,7 +22,7 @@ patches and features.
 
 ## Current Maintainers
 
-- [Marvin Brouwer](https://github.com/Marvin-Brouwer)
+- [**Marvin-Brouwer** Marvin Brouwer](https://github.com/Marvin-Brouwer)
 
 ## Verifying pull-requests
 
@@ -45,13 +45,15 @@ Pull-requests need at least these requirements:
 ## Release management
 
 Release management is pretty straight forward.  
-There is always a `release` branch and a [milestone](https://github.com/Marvin-Brouwer/FluentSerializer/milestones) containing issues for an upcoming release.
-
-Once the release is ready, packages need to be deployed.  
+After a merge, or set of merges we need to release.  
+  
+Maintainers are responsible for releases and should coordinate weekly if there are changes to be released.  
+If yes, a maintainer will be appointed `release coordinator` and will be responsible for the release.  
+  
+The release coordinator will be responsible for determining which packages need to be pushed and calculating the correct [semantic version](https://semver.org/) for each package.  
 Currently this works with a [manual deploy pipeline](https://github.com/Marvin-Brouwer/FluentSerializer/actions/workflows/manual-deployment.yml).  
 Just select the package containing the changes and the [semantic version](https://semver.org/) you'd like the next package to be.  
 Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
-
-Every release has an owner appointed at the start, who is responsible for versioning and publishing.
-
-After releasing, merge the `release` branch into the `main` branch.
+  
+The release coordinator will also be responsible for closing issues after the release has been pushed completely.  
+> _Currently there is only one maintainer, so the need for the weekly coordination is not required._
