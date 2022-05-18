@@ -11,19 +11,21 @@ namespace FluentSerializer.Core.Converting.Converters;
 public enum EnumFormat
 {
 	/// <summary>
-	/// Use the <see cref="DescriptionAttribute" /> to read and write, read and write to name if not found, read from underlying number as fallback
+	/// Use the <see cref="EnumMemberAttribute" /> to read and write,
+	/// otherwise use the <see cref="DescriptionAttribute" /> to read and write,
+	/// read and write to name if not found, read from underlying number as fallback
 	/// </summary>
 	[EnumMember, Description("Use the most flexible format, using all EnumFormats combined")]
 	Default = UseEnumMember | UseDescription | UseName | UseNumberValue,
 
 	/// <summary>
-	/// Use the <see cref="DescriptionAttribute" /> to read and write, read and write to name if not found, read from underlying number as fallback
+	/// Use the member name to read and write, read from underlying number as fallback
 	/// </summary>
-	[EnumMember, Description("Use the name or number value only")]
+	[EnumMember, Description("Use the member name to read and write, read from underlying number as fallback")]
 	Simple = UseName | UseNumberValue,
 
 	/// <summary>
-	/// Use the <see cref="DescriptionAttribute" /> to read and write
+	/// Use the <see cref="EnumMemberAttribute" /> to read and write
 	/// </summary>
 	[EnumMember(Value = "EnumMember"), Description("Use the value of System.Runtime.Serialization.EnumMemberAttribute to write out")]
 	UseEnumMember = 0x1,

@@ -7,8 +7,6 @@ using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Converting.Converters;
 
-// TODO: Update documentation
-
 /// <summary>
 /// Converts <see cref="Enum"/>
 /// </summary>
