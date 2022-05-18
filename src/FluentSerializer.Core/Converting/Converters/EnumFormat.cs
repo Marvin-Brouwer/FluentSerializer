@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace FluentSerializer.Core.Converting.Converters;
 
@@ -10,24 +11,37 @@ namespace FluentSerializer.Core.Converting.Converters;
 public enum EnumFormat
 {
 	/// <summary>
-	/// Use the <see cref="DescriptionAttribute" /> to read and write, read and write to name if not found, read from underlying number as fallback
+	/// Use the <see cref="EnumMemberAttribute" /> to read and write,
+	/// otherwise use the <see cref="DescriptionAttribute" /> to read and write,
+	/// read and write to name if not found, read from underlying number as fallback
 	/// </summary>
-	[Description("Use the most flexible format, using all EnumFormats combined")]
-	Default = UseDescription | UseName | UseNumberValue,
+	[EnumMember, Description("Use the most flexible format, using all EnumFormats combined")]
+	Default = UseEnumMember | UseDescription | UseName | UseNumberValue,
 
+	/// <summary>
+	/// Use the member name to read and write, read from underlying number as fallback
+	/// </summary>
+	[EnumMember, Description("Use the member name to read and write, read from underlying number as fallback")]
+	Simple = UseName | UseNumberValue,
+
+	/// <summary>
+	/// Use the <see cref="EnumMemberAttribute" /> to read and write
+	/// </summary>
+	[EnumMember(Value = "EnumMember"), Description("Use the value of System.Runtime.Serialization.EnumMemberAttribute to write out")]
+	UseEnumMember = 0x1,
 	/// <summary>
 	/// Use the <see cref="DescriptionAttribute" /> to read and write
 	/// </summary>
-	[Description("Use the System.ComponentModel.DescriptionAttribute to write out")]
-	UseDescription = 0x1,
+	[EnumMember(Value = "Description"), Description("Use the System.ComponentModel.DescriptionAttribute to write out")]
+	UseDescription = 0x2,
 	/// <summary>
 	/// Use the member name to read and write
 	/// </summary>
-	[Description("Use the name to write out")]
-	UseName = 0x2,
+	[EnumMember(Value = "Name"), Description("Use the name to write out")]
+	UseName = 0x4,
 	/// <summary>
 	/// Use the underlying number type to read and write
 	/// </summary>
-	[Description("Use the number value to write out")]
-	UseNumberValue = 0x4
+	[EnumMember(Value = "Value"), Description("Use the number value to write out")]
+	UseNumberValue = 0x8
 }

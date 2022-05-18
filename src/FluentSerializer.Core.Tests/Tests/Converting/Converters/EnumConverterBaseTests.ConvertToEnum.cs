@@ -21,6 +21,22 @@ public sealed partial class EnumConverterBaseTests
 	}
 
 	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void ConvertToEnum_FormatUseEnumMember_Returns()
+	{
+		// Arrange
+		var sut = new TestConverter(EnumFormat.UseEnumMember);
+
+		// Act
+		var result1 = sut.ConvertToEnum(MemberWithEnumMemberDataValue, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
+
+		// Assert
+		result1.Should().BeEquivalentTo(TestEnum.MemberWithEnumMember);
+		result2.Should().BeNull();
+	}
+
+	[Fact,
 		Trait("Category", "UnitTest")]
 	public void ConvertToEnum_FormatUseDescription_Returns()
 	{
@@ -28,7 +44,7 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseDescription);
 
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
 		// Assert
@@ -45,7 +61,7 @@ public sealed partial class EnumConverterBaseTests
 
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result2 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
 		// Assert
@@ -62,14 +78,32 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseNumberValue);
 		
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithoutDescriptionValue.ToString(), typeof(TestEnum));
-		var result2 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithoutDescriptionOrEnumMemberValue.ToString(), typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 
 		// Assert
-		result1.Should().BeEquivalentTo(TestEnum.MemberWithoutDescription);
+		result1.Should().BeEquivalentTo(TestEnum.MemberWithoutDescriptionOrEnumMember);
 		result2.Should().BeNull();
 		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
+	}
+
+	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void ConvertToEnum_FormatUseEnumMemberOrUseName_Returns()
+	{
+		// Arrange
+		var sut = new TestConverter(EnumFormat.UseEnumMember | EnumFormat.UseName);
+
+		// Act
+		var result1 = sut.ConvertToEnum(MemberWithEnumMemberDataValue, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithEnumMemberName, typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithEnumMemberValue.ToString(), typeof(TestEnum));
+
+		// Assert
+		result1.Should().BeEquivalentTo(TestEnum.MemberWithEnumMember);
+		result2.Should().BeEquivalentTo(TestEnum.MemberWithEnumMember);
+		result3.Should().BeNull();
 	}
 
 	[Fact,
@@ -80,7 +114,7 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseDescription | EnumFormat.UseName);
 
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithDescriptionValue.ToString(), typeof(TestEnum));
 
@@ -91,6 +125,24 @@ public sealed partial class EnumConverterBaseTests
 	}
 
 	[Fact,
+	 Trait("Category", "UnitTest")]
+	public void ConvertToEnum_FormatUseEnumMemberOrUseNumberValue_Returns()
+	{
+		// Arrange
+		var sut = new TestConverter(EnumFormat.UseEnumMember | EnumFormat.UseNumberValue);
+
+		// Act
+		var result1 = sut.ConvertToEnum(MemberWithEnumMemberDataValue, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithEnumMemberName, typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
+
+		// Assert
+		result1.Should().BeEquivalentTo(TestEnum.MemberWithEnumMember);
+		result2.Should().BeNull();
+		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
+	}
+
+	[Fact,
 		Trait("Category", "UnitTest")]
 	public void ConvertToEnum_FormatUseDescriptionOrUseNumberValue_Returns()
 	{
@@ -98,7 +150,7 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseDescription | EnumFormat.UseNumberValue);
 
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 
@@ -116,7 +168,7 @@ public sealed partial class EnumConverterBaseTests
 		var sut = new TestConverter(EnumFormat.UseName | EnumFormat.UseNumberValue);
 
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
 		var result4 = sut.ConvertToEnum(MemberWithExplicitValueName, typeof(TestEnum));
@@ -133,16 +185,20 @@ public sealed partial class EnumConverterBaseTests
 	public void ConvertToEnum_FormatUseAll_Returns()
 	{
 		// Arrange
-		var sut = new TestConverter(EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue);
+		var sut = new TestConverter(EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue);
 
 		// Act
-		var result1 = sut.ConvertToEnum(MemberWithDescriptionDescription, typeof(TestEnum));
-		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
+		var result1 = sut.ConvertToEnum(MemberWithEnumMemberDataValue, typeof(TestEnum));
+		var result2 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
+		var result4 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
+		var result5 = sut.ConvertToEnum(MemberWithEnumMemberAndDescriptionDataValueMember, typeof(TestEnum));
 
 		// Assert
-		result1.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
+		result1.Should().BeEquivalentTo(TestEnum.MemberWithEnumMember);
 		result2.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
-		result3.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
+		result3.Should().BeEquivalentTo(TestEnum.MemberWithDescription);
+		result4.Should().BeEquivalentTo(TestEnum.MemberWithExplicitValue);
+		result5.Should().BeEquivalentTo(TestEnum.MemberWithEnumMemberAndDescription);
 	}
 }

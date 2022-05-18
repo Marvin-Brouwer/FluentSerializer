@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using FluentAssertions;
 using FluentSerializer.Core.Converting.Converters;
 using Xunit;
@@ -38,19 +39,31 @@ public sealed partial class EnumConverterBaseTests
 		result.Should().BeFalse();
 	}
 
-	private const string MemberWithoutDescriptionName = nameof(TestEnum.MemberWithoutDescription);
-	private const long MemberWithoutDescriptionValue = 0;
+	private const string MemberWithoutDescriptionOrEnumMemberName = nameof(TestEnum.MemberWithoutDescriptionOrEnumMember);
+	private const long MemberWithoutDescriptionOrEnumMemberValue = (int)TestEnum.MemberWithoutDescriptionOrEnumMember;
+	private const string MemberWithEnumMemberName = nameof(TestEnum.MemberWithEnumMember);
+	private const long MemberWithEnumMemberValue = (int)TestEnum.MemberWithEnumMember;
+	private const string MemberWithEnumMemberDataValue = "MemberValue";
 	private const string MemberWithDescriptionName = nameof(TestEnum.MemberWithDescription);
-	private const long MemberWithDescriptionValue = 1;
-	private const string MemberWithDescriptionDescription = "This member has a description";
+	private const long MemberWithDescriptionValue = (int)TestEnum.MemberWithDescription;
+	private const string MemberWithDescriptionDataValue = "This member has a description";
+	private const string MemberWithEnumMemberAndDescriptionName = nameof(TestEnum.MemberWithEnumMemberAndDescription);
+	private const long MemberWithEnumMemberAndDescriptionValue = (int)TestEnum.MemberWithEnumMemberAndDescription;
+	private const string MemberWithEnumMemberAndDescriptionDataValueMember = "MemberValueWithDescription";
+	private const string MemberWithEnumMemberAndDescriptionDataValueDescription = "This member has a description and an enum member attribute";
 	private const string MemberWithExplicitValueName = nameof(TestEnum.MemberWithExplicitValue);
 	private const long MemberWithExplicitValueValue = 9239202348;
 
 	private enum TestEnum : long
 	{
-		MemberWithoutDescription,
-		[Description(MemberWithDescriptionDescription)]
+		MemberWithoutDescriptionOrEnumMember,
+		[EnumMember(Value = MemberWithEnumMemberDataValue)]
+		MemberWithEnumMember,
+		[Description(MemberWithDescriptionDataValue)]
 		MemberWithDescription,
+		[EnumMember(Value = MemberWithEnumMemberAndDescriptionDataValueMember)]
+		[Description(MemberWithEnumMemberAndDescriptionDataValueDescription)]
+		MemberWithEnumMemberAndDescription,
 		MemberWithExplicitValue = MemberWithExplicitValueValue
 	}
 
