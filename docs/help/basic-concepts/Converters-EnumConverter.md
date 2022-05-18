@@ -39,7 +39,8 @@ When these settings result in no values, null is returned to the serializer to e
 
 Since this is a `Flag enum`, you can combine these in whatever way you like and the converter can handle it.  
 However, it will always use the follow this quantity order: `UseEnumMember > UseDescription > UseName > UseNumberValue`;
-This is straight forward for both serializing and deserializing. However, when serializing this effectively has the same result as `UseDescription | UseName` since it will always have a member name.  
+This is straight forward for both serializing and deserializing.  
+However, when serializing `... UseName | UseNumberValue` effectively has the same result as `... UseName` since it will always have a member name.  
 
 In addition to the `EnumFormat` some converters may have additional configuration.  
 For example, the JSON serializer allows you to specify whether you'd like the output of the number to be a string `"0"` instead of a number `0`:
