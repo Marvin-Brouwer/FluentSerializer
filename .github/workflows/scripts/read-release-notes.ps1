@@ -3,7 +3,7 @@ Function Read-ReleaseNotes {
 		[Parameter(Mandatory=$true)] [String]$Path
 	)
 
-	$releaseNotesPath = "$Path/Release notes.md";
+	$releaseNotesPath = "$Path/Changelog.md";
 	$releaseNotesFile = [System.IO.File]::ReadLines($releaseNotesPath);
 
 	foreach ($line in $releaseNotesFile) {
