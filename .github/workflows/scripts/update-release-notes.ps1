@@ -4,7 +4,7 @@ Param (
 
 . "$PSScriptRoot\read-release-notes.ps1"
 
-$linkReplacement = "- ";
+$linkReplacement = "";
 $linkRemovalPattern = [System.Text.RegularExpressions.Regex]::new(
 	"- \[#[0-9]+]\(https:\/\/github\.com\/Marvin-Brouwer\/FluentSerializer\/issues\/[0-9]+\) ",
 	[System.Text.RegularExpressions.RegexOptions]::IgnoreCase
