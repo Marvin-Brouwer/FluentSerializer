@@ -64,6 +64,16 @@ jobs:
           -Version "${{ github.event.inputs.version }}" `
           -File "${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj";
     ###
+    # 🔧 Update NuGet readme
+    #
+    # Update the NuGet readme with additional release metadata
+    ###
+    - name: 🔧 Update NuGet readme
+      shell: pwsh
+      run: |-
+        ${{github.workspace}}/.github/workflows/update-package-readme.ps1 `
+          -Path "${{github.workspace}}/src/${{ github.event.inputs.package }}";
+    ###
     # 🗃 Restore dependencies
     #
     # Fill the NuGet store with necessary libraries
