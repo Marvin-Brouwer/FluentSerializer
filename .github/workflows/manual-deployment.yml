@@ -60,8 +60,18 @@ jobs:
     - name: 🔧 Fix version
       shell: pwsh
       run: |-
-        ${{github.workspace}}/.github/workflows/update-version.ps1 `
+        ${{github.workspace}}/.github/workflows/scripts/update-version.ps1 `
           -Version "${{ github.event.inputs.version }}" `
+          -File "${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj";
+    ###
+    # 🔧 Fix release notes
+    #
+    # Override the libraries release notes info
+    ###
+    - name: 🔧 Fix release notes
+      shell: pwsh
+      run: |-
+        ${{github.workspace}}/.github/workflows/scripts/update-release-notes.ps1 `
           -File "${{github.workspace}}/src/${{ github.event.inputs.package }}/${{ github.event.inputs.package }}.csproj";
     ###
     # 🔧 Update NuGet readme
@@ -71,7 +81,7 @@ jobs:
     - name: 🔧 Update NuGet readme
       shell: pwsh
       run: |-
-        ${{github.workspace}}/.github/workflows/update-package-readme.ps1 `
+        ${{github.workspace}}/.github/workflows/scripts/update-package-readme.ps1 `
           -Path "${{github.workspace}}/src/${{ github.event.inputs.package }}";
     ###
     # 🗃 Restore dependencies

@@ -2,18 +2,13 @@ Param (
 	[Parameter(Mandatory=$true)]  [String]$Path
 )
 
-$releaseNotesPath = "$Path/Release notes.md";
-$nuGetReadmePath = "$Path/Readme.NuGet.md";
-$releaseNotesFile = [System.IO.File]::ReadLines($releaseNotesPath);
+. "$PSScriptRoot\read-release-notes.ps1"
 
-foreach ($line in $releaseNotesFile) {
-	if ($line -eq "## @next") { break };
-}
-$releaseNotes = @();
-foreach ($line in $releaseNotesFile) {
-	if ($line.StartsWith("##")) { break };
-	$releaseNotes += $line;
-}
+$nuGetReadmePath = "$Path/Readme.NuGet.md";
+
+Write-Host "Appending release notes to $nuGetReadmePath" -ForegroundColor DarkYellow;
+
+$releaseNotes = . Read-ReleaseNotes -Path $Path
 
 Add-Content -Path $nuGetReadmePath -Value "" -Force
 Add-Content -Path $nuGetReadmePath -Value "## Release notes" -Force

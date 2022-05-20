@@ -16,6 +16,7 @@
 		<PackageProjectUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</RepositoryUrl>
 		<Version /> <!-- Version will be replaced by release pipeline -->
+		<PackageReleaseNotes /> <!-- PackageReleaseNotes will be replaced by release pipeline -->
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
