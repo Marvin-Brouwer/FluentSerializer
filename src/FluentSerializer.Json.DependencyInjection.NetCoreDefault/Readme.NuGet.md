@@ -1,7 +1,13 @@
-﻿# FluentSerializer.Json.DependencyInjection.NetCoreDefault
+﻿# [FluentSerializer](https://github.com/Marvin-Brouwer/FluentSerializer#readme)
 
 FluentSerializer is a library to help you with serializing to-and-from C# POCOs using profiles.
 
-- [FluentSerializer.Json.DependencyInjection.NetCoreDefault](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme)
 - FluentSerializer [Main readme](https://github.com/Marvin-Brouwer/FluentSerializer#readme)
 - FluentSerializer [License](https://github.com/Marvin-Brouwer/FluentSerializer/blob/main/License.md#readme)
+
+## [FluentSerializer.Json.DependencyInjection.NetCoreDefault](https://github.com/Marvin-Brouwer/FluentSerializer/tree/main/src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme)
+
+[DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
+
+The `FluentSerializer.Json.DependencyInjection.NetCoreDefault` library is responsible for registering the FluentSerializer for JSON using
+[Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
