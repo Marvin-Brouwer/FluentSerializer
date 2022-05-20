@@ -4,6 +4,12 @@ Param (
 
 . "$PSScriptRoot\read-release-notes.ps1"
 
+$linkReplacement = "- ";
+$linkRemovalPattern = [System.Text.RegularExpressions.Regex]::new(
+	"- \[#[0-9]+]\(https:\/\/github\.com\/Marvin-Brouwer\/FluentSerializer\/issues\/[0-9]+\) ",
+	[System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+);
+
 Write-Host "Updating release notes in $file" -ForegroundColor DarkYellow;
 
 $releaseNotesMarkDown = . Read-ReleaseNotes -Path ($File | Split-Path)
@@ -16,10 +22,10 @@ foreach ($line in $releaseNotesMarkDown) {
 		continue;
 	}
 	elseif ($pos -eq $releaseNotesMarkDown.length) {
-		$releaseNotes += $line;
+		$releaseNotes += $line -Replace $linkRemovalPattern, $linkReplacement;
 	}
 	else {
-		$releaseNotes += $line;
+		$releaseNotes += $line -Replace $linkRemovalPattern, $linkReplacement;
 		$releaseNotes += "`n"
 	}
 	$pos ++;
