@@ -11,20 +11,20 @@ namespace FluentSerializer.Xml.Converting;
 /// <inheritdoc/>
 public sealed class UseXmlConverters : IUseXmlConverters
 {
-	internal static readonly SimpleTypeConverter<DateTime> DefaultDateConverter = new DefaultDateConverter();
+	internal static readonly SimpleTypeConverter<DateTime> DefaultDateTimeConverter = new DefaultDateTimeConverter();
 	internal static readonly IXmlConverter<IXmlElement> WrappedCollectionConverter = new WrappedCollectionConverter();
 	private static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormat.Default);
 
 	/// <inheritdoc/>
-	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateConverter;
+	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateTimeConverter;
 
 	/// <inheritdoc/>
 	public Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
+		return () => new DateTimeByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
 	/// <inheritdoc/>

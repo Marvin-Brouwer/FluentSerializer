@@ -15,10 +15,10 @@ namespace FluentSerializer.Xml.Converting;
 /// </remarks>
 public interface IUseXmlConverters
 {
-	/// <inheritdoc cref="DefaultDateConverter" />
+	/// <inheritdoc cref="DefaultDateTimeConverter" />
 	SimpleTypeConverter<DateTime> DateTime();
 
-	/// <inheritdoc cref="DateByFormatConverter" />
+	/// <inheritdoc cref="DateTimeByFormatConverter" />
 	Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
 
 	/// <summary>

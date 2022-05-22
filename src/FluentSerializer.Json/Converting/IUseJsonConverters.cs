@@ -13,10 +13,10 @@ namespace FluentSerializer.Json.Converting;
 /// </remarks>
 public interface IUseJsonConverters
 {
-	/// <inheritdoc cref="DefaultDateConverter" />
+	/// <inheritdoc cref="DefaultDateTimeConverter" />
 	IJsonConverter DateTime();
 
-	/// <inheritdoc cref="DateByFormatConverter" />
+	/// <inheritdoc cref="DateTimeByFormatConverter" />
 	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
 
 	/// <inheritdoc cref="CollectionConverter" />
