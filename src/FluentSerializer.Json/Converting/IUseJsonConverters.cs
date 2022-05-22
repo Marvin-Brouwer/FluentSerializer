@@ -1,7 +1,7 @@
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting.Converters;
 using System;
 using System.Globalization;
-using FluentSerializer.Core.Converting.Converters;
 
 namespace FluentSerializer.Json.Converting;
 
@@ -18,6 +18,29 @@ public interface IUseJsonConverters
 
 	/// <inheritdoc cref="DateTimeByFormatConverter" />
 	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+
+	/// <inheritdoc cref="DefaultDateTimeOffsetConverter" />
+	IJsonConverter DateTimeOffset();
+
+	/// <inheritdoc cref="DateTimeOffsetByFormatConverter" />
+	Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+
+#if NET5_0_OR_GREATER
+	/// <inheritdoc cref="DefaultDateOnlyConverter" />
+	IJsonConverter DateOnly();
+
+	/// <inheritdoc cref="DateOnlyByFormatConverter" />
+	Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+
+	/// <inheritdoc cref="DefaultTimeOnlyConverter" />
+	IJsonConverter TimeOnly();
+
+	/// <inheritdoc cref="TimeOnlyByFormatConverter" />
+	Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+#endif
+
+	/// <inheritdoc cref="DefaultTimeSpanConverter" />
+	IJsonConverter TimeSpan();
 
 	/// <inheritdoc cref="CollectionConverter" />
 	IJsonConverter Collection();
