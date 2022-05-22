@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Json.Converting.Converters.Base;
 using FluentSerializer.Json.DataNodes;
 
@@ -13,8 +14,6 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// </summary>
 public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 {
-	private const string IsoDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
-
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue)
 	{
@@ -27,7 +26,7 @@ public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateTime value) =>
 		JsonCharacterConstants.PropertyWrapCharacter + 
-		value.ToUniversalTime().ToString(IsoDateFormat, CultureInfo.CurrentCulture) +
+		value.ToUniversalTime().ToString(DateTimeConstants.IsoDateTimeFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 
 	/// <inheritdoc />
