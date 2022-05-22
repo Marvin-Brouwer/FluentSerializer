@@ -41,6 +41,7 @@ Pull-requests need at least these requirements:
 - Performance cannot degrade by too much of a margin  
   This is pretty subjective but still important.
 - Additional dependencies have to be cleared by the entire team of maintainers.
+- Changelogs have to be updated.
 
 ## Release management
 
@@ -55,5 +56,5 @@ Currently this works with a [manual deploy pipeline](https://github.com/Marvin-B
 Just select the package containing the changes and the [semantic version](https://semver.org/) you'd like the next package to be.  
 Please make sure you adhere to the [SemVer Guidelines](https://semver.org/), ask the team of maintainers for help if you have questions.
   
-The release coordinator will also be responsible for closing issues after the release has been pushed completely.  
+The release coordinator will also be responsible for moving the `## @next` chapters to the released versions after the release has been pushed completely so new change logs can be put in the  `## @next` fot a following release.  
 > _Currently there is only one maintainer, so the need for the weekly coordination is not required._
