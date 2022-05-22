@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// Using <c>DateTime.ToUniversalTime().ToString(IsoDateFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like yyyy-MM-ddTHH:mm:ssK
 /// </summary>
-public sealed class DefaultDateConverter : SimpleTypeConverter<DateTime>
+public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 {
 	private const string IsoDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
 

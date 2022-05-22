@@ -9,19 +9,19 @@ namespace FluentSerializer.Json.Converting;
 /// <inheritdoc />
 public sealed class UseJsonConverters : IUseJsonConverters
 {
-	internal static readonly IJsonConverter DefaultDateConverter = new DefaultDateConverter();
+	internal static readonly IJsonConverter DefaultDateTimeConverter = new DefaultDateTimeConverter();
 	internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormat.Default, true);
 
 	/// <inheritdoc />
-	public IJsonConverter DateTime() => DefaultDateConverter;
+	public IJsonConverter DateTime() => DefaultDateTimeConverter;
 
 	/// <inheritdoc />
 	public Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		return () => new DateByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
+		return () => new DateTimeByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
 	/// <inheritdoc />
