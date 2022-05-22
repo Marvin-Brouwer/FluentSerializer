@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Xml.Converting.Converters.Base;
 
 namespace FluentSerializer.Xml.Converting.Converters;
@@ -12,11 +13,9 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// </summary>
 public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 {
-	private const string IsoDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
-
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue) => DateTime.Parse(currentValue, CultureInfo.CurrentCulture, DateTimeStyles.NoCurrentDateDefault);
 
 	/// <inheritdoc />
-	protected override string ConvertToString(in DateTime value) => value.ToString(IsoDateFormat, CultureInfo.CurrentCulture);
+	protected override string ConvertToString(in DateTime value) => value.ToString(DateTimeConstants.IsoDateTimeFormat, CultureInfo.CurrentCulture);
 }
