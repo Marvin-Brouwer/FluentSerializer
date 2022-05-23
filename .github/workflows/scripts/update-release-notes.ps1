@@ -1,8 +1,11 @@
+###
+# Adds a cleaned release notes section to the NuSpec via the CSPROJ file
+# So it appears in the NuGet explorer
+###
+
 Param (
 	[Parameter(Mandatory=$true)]  [String]$File
 )
-
-. "$PSScriptRoot\read-release-notes.ps1"
 
 $linkReplacement = "";
 $linkRemovalPattern = [System.Text.RegularExpressions.Regex]::new(
@@ -12,9 +15,12 @@ $linkRemovalPattern = [System.Text.RegularExpressions.Regex]::new(
 
 Write-Host "Updating release notes in $file" -ForegroundColor DarkYellow;
 
+# Get release notes from changelog
+. "$PSScriptRoot\read-release-notes.ps1"
 $releaseNotesMarkDown = . Read-ReleaseNotes -Path ($File | Split-Path)
 $releaseNotes = "";
 
+# Clean out GitHub issue links from release notes
 $pos = 1;
 foreach ($line in $releaseNotesMarkDown) {
 
@@ -31,6 +37,7 @@ foreach ($line in $releaseNotesMarkDown) {
 	$pos ++;
 }
 
+# Write the release notes to CSPROJ
 [xml]$xmlDoc = Get-Content $File;
 
 try {

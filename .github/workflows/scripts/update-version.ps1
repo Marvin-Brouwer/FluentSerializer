@@ -1,3 +1,7 @@
+###
+# Writes the version to the CSPROJ file for correct package generating
+###
+
 Param (
 	[Parameter(Mandatory=$true)]  [String]$Version,
 	[Parameter(Mandatory=$true)]  [String]$File
