@@ -9,12 +9,14 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\docs\logo\NuGetIcon.json.ico</ApplicationIcon>
 		<PackageIcon>NuGetIcon.json.png</PackageIcon>
+        <PackageReadmeFile>Readme.NuGet.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Company>N/A</Company>
 		<Copyright>Apache-2.0</Copyright>
 		<PackageProjectUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Marvin-Brouwer/FluentSerializer#readme</RepositoryUrl>
 		<Version /> <!-- Version will be replaced by release pipeline -->
+		<PackageReleaseNotes /> <!-- PackageReleaseNotes will be replaced by release pipeline -->
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
@@ -23,6 +25,10 @@
 
 	<ItemGroup>
 		<None Include="..\..\docs\logo\NuGetIcon.json.png" Visible="false">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="Readme.NuGet.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

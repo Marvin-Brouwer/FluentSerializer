@@ -13,11 +13,12 @@
 
 [//]: # (Body)
 
-This library contains the core parts of the serializer logic.
+The `FluentSerializer.Core` library contains the core parts of the serializer logic.
 Meaning:
 
 - Shared interfaces
 - Shared code that's not prone to changes
+- Shared code that's reusable across different formats
 
 Currently this solution only contains a `FluentSerializer.Core` project.  
 If there tends to be a lot of shared code with code that's prone to change, that part may get its own project.  

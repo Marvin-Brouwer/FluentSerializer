@@ -13,7 +13,7 @@
 
 [//]: # (Body)
 
-This library contains an `IJsonConverter` that is capable to convert to and from the JSON data models used by `FluentSerializer.Json` internally.
+The `FluentSerializer.Json.Converter.DefaultJson` library contains an `IJsonConverter` that is capable to convert to and from the JSON data models used by `FluentSerializer.Json` internally.
 
 This can be useful for the following scenarios:
 

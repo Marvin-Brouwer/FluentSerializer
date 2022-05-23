@@ -14,7 +14,7 @@
 [//]: # (Body)
 [DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
 
-This library is responsible for registering the FluentSerializer for JSON using
+The `FluentSerializer.Json.DependencyInjection.NetCoreDefault` library is responsible for registering the FluentSerializer for JSON using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage

@@ -13,9 +13,7 @@
 
 [//]: # (Body)
 
-This library is responsible for exposing the JSON API and implementing the JSON conversion logic.
-
-See:
+The `FluentSerializer.Json` library is responsible for exposing the JSON API and implementing the JSON conversion logic.
 
 - [JSON spec](https://www.json.org/json-en.html)
 - [JSONC spec](https://code.visualstudio.com/docs/languages/json#_json-with-comments)

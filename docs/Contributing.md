@@ -146,8 +146,18 @@ Please don't squash, we care about the merge history.
 [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
 The target branch should be the `main` branch unless you're instructed to use a different branch by a maintainer.  
 
+#### Final pull request  
+  
+When finalizing your change please make sure you:
+
+* State it's meant for merging
+* Turn on auto merge
+* Add release notes to the `Changelog.md` in the projects you changed, with a link to the GitHub issue.
+  Make sure it's in the `## @next` chapter so it get's added to the next package publish automagically.
+  Eg. `- [#150](https://github.com/Marvin-Brouwer/FluentSerializer/issues/150) Added release notes`
+
 ### Release management  
   
 Once your feature is merged a maintainer will take over.  
-A deploy will be scheduled and once the deploy is done the maintainer will close the issue.  
+A deploy will be scheduled.  
 See: [Maintaining: Release management](./Maintaining.md#release-management)

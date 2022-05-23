@@ -12,7 +12,8 @@
 </h1>
 
 [//]: # (Body)
-See:
+
+The `FluentSerializer.Xml` library is responsible for exposing the XML API and implementing the XML conversion logic.
 
 - [XML spec](https://www.w3.org/TR/xml)
 

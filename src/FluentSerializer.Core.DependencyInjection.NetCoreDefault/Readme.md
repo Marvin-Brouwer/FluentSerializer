@@ -14,7 +14,7 @@
 [//]: # (Body)
 [DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
 
-This library contains some basic logic to help register the specific serializer using
+The `FluentSerializer.Core.DependencyInjection.NetCoreDefault` library contains some basic logic to help register the specific serializer using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 
 ## Usage
