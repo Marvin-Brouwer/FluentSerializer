@@ -22,6 +22,8 @@ public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
 	public bool CanConvert(in Type targetType) => typeof(string) == targetType;
 	/// <inheritdoc />
 	public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
+	/// <inheritdoc />
+	public virtual int ConverterHashCode { get; } = typeof(RequestTypeValueConverter).GetHashCode();
 
 	/// <inheritdoc />
 	public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)

@@ -39,6 +39,9 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(IMavenlinkEntity).IsAssignableFrom(targetType);
 
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(MavenlinkIdReferenceConverter).GetHashCode();
+
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 		throw new NotSupportedException();
 
