@@ -15,17 +15,18 @@ using static FluentSerializer.Json.JsonBuilder;
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="DateTime.ToString(string?)"/>
-/// and <see cref="DateTime.ParseExact(string, string, IFormatProvider?, DateTimeStyles)"/>
+/// Basically test if this converter behaves exactly like <see cref="DateTime.ToString()"/>
+/// and <see cref="DateTime.Parse(string, IFormatProvider?)"/>
 /// </summary>
-public sealed class DateTimeByFormatConverterTests
+public sealed class DefaultDateTimeConverterTests
 {
+	private static readonly string DateTimeString = "2096-04-20T04:20:00Z";
 	private static readonly DateTime DateTimeValue = DateTime.Parse(
-		"2096-04-20T04:20:00Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
-	
+		DateTimeString, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
-	public DateTimeByFormatConverterTests()
+	public DefaultDateTimeConverterTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
@@ -34,22 +35,31 @@ public sealed class DateTimeByFormatConverterTests
 
 	private static IEnumerable<object[]> GenerateConvertibleData()
 	{
-		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+		yield return new object[] { true, "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
+		yield return new object[] { false, "\"4/20/2096\"", new CultureInfo("en-US") };
+		yield return new object[] { true, "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
+		yield return new object[] { true, "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+	}
+
+	private static IEnumerable<object[]> GenerateCultureOptions()
+	{
+		yield return new object[] { CultureInfo.InvariantCulture };
+		yield return new object[] { new CultureInfo("en") };
+		yield return new object[] { new CultureInfo("en-US") };
+		yield return new object[] { new CultureInfo("nl-NL") };
 	}
 
 	#region Serialize
 
 	[Theory,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
-		MemberData(nameof(GenerateConvertibleData))]
-	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
+		MemberData(nameof(GenerateCultureOptions))]
+	public void SerializePattern_ReturnsString(CultureInfo cultureInfo)
 	{
 		// Arrange
-		var expected = Value(expectedValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
+		CultureInfo.CurrentCulture = cultureInfo;
+		var expected = Value($"\"{DateTimeString}\"");
+		var sut = new DefaultDateTimeConverter();
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeValue.GetType());
@@ -65,11 +75,12 @@ public sealed class DateTimeByFormatConverterTests
 	[Theory,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void Deserialize_Convertible_ReturnsValue(string pattern, string inputValue, CultureInfo cultureInfo)
+	public void Deserialize_Convertible_ReturnsValue(bool hasTime, string inputValue, CultureInfo cultureInfo)
 	{
 		// Arrange
+		CultureInfo.CurrentCulture = cultureInfo;
 		var input = Value(inputValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.None);
+		var sut = new DefaultDateTimeConverter();
 
 		_contextMock
 			.WithPropertyType(DateTimeValue.GetType());
@@ -80,7 +91,7 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Assert
 		canConvert.Should().BeTrue();
-		if (pattern == "d") result.Should().BeSameDateAs(DateTimeValue);
+		if (!hasTime) result.Should().BeSameDateAs(DateTimeValue);
 		else result.Should().Be(DateTimeValue);
 	}
 
@@ -90,7 +101,7 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var input = Value("SomeText");
-		var sut = new DateTimeByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.None);
+		var sut = new DefaultDateTimeConverter();
 
 		_contextMock
 			.WithPropertyType(typeof(int));
@@ -101,7 +112,7 @@ public sealed class DateTimeByFormatConverterTests
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
-			.WithMessage("String 'SomeText' was not recognized as a valid DateTime.");
+			.WithMessage("The string 'SomeText' was not recognized as a valid DateTime. There is an unknown word starting at index '0'.");
 	}
 	#endregion
 }
