@@ -66,6 +66,13 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public IJsonConverter TimeSpan() => DefaultTimeSpanConverter;
 
 	/// <inheritdoc />
+	public Func<IJsonConverter> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None)
+	{
+		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		return () => new TimeSpanByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
+	}
+
+	/// <inheritdoc />
 	public IJsonConverter Collection() => CollectionConverter;
 
 	/// <inheritdoc />

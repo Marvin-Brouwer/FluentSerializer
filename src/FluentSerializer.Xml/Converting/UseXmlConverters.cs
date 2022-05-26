@@ -68,6 +68,13 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	/// <inheritdoc />
 	public SimpleTypeConverter<TimeSpan> TimeSpan() => DefaultTimeSpanConverter;
 
+	/// <inheritdoc />
+	public Func<SimpleTypeConverter<TimeSpan>> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None)
+	{
+		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		return () => new TimeSpanByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
+	}
+
 	/// <inheritdoc/>
 	public Func<IXmlConverter<IXmlElement>> Collection(in bool wrapCollection = true)
 	{

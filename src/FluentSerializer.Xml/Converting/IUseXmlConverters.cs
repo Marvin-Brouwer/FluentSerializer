@@ -44,6 +44,9 @@ public interface IUseXmlConverters
 	/// <inheritdoc cref="DefaultTimeSpanConverter" />
 	SimpleTypeConverter<TimeSpan> TimeSpan();
 
+	/// <inheritdoc cref="TimeSpanByFormatConverter" />
+	Func<SimpleTypeConverter<TimeSpan>> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None);
+
 	/// <summary>
 	/// Converts most DotNet collections
 	/// </summary>

@@ -42,6 +42,9 @@ public interface IUseJsonConverters
 	/// <inheritdoc cref="DefaultTimeSpanConverter" />
 	IJsonConverter TimeSpan();
 
+	/// <inheritdoc cref="TimeSpanByFormatConverter" />
+	Func<IJsonConverter> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None);
+
 	/// <inheritdoc cref="CollectionConverter" />
 	IJsonConverter Collection();
 
