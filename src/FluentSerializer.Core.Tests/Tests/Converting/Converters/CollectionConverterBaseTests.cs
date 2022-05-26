@@ -3,6 +3,7 @@ using FluentSerializer.Core.Converting.Converters;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
@@ -94,6 +95,7 @@ public sealed class CollectionConverterBaseTests
 	}
 
 	/// <inheritdoc />
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
 	private class TestConverter : CollectionConverterBase
 	{
 		/// <inheritdoc cref="CollectionConverterBase.GetEnumerableInstance" />
@@ -101,6 +103,7 @@ public sealed class CollectionConverterBaseTests
 		{
 			return CollectionConverterBase.GetEnumerableInstance(in targetType);
 		}
+
 
 		/// <inheritdoc cref="CollectionConverterBase.FinalizeEnumerableInstance" />
 		public new IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
