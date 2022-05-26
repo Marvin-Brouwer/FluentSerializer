@@ -40,6 +40,12 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 			UseXmlConverters.ConvertibleConverter,
 			UseXmlConverters.DefaultEnumConverter,
 			UseXmlConverters.DefaultDateTimeConverter,
+			UseXmlConverters.DefaultDateTimeOffsetConverter,
+#if NET5_0_OR_GREATER
+			UseXmlConverters.DefaultDateOnlyConverter,
+			UseXmlConverters.DefaultTimeOnlyConverter,
+#endif
+			UseXmlConverters.DefaultTimeSpanConverter,
 			// Collection converters
 			UseXmlConverters.WrappedCollectionConverter
 		};

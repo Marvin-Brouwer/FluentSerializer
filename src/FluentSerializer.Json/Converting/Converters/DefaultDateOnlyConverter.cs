@@ -9,7 +9,9 @@ namespace FluentSerializer.Json.Converting.Converters;
 
 /// <summary>
 /// Converts dates <br/>
-/// Using <see cref="DateOnly.Parse(string, IFormatProvider?)"/> with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
+/// Using <see cref="DateOnly.Parse(string, IFormatProvider?, DateTimeStyles)"/> 
+/// with <see cref="CultureInfo.CurrentCulture"/>
+/// and <see cref="DateTimeStyles.NoCurrentDateDefault"/> for deserializing <br/>
 /// Using <c>DateOnly.ToString(IsoDateFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like yyyy-MM-dd
 /// </summary>

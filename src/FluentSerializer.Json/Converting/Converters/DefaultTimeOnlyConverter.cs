@@ -9,7 +9,9 @@ namespace FluentSerializer.Json.Converting.Converters;
 
 /// <summary>
 /// Converts times <br/>
-/// Using <see cref="TimeOnly.Parse(string, IFormatProvider?)"/> with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
+/// Using <see cref="TimeOnly.Parse(string, IFormatProvider?, DateTimeStyles)"/>
+/// with <see cref="CultureInfo.CurrentCulture"/>
+/// and <see cref="DateTimeStyles.NoCurrentDateDefault"/> for deserializing <br/>
 /// Using <c>TimeOnly.ToString(IsoTimeFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like HH:mm:ssK
 /// </summary>
