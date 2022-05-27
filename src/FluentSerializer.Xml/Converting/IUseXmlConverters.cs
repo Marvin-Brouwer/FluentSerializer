@@ -19,26 +19,26 @@ public interface IUseXmlConverters
 	SimpleTypeConverter<DateTime> DateTime();
 
 	/// <inheritdoc cref="DateTimeByFormatConverter" />
-	Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
 
 	/// <inheritdoc cref="DefaultDateTimeOffsetConverter" />
 	SimpleTypeConverter<DateTimeOffset> DateTimeOffset();
 
 	/// <inheritdoc cref="DateTimeOffsetByFormatConverter" />
-	Func<SimpleTypeConverter<DateTimeOffset>> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<SimpleTypeConverter<DateTimeOffset>> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
 
 #if NET5_0_OR_GREATER
 	/// <inheritdoc cref="DefaultDateOnlyConverter" />
 	SimpleTypeConverter<DateOnly> DateOnly();
 
 	/// <inheritdoc cref="DateOnlyByFormatConverter" />
-	Func<SimpleTypeConverter<DateOnly>> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<SimpleTypeConverter<DateOnly>> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
 
 	/// <inheritdoc cref="DefaultTimeOnlyConverter" />
 	SimpleTypeConverter<TimeOnly> TimeOnly();
 
 	/// <inheritdoc cref="TimeOnlyByFormatConverter" />
-	Func<SimpleTypeConverter<TimeOnly>> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<SimpleTypeConverter<TimeOnly>> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
 #endif
 
 	/// <inheritdoc cref="DefaultTimeSpanConverter" />

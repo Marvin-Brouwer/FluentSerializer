@@ -6,7 +6,8 @@ namespace FluentSerializer.Xml.Converting.Converters;
 
 /// <summary>
 /// Converts times <br/>
-/// Using <see cref="TimeSpan.Parse(string, IFormatProvider?)"/> with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
+/// Using <see cref="TimeSpan.Parse(string, IFormatProvider?)"/>
+/// with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
 /// Using <c>TimeSpan.ToString(null, CultureInfo.CurrentCulture)</c> for serializing
 /// </summary>
 public sealed class DefaultTimeSpanConverter : SimpleTypeConverter<TimeSpan>

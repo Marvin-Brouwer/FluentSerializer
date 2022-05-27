@@ -109,7 +109,7 @@ public sealed class XmlTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
 	public void DeserializeFromNode_NonNullableValueIsEmpty_Throws()
 	{
 		// Arrange
