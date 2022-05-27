@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// Converts times <br/>
 /// Using <see cref="TimeOnly.Parse(string, IFormatProvider?, DateTimeStyles)"/>
 /// with <see cref="CultureInfo.CurrentCulture"/>
-/// and <see cref="DateTimeStyles.NoCurrentDateDefault"/> for deserializing <br/>
+/// and <see cref="DateTimeStyles.AllowWhiteSpaces"/> for deserializing <br/>
 /// Using <c>TimeOnly.ToString(IsoTimeFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like HH:mm:ssK
 /// </summary>
@@ -23,7 +23,7 @@ public sealed class DefaultTimeOnlyConverter : SimpleTypeConverter<TimeOnly>
 		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
 			? currentValue[1..^1]
 			: currentValue;
-		return TimeOnly.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.NoCurrentDateDefault);
+		return TimeOnly.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces);
 	}
 
 	/// <inheritdoc />

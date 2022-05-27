@@ -17,26 +17,26 @@ public interface IUseJsonConverters
 	IJsonConverter DateTime();
 
 	/// <inheritdoc cref="DateTimeByFormatConverter" />
-	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
 
 	/// <inheritdoc cref="DefaultDateTimeOffsetConverter" />
 	IJsonConverter DateTimeOffset();
 
 	/// <inheritdoc cref="DateTimeOffsetByFormatConverter" />
-	Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
 
 #if NET5_0_OR_GREATER
 	/// <inheritdoc cref="DefaultDateOnlyConverter" />
 	IJsonConverter DateOnly();
 
 	/// <inheritdoc cref="DateOnlyByFormatConverter" />
-	Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
 
 	/// <inheritdoc cref="DefaultTimeOnlyConverter" />
 	IJsonConverter TimeOnly();
 
 	/// <inheritdoc cref="TimeOnlyByFormatConverter" />
-	Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
 #endif
 
 	/// <inheritdoc cref="DefaultTimeSpanConverter" />

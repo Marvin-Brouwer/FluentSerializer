@@ -16,17 +16,16 @@ using static FluentSerializer.Json.JsonBuilder;
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="DateTime.ToString(string?)"/>
-/// and <see cref="DateTime.ParseExact(string, string, IFormatProvider?, DateTimeStyles)"/>
+/// Basically test if this converter behaves exactly like <see cref="DateOnly.ToString(string?)"/>
+/// and <see cref="DateOnly.ParseExact(string, string, IFormatProvider?, DateTimeStyles)"/>
 /// </summary>
-public sealed class DateTimeByFormatConverterTests
+public sealed class DateOnlyByFormatConverterTests
 {
-	private static readonly DateTime DateTimeValue = DateTime.Parse(
-		"2096-04-20T04:20:00Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+	private static readonly DateOnly DateOnlyValue = DateOnly.Parse("2096-04-20", CultureInfo.InvariantCulture);
 	
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
-	public DateTimeByFormatConverterTests()
+	public DateOnlyByFormatConverterTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
@@ -35,10 +34,9 @@ public sealed class DateTimeByFormatConverterTests
 
 	private static IEnumerable<object[]> GenerateConvertibleData()
 	{
-		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+		yield return new object[] { "yyyy-MM-dd", "\"2096-04-20\"", CultureInfo.InvariantCulture };
+		yield return new object[] { "M/d/yyyy", "\"4/20/2096\"", new CultureInfo("en-US") };
+		yield return new object[] { "dd-MM-yyyy", "\"20-04-2096\"", new CultureInfo("nl-NL") };
 	}
 
 	#region Serialize
@@ -50,11 +48,11 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var expected = Value(expectedValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
+		var sut = new DateOnlyByFormatConverter(pattern, cultureInfo, DateTimeStyles.AllowWhiteSpaces);
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = sut.Serialize(DateTimeValue, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateOnlyValue.GetType());
+		var result = sut.Serialize(DateOnlyValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -70,19 +68,18 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var input = Value(inputValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.None);
+		var sut = new DateOnlyByFormatConverter(pattern, cultureInfo, DateTimeStyles.AllowWhiteSpaces);
 
 		_contextMock
-			.WithPropertyType(DateTimeValue.GetType());
+			.WithPropertyType(DateOnlyValue.GetType());
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = (DateTime)sut.Deserialize(input, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateOnlyValue.GetType());
+		var result = (DateOnly)sut.Deserialize(input, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
-		if (pattern == "d") result.Should().BeSameDateAs(DateTimeValue);
-		else result.Should().Be(DateTimeValue);
+		result.Should().Be(DateOnlyValue);
 	}
 
 	[Fact,
@@ -91,18 +88,18 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var input = Value("SomeText");
-		var sut = new DateTimeByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.None);
+		var sut = new DateOnlyByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
 
 		_contextMock
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTime?)sut.Deserialize(input, _contextMock.Object);
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
-			.WithMessage("String 'SomeText' was not recognized as a valid DateTime.");
+			.WithMessage("String 'SomeText' was not recognized as a valid DateOnly.");
 	}
 	#endregion
 }

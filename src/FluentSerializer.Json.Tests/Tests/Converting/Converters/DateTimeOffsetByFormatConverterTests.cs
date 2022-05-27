@@ -16,17 +16,17 @@ using static FluentSerializer.Json.JsonBuilder;
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="DateTime.ToString(string?)"/>
-/// and <see cref="DateTime.ParseExact(string, string, IFormatProvider?, DateTimeStyles)"/>
+/// Basically test if this converter behaves exactly like <see cref="DateTimeOffset.ToString(string?)"/>
+/// and <see cref="DateTimeOffset.ParseExact(string, string, IFormatProvider?, DateTimeStyles)"/>
 /// </summary>
-public sealed class DateTimeByFormatConverterTests
+public sealed class DateTimeOffsetByFormatConverterTests
 {
-	private static readonly DateTime DateTimeValue = DateTime.Parse(
-		"2096-04-20T04:20:00Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+	private static readonly DateTimeOffset DateTimeOffsetValue = DateTimeOffset.Parse(
+		"2096-04-20T04:20:00+00:00", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 	
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
-	public DateTimeByFormatConverterTests()
+	public DateTimeOffsetByFormatConverterTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
@@ -35,10 +35,10 @@ public sealed class DateTimeByFormatConverterTests
 
 	private static IEnumerable<object[]> GenerateConvertibleData()
 	{
-		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+		yield return new object[] { "yyyy-MM-dd HH:mm:ss zzz", "\"2096-04-20 04:20:00 +00:00\"", CultureInfo.InvariantCulture };
+		yield return new object[] { "M/d/yyyy zzz", "\"4/20/2096 +00:00\"", new CultureInfo("en-US") };
+		yield return new object[] { "M/d/yyyy h:mm tt zzz", "\"4/20/2096 4:20 AM +00:00\"", new CultureInfo("en-US") };
+		yield return new object[] { "dd-MM-yyyy HH:mm zzz", "\"20-04-2096 04:20 +00:00\"", new CultureInfo("nl-NL") };
 	}
 
 	#region Serialize
@@ -50,11 +50,11 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var expected = Value(expectedValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
+		var sut = new DateTimeOffsetByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = sut.Serialize(DateTimeValue, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateTimeOffsetValue.GetType());
+		var result = sut.Serialize(DateTimeOffsetValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -70,19 +70,19 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var input = Value(inputValue);
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.None);
+		var sut = new DateTimeOffsetByFormatConverter(pattern, cultureInfo, DateTimeStyles.None);
 
 		_contextMock
-			.WithPropertyType(DateTimeValue.GetType());
+			.WithPropertyType(DateTimeOffsetValue.GetType());
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = (DateTime)sut.Deserialize(input, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateTimeOffsetValue.GetType());
+		var result = (DateTimeOffset)sut.Deserialize(input, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
-		if (pattern == "d") result.Should().BeSameDateAs(DateTimeValue);
-		else result.Should().Be(DateTimeValue);
+		if (pattern == "M/d/yyyy zzz") result.Should().BeSameDateAs(DateTimeOffsetValue);
+		else result.ToUniversalTime().Should().Be(DateTimeOffsetValue);
 	}
 
 	[Fact,
@@ -91,13 +91,13 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		// Arrange
 		var input = Value("SomeText");
-		var sut = new DateTimeByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.None);
+		var sut = new DateTimeOffsetByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
 		_contextMock
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTime?)sut.Deserialize(input, _contextMock.Object);
+		var result = () => (DateTimeOffset?)sut.Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()

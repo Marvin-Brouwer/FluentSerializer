@@ -16,18 +16,17 @@ using static FluentSerializer.Json.JsonBuilder;
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="DateTime.ToString()"/>
-/// and <see cref="DateTime.Parse(string, IFormatProvider?)"/>
+/// Basically test if this converter behaves exactly like <see cref="DateOnly.ToString()"/>
+/// and <see cref="DateOnly.Parse(string, IFormatProvider?)"/>
 /// </summary>
-public sealed class DefaultDateTimeConverterTests
+public sealed class DefaultDateOnlyConverterTests
 {
-	private static readonly string DateTimeString = "2096-04-20T04:20:00Z";
-	private static readonly DateTime DateTimeValue = DateTime.Parse(
-		DateTimeString, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+	private static readonly string DateOnlyString = "2096-04-20";
+	private static readonly DateOnly DateOnlyValue = DateOnly.Parse(DateOnlyString, CultureInfo.InvariantCulture);
 
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
-	public DefaultDateTimeConverterTests()
+	public DefaultDateOnlyConverterTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
@@ -36,10 +35,9 @@ public sealed class DefaultDateTimeConverterTests
 
 	private static IEnumerable<object[]> GenerateConvertibleData()
 	{
-		yield return new object[] { true, "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { false, "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { true, "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
-		yield return new object[] { true, "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+		yield return new object[] { "\"2096-04-20\"", CultureInfo.InvariantCulture };
+		yield return new object[] { "\"4/20/2096\"", new CultureInfo("en-US") };
+		yield return new object[] { "\"20-04-2096\"", new CultureInfo("nl-NL") };
 	}
 
 	private static IEnumerable<object[]> GenerateCultureOptions()
@@ -59,12 +57,12 @@ public sealed class DefaultDateTimeConverterTests
 	{
 		// Arrange
 		CultureInfo.CurrentCulture = cultureInfo;
-		var expected = Value($"\"{DateTimeString}\"");
-		var sut = new DefaultDateTimeConverter();
+		var expected = Value($"\"{DateOnlyString}\"");
+		var sut = new DefaultDateOnlyConverter();
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = sut.Serialize(DateTimeValue, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateOnlyValue.GetType());
+		var result = sut.Serialize(DateOnlyValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -76,24 +74,23 @@ public sealed class DefaultDateTimeConverterTests
 	[Theory,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void Deserialize_Convertible_ReturnsValue(bool hasTime, string inputValue, CultureInfo cultureInfo)
+	public void Deserialize_Convertible_ReturnsValue(string inputValue, CultureInfo cultureInfo)
 	{
 		// Arrange
 		CultureInfo.CurrentCulture = cultureInfo;
 		var input = Value(inputValue);
-		var sut = new DefaultDateTimeConverter();
+		var sut = new DefaultDateOnlyConverter();
 
 		_contextMock
-			.WithPropertyType(DateTimeValue.GetType());
+			.WithPropertyType(DateOnlyValue.GetType());
 
 		// Act
-		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var result = (DateTime)sut.Deserialize(input, _contextMock.Object)!;
+		var canConvert = sut.CanConvert(DateOnlyValue.GetType());
+		var result = (DateOnly)sut.Deserialize(input, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
-		if (!hasTime) result.Should().BeSameDateAs(DateTimeValue);
-		else result.Should().Be(DateTimeValue);
+		result.Should().Be(DateOnlyValue);
 	}
 
 	[Fact,
@@ -102,18 +99,18 @@ public sealed class DefaultDateTimeConverterTests
 	{
 		// Arrange
 		var input = Value("SomeText");
-		var sut = new DefaultDateTimeConverter();
+		var sut = new DefaultDateOnlyConverter();
 
 		_contextMock
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTime?)sut.Deserialize(input, _contextMock.Object);
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
-			.WithMessage("The string 'SomeText' was not recognized as a valid DateTime. There is an unknown word starting at index '0'.");
+			.WithMessage("String 'SomeText' was not recognized as a valid DateOnly.");
 	}
 	#endregion
 }

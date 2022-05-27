@@ -24,7 +24,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public IJsonConverter DateTime() => DefaultDateTimeConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new DateTimeByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
@@ -34,7 +34,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public IJsonConverter DateTimeOffset() => DefaultDateTimeOffsetConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new DateTimeOffsetByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
@@ -45,7 +45,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public IJsonConverter DateOnly() => DefaultDateOnlyConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new DateOnlyByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
@@ -55,7 +55,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public IJsonConverter TimeOnly() => DefaultTimeOnlyConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces)
 	{
 		Guard.Against.NullOrWhiteSpace(format, nameof(format));
 		return () => new TimeOnlyByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);

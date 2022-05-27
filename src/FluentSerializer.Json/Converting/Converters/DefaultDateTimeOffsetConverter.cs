@@ -8,7 +8,9 @@ namespace FluentSerializer.Json.Converting.Converters;
 
 /// <summary>
 /// Converts dates <br/>
-/// Using <see cref="DateTimeOffset.Parse(string, IFormatProvider?)"/> with <see cref="CultureInfo.CurrentCulture"/> for deserializing <br/>
+/// Using <see cref="DateTimeOffset.Parse(string, IFormatProvider?)"/> 
+/// with <see cref="CultureInfo.CurrentCulture"/>
+/// and <see cref="DateTimeStyles.AdjustToUniversal"/> for deserializing <br/>
 /// Using <c>DateTimeOffset.ToUniversalTime().ToString(IsoDateTimeFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like yyyy-MM-ddTHH:mm:ssK
 /// </summary>
@@ -20,7 +22,7 @@ public sealed class DefaultDateTimeOffsetConverter : SimpleTypeConverter<DateTim
 		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
 			? currentValue[1..^1]
 			: currentValue;
-		return DateTimeOffset.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.NoCurrentDateDefault);
+		return DateTimeOffset.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AdjustToUniversal);
 	}
 
 	/// <inheritdoc />

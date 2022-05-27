@@ -11,7 +11,7 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// Converts dates <br/>
 /// Using <see cref="DateOnly.Parse(string, IFormatProvider?, DateTimeStyles)"/> 
 /// with <see cref="CultureInfo.CurrentCulture"/>
-/// and <see cref="DateTimeStyles.NoCurrentDateDefault"/> for deserializing <br/>
+/// and <see cref="DateTimeStyles.AllowWhiteSpaces"/> for deserializing <br/>
 /// Using <c>DateOnly.ToString(IsoDateFormat, CultureInfo.CurrentCulture)</c> for serializing
 /// with a format like yyyy-MM-dd
 /// </summary>
@@ -23,7 +23,7 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
 			? currentValue[1..^1]
 			: currentValue;
-		return DateOnly.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.NoCurrentDateDefault);
+		return DateOnly.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces);
 	}
 
 	/// <inheritdoc />
