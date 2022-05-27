@@ -40,5 +40,17 @@ public interface IConverter : IComparable
 	/// </summary>
 	SerializerDirection Direction { get; }
 
-	int IComparable.CompareTo(object? obj) => obj?.GetHashCode() ?? 0;
+	/// <inheritdoc cref="object.GetHashCode()"/>
+	int GetHashCode() => ConverterHashCode;
+
+	/// <inheritdoc />
+	int ConverterHashCode { get; }
+
+	int IComparable.CompareTo(object? obj)
+	{
+		if (obj is null) return 0;
+		if (obj is not IConverter converter) throw new NotSupportedException("Comparing is only supported with other IConverters");
+
+		return converter.ConverterHashCode;
+	}
 }

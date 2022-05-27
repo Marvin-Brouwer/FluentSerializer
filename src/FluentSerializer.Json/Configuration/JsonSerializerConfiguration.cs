@@ -34,7 +34,13 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 			// Built-in converters
 			UseJsonConverters.ConvertibleConverter,
 			UseJsonConverters.DefaultEnumConverter,
-			UseJsonConverters.DefaultDateConverter,
+			UseJsonConverters.DefaultDateTimeConverter,
+			UseJsonConverters.DefaultDateTimeOffsetConverter,
+#if NET5_0_OR_GREATER
+			UseJsonConverters.DefaultDateOnlyConverter,
+			UseJsonConverters.DefaultTimeOnlyConverter,
+#endif
+			UseJsonConverters.DefaultTimeSpanConverter,
 			// Collection converters
 			UseJsonConverters.CollectionConverter
 		};

@@ -43,6 +43,9 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 	/// <inheritdoc cref="CollectionConverterBase.Direction" />
 	public bool CanConvert(in Type targetType) => true;
 
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(MavenlinkCustomFieldReferenceConverter).GetHashCode();
+
 	public MavenlinkCustomFieldReferenceConverter(Func<INamingStrategy> namingStrategy)
 	{
 		_namingStrategy = namingStrategy();

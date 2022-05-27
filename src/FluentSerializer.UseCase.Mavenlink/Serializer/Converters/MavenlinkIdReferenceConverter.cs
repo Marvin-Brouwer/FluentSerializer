@@ -39,6 +39,9 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(IMavenlinkEntity).IsAssignableFrom(targetType);
 
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(MavenlinkIdReferenceConverter).GetHashCode();
+
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 		throw new NotSupportedException();
 
@@ -62,17 +65,14 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 		var hasCalculatedStore = context.Data<MavenlinkIdReferenceConverter, bool>();
 		if (hasCalculatedStore.TryGetValue(stringValue, out bool hasCalculated) && hasCalculated) return default;
 
-		var targetNodeReferenceCollection = (context.RootNode as IJsonObject)!
-			.GetProperty(targetNodeCollectionName)?
-			.Value as IJsonObject;
-
+		var targetNodeReferenceCollection = FindTargetNodeReferenceCollection(targetNodeCollectionName, context);
 		if (targetNodeReferenceCollection is null)
 		{
 			hasCalculatedStore.Add(stringValue, true);
 			return default;
 		}
-		var targetReferenceNode = targetNodeReferenceCollection.GetProperty(stringValue)?.Value as IJsonObject;
 
+		var targetReferenceNode = FindTargetReferenceNode(stringValue, targetNodeReferenceCollection);
 		if (targetReferenceNode is null)
 		{
 			hasCalculatedStore.Add(stringValue, true);
@@ -83,5 +83,21 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 		var deserializedInstance = ((IAdvancedJsonSerializer)context.CurrentSerializer).Deserialize(targetReferenceNode, targetType, context);
 
 		return deserializedInstance;
+	}
+
+	private static IJsonObject? FindTargetNodeReferenceCollection(string targetNodeCollectionName, ISerializerContext<IJsonNode> context)
+	{
+		var rootNode = (context.RootNode as IJsonObject)!;
+
+		return rootNode
+			.GetProperty(targetNodeCollectionName)?
+			.Value as IJsonObject;
+	}
+
+	private static IJsonObject? FindTargetReferenceNode(string stringValue, IJsonObject targetNodeReferenceCollection)
+	{
+		return targetNodeReferenceCollection
+			.GetProperty(stringValue)?
+			.Value as IJsonObject;
 	}
 }

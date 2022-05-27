@@ -10,12 +10,15 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// <summary>
 /// Converts most dotnet collections
 /// </summary>
-public abstract class CollectionConverterBase {
+public abstract class CollectionConverterBase : IConverter {
 
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public virtual bool CanConvert(in Type targetType) => targetType.IsEnumerable();
+
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(IEnumerable).GetHashCode();
 
 	/// <summary>
 	/// Create a new instance of <see cref="IList"/> that matches the passed <paramref name="targetType"/> most closely
@@ -91,7 +94,4 @@ public abstract class CollectionConverterBase {
 		var genericType = type.GetTypeInfo().GenericTypeArguments;
 		return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
 	}
-
-	/// <inheritdoc />
-	public override int GetHashCode() => typeof(IEnumerable).GetHashCode();
 }

@@ -9,7 +9,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 /// yyyy-MM-dd
 /// </example>
 /// </summary>
-public sealed class SimpleDateConverter : DateByFormatConverter
+public sealed class SimpleDateConverter : DateTimeByFormatConverter
 {
 	private const string DateFormat = "yyyy-MM-dd";
 	private static readonly CultureInfo CultureInfo = CultureInfo.InvariantCulture;

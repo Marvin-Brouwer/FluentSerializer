@@ -6,13 +6,16 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// <summary>
 /// Converts types that implement <see cref="IConvertible"/>
 /// </summary>
-public abstract class ConvertibleConverterBase
+public abstract class ConvertibleConverterBase : IConverter
 {
 	/// <inheritdoc cref="IConverter.Direction" />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
 
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
+
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(IConvertible).GetHashCode();
 
 	/// <summary>
 	/// Wrapper around <see cref="Convert.ToString(bool)"/>
@@ -28,7 +31,4 @@ public abstract class ConvertibleConverterBase
 
 		return Convert.ChangeType(currentValue, targetType);
 	}
-
-	/// <inheritdoc />
-	public override int GetHashCode() => typeof(IConvertible).GetHashCode();
 }

@@ -6,12 +6,15 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// <summary>
 /// This class contains methods that are used when converting simple types
 /// </summary>
-public abstract class SimpleTypeConverterBase<TObject>
+public abstract class SimpleTypeConverterBase<TObject> : IConverter
 {
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public virtual bool CanConvert(in Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
+
+	/// <inheritdoc />
+	public virtual int ConverterHashCode { get; } = typeof(TObject).GetHashCode();
 
 	/// <summary>
 	/// Abstract placeholder for converting to string logic

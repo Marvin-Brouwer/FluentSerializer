@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using FluentSerializer.Core.Converting.Converters;
 using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
 
@@ -149,6 +150,7 @@ public sealed class ConvertibleConverterBaseTests
 	#endregion
 
 	/// <inheritdoc cref="ConvertibleConverterBase"/>
+	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
 	private sealed class TestConverter : ConvertibleConverterBase
 	{
 		/// <inheritdoc cref="ConvertibleConverterBase.ConvertToString"/>

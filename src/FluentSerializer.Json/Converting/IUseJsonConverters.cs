@@ -1,7 +1,7 @@
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting.Converters;
 using System;
 using System.Globalization;
-using FluentSerializer.Core.Converting.Converters;
 
 namespace FluentSerializer.Json.Converting;
 
@@ -13,11 +13,37 @@ namespace FluentSerializer.Json.Converting;
 /// </remarks>
 public interface IUseJsonConverters
 {
-	/// <inheritdoc cref="DefaultDateConverter" />
+	/// <inheritdoc cref="DefaultDateTimeConverter" />
 	IJsonConverter DateTime();
 
-	/// <inheritdoc cref="DateByFormatConverter" />
-	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None);
+	/// <inheritdoc cref="DateTimeByFormatConverter" />
+	Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
+
+	/// <inheritdoc cref="DefaultDateTimeOffsetConverter" />
+	IJsonConverter DateTimeOffset();
+
+	/// <inheritdoc cref="DateTimeOffsetByFormatConverter" />
+	Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal);
+
+#if NET5_0_OR_GREATER
+	/// <inheritdoc cref="DefaultDateOnlyConverter" />
+	IJsonConverter DateOnly();
+
+	/// <inheritdoc cref="DateOnlyByFormatConverter" />
+	Func<IJsonConverter> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
+
+	/// <inheritdoc cref="DefaultTimeOnlyConverter" />
+	IJsonConverter TimeOnly();
+
+	/// <inheritdoc cref="TimeOnlyByFormatConverter" />
+	Func<IJsonConverter> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces);
+#endif
+
+	/// <inheritdoc cref="DefaultTimeSpanConverter" />
+	IJsonConverter TimeSpan();
+
+	/// <inheritdoc cref="TimeSpanByFormatConverter" />
+	Func<IJsonConverter> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None);
 
 	/// <inheritdoc cref="CollectionConverter" />
 	IJsonConverter Collection();

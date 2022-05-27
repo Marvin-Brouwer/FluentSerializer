@@ -30,6 +30,9 @@ public abstract class EnumConverterBase
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public virtual bool CanConvert(in Type targetType) => targetType.IsEnum;
 
+	/// <inheritdoc />
+	public int ConverterHashCode { get; } = typeof(Enum).GetHashCode();
+
 	/// <inheritdoc cref="EnumConverterBase"/>
 	/// <paramref name="enumFormat">The format to use when reading and writing serialized <c>enum</c> values</paramref>
 	protected EnumConverterBase(EnumFormat enumFormat)
@@ -307,7 +310,4 @@ public abstract class EnumConverterBase
 			return default;
 		}
 	}
-
-	/// <inheritdoc />
-	public override int GetHashCode() => typeof(Enum).GetHashCode();
 }
