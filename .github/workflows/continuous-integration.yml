@@ -427,6 +427,20 @@ jobs:
         sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
+    # 🗃 Publish highest dotnet version benchmark results to job overview
+    ###
+    - name: 🗃 Publish highest dotnet version benchmark results to job overview
+      uses: LouisBrunner/checks-action@v1.2.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Benchmark results - XML
+        conclusion: ${{ job.status }}
+        output: "{\"summary\":\"Benchmark Results XML\"}"
+        output_text_description_file: |
+          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results/
+          xml-serializer-benchmark-netcoreapp_6_0-github.md
+    ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
@@ -435,7 +449,7 @@ jobs:
       with:
         name: benchmark-results-xml
         path: ${{github.workspace}}/benchmark-results
-        retention-days: 1
+        retention-days: 30
     ###
     # 🗃 Cancel after benchmark failure
     # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
