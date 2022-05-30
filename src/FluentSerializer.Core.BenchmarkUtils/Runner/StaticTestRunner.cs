@@ -64,7 +64,7 @@ public abstract class StaticTestRunner
 
 	private static Job CreateJob(string[] parameters)
 	{
-		var quickRun = parameters.Contains("--quick=true");
+		var quickRun = parameters.Contains("--quick");
 		return CreateBasicJob(quickRun)
 #if (DEBUG)
 				.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
@@ -120,35 +120,30 @@ public abstract class StaticTestRunner
 
 		BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
 
-		FixFileNames(dataType, config);
+		FixConsoleArtifactFileName(dataType, config);
+		FixGitHubSummaryFileName(dataType, config);
 	}
 
 	/// <summary>
 	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 	/// </summary>
-	private static void FixFileNames(string dataType, ManualConfig config)
+	private static void FixConsoleArtifactFileName(string dataType, ManualConfig config)
 	{
 		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.WriteLine();
-		Console.WriteLine("Correcting fileName");
+		Console.WriteLine("Correcting console summary fileName");
 		Console.ResetColor();
 
-		var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
-		var markdownSummaryFile = resultsDir
-			.GetFiles("BenchmarkRun-joined-*-report-console.md")
-			.OrderByDescending(directory => directory.CreationTimeUtc)
-			.FirstOrDefault();
-
+		var consoleFilePattern = "BenchmarkRun-joined-*-report-console.md";
+		var markdownSummaryFile = FindFileName(consoleFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
 			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine("No summary found with pattern \"BenchmarkRun-joined-*-report-console.md\"");
+			Console.WriteLine($"No summary found with pattern \"{consoleFilePattern}\"");
 			Console.ResetColor();
 			Console.WriteLine();
 			return;
 		}
-
-		var oldName = markdownSummaryFile.FullName;
 
 		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
@@ -156,11 +151,63 @@ public abstract class StaticTestRunner
 			.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
 			.Replace("-report-console", string.Empty);
 
-		Console.WriteLine("Renaming report");
-		Console.WriteLine($"  from: \"{oldName}\"");
-		Console.WriteLine($"  to: \"{readableFileName}\"");
+		FixFileNames(markdownSummaryFile, readableFileName);
+	}
+
+	/// <summary>
+	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
+	/// </summary>
+	private static void FixGitHubSummaryFileName(string dataType, ManualConfig config)
+	{
+		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.WriteLine();
-		markdownSummaryFile.MoveTo(readableFileName);
+		Console.WriteLine("Correcting GitHub summary filename");
+		Console.ResetColor();
+
+		var gitHubFilePattern = "BenchmarkRun-joined-*-report-console.md";
+		var markdownSummaryFile = FindFileName(gitHubFilePattern, config);
+		if (markdownSummaryFile is null)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine($"No summary found with pattern \"{gitHubFilePattern}\"");
+			Console.ResetColor();
+			Console.WriteLine();
+			return;
+		}
+
+		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
+		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
+		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-github.md";
+		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
+
+		FixFileNames(markdownSummaryFile, Path.Join(parentDirectory.FullName, readableFileName));
+	}
+
+	private static FileInfo? FindFileName(string pattern, ManualConfig config)
+	{
+		var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
+		var markdownSummaryFile = resultsDir
+			.GetFiles(pattern)
+			.OrderByDescending(directory => directory.CreationTimeUtc)
+			.FirstOrDefault();
+
+		return markdownSummaryFile;
+	}
+
+
+	/// <summary>
+	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
+	/// </summary>
+	private static void FixFileNames(FileInfo markdownSummaryFile, string readableFilePath)
+	{
+		var newFileInfo = new FileInfo(readableFilePath);
+
+		Console.WriteLine("Copying report");
+		Console.WriteLine($"  from: \"{markdownSummaryFile.FullName}\"");
+		Console.WriteLine($"  to: \"{newFileInfo.FullName}\"");
+		Console.WriteLine();
+
+		markdownSummaryFile.CopyTo(newFileInfo.FullName, newFileInfo.Exists);
 	}
 
 	public static void RequireElevatedPermissions()

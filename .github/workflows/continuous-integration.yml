@@ -204,7 +204,7 @@ jobs:
               })
 
   test:
-    name: "Test"
+    name: "Automated testing"
 
     runs-on: ubuntu-latest
     needs: build
@@ -306,7 +306,7 @@ jobs:
     # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
     ###
     - name: 🧪 Run integration tests
-      run:  >-
+      run: >-
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -323,7 +323,7 @@ jobs:
     # This is basically a kind of integration test.
     ###
     - name: 🧪 Run use-case tests
-      run:  >-
+      run: >-
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -359,7 +359,7 @@ jobs:
               })
 
   benchmark-xml:
-    name: "Benchmark (XML)"
+    name: "Benchmark XML"
 
     runs-on: ubuntu-latest
     needs: [test, quality-check]
@@ -413,8 +413,8 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net6.0/FluentSerializer.Xml.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
+          sudo ./net6.0/FluentSerializer.Xml.Benchmark
+          sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -427,6 +427,16 @@ jobs:
         sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
+    # 📈 Report benchmarks
+    #
+    # Publish benchmark results to job overview
+    ###
+    - name: 📈 Report benchmarks
+      run: |-
+        cat ./xml-serializer-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./xml-serializer-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
+    ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
@@ -435,7 +445,7 @@ jobs:
       with:
         name: benchmark-results-xml
         path: ${{github.workspace}}/benchmark-results
-        retention-days: 1
+        retention-days: 20
     ###
     # 🗃 Cancel after benchmark failure
     # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
@@ -452,7 +462,7 @@ jobs:
               })
 
   benchmark-json:
-    name: "Benchmark (JSON)"
+    name: "Benchmark JSON"
 
     runs-on: ubuntu-latest
     needs: [test, quality-check]
@@ -506,8 +516,8 @@ jobs:
     - name: ⏱ Benchmark JSON serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
-        sudo ./net6.0/FluentSerializer.Json.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
+          sudo ./net6.0/FluentSerializer.Json.Benchmark
+          sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -520,6 +530,16 @@ jobs:
         sudo mv ./json-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
+    # 📈 Report benchmarks
+    #
+    # Publish benchmark results to job overview
+    ###
+    - name: 📈 Report benchmarks
+      run: |-
+        cat ./json-serializer-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./json-serializer-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
+    ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
@@ -528,7 +548,7 @@ jobs:
       with:
         name: benchmark-results-json
         path: ${{github.workspace}}/benchmark-results
-        retention-days: 1
+        retention-days: 20
     ###
     # 🗃 Cancel after benchmark failure
     # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
