@@ -164,7 +164,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting GitHub summary filename");
 		Console.ResetColor();
 
-		var gitHubFilePattern = "BenchmarkRun-joined-*-report-github.md";
+		var gitHubFilePattern = "BenchmarkRun-joined-*-report-console.md";
 		var markdownSummaryFile = FindFileName(gitHubFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
