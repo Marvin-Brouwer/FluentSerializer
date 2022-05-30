@@ -362,8 +362,7 @@ jobs:
     name: "Benchmark (XML)"
 
     runs-on: ubuntu-latest
-    # needs: [test, quality-check]
-    needs: build
+    needs: [test, quality-check]
 
     steps:
     ###
@@ -414,38 +413,9 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net6.0/FluentSerializer.Xml.Benchmark --quick
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate --quick
+        sudo ./net6.0/FluentSerializer.Xml.Benchmark
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
-    ###
-    # 📈 Publish XML benchmark
-    #
-    # Publish highest dotnet version benchmark results to job overview
-    ###
-    - name: 📈 Publish XML benchmark
-      uses: LouisBrunner/checks-action@v1.2.0
-      if: always()
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Benchmark (XML)
-        conclusion: ${{ job.status }}
-        output: "{\"summary\":\"Benchmark Results XML\"}"
-        output_text_description_file: "\
-          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark\
-          /bin/Release/BenchmarkDotNet.Artifacts\
-          /xml-serializer-benchmark-netcoreapp_6_0-github.md"
-    - name: 📈 Publish XML benchmark
-      uses: LouisBrunner/checks-action@v1.2.0
-      if: always()
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Benchmark (XML)
-        conclusion: ${{ job.status }}
-        output: "{\"summary\":\"Benchmark Results XML\"}"
-        output_text_description_file: "\
-          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark\
-          /bin/Release/BenchmarkDotNet.Artifacts\
-          /xml-serializer-benchmark-netcoreapp_3_1-github.md"
     ###
     # 🗃 Collect benchmark reports
     ###
@@ -456,6 +426,23 @@ jobs:
         cd ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
         sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
+    ###
+    # 📈 Report XML benchmark
+    #
+    # Publish highest dotnet version benchmark results to job overview
+    ###
+    - name: 📈 Report XML benchmark
+      uses: LouisBrunner/checks-action@v1.2.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Benchmark results (XML)
+        conclusion: ${{ job.status }}
+        output: "{\"summary\":\"Benchmark Results XML\"}"
+        output_text_description_file: "\
+          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark\
+          /bin/Release/BenchmarkDotNet.Artifacts\
+          /xml-serializer-benchmark-netcoreapp_6_0-github.md"
     ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
