@@ -64,7 +64,7 @@ public abstract class StaticTestRunner
 
 	private static Job CreateJob(string[] parameters)
 	{
-		var quickRun = parameters.Contains("--quick=true");
+		var quickRun = parameters.Contains("--quick");
 		return CreateBasicJob(quickRun)
 #if (DEBUG)
 				.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
@@ -178,8 +178,9 @@ public abstract class StaticTestRunner
 		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
 		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-github.md";
+		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
 
-		FixFileNames(markdownSummaryFile, Path.Join(markdownSummaryFile.DirectoryName, readableFileName));
+		FixFileNames(markdownSummaryFile, Path.Join(parentDirectory.FullName, readableFileName));
 	}
 
 	private static FileInfo? FindFileName(string pattern, ManualConfig config)

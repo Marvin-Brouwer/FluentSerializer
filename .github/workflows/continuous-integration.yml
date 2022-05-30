@@ -362,7 +362,8 @@ jobs:
     name: "Benchmark (XML)"
 
     runs-on: ubuntu-latest
-    needs: [test, quality-check]
+    # needs: [test, quality-check]
+    needs: build
 
     steps:
     ###
@@ -413,9 +414,38 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net6.0/FluentSerializer.Xml.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
+        sudo ./net6.0/FluentSerializer.Xml.Benchmark --quick
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate --quick
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
+    ###
+    # 📈 Publish XML benchmark
+    #
+    # Publish highest dotnet version benchmark results to job overview
+    ###
+    - name: 📈 Publish XML benchmark
+      uses: LouisBrunner/checks-action@v1.2.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Benchmark (XML)
+        conclusion: ${{ job.status }}
+        output: "{\"summary\":\"Benchmark Results XML\"}"
+        output_text_description_file: "\
+          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark\
+          /bin/Release/BenchmarkDotNet.Artifacts\
+          /xml-serializer-benchmark-netcoreapp_6_0-github.md"
+    - name: 📈 Publish XML benchmark
+      uses: LouisBrunner/checks-action@v1.2.0
+      if: always()
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Benchmark (XML)
+        conclusion: ${{ job.status }}
+        output: "{\"summary\":\"Benchmark Results XML\"}"
+        output_text_description_file: "\
+          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark\
+          /bin/Release/BenchmarkDotNet.Artifacts\
+          /xml-serializer-benchmark-netcoreapp_3_1-github.md"
     ###
     # 🗃 Collect benchmark reports
     ###
@@ -427,20 +457,6 @@ jobs:
         sudo mv ./xml-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
-    # 🗃 Publish highest dotnet version benchmark results to job overview
-    ###
-    - name: 🗃 Publish highest dotnet version benchmark results to job overview
-      uses: LouisBrunner/checks-action@v1.2.0
-      if: always()
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Benchmark results - XML
-        conclusion: ${{ job.status }}
-        output: "{\"summary\":\"Benchmark Results XML\"}"
-        output_text_description_file: |
-          ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results/
-          xml-serializer-benchmark-netcoreapp_6_0-github.md
-    ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
@@ -449,7 +465,7 @@ jobs:
       with:
         name: benchmark-results-xml
         path: ${{github.workspace}}/benchmark-results
-        retention-days: 30
+        retention-days: 20
     ###
     # 🗃 Cancel after benchmark failure
     # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.

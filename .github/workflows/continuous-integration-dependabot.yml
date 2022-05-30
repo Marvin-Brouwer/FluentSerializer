@@ -287,7 +287,7 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-        sudo ./net6.0/FluentSerializer.Xml.Benchmark --quick=true
+        sudo ./net6.0/FluentSerializer.Xml.Benchmark --quick
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -379,7 +379,7 @@ jobs:
     - name: ⏱ Benchmark JSON serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
-        sudo ./net6.0/FluentSerializer.Json.Benchmark --quick=true
+        sudo ./net6.0/FluentSerializer.Json.Benchmark --quick
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
