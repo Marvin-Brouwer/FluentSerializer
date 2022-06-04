@@ -27,7 +27,8 @@ public sealed class TimeSpanByFormatConverterTests
 
 	public TimeSpanByFormatConverterTests()
 	{
-		var serializerMock = new Mock<IAdvancedJsonSerializer>();
+		var serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.SetupDefault();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(serializerMock);
 	}

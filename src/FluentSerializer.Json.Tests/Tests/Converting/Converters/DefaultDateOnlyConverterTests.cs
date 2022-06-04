@@ -28,7 +28,8 @@ public sealed class DefaultDateOnlyConverterTests
 
 	public DefaultDateOnlyConverterTests()
 	{
-		var serializerMock = new Mock<IAdvancedJsonSerializer>();
+		var serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.SetupDefault();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(serializerMock);
 	}

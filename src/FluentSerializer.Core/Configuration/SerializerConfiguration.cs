@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Text;
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Converting;
 
@@ -17,6 +19,12 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	public int StringBuilderMaximumRetainedCapacity { get; } = 4096;
 
 	/// <inheritdoc />
+	public ReferenceLoopBehavior ReferenceLoopBehavior { get; set; } = ReferenceLoopBehavior.Throw;
+	/// <inheritdoc />
+	public IEqualityComparer ReferenceComparer { get; set; } = DefaultReferenceComparer.Default;
+
+
+	/// <inheritdoc />
 	public bool FormatOutput { get; set; } = true;
 	/// <inheritdoc />
 	public bool WriteNull { get; set; } = false;
@@ -26,5 +34,4 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	/// <inheritdoc />
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	/// <inheritdoc />
-	public string NewLine { get; set; } = LineEndings.Environment;
-}
+	public string NewLine { get; set; } = LineEndings.Environment;}

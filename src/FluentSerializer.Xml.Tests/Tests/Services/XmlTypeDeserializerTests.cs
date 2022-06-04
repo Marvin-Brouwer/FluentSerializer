@@ -28,7 +28,9 @@ public sealed class XmlTypeDeserializerTests
 
 	public XmlTypeDeserializerTests()
 	{
-		_coreContextStub = new SerializerCoreContext<IXmlNode>(Mock.Of<IAdvancedXmlSerializer>());
+		var serializerMock = new Mock<IAdvancedXmlSerializer>()
+			.SetupDefault();
+		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)

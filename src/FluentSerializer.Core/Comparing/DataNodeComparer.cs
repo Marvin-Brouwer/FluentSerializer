@@ -1,8 +1,9 @@
+using FluentSerializer.Core.DataNodes;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace FluentSerializer.Core.DataNodes;
+namespace FluentSerializer.Core.Comparing;
 
 /// <summary>
 /// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="GetHashCode"/>

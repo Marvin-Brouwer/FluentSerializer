@@ -1,3 +1,4 @@
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Naming.NamingStrategies;
@@ -10,6 +11,21 @@ namespace FluentSerializer.Core.Tests.ObjectMother;
 
 public static class SerializerContextMother
 {
+	internal class TestSerializerConfiguration : SerializerConfiguration {
+		public static readonly TestSerializerConfiguration Default = new();
+	}
+	/// <summary>
+	/// Create a minimal context mock for testing
+	/// </summary>
+	public static Mock<TSerializer> SetupDefault<TSerializer>(this Mock<TSerializer> contextMock)
+		where TSerializer : class, ISerializer
+	{
+		contextMock
+			.Setup(context => context.Configuration)
+			.Returns(TestSerializerConfiguration.Default);
+
+		return contextMock;
+	}
 	/// <summary>
 	/// Create a minimal context mock for testing
 	/// </summary>

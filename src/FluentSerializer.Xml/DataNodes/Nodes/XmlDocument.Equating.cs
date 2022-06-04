@@ -1,3 +1,4 @@
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;

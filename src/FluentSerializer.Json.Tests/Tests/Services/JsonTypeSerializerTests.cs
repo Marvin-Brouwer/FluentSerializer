@@ -27,7 +27,9 @@ public sealed class JsonTypeSerializerTests
 
 	public JsonTypeSerializerTests()
 	{
-		_coreContextStub = new SerializerCoreContext<IJsonNode>(Mock.Of<IAdvancedJsonSerializer>());
+		var serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.SetupDefault();
+		_coreContextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
 			.WithNamingStrategy(Names.Use.PascalCase)

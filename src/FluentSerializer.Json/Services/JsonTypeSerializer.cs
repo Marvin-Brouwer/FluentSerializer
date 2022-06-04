@@ -53,6 +53,8 @@ public sealed class JsonTypeSerializer
 			_mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
+		currentCoreContext.TryAddReference(dataModel);
+
 		var properties = new List<IJsonObjectContent>();
 		foreach(var property in instanceType.GetProperties())
 		{
@@ -62,6 +64,14 @@ public sealed class JsonTypeSerializer
 
 			var propertyValue = property.GetValue(dataModel);
 			if (propertyValue is null) continue;
+
+			if (currentCoreContext.ContainsReference(propertyValue))
+			{
+				var referenceLoopBehavior = currentCoreContext.CurrentSerializer.Configuration.ReferenceLoopBehavior;
+				if (referenceLoopBehavior == ReferenceLoopBehavior.Ignore) continue;
+
+				throw new ReferenceLoopException(in instanceType, property.PropertyType, property.Name);
+			}
 
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),

@@ -41,7 +41,8 @@ public sealed class CollectionConverterTests
 	public CollectionConverterTests()
 	{
 		_sut = new CollectionConverter();
-		_serializerMock = new Mock<IAdvancedJsonSerializer>();
+		_serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.SetupDefault();
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(_serializerMock)
 			.WithNamingStrategy(Names.Equal(ListName));

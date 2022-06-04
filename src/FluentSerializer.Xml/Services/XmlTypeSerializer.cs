@@ -1,17 +1,17 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.Exceptions;
+using FluentSerializer.Xml.Profiles;
 using System;
 using System.Collections;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Xml.Exceptions;
-using FluentSerializer.Xml.DataNodes;
 using System.Collections.Generic;
 
 using static FluentSerializer.Xml.XmlBuilder;
-using FluentSerializer.Xml.Profiles;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -43,11 +43,18 @@ public sealed class XmlTypeSerializer
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
 
-		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
+
+		var instanceType = dataModel.GetType();
+		var classMap =
+			_mappings.Scan((instanceType, SerializerDirection.Serialize)) ??
+			_mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		var currentCoreContext = coreContext.WithPathSegment(classType);
 		var elementName = classMap.NamingStrategy.SafeGetName(in classType, new NamingContext(_mappings));
+
+		currentCoreContext.TryAddReference(dataModel);
+
 		var childNodes = new List<IXmlNode>();
 		foreach(var property in classType.GetProperties())
 		{
@@ -57,6 +64,14 @@ public sealed class XmlTypeSerializer
 
 			var propertyValue = property.GetValue(dataModel);
 			if (propertyValue is null) continue;
+
+			if (currentCoreContext.ContainsReference(propertyValue))
+			{
+				var referenceLoopBehavior = currentCoreContext.CurrentSerializer.Configuration.ReferenceLoopBehavior;
+				if (referenceLoopBehavior == ReferenceLoopBehavior.Ignore) continue;
+
+				throw new ReferenceLoopException(in instanceType, property.PropertyType, property.Name);
+			}
 
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(property),
