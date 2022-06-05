@@ -43,12 +43,12 @@ public interface ISerializerCoreContext
 	/// <summary>
 	/// Add an instance to the reference collection if not present already.
 	/// </summary>
-	bool TryAddReference(in object instance);
+	bool TryAddReference(in object? instance);
 
 	/// <summary>
 	/// Check if a reference has been processed by the serializer already
 	/// </summary>
-	bool ContainsReference(in object instance);
+	bool ContainsReference(in object? instance);
 }
 
 /// <summary>

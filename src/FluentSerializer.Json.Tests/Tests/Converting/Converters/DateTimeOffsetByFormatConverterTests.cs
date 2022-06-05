@@ -2,6 +2,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
@@ -29,7 +30,7 @@ public sealed class DateTimeOffsetByFormatConverterTests
 	public DateTimeOffsetByFormatConverterTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
-			.SetupDefault();
+			.UseConfig(JsonSerializerConfiguration.Default);
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(serializerMock);
 	}

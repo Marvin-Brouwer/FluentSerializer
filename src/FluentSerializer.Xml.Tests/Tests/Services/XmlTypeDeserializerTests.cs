@@ -1,9 +1,11 @@
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Tests.ObjectMother;
+using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Profiles;
@@ -11,7 +13,6 @@ using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
 using System.Collections.Generic;
-using FluentSerializer.Core.Context;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -29,7 +30,7 @@ public sealed class XmlTypeDeserializerTests
 	public XmlTypeDeserializerTests()
 	{
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
-			.SetupDefault();
+			.UseConfig(XmlSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()

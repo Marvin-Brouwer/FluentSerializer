@@ -1,9 +1,12 @@
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Tests.ObjectMother;
+using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Profiles;
@@ -11,7 +14,6 @@ using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
 using System.Collections.Generic;
-using FluentSerializer.Core.Context;
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -29,7 +31,7 @@ public sealed class XmlTypeSerializerTests
 	public XmlTypeSerializerTests()
 	{
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
-			.SetupDefault();
+			.UseConfig(XmlSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
@@ -172,7 +174,7 @@ public sealed class XmlTypeSerializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
-	public void SerializeFromAttribute_AttributePropertyMapping_ReturnsValue()
+	public void SerializeToAttribute_AttributePropertyMapping_ReturnsValue()
 	{
 		// Arrange
 		var expected = Element(nameof(TestClass),
@@ -202,7 +204,7 @@ public sealed class XmlTypeSerializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
-	public void SerializeFromText_TextPropertyMapping_ReturnsValue()
+	public void SerializeToText_TextPropertyMapping_ReturnsValue()
 	{
 		// Arrange
 		var expected = Element(nameof(TestClass),
@@ -230,8 +232,180 @@ public sealed class XmlTypeSerializerTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
+		InlineData(ReferenceLoopBehavior.Throw), InlineData(ReferenceLoopBehavior.Ignore)]
+	public void SerializeToElement_NoReferenceLoop_ReturnsElement(ReferenceLoopBehavior behavior)
+	{
+		// Arrange
+		var expected = Element(nameof(TestClass),
+			Element(nameof(TestClass.Value), Text("test"))
+		);
+		var input = new TestClass
+		{
+			Value = "test"
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlElement);
+		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
+		_classMap
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_scanList
+			.WithClassMap(type, _classMap);
+
+		var configuration = new XmlSerializerConfiguration
+		{
+			ReferenceLoopBehavior = behavior,
+			DefaultClassNamingStrategy = Names.Use.PascalCase,
+			DefaultPropertyNamingStrategy = Names.Use.PascalCase
+		};
+		var serializerMock = new Mock<IAdvancedXmlSerializer>()
+			.UseConfig(configuration);
+		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
+
+		var sut = new XmlTypeSerializer(_scanList.Object);
+
+		// Act
+		var result = sut.SerializeToElement(input, type, contextStub);
+
+		// Assert
+		result.Should().BeEquivalentTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToElement_ReferenceLoop_BehaviorIgnore_ReturnsElement()
+	{
+		// Arrange
+		var expected1 = Element(nameof(TestClass),
+			Attribute(nameof(TestClass.Value), "test"),
+			Element(nameof(TestClass.WrappedReference))
+		);
+		var input1 = new TestClass
+		{
+			Value = "test"
+		};
+		input1.Reference = input1;
+
+		var expected2 = Element(nameof(TestClass),
+			Attribute(nameof(TestClass.Value), "test"),
+			Element(nameof(TestClass.Reference)),
+			Element(nameof(TestClass.WrappedReference),
+				Element(nameof(TestWrapper),
+					Attribute(nameof(TestWrapper.Value), "testWrapper")
+				)
+			)
+		);
+		var input2 = new TestClass
+		{
+			Value = "test"
+		};
+		input2.WrappedReference = new TestWrapper
+		{
+			Value = "testWrapper",
+			Reference = input2
+		};
+
+		var type = typeof(TestClass);
+		var configuration = new XmlSerializerConfiguration
+		{
+			ReferenceLoopBehavior = ReferenceLoopBehavior.Ignore,
+			DefaultClassNamingStrategy = Names.Use.PascalCase,
+			DefaultPropertyNamingStrategy = Names.Use.PascalCase,
+			WriteNull = true
+		};
+		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
+		var scanList = new ClassMapScanList<XmlSerializerProfile>(testProfile);
+
+		var serializerMock = new Mock<IAdvancedXmlSerializer>()
+			.UseConfig(configuration);
+		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
+
+		var sut = new XmlTypeSerializer(scanList);
+
+		// Act
+		var result1 = sut.SerializeToElement(input1, type, contextStub);
+		var result2 = sut.SerializeToElement(input2, type, contextStub);
+
+		// Assert
+		result1.Should().BeEquivalentTo(expected1);
+		result2.Should().BeEquivalentTo(expected2);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToElement_ReferenceLoop_BehaviorThrow_Throws()
+	{
+		// Arrange
+		var input1 = new TestClass
+		{
+			Value = "test"
+		};
+		input1.Reference = input1;
+
+		var input2 = new TestClass
+		{
+			Value = "test"
+		};
+		input2.WrappedReference = new TestWrapper
+		{
+			Value = "testWrapper",
+			Reference = input2
+		};
+
+		var type = typeof(TestClass);
+		var configuration = new XmlSerializerConfiguration
+		{
+			ReferenceLoopBehavior = ReferenceLoopBehavior.Throw,
+			DefaultClassNamingStrategy = Names.Use.PascalCase,
+			DefaultPropertyNamingStrategy = Names.Use.PascalCase
+		};
+		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
+		var scanList = new ClassMapScanList<XmlSerializerProfile>(testProfile);
+
+		var serializerMock = new Mock<IAdvancedXmlSerializer>()
+			.UseConfig(configuration);
+		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
+
+		var sut = new XmlTypeSerializer(scanList);
+
+		// Act
+		var result1 = () => sut.SerializeToElement(input1, type, contextStub);
+		var result2 = () => sut.SerializeToElement(input2, type, contextStub);
+
+		// Assert
+		result1.Should().ThrowExactly<ReferenceLoopException>()
+			.Which.InstanceType.Should().Be(typeof(TestClass));
+		result2.Should().ThrowExactly<ReferenceLoopException>()
+			.Which.InstanceType.Should().Be(typeof(TestWrapper));
+	}
+
+	private sealed class TestClassProfile : XmlSerializerProfile
+	{
+		protected override void Configure()
+		{
+			For<TestClass>()
+				.Attribute(test => test.Value)
+				.Child(test => test.Reference)
+				.Child(test => test.WrappedReference);
+
+			For<TestWrapper>()
+				.Attribute(test => test.Value)
+				.Child(test => test.Reference);
+		}
+	}
+
 	private sealed class TestClass
 	{
 		public string Value { get; init; } = default!;
+		public TestClass? Reference { get; set; }
+		public TestWrapper? WrappedReference { get; set; }
+	}
+
+	private sealed class TestWrapper
+	{
+		public string Value { get; init; } = default!;
+		public TestClass? Reference { get; init; }
 	}
 }

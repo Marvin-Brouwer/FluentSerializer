@@ -19,7 +19,7 @@ public readonly struct DefaultReferenceComparer : IEqualityComparer
 		if (y is null) return false;
 		if (ReferenceEquals(x, y)) return true;
 
-		return x.Equals(y);
+		return x.GetHashCode().Equals(y.GetHashCode());
 	}
 
 	/// <inheritdoc cref="IEqualityComparer"/>

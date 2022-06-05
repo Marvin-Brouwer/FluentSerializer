@@ -1,16 +1,17 @@
 using FluentAssertions;
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Tests.ObjectMother;
+using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Tests.ObjectMother;
 using Moq;
 using System.Collections.Generic;
-using FluentSerializer.Core.Context;
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -28,7 +29,7 @@ public sealed class JsonTypeDeserializerTests
 	public JsonTypeDeserializerTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
-			.SetupDefault();
+			.UseConfig(JsonSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()

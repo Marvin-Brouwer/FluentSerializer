@@ -16,14 +16,15 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 	/// <summary>
 	/// A static reference to the default JSON Configuration
 	/// </summary>
-	public static JsonSerializerConfiguration Default { get; } = new();
+	public static readonly JsonSerializerConfiguration Default = new();
 
 	/// <summary>
 	/// The default naming strategy for all JSON properties
 	/// </summary>
 	public Func<INamingStrategy> DefaultNamingStrategy { get; set; }
 
-	private JsonSerializerConfiguration()
+	/// <inheritdoc cref="JsonSerializerConfiguration"/>
+	public JsonSerializerConfiguration()
 	{
 		Encoding = Encoding.UTF8;
 		FormatOutput = true;

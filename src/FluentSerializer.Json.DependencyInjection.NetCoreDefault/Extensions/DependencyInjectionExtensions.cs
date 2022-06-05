@@ -34,7 +34,7 @@ public static class DependencyInjectionExtensions
 	public static IServiceCollection AddFluentJsonSerializer(
 		this IServiceCollection serviceCollection, in Assembly assembly, in Action<JsonSerializerConfiguration> configurator)
 	{
-		var configuration = JsonSerializerConfiguration.Default;
+		var configuration = new JsonSerializerConfiguration();
 		configurator(configuration);
 		return serviceCollection.AddFluentJsonSerializer(in assembly, configuration);
 	}

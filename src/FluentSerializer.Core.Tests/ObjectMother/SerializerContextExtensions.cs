@@ -11,21 +11,19 @@ namespace FluentSerializer.Core.Tests.ObjectMother;
 
 public static class SerializerContextMother
 {
-	internal class TestSerializerConfiguration : SerializerConfiguration {
-		public static readonly TestSerializerConfiguration Default = new();
-	}
 	/// <summary>
-	/// Create a minimal context mock for testing
+	/// Create a minimal context mock for testing allowing for config changes
 	/// </summary>
-	public static Mock<TSerializer> SetupDefault<TSerializer>(this Mock<TSerializer> contextMock)
+	public static Mock<TSerializer> UseConfig<TSerializer>(this Mock<TSerializer> contextMock, SerializerConfiguration configuration)
 		where TSerializer : class, ISerializer
 	{
 		contextMock
 			.Setup(context => context.Configuration)
-			.Returns(TestSerializerConfiguration.Default);
+			.Returns(configuration);
 
 		return contextMock;
 	}
+
 	/// <summary>
 	/// Create a minimal context mock for testing
 	/// </summary>

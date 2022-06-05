@@ -26,7 +26,7 @@ public sealed class SerializerContextTests
 		_classMapMock = new Mock<IClassMap>()
 			.WithoutPropertyMaps();
 		_serializerMock = new Mock<ISerializer>()
-			.SetupDefault();
+			.UseConfig(TestSerializerConfiguration.Default);
 	}
 
 	[Theory,
@@ -97,5 +97,10 @@ public sealed class SerializerContextTests
 	private sealed class TestClass
 	{
 		public int Id { get; init; } = default!;
+	}
+
+	private sealed class TestSerializerConfiguration : SerializerConfiguration
+	{
+		public static readonly TestSerializerConfiguration Default = new ();
 	}
 }

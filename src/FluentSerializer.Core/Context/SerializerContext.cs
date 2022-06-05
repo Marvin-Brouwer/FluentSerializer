@@ -104,10 +104,10 @@ public class SerializerContext : ISerializerContext
 	public ISerializerCoreContext WithPathSegment(in Type type) => _coreContext.WithPathSegment(type);
 
 	/// <inheritdoc />
-	bool ISerializerCoreContext.TryAddReference(in object instance) => _coreContext.TryAddReference(in instance);
+	bool ISerializerCoreContext.TryAddReference(in object? instance) => _coreContext.TryAddReference(in instance);
 
 	/// <inheritdoc />
-	bool ISerializerCoreContext.ContainsReference(in object instance) => _coreContext.ContainsReference(in instance);
+	bool ISerializerCoreContext.ContainsReference(in object? instance) => _coreContext.ContainsReference(in instance);
 }
 
 /// <inheritdoc cref="ISerializerContext"/>
