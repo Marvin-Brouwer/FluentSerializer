@@ -14,6 +14,8 @@
 [//]: # (Body)
 [DependencyInjectionNuget]: (https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions/)
 
+> **This package is Deprecated**
+
 The `FluentSerializer.Core.DependencyInjection.NetCoreDefault` library contains some basic logic to help register the specific serializer using
 [Microsoft.Extensions.DependencyInjection.Abstractions][DependencyInjectionNuget].
 

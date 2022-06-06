@@ -9,7 +9,7 @@ namespace FluentSerializer.Core.Mapping;
 public sealed class PropertyMapScanList : ScanList<PropertyInfo, IPropertyMap>
 {
 	/// <inheritdoc />
-	public PropertyMapScanList(in IReadOnlyList<IPropertyMap> dataTypes) : base(in dataTypes) { }
+	public PropertyMapScanList(in IReadOnlyCollection<IPropertyMap> dataTypes) : base(in dataTypes) { }
 
 	/// <remarks>
 	/// Because <see cref="PropertyInfo"/> isn't comparable just check important properties.

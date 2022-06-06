@@ -2,6 +2,8 @@
 
 ## @next
 
+- [#157](https://github.com/Marvin-Brouwer/FluentSerializer/issues/157) Added base functionality for Serializer factories
+
 ## v2.0.0
 
 - [#150](https://github.com/Marvin-Brouwer/FluentSerializer/issues/150) Added release notes

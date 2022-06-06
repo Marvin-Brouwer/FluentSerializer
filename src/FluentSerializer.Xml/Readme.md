@@ -22,7 +22,7 @@ The `FluentSerializer.Xml` library is responsible for exposing the XML API and i
 [configuring-di]: /src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
 
 It is possible to configure the defaults of certain aspects the serializer uses.
-You can override these when [configuring the DI injection][configuring-di].
+You can override these when [configuring the DI injection][configuring-di] or when using `SerializerFactory.For.Xml()`.
 
 By default it looks like this:
 
@@ -35,7 +35,35 @@ By default it looks like this:
   - Converter that can handle DateTime objects (XML spec compliant)
   - Converter that can handle IConvertible types
   - Converter to handle collection types (wrapped XML collection)
-  
+
+### Using the factory
+
+For basic usage you can use this:
+
+```csharp
+SerializerFactory.For
+	.Xml()
+	.UseProfilesFromAssembly<TAssemblyMarker>();
+```
+
+This will use the `XmlSerializerConfiguration.Default` as the applied config.
+The type parameter of `TAssemblyMarker` will be used to scan that assembly for the profiles associated with this serializer.
+Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.
+
+There are multiple overloads, for changing configuration the lambda approach is recommended:
+
+```csharp
+SerializerFactory.For
+	.Xml(static configuration =>
+	{
+		// Change configuration values
+		configuration.NewLine = LineEndings.LineFeed;
+	})
+	.UseProfilesFromAssembly<TAssemblyMarker>();
+```
+
+This will use a new instance of the `XmlSerializerConfiguration` as the applied config and allows you to change some properties.
+
 ## Creating profiles
 
 For the serializer to understand how to map the data structure to and from C# Models, you need to create a profile.  

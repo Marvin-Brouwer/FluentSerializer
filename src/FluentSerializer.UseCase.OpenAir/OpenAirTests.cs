@@ -7,32 +7,32 @@ using FluentAssertions;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.TestUtils.Extensions;
-using FluentSerializer.Xml.DependencyInjection.NetCoreDefault.Extensions;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Converter.DefaultXml.Converting.Extensions;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using FluentSerializer.Core.Factories;
+using FluentSerializer.Xml.Extensions;
 
 namespace FluentSerializer.UseCase.OpenAir;
 
 public sealed partial class OpenAirTests
 {
-	private readonly IServiceProvider _serviceProvider;
+	private readonly IXmlSerializer _sut;
 
 	public OpenAirTests()
 	{
-		_serviceProvider = new ServiceCollection()
-			.AddFluentXmlSerializer<OpenAirTests>(static configuration =>
+		_sut = SerializerFactory.For
+			.Xml(static configuration =>
 			{
 				configuration.Encoding = Encoding.UTF8;
 				configuration.DefaultPropertyNamingStrategy = Names.Use.SnakeCase;
 				configuration.DefaultConverters.Use(Converter.For.Xml());
 				configuration.NewLine = LineEndings.LineFeed;
 			})
-			.BuildServiceProvider();
+			.UseProfilesFromAssembly<OpenAirTests>();
 	}
 
 	[Fact,
@@ -43,10 +43,8 @@ public sealed partial class OpenAirTests
 		var expected = await File.ReadAllTextAsync("./OpenAirTests.Serialize.xml");
 		var example = ProjectRequestExample;
 
-		var sut = _serviceProvider.GetService<IXmlSerializer>()!;
-
 		// Act
-		var result = sut.Serialize(example);
+		var result = _sut.Serialize(example);
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
@@ -60,10 +58,8 @@ public sealed partial class OpenAirTests
 		var expected = RateCardResponseExample;
 		var example = await File.ReadAllTextAsync("./OpenAirTests.Deserialize.xml");
 
-		var sut = _serviceProvider.GetService<IXmlSerializer>()!;
-
 		// Act
-		var result = sut.Deserialize<Response<RateCard>>(example);
+		var result = _sut.Deserialize<Response<RateCard>>(example);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);

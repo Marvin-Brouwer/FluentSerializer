@@ -3,6 +3,7 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
@@ -19,14 +20,14 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeSerializer
 {
-	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
+	private readonly IClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration> _mappings;
 
 	/// <inheritdoc cref="JsonTypeSerializer" />
-	public JsonTypeSerializer(in IClassMapScanList<JsonSerializerProfile> mappings)
+	public JsonTypeSerializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = mappings;
+		_mappings = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(mappings);
 	}
 
 	/// <summary>

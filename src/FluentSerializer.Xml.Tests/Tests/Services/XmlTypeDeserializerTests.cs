@@ -2,13 +2,11 @@ using FluentAssertions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
-using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
 using Moq;
@@ -24,7 +22,6 @@ public sealed class XmlTypeDeserializerTests
 	private const SerializerDirection TestDirection = SerializerDirection.Deserialize;
 
 	private readonly ISerializerCoreContext<IXmlNode> _coreContextStub;
-	private readonly Mock<IClassMapScanList<XmlSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public XmlTypeDeserializerTests()
@@ -32,9 +29,8 @@ public sealed class XmlTypeDeserializerTests
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(XmlSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
-		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
-			.WithNamingStrategy(Names.Use.PascalCase)
+			.WithDefaults()
 			.WithoutPropertyMaps();
 	}
 
@@ -50,9 +46,9 @@ public sealed class XmlTypeDeserializerTests
 		var input = Element("PlaceHolder");
 
 		var type = typeof(IEnumerable<int>);
-		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new XmlTypeDeserializer(in scanList);
+		var sut = new XmlTypeDeserializer(classMap);
 
 		// Act
 		var result = () => sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -74,9 +70,9 @@ public sealed class XmlTypeDeserializerTests
 		var input = Element("PlaceHolder");
 
 		var type = typeof(TestClass);
-		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new XmlTypeDeserializer(in scanList);
+		var sut = new XmlTypeDeserializer(classMap);
 
 		// Act
 		var result = () => sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -96,10 +92,10 @@ public sealed class XmlTypeDeserializerTests
 	{
 		// Arrange
 		var type = typeof(TestClass);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		_classMap
+			.WithClassType(type);
+		
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = () => sut.DeserializeFromElement(
@@ -122,11 +118,10 @@ public sealed class XmlTypeDeserializerTests
 		var containerType = typeof(IXmlElement);
 		var property = type.GetProperty(nameof(TestClass.Value));
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, property!);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = () => sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -145,10 +140,10 @@ public sealed class XmlTypeDeserializerTests
 		var input = Element(nameof(TestClass));
 
 		var type = typeof(TestClass);
-		_scanList
-			.WithClassMap(type, _classMap);
+		_classMap
+			.WithClassType(type);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -170,11 +165,10 @@ public sealed class XmlTypeDeserializerTests
 		var attemptedContainerType = typeof(bool);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = () => sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -202,11 +196,10 @@ public sealed class XmlTypeDeserializerTests
 		var containerType = typeof(IXmlElement);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -232,11 +225,10 @@ public sealed class XmlTypeDeserializerTests
 		var containerType = typeof(IXmlAttribute);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.DeserializeFromElement(input, type, _coreContextStub);
@@ -262,11 +254,10 @@ public sealed class XmlTypeDeserializerTests
 		var containerType = typeof(IXmlText);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeDeserializer(_scanList.Object);
+		var sut = new XmlTypeDeserializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.DeserializeFromElement(input, type, _coreContextStub);

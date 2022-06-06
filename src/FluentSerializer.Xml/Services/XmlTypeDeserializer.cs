@@ -4,12 +4,13 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Profiles;
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Services;
@@ -19,14 +20,14 @@ namespace FluentSerializer.Xml.Services;
 /// </summary>
 public sealed class XmlTypeDeserializer
 {
-	private readonly IClassMapScanList<XmlSerializerProfile> _mappings;
+	private readonly IClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration> _mappings;
 
 	/// <inheritdoc cref="XmlTypeDeserializer" />
-	public XmlTypeDeserializer(in IClassMapScanList<XmlSerializerProfile> mappings)
+	public XmlTypeDeserializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = mappings;
+		_mappings = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(mappings);
 	}
 
 	/// <summary>

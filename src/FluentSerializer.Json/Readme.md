@@ -23,7 +23,7 @@ The `FluentSerializer.Json` library is responsible for exposing the JSON API and
 [configuring-di]: /src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
 
 It is possible to configure the defaults of certain aspects the serializer uses.
-You can override these when [configuring the DI injection][configuring-di].
+You can override these when [configuring the DI injection][configuring-di] or when using the `SerializerFactory.For.Json()`.
 
 By default it looks like this:
 
@@ -35,6 +35,34 @@ By default it looks like this:
   - Converter that can handle DateTime objects (JSON spec compliant)
   - Converter that can handle IConvertible types
   - Converter to handle collection types
+  
+### Using the factory
+
+For basic usage you can use this:
+
+```csharp
+SerializerFactory.For
+	.Json()
+	.UseProfilesFromAssembly<TAssemblyMarker>();
+```
+
+This will use the `JsonSerializerConfiguration.Default` as the applied config.
+The type parameter of `TAssemblyMarker` will be used to scan that assembly for the profiles associated with this serializer.
+Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.
+
+There are multiple overloads, for changing configuration the lambda approach is recommended:
+
+```csharp
+SerializerFactory.For
+	.Json(static configuration =>
+	{
+		// Change configuration values
+		configuration.NewLine = LineEndings.LineFeed;
+	})
+	.UseProfilesFromAssembly<TAssemblyMarker>();
+```
+
+This will use a new instance of the `JsonSerializerConfiguration` as the applied config and allows you to change some properties.
 
 ## Creating profiles
 

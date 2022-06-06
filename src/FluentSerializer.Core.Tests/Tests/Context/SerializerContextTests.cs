@@ -16,13 +16,13 @@ public sealed class SerializerContextTests
 {
 	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
 
-	private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
+	private readonly Mock<IClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>> _scanListMock;
 	private readonly Mock<IClassMap> _classMapMock;
 	private readonly Mock<ISerializer> _serializerMock;
 
 	public SerializerContextTests()
 	{
-		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
+		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>>();
 		_classMapMock = new Mock<IClassMap>()
 			.WithoutPropertyMaps();
 		_serializerMock = new Mock<ISerializer>()
@@ -58,7 +58,7 @@ public sealed class SerializerContextTests
 		var coreContext = new SerializerCoreContext(_serializerMock.Object);
 
 		_classMapMock
-			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
+			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
 		_scanListMock
 			.WithClassMap(type, _classMapMock);
 

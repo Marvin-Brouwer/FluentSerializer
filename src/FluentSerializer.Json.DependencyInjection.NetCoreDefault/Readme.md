@@ -29,7 +29,6 @@ serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>();
 
 This will use the `JsonSerializerConfiguration.Default` as the applied config.
 The type parameter of `TAssemblyMarker` will be used to scan that assembly for the profiles associated with this serializer.
-You can call this registration multiple times with different assemblies for additional profiles.
 Alternatively there are overloads that accept a `System.Reflection.Assembly` variable.
 
 There are multiple overloads, for changing configuration the lambda approach is recommended:
@@ -42,5 +41,5 @@ serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration 
 });
 ```
 
-This will use the `JsonSerializerConfiguration.Default` as the applied config and allows you to change some properties.
+This will use a new instance of the `JsonSerializerConfiguration` as the applied config and allows you to change some properties.
 [See the default values][configuration-doc].

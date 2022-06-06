@@ -22,6 +22,7 @@ public sealed class ProfileScannerTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
+	[Obsolete("Obsolete", false)]
 	public void ScanAssembliesForType_NotPresent_ReturnsEmptyList()
 	{
 		// Arrange
@@ -31,7 +32,7 @@ public sealed class ProfileScannerTests
 
 		// Act
 		var result = ProfileScanner
-			.FindClassMapsInAssembly<ISerializerProfile>(_assemblyMock.Object, _configurationMock.Object);
+			.FindClassMapsInAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object, _configurationMock.Object);
 
 		// Assert
 		result.Should().BeEmpty();
@@ -39,6 +40,7 @@ public sealed class ProfileScannerTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
+	[Obsolete("Obsolete", false)]
 	public void ScanAssembliesForType_Present_ReturnsProfile()
 	{
 		// Arrange
@@ -48,20 +50,20 @@ public sealed class ProfileScannerTests
 
 		// Act
 		var result = ProfileScanner
-			.FindClassMapsInAssembly<ISerializerProfile>(_assemblyMock.Object, _configurationMock.Object);
+			.FindClassMapsInAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object, _configurationMock.Object);
 
 		// Assert
 		result.Should().NotBeEmpty();
 	}
 
-	private sealed class SerializerProfileFake : ISerializerProfile
+	private sealed class SerializerProfileFake : ISerializerProfile<ISerializerConfiguration>
 	{
 		private static readonly List<IClassMap> ClassMaps = new()
 		{
 			Mock.Of<IClassMap>()
 		};
 
-		public IReadOnlyList<IClassMap> Configure(in SerializerConfiguration configuration)
+		public IReadOnlyList<IClassMap> Configure(in ISerializerConfiguration configuration)
 		{
 			return ClassMaps;
 		}

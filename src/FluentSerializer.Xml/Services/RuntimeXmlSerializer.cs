@@ -12,7 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Xml.Profiles;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -30,9 +30,9 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 
 	/// <inheritdoc cref="RuntimeXmlSerializer" />
 	public RuntimeXmlSerializer(
-		IClassMapScanList<XmlSerializerProfile> mappings, 
 		XmlSerializerConfiguration configuration,
-		ObjectPoolProvider objectPoolProvider)
+		ObjectPoolProvider objectPoolProvider,
+		IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));

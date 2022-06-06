@@ -14,12 +14,12 @@ namespace FluentSerializer.Xml.Profiles;
 /// A profile for the JSON serializer to map from
 /// </summary>
 [ImplicitlyUsed]
-public abstract class XmlSerializerProfile : ISerializerProfile
+public abstract class XmlSerializerProfile : ISerializerProfile<XmlSerializerConfiguration>
 {
 	private readonly List<IClassMap> _classMaps = new();
 	private XmlSerializerConfiguration _configuration = XmlSerializerConfiguration.Default;
 
-	/// <inheritdoc cref="ISerializerProfile.Configure" />
+	/// <inheritdoc cref="ISerializerProfile{XmlSerializerConfiguration}.Configure" />
 	protected abstract void Configure();
 
 	/// <remarks>
@@ -27,9 +27,9 @@ public abstract class XmlSerializerProfile : ISerializerProfile
 	/// </remarks>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> ISerializerProfile.Configure(in SerializerConfiguration configuration)
+	IReadOnlyList<IClassMap> ISerializerProfile<XmlSerializerConfiguration>.Configure(in XmlSerializerConfiguration configuration)
 	{
-		_configuration = (XmlSerializerConfiguration)configuration;
+		_configuration = configuration;
 		Configure();
 		return new ReadOnlyCollection<IClassMap>(_classMaps);
 	}
