@@ -60,32 +60,22 @@ If you're just looking for a simple JSON or XML serializer checkout these option
 
 ## Getting started
 
-[json-di-dotnet-readme]: /src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
-[xml-di-dotnet-readme]: /src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
+[json-readme]: /src/FluentSerializer.Json#readme
+[xml-readme]: /src/FluentSerializer.Xml#readme
 
-Install a `FluentSerializer` for the serial format you need. Currently we only support the default DotNet dependency injection framework.
+Install a `FluentSerializer` for the serial format you need.
 
-<sub>[FluentSerializer.Json.DependencyInjection.NetCoreDefault][json-di-dotnet-readme]</sub>
+- **Json**: [`FluentSerializer.Json`][json-readme]  
 
-```txt
-dotnet add package FluentSerializer.Json.DependencyInjection.NetCoreDefault
-```
+  ```txt
+  dotnet add package FluentSerializer.Json
+  ```
 
-<sub>[FluentSerializer.Xml.DependencyInjection.NetCoreDefault][xml-di-dotnet-readme]</sub>
+- **Xml**: [`FluentSerializer.Xml`][xml-readme]  
 
-```txt
-dotnet add package FluentSerializer.Xml.DependencyInjection.NetCoreDefault
-```
-
-And then add the serializer to the DI registration, pointing to the a type in the assembly where your profiles live.
-
-```csharp
-serviceCollection
-	.AddFluentJsonSerializer<TAssemblyMarker>()
-	.AddFluentXmlSerializer<TAssemblyMarker>();
-```
-
-There are multiple overloads for overriding configurations and passing assemblies, please read the respective readme's for the `DependencyInjection` libraries.
+  ```txt
+  dotnet add package FluentSerializer.Xml
+  ```
 
 ## Basic usage
 
@@ -157,10 +147,16 @@ public sealed class WeirdExample : IWeirdExample {
 	private readonly IJsonSerializer _jsonSerializer;
 	private readonly IXmlSerializer _xmlSerializer;
 
-	public WeirdExample(IWebClient webClient, IJsonSerializer jsonSerializer, IXmlSerializer xmlSerializer) {
+	public WeirdExample(IWebClient webClient) {
+
 		_webClient = webClient;
-		_jsonSerializer = jsonSerializer;
-		_xmlSerializer = xmlSerializer;
+
+		_jsonSerializer = SerializerFactory.For
+			.Json()
+			.UseProfilesFromAssembly<IAssemblyMarker>();
+		_xmlSerializer =  SerializerFactory.For
+			.Xml()
+			.UseProfilesFromAssembly<IAssemblyMarker>();
 	}
 
 	public TReceive DoApiCall<TSend, TReceive>(TSend sendModel) {
@@ -169,12 +165,53 @@ public sealed class WeirdExample : IWeirdExample {
 		var idResponse = _webClient.Post(sendXML);
 
 		var otherApiJsonResponse = _webClient.Get(idResponse);
-		return _jsonSerializer.Deserialize(otherApiJsonResponse);
+		return _jsonSerializer.Deserialize<TReceive>(otherApiJsonResponse);
 	}
 }
 ```
 
 The serialize will automatically find the correct profile for the types that are passed or requested and (de)serialize as expected.
+
+### Configuration
+
+Every serializer has overloads for the factory that will allow you to configure the serialier to fit your application.  
+To read more about that you can either visit the specific serializer's readme, check out the [Basic concepts](#basic-concepts) or the [Advanced concepts](#advanced-concepts) section of this guide.
+
+- [Configuring `JSON`](./src/FluentSerializer.Json#Configuration)
+- [Configuring `XML`](./src/FluentSerializer.Xml#Configuration)
+
+### Dependency injection
+
+[json-di-dotnet-readme]: /src/FluentSerializer.Json.DependencyInjection.NetCoreDefault#readme
+[xml-di-dotnet-readme]: /src/FluentSerializer.Xml.DependencyInjection.NetCoreDefault#readme
+
+Alternatively, if you prefer dependency injection;  
+Each serializer has an adjacent NuGet package that makes registering the serializer to the default DotNet dependency injection library easier.
+
+Install a corresponding NuGet package for the serial format you need.
+
+- **Json**: [`FluentSerializer.Json.DependencyInjection.NetCoreDefault`][json-di-dotnet-readme]  
+
+  ```txt
+  dotnet add package FluentSerializer.Json.DependencyInjection.NetCoreDefault
+  ```
+
+- **Xml**: [`FluentSerializer.Xml.DependencyInjection.NetCoreDefault`][xml-di-dotnet-readme]  
+
+  ```txt
+  dotnet add package FluentSerializer.Xml.DependencyInjection.NetCoreDefault
+  ```
+
+And then add the serializer to the DI registration, pointing to the a type in the assembly where your profiles live.
+
+```csharp
+serviceCollection
+	.AddFluentJsonSerializer<TAssemblyMarker>()
+	.AddFluentXmlSerializer<TAssemblyMarker>();
+```
+
+Like for the factory approach, there are multiple overloads for overriding configurations and passing assemblies.  
+Please read the respective readme's for the `DependencyInjection` libraries to read more.
 
 ## Use-case Examples
 
