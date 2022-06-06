@@ -2,6 +2,10 @@
 
 ## @next
 
+`-`
+
+## v2.1.0
+
 - [#157](https://github.com/Marvin-Brouwer/FluentSerializer/issues/157) Added `XmlSerializerFactory`
 
 ## v2.0.0
