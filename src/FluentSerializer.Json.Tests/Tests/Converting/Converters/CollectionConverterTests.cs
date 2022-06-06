@@ -2,6 +2,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
+using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
@@ -41,7 +42,8 @@ public sealed class CollectionConverterTests
 	public CollectionConverterTests()
 	{
 		_sut = new CollectionConverter();
-		_serializerMock = new Mock<IAdvancedJsonSerializer>();
+		_serializerMock = new Mock<IAdvancedJsonSerializer>()
+			.UseConfig(JsonSerializerConfiguration.Default);
 		_contextMock = new Mock<ISerializerContext<IJsonNode>>()
 			.SetupDefault(_serializerMock)
 			.WithNamingStrategy(Names.Equal(ListName));

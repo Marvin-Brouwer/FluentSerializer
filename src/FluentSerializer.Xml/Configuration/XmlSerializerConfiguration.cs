@@ -16,7 +16,7 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 	/// <summary>
 	/// A static reference to the default XML Configuration
 	/// </summary>
-	public static XmlSerializerConfiguration Default { get; } = new();
+	public static readonly XmlSerializerConfiguration Default = new();
 
 	/// <summary>
 	/// The default naming strategy for all XML elements
@@ -27,7 +27,8 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 	/// </summary>
 	public Func<INamingStrategy> DefaultPropertyNamingStrategy { get; set; }
 
-	private XmlSerializerConfiguration()
+	/// <inheritdoc cref="XmlSerializerConfiguration"/>
+	public XmlSerializerConfiguration()
 	{
 		Encoding = Encoding.Unicode;
 		FormatOutput = true;

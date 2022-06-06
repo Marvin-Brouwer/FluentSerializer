@@ -4,6 +4,7 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
+using FluentSerializer.Core.Services;
 using FluentSerializer.Core.Tests.ObjectMother;
 using Moq;
 using System;
@@ -17,12 +18,15 @@ public sealed class SerializerContextTests
 
 	private readonly Mock<IClassMapScanList<ISerializerProfile>> _scanListMock;
 	private readonly Mock<IClassMap> _classMapMock;
+	private readonly Mock<ISerializer> _serializerMock;
 
 	public SerializerContextTests()
 	{
 		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile>>();
 		_classMapMock = new Mock<IClassMap>()
 			.WithoutPropertyMaps();
+		_serializerMock = new Mock<ISerializer>()
+			.UseConfig(TestSerializerConfiguration.Default);
 	}
 
 	[Theory,
@@ -33,7 +37,7 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
-		var coreContext = new SerializerCoreContext(default!);
+		var coreContext = new SerializerCoreContext(_serializerMock.Object);
 
 		// Act
 		var result = new SerializerContext(coreContext, property, input, type,
@@ -51,7 +55,7 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
-		var coreContext = new SerializerCoreContext(default!);
+		var coreContext = new SerializerCoreContext(_serializerMock.Object);
 
 		_classMapMock
 			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile), property, null!);
@@ -75,7 +79,7 @@ public sealed class SerializerContextTests
 		// Arrange
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
-		var coreContext = new SerializerCoreContext(default!);
+		var coreContext = new SerializerCoreContext(_serializerMock.Object);
 
 		_scanListMock
 			.WithClassMap(type, _classMapMock);
@@ -93,5 +97,10 @@ public sealed class SerializerContextTests
 	private sealed class TestClass
 	{
 		public int Id { get; init; } = default!;
+	}
+
+	private sealed class TestSerializerConfiguration : SerializerConfiguration
+	{
+		public static readonly TestSerializerConfiguration Default = new ();
 	}
 }

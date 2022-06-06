@@ -1,17 +1,17 @@
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.DataNodes;
+using FluentSerializer.Xml.Exceptions;
+using FluentSerializer.Xml.Profiles;
 using System;
 using System.Collections;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Xml.Exceptions;
-using FluentSerializer.Xml.DataNodes;
 using System.Collections.Generic;
 
 using static FluentSerializer.Xml.XmlBuilder;
-using FluentSerializer.Xml.Profiles;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -43,11 +43,18 @@ public sealed class XmlTypeSerializer
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
 
-		var classMap = _mappings.Scan((classType, SerializerDirection.Serialize));
+
+		var instanceType = dataModel.GetType();
+		var classMap =
+			_mappings.Scan((instanceType, SerializerDirection.Serialize)) ??
+			_mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		var currentCoreContext = coreContext.WithPathSegment(classType);
 		var elementName = classMap.NamingStrategy.SafeGetName(in classType, new NamingContext(_mappings));
+
+		currentCoreContext.TryAddReference(dataModel);
+
 		var childNodes = new List<IXmlNode>();
 		foreach(var property in classType.GetProperties())
 		{
@@ -56,7 +63,15 @@ public sealed class XmlTypeSerializer
 			if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
 			var propertyValue = property.GetValue(dataModel);
-			if (propertyValue is null) continue;
+			if (!coreContext.CurrentSerializer.Configuration.WriteNull && propertyValue is null) continue;
+
+			if (currentCoreContext.ContainsReference(propertyValue))
+			{
+				var referenceLoopBehavior = currentCoreContext.CurrentSerializer.Configuration.ReferenceLoopBehavior;
+				if (referenceLoopBehavior == ReferenceLoopBehavior.Ignore) continue;
+
+				throw new ReferenceLoopException(in instanceType, property.PropertyType, property.Name);
+			}
 
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(property),
@@ -71,21 +86,47 @@ public sealed class XmlTypeSerializer
 	}
 
 	private IXmlNode? SerializeProperty(
-		in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
+		in object? propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
 	{
 		if (typeof(IXmlText).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeNode<IXmlText>(in propertyValue, in propertyMapping, in serializerContext);
+			if (propertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (propertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Text(string.Empty);
+
+			var xmlTextValue = SerializeNode<IXmlText>(in propertyValue!, in propertyMapping, in serializerContext);
+			if (xmlTextValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (xmlTextValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Text(string.Empty);
+
+			return xmlTextValue;
 		}
 
 		if (typeof(IXmlAttribute).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeNode<IXmlAttribute>(in propertyValue, in propertyMapping, in serializerContext);
+			if (propertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			var xmlAttributeName = propertyMapping.NamingStrategy.SafeGetName(
+				propertyMapping.Property, propertyMapping.ConcretePropertyType, serializerContext);
+
+			if (propertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Attribute(xmlAttributeName, string.Empty);
+			var xmlAttributeValue = SerializeNode<IXmlAttribute>(in propertyValue!, in propertyMapping, in serializerContext);
+			if (xmlAttributeValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (xmlAttributeValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Attribute(xmlAttributeName, string.Empty);
+
+			return xmlAttributeValue;
 		}
 
 		if (typeof(IXmlElement).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeXElement(in propertyValue, in propertyMapping, in serializerContext);
+			var xmlPropertyName = propertyMapping.NamingStrategy.SafeGetName(
+				propertyMapping.Property, propertyMapping.ConcretePropertyType, serializerContext);
+
+			if (propertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (propertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Element(xmlPropertyName);
+
+			var xmlElementValue = SerializeXElement(in propertyValue!, in propertyMapping, in serializerContext, xmlPropertyName);
+			if (xmlElementValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (xmlElementValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Element(xmlPropertyName);
+
+			return xmlElementValue;
 		}
 
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
@@ -104,13 +145,17 @@ public sealed class XmlTypeSerializer
 		return matchingConverter.Serialize(in propertyValue, serializerContext);
 	}
 
-	private IXmlElement? SerializeXElement(in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
+	private IXmlElement? SerializeXElement(in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext, string xmlPropertyName)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IXmlElement, IXmlNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
-		return matchingConverter is null 
-			? SerializeToElement(in propertyValue, serializerContext.PropertyType, serializerContext) 
-			: matchingConverter.Serialize(in propertyValue, serializerContext);
+		if (matchingConverter is not null)
+			return matchingConverter.Serialize(in propertyValue, serializerContext);
+
+		var xmlPropertyValue = SerializeToElement(in propertyValue!, serializerContext.PropertyType, serializerContext);
+		if (xmlPropertyValue is null) return null;
+
+		return Element(xmlPropertyName, xmlPropertyValue);
 	}
 }

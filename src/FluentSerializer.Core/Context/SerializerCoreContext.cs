@@ -14,6 +14,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 {
 	private readonly Dictionary<string, IDictionary?> _additionalData;
 	private readonly List<string> _path;
+	private readonly Hashtable _referenceCollection;
 
 	/// <inheritdoc />
 	public IReadOnlyCollection<string> Path => _path;
@@ -23,8 +24,9 @@ public class SerializerCoreContext : ISerializerCoreContext
 	/// <inheritdoc cref="ISerializerCoreContext"/>
 	public SerializerCoreContext(in ISerializer currentSerializer)
 	{
-		_additionalData = new Dictionary<string, IDictionary?>();
-		_path = new List<string>();
+		_additionalData = new();
+		_path = new();
+		_referenceCollection = new Hashtable(currentSerializer.Configuration.ReferenceComparer);
 		CurrentSerializer = currentSerializer;
 	}
 	
@@ -37,6 +39,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 		{
 			name
 		};
+		_referenceCollection = serializerCoreContext._referenceCollection;
 	}
 
 	/// <inheritdoc />
@@ -67,8 +70,25 @@ public class SerializerCoreContext : ISerializerCoreContext
 		if (!_additionalData.ContainsKey(dataKey))
 			_additionalData.Add(dataKey, new Dictionary<string, TValue>());
 
-		return (IDictionary<string, TValue>) _additionalData[dataKey]!;
+		return (IDictionary<string, TValue>)_additionalData[dataKey]!;
 	}
+
+	/// <inheritdoc />
+	public bool TryAddReference(in object? instance)
+	{
+		if (instance is null) return false;
+
+		var hash = CurrentSerializer.Configuration.ReferenceComparer.GetHashCode(instance);
+		if(_referenceCollection.ContainsKey(hash)) return false;
+		if(_referenceCollection.Contains(instance)) return false;
+
+		_referenceCollection.Add(hash, instance);
+
+		return true;
+	}
+
+	/// <inheritdoc />
+	public bool ContainsReference(in object? instance) => instance is null ? false : _referenceCollection.Contains(instance);
 }
 
 /// <inheritdoc cref="ISerializerCoreContext{TDataNode}"/>

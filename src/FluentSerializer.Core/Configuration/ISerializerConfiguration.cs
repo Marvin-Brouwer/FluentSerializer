@@ -1,4 +1,5 @@
 using FluentSerializer.Core.Converting;
+using System.Collections;
 
 namespace FluentSerializer.Core.Configuration;
 
@@ -14,6 +15,14 @@ public interface ISerializerConfiguration
 	/// </example>
 	/// </summary>
 	IConfigurationStack<IConverter> DefaultConverters { get; set; }
+
+	/// <inheritdoc cref="ReferenceLoopBehavior"/>
+	ReferenceLoopBehavior ReferenceLoopBehavior { get; set; }
+
+	/// <summary>
+	/// The equality comparer used by the serializer when comparing references.
+	/// </summary>
+	IEqualityComparer ReferenceComparer { get; set; }
 
 	/// <summary>
 	/// Determine whether to format the serialized data or not.

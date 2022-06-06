@@ -58,7 +58,6 @@ public static class ClassMapMother
 			.WithBasicProppertyMapping(direction, containerType, targetProperty, assignedConverter);
 
 		return classMapMock
-			//.WithPropertyType(targetProperty.PropertyType)
 			.WithPropertyMaps(propertyMap.Object);
 	}
 }

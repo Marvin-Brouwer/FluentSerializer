@@ -34,7 +34,7 @@ public static class DependencyInjectionExtensions
 	public static IServiceCollection AddFluentXmlSerializer(
 		this IServiceCollection serviceCollection, in Assembly assembly, in Action<XmlSerializerConfiguration> configurator)
 	{
-		var configuration = XmlSerializerConfiguration.Default;
+		var configuration = new XmlSerializerConfiguration();
 		configurator(configuration);
 		return serviceCollection.AddFluentXmlSerializer(assembly, configuration);
 	}

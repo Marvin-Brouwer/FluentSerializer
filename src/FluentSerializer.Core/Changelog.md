@@ -5,6 +5,7 @@
 - [#150](https://github.com/Marvin-Brouwer/FluentSerializer/issues/150) Added release notes
 - [#127](https://github.com/Marvin-Brouwer/FluentSerializer/issues/127) Added `EnumMemberAttribute` support
 - [#73](https://github.com/Marvin-Brouwer/FluentSerializer/issues/73) Added constants for Date and Time formats
+- [#101](https://github.com/Marvin-Brouwer/FluentSerializer/issues/101) Added support for reference loop detection
 
 ## v1.0.0
 

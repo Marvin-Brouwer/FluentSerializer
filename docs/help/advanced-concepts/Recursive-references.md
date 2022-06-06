@@ -14,6 +14,19 @@
 [//]: # (Body)
 
 It's possible to recursively reference instances in C# and serializing this causes issues.  
-In most serializers this is only the case for writing out serialized data. However, because of the model-first nature of this library this also counts for reading.  
+Just like most serializer libraries the way reference loops are handled is configurable.  
+There are two settings related to this:  
+
+- **ReferenceLoopBehavior**  
+  The `ReferenceLoopBehavior` setting dictates how the serializer handles this instance.
+  There are two possible options:
+  - `ReferenceLoopBehavior.Throw`: This simply throws a `ReferenceLoopException` when a reference loop is detected.
+  - `ReferenceLoopBehavior.Ignore`: This will skip serializing the property, note that this ignores the `WriteNull` setting.
+- **ReferenceComparer**  
+  The `ReferenceComparer` is an `IComparer` that is responsible for detecting whether an instance has been seen before.
+  By default this uses the `.GetHashCode()` method of the instance. You can override this to use bespoke logic to your classes if necessary.
   
-At the moment of writing there is no real solution and/or failsafe for this, there is a feature planned for the next release to add a failsafe: [Add recursive detection to default collection converters #101](https://github.com/Marvin-Brouwer/FluentSerializer/issues/101).  
+_In most serializers it's is only possible to encounter reference loops when writing out serialized data._  
+_However, because of the model-first nature of this library this may also count for deserializing using custom `IConverter` implementations._  
+_When using OOTB functionality, this is only possible when serializing so the library only has detection for serializing._  
+_Because most data formats are linear, having looped or recursive references won't be possible so the profile will just not be able to find a self referencing properties value._  

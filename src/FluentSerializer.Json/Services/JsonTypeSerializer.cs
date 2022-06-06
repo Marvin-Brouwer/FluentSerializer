@@ -3,14 +3,14 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Json.Converting.Converters;
+using FluentSerializer.Json.DataNodes;
+using FluentSerializer.Json.Profiles;
 using System;
 using System.Collections;
-using FluentSerializer.Json.DataNodes;
 using System.Collections.Generic;
 
 using static FluentSerializer.Json.JsonBuilder;
-using FluentSerializer.Json.Profiles;
-using FluentSerializer.Json.Converting.Converters;
 
 namespace FluentSerializer.Json.Services;
 
@@ -53,6 +53,8 @@ public sealed class JsonTypeSerializer
 			_mappings.Scan((classType, SerializerDirection.Serialize));
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
+		currentCoreContext.TryAddReference(dataModel);
+
 		var properties = new List<IJsonObjectContent>();
 		foreach(var property in instanceType.GetProperties())
 		{
@@ -61,7 +63,15 @@ public sealed class JsonTypeSerializer
 			if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
 			var propertyValue = property.GetValue(dataModel);
-			if (propertyValue is null) continue;
+			if (propertyValue is null && !coreContext.CurrentSerializer.Configuration.WriteNull) continue;
+
+			if (currentCoreContext.ContainsReference(propertyValue))
+			{
+				var referenceLoopBehavior = currentCoreContext.CurrentSerializer.Configuration.ReferenceLoopBehavior;
+				if (referenceLoopBehavior == ReferenceLoopBehavior.Ignore) continue;
+
+				throw new ReferenceLoopException(in instanceType, property.PropertyType, property.Name);
+			}
 
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
@@ -76,29 +86,37 @@ public sealed class JsonTypeSerializer
 	}
 
 	private IJsonObjectContent? SerializeObjectContent(
-		in object propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
+		in object? propertyValue, in IPropertyMap propertyMapping, in SerializerContext serializerContext)
 	{
 		if (typeof(IJsonProperty).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			return SerializeProperty(in propertyValue, in propertyMapping, in serializerContext);
+			var propertyName = propertyMapping.NamingStrategy.GetName(
+				propertyMapping.Property, serializerContext.PropertyType, serializerContext);
+
+			if (propertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (propertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Property(in propertyName, Value(null));
+
+			var jsonPropertyValue = SerializeProperty(in propertyValue!, in propertyMapping, in serializerContext, propertyName);
+			if (jsonPropertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
+			if (jsonPropertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Property(in propertyName, Value(null));
+
+			return jsonPropertyValue;
 		}
 
 		throw new ContainerNotSupportedException(propertyMapping.ContainerType);
 	}
 
 	private IJsonObjectContent? SerializeProperty(in object propertyValue, in IPropertyMap propertyMapping,
-		in SerializerContext serializerContext)
+		in SerializerContext serializerContext, string propertyName)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(
 			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
 
-		var nodeValue = matchingConverter is null 
-			? SerializeToNode(in propertyValue, serializerContext.PropertyType, serializerContext) 
-			: matchingConverter.Serialize(in propertyValue, serializerContext);
-		if (nodeValue is not IJsonPropertyContent jsonContent) return default;
-		
-		var propertyName = propertyMapping.NamingStrategy.GetName(propertyMapping.Property, serializerContext.PropertyType, serializerContext);
-            
-		return Property(in propertyName, in jsonContent);
+		var jsonPropertyValue = matchingConverter is not null
+			? matchingConverter.Serialize(in propertyValue, serializerContext)
+			: SerializeToNode(in propertyValue, serializerContext.PropertyType, serializerContext);
+
+		if (jsonPropertyValue is not IJsonPropertyContent jsonPropertyContent) return null;
+		return Property(in propertyName, in jsonPropertyContent);
 	}
 }
