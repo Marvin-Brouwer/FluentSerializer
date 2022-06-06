@@ -34,6 +34,7 @@ public static class ProfileScanner
 	/// Find all profiles of type <typeparamref name="TSerializerProfile"/> in the given <paramref name="assembly"/>,
 	/// generate the profile definitions and push into an <see cref="IClassMapScanList{TSerializer, TConfiguration}"/>
 	/// </summary>
+	[Obsolete("Obsolete", false)]
 	public static IClassMapScanList<TSerializerProfile, TConfiguration> FindClassMapsInAssembly<TSerializerProfile, TConfiguration>(
 		in Assembly assembly, TConfiguration configuration)
 		where TSerializerProfile : ISerializerProfile<TConfiguration>

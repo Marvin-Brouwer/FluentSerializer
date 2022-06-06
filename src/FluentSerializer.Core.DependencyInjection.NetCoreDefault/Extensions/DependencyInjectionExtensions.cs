@@ -3,6 +3,7 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -11,14 +12,20 @@ namespace FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
 /// <summary>
 /// Extension class for registering FluentSerializers required services.
 /// </summary>
+[Obsolete(ObsolescenseMessage, false)]
 public static class DependencyInjectionExtensions
 {
+	internal const string ObsolescenseMessage = "The FluentSerializer.Core.DependencyInjection.NetCoreDefault is no longer necessary \n" +
+		"Please update the dependency injection packages and uninstall this one. \n" +
+		"Will be removed in the next Major update.";
+
 	/// <summary>
 	/// Add the services required for the FluentSerializer to work <br />
 	/// Registers the following: <br />
 	/// - The <see cref="DefaultObjectPoolProvider"/> as singleton, given there is no registration for <see cref="ObjectPoolProvider"/><br />
 	/// - The <typeparamref name="TConfiguration"/> as singleton, given it has not been registered yet.
 	/// </summary>
+	[Obsolete(ObsolescenseMessage, false)]
 	public static IServiceCollection AddFluentSerializerServices<TConfiguration>(
 		this IServiceCollection serviceCollection, TConfiguration configuration)
 		where TConfiguration : SerializerConfiguration
@@ -37,6 +44,7 @@ public static class DependencyInjectionExtensions
 	/// Register <typeparamref name="TSerializerProfile"/>s found in <paramref name="assembly"/>. <br />
 	/// If there already are <typeparamref name="TSerializerProfile"/>s present, they will be appended to.
 	/// </summary>
+	[Obsolete(ObsolescenseMessage, false)]
 	public static IServiceCollection AddFluentSerializerProfiles<TSerializerProfile, TConfiguration>(
 		this IServiceCollection serviceCollection, in Assembly assembly, in TConfiguration configuration)
 		where TSerializerProfile : class, ISerializerProfile<TConfiguration>
@@ -54,6 +62,7 @@ public static class DependencyInjectionExtensions
 		return serviceCollection;
 	}
 
+	[Obsolete(ObsolescenseMessage, false)]
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
@@ -67,6 +76,7 @@ public static class DependencyInjectionExtensions
 		return false;
 	}
 
+	[Obsolete(ObsolescenseMessage, false)]
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else

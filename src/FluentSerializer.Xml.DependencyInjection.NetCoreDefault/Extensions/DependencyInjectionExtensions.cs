@@ -1,77 +1,162 @@
-using FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Factories;
 using FluentSerializer.Xml.Configuration;
-using FluentSerializer.Xml.Profiles;
+using FluentSerializer.Xml.Extensions;
 using FluentSerializer.Xml.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Reflection;
 
 namespace FluentSerializer.Xml.DependencyInjection.NetCoreDefault.Extensions;
 
 /// <summary>
-/// Extension class for registering the FluentSerializer for XML
+/// Extension class for registering the FluentSerializer for Xml
 /// </summary>
 public static class DependencyInjectionExtensions
 {
-	private static readonly ServiceDescriptor RuntimeSerializerDescriptor = new(typeof(RuntimeXmlSerializer), typeof(RuntimeXmlSerializer), ServiceLifetime.Transient);
+	private static readonly ServiceDescriptor RuntimeSerializerDescriptor = new(typeof(IXmlSerializer), typeof(RuntimeXmlSerializer), ServiceLifetime.Transient);
 
-	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="XmlSerializerProfile"/></typeparam>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configurator">A configuration lambda to configure this serializer</param>
-	/// <returns></returns>
 	/// <summary>
-	/// Register the FluentSerializer for XML
+	/// Create a new <see cref="IXmlSerializer"/> using <see cref="XmlSerializerConfiguration.Default"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IXmlSerializer"/>
 	/// </summary>
-	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(
-		this IServiceCollection serviceCollection, in Action<XmlSerializerConfiguration> configurator) =>
-		serviceCollection.AddFluentXmlSerializer(typeof(TAssemblyMarker).Assembly, configurator);
-
-	/// <param name="assembly">The assembly to scan for <see cref="XmlSerializerProfile"/></param>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configurator">A configuration lambda to configure this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentXmlSerializer(
-		this IServiceCollection serviceCollection, in Assembly assembly, in Action<XmlSerializerConfiguration> configurator)
-	{
-		var configuration = new XmlSerializerConfiguration();
-		configurator(configuration);
-		return serviceCollection.AddFluentXmlSerializer(assembly, configuration);
-	}
-
-	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="XmlSerializerProfile"/></typeparam>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configuration">A configuration override for this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(
-		this IServiceCollection serviceCollection, XmlSerializerConfiguration? configuration = null) =>
-		serviceCollection.AddFluentXmlSerializer(typeof(TAssemblyMarker).Assembly, configuration);
-
-	/// <param name="assembly">The assembly to scan for <see cref="XmlSerializerProfile"/></param>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configuration">A configuration override for this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentXmlSerializer{TAssemblyMarker}(IServiceCollection, in Action{XmlSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentXmlSerializer(
-		this IServiceCollection serviceCollection, in Assembly assembly, XmlSerializerConfiguration? configuration = null)
-	{
-		configuration ??= XmlSerializerConfiguration.Default;
-
-		return serviceCollection
-			.AddFluentSerializerServices(configuration)
-			.AddFluentSerializerProfiles<XmlSerializerProfile, XmlSerializerConfiguration>(in assembly, in configuration)
-			.AddRuntimeXmlSerializer();
-	}
-
-	private static IServiceCollection AddRuntimeXmlSerializer(this IServiceCollection serviceCollection)
+	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection)
 	{
 		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
 
 		serviceCollection
-			.Add(RuntimeSerializerDescriptor);
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(objectPoolProvider)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
 		return serviceCollection
-			.AddTransient<IAdvancedXmlSerializer, RuntimeXmlSerializer>(static resolver => resolver.GetService<RuntimeXmlSerializer>()!)
-			.AddTransient<IXmlSerializer, RuntimeXmlSerializer>(static resolver => resolver.GetService<RuntimeXmlSerializer>()!);
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IXmlSerializer"/> using <see cref="XmlSerializerConfiguration.Default"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IXmlSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentXmlSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(objectPoolProvider)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IXmlSerializer"/> using the provided <paramref name="configuration"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IXmlSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection,
+		XmlSerializerConfiguration configuration)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(configuration, objectPoolProvider)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IXmlSerializer"/> using the provided <paramref name="configuration"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IXmlSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentXmlSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly, XmlSerializerConfiguration configuration)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(configuration, objectPoolProvider)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IXmlSerializer"/> using the provided <paramref name="configurationSetup"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IXmlSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentXmlSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection,
+		Action<XmlSerializerConfiguration> configurationSetup)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(objectPoolProvider, configurationSetup)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IXmlSerializer"/> using the provided <paramref name="configurationSetup"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IXmlSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentXmlSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly, Action<XmlSerializerConfiguration> configurationSetup)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Xml(objectPoolProvider, configurationSetup)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	private static IServiceCollection AddInterFaceRegistrations(this IServiceCollection serviceCollection)
+	{
+		return serviceCollection
+			.AddTransient(static resolver => (IAdvancedXmlSerializer)resolver.GetService<IXmlSerializer>()!);
 	}
 }

@@ -1,8 +1,10 @@
-using FluentSerializer.Core.DependencyInjection.NetCoreDefault.Extensions;
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Factories;
 using FluentSerializer.Json.Configuration;
-using FluentSerializer.Json.Profiles;
+using FluentSerializer.Json.Extensions;
 using FluentSerializer.Json.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.ObjectPool;
 using System;
 using System.Reflection;
 
@@ -13,65 +15,148 @@ namespace FluentSerializer.Json.DependencyInjection.NetCoreDefault.Extensions;
 /// </summary>
 public static class DependencyInjectionExtensions
 {
-	private static readonly ServiceDescriptor RuntimeSerializerDescriptor = new(typeof(RuntimeJsonSerializer), typeof(RuntimeJsonSerializer), ServiceLifetime.Transient);
+	private static readonly ServiceDescriptor RuntimeSerializerDescriptor = new(typeof(IJsonSerializer), typeof(RuntimeJsonSerializer), ServiceLifetime.Transient);
 
-	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="JsonSerializerProfile"/></typeparam>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configurator">A configuration lambda to configure this serializer</param>
-	/// <returns></returns>
 	/// <summary>
-	/// Register the FluentSerializer for JSON
+	/// Create a new <see cref="IJsonSerializer"/> using <see cref="JsonSerializerConfiguration.Default"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IJsonSerializer"/>
 	/// </summary>
-	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(
-		this IServiceCollection serviceCollection, in Action<JsonSerializerConfiguration> configurator) =>
-		serviceCollection.AddFluentJsonSerializer(typeof(TAssemblyMarker).Assembly, in configurator);
-
-	/// <param name="assembly">The assembly to scan for <see cref="JsonSerializerProfile"/></param>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configurator">A configuration lambda to configure this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentJsonSerializer{TAssemblyMarker}(IServiceCollection, in Action{JsonSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentJsonSerializer(
-		this IServiceCollection serviceCollection, in Assembly assembly, in Action<JsonSerializerConfiguration> configurator)
-	{
-		var configuration = new JsonSerializerConfiguration();
-		configurator(configuration);
-		return serviceCollection.AddFluentJsonSerializer(in assembly, configuration);
-	}
-
-	/// <typeparam name="TAssemblyMarker">The assembly to scan for <see cref="JsonSerializerProfile"/></typeparam>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configuration">A configuration override for this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentJsonSerializer{TAssemblyMarker}(IServiceCollection, in Action{JsonSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(
-		this IServiceCollection serviceCollection, JsonSerializerConfiguration? configuration = null) =>
-		serviceCollection.AddFluentJsonSerializer(typeof(TAssemblyMarker).Assembly, configuration);
-
-	/// <param name="assembly">The assembly to scan for <see cref="JsonSerializerProfile"/></param>
-	/// <param name="serviceCollection"></param>
-	/// <param name="configuration">A configuration override for this serializer</param>
-	/// <returns></returns>
-	/// <inheritdoc cref="AddFluentJsonSerializer{TAssemblyMarker}(IServiceCollection, in Action{JsonSerializerConfiguration})"/>
-	public static IServiceCollection AddFluentJsonSerializer(
-		this IServiceCollection serviceCollection, in Assembly assembly, JsonSerializerConfiguration? configuration = null)
-	{
-		configuration ??= JsonSerializerConfiguration.Default;
-
-		return serviceCollection
-			.AddFluentSerializerServices(configuration)
-			//.AddFluentSerializerProfiles<JsonSerializerProfile, JsonSerializerConfiguration>(in assembly, in configuration)
-			.AddRuntimeJsonSerializer();
-	}
-
-	private static IServiceCollection AddRuntimeJsonSerializer(this IServiceCollection serviceCollection)
+	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection)
 	{
 		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
 
 		serviceCollection
-			.Add(RuntimeSerializerDescriptor);
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(objectPoolProvider)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
 		return serviceCollection
-			.AddTransient<IAdvancedJsonSerializer, RuntimeJsonSerializer>(static resolver => resolver.GetService<RuntimeJsonSerializer>()!)
-			.AddTransient<IJsonSerializer, RuntimeJsonSerializer>(static resolver => resolver.GetService<RuntimeJsonSerializer>()!);
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IJsonSerializer"/> using <see cref="JsonSerializerConfiguration.Default"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IJsonSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentJsonSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(objectPoolProvider)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IJsonSerializer"/> using the provided <paramref name="configuration"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IJsonSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection,
+		JsonSerializerConfiguration configuration)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(configuration, objectPoolProvider)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IJsonSerializer"/> using the provided <paramref name="configuration"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IJsonSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentJsonSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly, JsonSerializerConfiguration configuration)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(configuration, objectPoolProvider)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IJsonSerializer"/> using the provided <paramref name="configurationSetup"/>
+	/// And use all the profiles found in the <typeparamref name="TAssemblyMarker"/> to configure the <see cref="IJsonSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentJsonSerializer<TAssemblyMarker>(this IServiceCollection serviceCollection,
+		Action<JsonSerializerConfiguration> configurationSetup)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(objectPoolProvider, configurationSetup)
+					.UseProfilesFromAssembly<TAssemblyMarker>();
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	/// <summary>
+	/// Create a new <see cref="IJsonSerializer"/> using the provided <paramref name="configurationSetup"/>
+	/// And use all the profiles found in the <paramref name="assembly"/> to configure the <see cref="IJsonSerializer"/>
+	/// </summary>
+	public static IServiceCollection AddFluentJsonSerializer(this IServiceCollection serviceCollection,
+		Assembly assembly, Action<JsonSerializerConfiguration> configurationSetup)
+	{
+		if (serviceCollection.Contains(RuntimeSerializerDescriptor)) return serviceCollection;
+
+		serviceCollection
+			.AddTransient(s =>
+			{
+				var objectPoolProvider = s.GetService<ObjectPoolProvider>() ?? FactoryConstants.DefaultObjectPoolProvider;
+
+				return SerializerFactory.For
+					.Json(objectPoolProvider, configurationSetup)
+					.UseProfilesFromAssembly(assembly);
+			});
+
+		return serviceCollection
+			.AddInterFaceRegistrations();
+	}
+
+	private static IServiceCollection AddInterFaceRegistrations(this IServiceCollection serviceCollection)
+	{
+		return serviceCollection
+			.AddTransient(static resolver => (IAdvancedJsonSerializer)resolver.GetService<IJsonSerializer>()!);
 	}
 }
