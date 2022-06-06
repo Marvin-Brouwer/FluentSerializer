@@ -32,7 +32,7 @@ public sealed class ScanListTests
 	{
 		// Arrange
 		var input = (typeof(int), SerializerDirection.Deserialize);
-		var sut = new ClassMapScanList<ISerializerProfile>(ClassMaps);
+		var sut = new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(ClassMaps);
 
 		// Act
 		var result = sut.Scan(input);
@@ -47,7 +47,7 @@ public sealed class ScanListTests
 	{
 		// Arrange
 		var input = (typeof(bool), SerializerDirection.Serialize);
-		var sut = new ClassMapScanList<ISerializerProfile>(ClassMaps);
+		var sut = new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(ClassMaps);
 
 		// Act
 		var result = sut.Scan(input);

@@ -11,9 +11,9 @@ public static class ScanListObjectMother
 	/// <summary>
 	/// Setup the mock of <see cref="IClassMapScanList{TSerializerProfile}"/> to return <paramref name="mapping"/> on scan
 	/// </summary>
-	public static Mock<IClassMapScanList<TProfile>> WithClassMap<TProfile>(this Mock<IClassMapScanList<TProfile>> scanListMock,
+	public static Mock<IClassMapScanList<TProfile, ISerializerConfiguration>> WithClassMap<TProfile>(this Mock<IClassMapScanList<TProfile, ISerializerConfiguration>> scanListMock,
 		Type type, IClassMap mapping)
-		where TProfile : ISerializerProfile
+		where TProfile : ISerializerProfile<ISerializerConfiguration>
 	{
 		scanListMock
 			.Setup(list => list.Scan(It.Is((
@@ -27,9 +27,9 @@ public static class ScanListObjectMother
 	/// <summary>
 	/// Setup the mock of <see cref="IClassMapScanList{TSerializerProfile}"/> to return <paramref name="mappingMock"/>'s object on scan
 	/// </summary>
-	public static Mock<IClassMapScanList<TProfile>> WithClassMap<TProfile>(this Mock<IClassMapScanList<TProfile>> scanListMock,
+	public static Mock<IClassMapScanList<TProfile, ISerializerConfiguration>> WithClassMap<TProfile>(this Mock<IClassMapScanList<TProfile, ISerializerConfiguration>> scanListMock,
 		Type type, IMock<IClassMap> mappingMock)
-		where TProfile : ISerializerProfile
+		where TProfile : ISerializerProfile<ISerializerConfiguration>
 	{
 		return scanListMock
 			.WithClassMap(type, mappingMock.Object);

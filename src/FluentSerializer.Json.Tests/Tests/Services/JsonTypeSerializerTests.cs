@@ -24,7 +24,6 @@ public sealed class JsonTypeSerializerTests
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
 	private readonly ISerializerCoreContext<IJsonNode> _coreContextStub;
-	private readonly Mock<IClassMapScanList<JsonSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public JsonTypeSerializerTests()
@@ -32,9 +31,8 @@ public sealed class JsonTypeSerializerTests
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(JsonSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
-		_scanList = new Mock<IClassMapScanList<JsonSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
-			.WithNamingStrategy(Names.Use.PascalCase)
+			.WithDefaults()
 			.WithoutPropertyMaps();
 	}
 
@@ -49,9 +47,9 @@ public sealed class JsonTypeSerializerTests
 		var input = new TestClass();
 
 		var type = typeof(TestClass);
-		var scanList = Mock.Of<IClassMapScanList<JsonSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new JsonTypeSerializer(in scanList);
+		var sut = new JsonTypeSerializer(classMap);
 
 		// Act
 		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
@@ -74,10 +72,10 @@ public sealed class JsonTypeSerializerTests
 		};
 
 		var type = typeof(TestClass);
-		_scanList
-			.WithClassMap(type, _classMap);
+		_classMap
+			.WithClassType(type);
 
-		var sut = new JsonTypeSerializer(_scanList.Object);
+		var sut = new JsonTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -101,11 +99,10 @@ public sealed class JsonTypeSerializerTests
 		var attemptedContainerType = typeof(bool);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new JsonTypeSerializer(_scanList.Object);
+		var sut = new JsonTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
@@ -133,11 +130,10 @@ public sealed class JsonTypeSerializerTests
 		var containerType = typeof(IJsonProperty);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new JsonTypeSerializer(_scanList.Object);
+		var sut = new JsonTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -155,9 +151,9 @@ public sealed class JsonTypeSerializerTests
 		var input = new List<int>();
 
 		var type = typeof(IEnumerable<int>);
-		var scanList = Mock.Of<IClassMapScanList<JsonSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new JsonTypeSerializer(in scanList);
+		var sut = new JsonTypeSerializer(classMap);
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -184,9 +180,8 @@ public sealed class JsonTypeSerializerTests
 		var containerType = typeof(IJsonProperty);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
 		var configuration = new JsonSerializerConfiguration
 		{
@@ -197,7 +192,7 @@ public sealed class JsonTypeSerializerTests
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(_scanList.Object);
+		var sut = new JsonTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToNode(input, type, contextStub);
@@ -245,8 +240,8 @@ public sealed class JsonTypeSerializerTests
 			DefaultNamingStrategy = Names.Use.PascalCase,
 			WriteNull = true
 		};
-		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<JsonSerializerProfile>(testProfile);
+		var testProfile = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
+		var scanList = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(testProfile);
 
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(configuration);
@@ -290,14 +285,13 @@ public sealed class JsonTypeSerializerTests
 			ReferenceLoopBehavior = ReferenceLoopBehavior.Throw,
 			DefaultNamingStrategy = Names.Use.PascalCase
 		};
-		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<JsonSerializerProfile>(testProfile);
+		var testProfile = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
 
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(scanList);
+		var sut = new JsonTypeSerializer(testProfile);
 
 		// Act
 		var result1 = () => sut.SerializeToNode(input1, type, contextStub);

@@ -39,17 +39,17 @@ public static class DependencyInjectionExtensions
 	/// </summary>
 	public static IServiceCollection AddFluentSerializerProfiles<TSerializerProfile, TConfiguration>(
 		this IServiceCollection serviceCollection, in Assembly assembly, in TConfiguration configuration)
-		where TSerializerProfile : class, ISerializerProfile
+		where TSerializerProfile : class, ISerializerProfile<TConfiguration>
 		where TConfiguration : SerializerConfiguration
 	{
-		var existingMappings = serviceCollection.FindRegistrationFor<IClassMapScanList<TSerializerProfile>>();
-		var mappings = ProfileScanner.FindClassMapsInAssembly<TSerializerProfile>(in assembly, configuration);
+		var existingMappings = serviceCollection.FindRegistrationFor<IClassMapScanList<TSerializerProfile, TConfiguration>>();
+		var mappings = ProfileScanner.FindClassMapsInAssembly<TSerializerProfile, TConfiguration>(in assembly, configuration);
 
 		if (existingMappings is null)
 			serviceCollection.AddScoped(_ => mappings);
 		else
-			serviceCollection.AddScoped<IClassMapScanList<TSerializerProfile>>(_ =>
-				((ClassMapScanList<TSerializerProfile>)existingMappings).Append(mappings));
+			serviceCollection.AddScoped<IClassMapScanList<TSerializerProfile, TConfiguration>>(_ =>
+				((ClassMapScanList<TSerializerProfile, TConfiguration>)existingMappings).Append(mappings));
 
 		return serviceCollection;
 	}

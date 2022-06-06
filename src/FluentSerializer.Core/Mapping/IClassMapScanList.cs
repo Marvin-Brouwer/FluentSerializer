@@ -5,7 +5,8 @@ using System;
 namespace FluentSerializer.Core.Mapping;
 
 /// <inheritdoc />
-public interface IClassMapScanList<TSerializerProfile> : IScanList<(Type type, SerializerDirection direction), IClassMap>
-	where TSerializerProfile : ISerializerProfile
+public interface IClassMapScanList<TSerializerProfile, TConfiguration> : IScanList<(Type type, SerializerDirection direction), IClassMap>
+	where TSerializerProfile : ISerializerProfile<TConfiguration>
+	where TConfiguration : ISerializerConfiguration
 {
 }

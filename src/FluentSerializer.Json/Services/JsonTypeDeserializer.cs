@@ -9,6 +9,8 @@ using System.Collections;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Converting.Converters;
+using System.Collections.Generic;
+using FluentSerializer.Json.Configuration;
 
 namespace FluentSerializer.Json.Services;
 
@@ -17,14 +19,14 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeDeserializer
 {
-	private readonly IClassMapScanList<JsonSerializerProfile> _mappings;
+	private readonly IClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration> _mappings;
 
 	/// <inheritdoc cref="JsonTypeDeserializer" />
-	public JsonTypeDeserializer(in IClassMapScanList<JsonSerializerProfile> mappings)
+	public JsonTypeDeserializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = mappings;
+		_mappings = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(mappings);
 	}
 
 	/// <summary>

@@ -25,7 +25,6 @@ public sealed class XmlTypeSerializerTests
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
 	private readonly ISerializerCoreContext<IXmlNode> _coreContextStub;
-	private readonly Mock<IClassMapScanList<XmlSerializerProfile>> _scanList;
 	private readonly Mock<IClassMap> _classMap;
 
 	public XmlTypeSerializerTests()
@@ -33,9 +32,8 @@ public sealed class XmlTypeSerializerTests
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(XmlSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
-		_scanList = new Mock<IClassMapScanList<XmlSerializerProfile>>();
 		_classMap = new Mock<IClassMap>()
-			.WithNamingStrategy(Names.Use.PascalCase)
+			.WithDefaults()
 			.WithoutPropertyMaps();
 	}
 
@@ -51,9 +49,9 @@ public sealed class XmlTypeSerializerTests
 		var input = new List<int>();
 
 		var type = typeof(IEnumerable<int>);
-		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new XmlTypeSerializer(in scanList);
+		var sut = new XmlTypeSerializer(classMap);
 
 		// Act
 		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
@@ -75,9 +73,9 @@ public sealed class XmlTypeSerializerTests
 		var input = new TestClass();
 
 		var type = typeof(TestClass);
-		var scanList = Mock.Of<IClassMapScanList<XmlSerializerProfile>>();
+		var classMap = new List<IClassMap>(0);
 
-		var sut = new XmlTypeSerializer(in scanList);
+		var sut = new XmlTypeSerializer(classMap);
 
 		// Act
 		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
@@ -100,10 +98,10 @@ public sealed class XmlTypeSerializerTests
 		};
 
 		var type = typeof(TestClass);
-		_scanList
-			.WithClassMap(type, _classMap);
+		_classMap
+			.WithClassType(type);
 
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToElement(input, type, _coreContextStub);
@@ -127,11 +125,10 @@ public sealed class XmlTypeSerializerTests
 		var attemptedContainerType = typeof(bool);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
@@ -159,11 +156,10 @@ public sealed class XmlTypeSerializerTests
 		var containerType = typeof(IXmlElement);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToElement(input, type, _coreContextStub);
@@ -189,11 +185,10 @@ public sealed class XmlTypeSerializerTests
 		var containerType = typeof(IXmlAttribute);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
-
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToElement(input, type, _coreContextStub);
@@ -219,11 +214,10 @@ public sealed class XmlTypeSerializerTests
 		var containerType = typeof(IXmlText);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
 
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToElement(input, type, _coreContextStub);
@@ -250,10 +244,9 @@ public sealed class XmlTypeSerializerTests
 		var containerType = typeof(IXmlElement);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
 		_classMap
+			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
-		_scanList
-			.WithClassMap(type, _classMap);
-
+		
 		var configuration = new XmlSerializerConfiguration
 		{
 			ReferenceLoopBehavior = behavior,
@@ -264,7 +257,7 @@ public sealed class XmlTypeSerializerTests
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 
-		var sut = new XmlTypeSerializer(_scanList.Object);
+		var sut = new XmlTypeSerializer(_classMap.ToCollection());
 
 		// Act
 		var result = sut.SerializeToElement(input, type, contextStub);
@@ -315,8 +308,8 @@ public sealed class XmlTypeSerializerTests
 			DefaultPropertyNamingStrategy = Names.Use.PascalCase,
 			WriteNull = true
 		};
-		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<XmlSerializerProfile>(testProfile);
+		var testProfile = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
+		var scanList = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(testProfile);
 
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(configuration);
@@ -361,8 +354,8 @@ public sealed class XmlTypeSerializerTests
 			DefaultClassNamingStrategy = Names.Use.PascalCase,
 			DefaultPropertyNamingStrategy = Names.Use.PascalCase
 		};
-		var testProfile = ((ISerializerProfile)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<XmlSerializerProfile>(testProfile);
+		var testProfile = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
+		var scanList = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(testProfile);
 
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(configuration);

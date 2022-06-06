@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
-using FluentSerializer.Json.Profiles;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Json.Services;
 
@@ -27,9 +27,9 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 	/// <inheritdoc cref="RuntimeJsonSerializer" />
 	public RuntimeJsonSerializer(
-		IClassMapScanList<JsonSerializerProfile> mappings, 
 		JsonSerializerConfiguration configuration,
-		ObjectPoolProvider objectPoolProvider)
+		ObjectPoolProvider objectPoolProvider,
+		IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));

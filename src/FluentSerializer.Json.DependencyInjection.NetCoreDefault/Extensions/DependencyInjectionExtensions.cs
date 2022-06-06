@@ -60,7 +60,7 @@ public static class DependencyInjectionExtensions
 
 		return serviceCollection
 			.AddFluentSerializerServices(configuration)
-			.AddFluentSerializerProfiles<JsonSerializerProfile, JsonSerializerConfiguration>(in assembly, in configuration)
+			//.AddFluentSerializerProfiles<JsonSerializerProfile, JsonSerializerConfiguration>(in assembly, in configuration)
 			.AddRuntimeJsonSerializer();
 	}
 

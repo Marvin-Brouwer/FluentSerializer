@@ -4,6 +4,7 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Profiles;
@@ -20,14 +21,14 @@ namespace FluentSerializer.Xml.Services;
 /// </summary>
 public sealed class XmlTypeSerializer
 {
-	private readonly IClassMapScanList<XmlSerializerProfile> _mappings;
+	private readonly IClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration> _mappings;
 
 	/// <inheritdoc cref="XmlTypeSerializer" />
-	public XmlTypeSerializer(in IClassMapScanList<XmlSerializerProfile> mappings)
+	public XmlTypeSerializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = mappings;
+		_mappings = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(mappings);
 	}
 
 	/// <summary>
@@ -42,7 +43,6 @@ public sealed class XmlTypeSerializer
 		Guard.Against.Null(coreContext, nameof(coreContext));
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
-
 
 		var instanceType = dataModel.GetType();
 		var classMap =

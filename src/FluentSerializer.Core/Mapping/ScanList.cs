@@ -10,13 +10,13 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	where TScanBy : notnull
 	where TScanFor : class
 {
-	private readonly IReadOnlyList<TScanFor> _storedDataTypes;
+	private readonly IReadOnlyCollection<TScanFor> _storedDataTypes;
 #if (!DEBUG)
         private readonly Dictionary<TScanBy, TScanFor?> _cachedMappings = new();
 #endif
 
 	/// <inheritdoc  cref="IScanList{TScanBy,TScanFor}" />
-	protected ScanList(in IReadOnlyList<TScanFor> dataTypes)
+	protected ScanList(in IReadOnlyCollection<TScanFor> dataTypes)
 	{
 		Guard.Against.Null(dataTypes, nameof(dataTypes));
 
@@ -51,10 +51,7 @@ public abstract class ScanList<TScanBy, TScanFor> : IScanList<TScanBy, TScanFor>
 	/// </summary>
 	protected abstract bool Compare(TScanBy compareTo, in TScanFor dataType);
 
-	#region IReadonlyList<T>
-
-	/// <inheritdoc />
-	public TScanFor this[int index] => _storedDataTypes[index];
+	#region IReadOnlyCollection<T>
 
 	/// <inheritdoc />
 	public int Count => _storedDataTypes.Count;
