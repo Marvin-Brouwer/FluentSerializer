@@ -2,6 +2,7 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 
@@ -17,9 +18,9 @@ public readonly partial struct JsonObject : IJsonObject
 	public string Name => ObjectName;
 
 	private readonly int? _lastPropertyIndex;
-	private readonly List<IJsonNode> _children;
+
 	/// <inheritdoc />
-	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
+	public IReadOnlyList<IJsonNode> Children { get; } = ImmutableArray<IJsonNode>.Empty;
 
 	/// <inheritdoc cref="object"/>
 	/// <remarks>
@@ -33,18 +34,20 @@ public readonly partial struct JsonObject : IJsonObject
 		    || properties.Equals(Enumerable.Empty<IJsonObjectContent>())
 		    || properties.Equals(Array.Empty<IJsonObjectContent>()))
 		{
-			_children = new List<IJsonNode>(0);
+			Children = ImmutableArray<IJsonNode>.Empty;
 		}
 		else
 		{
 			var currentPropertyIndex = 0;
-			_children = new List<IJsonNode>();
+			var children = ImmutableArray.CreateBuilder<IJsonNode>();
 			foreach (var property in properties)
 			{
-				_children.Add(property);
+				children.Add(property);
 				if (property is not IJsonComment) _lastPropertyIndex = currentPropertyIndex;
 				currentPropertyIndex++;
 			}
+
+			Children = children.ToImmutable();
 		}
 	}
 

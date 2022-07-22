@@ -45,7 +45,7 @@ public readonly partial struct XmlElement
 		// Technically this object can have multiple text nodes, only the first needs indentation
 		var textOnly = true;
 		var firstTextNode = true;
-		foreach (var child in _children)
+		foreach (var child in _childNodes)
 		{
 			if (child is IXmlElement childElement) {
 				textOnly = false;

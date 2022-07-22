@@ -34,7 +34,7 @@ public readonly partial struct JsonProperty
 			// Just pretend it's null if no value has been provided
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
 			{
-				_children = Array.Empty<IJsonNode>();
+				Children = Array.Empty<IJsonNode>();
 				offset++;
 				return;
 			}
@@ -48,7 +48,7 @@ public readonly partial struct JsonProperty
 			offset++;
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				_children = new IJsonNode[]{
+				Children = new IJsonNode[]{
 					new JsonObject(in text, ref offset)
 				};
 				HasValue = true;
@@ -56,7 +56,7 @@ public readonly partial struct JsonProperty
 			}
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				_children = new IJsonNode[] {
+				Children = new IJsonNode[] {
 					new JsonArray(in text, ref offset)
 				};
 				HasValue = true;
@@ -67,14 +67,14 @@ public readonly partial struct JsonProperty
 			// Just pretend it's null if no value has been provided
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
 			{
-				_children = Array.Empty<IJsonNode>();
+				Children = Array.Empty<IJsonNode>();
 				offset++;
 				return;
 			}
 		}
 
 		var jsonValue = new JsonValue(in text, ref offset);
-		_children = new IJsonNode[]
+		Children = new IJsonNode[]
 		{
 			jsonValue
 		};

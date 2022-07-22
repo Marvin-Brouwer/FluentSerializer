@@ -1,6 +1,6 @@
 using FluentSerializer.Core.Extensions;
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -29,8 +29,9 @@ public readonly partial struct XmlElement
 		offset.AdjustForToken(XmlCharacterConstants.TagStartCharacter);
 		offset.AdjustForWhiteSpace(in text);
 
-		_attributes = new List<IXmlAttribute>();
-		_children = new List<IXmlNode>();
+		var attributes = ImmutableArray.CreateBuilder<IXmlAttribute>();
+		var childNodes = ImmutableArray.CreateBuilder<IXmlNode>();
+		var allNodes = ImmutableArray.CreateBuilder<IXmlNode>();
 
 		var nameStartOffset = offset;
 		var nameEndOffset = offset;
@@ -94,10 +95,20 @@ public readonly partial struct XmlElement
 				continue;
 			}
 
-			_attributes.Add(new XmlAttribute(in text, ref offset));
+			attributes.Add(new XmlAttribute(in text, ref offset));
 		}
 
-		if (elementClosed) return;
+		if (elementClosed)
+		{
+			_attributes = attributes.ToImmutable();
+			_childNodes = childNodes.ToImmutable();
+
+			allNodes.AddRange(attributes);
+			allNodes.AddRange(childNodes);
+			Children = allNodes.ToImmutable();
+
+			return;
+		}
 
 		while (text.WithinCapacity(in offset))
 		{
@@ -114,16 +125,16 @@ public readonly partial struct XmlElement
 			{
 				if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CommentStart))
 				{
-					_children.Add(new XmlComment(in text, ref offset));
+					childNodes.Add(new XmlComment(in text, ref offset));
 					continue;
 				}
 				if (text.HasCharactersAtOffset(in offset, XmlCharacterConstants.CharacterDataStart))
 				{
-					_children.Add(new XmlCharacterData(in text, ref offset));
+					childNodes.Add(new XmlCharacterData(in text, ref offset));
 					continue;
 				}
 
-				_children.Add(new XmlElement(in text, ref offset));
+				childNodes.Add(new XmlElement(in text, ref offset));
 				continue;
 			}
 			if (text.HasWhitespaceAtOffset(in offset))
@@ -132,7 +143,7 @@ public readonly partial struct XmlElement
 				continue;
 			}
 
-			_children.Add(new XmlText(in text, ref offset));
+			childNodes.Add(new XmlText(in text, ref offset));
 		}
 
 		// Walk to the end of the current closing tag
@@ -142,5 +153,12 @@ public readonly partial struct XmlElement
 			offset++;
 		}
 		offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
+
+		_attributes = attributes.ToImmutable();
+		_childNodes = childNodes.ToImmutable();
+
+		allNodes.AddRange(attributes);
+		allNodes.AddRange(childNodes);
+		Children = allNodes.ToImmutable();
 	}
 }

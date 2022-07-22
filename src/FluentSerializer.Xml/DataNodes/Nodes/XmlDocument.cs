@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
@@ -12,7 +13,7 @@ public readonly partial struct XmlDocument : IXmlDocument
 	/// <inheritdoc />
 	public IXmlElement? RootElement { get; }
 	/// <inheritdoc />
-	public IReadOnlyList<IXmlNode> Children => RootElement?.Children ?? new List<IXmlNode>(0);
+	public IReadOnlyList<IXmlNode> Children => RootElement?.Children ?? ImmutableArray<IXmlNode>.Empty;
 
 	/// <inheritdoc />
 	public string Name => DocumentName;

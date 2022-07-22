@@ -1,6 +1,6 @@
 using FluentSerializer.Core.Extensions;
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -12,7 +12,7 @@ public readonly partial struct JsonObject
 	/// </remarks>
 	public JsonObject(in ReadOnlySpan<char> text, ref int offset)
 	{
-		_children = new List<IJsonNode>();
+		var children = ImmutableArray.CreateBuilder<IJsonNode>();
 		_lastPropertyIndex = null;
 		var currentPropertyIndex = 0;
 
@@ -24,20 +24,20 @@ public readonly partial struct JsonObject
 
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(in text, ref offset));
+				children.Add(new JsonCommentSingleLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(in text, ref offset));
+				children.Add(new JsonCommentMultiLine(in text, ref offset));
 				currentPropertyIndex++;
 				continue;
 			}
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter))
 			{
 				var jsonProperty = new JsonProperty(in text, ref offset);
-				_children.Add(jsonProperty);
+				children.Add(jsonProperty);
 				_lastPropertyIndex = currentPropertyIndex;
 
 				currentPropertyIndex++;
@@ -47,5 +47,7 @@ public readonly partial struct JsonObject
 			offset++;
 		}
 		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
+
+		Children = children.ToImmutable();
 	}
 }

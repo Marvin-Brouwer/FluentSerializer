@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 
@@ -14,9 +15,9 @@ public readonly partial struct JsonArray : IJsonArray
 	public string Name => ArrayName;
 
 	private readonly int? _lastNonCommentChildIndex;
-	private readonly List<IJsonNode> _children;
+
 	/// <inheritdoc />
-	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
+	public IReadOnlyList<IJsonNode> Children { get; } = ImmutableArray<IJsonNode>.Empty;
 
 	/// <inheritdoc cref="JsonBuilder.Array(in IEnumerable{IJsonArrayContent})"/>
 	/// <remarks>
@@ -30,19 +31,21 @@ public readonly partial struct JsonArray : IJsonArray
 		    || elements.Equals(Enumerable.Empty<IJsonArrayContent>())
 		    || elements.Equals(Array.Empty<IJsonArrayContent>()))
 		{
-			_children = new List<IJsonNode>(0);
+			Children = ImmutableArray<IJsonNode>.Empty;
 		}
 		else
 		{
-			_children = new List<IJsonNode>();
+			var children = ImmutableArray.CreateBuilder<IJsonNode>();
 			var currentChildIndex = 0;
 			foreach (var property in elements)
 			{
-				_children.Add(property);
+				children.Add(property);
 				if (property is not IJsonComment) _lastNonCommentChildIndex = currentChildIndex;
 				currentChildIndex++;
 
 			}
+
+			Children = children.ToImmutable();
 		}
 	}
 }

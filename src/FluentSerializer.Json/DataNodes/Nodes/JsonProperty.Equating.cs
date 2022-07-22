@@ -17,7 +17,7 @@ public readonly partial struct JsonProperty
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
 	/// <inheritdoc />
-	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _children);
+	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Children);
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
 	/// <param name="left">The left side object to compare with this object.</param>

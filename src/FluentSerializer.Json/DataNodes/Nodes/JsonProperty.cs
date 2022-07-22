@@ -1,9 +1,8 @@
-using System;
 using Ardalis.GuardClauses;
 using FluentSerializer.Core.Extensions;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Linq;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -14,8 +13,8 @@ public readonly partial struct JsonProperty : IJsonProperty
 	[DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
 	private string GetDebugValue()
 	{
-		if (_children.Length == 0) return JsonCharacterConstants.NullValue;
-		var value = _children[0];
+		if (Children.Count == 0) return JsonCharacterConstants.NullValue;
+		var value = Children[0];
 		if (value is JsonValue jsonValue) return jsonValue.Value ?? JsonCharacterConstants.NullValue;
 		return value.Name;
 	}
@@ -23,16 +22,14 @@ public readonly partial struct JsonProperty : IJsonProperty
 	/// <inheritdoc />
 	public string Name { get; }
 
-	private readonly IJsonNode[] _children;
-
 	/// <inheritdoc />
 	public bool HasValue { get; }
 
 	/// <inheritdoc />
-	public IReadOnlyList<IJsonNode> Children => _children;
+	public IReadOnlyList<IJsonNode> Children { get; } = ImmutableArray<IJsonNode>.Empty;
 
 	/// <inheritdoc />
-	public IJsonNode? Value => _children.FirstOrDefault();
+	public IJsonNode? Value => Children.Count == 0 ? null : Children[0];
 
 	/// <inheritdoc cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/>
 	/// <remarks>
@@ -45,6 +42,8 @@ public readonly partial struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = value is null ? Array.Empty<IJsonNode>() : new IJsonNode[] { value };
+		Children = value is null
+			? ImmutableArray<IJsonNode>.Empty
+			: ImmutableArray.Create(value);
 	}
 }

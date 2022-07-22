@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
@@ -11,6 +12,9 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// Converts most dotnet collections
 /// </summary>
 public abstract class CollectionConverterBase : IConverter {
+
+	private static MethodInfo? _immutableArrayMethod;
+	private static MethodInfo? _immutableListMethod;
 
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -33,14 +37,21 @@ public abstract class CollectionConverterBase : IConverter {
 	/// </remarks>
 	protected static IList GetEnumerableInstance(in Type targetType)
 	{
-		if (targetType.Equals(typeof(IEnumerable)) && !targetType.IsGenericType) return new List<object>();
-		if (targetType.Equals(typeof(IEnumerable))) return GenerateDefaultEnumerable(targetType);
+		if (targetType.IsGenericType && targetType.EqualsTopLevel(typeof(ImmutableList<>)))
+			return CreateImmutableListBuilder(in targetType);
+		if (targetType.IsGenericType && targetType.EqualsTopLevel(typeof(ImmutableArray<>)))
+			return CreateImmutableListBuilder(in targetType);
+
+		if (targetType == typeof(IEnumerable) && !targetType.IsGenericType) return new List<object>();
+		if (targetType == typeof(IEnumerable)) return GenerateDefaultEnumerable(in targetType);
 
 		if (targetType.EqualsTopLevel(typeof(ArrayList))) return (IList)Activator.CreateInstance(targetType)!;
 		if (targetType.EqualsTopLevel(typeof(List<>))) return (IList)Activator.CreateInstance(targetType)!;
+		if (targetType.IsArray) return GenerateDefaultEnumerable(in targetType);
 
-		if (targetType.IsInterface && typeof(IEnumerable).IsAssignableFrom(targetType)) return GenerateDefaultEnumerable(targetType);
-		if (TryCreateSystemArray(targetType, out var array)) return array;
+		// All enumerable fallback
+		if (targetType.IsInterface && typeof(IEnumerable).IsAssignableFrom(targetType))
+			return CreateImmutableListBuilder(in targetType);
 
 		throw new NotSupportedException($"Unable to create an enumerable collection of '{targetType.FullName}'");
 	}
@@ -48,50 +59,111 @@ public abstract class CollectionConverterBase : IConverter {
 	/// <summary>
 	/// Convert an IList to the original requested type
 	/// </summary>
-	protected static IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
+	protected static IEnumerable? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
 	{
 		if (collection is null) return null;
 
-		if (targetType.Equals(typeof(ArrayList))) return new ArrayList(collection);
-		if (targetType.IsArray) return ToArray(collection);
+		if (targetType.IsGenericType && targetType.EqualsTopLevel(typeof(ImmutableList<>)))
+			return ToImmutableList(in collection, in targetType);
+		if (targetType.IsGenericType && targetType.EqualsTopLevel(typeof(ImmutableArray<>)))
+			return ToImmutableArray(in collection, in targetType);
+
+		if (targetType == typeof(ArrayList)) return new ArrayList(collection);
+		if (targetType.IsArray) return ToArray(in collection, in targetType);
+
+		if (targetType.IsInterface && typeof(IEnumerable).IsAssignableFrom(targetType))
+			return ToImmutableArray(in collection, collection.GetType());
+
 		return collection;
 	}
 
-	private static IList ToArray(IList list)
+	private static IEnumerable ToImmutableList(in IList collection, in Type targetType)
 	{
-		var genericType = list.GetType().GetGenericArguments()[0];
-		var newArray = Array.CreateInstance(genericType, list.Count);
+		var genericTypes = GetGenericTypeInfo(in targetType);
+		
+		if (_immutableListMethod is null)
+			foreach (var method in typeof(ImmutableList).GetMethods(
+				         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+			{
+				if (!method.Name.Equals(nameof(ImmutableList.ToImmutableList), StringComparison.Ordinal)) continue;
+				if (typeof(IEnumerable).IsAssignableFrom(method.GetParameters()[0].ParameterType))
+				{
+					_immutableListMethod = method;
+					break;
+				}
+			}
+
+		var genericMethod = _immutableListMethod!.MakeGenericMethod(genericTypes);
+		return (IEnumerable)genericMethod.Invoke(null, new object?[] { collection })!;
+	}
+
+	private static IEnumerable ToImmutableArray(in IList collection, in Type targetType)
+	{
+		var genericTypes = GetGenericTypeInfo(targetType);
+
+		if (_immutableArrayMethod is null)
+			foreach (var method in typeof(ImmutableArray).GetMethods(
+				BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+			{
+				if (!method.Name.Equals(nameof(ImmutableArray.ToImmutableArray), StringComparison.Ordinal)) continue;
+				if (typeof(IEnumerable).IsAssignableFrom(method.GetParameters()[0].ParameterType))
+				{
+					_immutableArrayMethod = method;
+					break;
+				}
+			}
+
+		var genericMethod = _immutableArrayMethod!.MakeGenericMethod(genericTypes);
+		return (IEnumerable)genericMethod.Invoke(null, new object?[] { collection })!;
+	}
+
+	private static IList ToArray(in IList list, in Type targetType)
+	{
+		var genericTypes = GetGenericTypeInfo(in targetType);
+		var newArray = Array.CreateInstance(genericTypes[0], list.Count);
 
 		list.CopyTo(newArray, 0);
 		return newArray;
 	}
 
-	private static bool TryCreateSystemArray(Type type, out IList array)
+	private static IList GenerateDefaultEnumerable(in Type targetType)
 	{
-		array = Array.Empty<object>();
+		var listType = typeof(List<>);
+		var genericTypes = GetGenericTypeInfo(in targetType);
 
-		if (type.BaseType?.IsAssignableFrom(typeof(Array)) != true) return false;
-		if (!typeof(IEnumerable).IsAssignableFrom(type)) return false;
+		return (IList)Activator.CreateInstance(listType.MakeGenericType(genericTypes))!;
+	}
 
-		Type? enumerableInterface = null;
-		foreach (var typeInterface in type.GetInterfaces())
+	private static IList CreateImmutableListBuilder(in Type targetType)
+	{
+		var genericTypes = GetGenericTypeInfo(in targetType);
+
+		var method = typeof(ImmutableList).GetMethod(nameof(ImmutableList.CreateBuilder));
+		var genericMethod = method!.MakeGenericMethod(genericTypes);
+		return (IList)genericMethod.Invoke(null, null)!;
+	}
+
+	private static Type[] GetGenericTypeInfo(in Type targetType)
+	{
+		if (!typeof(IEnumerable).IsAssignableFrom(targetType)) throw new NotSupportedException("Not enumerable");
+		if (typeof(Array).IsAssignableFrom(targetType.BaseType)) return GetArrayTypeInfo(in targetType);
+
+		var genericTypes = targetType.GetTypeInfo().GenericTypeArguments;
+		if (genericTypes.Length == 0) genericTypes = new[] { typeof(object) };
+
+		return genericTypes;
+	}
+
+	private static Type[] GetArrayTypeInfo(in Type targetType)
+	{
+		foreach (var typeInterface in targetType.GetInterfaces())
 		{
 			if (!typeInterface.IsGenericType) continue;
 			if (!typeof(IList<>).IsAssignableFrom(typeInterface.GetGenericTypeDefinition())) continue;
-			enumerableInterface = typeInterface;
-			break;
+
+			return GetGenericTypeInfo(in typeInterface);
 		}
 
-		if (enumerableInterface is null) return false;
-
-		array = GenerateDefaultEnumerable(enumerableInterface);
-		return true;
-	}
-
-	private static IList GenerateDefaultEnumerable(Type type)
-	{
-		var listType = typeof(List<>);
-		var genericType = type.GetTypeInfo().GenericTypeArguments;
-		return (IList)Activator.CreateInstance(listType.MakeGenericType(genericType))!;
+		return new [] { typeof(object) };
 	}
 }
