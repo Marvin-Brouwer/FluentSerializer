@@ -64,14 +64,16 @@ public abstract class StaticTestRunner
 
 	private static Job CreateJob(string[] parameters)
 	{
-		var quickRun = parameters.Contains("--quick");
-		return CreateBasicJob(quickRun)
+		return CreateBasicJob(parameters)
 #if (DEBUG)
-				.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
+			.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
 #endif
-				.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
+			.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 			.WithMinIterationCount(1)
-			.WithMaxRelativeError(0.0001)
+#if (!DEBUG)
+			.WithMaxRelativeError(0.001)
+			.WithMaxAbsoluteError(TimeInterval.FromNanoseconds(10))
+#endif
 			// Make sure the compile projects have access to the correct build tool
 			.WithNuGet("Microsoft.Net.Compilers.Toolset")
 			.WithId(typeof(BenchmarkRunner).Assembly.FullName)
@@ -83,20 +85,25 @@ public abstract class StaticTestRunner
 			.WithGcAllowVeryLargeObjects(false);
 	}
 
-	private static Job CreateBasicJob(bool quickRun)
+	private static Job CreateBasicJob(string[] parameters)
 	{
 #if DEBUG
-		_ = quickRun;
+		_ = parameters;
 
-		return Job.Dry
-			.WithLaunchCount(1)
-			.WithIterationCount(1);
+		return Job.Dry;
 #else
-			if (quickRun) return Job.Dry
-                .WithLaunchCount(1)
-                .WithIterationCount(1);
+		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType="));
 
-			return Job.VeryLongRun;
+		return runType switch
+		{
+			null => Job.Default,
+			"--jobType=Dry" => Job.Dry,
+			"--jobType=Short" => Job.ShortRun,
+			"--jobType=Long" => Job.LongRun,
+			"--jobType=VeryLong" => Job.VeryLongRun,
+			_ => Job.Default
+		};
+
 #endif
 	}
 
