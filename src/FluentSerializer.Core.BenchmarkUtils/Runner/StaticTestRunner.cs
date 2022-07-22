@@ -96,10 +96,7 @@ public abstract class StaticTestRunner
                 .WithLaunchCount(1)
                 .WithIterationCount(1);
 
-			return Job.Dry
-				.WithWarmupCount(32)
-				.WithLaunchCount(4)
-				.WithIterationCount(8);
+			return Job.VeryLongRun;
 #endif
 	}
 
