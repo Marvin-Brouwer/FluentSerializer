@@ -411,12 +411,12 @@ jobs:
     # Benchmark the code for serializing and deserializing a test set of XML data.
     ###
 
-    ## TODO: --jobType=Long or default for main
+    ## TODO: --jobType=Long or default for main default for 31
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
         sudo ./net6.0/FluentSerializer.Xml.Benchmark --jobType=Long
-      #  sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate --jobType=Default
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate --jobType=Dry
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -516,12 +516,12 @@ jobs:
     # Benchmark the code  for serializing and deserializing a test set of JSON data.
     ###
 
-    ## TODO: --jobType=Long or default for main
+    ## TODO: --jobType=Long or default for main default for 31
     - name: ⏱ Benchmark JSON serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
         sudo ./net6.0/FluentSerializer.Json.Benchmark --jobType=Long
-    #    sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate --jobType=Default
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate --jobType=Dry
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
