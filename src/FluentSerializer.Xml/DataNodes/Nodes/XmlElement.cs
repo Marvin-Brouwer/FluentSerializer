@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -95,16 +96,20 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public string? GetTextValue()
 	{
-		string? returnValue = null;
+		var stringBuilder = new StringBuilder(64);
+		var hasText = false;
+
 		foreach (var child in _children)
 		{
 			if (child is not IXmlText element) continue;
 			if (string.IsNullOrEmpty(element.Value)) continue;
 
-			returnValue ??= string.Empty;
-			returnValue += element.Value;
+			stringBuilder.Append(element.Value);
+			hasText = true;
 		}
 
-		return returnValue;
+		return hasText
+			? stringBuilder.ToString()
+			: null;
 	}
 }
