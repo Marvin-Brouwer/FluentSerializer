@@ -15,17 +15,31 @@ namespace FluentSerializer.Core.Benchmark.Profiles;
 
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [MemoryDiagnoser]
-public class ClassMappingProfile
+public partial class ClassMappingProfile
 {
 	private static IReadOnlyList<PropertyMap> GeneratePropertyMaps =>
-		Enumerable.Repeat(new PropertyMap(SerializerDirection.Both,
-			typeof(TestClass),
-			typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-			Names.Use.KebabCase, null), 5000).ToArray();
+		Array.Empty<SerializerDirection>()
+			.Concat(Enumerable.Repeat(SerializerDirection.Both, 200))
+			.Concat(Enumerable.Repeat(SerializerDirection.Serialize, 100))
+			.Concat(Enumerable.Repeat(SerializerDirection.Deserialize, 100))
+			.Select(direction => new PropertyMap(
+				direction,
+				typeof(TestClass),
+				typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
+				Names.Use.KebabCase, null))
+			.ToArray();
 
 	private static IReadOnlyList<ClassMap> GenerateClassMaps(IReadOnlyList<IPropertyMap> propertyMaps) =>
-		Enumerable.Repeat(new ClassMap(typeof(TestClass), SerializerDirection.Both,
-			Names.Use.CamelCase, propertyMaps), 20000).ToArray();
+		Array.Empty<SerializerDirection>()
+			.Concat(Enumerable.Repeat(SerializerDirection.Both, 200))
+			.Concat(Enumerable.Repeat(SerializerDirection.Serialize, 100))
+			.Concat(Enumerable.Repeat(SerializerDirection.Deserialize, 100))
+			.Select(direction => new ClassMap(
+				typeof(TestClass),
+				direction,
+				Names.Use.CamelCase,
+				propertyMaps))
+			.ToArray();
 
 	private static readonly IReadOnlyList<PropertyMap> PropertyMaps = GeneratePropertyMaps;
 	private static readonly IReadOnlyList<ClassMap> ClassMaps = GenerateClassMaps(Array.Empty<IPropertyMap>());
@@ -42,18 +56,32 @@ public class ClassMappingProfile
 	{
 		var classMapBuilder = new ReadOnlyCollectionBuilder<IClassMap>();
 
-		for (int classMapIteration = 0; classMapIteration < 20000; classMapIteration++)
+		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
 		{
 			var propertyMapBuilder = new ReadOnlyCollectionBuilder<IPropertyMap>();
-			for (int propertyMapIteration = 0; propertyMapIteration < 5000; propertyMapIteration++)
+			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
 			{
-				propertyMapBuilder.Add(new PropertyMap(SerializerDirection.Both,
+				var propertyDirection = classMapIteration switch
+				{
+					< 200 => SerializerDirection.Both,
+					< 300 => SerializerDirection.Serialize,
+					_ => SerializerDirection.Deserialize
+				};
+
+				propertyMapBuilder.Add(new PropertyMap(propertyDirection,
 					typeof(TestClass),
 					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
 					Names.Use.KebabCase, null));
 			}
+
+			var classDirection = classMapIteration switch
+			{
+				< 200 => SerializerDirection.Both,
+				< 300 => SerializerDirection.Serialize,
+				_ => SerializerDirection.Deserialize
+			};
 			classMapBuilder.Add(
-				new ClassMap(typeof(TestClass), SerializerDirection.Both,
+				new ClassMap(typeof(TestClass), classDirection,
 				Names.Use.CamelCase, propertyMapBuilder.ToReadOnlyCollection()));
 		}
 		return new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(
