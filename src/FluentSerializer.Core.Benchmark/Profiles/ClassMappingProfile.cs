@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Benchmark.Profiles;
 
@@ -47,8 +47,38 @@ public partial class ClassMappingProfile
 	[Benchmark(Baseline = true), BenchmarkCategory("CreateFullMap")]
 	public ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration> CreateClassMap()
 	{
+		var classMaps = new List<IClassMap>();
+
+		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
+		{
+			var propertyMaps = new List<IPropertyMap>();
+			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
+			{
+				var propertyDirection = classMapIteration switch
+				{
+					< 200 => SerializerDirection.Both,
+					< 300 => SerializerDirection.Serialize,
+					_ => SerializerDirection.Deserialize
+				};
+
+				propertyMaps.Add(new PropertyMap(propertyDirection,
+					typeof(TestClass),
+					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
+					Names.Use.KebabCase, null));
+			}
+
+			var classDirection = classMapIteration switch
+			{
+				< 200 => SerializerDirection.Both,
+				< 300 => SerializerDirection.Serialize,
+				_ => SerializerDirection.Deserialize
+			};
+			classMaps.Add(
+				new ClassMap(typeof(TestClass), classDirection,
+					Names.Use.CamelCase, propertyMaps));
+		}
 		return new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(
-			GenerateClassMaps(GeneratePropertyMaps));
+			classMaps);
 	}
 
 	[Benchmark, BenchmarkCategory("CreateFullMap")]
@@ -102,8 +132,7 @@ public partial class ClassMappingProfile
 	public IPropertyMap? GetPropertyMap()
 	{
 		var scanList = new PropertyMapScanList(PropertyMaps);
-
-
+		
 		return scanList.Scan(typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!);
 	}
 }

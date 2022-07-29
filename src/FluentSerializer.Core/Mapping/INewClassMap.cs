@@ -1,7 +1,7 @@
-using System;
-using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
 
 namespace FluentSerializer.Core.Mapping;
 

@@ -1,15 +1,13 @@
+using BenchmarkDotNet.Attributes;
+
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Naming;
-using FluentSerializer.Core.Profiles;
 
 namespace FluentSerializer.Core.Benchmark.Profiles;
 
@@ -30,7 +28,7 @@ public partial class ClassMappingProfile
 	private static readonly IReadOnlyList<NewClassMap> NewClassMaps = GenerateNewClassMaps(Array.Empty<IPropertyMap>());
 	
 	[Benchmark, BenchmarkCategory("CreateFullMap")]
-	public ClassMapCollection CreateClass_ClassMapCollection()
+	public ClassMapCollection CreateClass_ClassMapCollection_List()
 	{
 		var classMapBuilder = new List<INewClassMap>();
 
@@ -61,6 +59,43 @@ public partial class ClassMappingProfile
 			classMapBuilder.Add(
 				new NewClassMap(typeof(TestClass), classDirection,
 					Names.Use.CamelCase, propertyMapBuilder));
+		}
+
+		return new ClassMapCollection(classMapBuilder);
+	}
+
+	[Benchmark, BenchmarkCategory("CreateFullMap")]
+	public ClassMapCollection CreateClass_ClassMapCollection_Array()
+	{
+		var classMapBuilder = new INewClassMap[500];
+
+		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
+		{
+			var propertyMapBuilder = new IPropertyMap[500];
+			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
+			{
+				var propertyDirection = classMapIteration switch
+				{
+					< 200 => SerializerDirection.Both,
+					< 300 => SerializerDirection.Serialize,
+					_ => SerializerDirection.Deserialize
+				};
+
+				propertyMapBuilder[propertyMapIteration] = new PropertyMap(propertyDirection,
+					typeof(TestClass),
+					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
+					Names.Use.KebabCase, null);
+			}
+
+			var classDirection = classMapIteration switch
+			{
+				< 200 => SerializerDirection.Both,
+				< 300 => SerializerDirection.Serialize,
+				_ => SerializerDirection.Deserialize
+			};
+			classMapBuilder[classMapIteration] =
+				new NewClassMap(typeof(TestClass), classDirection,
+					Names.Use.CamelCase, propertyMapBuilder);
 		}
 
 		return new ClassMapCollection(classMapBuilder);
