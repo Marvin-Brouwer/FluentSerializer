@@ -1,14 +1,11 @@
 using FluentSerializer.Core.BenchmarkUtils.Runner;
-using FluentSerializer.Json.Benchmark.Data;
 using System;
-using System.Linq;
-using FluentSerializer.Core.BenchmarkUtils.Configuration;
 
 #if !NET5_0_OR_GREATER
 using System.Security.Permissions;
 #endif
 
-namespace FluentSerializer.Json.Benchmark;
+namespace FluentSerializer.Core.Benchmark;
 
 public static class Program
 {
@@ -19,12 +16,6 @@ public static class Program
 	public static void Main(params string[] arguments)
 	{
 		StaticTestRunner.RequireElevatedPermissions();
-
-		if (!arguments.Contains("--no-generate"))
-			JsonDataCollection.Default.GenerateTestCaseFiles();
-
-		StaticTestRunner.Run(
-			typeof(Program).Assembly, arguments,
-			"json-serializer", new ValueSizeTestOrderer());
+		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "core");
 	}
 }

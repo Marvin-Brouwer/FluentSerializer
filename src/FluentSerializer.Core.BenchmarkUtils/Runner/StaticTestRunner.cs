@@ -15,6 +15,7 @@ using System.Linq;
 using BenchmarkDotNet.Columns;
 using System.Threading;
 using System.Globalization;
+using BenchmarkDotNet.Order;
 using Microsoft.Extensions.PlatformAbstractions;
 using BenchmarkDotNet.Reports;
 
@@ -31,7 +32,7 @@ public abstract class StaticTestRunner
 		NumberFormat = NumberFormatInfo.InvariantInfo
 	};
 
-	private static ManualConfig CreateConfig(string[] arguments)
+	private static ManualConfig CreateConfig(string[] arguments, IOrderer? orderer)
 	{
 		Environment.SetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", "1");
 		Environment.SetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", "1");
@@ -40,7 +41,6 @@ public abstract class StaticTestRunner
 		Thread.CurrentThread.CurrentUICulture = AppCulture;
 
 		var config = ManualConfig.Create(DefaultConfig.Instance)
-			.WithOrderer(new ValueSizeTestOrderer())
 			.AddJob(CreateJob(arguments))
 			.WithCultureInfo(AppCulture)
 			.AddExporter(MarkdownExporter.Console)
@@ -49,7 +49,11 @@ public abstract class StaticTestRunner
 				// We'd actually like it to grow when the size grows but this doesn't seem to be consistent between
 				// the XML and JSON benchmarks so we set it to a constant metric.
 				.WithSizeUnit(SizeUnit.MB)
-				.WithTimeUnit(TimeUnit.Millisecond));
+				.WithTimeUnit(TimeUnit.Millisecond)
+			);
+
+		if (orderer is not null)
+			config = config.WithOrderer(orderer);
 
 		// We only ever profile methods so no need for an additional column
 		var columnProviders = (List<IColumnProvider>)config.GetColumnProviders();
@@ -111,11 +115,11 @@ public abstract class StaticTestRunner
 		[System.Security.Permissions.PrincipalPermission(
 			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
-	public static void Run(Assembly assembly, string[] arguments, string dataType)
+	public static void Run(Assembly assembly, string[] arguments, string dataType, IOrderer? orderer = null)
 	{
 		RequireElevatedPermissions();
 
-		var config = CreateConfig(arguments);
+		var config = CreateConfig(arguments, orderer);
 
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("Starting benchmark runner...");

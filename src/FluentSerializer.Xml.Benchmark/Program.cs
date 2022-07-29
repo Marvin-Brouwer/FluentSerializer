@@ -2,6 +2,7 @@ using FluentSerializer.Core.BenchmarkUtils.Runner;
 using FluentSerializer.Xml.Benchmark.Data;
 using System;
 using System.Linq;
+using FluentSerializer.Core.BenchmarkUtils.Configuration;
 
 #if !NET5_0_OR_GREATER
 using System.Security.Permissions;
@@ -22,6 +23,8 @@ public static class Program
 		if (!arguments.Contains("--no-generate"))
 			XmlDataCollection.Default.GenerateTestCaseFiles();
 
-		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "xml-serializer");
+		StaticTestRunner.Run(
+			typeof(Program).Assembly, arguments,
+			"xml-serializer", new ValueSizeTestOrderer());
 	}
 }

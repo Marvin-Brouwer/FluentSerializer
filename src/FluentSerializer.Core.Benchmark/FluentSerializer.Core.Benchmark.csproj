@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
+		<LangVersion>10</LangVersion>
+		<StartupObject>FluentSerializer.Core.Benchmark.Program</StartupObject>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<ApplicationIcon>..\..\docs\logo\NuGetIcon.default.ico</ApplicationIcon>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+		<PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.2.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FluentSerializer.Core.BenchmarkUtils\FluentSerializer.Core.BenchmarkUtils.csproj" />
+	</ItemGroup>
+
+</Project>
