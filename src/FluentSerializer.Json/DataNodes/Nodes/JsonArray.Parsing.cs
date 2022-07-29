@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
@@ -12,7 +13,7 @@ public readonly partial struct JsonArray
 	/// </remarks>
 	public JsonArray(in ReadOnlySpan<char> text, ref int offset)
 	{
-		_children = new List<IJsonNode>();
+		var children = new ReadOnlyCollectionBuilder<IJsonNode>();
 		_lastNonCommentChildIndex = null;
 		var currentChildIndex = 0;
 
@@ -24,7 +25,7 @@ public readonly partial struct JsonArray
 
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				_children.Add(new JsonObject(in text, ref offset));
+				children.Add(new JsonObject(in text, ref offset));
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
@@ -32,7 +33,7 @@ public readonly partial struct JsonArray
 			}
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				_children.Add(new JsonArray(in text, ref offset));
+				children.Add(new JsonArray(in text, ref offset));
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
@@ -43,21 +44,21 @@ public readonly partial struct JsonArray
 
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
 			{
-				_children.Add(new JsonCommentSingleLine(in text, ref offset));
+				children.Add(new JsonCommentSingleLine(in text, ref offset));
 
 				currentChildIndex++;
 				continue;
 			}
 			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
 			{
-				_children.Add(new JsonCommentMultiLine(in text, ref offset));
+				children.Add(new JsonCommentMultiLine(in text, ref offset));
 
 				currentChildIndex++;
 				continue;
 			}
 			if (!text.HasWhitespaceAtOffset(in offset))
 			{
-				_children.Add(new JsonValue(in text, ref offset));
+				children.Add(new JsonValue(in text, ref offset));
 				_lastNonCommentChildIndex = currentChildIndex;
 
 				currentChildIndex++;
@@ -66,5 +67,7 @@ public readonly partial struct JsonArray
 			offset++;
 		}
 		offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
+
+		_children = children.ToReadOnlyCollection();
 	}
 }

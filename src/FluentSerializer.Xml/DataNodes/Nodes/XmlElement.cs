@@ -3,6 +3,7 @@ using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -13,17 +14,18 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public string Name { get; }
 
-	private readonly List<IXmlNode> _children;
-	private readonly List<IXmlAttribute> _attributes;
+	private readonly IReadOnlyList<IXmlNode> _children;
+	private readonly IReadOnlyList<IXmlAttribute> _attributes;
 
 	/// <inheritdoc />
 	public IReadOnlyList<IXmlNode> Children
 	{
 		get
 		{
-			var childList = new List<IXmlNode>(_attributes);
-			childList.AddRange(_children);
-			return childList;
+			var children = new ReadOnlyCollectionBuilder<IXmlNode>(_attributes);
+			foreach (var child in _children) children.Add(child);
+
+			return children.ToReadOnlyCollection();
 		}
 	}
 
@@ -36,16 +38,19 @@ public readonly partial struct XmlElement : IXmlElement
 		Guard.Against.InvalidName(in name);
 
 		Name = name;
-		_attributes = new List<IXmlAttribute>();
-		_children = new List<IXmlNode>();
 
+		var attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
+		var children = new ReadOnlyCollectionBuilder<IXmlNode>();
 		foreach (var node in childNodes)
 		{
 			if (node is null) continue;
 			if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
-			if (node is XmlAttribute attribute) _attributes.Add(attribute);
-			else _children.Add(node);
+			if (node is XmlAttribute attribute) attributes.Add(attribute);
+			else children.Add(node);
 		}
+
+		_attributes = attributes.ToReadOnlyCollection();
+		_children = children.ToReadOnlyCollection();
 	}
 
 	/// <inheritdoc />
