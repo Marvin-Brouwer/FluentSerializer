@@ -35,7 +35,7 @@ public sealed class DateOnlyByFormatConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(DateOnlyValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd", "2096-04-20", CultureInfo.InvariantCulture };
 		yield return new object[] { "M/d/yyyy", "4/20/2096", new CultureInfo("en-US") };

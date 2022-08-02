@@ -36,7 +36,7 @@ public sealed class DateTimeByFormatConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(DateTimeValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "2096-04-20 04:20:00", CultureInfo.InvariantCulture };
 		yield return new object[] { "d", "4/20/2096", new CultureInfo("en-US") };

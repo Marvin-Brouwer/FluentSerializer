@@ -35,7 +35,7 @@ public sealed class TimeOnlyByFormatConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(TimeOnlyValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "HH:mm:ss", "04:20:00", CultureInfo.InvariantCulture };
 		yield return new object[] { "h:mm tt", "4:20 AM", new CultureInfo("en-US") };
