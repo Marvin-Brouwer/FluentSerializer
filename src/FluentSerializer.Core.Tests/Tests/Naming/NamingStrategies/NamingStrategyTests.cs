@@ -14,7 +14,7 @@ public sealed class NamingStrategyTests
 
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 MemberData(nameof(ValidNamingRequests))]
+		MemberData(nameof(ValidNamingRequests))]
 	public void ValidString_GetName_ConvertsName(in INamingStrategy sut, in string expectedClassName, in string expectedPropertyName)
 	{
 		// Arrange
@@ -30,7 +30,7 @@ public sealed class NamingStrategyTests
 		propertyResult.Should().BeEquivalentTo(expectedPropertyName);
 	}
 
-	private static IEnumerable<object[]> ValidNamingRequests()
+	public static IEnumerable<object[]> ValidNamingRequests()
 	{
 		yield return new object[] {
 			Names.Use.CamelCase(), "classNameWithMultipleParts", "propertyNameWithMultipleParts"

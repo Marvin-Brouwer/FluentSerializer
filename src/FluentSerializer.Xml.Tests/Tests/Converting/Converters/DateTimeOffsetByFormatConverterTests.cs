@@ -36,7 +36,7 @@ public sealed class DateTimeOffsetByFormatConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(DateTimeOffsetValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss zzz", "2096-04-20 04:20:00 +00:00", CultureInfo.InvariantCulture };
 		yield return new object[] { "M/d/yyyy zzz", "4/20/2096 +00:00", new CultureInfo("en-US") };

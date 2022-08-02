@@ -36,7 +36,7 @@ public sealed class DefaultDateTimeConverterTests
 			.SetupDefault(serializerMock);
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { true, "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
 		yield return new object[] { false, "\"4/20/2096\"", new CultureInfo("en-US") };
@@ -44,7 +44,7 @@ public sealed class DefaultDateTimeConverterTests
 		yield return new object[] { true, "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
 	}
 
-	private static IEnumerable<object[]> GenerateCultureOptions()
+	public static IEnumerable<object[]> GenerateCultureOptions()
 	{
 		yield return new object[] { CultureInfo.InvariantCulture };
 		yield return new object[] { new CultureInfo("en") };

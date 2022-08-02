@@ -35,7 +35,7 @@ public sealed class TimeSpanByFormatConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(TimeSpanValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { @"hh\:mm\:ss\.fff", "04:20:00.000" };
 		yield return new object[] { @"hh\:mm\:ss", "04:20:00" };
