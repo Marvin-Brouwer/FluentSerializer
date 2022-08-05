@@ -1,15 +1,13 @@
-using BenchmarkDotNet.Attributes;
-
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Naming;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using BenchmarkDotNet.Attributes;
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming;
 
-namespace FluentSerializer.Core.Benchmark.Profiles;
+namespace FluentSerializer.Core.Benchmark.Profiles.Mapping;
 
 public partial class ClassMappingProfile
 {

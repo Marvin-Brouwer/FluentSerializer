@@ -1,17 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-
-namespace FluentSerializer.Core.Benchmark.Profiles;
+namespace FluentSerializer.Core.Benchmark.Profiles.Mapping;
 
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [MemoryDiagnoser]

@@ -5,7 +5,7 @@ namespace FluentSerializer.Core.Naming;
 
 internal readonly struct UseNamingStrategies : IUseNamingStrategies
 {
-	private static readonly CamelCaseNamingStrategy CamelCaseNamingStrategy = new();
+	private static readonly NewCamelCaseNamingStrategy CamelCaseNamingStrategy = new();
 	private static readonly LowerCaseNamingStrategy LowerCaseNamingStrategy = new();
 	private static readonly PascalCaseNamingStrategy PascalCaseNamingStrategy = new();
 	private static readonly SnakeCaseNamingStrategy SnakeCaseNamingStrategy = new();

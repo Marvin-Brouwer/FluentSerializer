@@ -135,6 +135,11 @@ public abstract class StaticTestRunner
 
 		FixConsoleArtifactFileName(dataType, config, jobDate);
 		FixGitHubSummaryFileName(dataType, config);
+
+
+		if (!arguments.Contains("--wait-on-exit")) return;
+		Console.WriteLine("Press any key to exit.");
+		Console.ReadKey();
 	}
 
 	/// <summary>
