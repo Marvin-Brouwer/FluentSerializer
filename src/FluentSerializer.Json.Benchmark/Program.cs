@@ -18,13 +18,13 @@ public static class Program
 #endif
 	public static void Main(params string[] arguments)
 	{
-		StaticTestRunner.RequireElevatedPermissions();
+		StaticTestRunner.RequireElevatedPermissions(in arguments);
 
 		if (!arguments.Contains("--no-generate"))
 			JsonDataCollection.Default.GenerateTestCaseFiles();
 
 		StaticTestRunner.Run(
-			typeof(Program).Assembly, arguments,
+			typeof(Program).Assembly, in arguments,
 			"json-serializer", new ValueSizeTestOrderer());
 	}
 }

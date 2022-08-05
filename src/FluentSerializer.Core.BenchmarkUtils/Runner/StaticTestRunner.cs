@@ -98,6 +98,11 @@ public abstract class StaticTestRunner
 #else
 		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType="));
 
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		if (runType is not null) Console.WriteLine(runType);
+		Console.ResetColor();
+		Console.WriteLine();
+
 		return runType switch
 		{
 			null => Job.Default,
@@ -107,7 +112,6 @@ public abstract class StaticTestRunner
 			"--jobType=VeryLong" => Job.VeryLongRun,
 			_ => Job.Default
 		};
-
 #endif
 	}
 
@@ -115,10 +119,11 @@ public abstract class StaticTestRunner
 		[System.Security.Permissions.PrincipalPermission(
 			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
-	public static void Run(Assembly assembly, string[] arguments, string dataType, IOrderer? orderer = null)
+	public static void Run(Assembly assembly, in string[] arguments, string dataType, IOrderer? orderer = null)
 	{
-		RequireElevatedPermissions();
+		RequireElevatedPermissions(in arguments);
 
+		var jobDate = DateTime.UtcNow;
 		var config = CreateConfig(arguments, orderer);
 
 		Console.ForegroundColor = ConsoleColor.Cyan;
@@ -128,21 +133,21 @@ public abstract class StaticTestRunner
 
 		BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
 
-		FixConsoleArtifactFileName(dataType, config);
+		FixConsoleArtifactFileName(dataType, config, jobDate);
 		FixGitHubSummaryFileName(dataType, config);
 	}
 
 	/// <summary>
 	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 	/// </summary>
-	private static void FixConsoleArtifactFileName(string dataType, ManualConfig config)
+	private static void FixConsoleArtifactFileName(string dataType, ManualConfig config, DateTime jobDate)
 	{
 		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.WriteLine();
 		Console.WriteLine("Correcting console summary fileName");
 		Console.ResetColor();
 
-		var consoleFilePattern = "BenchmarkRun-joined-*-report-console.md";
+		var consoleFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(consoleFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -155,11 +160,10 @@ public abstract class StaticTestRunner
 
 		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
-		var readableFileName = markdownSummaryFile.FullName
-			.Replace("BenchmarkRun-joined", $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}")
-			.Replace("-report-console", string.Empty);
+		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
+		var directory = markdownSummaryFile.Directory!;
 
-		FixFileNames(markdownSummaryFile, readableFileName);
+		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
 	}
 
 	/// <summary>
@@ -172,7 +176,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting GitHub summary filename");
 		Console.ResetColor();
 
-		var gitHubFilePattern = "BenchmarkRun-joined-*-report-console.md";
+		var gitHubFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(gitHubFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -196,8 +200,12 @@ public abstract class StaticTestRunner
 		var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
 		var markdownSummaryFile = resultsDir
 			.GetFiles(pattern)
+#if NET5_0_OR_GREATER
+			.MaxBy(directory => directory.CreationTimeUtc);
+#else
 			.OrderByDescending(directory => directory.CreationTimeUtc)
 			.FirstOrDefault();
+#endif
 
 		return markdownSummaryFile;
 	}
@@ -218,18 +226,19 @@ public abstract class StaticTestRunner
 		markdownSummaryFile.CopyTo(newFileInfo.FullName, newFileInfo.Exists);
 	}
 
-	public static void RequireElevatedPermissions()
+	public static void RequireElevatedPermissions(in string[] arguments)
 	{
-		if (!IsWindowsAdministrator()) ElevateWindowsApp();
+		if (!IsWindowsAdministrator()) ElevateWindowsApp(in arguments);
 	}
 
-	private static void ElevateWindowsApp()
+	private static void ElevateWindowsApp(in string[] arguments)
 	{
 		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
 
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine();
 		Console.WriteLine("Restarting process with admin permissions.");
+		Console.ResetColor();
 
 		// Restart program and run as admin
 		var exeName = GetProcessFileName();
@@ -238,6 +247,9 @@ public abstract class StaticTestRunner
 			UseShellExecute = true,
 			Verb = "runas"
 		};
+
+		foreach (var argument in arguments)
+			startInfo.ArgumentList.Add(argument);
 
 		Process.Start(startInfo);
 		Environment.Exit(0);

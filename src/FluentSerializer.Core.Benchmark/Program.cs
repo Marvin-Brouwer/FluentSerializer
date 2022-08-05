@@ -15,7 +15,7 @@ public static class Program
 #endif
 	public static void Main(params string[] arguments)
 	{
-		StaticTestRunner.RequireElevatedPermissions();
-		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "core");
+		StaticTestRunner.RequireElevatedPermissions(in arguments);
+		StaticTestRunner.Run(typeof(Program).Assembly, in arguments, "core");
 	}
 }

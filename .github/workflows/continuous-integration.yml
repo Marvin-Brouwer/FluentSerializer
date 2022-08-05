@@ -435,8 +435,8 @@ jobs:
     ###
     - name: 📈 Report benchmarks
       run: |-
-        cat ./core-serializer-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
-        cat ./core-serializer-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./core-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./core-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.Core.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
     ###
     # 🗃 Publish 'benchmark-results' artifacts
