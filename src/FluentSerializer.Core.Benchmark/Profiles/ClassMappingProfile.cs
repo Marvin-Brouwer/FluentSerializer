@@ -17,7 +17,7 @@ namespace FluentSerializer.Core.Benchmark.Profiles;
 [MemoryDiagnoser]
 public partial class ClassMappingProfile
 {
-	private static IReadOnlyList<PropertyMap> GeneratePropertyMaps =>
+	private static IEnumerable<PropertyMap> GeneratePropertyMaps =>
 		Array.Empty<SerializerDirection>()
 			.Concat(Enumerable.Repeat(SerializerDirection.Both, 200))
 			.Concat(Enumerable.Repeat(SerializerDirection.Serialize, 100))
@@ -26,10 +26,9 @@ public partial class ClassMappingProfile
 				direction,
 				typeof(TestClass),
 				typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-				Names.Use.KebabCase, null))
-			.ToArray();
+				Names.Use.KebabCase, null));
 
-	private static IReadOnlyList<ClassMap> GenerateClassMaps(IReadOnlyList<IPropertyMap> propertyMaps) =>
+	private static IEnumerable<ClassMap> GenerateClassMapsArray(IReadOnlyList<IPropertyMap> propertyMaps) =>
 		Array.Empty<SerializerDirection>()
 			.Concat(Enumerable.Repeat(SerializerDirection.Both, 200))
 			.Concat(Enumerable.Repeat(SerializerDirection.Serialize, 100))
@@ -38,11 +37,12 @@ public partial class ClassMappingProfile
 				typeof(TestClass),
 				direction,
 				Names.Use.CamelCase,
-				propertyMaps))
-			.ToArray();
+				propertyMaps));
 
-	private static readonly IReadOnlyList<PropertyMap> PropertyMaps = GeneratePropertyMaps;
-	private static readonly IReadOnlyList<ClassMap> ClassMaps = GenerateClassMaps(Array.Empty<IPropertyMap>());
+	private static readonly IReadOnlyList<PropertyMap> PropertyMapsArray = GeneratePropertyMaps.ToArray();
+	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMapsArray(Array.Empty<IPropertyMap>()).ToArray();
+	private static readonly IReadOnlyList<PropertyMap> PropertyMapsList = GeneratePropertyMaps.ToList();
+	private static readonly IReadOnlyList<ClassMap> ClassMapsList = GenerateClassMapsArray(Array.Empty<IPropertyMap>()).ToList();
 
 	[Benchmark(Baseline = true), BenchmarkCategory("CreateFullMap")]
 	public ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration> CreateClassMap()
@@ -119,20 +119,36 @@ public partial class ClassMappingProfile
 	}
 
 	[Benchmark(Baseline = true), BenchmarkCategory("GetClassMap")]
-	public IClassMap? GetClassMap()
+	public IClassMap? GetClassMapArray()
 	{
 		var scanList = new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(
-			ClassMaps);
+			ClassMapsArray);
 
 		return scanList.Scan((typeof(TestClass), SerializerDirection.Serialize));
 	}
 
+	[Benchmark, BenchmarkCategory("GetClassMap")]
+	public IClassMap? GetClassMapList()
+	{
+		var scanList = new ClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(
+			ClassMapsList);
+
+		return scanList.Scan((typeof(TestClass), SerializerDirection.Serialize));
+	}
 
 	[Benchmark(Baseline = true), BenchmarkCategory("GetPropertyMap")]
-	public IPropertyMap? GetPropertyMap()
+	public IPropertyMap? GetPropertyMapArray()
 	{
-		var scanList = new PropertyMapScanList(PropertyMaps);
-		
+		var scanList = new PropertyMapScanList(PropertyMapsArray);
+
+		return scanList.Scan(typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!);
+	}
+
+	[Benchmark, BenchmarkCategory("GetPropertyMap")]
+	public IPropertyMap? GetPropertyMapList()
+	{
+		var scanList = new PropertyMapScanList(PropertyMapsList);
+
 		return scanList.Scan(typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!);
 	}
 }

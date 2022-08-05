@@ -13,7 +13,7 @@ namespace FluentSerializer.Core.Benchmark.Profiles;
 
 public partial class ClassMappingProfile
 {
-	private static IReadOnlyList<NewClassMap> GenerateNewClassMaps(IReadOnlyList<IPropertyMap> propertyMaps) =>
+	private static IEnumerable<NewClassMap> GenerateNewClassMaps(IReadOnlyList<IPropertyMap> propertyMaps) =>
 		Array.Empty<SerializerDirection>()
 			.Concat(Enumerable.Repeat(SerializerDirection.Both, 200))
 			.Concat(Enumerable.Repeat(SerializerDirection.Serialize, 100))
@@ -22,10 +22,10 @@ public partial class ClassMappingProfile
 				typeof(TestClass),
 				direction,
 				Names.Use.CamelCase,
-				propertyMaps))
-			.ToArray();
+				propertyMaps));
 
-	private static readonly IReadOnlyList<NewClassMap> NewClassMaps = GenerateNewClassMaps(Array.Empty<IPropertyMap>());
+	private static readonly IReadOnlyList<NewClassMap> NewClassMapsArray = GenerateNewClassMaps(Array.Empty<IPropertyMap>()).ToArray();
+	private static readonly IReadOnlyList<NewClassMap> NewClassMapsList = GenerateNewClassMaps(Array.Empty<IPropertyMap>()).ToList();
 	
 	[Benchmark, BenchmarkCategory("CreateFullMap")]
 	public ClassMapCollection CreateClass_ClassMapCollection_List()
@@ -139,19 +139,36 @@ public partial class ClassMappingProfile
 	}
 
 	[Benchmark, BenchmarkCategory("GetClassMap")]
-	public INewClassMap? GetNewClassMap()
+	public INewClassMap? GetNewClassMapArray()
 	{
-		var scanList = new ClassMapCollection(NewClassMaps);
+		var scanList = new ClassMapCollection(NewClassMapsArray);
 
 		return scanList.GetClassMapFor(typeof(TestClass), SerializerDirection.Serialize);
 	}
 
+	[Benchmark, BenchmarkCategory("GetClassMap")]
+	public INewClassMap? GetNewClassMapList()
+	{
+		var scanList = new ClassMapCollection(NewClassMapsList);
+
+		return scanList.GetClassMapFor(typeof(TestClass), SerializerDirection.Serialize);
+	}
 
 	[Benchmark, BenchmarkCategory("GetPropertyMap")]
-	public IPropertyMap? GetNewPropertyMap()
+	public IPropertyMap? GetNewPropertyMapArray()
 	{
-		var scanList = new PropertyMapCollection(PropertyMaps);
-		
+		var scanList = new PropertyMapCollection(PropertyMapsArray);
+
+		return scanList.GetPropertyMapFor(
+			typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
+			SerializerDirection.Serialize);
+	}
+
+	[Benchmark, BenchmarkCategory("GetPropertyMap")]
+	public IPropertyMap? GetNewPropertyMapList()
+	{
+		var scanList = new PropertyMapCollection(PropertyMapsList);
+
 		return scanList.GetPropertyMapFor(
 			typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
 			SerializerDirection.Serialize);
