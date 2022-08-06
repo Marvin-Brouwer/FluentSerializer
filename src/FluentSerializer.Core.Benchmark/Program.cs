@@ -1,3 +1,5 @@
+using BenchmarkDotNet.Order;
+using FluentSerializer.Core.BenchmarkUtils.Configuration;
 using FluentSerializer.Core.BenchmarkUtils.Runner;
 using System;
 
@@ -16,6 +18,6 @@ public static class Program
 	public static void Main(params string[] arguments)
 	{
 		StaticTestRunner.RequireElevatedPermissions(in arguments);
-		StaticTestRunner.Run(typeof(Program).Assembly, in arguments, "core");
+		StaticTestRunner.Run(typeof(Program).Assembly, in arguments, "core", new ClassAndCategoryOrderer());
 	}
 }

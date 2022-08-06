@@ -15,7 +15,7 @@ public sealed class ExpressionExtensionTests
 {
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 MemberData(nameof(ValidCharacters))]
+		MemberData(nameof(ValidCharacters))]
 	public void SafeGetName_NameValid_ReturnsName(string input)
 	{
 		// Arrange
@@ -38,7 +38,7 @@ public sealed class ExpressionExtensionTests
 
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 MemberData(nameof(InvalidCharacters))]
+		MemberData(nameof(InvalidCharacters))]
 	public void SafeGetName_NameInValid_Throws(string input)
 	{
 		// Arrange
@@ -123,7 +123,7 @@ public sealed class ExpressionExtensionTests
 			.Which.ParamName.Should().BeEquivalentTo("input");
 	}
 
-	public static IEnumerable<string[]> ValidCharacters()
+	public static IEnumerable<object[]> ValidCharacters()
 	{
 		for (char letter = 'A'; letter <= 'Z'; letter++)
 		{

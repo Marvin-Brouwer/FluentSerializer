@@ -6,4 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Performance", "CA1822:Mark members as static",
-	Justification = "BenchmarkDotNet", Scope = "namespace", Target = "~N:FluentSerializer.Core.Benchmark")]
+	Justification = "BenchmarkDotNet", Scope = "module")]

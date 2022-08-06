@@ -11,7 +11,6 @@ using FluentSerializer.Core.Profiles;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Mapping;
 
-[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [MemoryDiagnoser]
 public partial class ClassMappingProfile
 {

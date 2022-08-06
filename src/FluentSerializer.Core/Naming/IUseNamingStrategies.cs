@@ -13,12 +13,20 @@ public interface IUseNamingStrategies
 {
 	/// <inheritdoc cref="CamelCaseNamingStrategy" />
 	INamingStrategy CamelCase();
+	/// <inheritdoc cref="CamelCaseNamingStrategy" />
+	INewNamingStrategy CamelCaseNew();
 	/// <inheritdoc cref="LowerCaseNamingStrategy" />
 	INamingStrategy LowerCase();
 	/// <inheritdoc cref="PascalCaseNamingStrategy" />
 	INamingStrategy PascalCase();
+	/// <inheritdoc cref="PascalCaseNamingStrategy" />
+	INewNamingStrategy PascalCaseNew();
 	/// <inheritdoc cref="SnakeCaseNamingStrategy" />
 	INamingStrategy SnakeCase();
+	/// <inheritdoc cref="SnakeCaseNamingStrategy" />
+	INewNamingStrategy SnakeCaseNew();
 	/// <inheritdoc cref="KebabCaseNamingStrategy" />
 	INamingStrategy KebabCase();
+	/// <inheritdoc cref="KebabCaseNamingStrategy" />
+	INewNamingStrategy KebabCaseNew();
 }

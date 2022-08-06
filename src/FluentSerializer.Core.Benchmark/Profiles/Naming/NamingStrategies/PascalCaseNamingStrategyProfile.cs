@@ -7,45 +7,45 @@ using System;
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 
 [MemoryDiagnoser]
-public class CamelCaseNamingStrategyProfile
+public class PascalCaseNamingStrategyProfile
 {
-	private static readonly CamelCaseNamingStrategy _baseLineStrategy = new ();
-	private static readonly NewCamelCaseNamingStrategy _optimizedStrategy = new ();
+	private static readonly PascalCaseNamingStrategy _baseLineStrategy = new ();
+	private static readonly NewPascalCaseNamingStrategy _optimizedStrategy = new ();
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_ShortNamedClass")]
-	public string CamelCase_ShortNamedClass() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("PascalCase_ShortNamedClass")]
+	public string PascalCase_ShortNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_ShortNamedClass")]
-	public ReadOnlySpan<char> CamelCase_ShortNamedClassOptimized() =>
+	[Benchmark, BenchmarkCategory("PascalCase_ShortNamedClass")]
+	public ReadOnlySpan<char> PascalCase_ShortNamedClassOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_ShortNamedProperty")]
-	public string CamelCase_ShortNamedProperty() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("PascalCase_ShortNamedProperty")]
+	public string PascalCase_ShortNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_ShortNamedProperty")]
-	public ReadOnlySpan<char> CamelCase_ShortNamedPropertyOptimized() =>
+	[Benchmark, BenchmarkCategory("PascalCase_ShortNamedProperty")]
+	public ReadOnlySpan<char> PascalCase_ShortNamedPropertyOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_LongNamedClass")]
-	public string CamelCase_LongNamedClass() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("PascalCase_LongNamedClass")]
+	public string PascalCase_LongNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_LongNamedClass")]
-	public ReadOnlySpan<char> CamelCase_LongNamedClassOptimized() =>
+	[Benchmark, BenchmarkCategory("PascalCase_LongNamedClass")]
+	public ReadOnlySpan<char> PascalCase_LongNamedClassOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_LongNamedProperty")]
-	public string CamelCase_LongNamedProperty() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("PascalCase_LongNamedProperty")]
+	public string PascalCase_LongNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_LongNamedProperty")]
-	public ReadOnlySpan<char> CamelCase_LongNamedPropertyOptimized() =>
+	[Benchmark, BenchmarkCategory("PascalCase_LongNamedProperty")]
+	public ReadOnlySpan<char> PascalCase_LongNamedPropertyOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 }

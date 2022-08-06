@@ -134,9 +134,11 @@ public abstract class StaticTestRunner
 		BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
 
 		FixConsoleArtifactFileName(dataType, config, jobDate);
-		FixGitHubSummaryFileName(dataType, config);
+		var gitHubSummaryFileName = FixGitHubSummaryFileName(dataType, config);
+		if (gitHubSummaryFileName is not null) WrapGitHubFileSummary(gitHubSummaryFileName);
 
-
+		// Ring a bell if posible to signal done
+		Console.Write("\a");
 		if (!arguments.Contains("--wait-on-exit")) return;
 		Console.WriteLine("Press any key to exit.");
 		Console.ReadKey();
@@ -174,7 +176,7 @@ public abstract class StaticTestRunner
 	/// <summary>
 	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 	/// </summary>
-	private static void FixGitHubSummaryFileName(string dataType, ManualConfig config)
+	private static string? FixGitHubSummaryFileName(string dataType, ManualConfig config)
 	{
 		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.WriteLine();
@@ -189,15 +191,36 @@ public abstract class StaticTestRunner
 			Console.WriteLine($"No summary found with pattern \"{gitHubFilePattern}\"");
 			Console.ResetColor();
 			Console.WriteLine();
-			return;
+			return null;
 		}
 
 		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
 		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
 		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-github.md";
 		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
+		var fullPath = Path.Join(parentDirectory.FullName, readableFileName);
 
-		FixFileNames(markdownSummaryFile, Path.Join(parentDirectory.FullName, readableFileName));
+		FixFileNames(markdownSummaryFile, fullPath);
+		return fullPath;
+	}
+
+	/// <summary>
+	/// Since these summaries ended up not being really readable, wrap the tables in a txt block.
+	/// </summary>
+	private static void WrapGitHubFileSummary(string gitHubSummaryFileName)
+	{
+		using var content = File.Open(gitHubSummaryFileName, FileMode.Open);
+		using var streamReader = new StreamReader(content);
+		var text = streamReader.ReadToEnd();
+		streamReader.Close();
+		content.Close();
+
+		text = text.Replace(
+			@$"{Environment.NewLine}{Environment.NewLine}|",
+			@$"{Environment.NewLine}{Environment.NewLine}```txt{Environment.NewLine}|");
+		text += @$"``` {Environment.NewLine}";
+
+		File.WriteAllText(gitHubSummaryFileName, text);
 	}
 
 	private static FileInfo? FindFileName(string pattern, ManualConfig config)

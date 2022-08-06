@@ -4,6 +4,7 @@ using Ardalis.GuardClauses;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using System.Runtime.CompilerServices;
+using FluentSerializer.Core.Constants;
 
 namespace FluentSerializer.Core.Extensions;
 
@@ -41,9 +42,7 @@ public static class NamingExtensions
 	/// </summary>
 	public static void InvalidName(this IGuardClause guard, in string? value, [CallerArgumentExpression("value")] string name = "")
 	{
-		const string invalidCharactersMatch = @"^[\w_\-+]*$";
-
 		guard.NullOrWhiteSpace(value, name);
-		guard.InvalidFormat(value, name, invalidCharactersMatch);
+		guard.InvalidFormat(value, name, NamingConstants.ForbiddenNamePattern);
 	}
 }
