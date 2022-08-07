@@ -16,8 +16,7 @@ public static class OffsetExtensions
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public static void AdjustForToken(ref this int offset, in ReadOnlySpan<char> token) =>
-		offset += token.Length;
+	public static void AdjustForToken(ref this int offset, in ReadOnlySpan<char> token) => offset.Increment(token.Length);
 
 	/// <summary>
 	/// Adjust the offset by the length of the provided token
@@ -33,7 +32,7 @@ public static class OffsetExtensions
 	public static void AdjustForToken(ref this int offset, in char token)
 	{
 		_ = token;
-		offset++;
+		offset.Increment();
 	}
 
 	/// <summary>
@@ -48,7 +47,27 @@ public static class OffsetExtensions
 	{
 		while (text.WithinCapacity(in offset) && text.HasWhitespaceAtOffset(in offset))
 		{
-			offset++;
+			offset.Increment();
 		}
 	}
+
+	/// <summary>
+	/// Adjust the offset by one
+	/// </summary>
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	public static void Increment(ref this int offset) => offset++;
+
+	/// <summary>
+	/// Adjust the offset by the amount of whitespace found after the current <paramref name="offset"/>
+	/// </summary>
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	public static void Increment(ref this int offset, in int amount) => offset += amount;
 }

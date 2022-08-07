@@ -7,45 +7,45 @@ using System;
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 
 [MemoryDiagnoser]
-public class CamelCaseNamingStrategyProfile
+public class NamingStrategyProfile_KebabCase
 {
-	private static readonly CamelCaseNamingStrategy _baseLineStrategy = new ();
-	private static readonly NewCamelCaseNamingStrategy _optimizedStrategy = new ();
+	private static readonly KebabCaseNamingStrategy _baseLineStrategy = new ();
+	private static readonly NewKebabCaseNamingStrategy _optimizedStrategy = new ();
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_ShortNamedClass")]
-	public string CamelCase_ShortNamedClass() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("KebabCase_ShortNamedClass")]
+	public string KebabCase_ShortNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_ShortNamedClass")]
-	public ReadOnlySpan<char> CamelCase_ShortNamedClassOptimized() =>
+	[Benchmark, BenchmarkCategory("KebabCase_ShortNamedClass")]
+	public ReadOnlySpan<char> KebabCase_ShortNamedClassOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_ShortNamedProperty")]
-	public string CamelCase_ShortNamedProperty() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("KebabCase_ShortNamedProperty")]
+	public string KebabCase_ShortNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_ShortNamedProperty")]
-	public ReadOnlySpan<char> CamelCase_ShortNamedPropertyOptimized() =>
+	[Benchmark, BenchmarkCategory("KebabCase_ShortNamedProperty")]
+	public ReadOnlySpan<char> KebabCase_ShortNamedPropertyOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_LongNamedClass")]
-	public string CamelCase_LongNamedClass() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("KebabCase_LongNamedClass")]
+	public string KebabCase_LongNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_LongNamedClass")]
-	public ReadOnlySpan<char> CamelCase_LongNamedClassOptimized() =>
+	[Benchmark, BenchmarkCategory("KebabCase_LongNamedClass")]
+	public ReadOnlySpan<char> KebabCase_LongNamedClassOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark(Baseline = true), BenchmarkCategory("CamelCase_LongNamedProperty")]
-	public string CamelCase_LongNamedProperty() =>
+	[Benchmark(Baseline = true), BenchmarkCategory("KebabCase_LongNamedProperty")]
+	public string KebabCase_LongNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("CamelCase_LongNamedProperty")]
-	public ReadOnlySpan<char> CamelCase_LongNamedPropertyOptimized() =>
+	[Benchmark, BenchmarkCategory("KebabCase_LongNamedProperty")]
+	public ReadOnlySpan<char> KebabCase_LongNamedPropertyOptimized() =>
 		_optimizedStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 }

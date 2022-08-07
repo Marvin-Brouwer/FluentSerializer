@@ -15,44 +15,42 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// </summary>
 public sealed class NewCamelCaseNamingStrategy : AbstractSpanNamingStrategy
 {
-	private bool _loweredFirst = false;
-	private int _skippedCount = 0;
-
 	/// <remarks>
 	/// Since we don't have whitespaces in C# property and class names we can just lowercase the first char.
 	/// </remarks>
 	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
-		for (var i = 0; i < sourceSpan.Length; i++)
+		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
 		{
-			var currentChar = sourceSpan[i];
+			var currentChar = sourceSpan[iteration];
 
-			if (!_loweredFirst)
+			if (CharCount == 0)
 			{
-				_loweredFirst = true;
-				characterSpan[i - _skippedCount] = char.ToLowerInvariant(currentChar);
+				characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
+				CharCount.Increment();
 				continue;
 			}
 			if (currentChar == NamingConstants.ForbiddenCharacters.Underscore
 			||  currentChar == NamingConstants.ForbiddenCharacters.Plus
 			||  currentChar == NamingConstants.ForbiddenCharacters.Minus)
 			{
-				characterSpan[i - _skippedCount] = char.ToUpperInvariant(currentChar);
-				_skippedCount++;
+				if (sourceSpan.Length > iteration)
+				{
+					characterSpan[CharCount] = char.ToUpperInvariant(sourceSpan[iteration + 1]);
+					CharCount.Increment();
+				}
+				iteration.Increment();
 				continue;
 			}
-			characterSpan[i - _skippedCount] = currentChar;
+			characterSpan[CharCount] = currentChar;
 
 			// Stop if we encounter a generic type indicator
-			if (sourceSpan.Length > i + 1 && sourceSpan[i + 1] == NamingConstants.GenericTypeMarker)
-			{
-				_skippedCount += sourceSpan.Length - (i +1);
-				break;
-			}
+			if (currentChar == NamingConstants.GenericTypeMarker) break;
+
+			if (sourceSpan.Length == iteration) break;
+			CharCount.Increment();
 		}
 
-		characterSpan = characterSpan[..^_skippedCount];
-		_loweredFirst = false;
-		_skippedCount = 0;
+		characterSpan = characterSpan[..CharCount];
 	}
 }

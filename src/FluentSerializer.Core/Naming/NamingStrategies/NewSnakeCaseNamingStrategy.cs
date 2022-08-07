@@ -31,16 +31,16 @@ public sealed class NewSnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 	/// <inheritdoc />
 	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
-		for (var i = 0; i < sourceSpan.Length; i++)
+		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
 		{
-			var currentChar = sourceSpan[i];
+			var currentChar = sourceSpan[iteration];
 
 			if (char.IsUpper(currentChar))
 			{
 				characterSpan[CharCount] = NamingConstants.ForbiddenCharacters.Underscore;
-				CharCount++;
+				CharCount.Increment();
 				characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
-				CharCount++;
+				CharCount.Increment();
 				continue;
 			}
 
@@ -49,21 +49,17 @@ public sealed class NewSnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 			 || currentChar == NamingConstants.ForbiddenCharacters.Minus)
 			{
 				characterSpan[CharCount] = NamingConstants.ForbiddenCharacters.Underscore;
-				CharCount++;
+				CharCount.Increment();
 				continue;
 			}
 
 			characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
-			CharCount++;
-			if (i == 0)
-			{
-				continue;
-			}
 
 			// Stop if we encounter a generic type indicator
-			if (sourceSpan.Length > i + 1 && sourceSpan[i + 1] == NamingConstants.GenericTypeMarker) {
-				break;
-			}
+			if (currentChar == NamingConstants.GenericTypeMarker) break;
+
+			if (sourceSpan.Length == iteration) break;
+			CharCount.Increment();
 		}
 
 		characterSpan = characterSpan[1..CharCount];

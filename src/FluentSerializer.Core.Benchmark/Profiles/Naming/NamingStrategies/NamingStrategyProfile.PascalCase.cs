@@ -7,7 +7,7 @@ using System;
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 
 [MemoryDiagnoser]
-public class PascalCaseNamingStrategyProfile
+public class NamingStrategyProfile_PascalCase
 {
 	private static readonly PascalCaseNamingStrategy _baseLineStrategy = new ();
 	private static readonly NewPascalCaseNamingStrategy _optimizedStrategy = new ();
