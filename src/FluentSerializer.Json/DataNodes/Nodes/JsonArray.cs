@@ -36,7 +36,10 @@ public readonly partial struct JsonArray : IJsonArray
 		else
 		{
 			var currentChildIndex = 0;
-			var children = new ReadOnlyCollectionBuilder<IJsonNode>();
+			var children = elements is ICollection<IJsonArrayContent> childrenCollection
+				? new ReadOnlyCollectionBuilder<IJsonNode>(childrenCollection.Count)
+				: new ReadOnlyCollectionBuilder<IJsonNode>();
+
 			foreach (var property in elements)
 			{
 				children.Add(property);

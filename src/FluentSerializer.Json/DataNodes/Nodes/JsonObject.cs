@@ -40,7 +40,10 @@ public readonly partial struct JsonObject : IJsonObject
 		else
 		{
 			var currentPropertyIndex = 0;
-			var children = new ReadOnlyCollectionBuilder<IJsonNode>();
+			var children = properties is ICollection<IJsonArrayContent> propertiesCollection
+				? new ReadOnlyCollectionBuilder<IJsonNode>(propertiesCollection.Count)
+				: new ReadOnlyCollectionBuilder<IJsonNode>();
+
 			foreach (var property in properties)
 			{
 				children.Add(property);

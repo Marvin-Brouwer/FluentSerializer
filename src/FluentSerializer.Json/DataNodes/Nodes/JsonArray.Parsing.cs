@@ -13,7 +13,7 @@ public readonly partial struct JsonArray
 	/// </remarks>
 	public JsonArray(in ReadOnlySpan<char> text, ref int offset)
 	{
-		var children = new ReadOnlyCollectionBuilder<IJsonNode>();
+		var children = new List<IJsonNode>();
 		_lastNonCommentChildIndex = null;
 		var currentChildIndex = 0;
 
@@ -68,6 +68,6 @@ public readonly partial struct JsonArray
 		}
 		offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
 
-		_children = children.ToReadOnlyCollection();
+		_children = children;
 	}
 }

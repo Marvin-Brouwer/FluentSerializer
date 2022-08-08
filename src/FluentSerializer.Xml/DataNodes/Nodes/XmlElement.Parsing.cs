@@ -30,8 +30,8 @@ public readonly partial struct XmlElement
 		offset.AdjustForToken(XmlCharacterConstants.TagStartCharacter);
 		offset.AdjustForWhiteSpace(in text);
 
-		var attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
-		var children = new ReadOnlyCollectionBuilder<IXmlNode>();
+		var attributes = new List<IXmlAttribute>();
+		var children = new List<IXmlNode>();
 
 		var nameStartOffset = offset;
 		var nameEndOffset = offset;
@@ -100,8 +100,8 @@ public readonly partial struct XmlElement
 
 		if (elementClosed)
 		{
-			_attributes = attributes.ToReadOnlyCollection();
-			_children = children.ToReadOnlyCollection();
+			_attributes = attributes;
+			_children = children;
 			return;
 		}
 
@@ -149,7 +149,7 @@ public readonly partial struct XmlElement
 		}
 		offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 
-		_attributes = attributes.ToReadOnlyCollection();
-		_children = children.ToReadOnlyCollection();
+		_attributes = attributes;
+		_children = children;
 	}
 }

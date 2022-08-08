@@ -35,7 +35,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 	public IReadOnlyList<IJsonNode> Children => _children;
 
 	/// <inheritdoc />
-	public IJsonNode? Value => _children.FirstOrDefault();
+	public IJsonNode? Value => _children.Count > 0 ? _children[0] : null;
 
 	/// <inheritdoc cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/>
 	/// <remarks>

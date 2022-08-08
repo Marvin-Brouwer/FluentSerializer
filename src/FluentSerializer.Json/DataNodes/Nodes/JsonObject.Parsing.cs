@@ -14,7 +14,7 @@ public readonly partial struct JsonObject
 	public JsonObject(in ReadOnlySpan<char> text, ref int offset)
 	{
 		_lastPropertyIndex = null;
-		var children = new ReadOnlyCollectionBuilder<IJsonNode>();
+		var children = new List<IJsonNode>();
 		var currentPropertyIndex = 0;
 
 		offset.AdjustForToken(JsonCharacterConstants.ObjectStartCharacter);
@@ -48,6 +48,6 @@ public readonly partial struct JsonObject
 			offset++;
 		}
 		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
-		_children = children.ToReadOnlyCollection();
+		_children = children;
 	}
 }

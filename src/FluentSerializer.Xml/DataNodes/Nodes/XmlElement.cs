@@ -40,8 +40,21 @@ public readonly partial struct XmlElement : IXmlElement
 
 		Name = name;
 
-		var attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
-		var children = new ReadOnlyCollectionBuilder<IXmlNode>();
+		// This does not have the same impact as when you'd have one collection.
+		// However, it will still ensure a smaller initial size than the dotnet default on smaller element collections.
+		ReadOnlyCollectionBuilder<IXmlAttribute> attributes;
+		ReadOnlyCollectionBuilder<IXmlNode> children;
+		if (childNodes is ICollection<IXmlNode> childrenCollection)
+		{
+			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>(childrenCollection.Count);
+			children = new ReadOnlyCollectionBuilder<IXmlNode>(childrenCollection.Count);
+		}
+		else
+		{
+			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
+			children = new ReadOnlyCollectionBuilder<IXmlNode>();
+		}
+
 		foreach (var node in childNodes)
 		{
 			if (node is null) continue;
