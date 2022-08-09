@@ -100,8 +100,8 @@ public readonly partial struct XmlElement
 
 		if (elementClosed)
 		{
-			_attributes = attributes;
-			_children = children;
+			_attributes = attributes.AsReadOnly();
+			_children = children.AsReadOnly();
 			return;
 		}
 
@@ -149,7 +149,7 @@ public readonly partial struct XmlElement
 		}
 		offset.AdjustForToken(XmlCharacterConstants.TagEndCharacter);
 
-		_attributes = attributes;
-		_children = children;
+		_attributes = attributes.AsReadOnly();
+		_children = children.AsReadOnly();
 	}
 }

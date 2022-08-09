@@ -48,6 +48,6 @@ public readonly partial struct JsonObject
 			offset++;
 		}
 		offset.AdjustForToken(JsonCharacterConstants.ObjectEndCharacter);
-		_children = children;
+		_children = children.AsReadOnly();
 	}
 }
