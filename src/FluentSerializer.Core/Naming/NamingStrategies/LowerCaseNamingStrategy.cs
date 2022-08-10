@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// SomeName => somename
 /// </example>
 /// </summary>
-public class LowerCaseNamingStrategy : INamingStrategy
+public readonly struct LowerCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
 	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext _) => GetName(property.Name);

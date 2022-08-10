@@ -8,7 +8,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// <summary>
 /// Use a preconfigured value
 /// </summary>
-public sealed class CustomNamingStrategy : INamingStrategy
+public readonly struct CustomNamingStrategy : INamingStrategy
 {
 	private readonly string _name;
 

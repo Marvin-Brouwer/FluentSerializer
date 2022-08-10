@@ -13,11 +13,6 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// </summary>
 public abstract class AbstractSpanNamingStrategy : INamingStrategy
 {
-	/// <summary>
-	/// Current character count, will be reset in the default <see cref="GetName(in string)"/> method.
-	/// </summary>
-	protected int CharCount = 0;
-
 	/// <inheritdoc />
 	public virtual ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(property.Name);
 	/// <inheritdoc />
@@ -31,7 +26,6 @@ public abstract class AbstractSpanNamingStrategy : INamingStrategy
 		Span<char> characterSpan = stackalloc char[name.Length];
 
 		ConvertCasing(name, ref characterSpan);
-		CharCount = 0;
 
 		var newName = characterSpan.ToString();
 		Guard.Against.InvalidName(newName);

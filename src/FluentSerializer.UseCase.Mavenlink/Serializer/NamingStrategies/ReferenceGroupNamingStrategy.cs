@@ -15,7 +15,7 @@ internal class ReferenceGroupNamingStrategy : INamingStrategy
 {
 	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
 	{
-		string typeName = GetTypeName(propertyType);
+		var typeName = GetTypeName(propertyType);
 		return EntityMappings.GetDataReferenceGroupName(in typeName);
 	}
 

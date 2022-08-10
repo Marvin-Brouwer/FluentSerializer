@@ -18,14 +18,16 @@ public sealed class PascalCaseNamingStrategy : AbstractSpanNamingStrategy
 	/// </remarks>
 	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
+		var charCount = 0;
+
 		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
 		{
 			var currentChar = sourceSpan[iteration];
 
-			if (CharCount == 0)
+			if (charCount == 0)
 			{
-				characterSpan[CharCount] = char.ToUpperInvariant(currentChar);
-				CharCount.Increment();
+				characterSpan[charCount] = char.ToUpperInvariant(currentChar);
+				charCount.Increment();
 				continue;
 			}
 			if (currentChar == NamingConstants.SpecialCharacters.Underscore
@@ -34,21 +36,21 @@ public sealed class PascalCaseNamingStrategy : AbstractSpanNamingStrategy
 			{
 				if (sourceSpan.Length > iteration)
 				{
-					characterSpan[CharCount] = char.ToUpperInvariant(sourceSpan[iteration + 1]);
-					CharCount.Increment();
+					characterSpan[charCount] = char.ToUpperInvariant(sourceSpan[iteration + 1]);
+					charCount.Increment();
 				}
 				iteration.Increment();
 				continue;
 			}
-			characterSpan[CharCount] = currentChar;
+			characterSpan[charCount] = currentChar;
 
 			// Stop if we encounter a generic type indicator
 			if (currentChar == NamingConstants.GenericTypeMarker) break;
 
 			if (sourceSpan.Length == iteration) break;
-			CharCount.Increment();
+			charCount.Increment();
 		}
 
-		characterSpan = characterSpan[..CharCount];
+		characterSpan = characterSpan[..charCount];
 	}
 }

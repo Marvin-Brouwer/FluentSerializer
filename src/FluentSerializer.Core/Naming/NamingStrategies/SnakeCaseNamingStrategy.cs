@@ -21,7 +21,6 @@ public sealed class SnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 		Span<char> characterSpan = stackalloc char[name.Length *2];
 
 		ConvertCasing(name, ref characterSpan);
-		CharCount = 0;
 
 		var newName = characterSpan.ToString();
 		Guard.Against.InvalidName(newName);
@@ -31,16 +30,18 @@ public sealed class SnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 	/// <inheritdoc />
 	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
+		var charCount = 0;
+
 		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
 		{
 			var currentChar = sourceSpan[iteration];
 
 			if (char.IsUpper(currentChar))
 			{
-				characterSpan[CharCount] = NamingConstants.SpecialCharacters.Underscore;
-				CharCount.Increment();
-				characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
-				CharCount.Increment();
+				characterSpan[charCount] = NamingConstants.SpecialCharacters.Underscore;
+				charCount.Increment();
+				characterSpan[charCount] = char.ToLowerInvariant(currentChar);
+				charCount.Increment();
 				continue;
 			}
 
@@ -48,20 +49,20 @@ public sealed class SnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 			 || currentChar == NamingConstants.SpecialCharacters.Plus
 			 || currentChar == NamingConstants.SpecialCharacters.Minus)
 			{
-				characterSpan[CharCount] = NamingConstants.SpecialCharacters.Underscore;
-				CharCount.Increment();
+				characterSpan[charCount] = NamingConstants.SpecialCharacters.Underscore;
+				charCount.Increment();
 				continue;
 			}
 
-			characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
+			characterSpan[charCount] = char.ToLowerInvariant(currentChar);
 
 			// Stop if we encounter a generic type indicator
 			if (currentChar == NamingConstants.GenericTypeMarker) break;
 
 			if (sourceSpan.Length == iteration) break;
-			CharCount.Increment();
+			charCount.Increment();
 		}
 
-		characterSpan = characterSpan[1..CharCount];
+		characterSpan = characterSpan[1..charCount];
 	}
 }
