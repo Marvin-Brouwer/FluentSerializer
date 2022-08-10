@@ -1,7 +1,8 @@
+using FluentSerializer.Core.Configuration;
+
 using System;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Text;
 

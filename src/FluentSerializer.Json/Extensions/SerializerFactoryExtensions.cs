@@ -1,7 +1,9 @@
 using FluentSerializer.Core.Factories;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Factory;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 
 namespace FluentSerializer.Json.Extensions;

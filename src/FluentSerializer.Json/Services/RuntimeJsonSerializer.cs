@@ -1,15 +1,18 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Mapping;
-using FluentSerializer.Json.Configuration;
-using FluentSerializer.Json.DataNodes;
-using Microsoft.Extensions.ObjectPool;
-using System;
-using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Json.Configuration;
+using FluentSerializer.Json.DataNodes;
+
+using Microsoft.Extensions.ObjectPool;
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.Services;
 

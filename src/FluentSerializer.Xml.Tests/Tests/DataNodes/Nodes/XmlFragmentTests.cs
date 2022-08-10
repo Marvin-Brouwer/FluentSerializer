@@ -3,7 +3,9 @@ using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

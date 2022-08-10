@@ -1,8 +1,11 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Extensions;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;

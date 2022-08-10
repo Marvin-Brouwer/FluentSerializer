@@ -1,5 +1,6 @@
-using System;
 using FluentSerializer.Core.Extensions;
+
+using System;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

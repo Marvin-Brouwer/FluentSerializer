@@ -1,5 +1,7 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Extensions;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;

@@ -1,5 +1,7 @@
 using FluentSerializer.Xml.DataNodes;
+
 using System.IO;
+
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.Tests;

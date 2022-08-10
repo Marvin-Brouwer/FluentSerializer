@@ -1,6 +1,8 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Assertions;
+
 using System;
 
 namespace FluentSerializer.Core.TestUtils.Extensions;

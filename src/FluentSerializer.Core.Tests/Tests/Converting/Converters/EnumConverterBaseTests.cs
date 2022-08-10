@@ -1,8 +1,11 @@
+using FluentAssertions;
+
+using FluentSerializer.Core.Converting.Converters;
+
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using FluentAssertions;
-using FluentSerializer.Core.Converting.Converters;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;

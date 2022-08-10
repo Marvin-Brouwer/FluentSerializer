@@ -1,6 +1,8 @@
-using Microsoft.Extensions.ObjectPool;
-using System;
 using FluentSerializer.Core.Text;
+
+using Microsoft.Extensions.ObjectPool;
+
+using System;
 
 namespace FluentSerializer.Core.DataNodes;
 

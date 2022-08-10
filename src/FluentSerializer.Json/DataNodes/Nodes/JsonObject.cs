@@ -1,5 +1,7 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -1,8 +1,10 @@
 #if NET5_0_OR_GREATER
+using Ardalis.GuardClauses;
+
+using FluentSerializer.Xml.Converting.Converters.Base;
+
 using System;
 using System.Globalization;
-using Ardalis.GuardClauses;
-using FluentSerializer.Xml.Converting.Converters.Base;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 

@@ -1,9 +1,10 @@
-using System;
-using System.Linq.Expressions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converting;
+
+using System;
+using System.Linq.Expressions;
 
 namespace FluentSerializer.Json.Profiles;
 

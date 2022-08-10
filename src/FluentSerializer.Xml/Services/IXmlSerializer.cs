@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Services;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Xml.Services;

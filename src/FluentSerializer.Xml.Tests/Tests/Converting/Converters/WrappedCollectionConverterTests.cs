@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
@@ -6,9 +7,12 @@ using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
+
 using Moq;
+
 using System;
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

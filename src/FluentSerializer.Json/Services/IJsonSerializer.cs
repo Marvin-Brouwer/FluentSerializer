@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Services;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.Services;

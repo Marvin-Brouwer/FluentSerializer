@@ -1,7 +1,9 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.SerializerException;
+
 using System;
 using System.Runtime.Serialization;
 

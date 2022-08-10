@@ -1,8 +1,9 @@
+using FluentSerializer.Core.BenchmarkUtils.Configuration;
 using FluentSerializer.Core.BenchmarkUtils.Runner;
 using FluentSerializer.Xml.Benchmark.Data;
+
 using System;
 using System.Linq;
-using FluentSerializer.Core.BenchmarkUtils.Configuration;
 
 #if !NET5_0_OR_GREATER
 using System.Security.Permissions;

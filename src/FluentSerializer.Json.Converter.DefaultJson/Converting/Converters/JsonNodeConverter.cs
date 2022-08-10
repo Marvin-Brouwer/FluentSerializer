@@ -1,8 +1,9 @@
-using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
+
+using System;
 
 namespace FluentSerializer.Json.Converter.DefaultJson.Converting.Converters;
 

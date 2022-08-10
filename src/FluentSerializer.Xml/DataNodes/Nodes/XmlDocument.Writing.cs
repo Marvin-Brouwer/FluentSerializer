@@ -1,7 +1,8 @@
-using FluentSerializer.Xml.Configuration;
-using Microsoft.Extensions.ObjectPool;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Xml.Configuration;
+
+using Microsoft.Extensions.ObjectPool;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Configuration;
 

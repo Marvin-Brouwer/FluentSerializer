@@ -1,18 +1,21 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
 using FluentSerializer.Xml.Exceptions;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Core.Text;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Xml.Services;
 

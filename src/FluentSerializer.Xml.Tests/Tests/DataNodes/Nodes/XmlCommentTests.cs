@@ -1,10 +1,13 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

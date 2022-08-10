@@ -1,7 +1,7 @@
 using FluentSerializer.Core.Extensions;
+
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

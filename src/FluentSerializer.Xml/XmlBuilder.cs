@@ -1,7 +1,9 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System.Collections.Generic;
 using System.Linq;
 

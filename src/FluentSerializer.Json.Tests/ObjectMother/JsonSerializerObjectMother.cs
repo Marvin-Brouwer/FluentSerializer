@@ -1,8 +1,10 @@
+using FluentSerializer.Core.Context;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
+
 using Moq;
+
 using System;
-using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Json.Tests.ObjectMother;
 

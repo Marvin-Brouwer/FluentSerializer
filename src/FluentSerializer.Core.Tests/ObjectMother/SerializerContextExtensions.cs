@@ -3,7 +3,9 @@ using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Services;
+
 using Moq;
+
 using System;
 using System.Reflection;
 

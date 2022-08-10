@@ -1,10 +1,13 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
+
 using Moq;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;

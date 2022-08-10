@@ -1,7 +1,8 @@
-using System;
-using System.Globalization;
 using FluentSerializer.Json.Converting.Converters.Base;
 using FluentSerializer.Json.DataNodes;
+
+using System;
+using System.Globalization;
 
 namespace FluentSerializer.Json.Converting.Converters;
 

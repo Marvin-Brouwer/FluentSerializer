@@ -1,5 +1,6 @@
-using System;
 using FluentSerializer.Core.Extensions;
+
+using System;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -14,7 +15,6 @@ public readonly partial struct JsonValue
 		var stringValue = false;
 
 		var valueStartOffset = offset;
-		var valueEndOffset = offset;
 
 		while (text.WithinCapacity(in offset))
 		{
@@ -26,16 +26,14 @@ public readonly partial struct JsonValue
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true;
 
 			offset++;
-			valueEndOffset = offset;
 
 			if (!stringValue && text.HasWhitespaceAtOffset(in offset)) break;
 		}
 
 		// Append a '"' if it started with a '"'
 		if (stringValue) offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
-		valueEndOffset = offset;
 
-		Value = text[valueStartOffset..valueEndOffset].ToString().Trim();
+		Value = text[valueStartOffset..offset].ToString().Trim();
 		if (Value.Equals(JsonCharacterConstants.NullValue, StringComparison.OrdinalIgnoreCase))
 			Value = null;
 	}

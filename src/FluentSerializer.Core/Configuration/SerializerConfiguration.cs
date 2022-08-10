@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Text;
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Converting;
+
+using System.Collections;
+using System.Text;
 
 namespace FluentSerializer.Core.Configuration;
 

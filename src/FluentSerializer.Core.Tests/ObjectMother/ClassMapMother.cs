@@ -3,7 +3,9 @@ using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
 using Moq;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

@@ -1,22 +1,33 @@
 using System;
 using System.Collections.Generic;
+
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
+
 using System.Reflection;
+
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
+
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+
 using Perfolizer.Horology;
+
 using System.IO;
 using System.Linq;
+
 using BenchmarkDotNet.Columns;
+
 using System.Threading;
 using System.Globalization;
+
 using BenchmarkDotNet.Order;
+
 using Microsoft.Extensions.PlatformAbstractions;
+
 using BenchmarkDotNet.Reports;
 
 #if (DEBUG)

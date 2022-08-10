@@ -1,8 +1,9 @@
-using System.Runtime.CompilerServices;
-using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text;
+
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FluentSerializer.Core.Extensions;
 

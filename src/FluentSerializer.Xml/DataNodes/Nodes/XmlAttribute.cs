@@ -1,6 +1,8 @@
-using System.Diagnostics;
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
+
+using System.Diagnostics;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

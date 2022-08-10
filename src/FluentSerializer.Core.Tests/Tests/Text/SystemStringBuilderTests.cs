@@ -1,7 +1,10 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Helpers;
+
 using System;
 using System.Text;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Text;

@@ -1,10 +1,11 @@
-using System;
-using System.Text;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Converting;
+
+using System;
+using System.Text;
 
 namespace FluentSerializer.Json.Configuration;
 

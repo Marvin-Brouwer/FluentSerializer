@@ -1,7 +1,9 @@
-using System;
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
+
+using System;
 
 namespace FluentSerializer.Json;
 

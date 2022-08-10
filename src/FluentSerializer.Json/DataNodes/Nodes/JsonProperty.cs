@@ -1,10 +1,11 @@
-using System;
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 

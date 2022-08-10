@@ -1,10 +1,13 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

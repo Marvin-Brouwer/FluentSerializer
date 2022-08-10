@@ -22,3 +22,5 @@ indent_size = 2
 [*.cs]
 csharp_style_namespace_declarations = file_scoped
 dotnet_diagnostic.IDE0161.severity = error
+dotnet_sort_system_directives_first = false
+dotnet_separate_import_directive_groups = true

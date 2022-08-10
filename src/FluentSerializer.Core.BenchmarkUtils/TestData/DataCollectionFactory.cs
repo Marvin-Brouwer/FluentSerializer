@@ -1,9 +1,10 @@
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.TestUtils.Helpers;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using FluentSerializer.Core.TestUtils.Helpers;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;
 

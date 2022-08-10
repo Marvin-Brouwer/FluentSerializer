@@ -1,5 +1,6 @@
-using System;
 using FluentSerializer.Core.Configuration;
+
+using System;
 
 namespace FluentSerializer.Core.Converting.Converters;
 

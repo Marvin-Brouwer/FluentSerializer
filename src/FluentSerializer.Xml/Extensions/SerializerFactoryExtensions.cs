@@ -1,7 +1,9 @@
 using FluentSerializer.Core.Factories;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Factory;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 
 namespace FluentSerializer.Xml.Extensions;

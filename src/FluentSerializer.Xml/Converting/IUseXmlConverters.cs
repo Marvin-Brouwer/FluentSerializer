@@ -1,9 +1,10 @@
-using System;
-using System.Globalization;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Converting.Converters.Base;
 using FluentSerializer.Xml.DataNodes;
+
+using System;
+using System.Globalization;
 
 namespace FluentSerializer.Xml.Converting;
 

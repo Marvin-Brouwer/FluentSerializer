@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Json.Converting.Converters;
+
 using System;
 
 namespace FluentSerializer.Json.Tests.ObjectMother;

@@ -1,6 +1,9 @@
-using System;
 using FluentAssertions;
+
 using FluentSerializer.Core.Converting.Converters;
+
+using System;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;

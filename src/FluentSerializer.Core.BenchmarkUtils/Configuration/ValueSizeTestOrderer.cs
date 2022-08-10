@@ -1,7 +1,9 @@
 using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+
 using FluentSerializer.Core.BenchmarkUtils.TestData;
+
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;

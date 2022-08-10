@@ -1,4 +1,5 @@
 using Bogus;
+
 using System.Collections.Generic;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;

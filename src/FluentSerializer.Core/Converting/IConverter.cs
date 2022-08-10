@@ -1,8 +1,9 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
+
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Core.Converting;
 

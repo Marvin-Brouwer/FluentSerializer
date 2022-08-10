@@ -1,4 +1,5 @@
 using FluentSerializer.Core.TestUtils.Extensions;
+
 using Xunit;
 
 namespace FluentSerializer.Json.Tests.Tests;

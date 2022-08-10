@@ -1,5 +1,6 @@
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.DataNodes;
+
 using System.Collections.Generic;
 using System.Linq;
 
