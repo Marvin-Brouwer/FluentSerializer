@@ -3,6 +3,8 @@ using FluentSerializer.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -13,17 +15,18 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public string Name { get; }
 
-	private readonly List<IXmlNode> _children;
-	private readonly List<IXmlAttribute> _attributes;
+	private readonly IReadOnlyList<IXmlNode> _children;
+	private readonly IReadOnlyList<IXmlAttribute> _attributes;
 
 	/// <inheritdoc />
 	public IReadOnlyList<IXmlNode> Children
 	{
 		get
 		{
-			var childList = new List<IXmlNode>(_attributes);
-			childList.AddRange(_children);
-			return childList;
+			var children = new ReadOnlyCollectionBuilder<IXmlNode>(_attributes);
+			foreach (var child in _children) children.Add(child);
+
+			return children.ToReadOnlyCollection();
 		}
 	}
 
@@ -36,16 +39,32 @@ public readonly partial struct XmlElement : IXmlElement
 		Guard.Against.InvalidName(in name);
 
 		Name = name;
-		_attributes = new List<IXmlAttribute>();
-		_children = new List<IXmlNode>();
+
+		// This does not have the same impact as when you'd have one collection.
+		// However, it will still ensure a smaller initial size than the dotnet default on smaller element collections.
+		ReadOnlyCollectionBuilder<IXmlAttribute> attributes;
+		ReadOnlyCollectionBuilder<IXmlNode> children;
+		if (childNodes is ICollection<IXmlNode> childrenCollection)
+		{
+			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>(childrenCollection.Count);
+			children = new ReadOnlyCollectionBuilder<IXmlNode>(childrenCollection.Count);
+		}
+		else
+		{
+			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
+			children = new ReadOnlyCollectionBuilder<IXmlNode>();
+		}
 
 		foreach (var node in childNodes)
 		{
 			if (node is null) continue;
 			if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
-			if (node is XmlAttribute attribute) _attributes.Add(attribute);
-			else _children.Add(node);
+			if (node is XmlAttribute attribute) attributes.Add(attribute);
+			else children.Add(node);
 		}
+
+		_attributes = attributes.ToReadOnlyCollection();
+		_children = children.ToReadOnlyCollection();
 	}
 
 	/// <inheritdoc />
@@ -90,16 +109,20 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public string? GetTextValue()
 	{
-		string? returnValue = null;
+		var stringBuilder = new StringBuilder(64);
+		var hasText = false;
+
 		foreach (var child in _children)
 		{
 			if (child is not IXmlText element) continue;
 			if (string.IsNullOrEmpty(element.Value)) continue;
 
-			returnValue ??= string.Empty;
-			returnValue += element.Value;
+			stringBuilder.Append(element.Value);
+			hasText = true;
 		}
 
-		return returnValue;
+		return hasText
+			? stringBuilder.ToString()
+			: null;
 	}
 }

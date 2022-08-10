@@ -9,7 +9,7 @@ public interface IDataContainer<out TValue> : IDataNode
 	where TValue : IDataNode
 {
 	/// <summary>
-	/// The datanodes nested in this data node
+	/// The <see cref="IDataNode"/>s nested in this data node
 	/// </summary>
 	IReadOnlyList<TValue> Children { get; }
 }
