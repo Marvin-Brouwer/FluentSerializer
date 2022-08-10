@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Dirty;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Json.Configuration;
+
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FluentSerializer.Json.Profiles;
 
@@ -27,7 +28,7 @@ public abstract class JsonSerializerProfile : ISerializerProfile<JsonSerializerC
 	/// </remarks>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> ISerializerProfile<JsonSerializerConfiguration>.Configure(in JsonSerializerConfiguration configuration)
+	IReadOnlyCollection<IClassMap> ISerializerProfile<JsonSerializerConfiguration>.Configure(in JsonSerializerConfiguration configuration)
 	{
 		_configuration = configuration;
 		Configure();

@@ -1,3 +1,8 @@
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Extensions;
+
+using System;
+
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
 /// <summary>
@@ -6,14 +11,44 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// SomeName => SomeName
 /// </example>
 /// </summary>
-public class PascalCaseNamingStrategy : CamelCaseNamingStrategy
+public sealed class PascalCaseNamingStrategy : AbstractSpanNamingStrategy
 {
-	/// <inheritdoc />
-	protected override string GetName(in string name)
+	/// <remarks>
+	/// Since we don't have whitespaces in C# property and class names we can just uppercase the first char.
+	/// </remarks>
+	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
-		// Just use the camelCase logic here
-		var camelCaseName = base.GetName(in name);
+		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
+		{
+			var currentChar = sourceSpan[iteration];
 
-		return $"{char.ToUpper(camelCaseName[0])}{camelCaseName[1..]}";
+			if (CharCount == 0)
+			{
+				characterSpan[CharCount] = char.ToUpperInvariant(currentChar);
+				CharCount.Increment();
+				continue;
+			}
+			if (currentChar == NamingConstants.SpecialCharacters.Underscore
+			|| currentChar == NamingConstants.SpecialCharacters.Plus
+			|| currentChar == NamingConstants.SpecialCharacters.Minus)
+			{
+				if (sourceSpan.Length > iteration)
+				{
+					characterSpan[CharCount] = char.ToUpperInvariant(sourceSpan[iteration + 1]);
+					CharCount.Increment();
+				}
+				iteration.Increment();
+				continue;
+			}
+			characterSpan[CharCount] = currentChar;
+
+			// Stop if we encounter a generic type indicator
+			if (currentChar == NamingConstants.GenericTypeMarker) break;
+
+			if (sourceSpan.Length == iteration) break;
+			CharCount.Increment();
+		}
+
+		characterSpan = characterSpan[..CharCount];
 	}
 }

@@ -1,6 +1,8 @@
+using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Context;
+
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -13,7 +15,19 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public class LowerCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext _) => property.Name.Split('`')[0].ToLowerInvariant();
+	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext _) => GetName(property.Name);
+
 	/// <inheritdoc />
-	public string GetName(in Type classType, in INamingContext _) => classType.Name.Split('`')[0].ToLowerInvariant();
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext _) => GetName(classType.Name);
+
+	private ReadOnlySpan<char> GetName(in string name)
+	{
+		var genericIndex = name.IndexOf(NamingConstants.GenericTypeMarker);
+		if (genericIndex == -1) return name.ToLowerInvariant();
+
+		Span<char> nameSpan = stackalloc char[genericIndex];
+		MemoryExtensions.ToLowerInvariant(name.AsSpan()[..genericIndex], nameSpan);
+
+		return nameSpan.ToString();
+	}
 }

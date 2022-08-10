@@ -1,9 +1,13 @@
 using Ardalis.GuardClauses;
+
 using FluentAssertions;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
 using System;
 using System.Collections.Generic;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;
@@ -113,10 +117,10 @@ public sealed class ExpressionExtensionTests
 
 		// Assert
 		resultClassName.Should().Throw<ArgumentException>()
-			.WithMessage("Value cannot be null. *")
+			.WithMessage("Required input resolvedName was empty. *")
 			.Which.ParamName.Should().BeEquivalentTo("resolvedName");
 		resultPropertyName.Should().Throw<ArgumentException>()
-			.WithMessage("Value cannot be null. *")
+			.WithMessage("Required input resolvedName was empty. *")
 			.Which.ParamName.Should().BeEquivalentTo("resolvedName");
 		resultGuard.Should().Throw<ArgumentException>()
 			.WithMessage("Value cannot be null. *")

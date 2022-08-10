@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -12,8 +13,11 @@ using FluentSerializer.Xml.Exceptions;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.ObjectMother;
+
 using Moq;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -308,14 +312,13 @@ public sealed class XmlTypeSerializerTests
 			DefaultPropertyNamingStrategy = Names.Use.PascalCase,
 			WriteNull = true
 		};
-		var testProfile = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(testProfile);
+		var testClassMaps = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
 
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 
-		var sut = new XmlTypeSerializer(scanList);
+		var sut = new XmlTypeSerializer(in testClassMaps);
 
 		// Act
 		var result1 = sut.SerializeToElement(input1, type, contextStub);
@@ -354,14 +357,13 @@ public sealed class XmlTypeSerializerTests
 			DefaultClassNamingStrategy = Names.Use.PascalCase,
 			DefaultPropertyNamingStrategy = Names.Use.PascalCase
 		};
-		var testProfile = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(testProfile);
+		var testClassMaps = ((ISerializerProfile<XmlSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
 
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
 
-		var sut = new XmlTypeSerializer(scanList);
+		var sut = new XmlTypeSerializer(in testClassMaps);
 
 		// Act
 		var result1 = () => sut.SerializeToElement(input1, type, contextStub);

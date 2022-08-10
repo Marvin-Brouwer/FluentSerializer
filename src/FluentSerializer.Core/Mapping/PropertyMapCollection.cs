@@ -3,32 +3,65 @@ using FluentSerializer.Core.Extensions;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace FluentSerializer.Core.Mapping;
 
+/// <inheritdoc />
 public readonly struct PropertyMapCollection : IPropertyMapCollection
 {
-	private readonly IReadOnlyList<IPropertyMap> _propertyMaps;
+	private static readonly NotSupportedException _serializerDirectionBothException = new NotSupportedException(
+		$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
+		"you can only register one as such!");
 
-	public PropertyMapCollection(IReadOnlyList<IPropertyMap> propertyMaps)
+	private readonly IReadOnlyCollection<IPropertyMap> _propertyMaps;
+
+	/// <inheritdoc cref="IPropertyMapCollection" />
+	public PropertyMapCollection(in IReadOnlyCollection<IPropertyMap> propertyMaps)
 	{
 		_propertyMaps = propertyMaps;
 	}
 
-	public IReadOnlyList<IPropertyMap> GetAllPropertyMaps() => _propertyMaps;
+	/// <inheritdoc />
+	public IReadOnlyCollection<IPropertyMap> GetAllPropertyMaps(in SerializerDirection direction)
+	{
+		if (direction == SerializerDirection.Both) throw _serializerDirectionBothException;
 
+		return GetPropertyMaps(direction).ToArray();
+	}
+
+	private IEnumerable<IPropertyMap> GetPropertyMaps(SerializerDirection direction)
+	{
+		foreach (var propertyMap in _propertyMaps)
+		{
+			if (!MatchDirection(in direction, propertyMap.Direction)) continue;
+
+			yield return propertyMap;
+		}
+	}
+
+	/// <inheritdoc />
 	public IPropertyMap? GetPropertyMapFor(in PropertyInfo propertyInfo, in SerializerDirection direction)
 	{
-		// todo cache?
-		if (direction == SerializerDirection.Both)
-			throw new NotSupportedException(
-				$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
-				"you can only register one as such!");
+		if (direction == SerializerDirection.Both) throw _serializerDirectionBothException;
 
 		foreach (var propertyMap in _propertyMaps)
 		{
 			if (!MatchDirection(in direction, propertyMap.Direction)) continue;
+			if (!MatchProperty(propertyMap.Property, in propertyInfo)) continue;
+
+			return propertyMap;
+		}
+
+		return default;
+	}
+
+	/// <inheritdoc />
+	public IPropertyMap? GetPropertyMapFor(in PropertyInfo propertyInfo)
+	{
+		foreach (var propertyMap in _propertyMaps)
+		{
 			if (!MatchProperty(propertyMap.Property, in propertyInfo)) continue;
 
 			return propertyMap;

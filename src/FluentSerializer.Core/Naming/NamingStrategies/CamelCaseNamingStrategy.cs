@@ -1,8 +1,7 @@
-using System;
-using System.Reflection;
-using Ardalis.GuardClauses;
-using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Extensions;
+
+using System;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -12,59 +11,44 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// SomeName => someName
 /// </example>
 /// </summary>
-public class CamelCaseNamingStrategy : INamingStrategy
+public sealed class CamelCaseNamingStrategy : AbstractSpanNamingStrategy
 {
-	/// <inheritdoc />
-	public virtual string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(property.Name);
-	/// <inheritdoc />
-	public virtual string GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
-
-	/// <summary>
-	/// Convert a string value to camelCase
-	/// </summary>
-	protected virtual string GetName(in string name)
-	{
-		Guard.Against.InvalidName(in name);
-
-		var properClassName = name.Split('`')[0];
-
-		return string.Create(properClassName.Length, properClassName, ConvertCasing);
-	}
-
-	private static void ConvertCasing(Span<char> characterSpan, string originalString)
-	{
-		var sourceSpan = originalString.AsSpan();
-		sourceSpan.CopyTo(characterSpan);
-		ConvertCasing(characterSpan);
-	}
-
 	/// <remarks>
-	/// This is based on the <see><cref>System.Text.Json.JsonCamelCaseNamingPolicy</cref></see> but,
-	/// since dotnet standard doesn't have that we needed our own version.
+	/// Since we don't have whitespaces in C# property and class names we can just lowercase the first char.
 	/// </remarks>
-	private static void ConvertCasing(Span<char> characterSpan)
+	protected override void ConvertCasing(in ReadOnlySpan<char> sourceSpan, ref Span<char> characterSpan)
 	{
-		const char spaceCharacter = ' ';
-
-		for (var i = 0; i < characterSpan.Length; i++)
+		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
 		{
-			if (i == 1 && !char.IsUpper(characterSpan[i])) break;
+			var currentChar = sourceSpan[iteration];
 
-			var hasNext = i + 1 < characterSpan.Length;
-
-			// Stop when next char is already lowercase.
-			if (i > 0 && hasNext && !char.IsUpper(characterSpan[i + 1]))
+			if (CharCount == 0)
 			{
-				// If the next char is a space, lowercase current char before exiting.
-				if (characterSpan[i + 1] == spaceCharacter)
-				{
-					characterSpan[i] = char.ToLowerInvariant(characterSpan[i]);
-				}
-
-				break;
+				characterSpan[CharCount] = char.ToLowerInvariant(currentChar);
+				CharCount.Increment();
+				continue;
 			}
+			if (currentChar == NamingConstants.SpecialCharacters.Underscore
+			||  currentChar == NamingConstants.SpecialCharacters.Plus
+			||  currentChar == NamingConstants.SpecialCharacters.Minus)
+			{
+				if (sourceSpan.Length > iteration)
+				{
+					characterSpan[CharCount] = char.ToUpperInvariant(sourceSpan[iteration + 1]);
+					CharCount.Increment();
+				}
+				iteration.Increment();
+				continue;
+			}
+			characterSpan[CharCount] = currentChar;
 
-			characterSpan[i] = char.ToLowerInvariant(characterSpan[i]);
+			// Stop if we encounter a generic type indicator
+			if (currentChar == NamingConstants.GenericTypeMarker) break;
+
+			if (sourceSpan.Length == iteration) break;
+			CharCount.Increment();
 		}
+
+		characterSpan = characterSpan[..CharCount];
 	}
 }

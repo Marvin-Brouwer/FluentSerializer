@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Profiles;
 
@@ -15,5 +16,5 @@ public interface ISerializerProfile<TConfiguration> //: ISerializerProfile
 	/// </summary>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough,
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> Configure(in TConfiguration configuration);
+	IReadOnlyCollection<IClassMap> Configure(in TConfiguration configuration);
 }

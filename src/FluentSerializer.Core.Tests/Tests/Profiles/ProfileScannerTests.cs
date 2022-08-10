@@ -1,11 +1,15 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
+
 using Moq;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Profiles;
@@ -63,7 +67,7 @@ public sealed class ProfileScannerTests
 			Mock.Of<IClassMap>()
 		};
 
-		public IReadOnlyList<IClassMap> Configure(in ISerializerConfiguration configuration)
+		public IReadOnlyCollection<IClassMap> Configure(in ISerializerConfiguration configuration)
 		{
 			return ClassMaps;
 		}

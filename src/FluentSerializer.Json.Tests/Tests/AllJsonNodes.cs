@@ -1,4 +1,5 @@
 using FluentSerializer.Json.DataNodes;
+
 using System.IO;
 
 using static FluentSerializer.Json.JsonBuilder;

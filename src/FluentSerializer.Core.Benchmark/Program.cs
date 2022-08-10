@@ -1,6 +1,6 @@
-using BenchmarkDotNet.Order;
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
 using FluentSerializer.Core.BenchmarkUtils.Runner;
+
 using System;
 
 #if !NET5_0_OR_GREATER

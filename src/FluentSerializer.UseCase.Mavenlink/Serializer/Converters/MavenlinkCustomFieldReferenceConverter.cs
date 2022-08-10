@@ -1,4 +1,3 @@
-using System;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
@@ -7,6 +6,8 @@ using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.UseCase.Mavenlink.Models;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
+
+using System;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
@@ -58,7 +59,10 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 	{
 		if (objectToDeserialize is not IJsonArray jsonArrayToDeserialize) throw new NotSupportedException();
 
-		var itemName = _namingStrategy.GetName(context.Property, context.PropertyType, context);
+		var itemName = _namingStrategy
+			.GetName(context.Property, context.PropertyType, context)
+			.ToString();
+
 		foreach (var child in jsonArrayToDeserialize.Children)
 		{
 			if (child is not IJsonValue customFieldReference) continue;

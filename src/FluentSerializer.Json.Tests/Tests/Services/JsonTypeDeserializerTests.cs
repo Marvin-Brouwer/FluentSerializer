@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -8,8 +9,11 @@ using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Tests.ObjectMother;
+
 using Moq;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;

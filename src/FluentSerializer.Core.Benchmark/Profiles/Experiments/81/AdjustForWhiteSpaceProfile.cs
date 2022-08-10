@@ -1,10 +1,8 @@
 using BenchmarkDotNet.Attributes;
+
 using FluentSerializer.Core.Extensions;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Experiments._81;
 

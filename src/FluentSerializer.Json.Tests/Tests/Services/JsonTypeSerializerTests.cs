@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -11,8 +12,11 @@ using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Tests.ObjectMother;
+
 using Moq;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -240,14 +244,13 @@ public sealed class JsonTypeSerializerTests
 			DefaultNamingStrategy = Names.Use.PascalCase,
 			WriteNull = true
 		};
-		var testProfile = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(testProfile);
+		var testClassMaps = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
 
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(scanList);
+		var sut = new JsonTypeSerializer(in testClassMaps);
 
 		// Act
 		var result1 = sut.SerializeToNode(input1, type, contextStub);

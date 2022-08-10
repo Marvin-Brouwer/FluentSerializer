@@ -1,7 +1,7 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
 
 using FluentSerializer.Core.Naming.NamingStrategies;
+
 using System;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
@@ -15,22 +15,22 @@ public class NamingStrategyProfile_Equal
 {
 	private static readonly CustomNamingStrategy _baseLineStrategy = new ("Override");
 
-	[Benchmark, BenchmarkCategory("Equal_ShortNamedClass")]
-	public string Equal_ShortNamedClass() =>
+	[Benchmark]
+	public ReadOnlySpan<char> Equal_ShortNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("Equal_ShortNamedProperty")]
-	public string Equal_ShortNamedProperty() =>
+	[Benchmark]
+	public ReadOnlySpan<char> Equal_ShortNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
 
-	[Benchmark, BenchmarkCategory("Equal_LongNamedClass")]
-	public string Equal_LongNamedClass() =>
+	[Benchmark]
+	public ReadOnlySpan<char> Equal_LongNamedClass() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
-	[Benchmark, BenchmarkCategory("Equal_LongNamedProperty")]
-	public string Equal_LongNamedProperty() =>
+	[Benchmark]
+	public ReadOnlySpan<char> Equal_LongNamedProperty() =>
 		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 }

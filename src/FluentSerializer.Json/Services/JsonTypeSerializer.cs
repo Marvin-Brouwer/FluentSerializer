@@ -1,12 +1,12 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
-using FluentSerializer.Json.Profiles;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,14 +20,16 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeSerializer
 {
-	private readonly IClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration> _mappings;
+	private const SerializerDirection TypeSerializerDirection = SerializerDirection.Serialize;
+
+	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="JsonTypeSerializer" />
 	public JsonTypeSerializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(mappings);
+		_classMappings = new ClassMapCollection(in mappings);
 	}
 
 	/// <summary>
@@ -50,8 +52,8 @@ public sealed class JsonTypeSerializer
 
 		var instanceType = dataModel.GetType();
 		var classMap =
-			_mappings.Scan((instanceType, SerializerDirection.Serialize)) ??
-			_mappings.Scan((classType, SerializerDirection.Serialize));
+			_classMappings.GetClassMapFor(instanceType, TypeSerializerDirection) ??
+			_classMappings.GetClassMapFor(classType, TypeSerializerDirection);
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		currentCoreContext.TryAddReference(dataModel);
@@ -59,9 +61,8 @@ public sealed class JsonTypeSerializer
 		var properties = new List<IJsonObjectContent>();
 		foreach(var property in instanceType.GetProperties())
 		{
-			var propertyMapping = classMap.PropertyMaps.Scan(property);
+			var propertyMapping = classMap.GetPropertyMapFor(property, SerializerDirection.Deserialize);
 			if (propertyMapping is null) continue;
-			if (propertyMapping.Direction == SerializerDirection.Deserialize) continue;
 
 			var propertyValue = property.GetValue(dataModel);
 			if (propertyValue is null && !coreContext.CurrentSerializer.Configuration.WriteNull) continue;
@@ -77,7 +78,7 @@ public sealed class JsonTypeSerializer
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
 				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
-				classMap.PropertyMaps, _mappings);
+				classMap.PropertyMapCollection, _classMappings);
 
 			var jsonNode = SerializeObjectContent(in propertyValue, in propertyMapping, in serializerContext);
 			if (jsonNode is not null) properties.Add(jsonNode);
@@ -91,8 +92,9 @@ public sealed class JsonTypeSerializer
 	{
 		if (typeof(IJsonProperty).IsAssignableFrom(propertyMapping.ContainerType))
 		{
-			var propertyName = propertyMapping.NamingStrategy.GetName(
-				propertyMapping.Property, serializerContext.PropertyType, serializerContext);
+			var propertyName = propertyMapping.NamingStrategy
+				.GetName(propertyMapping.Property, serializerContext.PropertyType, serializerContext)
+				.ToString();
 
 			if (propertyValue is null && !serializerContext.CurrentSerializer.Configuration.WriteNull) return null;
 			if (propertyValue is null && serializerContext.CurrentSerializer.Configuration.WriteNull) return Property(in propertyName, Value(null));
@@ -111,7 +113,7 @@ public sealed class JsonTypeSerializer
 		in SerializerContext serializerContext, string propertyName)
 	{
 		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(
-			SerializerDirection.Serialize, serializerContext.CurrentSerializer);
+			TypeSerializerDirection, serializerContext.CurrentSerializer);
 
 		var jsonPropertyValue = matchingConverter is not null
 			? matchingConverter.Serialize(in propertyValue, serializerContext)

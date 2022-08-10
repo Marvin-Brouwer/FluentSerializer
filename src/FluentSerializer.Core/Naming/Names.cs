@@ -1,8 +1,10 @@
-using System;
-using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Naming;
 

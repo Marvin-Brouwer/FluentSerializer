@@ -1,17 +1,17 @@
-using System;
-using System.Globalization;
-using System.Reflection;
 using Ardalis.GuardClauses;
-using FluentSerializer.Core.Constants;
+
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
+
+using System;
+using System.Reflection;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
 /// <summary>
 /// Base clas for convertin class and property names
 /// </summary>
-public abstract class AbstractSpanNamingStrategy : INewNamingStrategy
+public abstract class AbstractSpanNamingStrategy : INamingStrategy
 {
 	/// <summary>
 	/// Current character count, will be reset in the default <see cref="GetName(in string)"/> method.

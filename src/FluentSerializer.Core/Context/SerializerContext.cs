@@ -1,20 +1,20 @@
-using FluentSerializer.Core.Mapping;
-using FluentSerializer.Core.Services;
-using System;
-using System.Reflection;
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Naming.NamingStrategies;
-using System.Runtime.CompilerServices;
-using FluentSerializer.Core.DataNodes;
-using System.Collections.Generic;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming.NamingStrategies;
+using FluentSerializer.Core.Services;
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Context;
 
 /// <inheritdoc cref="ISerializerContext"/>
 public class SerializerContext : ISerializerContext
 {
-	private readonly IScanList<PropertyInfo, IPropertyMap> _propertyMappings;
+	private readonly IPropertyMapCollection _propertyMappings;
 
 	private readonly INamingContext _namingContext;
 
@@ -40,8 +40,8 @@ public class SerializerContext : ISerializerContext
 		in ISerializerCoreContext coreContext,
 		in PropertyInfo property, in Type propertyType, in Type classType,
 		in INamingStrategy namingStrategy,
-		in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
+		in IPropertyMapCollection propertyMappings,
+		in IClassMapCollection classMappings)
 	{
 		_propertyMappings = propertyMappings;
 
@@ -120,8 +120,8 @@ public sealed class SerializerContext<TSerialContainer> : SerializerContext, ISe
 	public SerializerContext(
 		in ISerializerCoreContext<TSerialContainer> coreContext,
 		in PropertyInfo property, in Type propertyType, in Type classType, in INamingStrategy namingStrategy,
-		in IScanList<PropertyInfo, IPropertyMap> propertyMappings,
-		in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
+		in IPropertyMapCollection propertyMappings,
+		in IClassMapCollection classMappings)
 		: base(coreContext, in property, in propertyType, in classType, in namingStrategy,
 			in propertyMappings, in classMappings)
 	{

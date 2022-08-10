@@ -1,16 +1,16 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
+using FluentSerializer.Json.Converting.Converters;
+using FluentSerializer.Json.DataNodes;
+
 using System;
 using System.Collections;
-using FluentSerializer.Json.DataNodes;
-using FluentSerializer.Json.Profiles;
-using FluentSerializer.Json.Converting.Converters;
 using System.Collections.Generic;
-using FluentSerializer.Json.Configuration;
 
 namespace FluentSerializer.Json.Services;
 
@@ -19,14 +19,16 @@ namespace FluentSerializer.Json.Services;
 /// </summary>
 public sealed class JsonTypeDeserializer
 {
-	private readonly IClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration> _mappings;
+	private const SerializerDirection TypeDeserializerDirection = SerializerDirection.Deserialize;
+
+	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="JsonTypeDeserializer" />
 	public JsonTypeDeserializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(mappings);
+		_classMappings = new ClassMapCollection(in mappings);
 	}
 
 	/// <summary>
@@ -66,21 +68,19 @@ public sealed class JsonTypeDeserializer
 		}
 		if (dataObject is not IJsonObject jsonObject) throw new ContainerNotSupportedException(in classType);
 
-		var classMap = _mappings.Scan((classType, SerializerDirection.Deserialize));
+		var classMap = _classMappings.GetClassMapFor(classType, TypeDeserializerDirection);
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		if (classType == typeof(string)) return dataObject.ToString();
 
 		var instance = Activator.CreateInstance(classType)!;
-		foreach (var propertyMapping in classMap.PropertyMaps)
+		foreach (var propertyMapping in classMap.GetAllPropertyMaps(TypeDeserializerDirection))
 		{
-			if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
-
 			var realPropertyInfo = classType.GetProperty(propertyMapping.Property.Name)!;
 			var serializerContext = new SerializerContext<IJsonNode>(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
 				in realPropertyInfo, realPropertyInfo.PropertyType, in classType, propertyMapping.NamingStrategy, 
-				classMap.PropertyMaps, _mappings)
+				classMap.PropertyMapCollection, _classMappings)
 			{
 				ParentNode = dataObject
 			};
@@ -124,7 +124,7 @@ public sealed class JsonTypeDeserializer
 			return;
 		}
 
-		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(SerializerDirection.Deserialize, serializerContext.CurrentSerializer);
+		var matchingConverter = propertyMapping.GetConverter<IJsonNode, IJsonNode>(TypeDeserializerDirection, serializerContext.CurrentSerializer);
 		if (matchingConverter is null)
 		{
 			var deserializedInstance = DeserializeFromNode(in propertyValue!, propertyMapping.Property.PropertyType, serializerContext);

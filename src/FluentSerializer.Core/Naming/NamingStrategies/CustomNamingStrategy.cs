@@ -1,6 +1,7 @@
+using FluentSerializer.Core.Context;
+
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -20,7 +21,7 @@ public sealed class CustomNamingStrategy : INamingStrategy
 	}
 
 	/// <inheritdoc />
-	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => _name;
+	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => _name;
 	/// <inheritdoc />
-	public string GetName(in Type classType, in INamingContext namingContext) => _name;
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => _name;
 }

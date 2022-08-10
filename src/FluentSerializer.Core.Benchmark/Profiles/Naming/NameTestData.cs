@@ -1,9 +1,9 @@
-using System;
-using System.Reflection;
-
 using FluentSerializer.Core.Context;
 
 using Moq;
+
+using System;
+using System.Reflection;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming;
 

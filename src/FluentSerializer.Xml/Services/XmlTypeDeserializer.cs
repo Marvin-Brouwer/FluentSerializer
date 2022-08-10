@@ -1,16 +1,17 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.SerializerException;
-using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Exceptions;
-using FluentSerializer.Xml.Profiles;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Services;
@@ -20,14 +21,16 @@ namespace FluentSerializer.Xml.Services;
 /// </summary>
 public sealed class XmlTypeDeserializer
 {
-	private readonly IClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration> _mappings;
+	private const SerializerDirection TypeDeserializerDirection = SerializerDirection.Deserialize;
+
+	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="XmlTypeDeserializer" />
 	public XmlTypeDeserializer(in IReadOnlyCollection<IClassMap> mappings)
 	{
 		Guard.Against.Null(mappings, nameof(mappings));
 
-		_mappings = new ClassMapScanList<XmlSerializerProfile, XmlSerializerConfiguration>(mappings);
+		_classMappings = new ClassMapCollection(in mappings);
 	}
 
 	/// <summary>
@@ -58,30 +61,28 @@ public sealed class XmlTypeDeserializer
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
 
 
-		var classMap = _mappings.Scan((classType, SerializerDirection.Deserialize));
+		var classMap = _classMappings.GetClassMapFor(classType, TypeDeserializerDirection);
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);
 
 		if (classType == typeof(string)) return dataObject.ToString();
 
 		var currentCoreContext = coreContext.WithPathSegment(classType);
-		var matchingTagName = classMap.NamingStrategy.SafeGetName(in classType, new NamingContext(_mappings));
+		var matchingTagName = classMap.NamingStrategy.SafeGetName(in classType, new NamingContext(_classMappings));
 		if (dataObject.Name != matchingTagName) throw new MissingNodeException(in classType, in matchingTagName);
 
 		var instance = Activator.CreateInstance(classType)!;
-		foreach (var propertyMapping in classMap.PropertyMaps)
+		foreach (var propertyMapping in classMap.GetAllPropertyMaps(SerializerDirection.Serialize))
 		{
 			var realPropertyInfo = classType.GetProperty(propertyMapping.Property.Name)!;
 			var serializerContext = new SerializerContext<IXmlNode>(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
 				in realPropertyInfo, realPropertyInfo.PropertyType, in classType, propertyMapping.NamingStrategy,
-				classMap.PropertyMaps, _mappings)
+				classMap.PropertyMapCollection, in _classMappings)
 			{
 				ParentNode = dataObject
 			};
 
 			var propertyName = propertyMapping.NamingStrategy.SafeGetName(in realPropertyInfo, serializerContext.PropertyType, serializerContext);
-			if (propertyMapping.Direction == SerializerDirection.Serialize) continue;
-
 			DeserializeProperty(in dataObject, in propertyName, in propertyMapping, in instance, in serializerContext);
 		}
 
@@ -128,9 +129,9 @@ public sealed class XmlTypeDeserializer
 			return;
 		}
 
-		var converter = propertyMapping.GetConverter<TNode, IXmlNode>(SerializerDirection.Deserialize, serializerContext.CurrentSerializer);
+		var converter = propertyMapping.GetConverter<TNode, IXmlNode>(TypeDeserializerDirection, serializerContext.CurrentSerializer);
 		if (converter is null) throw new ConverterNotFoundException(
-			propertyMapping.Property.PropertyType, propertyMapping.ContainerType, SerializerDirection.Deserialize);
+			propertyMapping.Property.PropertyType, propertyMapping.ContainerType, TypeDeserializerDirection);
 
 		var convertedAttributeValue = converter.Deserialize(in node!, serializerContext);
 		if (convertedAttributeValue is null && !propertyMapping.Property.IsNullable())
@@ -153,7 +154,7 @@ public sealed class XmlTypeDeserializer
 			return;
 		}
 
-		var matchingConverter = propertyMapping.GetConverter<IXmlElement, IXmlNode>(SerializerDirection.Deserialize, serializerContext.CurrentSerializer);
+		var matchingConverter = propertyMapping.GetConverter<IXmlElement, IXmlNode>(TypeDeserializerDirection, serializerContext.CurrentSerializer);
 		if (matchingConverter is null)
 		{
 			var deserializedInstance = DeserializeFromElement(in element, propertyMapping.Property.PropertyType, serializerContext);

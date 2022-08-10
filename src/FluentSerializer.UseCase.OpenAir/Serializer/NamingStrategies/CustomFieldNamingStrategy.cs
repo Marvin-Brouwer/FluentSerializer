@@ -1,8 +1,9 @@
-using System;
-using System.Reflection;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
+using System.Reflection;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
 
@@ -29,8 +30,8 @@ public sealed class CustomFieldNamingStrategy : INamingStrategy
 		_innerNamingStrategy = Names.Use.SnakeCase();
 	}
 
-	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in property, in propertyType, in namingContext));
-	public string GetName(in Type classType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in classType, in namingContext));
+	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in property, in propertyType, in namingContext));
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in classType, in namingContext));
 
-	private string GetName(in string name) => $"{name}__c";
+	private static ReadOnlySpan<char> GetName(in ReadOnlySpan<char> name) => $"{name}__c";
 }

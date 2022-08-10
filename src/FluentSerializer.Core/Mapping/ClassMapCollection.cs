@@ -6,20 +6,20 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Mapping;
 
+/// <inheritdoc />
 public readonly struct ClassMapCollection : IClassMapCollection
 {
-	private readonly IReadOnlyList<INewClassMap> _classMaps;
+	private readonly IReadOnlyCollection<IClassMap> _classMaps;
 
-	public ClassMapCollection(IReadOnlyList<INewClassMap> classMaps)
+	/// <inheritdoc cref="IClassMapCollection" />
+	public ClassMapCollection(in IReadOnlyCollection<IClassMap> classMaps)
 	{
 		_classMaps = classMaps;
 	}
 
-	public IReadOnlyList<INewClassMap> GetAllClassMaps() => _classMaps;
-
-	public INewClassMap? GetClassMapFor(in Type type, in SerializerDirection direction)
+	/// <inheritdoc />
+	public IClassMap? GetClassMapFor(in Type type, in SerializerDirection direction)
 	{
-		// todo cache?
 		if (direction == SerializerDirection.Both)
 			throw new NotSupportedException(
 				$"You cannot get a {nameof(ClassMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
@@ -28,6 +28,19 @@ public readonly struct ClassMapCollection : IClassMapCollection
 		foreach (var classMap in _classMaps)
 		{
 			if (!MatchDirection(in direction, classMap.Direction)) continue;
+			if (!MatchType(classMap.ClassType, in type)) continue;
+
+			return classMap;
+		}
+
+		return default;
+	}
+
+	/// <inheritdoc />
+	public IClassMap? GetClassMapFor(in Type type)
+	{
+		foreach (var classMap in _classMaps)
+		{
 			if (!MatchType(classMap.ClassType, in type)) continue;
 
 			return classMap;
