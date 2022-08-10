@@ -35,7 +35,7 @@ public sealed class DefaultTimeSpanConverterTests
 			.SetupDefault(serializerMock);
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "\"04:20:00\"" };
 		yield return new object[] { "\"04:20\"" };

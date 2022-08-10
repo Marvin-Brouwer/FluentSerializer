@@ -141,7 +141,7 @@ public sealed class ExpressionExtensionTests
 		}
 	}
 
-	public static IEnumerable<string[]> InvalidCharacters()
+	public static IEnumerable<object[]> InvalidCharacters()
 	{
 		const string invalidCharacters = "!@#$%^&*()=,.?/\\[]{}<>|";
 		foreach (var character in invalidCharacters)

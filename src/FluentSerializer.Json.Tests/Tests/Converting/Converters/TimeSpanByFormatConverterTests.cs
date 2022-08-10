@@ -34,7 +34,7 @@ public sealed class TimeSpanByFormatConverterTests
 			.SetupDefault(serializerMock);
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { @"hh\:mm\:ss\.fff", "\"04:20:00.000\"" };
 		yield return new object[] { @"hh\:mm\:ss", "\"04:20:00\"" };

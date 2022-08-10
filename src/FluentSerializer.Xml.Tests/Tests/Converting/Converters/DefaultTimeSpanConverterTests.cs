@@ -36,7 +36,7 @@ public sealed class DefaultTimeSpanConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(TimeSpanValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "04:20:00" };
 		yield return new object[] { "04:20" };

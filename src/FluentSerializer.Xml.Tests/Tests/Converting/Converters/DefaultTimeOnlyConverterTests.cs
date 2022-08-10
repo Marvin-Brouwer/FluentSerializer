@@ -36,14 +36,14 @@ public sealed class DefaultTimeOnlyConverterTests
 			.WithNamingStrategy(Names.Equal(nameof(TimeOnlyValue)));
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "04:20:00", CultureInfo.InvariantCulture };
 		yield return new object[] { "4:20 AM", new CultureInfo("en-US") };
 		yield return new object[] { "04:20", new CultureInfo("nl-NL") };
 	}
 
-	private static IEnumerable<object[]> GenerateCultureOptions()
+	public static IEnumerable<object[]> GenerateCultureOptions()
 	{
 		yield return new object[] { CultureInfo.InvariantCulture };
 		yield return new object[] { new CultureInfo("en") };

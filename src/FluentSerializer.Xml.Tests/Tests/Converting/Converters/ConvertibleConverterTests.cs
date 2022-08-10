@@ -32,7 +32,7 @@ public sealed class ConvertibleConverterTests
 			.SetupDefault(serializerMock);
 	}
 
-	private static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { 1, "1" };
 		yield return new object[] { true, "True" };
