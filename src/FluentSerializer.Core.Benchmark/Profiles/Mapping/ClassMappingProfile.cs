@@ -36,123 +36,12 @@ public partial class ClassMappingProfile
 				typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
 				Names.Use.KebabCase, null));
 
-	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMaps(Array.Empty<IPropertyMap>()).ToArray();
-	private static readonly IReadOnlyList<ClassMap> ClassMapsList = GenerateClassMaps(Array.Empty<IPropertyMap>()).ToList();
+	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMaps(PropertyMapsArray!).ToArray();
+	private static readonly IReadOnlyList<ClassMap> ClassMapsList = GenerateClassMaps(PropertyMapsList!).ToList();
 	private static readonly IReadOnlyList<PropertyMap> PropertyMapsArray = GeneratePropertyMaps.ToArray();
 	private static readonly IReadOnlyList<PropertyMap> PropertyMapsList = GeneratePropertyMaps.ToList();
 
-	[Benchmark, BenchmarkCategory("CreateFullMap")]
-	public ClassMapCollection CreateClass_ClassMapCollection_List()
-	{
-		var classMapBuilder = new List<IClassMap>();
-
-		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
-		{
-			var propertyMapBuilder = new List<IPropertyMap>();
-			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
-			{
-				var propertyDirection = classMapIteration switch
-				{
-					< 200 => SerializerDirection.Both,
-					< 300 => SerializerDirection.Serialize,
-					_ => SerializerDirection.Deserialize
-				};
-
-				propertyMapBuilder.Add(new PropertyMap(propertyDirection,
-					typeof(TestClass),
-					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-					Names.Use.KebabCase, null));
-			}
-
-			var classDirection = classMapIteration switch
-			{
-				< 200 => SerializerDirection.Both,
-				< 300 => SerializerDirection.Serialize,
-				_ => SerializerDirection.Deserialize
-			};
-			classMapBuilder.Add(
-				new ClassMap(typeof(TestClass), classDirection,
-					Names.Use.CamelCase, propertyMapBuilder));
-		}
-
-		return new ClassMapCollection(classMapBuilder);
-	}
-
-	[Benchmark, BenchmarkCategory("CreateFullMap")]
-	public ClassMapCollection CreateClass_ClassMapCollection_Array()
-	{
-		var classMapBuilder = new IClassMap[500];
-
-		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
-		{
-			var propertyMapBuilder = new IPropertyMap[500];
-			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
-			{
-				var propertyDirection = classMapIteration switch
-				{
-					< 200 => SerializerDirection.Both,
-					< 300 => SerializerDirection.Serialize,
-					_ => SerializerDirection.Deserialize
-				};
-
-				propertyMapBuilder[propertyMapIteration] = new PropertyMap(propertyDirection,
-					typeof(TestClass),
-					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-					Names.Use.KebabCase, null);
-			}
-
-			var classDirection = classMapIteration switch
-			{
-				< 200 => SerializerDirection.Both,
-				< 300 => SerializerDirection.Serialize,
-				_ => SerializerDirection.Deserialize
-			};
-			classMapBuilder[classMapIteration] =
-				new ClassMap(typeof(TestClass), classDirection,
-					Names.Use.CamelCase, propertyMapBuilder);
-		}
-
-		return new ClassMapCollection(classMapBuilder);
-	}
-
-	[Benchmark, BenchmarkCategory("CreateFullMap")]
-	public ClassMapCollection CreateClass_ClassMapCollection_ReadOnlyCollectionBuilder()
-	{
-		var classMapBuilder = new ReadOnlyCollectionBuilder<IClassMap>();
-
-		for (int classMapIteration = 0; classMapIteration < 500; classMapIteration++)
-		{
-			var propertyMapBuilder = new ReadOnlyCollectionBuilder<IPropertyMap>();
-			for (int propertyMapIteration = 0; propertyMapIteration < 500; propertyMapIteration++)
-			{
-				var propertyDirection = classMapIteration switch
-				{
-					< 200 => SerializerDirection.Both,
-					< 300 => SerializerDirection.Serialize,
-					_ => SerializerDirection.Deserialize
-				};
-
-				propertyMapBuilder.Add(new PropertyMap(propertyDirection,
-					typeof(TestClass),
-					typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-					Names.Use.KebabCase, null));
-			}
-
-			var classDirection = classMapIteration switch
-			{
-				< 200 => SerializerDirection.Both,
-				< 300 => SerializerDirection.Serialize,
-				_ => SerializerDirection.Deserialize
-			};
-			classMapBuilder.Add(
-				new ClassMap(typeof(TestClass), classDirection,
-					Names.Use.CamelCase, propertyMapBuilder.ToReadOnlyCollection()));
-		}
-
-		return new ClassMapCollection(classMapBuilder.ToReadOnlyCollection());
-	}
-
-	[Benchmark, BenchmarkCategory("GetClassMap")]
+	[Benchmark]
 	public IClassMap? GetNewClassMapArray()
 	{
 		var scanList = new ClassMapCollection(ClassMapsArray);
@@ -160,7 +49,7 @@ public partial class ClassMappingProfile
 		return scanList.GetClassMapFor(typeof(TestClass), SerializerDirection.Serialize);
 	}
 
-	[Benchmark, BenchmarkCategory("GetClassMap")]
+	[Benchmark]
 	public IClassMap? GetNewClassMapList()
 	{
 		var scanList = new ClassMapCollection(ClassMapsList);
@@ -168,7 +57,7 @@ public partial class ClassMappingProfile
 		return scanList.GetClassMapFor(typeof(TestClass), SerializerDirection.Serialize);
 	}
 
-	[Benchmark, BenchmarkCategory("GetPropertyMap")]
+	[Benchmark]
 	public IPropertyMap? GetNewPropertyMapArray()
 	{
 		var scanList = new PropertyMapCollection(PropertyMapsArray);
@@ -178,7 +67,7 @@ public partial class ClassMappingProfile
 			SerializerDirection.Serialize);
 	}
 
-	[Benchmark, BenchmarkCategory("GetPropertyMap")]
+	[Benchmark]
 	public IPropertyMap? GetNewPropertyMapList()
 	{
 		var scanList = new PropertyMapCollection(PropertyMapsList);
