@@ -3,7 +3,7 @@ namespace FluentSerializer.Json.DataNodes;
 /// <summary>
 /// Constants class containing all the characters used for parsing and writing JSON.
 /// </summary>
-internal readonly struct JsonCharacterConstants
+internal static class JsonCharacterConstants
 {
 	internal const char ObjectStartCharacter = '{';
 	internal const char ObjectEndCharacter = '}';

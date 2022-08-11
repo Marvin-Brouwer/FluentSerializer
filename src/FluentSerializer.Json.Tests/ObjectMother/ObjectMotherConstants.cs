@@ -5,7 +5,7 @@ using System;
 
 namespace FluentSerializer.Json.Tests.ObjectMother;
 
-internal struct ObjectMotherConstants
+internal static class ObjectMotherConstants
 {
 	/// <summary>
 	/// Converter used by Tests, it is basically the simplest converter because it can handle primitives and saves us writing a

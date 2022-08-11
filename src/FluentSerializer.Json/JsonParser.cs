@@ -10,7 +10,7 @@ namespace FluentSerializer.Json;
 /// <summary>
 /// JSON parsing utility class
 /// </summary>
-public readonly struct JsonParser
+public static class JsonParser
 {
 	/// <summary>
 	/// Parse a string value to a JSON object tree

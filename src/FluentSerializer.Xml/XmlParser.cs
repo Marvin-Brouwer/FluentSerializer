@@ -10,7 +10,7 @@ namespace FluentSerializer.Xml;
 /// <summary>
 /// XML parsing utility class
 /// </summary>
-public readonly struct XmlParser
+public static class XmlParser
 {
 	/// <summary>
 	/// Parse a string value to an XML object tree

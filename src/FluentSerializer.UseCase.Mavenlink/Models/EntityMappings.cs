@@ -5,7 +5,7 @@ using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 namespace FluentSerializer.UseCase.Mavenlink.Models;
 
-internal readonly struct EntityMappings
+internal static class EntityMappings
 {
 	// These overrides are just examples of what a real world example may look like
 	// Our code base doesn't contain any of these, otherwise nameof(WorkspaceStatus) would've been used.

@@ -3,7 +3,7 @@ namespace FluentSerializer.Core.Constants;
 /// <summary>
 /// Helper class containing constants for common line ending configurations
 /// </summary>
-public readonly struct LineEndings
+public static class LineEndings
 {
 	/// <summary>
 	/// The line feed (\n) character typically used in Unix based OS's

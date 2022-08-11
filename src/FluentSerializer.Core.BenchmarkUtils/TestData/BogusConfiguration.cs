@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;
 
-public readonly struct BogusConfiguration
+public static class BogusConfiguration
 {
 	private static readonly List<string> AreaTypes = new() { "city", "town", "village" };
 	private static readonly List<string> HouseTypes = new() { "apartment", "detached", "condominium", "ranch" };

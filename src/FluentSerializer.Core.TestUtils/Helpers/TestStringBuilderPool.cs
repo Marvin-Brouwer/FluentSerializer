@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FluentSerializer.Core.TestUtils.Helpers;
 
-public readonly struct TestStringBuilderPool
+public static class TestStringBuilderPool
 {
 	private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
 

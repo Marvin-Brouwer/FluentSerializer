@@ -1,6 +1,6 @@
 namespace FluentSerializer.Core.Constants;
 
-internal readonly struct NamingConstants
+internal static class NamingConstants
 {
 	/// <summary>
 	/// The character used in C# type names to indicate a generic type definition.
@@ -26,7 +26,7 @@ internal readonly struct NamingConstants
 	/// <summary>
 	/// Special characters that need to be converted when certain namingstrategies are applied.
 	/// </summary>
-	internal readonly struct SpecialCharacters
+	internal static class SpecialCharacters
 	{
 		internal const char Underscore = '_';
 		internal const char Minus = '-';

@@ -3,7 +3,7 @@ namespace FluentSerializer.Core.Constants;
 /// <summary>
 /// Helper class containing constants for date and time formatting
 /// </summary>
-public readonly struct DateTimeConstants
+public static class DateTimeConstants
 {
 	/// <summary>
 	/// ISO 8601 Time representation format
