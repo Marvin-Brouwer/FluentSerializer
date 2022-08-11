@@ -64,7 +64,7 @@ public sealed class SerializerContextTests
 		_classMapMock
 			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new SerializerContext(coreContext, property, property.PropertyType, type,
 			Names.Use.KebabCase(), _classMapMock.Object.PropertyMapCollection, _classMapCollectionMock.Object);
@@ -86,7 +86,7 @@ public sealed class SerializerContextTests
 		var coreContext = new SerializerCoreContext(_serializerMock.Object);
 
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new SerializerContext(coreContext, property, property.PropertyType, type,
 			Names.Use.KebabCase(), _classMapMock.Object.PropertyMapCollection, _classMapCollectionMock.Object);

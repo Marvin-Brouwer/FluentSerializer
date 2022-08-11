@@ -37,12 +37,10 @@ public partial class ClassMappingProfile
 				Names.Use.KebabCase, null));
 
 	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMaps(PropertyMapsArray!).ToArray();
-	private static readonly IReadOnlyList<ClassMap> ClassMapsList = GenerateClassMaps(PropertyMapsList!).ToList();
 	private static readonly IReadOnlyList<PropertyMap> PropertyMapsArray = GeneratePropertyMaps.ToArray();
-	private static readonly IReadOnlyList<PropertyMap> PropertyMapsList = GeneratePropertyMaps.ToList();
 
 	[Benchmark]
-	public IClassMap? GetNewClassMapArray()
+	public IClassMap? GetClassMap()
 	{
 		var scanList = new ClassMapCollection(ClassMapsArray);
 
@@ -50,27 +48,9 @@ public partial class ClassMappingProfile
 	}
 
 	[Benchmark]
-	public IClassMap? GetNewClassMapList()
-	{
-		var scanList = new ClassMapCollection(ClassMapsList);
-
-		return scanList.GetClassMapFor(typeof(TestClass), SerializerDirection.Serialize);
-	}
-
-	[Benchmark]
-	public IPropertyMap? GetNewPropertyMapArray()
+	public IPropertyMap? GetPropertyMap()
 	{
 		var scanList = new PropertyMapCollection(PropertyMapsArray);
-
-		return scanList.GetPropertyMapFor(
-			typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
-			SerializerDirection.Serialize);
-	}
-
-	[Benchmark]
-	public IPropertyMap? GetNewPropertyMapList()
-	{
-		var scanList = new PropertyMapCollection(PropertyMapsList);
 
 		return scanList.GetPropertyMapFor(
 			typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,

@@ -30,15 +30,15 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 
 	/// <inheritdoc cref="RuntimeJsonSerializer" />
 	public RuntimeJsonSerializer(
-		JsonSerializerConfiguration configuration,
-		ObjectPoolProvider objectPoolProvider,
-		IReadOnlyCollection<IClassMap> mappings)
+		in JsonSerializerConfiguration configuration,
+		in ObjectPoolProvider objectPoolProvider,
+		in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));
+		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
 
-		_serializer = new JsonTypeSerializer(in mappings);
-		_deserializer = new JsonTypeDeserializer(in mappings);
+		_serializer = new JsonTypeSerializer(in classMapCollection);
+		_deserializer = new JsonTypeDeserializer(in classMapCollection);
 		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		JsonConfiguration = configuration;

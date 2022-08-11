@@ -25,11 +25,11 @@ public sealed class JsonTypeSerializer
 	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="JsonTypeSerializer" />
-	public JsonTypeSerializer(in IReadOnlyCollection<IClassMap> mappings)
+	public JsonTypeSerializer(in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(mappings, nameof(mappings));
+		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
 
-		_classMappings = new ClassMapCollection(in mappings);
+		_classMappings = classMapCollection;
 	}
 
 	/// <summary>

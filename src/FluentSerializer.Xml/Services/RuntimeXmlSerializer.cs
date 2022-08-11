@@ -33,15 +33,15 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 
 	/// <inheritdoc cref="RuntimeXmlSerializer" />
 	public RuntimeXmlSerializer(
-		XmlSerializerConfiguration configuration,
-		ObjectPoolProvider objectPoolProvider,
-		IReadOnlyCollection<IClassMap> mappings)
+		in XmlSerializerConfiguration configuration,
+		in ObjectPoolProvider objectPoolProvider,
+		in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));
+		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
 
-		_serializer = new XmlTypeSerializer(in mappings);
-		_deserializer = new XmlTypeDeserializer(in mappings);
+		_serializer = new XmlTypeSerializer(in classMapCollection);
+		_deserializer = new XmlTypeDeserializer(in classMapCollection);
 		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		XmlConfiguration = configuration;

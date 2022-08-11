@@ -35,9 +35,10 @@ public sealed class NamingContextTests
 		var type = typeof(TestClass);
 
 		_classMapMock
+			.WithClassType(type)
 			.WithNamingStrategy(Names.Use.CamelCase);
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new NamingContext(_classMapCollectionMock.Object);
 
@@ -56,7 +57,7 @@ public sealed class NamingContextTests
 		var type = typeof(TestClass);
 
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new NamingContext(_classMapCollectionMock.Object);
 
@@ -79,7 +80,7 @@ public sealed class NamingContextTests
 			.WithClassType(type)
 			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new NamingContext(_classMapCollectionMock.Object);
 
@@ -99,7 +100,7 @@ public sealed class NamingContextTests
 		var property = type.GetProperty(nameof(TestClass.Id))!;
 
 		_classMapCollectionMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassMap(_classMapMock);
 
 		var sut = new NamingContext(_classMapCollectionMock.Object);
 

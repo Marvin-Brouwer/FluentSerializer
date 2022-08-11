@@ -19,9 +19,10 @@ internal sealed class XmlSerializerFactory : BaseSerializerFactory<IXmlSerialize
 {
 	protected override XmlSerializerConfiguration DefaultConfiguration => XmlSerializerConfiguration.Default;
 
-	protected override IXmlSerializer CreateSerializer(in XmlSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IEnumerable<IClassMap> mappings)
+	protected override IXmlSerializer CreateSerializer(in XmlSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IReadOnlyCollection<IClassMap> mappings)
 	{
-		return new RuntimeXmlSerializer(configuration, poolProvider, mappings.ToList());
+		var classMapCollection = new ClassMapCollection(in mappings);
+		return new RuntimeXmlSerializer(in configuration, in poolProvider, classMapCollection);
 	}
 
 	IXmlSerializer IConfiguredXmlSerializerFactory.UseProfilesFromAssembly(in Assembly assembly)

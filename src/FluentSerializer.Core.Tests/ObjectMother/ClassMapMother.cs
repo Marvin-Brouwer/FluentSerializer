@@ -63,26 +63,58 @@ public static class ClassMapMother
 	/// <summary>
 	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mapping"/> on GetClassMapFor
 	/// </summary>
-	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> scanListMock, Type type, IClassMap mapping)
+	public static Mock<IClassMapCollection> Empty(this Mock<IClassMapCollection> classMapCollectionMock)
 	{
-		scanListMock
+		classMapCollectionMock
+			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny))
+			.Returns((IClassMap?)null);
+
+		classMapCollectionMock
+			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny, It.Ref<SerializerDirection>.IsAny))
+			.Returns((IClassMap?)null);
+
+		return classMapCollectionMock;
+	}
+
+	/// <summary>
+	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mapping"/> on GetClassMapFor
+	/// </summary>
+	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, Type type, IClassMap mapping)
+	{
+		classMapCollectionMock
 			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny))
 			.Returns((Type typeRequested) => typeRequested == type ? mapping : null);
 
-		scanListMock
+		classMapCollectionMock
 			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny, It.Ref<SerializerDirection>.IsAny))
 			.Returns((Type typeRequested, SerializerDirection _) => typeRequested == type ? mapping : null);
 
-		return scanListMock;
+		return classMapCollectionMock;
+	}
+
+	/// <summary>
+	/// Setup the mock of <see cref="IClassMapCollection"/> to return no <see cref="IClassMap"/>s on GetClassMapFor with any value
+	/// </summary>
+	public static Mock<IClassMapCollection> WithoutClassMaps(this Mock<IClassMapCollection> classMapCollectionMock)
+	{
+		classMapCollectionMock
+			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny))
+			.Returns((IClassMap?)null);
+
+		classMapCollectionMock
+			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny, It.Ref<SerializerDirection>.IsAny))
+			.Returns((IClassMap?)null);
+
+		return classMapCollectionMock;
 	}
 
 	/// <summary>
 	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mappingMock"/>'s object on GetClassMapFor
 	/// </summary>
-	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> scanListMock, Type type, IMock<IClassMap> mappingMock)
+	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, IMock<IClassMap> mappingMock)
 	{
-		return scanListMock
-			.WithClassMap(type, mappingMock.Object);
+		return classMapCollectionMock
+			.WithClassMap(mappingMock.Object.ClassType, mappingMock.Object);
 	}
 
 	/// <summary>
@@ -131,15 +163,5 @@ public static class ClassMapMother
 
 		return classMapMock
 			.WithPropertyMaps(propertyMap.Object);
-	}
-
-	/// <summary>
-	/// Create a class map with a single simple representation of a <see cref="PropertyMap"/>
-	/// </summary>
-	/// <inheritdoc cref="PropertyMapMother.WithBasicProppertyMapping"/>
-	public static IReadOnlyCollection<IClassMap> ToCollection(
-		this Mock<IClassMap> classMapMock)
-	{
-		return new List<IClassMap> { classMapMock.Object };
 	}
 }

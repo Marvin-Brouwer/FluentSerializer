@@ -26,11 +26,11 @@ public sealed class XmlTypeDeserializer
 	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="XmlTypeDeserializer" />
-	public XmlTypeDeserializer(in IReadOnlyCollection<IClassMap> mappings)
+	public XmlTypeDeserializer(in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(mappings, nameof(mappings));
+		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
 
-		_classMappings = new ClassMapCollection(in mappings);
+		_classMappings = classMapCollection;
 	}
 
 	/// <summary>
@@ -59,7 +59,6 @@ public sealed class XmlTypeDeserializer
 		Guard.Against.Null(coreContext, nameof(coreContext));
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
-
 
 		var classMap = _classMappings.GetClassMapFor(classType, TypeDeserializerDirection);
 		if (classMap is null) throw new ClassMapNotFoundException(in classType);

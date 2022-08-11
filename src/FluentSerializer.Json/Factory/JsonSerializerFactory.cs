@@ -19,9 +19,10 @@ internal sealed class JsonSerializerFactory : BaseSerializerFactory<IJsonSeriali
 {
 	protected override JsonSerializerConfiguration DefaultConfiguration => JsonSerializerConfiguration.Default;
 
-	protected override IJsonSerializer CreateSerializer(in JsonSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IEnumerable<IClassMap> mappings)
+	protected override IJsonSerializer CreateSerializer(in JsonSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IReadOnlyCollection<IClassMap> mappings)
 	{
-		return new RuntimeJsonSerializer(configuration, poolProvider, mappings.ToList());
+		var classMapCollection = new ClassMapCollection(in mappings);
+		return new RuntimeJsonSerializer(in configuration, in poolProvider, classMapCollection);
 	}
 
 	IJsonSerializer IConfiguredJsonSerializerFactory.UseProfilesFromAssembly(in Assembly assembly)
