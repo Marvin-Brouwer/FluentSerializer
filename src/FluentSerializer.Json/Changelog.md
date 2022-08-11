@@ -2,7 +2,8 @@
 
 ## @next
 
-`-`
+- [#133](https://github.com/Marvin-Brouwer/FluentSerializer/issues/133) Improved performance
+- [#81](https://github.com/Marvin-Brouwer/FluentSerializer/issues/81) Improved some whitespace handling
 
 ## v2.1.0
 
