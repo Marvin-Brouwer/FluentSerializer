@@ -26,7 +26,7 @@ public readonly struct LowerCaseNamingStrategy : INamingStrategy
 		if (genericIndex == -1) return name.ToLowerInvariant();
 
 		Span<char> nameSpan = stackalloc char[genericIndex];
-		MemoryExtensions.ToLowerInvariant(name.AsSpan()[..genericIndex], nameSpan);
+		name.AsSpan()[..genericIndex].ToLowerInvariant(nameSpan);
 
 		return nameSpan.ToString();
 	}
