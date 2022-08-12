@@ -86,9 +86,11 @@ public sealed class TextWriterExtensionsTests
 			.Returns(sut);
 
 		// Act
-		var result = TextWriterExtensions.ToString(nodeMock.Object, new TestSerializerConfiguration());
+		var result = nodeMock.Object.ToString(new TestSerializerConfiguration());
 
 		// Assert
+		// It's empty because string appendage is mocked here.
+		result.Should().BeEmpty();
 		nodeMock
 			.Verify(node => node.AppendTo(ref It.Ref<ITextWriter>.IsAny, true, 0, true));
 	}

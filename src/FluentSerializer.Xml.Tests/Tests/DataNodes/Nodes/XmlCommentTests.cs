@@ -81,7 +81,6 @@ public sealed class XmlCommentTests
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
-		var expected = Comment(string.Empty);
 		var input = $"<!-- {XmlCommentValue}";
 
 		// Act

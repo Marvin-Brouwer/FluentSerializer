@@ -74,7 +74,7 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 			if (string.IsNullOrEmpty(customFieldValue.CustomFieldName)) continue;
 			if (!customFieldValue.CustomFieldName.Equals(itemName, StringComparison.Ordinal)) continue;
 
-			if (customFieldValue.Value is not IJsonValue rawValue) return default;
+			if (customFieldValue.Value is not { } rawValue) return default;
 			if (!rawValue.HasValue) return default;
 
 			if (context.PropertyType == typeof(string)) return rawValue.Value![1..^1];

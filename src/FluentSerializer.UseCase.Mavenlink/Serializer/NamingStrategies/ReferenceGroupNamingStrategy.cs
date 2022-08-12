@@ -27,6 +27,6 @@ internal class ReferenceGroupNamingStrategy : INamingStrategy
 	private static string GetTypeName(Type type)
 	{
 		if (!type.IsEnumerable()) return type.Name;
-		return type.GetGenericArguments()[0]!.Name;
+		return type.GetGenericArguments()[0].Name;
 	}
 }

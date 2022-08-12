@@ -14,15 +14,15 @@ public abstract class NamingStrategyTests
 {
 	protected abstract INamingStrategy Sut { get; }
 
-	private static readonly Mock<INamingContext> _namingContextMock = new();
+	private static readonly Mock<INamingContext> NamingContextMock = new();
 
 	public virtual void ValidString_GetName_ConvertsName(
 		in Type typeInput, in PropertyInfo propertyInput,
 		in string expectedClassName, in string expectedPropertyName)
 	{
 		// Act
-		var typeResult = Sut.GetName(in typeInput, _namingContextMock.Object);
-		var propertyResult = Sut.GetName(in propertyInput, propertyInput.PropertyType, _namingContextMock.Object);
+		var typeResult = Sut.GetName(in typeInput, NamingContextMock.Object);
+		var propertyResult = Sut.GetName(in propertyInput, propertyInput.PropertyType, NamingContextMock.Object);
 
 		// Assert
 		typeResult.ToString().Should().BeEquivalentTo(expectedClassName);

@@ -11,7 +11,7 @@ namespace FluentSerializer.Core.Mapping;
 /// <inheritdoc />
 public readonly struct PropertyMapCollection : IPropertyMapCollection
 {
-	private static readonly NotSupportedException _serializerDirectionBothException = new NotSupportedException(
+	private static readonly NotSupportedException SerializerDirectionBothException = new(
 		$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
 		"you can only register one as such!");
 
@@ -26,7 +26,7 @@ public readonly struct PropertyMapCollection : IPropertyMapCollection
 	/// <inheritdoc />
 	public IReadOnlyCollection<IPropertyMap> GetAllPropertyMaps(in SerializerDirection direction)
 	{
-		if (direction == SerializerDirection.Both) throw _serializerDirectionBothException;
+		if (direction == SerializerDirection.Both) throw SerializerDirectionBothException;
 
 		return GetPropertyMaps(direction).ToArray();
 	}
@@ -44,7 +44,7 @@ public readonly struct PropertyMapCollection : IPropertyMapCollection
 	/// <inheritdoc />
 	public IPropertyMap? GetPropertyMapFor(in PropertyInfo propertyInfo, in SerializerDirection direction)
 	{
-		if (direction == SerializerDirection.Both) throw _serializerDirectionBothException;
+		if (direction == SerializerDirection.Both) throw SerializerDirectionBothException;
 
 		foreach (var propertyMap in _propertyMaps)
 		{

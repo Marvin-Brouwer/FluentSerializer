@@ -11,7 +11,6 @@ using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
-using FluentSerializer.Json.Tests.ObjectMother;
 
 using Moq;
 
@@ -112,7 +111,7 @@ public sealed class JsonTypeSerializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, attemptedContainerType, targetProperty);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
@@ -146,7 +145,7 @@ public sealed class JsonTypeSerializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
@@ -201,7 +200,7 @@ public sealed class JsonTypeSerializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 

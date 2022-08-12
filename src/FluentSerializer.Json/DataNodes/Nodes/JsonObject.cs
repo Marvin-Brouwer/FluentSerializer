@@ -42,9 +42,14 @@ public readonly partial struct JsonObject : IJsonObject
 		else
 		{
 			var currentPropertyIndex = 0;
-			var children = properties is ICollection<IJsonArrayContent> propertiesCollection
-				? new ReadOnlyCollectionBuilder<IJsonNode>(propertiesCollection.Count)
-				: new ReadOnlyCollectionBuilder<IJsonNode>();
+			var children = properties switch
+			{
+				ICollection<IJsonObjectContent> { Count: > 0 } collection =>
+					new ReadOnlyCollectionBuilder<IJsonNode>(collection.Count),
+				IReadOnlyCollection<IJsonObjectContent> { Count: > 0 } collection =>
+					new ReadOnlyCollectionBuilder<IJsonNode>(collection.Count),
+				_ => new ReadOnlyCollectionBuilder<IJsonNode>()
+			};
 
 			foreach (var property in properties)
 			{

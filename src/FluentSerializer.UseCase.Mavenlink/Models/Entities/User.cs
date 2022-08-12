@@ -13,7 +13,7 @@ internal sealed class User : IMavenlinkEntity
 
 	/// <summary>
 	/// Because of the custom fields allowing different types of values you don't know up front,
-	/// you'll have to use a value of <see cref="IJsonValue"/>. <br />
+	/// you'll have to use a value of <see cref="Json.DataNodes.IJsonValue"/>. <br />
 	/// Therefore, it's provably better to specifically target custom field values. <br />
 	/// Chances exist you know what you're looking for up front anyway. <br />
 	/// <br />

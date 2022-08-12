@@ -13,24 +13,24 @@ namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 [MemoryDiagnoser]
 public class NamingStrategyProfile_Equal
 {
-	private static readonly CustomNamingStrategy _baseLineStrategy = new ("Override");
+	private static readonly CustomNamingStrategy NamingStrategy = new ("Override");
 
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_ShortNamedClass() =>
-		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
+		NamingStrategy.GetName(NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_ShortNamedProperty() =>
-		_baseLineStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
+		NamingStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
 
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_LongNamedClass() =>
-		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
+		NamingStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_LongNamedProperty() =>
-		_baseLineStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
+		NamingStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.PropertyInfo,
 			NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);
 }

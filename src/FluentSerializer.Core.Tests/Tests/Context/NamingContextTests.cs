@@ -78,7 +78,7 @@ public sealed class NamingContextTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
+			.WithBasicPropertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 

@@ -20,7 +20,7 @@ using static FluentSerializer.Xml.XmlBuilder;
 namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
+/// Basically test if this converter behaves exactly like <see cref="Convert.ToString()"/>
 /// and <see cref="Convert.ChangeType(object?, Type)"/>
 /// </summary>
 public sealed class ConvertibleConverterTests

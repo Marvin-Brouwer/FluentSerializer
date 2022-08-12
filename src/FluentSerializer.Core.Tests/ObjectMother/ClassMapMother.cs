@@ -7,7 +7,6 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 using Moq;
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace FluentSerializer.Core.Tests.ObjectMother;
@@ -61,7 +60,7 @@ public static class ClassMapMother
 	}
 
 	/// <summary>
-	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mapping"/> on GetClassMapFor
+	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="classMapCollectionMock"/> on GetClassMapFor
 	/// </summary>
 	public static Mock<IClassMapCollection> Empty(this Mock<IClassMapCollection> classMapCollectionMock)
 	{
@@ -77,7 +76,7 @@ public static class ClassMapMother
 	}
 
 	/// <summary>
-	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mapping"/> on GetClassMapFor
+	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="classMapCollectionMock"/> on GetClassMapFor
 	/// </summary>
 	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, Type type, IClassMap mapping)
 	{
@@ -123,14 +122,14 @@ public static class ClassMapMother
 	public static Mock<IClassMap> WithoutPropertyMaps(this Mock<IClassMap> classMapMock)
 	{
 		var propertyMapsMock = new Mock<IPropertyMapCollection>()
-			.WithoutProppertyMapping();
+			.WithoutPropertyMapping();
 
 		return classMapMock
 			.WithPropertyMaps(propertyMapsMock.Object);
 	}
 
 	/// <summary>
-	/// Configure the property mappings to <paramref name="propertyMapping"/>
+	/// Configure the property mappings to <paramref name="propertyMaps"/>
 	/// </summary>
 	public static Mock<IClassMap> WithPropertyMaps(this Mock<IClassMap> classMapMock, IPropertyMapCollection propertyMaps)
 	{
@@ -153,15 +152,27 @@ public static class ClassMapMother
 	/// <summary>
 	/// Create a class map with a single simple representation of a <see cref="PropertyMap"/>
 	/// </summary>
-	/// <inheritdoc cref="PropertyMapMother.WithBasicProppertyMapping"/>
-	public static Mock<IClassMap> WithBasicProppertyMapping(
+	/// <inheritdoc cref="PropertyMapMother.WithBasicPropertyMapping"/>
+	public static Mock<IClassMap> WithBasicPropertyMapping(
 		this Mock<IClassMap> classMapMock,
-		SerializerDirection direction, Type containerType, PropertyInfo targetProperty, Func<IConverter> assignedConverter)
+		SerializerDirection direction, Type containerType, PropertyInfo targetProperty, Func<IConverter>? assignedConverter)
 	{
 		var propertyMap = new Mock<IPropertyMapCollection>()
-			.WithBasicProppertyMapping(direction, containerType, targetProperty, assignedConverter);
+			.WithBasicPropertyMapping(direction, containerType, targetProperty, assignedConverter);
 
 		return classMapMock
 			.WithPropertyMaps(propertyMap.Object);
+	}
+
+	/// <summary>
+	/// Create a class map with a single simple representation of a <see cref="PropertyMap"/>
+	/// </summary>
+	/// <inheritdoc cref="PropertyMapMother.WithBasicPropertyMapping"/>
+	public static Mock<IClassMap> WithBasicPropertyMapping(
+		this Mock<IClassMap> classMapMock,
+		SerializerDirection direction, Type containerType, PropertyInfo targetProperty)
+	{
+		return classMapMock
+			.WithBasicPropertyMapping(direction, containerType, targetProperty, null);
 	}
 }

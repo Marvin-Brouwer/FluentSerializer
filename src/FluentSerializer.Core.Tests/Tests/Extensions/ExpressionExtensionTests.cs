@@ -131,17 +131,17 @@ public sealed class ExpressionExtensionTests
 	{
 		for (char letter = 'A'; letter <= 'Z'; letter++)
 		{
-			yield return new[] { char.ToLowerInvariant(letter).ToString() };
-			yield return new[] { letter.ToString() };
+			yield return new object[] { char.ToLowerInvariant(letter).ToString() };
+			yield return new object[] { letter.ToString() };
 		}
 		for (int number = 0; number <= 9; number++)
 		{
-			yield return new[] { number.ToString() };
+			yield return new object[] { number.ToString() };
 		}
 		const string validSpecialCharacters = "_+-";
 		foreach (var character in validSpecialCharacters)
 		{
-			yield return new[] { character.ToString() };
+			yield return new object[] { character.ToString() };
 		}
 	}
 
@@ -150,7 +150,7 @@ public sealed class ExpressionExtensionTests
 		const string invalidCharacters = "!@#$%^&*()=,.?/\\[]{}<>|";
 		foreach (var character in invalidCharacters)
 		{
-			yield return new[] { character.ToString() };
+			yield return new object[] { character.ToString() };
 		}
 	}
 

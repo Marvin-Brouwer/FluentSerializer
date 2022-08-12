@@ -7,12 +7,11 @@ using FluentSerializer.Core.Naming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Mapping;
 
 [MemoryDiagnoser]
-public partial class ClassMappingProfile
+public sealed class ClassMappingProfile
 {
 	private static IEnumerable<ClassMap> GenerateClassMaps(IReadOnlyList<IPropertyMap> propertyMaps) =>
 		Array.Empty<SerializerDirection>()
@@ -36,8 +35,8 @@ public partial class ClassMappingProfile
 				typeof(TestClass).GetProperty(nameof(TestClass.TestValue))!,
 				Names.Use.KebabCase, null));
 
-	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMaps(PropertyMapsArray!).ToArray();
 	private static readonly IReadOnlyList<PropertyMap> PropertyMapsArray = GeneratePropertyMaps.ToArray();
+	private static readonly IReadOnlyList<ClassMap> ClassMapsArray = GenerateClassMaps(PropertyMapsArray).ToArray();
 
 	[Benchmark]
 	public IClassMap? GetClassMap()

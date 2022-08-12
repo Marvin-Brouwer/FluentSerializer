@@ -17,12 +17,12 @@ public static class PropertyMapMother
 	/// This mapping has a custom converter of <see cref="ConvertibleConverter"/> because that makes mocking a lot easier,
 	/// the part where the serializer looks up a matching converter can be tested in isolation.
 	/// </remarks>
-	/// <inheritdoc cref="Core.Tests.ObjectMother.PropertyMapMother.WithBasicProppertyMapping"/>
+	/// <inheritdoc cref="Core.Tests.ObjectMother.PropertyMapMother.WithBasicPropertyMapping"/>
 	public static Mock<IPropertyMapCollection> WithBasicProppertyMapping(
 		this Mock<IPropertyMapCollection> propertyMapMock,
 		SerializerDirection direction, Type containerType, PropertyInfo targetProperty)
 	{
-		return propertyMapMock.WithBasicProppertyMapping(
+		return propertyMapMock.WithBasicPropertyMapping(
 			direction, containerType, targetProperty, ObjectMotherConstants.TestConverter);
 	}
 }

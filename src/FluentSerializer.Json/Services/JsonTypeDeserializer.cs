@@ -10,7 +10,6 @@ using FluentSerializer.Json.DataNodes;
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace FluentSerializer.Json.Services;
 

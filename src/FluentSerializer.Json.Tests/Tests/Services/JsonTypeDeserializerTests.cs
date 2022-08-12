@@ -81,7 +81,7 @@ public sealed class JsonTypeDeserializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, property!);
+			.WithBasicPropertyMapping(TestDirection, containerType, property!);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
@@ -109,7 +109,7 @@ public sealed class JsonTypeDeserializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, property!);
+			.WithBasicPropertyMapping(TestDirection, containerType, property!);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
@@ -162,7 +162,7 @@ public sealed class JsonTypeDeserializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, attemptedContainerType, targetProperty);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
@@ -196,7 +196,7 @@ public sealed class JsonTypeDeserializerTests
 
 		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 

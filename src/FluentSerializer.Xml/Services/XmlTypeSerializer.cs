@@ -154,7 +154,7 @@ public sealed class XmlTypeSerializer
 		if (matchingConverter is not null)
 			return matchingConverter.Serialize(in propertyValue, serializerContext);
 
-		var xmlPropertyValue = SerializeToElement(in propertyValue!, serializerContext.PropertyType, serializerContext);
+		var xmlPropertyValue = SerializeToElement(in propertyValue, serializerContext.PropertyType, serializerContext);
 		if (xmlPropertyValue is null) return null;
 
 		return Element(xmlPropertyName, xmlPropertyValue);

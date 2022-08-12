@@ -11,7 +11,6 @@ using FluentSerializer.Json.DataNodes;
 using Microsoft.Extensions.ObjectPool;
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.Services;

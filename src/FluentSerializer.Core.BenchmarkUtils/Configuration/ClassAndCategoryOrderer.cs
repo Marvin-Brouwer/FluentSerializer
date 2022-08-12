@@ -30,7 +30,7 @@ public sealed class ClassAndCategoryOrderer : IOrderer {
 		benchmarkCase.Descriptor.Type.FullName + benchmarkCase.Descriptor.Categories?.FirstOrDefault();
 
 	public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups) =>
-		logicalGroups.OrderBy(it => it.Key ?? string.Empty);
+		logicalGroups.OrderBy(it => it.Key);
 
 	public bool SeparateLogicalGroups => true;
 }

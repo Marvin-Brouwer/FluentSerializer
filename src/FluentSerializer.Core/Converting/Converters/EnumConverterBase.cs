@@ -31,7 +31,7 @@ public abstract class EnumConverterBase
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
 	public virtual bool CanConvert(in Type targetType) => targetType.IsEnum;
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="Enum.GetHashCode" />
 	public int ConverterHashCode { get; } = typeof(Enum).GetHashCode();
 
 	/// <inheritdoc cref="EnumConverterBase"/>

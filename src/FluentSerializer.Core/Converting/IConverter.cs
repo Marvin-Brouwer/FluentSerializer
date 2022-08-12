@@ -44,7 +44,10 @@ public interface IConverter : IComparable
 	/// <inheritdoc cref="object.GetHashCode()"/>
 	int GetHashCode() => ConverterHashCode;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// The internal hashcode used for the dataType attached to this converter.
+	/// This is mostly used to distinguish between converters when appending to the set.
+	/// </summary>
 	int ConverterHashCode { get; }
 
 	int IComparable.CompareTo(object? obj)

@@ -74,7 +74,7 @@ public static class SerializerContextMother
 	}
 
 	/// <summary>
-	/// Make the <see cref="ISerializerContext.ParentNode"/> return <paramref name="parent"/>
+	/// Make the <see cref="ISerializerContext{TDataNode}.ParentNode"/> return <paramref name="parent"/>
 	/// </summary>
 	public static Mock<ISerializerContext<TDataNode>> WithParentNode<TDataNode>(
 		this Mock<ISerializerContext<TDataNode>> contextMock, TDataNode parent)
@@ -102,7 +102,7 @@ public static class SerializerContextMother
 	}
 
 	/// <summary>
-	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// Make the <see cref="ISerializerContext.CurrentSerializer"/> return <paramref name="serializer"/>
 	/// </summary>
 	public static Mock<ISerializerCoreContext<TDataNode>> WithSerializer<TDataNode, TSerializer>(
 		this Mock<ISerializerCoreContext<TDataNode>> contextMock, TSerializer serializer)
@@ -117,7 +117,7 @@ public static class SerializerContextMother
 	}
 
 	/// <summary>
-	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// Make the <see cref="ISerializerContext.CurrentSerializer"/> return <paramref name="serializer"/>
 	/// </summary>
 	public static Mock<ISerializerCoreContext<TDataNode>> WithSerializer<TDataNode, TSerializer>(
 		this Mock<ISerializerCoreContext<TDataNode>> contextMock, IMock<TSerializer> serializer)
@@ -128,7 +128,7 @@ public static class SerializerContextMother
 	}
 
 	/// <summary>
-	/// Make the <see cref="ISerializerContext.NamingStrategy"/> return <paramref name="namingStrategy"/>
+	/// Make the <see cref="ISerializerContext.WithPathSegment"/> return a fake path segment
 	/// </summary>
 	public static Mock<ISerializerCoreContext<TDataNode>> WithAutoPathSegment<TDataNode>(
 		this Mock<ISerializerCoreContext<TDataNode>> contextMock)

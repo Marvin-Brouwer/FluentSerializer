@@ -51,6 +51,11 @@ public readonly partial struct XmlElement : IXmlElement
 			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>(childrenCollection.Count);
 			children = new ReadOnlyCollectionBuilder<IXmlNode>(childrenCollection.Count);
 		}
+		else if (childNodes is IReadOnlyCollection<IXmlNode> childrenReadonlyCollection)
+		{
+			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>(childrenReadonlyCollection.Count);
+			children = new ReadOnlyCollectionBuilder<IXmlNode>(childrenReadonlyCollection.Count);
+		}
 		else
 		{
 			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();

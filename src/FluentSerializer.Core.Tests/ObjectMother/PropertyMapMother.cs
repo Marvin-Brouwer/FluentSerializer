@@ -14,10 +14,10 @@ namespace FluentSerializer.Core.Tests.ObjectMother;
 public static class PropertyMapMother
 {
 	/// <summary>
-	/// Configure the mock of <see cref="IScanList{TScanBy, TScanFor}"/> for properties
+	/// Configure the mock of <see cref="IPropertyMapCollection"/> for properties
 	/// to return null on scan and no items on enumeration
 	/// </summary>
-	public static Mock<IPropertyMapCollection> WithoutProppertyMapping(
+	public static Mock<IPropertyMapCollection> WithoutPropertyMapping(
 		this Mock<IPropertyMapCollection> propertyMapMock)
 	{
 		propertyMapMock
@@ -34,10 +34,10 @@ public static class PropertyMapMother
 	}
 
 	/// <summary>
-	/// Configure the mock of <see cref="IScanList{TScanBy, TScanFor}"/> for properties
+	/// Configure the mock of <see cref="IPropertyMapCollection"/> for properties
 	/// to return <paramref name="propertyMapping"/> on scan and enumeration
 	/// </summary>
-	public static Mock<IPropertyMapCollection> WithProppertyMapping(
+	private static Mock<IPropertyMapCollection> WithPropertyMapping(
 		this Mock<IPropertyMapCollection> propertyMapMock, IPropertyMap propertyMapping)
 	{
 		propertyMapMock
@@ -57,13 +57,13 @@ public static class PropertyMapMother
 	/// Create a simple representation of a <see cref="PropertyMap"/>
 	/// </summary>
 	/// <remarks>
-	/// <see cref="Naming.NamingStrategies.INamingStrategy"/> is set to <see cref="Names.Use.PascalCase"/> because this essentially is a one-to-one mapping
+	/// <see cref="Naming.NamingStrategies.INamingStrategy"/> is set to <see cref="IUseNamingStrategies.PascalCase"/> because this essentially is a one-to-one mapping
 	/// when using C# coding conventions so it saves us writing a TestNamingStrategy.
 	/// </remarks>
-	public static Mock<IPropertyMapCollection> WithBasicProppertyMapping(
+	public static Mock<IPropertyMapCollection> WithBasicPropertyMapping(
 		this Mock<IPropertyMapCollection> propertyMapMock,
 		SerializerDirection direction, Type containerType, PropertyInfo targetProperty,
-		Func<IConverter> assignedConverter)
+		Func<IConverter>? assignedConverter)
 	{
 		var propertyMapping = new PropertyMap(direction,
 			containerType,
@@ -71,6 +71,6 @@ public static class PropertyMapMother
 			assignedConverter);
 
 		return propertyMapMock
-			.WithProppertyMapping(propertyMapping);
+			.WithPropertyMapping(propertyMapping);
 	}
 }

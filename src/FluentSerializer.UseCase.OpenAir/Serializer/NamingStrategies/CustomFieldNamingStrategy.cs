@@ -33,5 +33,5 @@ public sealed class CustomFieldNamingStrategy : INamingStrategy
 	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in property, in propertyType, in namingContext));
 	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => GetName(_innerNamingStrategy.GetName(in classType, in namingContext));
 
-	private static ReadOnlySpan<char> GetName(in ReadOnlySpan<char> name) => $"{name}__c";
+	private static ReadOnlySpan<char> GetName(in ReadOnlySpan<char> name) => $"{name.ToString()}__c";
 }
