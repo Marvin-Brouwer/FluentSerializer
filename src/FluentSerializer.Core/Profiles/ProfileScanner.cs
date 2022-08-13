@@ -33,23 +33,6 @@ public static class ProfileScanner
 	}
 
 	/// <summary>
-	/// Find all profiles of type <typeparamref name="TSerializerProfile"/> in the given <paramref name="assembly"/>,
-	/// generate the profile definitions and push into an <see cref="IClassMapCollection"/>
-	/// </summary>
-	[Obsolete("Obsolete", false)]
-	public static IReadOnlyCollection<IClassMap> FindClassMapsInAssembly<TSerializerProfile, TConfiguration>(
-		in Assembly assembly, TConfiguration configuration)
-		where TSerializerProfile : ISerializerProfile<TConfiguration>
-		where TConfiguration : ISerializerConfiguration
-	{
-		Guard.Against.Null(assembly, nameof(assembly));
-		Guard.Against.Null(configuration, nameof(configuration));
-
-		var profiles = ScanAssembly<TSerializerProfile, TConfiguration>(assembly);
-		return FindClassMapsInProfiles(profiles, configuration).ToList();
-	}
-
-	/// <summary>
 	/// Get all <see cref="IClassMap"/>s from a list of <typeparamref name="TSerializerProfile"/>s
 	/// </summary>
 #if NET6_0_OR_GREATER

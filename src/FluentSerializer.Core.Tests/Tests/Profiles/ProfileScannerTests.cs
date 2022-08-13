@@ -8,6 +8,7 @@ using Moq;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using Xunit;
@@ -26,7 +27,6 @@ public sealed class ProfileScannerTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
-	[Obsolete("Obsolete", false)]
 	public void ScanAssembliesForType_NotPresent_ReturnsEmptyList()
 	{
 		// Arrange
@@ -35,8 +35,10 @@ public sealed class ProfileScannerTests
 			.Returns(Array.Empty<Type>());
 
 		// Act
-		var result = ProfileScanner
-			.FindClassMapsInAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object, _configurationMock.Object);
+		var profiles = ProfileScanner
+			.ScanAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object);
+		var result = ProfileScanner.
+			FindClassMapsInProfiles<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(profiles, _configurationMock.Object);
 
 		// Assert
 		result.Should().BeEmpty();
@@ -44,7 +46,6 @@ public sealed class ProfileScannerTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
-	[Obsolete("Obsolete", false)]
 	public void ScanAssembliesForType_Present_ReturnsProfile()
 	{
 		// Arrange
@@ -53,8 +54,10 @@ public sealed class ProfileScannerTests
 			.Returns(new[] { typeof(SerializerProfileFake) });
 
 		// Act
-		var result = ProfileScanner
-			.FindClassMapsInAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object, _configurationMock.Object);
+		var profiles = ProfileScanner
+			.ScanAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object);
+		var result = ProfileScanner.
+			FindClassMapsInProfiles<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(profiles, _configurationMock.Object);
 
 		// Assert
 		result.Should().NotBeEmpty();
