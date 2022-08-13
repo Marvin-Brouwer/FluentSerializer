@@ -1,10 +1,13 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +47,7 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	/// The eventual method that will be called once the factory calls the last configuration method.
 	/// </summary>
 	protected abstract TSerializer CreateSerializer(in TConfiguration configuration, in ObjectPoolProvider poolProvider,
-		in IEnumerable<IClassMap> mappings);
+		in IReadOnlyCollection<IClassMap> mappings);
 
 	/// <inheritdoc/>
 	public IConfiguredSerializerFactory<TSerializer, TConfiguration, TSerializerProfile> WithConfiguration(in TConfiguration configuration, in ObjectPoolProvider? poolProvider = null)
@@ -97,7 +100,10 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	/// <inheritdoc/>
 	public TSerializer UseProfiles(in IReadOnlyCollection<TSerializerProfile> profiles)
 	{
-		var classMaps = ProfileScanner.FindClassMapsInProfiles(profiles, CurrentConfiguration);
-		return CreateSerializer(CurrentConfiguration, CurrentObjectPoolProvider, in classMaps);
+		var classMaps = ProfileScanner
+			.FindClassMapsInProfiles(profiles, CurrentConfiguration)
+			.ToArray();
+
+		return CreateSerializer(CurrentConfiguration, CurrentObjectPoolProvider, classMaps);
 	}
 }

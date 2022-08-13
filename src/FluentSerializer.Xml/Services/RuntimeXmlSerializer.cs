@@ -1,18 +1,20 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
 using FluentSerializer.Xml.Exceptions;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Extensions;
-using FluentSerializer.Core.Text;
-using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.Services;
 
@@ -30,15 +32,15 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 
 	/// <inheritdoc cref="RuntimeXmlSerializer" />
 	public RuntimeXmlSerializer(
-		XmlSerializerConfiguration configuration,
-		ObjectPoolProvider objectPoolProvider,
-		IReadOnlyCollection<IClassMap> mappings)
+		in XmlSerializerConfiguration configuration,
+		in ObjectPoolProvider objectPoolProvider,
+		in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(mappings, nameof(mappings));
 		Guard.Against.Null(configuration, nameof(configuration));
+		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
 
-		_serializer = new XmlTypeSerializer(in mappings);
-		_deserializer = new XmlTypeDeserializer(in mappings);
+		_serializer = new XmlTypeSerializer(in classMapCollection);
+		_deserializer = new XmlTypeDeserializer(in classMapCollection);
 		_stringBuilderPool = objectPoolProvider.CreateStringBuilderPool(configuration);
 
 		XmlConfiguration = configuration;

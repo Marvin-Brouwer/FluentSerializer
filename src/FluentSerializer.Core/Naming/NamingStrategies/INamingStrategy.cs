@@ -1,6 +1,7 @@
+using FluentSerializer.Core.Context;
+
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -12,9 +13,9 @@ public interface INamingStrategy
 	/// <summary>
 	/// Return a valid serializable name value for this <paramref name="property"/>
 	/// </summary>
-	public string GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext);
+	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext);
 	/// <summary>
 	/// Return a valid serializable name value for this <paramref name="classType"/>
 	/// </summary>
-	public string GetName(in Type classType, in INamingContext namingContext);
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext);
 }

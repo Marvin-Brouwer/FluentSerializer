@@ -1,7 +1,9 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Tests.ObjectMother;
+
 using Moq;
+
 using System;
 using System.Reflection;
 
@@ -21,6 +23,6 @@ public static class ClassMapMother
 		SerializerDirection direction, Type containerType, PropertyInfo targetProperty)
 	{
 		return classMapMock
-			.WithBasicProppertyMapping(direction, containerType, targetProperty, ObjectMotherConstants.TestConverter);
+			.WithBasicPropertyMapping(direction, containerType, targetProperty, ObjectMotherConstants.TestConverter);
 	}
 }

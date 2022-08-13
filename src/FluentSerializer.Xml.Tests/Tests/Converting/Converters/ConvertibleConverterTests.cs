@@ -1,14 +1,18 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+
 using Moq;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -16,7 +20,7 @@ using static FluentSerializer.Xml.XmlBuilder;
 namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
+/// Basically test if this converter behaves exactly like <see cref="Convert.ToString()"/>
 /// and <see cref="Convert.ChangeType(object?, Type)"/>
 /// </summary>
 public sealed class ConvertibleConverterTests

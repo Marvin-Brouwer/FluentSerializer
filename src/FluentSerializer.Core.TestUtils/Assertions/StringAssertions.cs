@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+
 using System;
 
 namespace FluentSerializer.Core.TestUtils.Assertions;

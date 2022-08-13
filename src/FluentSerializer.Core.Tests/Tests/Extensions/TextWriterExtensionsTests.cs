@@ -1,10 +1,13 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
+
 using Moq;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;
@@ -83,9 +86,11 @@ public sealed class TextWriterExtensionsTests
 			.Returns(sut);
 
 		// Act
-		var result = TextWriterExtensions.ToString(nodeMock.Object, new TestSerializerConfiguration());
+		var result = nodeMock.Object.ToString(new TestSerializerConfiguration());
 
 		// Assert
+		// It's empty because string appendage is mocked here.
+		result.Should().BeEmpty();
 		nodeMock
 			.Verify(node => node.AppendTo(ref It.Ref<ITextWriter>.IsAny, true, 0, true));
 	}

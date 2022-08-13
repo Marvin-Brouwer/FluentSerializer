@@ -1,11 +1,12 @@
 using FluentSerializer.Json.DataNodes;
+
 using System.IO;
 
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Tests.Tests;
 
-internal readonly struct AllJsonNodes
+internal static class AllJsonNodes
 {
 	internal static IJsonObject GetInstance(bool format) => Object(
 		format

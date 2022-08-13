@@ -1,10 +1,11 @@
-using System;
-using System.Linq.Expressions;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
+
+using System;
+using System.Linq.Expressions;
 
 namespace FluentSerializer.Xml.Profiles;
 

@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -8,8 +9,11 @@ using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 using FluentSerializer.Json.Tests.ObjectMother;
+
 using Moq;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -21,16 +25,18 @@ public sealed class JsonTypeDeserializerTests
 	private const SerializerDirection TestDirection = SerializerDirection.Deserialize;
 
 	private readonly ISerializerCoreContext<IJsonNode> _coreContextStub;
-	private readonly Mock<IClassMap> _classMap;
+	private readonly Mock<IClassMap> _classMapMock;
+	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 
 	public JsonTypeDeserializerTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(JsonSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
-		_classMap = new Mock<IClassMap>()
+		_classMapMock = new Mock<IClassMap>()
 			.WithDefaults()
 			.WithoutPropertyMaps();
+		_classMapCollectionMock = new Mock<IClassMapCollection>();
 	}
 
 	/// <summary>
@@ -45,7 +51,10 @@ public sealed class JsonTypeDeserializerTests
 
 		var type = typeof(TestClass);
 
-		var sut = new JsonTypeDeserializer(new List<IClassMap>(0));
+		_classMapCollectionMock
+			.WithoutClassMaps();
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -69,11 +78,14 @@ public sealed class JsonTypeDeserializerTests
 		var type = typeof(TestClass);
 		var containerType = typeof(IJsonProperty);
 		var property = type.GetProperty(nameof(TestClass.Value));
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, property!);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, containerType, property!);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -94,11 +106,14 @@ public sealed class JsonTypeDeserializerTests
 		var type = typeof(TestClass);
 		var containerType = typeof(IJsonProperty);
 		var property = type.GetProperty(nameof(TestClass.Value));
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, property!);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, containerType, property!);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -117,10 +132,13 @@ public sealed class JsonTypeDeserializerTests
 		var input = Object();
 
 		var type = typeof(TestClass);
-		_classMap
-			.WithClassType(type);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -141,11 +159,14 @@ public sealed class JsonTypeDeserializerTests
 		// Any arbitrary type here
 		var attemptedContainerType = typeof(bool);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, attemptedContainerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -172,11 +193,14 @@ public sealed class JsonTypeDeserializerTests
 		var type = typeof(TestClass);
 		var containerType = typeof(IJsonProperty);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.DeserializeFromNode(input, type, _coreContextStub);
@@ -205,8 +229,10 @@ public sealed class JsonTypeDeserializerTests
 		var contextMock = new Mock<ISerializerCoreContext<IJsonNode>>()
 			.WithAutoPathSegment()
 			.WithSerializer(serializerMock);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
-		var sut = new JsonTypeDeserializer(_classMap.ToCollection());
+		var sut = new JsonTypeDeserializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.DeserializeFromNode(input, typeof(IEnumerable<IJsonObject>), contextMock.Object);

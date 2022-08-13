@@ -1,10 +1,13 @@
 using FluentAssertions;
+
+using FluentSerializer.Core.Converting.Converters;
+
 using System;
 using System.Collections.Generic;
-using System.IO;
-using FluentSerializer.Core.Converting.Converters;
-using Xunit;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+
+using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
 

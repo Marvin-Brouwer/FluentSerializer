@@ -1,5 +1,6 @@
-using System;
 using FluentSerializer.Core.Configuration;
+
+using System;
 
 namespace FluentSerializer.Core.Converting.Converters;
 
@@ -35,6 +36,6 @@ public abstract class SimpleTypeConverterBase<TObject> : IConverter
 		return ConvertToDataType(in currentValue);
 	}
 
-	/// <inheritdoc />
+	/// <inheritdoc cref="object.GetHashCode" />
 	public override int GetHashCode() => typeof(TObject).GetHashCode();
 }

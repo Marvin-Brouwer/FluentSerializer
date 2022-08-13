@@ -1,5 +1,6 @@
-using System;
 using FluentSerializer.Core.Extensions;
+
+using System;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -38,7 +39,8 @@ public readonly partial struct JsonProperty
 				offset++;
 				return;
 			}
-			if (text.HasWhitespaceAtOffset(in offset)) continue;
+
+			offset.AdjustForWhiteSpace(in text);
 
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyAssignmentCharacter)) break;
 		}

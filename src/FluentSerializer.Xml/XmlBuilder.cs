@@ -1,7 +1,9 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +12,7 @@ namespace FluentSerializer.Xml;
 /// <summary>
 /// XML element builder utility class
 /// </summary>
-public readonly struct XmlBuilder
+public static class XmlBuilder
 {
 	/// <inheritdoc cref="IXmlElement"/>
 	/// <param name="name">A valid property name, will throw if given anything other than word characters.</param>

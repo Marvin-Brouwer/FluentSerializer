@@ -1,4 +1,5 @@
 using FluentSerializer.Core.Configuration;
+
 using System;
 using System.Runtime.Serialization;
 

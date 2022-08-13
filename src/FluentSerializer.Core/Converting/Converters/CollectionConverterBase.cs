@@ -1,9 +1,10 @@
+using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Extensions;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Extensions;
 
 namespace FluentSerializer.Core.Converting.Converters;
 

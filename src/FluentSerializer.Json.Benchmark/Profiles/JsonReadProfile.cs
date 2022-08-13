@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using System.IO;
 using BenchmarkDotNet.Attributes;
+
 using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.Benchmark.Data;
 using FluentSerializer.Json.DataNodes;
+
+using System.Collections.Generic;
+using System.IO;
 
 namespace FluentSerializer.Json.Benchmark.Profiles;
 

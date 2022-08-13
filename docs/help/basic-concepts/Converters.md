@@ -74,7 +74,7 @@ This is not rare, but rare enough to not be included out of the box.
 /// 0 => true
 /// </example>
 /// </summary>
-public class StringBitBooleanConverter : IJsonConverter
+public sealed class StringBitBooleanConverter : IJsonConverter
 {
 	/// <inheritdoc />
 	public SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -119,11 +119,16 @@ Then you create an extension method to expose this:
 ```csharp
 public static class ConverterExtensions
 {
-	private static readonly IConverter StringBitBooleanConverter = new StringBitBooleanConverter()
+	private static readonly IConverter StringBitBooleanConverter = new StringBitBooleanConverter();
+
 	/// <inheritdoc cref="Example.StringBitBooleanConverter" />
 	public static INamingStrategy StringBitBoolean(this IUseJsonConverters _) => StringBitBooleanConverter;
 }
 ```
+
+> **Note:**  
+> Keep in mind that when you store a converter like this (a static readonly instance),  
+> the converter will not be thread-safe in the sense that instance members are shared across threads.
 
 And now you can use it on properties or your configuration by calling `Converter.Use.StringBitBoolean`.
 

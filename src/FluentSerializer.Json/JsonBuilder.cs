@@ -1,7 +1,9 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
+
 using System.Collections.Generic;
 
 namespace FluentSerializer.Json;
@@ -9,7 +11,7 @@ namespace FluentSerializer.Json;
 /// <summary>
 /// JSON object builder utility class
 /// </summary>
-public readonly struct JsonBuilder
+public static class JsonBuilder
 {
 	/// <inheritdoc cref="IJsonObject"/>
 	/// <param name="properties">A parameters list of <see cref="IJsonObjectContent"/> as children of this object node.</param>

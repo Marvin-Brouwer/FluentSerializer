@@ -1,6 +1,7 @@
-using FluentSerializer.Xml.DataNodes;
-using System;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Xml.DataNodes;
+
+using System;
 
 namespace FluentSerializer.Xml.Services;
 

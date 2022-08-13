@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting.Converters;
+
 using System;
 using System.Globalization;
 

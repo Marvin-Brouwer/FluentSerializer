@@ -358,6 +358,109 @@ jobs:
                   run_id: context.runId
               })
 
+  benchmark-core:
+    name: "Benchmark Core libraries"
+
+    runs-on: ubuntu-latest
+    needs: [test, quality-check]
+
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    ###
+    # 🧰 Setup .Net
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          6.0.x
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
+    - name: 🗃 Restore 'library-binaries'
+      uses: actions/download-artifact@v3
+      with:
+        name: library-binaries
+        path: ./src
+    ###
+    # 🗃 Restore 'benchmark-binaries'
+    ###
+    - name: 🗃 Restore 'benchmark-binaries'
+      uses: actions/download-artifact@v3
+      with:
+        name: benchmark-binaries
+        path: ./src
+    ###
+    # ⏱ FluentSerializer.Core
+    #
+    # Benchmark the code in the core library
+    ###
+    - name: ⏱ Benchmark FluentSerializer.Core
+      run: |-
+        sudo chmod +rwx ./*/FluentSerializer.Core.Benchmark
+        sudo ./net6.0/FluentSerializer.Core.Benchmark --jobType=Long
+        sudo ./netcoreapp3.1/FluentSerializer.Core.Benchmark --jobType=Long
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Core.Benchmark/bin/Release
+    ###
+    # 🗃 Collect benchmark reports
+    ###
+    - name: 🗃 Collect benchmark reports
+      if: ${{ always() }}
+      run: |-
+        sudo mkdir ${{github.workspace}}/benchmark-results
+        cd ${{github.workspace}}/src/FluentSerializer.Core.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
+        sudo mv ./core-*.md ${{github.workspace}}/benchmark-results/
+      working-directory: ${{github.workspace}}
+    ###
+    # 📈 Report benchmarks
+    #
+    # Publish benchmark results to job overview
+    ###
+    - name: 📈 Report benchmarks
+      run: |-
+        cat ./core-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./core-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Core.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
+    ###
+    # 🗃 Publish 'benchmark-results' artifacts
+    ###
+    - name: 🗃 Publish 'benchmark-results' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results-core
+        path: ${{github.workspace}}/benchmark-results
+        retention-days: 20
+    ###
+    # 🗃 Cancel after benchmark failure
+    # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
+    ###
+    - name: 🗃 Cancel after benchmark failure
+      if: ${{ failure() }}
+      uses: actions/github-script@v6
+      with:
+          script: |
+              github.actions.cancelWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: context.runId
+              })
+
   benchmark-xml:
     name: "Benchmark XML"
 
@@ -413,8 +516,8 @@ jobs:
     - name: ⏱ Benchmark XML serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Xml.Benchmark
-          sudo ./net6.0/FluentSerializer.Xml.Benchmark
-          sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate
+        sudo ./net6.0/FluentSerializer.Xml.Benchmark --jobType=Default
+        sudo ./netcoreapp3.1/FluentSerializer.Xml.Benchmark --no-generate --jobType=Default
       working-directory: ${{github.workspace}}/src/FluentSerializer.Xml.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -516,8 +619,8 @@ jobs:
     - name: ⏱ Benchmark JSON serializer
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.Json.Benchmark
-          sudo ./net6.0/FluentSerializer.Json.Benchmark
-          sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate
+        sudo ./net6.0/FluentSerializer.Json.Benchmark --jobType=Default
+        sudo ./netcoreapp3.1/FluentSerializer.Json.Benchmark --no-generate --jobType=Default
       working-directory: ${{github.workspace}}/src/FluentSerializer.Json.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports

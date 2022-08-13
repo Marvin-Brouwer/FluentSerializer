@@ -1,7 +1,8 @@
-using System;
-using System.Reflection;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
+using System.Reflection;
 
 namespace FluentSerializer.Core.Context;
 

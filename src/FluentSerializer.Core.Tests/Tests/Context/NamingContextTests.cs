@@ -1,11 +1,14 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Core.Tests.ObjectMother;
+
 using Moq;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Context;
@@ -14,12 +17,12 @@ public sealed class NamingContextTests
 {
 	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
 
-	private readonly Mock<IClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>> _scanListMock;
+	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 	private readonly Mock<IClassMap> _classMapMock;
 
 	public NamingContextTests()
 	{
-		_scanListMock = new Mock<IClassMapScanList<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>>();
+		_classMapCollectionMock = new Mock<IClassMapCollection>();
 		_classMapMock = new Mock<IClassMap>()
 			.WithoutPropertyMaps();
 	}
@@ -32,11 +35,12 @@ public sealed class NamingContextTests
 		var type = typeof(TestClass);
 
 		_classMapMock
+			.WithClassType(type)
 			.WithNamingStrategy(Names.Use.CamelCase);
-		_scanListMock
-			.WithClassMap(type, _classMapMock);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_scanListMock.Object);
+		var sut = new NamingContext(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in type);
@@ -52,10 +56,10 @@ public sealed class NamingContextTests
 		// Arrange
 		var type = typeof(TestClass);
 
-		_scanListMock
-			.WithClassMap(type, _classMapMock);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_scanListMock.Object);
+		var sut = new NamingContext(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in type);
@@ -73,11 +77,12 @@ public sealed class NamingContextTests
 		var property = type.GetProperty(nameof(TestClass.Id))!;
 
 		_classMapMock
-			.WithBasicProppertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
-		_scanListMock
-			.WithClassMap(type, _classMapMock);
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, typeof(ISerializerProfile<ISerializerConfiguration>), property, null!);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_scanListMock.Object);
+		var sut = new NamingContext(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in type, in property);
@@ -94,10 +99,10 @@ public sealed class NamingContextTests
 		var type = typeof(TestClass);
 		var property = type.GetProperty(nameof(TestClass.Id))!;
 
-		_scanListMock
-			.WithClassMap(type, _classMapMock);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_scanListMock.Object);
+		var sut = new NamingContext(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.FindNamingStrategy(in type, in property);

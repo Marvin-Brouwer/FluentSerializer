@@ -77,12 +77,24 @@ If you want all your properties to be UpperCase you can do the following:
 /// SomeName => SOMENAME
 /// </example>
 /// </summary>
-public class UpperCaseNamingStrategy : INamingStrategy
+public sealed class UpperCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public string GetName(in PropertyInfo property, in INamingContext _) => property.Name.Split('`')[0].ToUpperInvariant();
+	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext _) => GetName(property.Name);
+
 	/// <inheritdoc />
-	public string GetName(in Type classType, in INamingContext _) => classType.Name.Split('`')[0].ToUpperInvariant();
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext _) => GetName(classType.Name);
+
+	private ReadOnlySpan<char> GetName(in string name)
+	{
+		var genericIndex = name.IndexOf(NamingConstants.GenericTypeMarker);
+		if (genericIndex == -1) return name.ToUpperInvariant();
+
+		Span<char> nameSpan = stackalloc char[genericIndex];
+		name.AsSpan()[..genericIndex].ToUpperInvariant(nameSpan);
+
+		return nameSpan.ToString();
+	}
 }
 ```
 
@@ -91,11 +103,16 @@ Then you create an extension method to expose this:
 ```csharp
 public static class NamingExtensions
 {
-	private static readonly INamingStrategy UpperCaseNamingStrategy = new UpperCaseNamingStrategy()
+	private static readonly INamingStrategy UpperCaseNamingStrategy = new UpperCaseNamingStrategy();
+
 	/// <inheritdoc cref="Example.StringBitBooleanConverter" />
 	public static INamingStrategy UpperCase (this IUseNamingStrategies _) => UpperCaseNamingStrategy;
 }
 ```
+
+> **Note:**  
+> Keep in mind that when you store a naming strategy like this (a static readonly instance),  
+> the converter will not be thread-safe in the sense that instance members are shared across threads.
 
 And now you can use it on properties or your configuration by calling `Names.Use.UpperCase`.
 

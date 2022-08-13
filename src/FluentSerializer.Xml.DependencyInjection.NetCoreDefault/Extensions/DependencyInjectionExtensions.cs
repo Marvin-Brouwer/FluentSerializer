@@ -3,8 +3,10 @@ using FluentSerializer.Core.Factories;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Extensions;
 using FluentSerializer.Xml.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Reflection;
 

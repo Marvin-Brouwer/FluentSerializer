@@ -1,4 +1,3 @@
-
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Naming;

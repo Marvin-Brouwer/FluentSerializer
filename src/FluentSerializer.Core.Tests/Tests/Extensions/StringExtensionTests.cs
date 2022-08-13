@@ -1,6 +1,9 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Extensions;
+
 using System;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;
@@ -40,7 +43,7 @@ public sealed class StringExtensionTests
 
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 InlineData('y', 0, true), InlineData('y', 2, false), InlineData('n', 0, false)]
+		InlineData('y', 0, true), InlineData('y', 2, false), InlineData('n', 0, false)]
 	public void HasCharacterAtOffset_ReturnsBoolean(char input, int offset, bool expectation)
 	{
 		// Arrange
@@ -55,7 +58,7 @@ public sealed class StringExtensionTests
 
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 InlineData('y', 'e', 0, true), InlineData('y', 'e', 1, false), InlineData('y', 'n', 0, false)]
+		InlineData('y', 'e', 0, true), InlineData('y', 'e', 1, false), InlineData('y', 'n', 0, false)]
 	public void HasCharactersAtOffset_ReturnsBoolean(char input1, char input2, int offset, bool expectation)
 	{
 		// Arrange
@@ -71,10 +74,9 @@ public sealed class StringExtensionTests
 		resultString.Should().Be(expectation);
 	}
 
-
 	[Theory,
 		Trait("Category", "UnitTest"),
-	 InlineData(0, false), InlineData(1, true), InlineData(3, true)]
+		InlineData(0, false), InlineData(1, true), InlineData(3, true)]
 	public void HasWhiteSpaceAtOffset_ReturnsBoolean(int offset, bool expectation)
 	{
 		// Arrange

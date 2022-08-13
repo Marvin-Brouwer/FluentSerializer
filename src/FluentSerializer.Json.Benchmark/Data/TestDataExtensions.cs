@@ -1,7 +1,9 @@
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.DataNodes;
+
 using System.Collections.Generic;
 using System.Linq;
+
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Benchmark.Data;

@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Mapping;
@@ -10,9 +11,11 @@ using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
-using FluentSerializer.Json.Tests.ObjectMother;
+
 using Moq;
+
 using System.Collections.Generic;
+
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -24,16 +27,18 @@ public sealed class JsonTypeSerializerTests
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
 	private readonly ISerializerCoreContext<IJsonNode> _coreContextStub;
-	private readonly Mock<IClassMap> _classMap;
+	private readonly Mock<IClassMap> _classMapMock;
+	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 
 	public JsonTypeSerializerTests()
 	{
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(JsonSerializerConfiguration.Default);
 		_coreContextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
-		_classMap = new Mock<IClassMap>()
+		_classMapMock = new Mock<IClassMap>()
 			.WithDefaults()
 			.WithoutPropertyMaps();
+		_classMapCollectionMock = new Mock<IClassMapCollection>();
 	}
 
 	/// <summary>
@@ -47,9 +52,11 @@ public sealed class JsonTypeSerializerTests
 		var input = new TestClass();
 
 		var type = typeof(TestClass);
-		var classMap = new List<IClassMap>(0);
 
-		var sut = new JsonTypeSerializer(classMap);
+		_classMapCollectionMock
+			.WithoutClassMaps();
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
@@ -72,10 +79,13 @@ public sealed class JsonTypeSerializerTests
 		};
 
 		var type = typeof(TestClass);
-		_classMap
-			.WithClassType(type);
 
-		var sut = new JsonTypeSerializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -98,11 +108,14 @@ public sealed class JsonTypeSerializerTests
 		// Any arbitrary type here
 		var attemptedContainerType = typeof(bool);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, attemptedContainerType, targetProperty);
 
-		var sut = new JsonTypeSerializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, attemptedContainerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = () => sut.SerializeToNode(input, type, _coreContextStub);
@@ -129,11 +142,14 @@ public sealed class JsonTypeSerializerTests
 		var type = typeof(TestClass);
 		var containerType = typeof(IJsonProperty);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
-		_classMap
-			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
 
-		var sut = new JsonTypeSerializer(_classMap.ToCollection());
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -151,9 +167,11 @@ public sealed class JsonTypeSerializerTests
 		var input = new List<int>();
 
 		var type = typeof(IEnumerable<int>);
-		var classMap = new List<IClassMap>(0);
 
-		var sut = new JsonTypeSerializer(classMap);
+		_classMapCollectionMock
+			.WithoutClassMaps();
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.SerializeToNode(input, type, _coreContextStub);
@@ -179,9 +197,12 @@ public sealed class JsonTypeSerializerTests
 		var type = typeof(TestClass);
 		var containerType = typeof(IJsonProperty);
 		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
-		_classMap
+
+		_classMapMock
 			.WithClassType(type)
-			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+			.WithBasicPropertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
 
 		var configuration = new JsonSerializerConfiguration
 		{
@@ -192,7 +213,7 @@ public sealed class JsonTypeSerializerTests
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(_classMap.ToCollection());
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
 
 		// Act
 		var result = sut.SerializeToNode(input, type, contextStub);
@@ -240,14 +261,13 @@ public sealed class JsonTypeSerializerTests
 			DefaultNamingStrategy = Names.Use.PascalCase,
 			WriteNull = true
 		};
-		var testProfile = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
-		var scanList = new ClassMapScanList<JsonSerializerProfile, JsonSerializerConfiguration>(testProfile);
+		var testClassMaps = ((ISerializerProfile<JsonSerializerConfiguration>)new TestClassProfile()).Configure(configuration);
 
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(scanList);
+		var sut = new JsonTypeSerializer(new ClassMapCollection(testClassMaps));
 
 		// Act
 		var result1 = sut.SerializeToNode(input1, type, contextStub);
@@ -291,7 +311,7 @@ public sealed class JsonTypeSerializerTests
 			.UseConfig(configuration);
 		var contextStub = new SerializerCoreContext<IJsonNode>(serializerMock.Object);
 
-		var sut = new JsonTypeSerializer(testProfile);
+		var sut = new JsonTypeSerializer(new ClassMapCollection(testProfile));
 
 		// Act
 		var result1 = () => sut.SerializeToNode(input1, type, contextStub);

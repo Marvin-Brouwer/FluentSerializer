@@ -3,10 +3,11 @@ using FluentSerializer.Core.Mapping;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace FluentSerializer.Xml.Factory;
@@ -17,9 +18,10 @@ internal sealed class XmlSerializerFactory : BaseSerializerFactory<IXmlSerialize
 {
 	protected override XmlSerializerConfiguration DefaultConfiguration => XmlSerializerConfiguration.Default;
 
-	protected override IXmlSerializer CreateSerializer(in XmlSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IEnumerable<IClassMap> mappings)
+	protected override IXmlSerializer CreateSerializer(in XmlSerializerConfiguration configuration, in ObjectPoolProvider poolProvider, in IReadOnlyCollection<IClassMap> mappings)
 	{
-		return new RuntimeXmlSerializer(configuration, poolProvider, mappings.ToList());
+		var classMapCollection = new ClassMapCollection(in mappings);
+		return new RuntimeXmlSerializer(in configuration, in poolProvider, classMapCollection);
 	}
 
 	IXmlSerializer IConfiguredXmlSerializerFactory.UseProfilesFromAssembly(in Assembly assembly)

@@ -1,9 +1,12 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Json.DataNodes.Nodes;
+
 using System;
+
 using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;

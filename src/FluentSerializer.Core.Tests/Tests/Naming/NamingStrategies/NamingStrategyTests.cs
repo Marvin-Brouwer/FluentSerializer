@@ -1,58 +1,45 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
 using Moq;
-using System.Collections.Generic;
-using Xunit;
+
+using System;
+using System.Reflection;
 
 namespace FluentSerializer.Core.Tests.Tests.Naming.NamingStrategies;
 
-public sealed class NamingStrategyTests
+public abstract class NamingStrategyTests
 {
-	private static readonly Mock<INamingContext> _namingContextMock = new();
+	protected abstract INamingStrategy Sut { get; }
 
-	[Theory,
-		Trait("Category", "UnitTest"),
-		MemberData(nameof(ValidNamingRequests))]
-	public void ValidString_GetName_ConvertsName(in INamingStrategy sut, in string expectedClassName, in string expectedPropertyName)
+	private static readonly Mock<INamingContext> NamingContextMock = new();
+
+	public virtual void ValidString_GetName_ConvertsName(
+		in Type typeInput, in PropertyInfo propertyInput,
+		in string expectedClassName, in string expectedPropertyName)
 	{
-		// Arrange
-		var typeInput = typeof(ClassNameWithMultipleParts);
-		var propertyInput = typeInput.GetProperty(nameof(ClassNameWithMultipleParts.PropertyNameWithMultipleParts))!;
-
 		// Act
-		var typeResult = sut.GetName(in typeInput, _namingContextMock.Object);
-		var propertyResult = sut.GetName(in propertyInput, propertyInput.PropertyType, _namingContextMock.Object);
+		var typeResult = Sut.GetName(in typeInput, NamingContextMock.Object);
+		var propertyResult = Sut.GetName(in propertyInput, propertyInput.PropertyType, NamingContextMock.Object);
 
 		// Assert
-		typeResult.Should().BeEquivalentTo(expectedClassName);
-		propertyResult.Should().BeEquivalentTo(expectedPropertyName);
+		typeResult.ToString().Should().BeEquivalentTo(expectedClassName);
+		propertyResult.ToString().Should().BeEquivalentTo(expectedPropertyName);
 	}
 
-	public static IEnumerable<object[]> ValidNamingRequests()
-	{
-		yield return new object[] {
-			Names.Use.CamelCase(), "classNameWithMultipleParts", "propertyNameWithMultipleParts"
-		};
-		yield return new object[] {
-			Names.Use.PascalCase(), "ClassNameWithMultipleParts", "PropertyNameWithMultipleParts"
-		};
-		yield return new object[] {
-			Names.Use.LowerCase(), "classnamewithmultipleparts", "propertynamewithmultipleparts"
-		};
-		yield return new object[] {
-			Names.Use.KebabCase(), "class-name-with-multiple-parts", "property-name-with-multiple-parts"
-		};
-		yield return new object[] {
-			Names.Use.SnakeCase(), "class_name_with_multiple_parts", "property_name_with_multiple_parts"
-		};
-
-		yield return new object[] { Names.Equal("Override")(), "Override", "Override" };
-	}
-
-	private sealed class ClassNameWithMultipleParts
+	protected sealed class ClassNameWithMultipleParts
 	{
 		public int PropertyNameWithMultipleParts { get; set; }
+	}
+
+	protected sealed class ClassNameWith_strangeName
+	{
+		public int PropertyNameWith_strangeName { get; set; }
+	}
+	protected sealed class ClassNameWithGeneric<T>
+	{
+		public int Property { get; set; }
 	}
 }

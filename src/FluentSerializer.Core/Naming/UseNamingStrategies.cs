@@ -1,5 +1,6 @@
-using System.Runtime.CompilerServices;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Naming;
 

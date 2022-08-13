@@ -1,4 +1,5 @@
 using FluentSerializer.Core.Configuration;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Core.Services;

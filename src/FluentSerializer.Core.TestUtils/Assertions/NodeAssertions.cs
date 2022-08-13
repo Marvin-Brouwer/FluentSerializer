@@ -1,7 +1,9 @@
 using Ardalis.GuardClauses;
+
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 

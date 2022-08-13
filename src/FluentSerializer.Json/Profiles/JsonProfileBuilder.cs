@@ -1,13 +1,15 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using Ardalis.GuardClauses;
 using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
+
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace FluentSerializer.Json.Profiles;
 

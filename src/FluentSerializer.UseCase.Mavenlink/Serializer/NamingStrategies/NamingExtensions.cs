@@ -5,11 +5,11 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 
 public static class ConverterExtensions
 {
-	private static readonly INamingStrategy RequestEntityNameStrategy = new RequestEntityNameStrategy();
+	private static readonly INamingStrategy RequestEntityNameStrategy = new RequestEntityNamingStrategy();
 	private static readonly INamingStrategy ReferenceNamingStrategy = new ReferenceNamingStrategy();
 	private static readonly INamingStrategy ReferenceGroupNamingStrategy = new ReferenceGroupNamingStrategy();
 
-	/// <inheritdoc cref="NamingStrategies.RequestEntityNameStrategy"/>
+	/// <inheritdoc cref="NamingStrategies.RequestEntityNamingStrategy"/>
 	public static INamingStrategy RequestEntityName(this IUseNamingStrategies _) => RequestEntityNameStrategy;
 
 	/// <inheritdoc cref="NamingStrategies.ReferenceNamingStrategy"/>

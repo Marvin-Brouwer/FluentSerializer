@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Xml.Converting.Converters;
+
 using System;
 
 namespace FluentSerializer.Xml.Tests.ObjectMother;

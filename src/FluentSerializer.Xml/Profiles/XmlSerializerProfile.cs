@@ -1,12 +1,13 @@
-using FluentSerializer.Core.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Dirty;
+using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Profiles;
 using FluentSerializer.Xml.Configuration;
+
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FluentSerializer.Xml.Profiles;
 
@@ -27,7 +28,7 @@ public abstract class XmlSerializerProfile : ISerializerProfile<XmlSerializerCon
 	/// </remarks>
 	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
 	 System.Diagnostics.DebuggerHidden]
-	IReadOnlyList<IClassMap> ISerializerProfile<XmlSerializerConfiguration>.Configure(in XmlSerializerConfiguration configuration)
+	IReadOnlyCollection<IClassMap> ISerializerProfile<XmlSerializerConfiguration>.Configure(in XmlSerializerConfiguration configuration)
 	{
 		_configuration = configuration;
 		Configure();

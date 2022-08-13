@@ -1,4 +1,5 @@
 using FluentSerializer.Core.BenchmarkUtils.Runner;
+
 using System;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;

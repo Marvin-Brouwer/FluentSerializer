@@ -1,5 +1,7 @@
+using FluentSerializer.Core.BenchmarkUtils.Configuration;
 using FluentSerializer.Core.BenchmarkUtils.Runner;
 using FluentSerializer.Xml.Benchmark.Data;
+
 using System;
 using System.Linq;
 
@@ -17,11 +19,13 @@ public static class Program
 #endif
 	public static void Main(params string[] arguments)
 	{
-		StaticTestRunner.RequireElevatedPermissions();
+		StaticTestRunner.RequireElevatedPermissions(in arguments);
 
 		if (!arguments.Contains("--no-generate"))
 			XmlDataCollection.Default.GenerateTestCaseFiles();
 
-		StaticTestRunner.Run(typeof(Program).Assembly, arguments, "xml-serializer");
+		StaticTestRunner.Run(
+			typeof(Program).Assembly, in arguments,
+			"xml-serializer", new ValueSizeTestOrderer());
 	}
 }

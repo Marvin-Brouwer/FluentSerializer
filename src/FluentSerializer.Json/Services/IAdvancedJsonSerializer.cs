@@ -1,6 +1,7 @@
-using System;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Json.DataNodes;
+
+using System;
 
 namespace FluentSerializer.Json.Services;
 

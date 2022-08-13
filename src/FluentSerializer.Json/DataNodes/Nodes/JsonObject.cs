@@ -1,9 +1,12 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -17,9 +20,10 @@ public readonly partial struct JsonObject : IJsonObject
 	public string Name => ObjectName;
 
 	private readonly int? _lastPropertyIndex;
-	private readonly List<IJsonNode> _children;
+	private readonly IReadOnlyList<IJsonNode> _children;
+
 	/// <inheritdoc />
-	public IReadOnlyList<IJsonNode> Children => _children ?? new List<IJsonNode>();
+	public IReadOnlyList<IJsonNode> Children => _children ?? Array.Empty<IJsonNode>();
 
 	/// <inheritdoc cref="object"/>
 	/// <remarks>
@@ -33,18 +37,28 @@ public readonly partial struct JsonObject : IJsonObject
 		    || properties.Equals(Enumerable.Empty<IJsonObjectContent>())
 		    || properties.Equals(Array.Empty<IJsonObjectContent>()))
 		{
-			_children = new List<IJsonNode>(0);
+			_children = Array.Empty<IJsonNode>();
 		}
 		else
 		{
 			var currentPropertyIndex = 0;
-			_children = new List<IJsonNode>();
+			var children = properties switch
+			{
+				ICollection<IJsonObjectContent> { Count: > 0 } collection =>
+					new ReadOnlyCollectionBuilder<IJsonNode>(collection.Count),
+				IReadOnlyCollection<IJsonObjectContent> { Count: > 0 } collection =>
+					new ReadOnlyCollectionBuilder<IJsonNode>(collection.Count),
+				_ => new ReadOnlyCollectionBuilder<IJsonNode>()
+			};
+
 			foreach (var property in properties)
 			{
-				_children.Add(property);
+				children.Add(property);
 				if (property is not IJsonComment) _lastPropertyIndex = currentPropertyIndex;
 				currentPropertyIndex++;
 			}
+
+			_children = children.ToReadOnlyCollection();
 		}
 	}
 

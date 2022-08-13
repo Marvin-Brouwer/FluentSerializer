@@ -5,7 +5,7 @@ namespace FluentSerializer.Core.Constants;
 /// <summary>
 /// Constant class for usage in Serializer factories
 /// </summary>
-public struct FactoryConstants
+public static class FactoryConstants
 {
 	/// <summary>
 	/// The default <see cref="DefaultObjectPoolProvider"/> to use when none are configured

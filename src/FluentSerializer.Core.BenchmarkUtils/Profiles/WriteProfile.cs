@@ -1,10 +1,12 @@
-using System;
-using System.IO;
-using System.Text;
 using BenchmarkDotNet.Attributes;
+
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Helpers;
+
+using System;
+using System.IO;
+using System.Text;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 

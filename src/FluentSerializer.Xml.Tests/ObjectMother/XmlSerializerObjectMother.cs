@@ -1,8 +1,10 @@
+using FluentSerializer.Core.Context;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+
 using Moq;
+
 using System;
-using FluentSerializer.Core.Context;
 
 namespace FluentSerializer.Xml.Tests.ObjectMother;
 

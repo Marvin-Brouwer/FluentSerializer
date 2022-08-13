@@ -1,6 +1,6 @@
-using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 

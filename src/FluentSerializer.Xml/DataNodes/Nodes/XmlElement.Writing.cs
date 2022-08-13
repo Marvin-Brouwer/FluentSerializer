@@ -1,7 +1,6 @@
 using FluentSerializer.Core.Extensions;
-using FluentSerializer.Xml.Configuration;
-using System.Linq;
 using FluentSerializer.Core.Text;
+using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -15,18 +14,18 @@ public readonly partial struct XmlElement
 	{
 		const char spacer = ' ';
 
-		var children = Children;
+		var childCount = _attributes.Count + _children.Count;
 		var childIndent = format ? indent + 1 : 0;
 
-		if (!writeNull && !children.Any()) return stringBuilder;
-		if (!writeNull && children[0] is IXmlText text
+		if (!writeNull && childCount == 0) return stringBuilder;
+		if (!writeNull && _children[0] is IXmlText text
 			&& string.IsNullOrEmpty(text.Value)) return stringBuilder;
 
 		stringBuilder
 			.Append(XmlCharacterConstants.TagStartCharacter)
 			.Append(Name);
 
-		if (!children.Any()) return stringBuilder
+		if (childCount == 0) return stringBuilder
 			.Append(spacer)
 			.Append(XmlCharacterConstants.TagTerminationCharacter)
 			.Append(XmlCharacterConstants.TagEndCharacter);

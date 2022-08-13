@@ -1,10 +1,13 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -78,7 +81,6 @@ public sealed class XmlCommentTests
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange
-		var expected = Comment(string.Empty);
 		var input = $"<!-- {XmlCommentValue}";
 
 		// Act

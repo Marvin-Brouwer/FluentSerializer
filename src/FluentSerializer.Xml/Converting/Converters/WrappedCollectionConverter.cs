@@ -1,12 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 
 using static FluentSerializer.Xml.XmlBuilder;
 

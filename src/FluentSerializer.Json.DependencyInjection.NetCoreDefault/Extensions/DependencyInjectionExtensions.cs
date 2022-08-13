@@ -3,8 +3,10 @@ using FluentSerializer.Core.Factories;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Extensions;
 using FluentSerializer.Json.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Reflection;
 

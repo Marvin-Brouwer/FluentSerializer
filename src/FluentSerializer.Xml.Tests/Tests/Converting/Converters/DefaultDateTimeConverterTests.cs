@@ -1,4 +1,5 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
@@ -7,10 +8,13 @@ using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+
 using Moq;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;

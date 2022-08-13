@@ -1,9 +1,11 @@
-using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
-using FluentSerializer.Core.DataNodes;
+
 using FluentSerializer.Core.BenchmarkUtils.Profiles;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
+using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Xml.Benchmark.Data;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.Xml.Benchmark.Profiles;
 

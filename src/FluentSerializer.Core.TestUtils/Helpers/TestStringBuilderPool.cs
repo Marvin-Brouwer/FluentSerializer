@@ -1,11 +1,13 @@
 using FluentSerializer.Core.Extensions;
-using Microsoft.Extensions.ObjectPool;
 using FluentSerializer.Core.Text;
+
+using Microsoft.Extensions.ObjectPool;
+
 using System.Text;
 
 namespace FluentSerializer.Core.TestUtils.Helpers;
 
-public readonly struct TestStringBuilderPool
+public static class TestStringBuilderPool
 {
 	private static readonly ObjectPoolProvider ObjectPoolProvider = new DefaultObjectPoolProvider();
 

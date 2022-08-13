@@ -2,7 +2,9 @@ using FluentSerializer.Core.Factories;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Profiles;
 using FluentSerializer.Xml.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

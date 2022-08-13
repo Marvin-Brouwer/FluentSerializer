@@ -1,15 +1,17 @@
-using System;
-using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Naming;
 
 /// <summary>
 /// Names configuration selector
 /// </summary>
-public readonly struct Names
+public static class Names
 {
 	/// <summary>
 	/// All names equal the explicit <paramref name="name"/> value for this mapping

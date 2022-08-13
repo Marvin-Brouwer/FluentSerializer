@@ -2,7 +2,9 @@ using FluentSerializer.Core.Factories;
 using FluentSerializer.Json.Configuration;
 using FluentSerializer.Json.Profiles;
 using FluentSerializer.Json.Services;
+
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

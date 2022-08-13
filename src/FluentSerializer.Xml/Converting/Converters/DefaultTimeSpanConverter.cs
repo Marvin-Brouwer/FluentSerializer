@@ -1,6 +1,7 @@
+using FluentSerializer.Xml.Converting.Converters.Base;
+
 using System;
 using System.Globalization;
-using FluentSerializer.Xml.Converting.Converters.Base;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 

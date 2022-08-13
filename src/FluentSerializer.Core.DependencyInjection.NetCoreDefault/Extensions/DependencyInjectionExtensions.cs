@@ -1,8 +1,9 @@
 using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Mapping;
 using FluentSerializer.Core.Profiles;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
+
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -44,22 +45,13 @@ public static class DependencyInjectionExtensions
 	/// Register <typeparamref name="TSerializerProfile"/>s found in <paramref name="assembly"/>. <br />
 	/// If there already are <typeparamref name="TSerializerProfile"/>s present, they will be appended to.
 	/// </summary>
-	[Obsolete(ObsolescenseMessage, false)]
+	[Obsolete(ObsolescenseMessage, true)]
 	public static IServiceCollection AddFluentSerializerProfiles<TSerializerProfile, TConfiguration>(
 		this IServiceCollection serviceCollection, in Assembly assembly, in TConfiguration configuration)
 		where TSerializerProfile : class, ISerializerProfile<TConfiguration>
 		where TConfiguration : SerializerConfiguration
 	{
-		var existingMappings = serviceCollection.FindRegistrationFor<IClassMapScanList<TSerializerProfile, TConfiguration>>();
-		var mappings = ProfileScanner.FindClassMapsInAssembly<TSerializerProfile, TConfiguration>(in assembly, configuration);
-
-		if (existingMappings is null)
-			serviceCollection.AddScoped(_ => mappings);
-		else
-			serviceCollection.AddScoped<IClassMapScanList<TSerializerProfile, TConfiguration>>(_ =>
-				((ClassMapScanList<TSerializerProfile, TConfiguration>)existingMappings).Append(mappings));
-
-		return serviceCollection;
+		throw new NotSupportedException("This is no longer supported, please update all DI packages.");
 	}
 
 	[Obsolete(ObsolescenseMessage, false)]

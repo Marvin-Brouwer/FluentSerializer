@@ -1,10 +1,11 @@
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.Naming.NamingStrategies;
 using FluentSerializer.Core.Services;
+
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Converting;
-using FluentSerializer.Core.Naming.NamingStrategies;
-using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Core.Mapping;
 

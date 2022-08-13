@@ -1,8 +1,9 @@
 #if NET5_0_OR_GREATER
-using System;
-using System.Globalization;
 using FluentSerializer.Core.Constants;
 using FluentSerializer.Xml.Converting.Converters.Base;
+
+using System;
+using System.Globalization;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 

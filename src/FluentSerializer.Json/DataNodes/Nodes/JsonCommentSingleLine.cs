@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+
 using System.Diagnostics;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;

@@ -1,8 +1,9 @@
 using FluentSerializer.Core.Configuration;
+using FluentSerializer.Core.Mapping;
+
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using FluentSerializer.Core.Mapping;
 
 namespace FluentSerializer.Core.SerializerException;
 

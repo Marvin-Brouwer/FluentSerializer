@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Constants;
+
 using System.Text;
 
 namespace FluentSerializer.Core.TestUtils.Helpers;

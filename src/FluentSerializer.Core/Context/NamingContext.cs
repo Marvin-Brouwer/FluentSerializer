@@ -1,19 +1,20 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Mapping;
+using FluentSerializer.Core.Naming.NamingStrategies;
+
 using System;
 using System.Reflection;
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Naming.NamingStrategies;
 
 namespace FluentSerializer.Core.Context;
 
 /// <inheritdoc cref="INamingContext" />
 public class NamingContext : INamingContext
 {
-	private readonly IScanList<(Type type, SerializerDirection direction), IClassMap> _classMappings;
+	private readonly IClassMapCollection _classMappings;
 
 	/// <inheritdoc cref="NamingContext" />
-	public NamingContext(in IScanList<(Type type, SerializerDirection direction), IClassMap> classMappings)
+	public NamingContext(in IClassMapCollection classMappings)
 	{
 		_classMappings = classMappings;
 	}
@@ -24,19 +25,19 @@ public class NamingContext : INamingContext
 		Guard.Against.Null(classType, nameof(classType));
 		Guard.Against.Null(property, nameof(property));
 
-		var classMap = _classMappings.Scan((classType, SerializerDirection.Both));
+		var classMap = _classMappings.GetClassMapFor(in classType);
 		if (classMap is null) return null;
 
-		return FindNamingStrategy(classMap.PropertyMaps, in property);
+		return classMap.GetPropertyMapFor(in property)?.NamingStrategy;
 	}
 
 	/// <inheritdoc cref="INamingContext" />
-	public static INamingStrategy? FindNamingStrategy(in IScanList<PropertyInfo, IPropertyMap> propertyMapping, in PropertyInfo property)
+	public static INamingStrategy? FindNamingStrategy(in IPropertyMapCollection propertyMapping, in PropertyInfo property)
 	{
 		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
 		Guard.Against.Null(property, nameof(property));
 
-		return propertyMapping.Scan(property)?.NamingStrategy;
+		return propertyMapping.GetPropertyMapFor(in property)?.NamingStrategy;
 	}
 
 	/// <inheritdoc />
@@ -44,6 +45,6 @@ public class NamingContext : INamingContext
 	{
 		Guard.Against.Null(type, nameof(type));
 
-		return _classMappings.Scan((type, SerializerDirection.Both))?.NamingStrategy;
+		return _classMappings.GetClassMapFor(type)?.NamingStrategy;
 	}
 }

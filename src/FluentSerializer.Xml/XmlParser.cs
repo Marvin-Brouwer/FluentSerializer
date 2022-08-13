@@ -1,6 +1,8 @@
 using Ardalis.GuardClauses;
+
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
 using System;
 
 namespace FluentSerializer.Xml;
@@ -8,7 +10,7 @@ namespace FluentSerializer.Xml;
 /// <summary>
 /// XML parsing utility class
 /// </summary>
-public readonly struct XmlParser
+public static class XmlParser
 {
 	/// <summary>
 	/// Parse a string value to an XML object tree

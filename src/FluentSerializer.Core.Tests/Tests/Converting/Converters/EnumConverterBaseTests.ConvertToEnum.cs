@@ -1,5 +1,7 @@
 using FluentAssertions;
+
 using FluentSerializer.Core.Converting.Converters;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Converting.Converters;
