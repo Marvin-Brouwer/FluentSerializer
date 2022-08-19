@@ -65,18 +65,21 @@ jobs:
     # 🧰 Install SonarCloud scanner
     ###
     - name: 🧰 Install SonarCloud scanner
-      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       shell: pwsh
-      run: |
-        New-Item -Path ./.sonar/scanner -ItemType Directory
+      run: |-
+        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scannery')
         dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
     ###
     # 🧰 Initialize SonarCloud scanner
     ###
     - name: 🧰 Initialize SonarCloud scanner
       shell: pwsh
-      run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"Marvin-Brouwer_FluentSerializer" /o:"marvin-brouwer" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+      run: >-
+        ./.sonar/scanner/dotnet-sonarscanner begin
+        /k:"Marvin-Brouwer_FluentSerializer"
+        /o:"marvin-brouwer"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        /d:sonar.host.url="https://sonarcloud.io"
     ###
     # 🧰 Initialize CodeQL
     #
@@ -162,6 +165,17 @@ jobs:
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
     ###
+    # 🗃 Publish 'SonarCloud' artifacts
+    ###
+    - name: 🗃 Publish 'SonarCloud' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: sonar-cloud
+        path: |
+          ./.sonarqube
+        retention-days: 1
+    ###
     # 🗃 Publish 'CodeQL' artifacts
     ###
     - name: 🗃 Publish 'CodeQL' artifacts
@@ -217,7 +231,7 @@ jobs:
     - name: 🧰 Install SonarCloud scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       shell: pwsh
-      run: |
+      run: |-
         New-Item -Path ./.sonar/scanner -ItemType Directory
         dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
     ###
@@ -258,6 +272,14 @@ jobs:
         name: library-binaries
         path: ./src
     ###
+    # 🗃 Restore 'sonar-cloud'
+    ###
+    - name: 🗃 Restore 'sonar-cloud'
+      uses: actions/download-artifact@v3
+      with:
+        name: sonar-cloud
+        path: ./.sonarqube
+    ###
     # 🗃 Restore 'github-codeql'
     ###
     - name: 🗃 Restore 'github-codeql'
@@ -270,8 +292,9 @@ jobs:
     ###
     - name: 🔬 Perform SonarCloud Analysis
       shell: pwsh
-      run: |
-        .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      run: >-
+        ./.sonar/scanner/dotnet-sonarscanner end
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     ###
     # 🔬 Perform CodeQL Analysis
     ###
