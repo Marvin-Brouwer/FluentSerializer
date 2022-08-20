@@ -15,6 +15,12 @@
 		"editor.trimAutoWhitespace": false,
 		"editor.renderWhitespace": "all"
 	},
+	"[yaml]": {
+		"editor.insertSpaces": true,
+		"editor.detectIndentation": true,
+		"editor.renderWhitespace": "all",
+		"editor.tabSize": 2
+	},
 	"markdownlint.config": {
 		"no-inline-html": false,
 		"no-hard-tabs": false,
