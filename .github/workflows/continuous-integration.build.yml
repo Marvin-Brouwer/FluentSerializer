@@ -78,7 +78,8 @@ jobs:
         /o:"marvin-brouwer"
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         /d:sonar.host.url="https://sonarcloud.io"
-        /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/"
+        /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
+        /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
     ###
     # 🧰 Initialize CodeQL
     #
