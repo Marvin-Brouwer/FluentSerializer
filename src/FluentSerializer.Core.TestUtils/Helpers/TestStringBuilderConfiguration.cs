@@ -7,7 +7,10 @@ namespace FluentSerializer.Core.TestUtils.Helpers;
 
 internal readonly struct TestStringBuilderConfiguration : ITextConfiguration
 {
-	internal static TestStringBuilderConfiguration Default = new();
+
+#pragma warning disable CS0649
+	internal static TestStringBuilderConfiguration Default;
+#pragma warning restore CS0649
 
 	public int StringBuilderInitialCapacity => 100;
 	public int StringBuilderMaximumRetainedCapacity => 4096;

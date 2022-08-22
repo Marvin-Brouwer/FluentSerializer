@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentSerializer.Core.Converting.Converters;
 
 using System;
+using System.Globalization;
 
 using Xunit;
 
@@ -89,13 +90,13 @@ public sealed partial class EnumConverterBaseTests
 		var result4 = sut.ConvertToString(TestEnum.MemberWithEnumMemberAndDescription, typeof(TestEnum));
 
 		// Assert
-		result1!.Value.value.Should().BeEquivalentTo(MemberWithDescriptionValue.ToString());
+		result1!.Value.value.Should().BeEquivalentTo(MemberWithDescriptionValue.ToString(CultureInfo.InvariantCulture));
 		result1!.Value.isNumeric.Should().BeTrue();
-		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString());
+		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString(CultureInfo.InvariantCulture));
 		result2!.Value.isNumeric.Should().BeTrue();
-		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString());
+		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString(CultureInfo.InvariantCulture));
 		result3!.Value.isNumeric.Should().BeTrue();
-		result4!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberAndDescriptionValue.ToString());
+		result4!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberAndDescriptionValue.ToString(CultureInfo.InvariantCulture));
 		result4!.Value.isNumeric.Should().BeTrue();
 	}
 
@@ -162,11 +163,11 @@ public sealed partial class EnumConverterBaseTests
 		var result5 = sut.ConvertToString(TestEnum.MemberWithEnumMemberAndDescription, typeof(TestEnum));
 
 		// Assert
-		result1!.Value.value.Should().BeEquivalentTo(MemberWithDescriptionValue.ToString());
+		result1!.Value.value.Should().BeEquivalentTo(MemberWithDescriptionValue.ToString(CultureInfo.InvariantCulture));
 		result1!.Value.isNumeric.Should().BeTrue();
-		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString());
+		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString(CultureInfo.InvariantCulture));
 		result2!.Value.isNumeric.Should().BeTrue();
-		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString());
+		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString(CultureInfo.InvariantCulture));
 		result3!.Value.isNumeric.Should().BeTrue();
 		result4!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberDataValue);
 		result4!.Value.isNumeric.Should().BeFalse();
@@ -191,11 +192,11 @@ public sealed partial class EnumConverterBaseTests
 		// Assert
 		result1!.Value.value.Should().BeEquivalentTo(MemberWithDescriptionDataValue);
 		result1!.Value.isNumeric.Should().BeFalse();
-		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString());
+		result2!.Value.value.Should().BeEquivalentTo(MemberWithoutDescriptionOrEnumMemberValue.ToString(CultureInfo.InvariantCulture));
 		result2!.Value.isNumeric.Should().BeTrue();
-		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString());
+		result3!.Value.value.Should().BeEquivalentTo(MemberWithExplicitValueValue.ToString(CultureInfo.InvariantCulture));
 		result3!.Value.isNumeric.Should().BeTrue();
-		result4!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberValue.ToString());
+		result4!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberValue.ToString(CultureInfo.InvariantCulture));
 		result4!.Value.isNumeric.Should().BeTrue();
 		result5!.Value.value.Should().BeEquivalentTo(MemberWithEnumMemberAndDescriptionDataValueDescription);
 		result5!.Value.isNumeric.Should().BeFalse();
