@@ -1,6 +1,7 @@
 using FluentSerializer.Core.BenchmarkUtils.Runner;
 
 using System;
+using System.Globalization;
 
 namespace FluentSerializer.Core.BenchmarkUtils.TestData;
 
@@ -49,7 +50,7 @@ public readonly record struct TestCase<TData>(Func<TData> GetData, int Count, lo
 		}
 		else
 		{
-			return SizeInBytes.ToString("0 B"); // Byte
+			return SizeInBytes.ToString("0 B", CultureInfo.InvariantCulture); // Byte
 		}
 		// Divide by 1024 to get fractional value
 		readable /= 1024;

@@ -41,9 +41,9 @@ public interface ISerializerContext : ISerializerCoreContext, INamingContext
 	/// Find the <see cref="INamingStrategy"/>  for any property of the current <see cref="ClassType"/> if registered
 	/// This can be useful when unpacking collections to a different data structure
 	/// </summary>
-	/// <param name="property"></param>
+	/// <param name="propertyInfo"></param>
 	/// <returns></returns>
-	INamingStrategy? FindNamingStrategy(in PropertyInfo property);
+	INamingStrategy? FindNamingStrategy(in PropertyInfo propertyInfo);
 }
 
 /// <summary>

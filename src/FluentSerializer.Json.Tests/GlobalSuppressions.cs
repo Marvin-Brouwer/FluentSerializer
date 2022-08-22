@@ -5,5 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Performance", "CA1822:Mark members as static",
-	Justification = "BenchmarkDotNet", Scope = "module")]
+[assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+	Justification = "Underscores are common in test method naming", Scope = "module")]

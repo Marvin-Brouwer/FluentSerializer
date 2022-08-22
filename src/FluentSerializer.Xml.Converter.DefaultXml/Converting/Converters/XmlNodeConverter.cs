@@ -8,6 +8,8 @@ using System;
 
 namespace FluentSerializer.Xml.Converter.DefaultXml.Converting.Converters;
 
+#pragma warning disable CA1036 // Override methods on comparable types
+
 /// <summary>
 /// Converts any raw <see cref="IXmlNode"/>
 /// </summary>

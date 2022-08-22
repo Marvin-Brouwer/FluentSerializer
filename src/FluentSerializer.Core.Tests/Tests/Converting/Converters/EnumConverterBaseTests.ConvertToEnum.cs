@@ -174,7 +174,7 @@ public sealed partial class EnumConverterBaseTests
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
+		var result3 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(CultureInfo.InvariantCulture), typeof(TestEnum));
 		var result4 = sut.ConvertToEnum(MemberWithExplicitValueName, typeof(TestEnum));
 
 		// Assert
@@ -195,7 +195,7 @@ public sealed partial class EnumConverterBaseTests
 		var result1 = sut.ConvertToEnum(MemberWithEnumMemberDataValue, typeof(TestEnum));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestEnum));
 		var result3 = sut.ConvertToEnum(MemberWithDescriptionName, typeof(TestEnum));
-		var result4 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(), typeof(TestEnum));
+		var result4 = sut.ConvertToEnum(MemberWithExplicitValueValue.ToString(CultureInfo.InvariantCulture), typeof(TestEnum));
 		var result5 = sut.ConvertToEnum(MemberWithEnumMemberAndDescriptionDataValueMember, typeof(TestEnum));
 
 		// Assert

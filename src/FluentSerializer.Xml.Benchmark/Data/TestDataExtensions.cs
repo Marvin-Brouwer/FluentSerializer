@@ -2,6 +2,7 @@ using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.DataNodes;
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -29,7 +30,7 @@ public static class TestDataExtensions
 			Attribute("type", house.Type),
 			Element("Address",
 				Element("street", Text(house.StreetName)),
-				Element("number", Text(house.HouseNumber.ToString())),
+				Element("number", Text(house.HouseNumber.ToString(CultureInfo.InvariantCulture))),
 				Element("city", Text(house.ZipCode)),
 				Element("zipCode", Text(house.ZipCode)),
 				Element("country", Text(house.Country)),

@@ -8,6 +8,7 @@ using FluentSerializer.UseCase.Mavenlink.Models;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
 
 using System;
+using System.Globalization;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 
@@ -79,7 +80,7 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 
 			if (context.PropertyType == typeof(string)) return rawValue.Value![1..^1];
 			
-			return Convert.ChangeType(customFieldValue.Value, context.PropertyType);
+			return Convert.ChangeType(customFieldValue.Value, context.PropertyType, CultureInfo.CurrentCulture);
 		}
 
 		return default;

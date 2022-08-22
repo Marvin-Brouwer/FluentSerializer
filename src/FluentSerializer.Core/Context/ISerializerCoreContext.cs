@@ -64,7 +64,8 @@ public interface ISerializerCoreContext<out TDataNode> : ISerializerCoreContext 
 	TDataNode RootNode { get; }
 	
 	/// <inheritdoc cref="ISerializerCoreContext.WithPathSegment(in PropertyInfo)"/>
-	new ISerializerCoreContext<TDataNode> WithPathSegment(in PropertyInfo property);
+	new ISerializerCoreContext<TDataNode> WithPathSegment(in PropertyInfo propertyInfo);
+
 	/// <inheritdoc cref="ISerializerCoreContext.WithPathSegment(in PropertyInfo)"/>
 	new ISerializerCoreContext<TDataNode> WithPathSegment(in Type type);
 }

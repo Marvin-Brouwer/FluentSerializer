@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.DataNodes;
 
 using System;
@@ -29,7 +30,7 @@ public interface IConverter<TSerialContainer, TDataNode> : IConverter
 /// <summary>
 /// A service implementation responsible for converting Text to and from a specific datatype
 /// </summary>
-public interface IConverter : IComparable
+public interface IConverter : IComparable<IConverter>
 {
 	/// <summary>
 	/// Test whether this converter can convert <paramref name="targetType"/> 
@@ -50,11 +51,51 @@ public interface IConverter : IComparable
 	/// </summary>
 	int ConverterHashCode { get; }
 
-	int IComparable.CompareTo(object? obj)
+	int IComparable<IConverter>.CompareTo(IConverter? obj)
 	{
 		if (obj is null) return 0;
-		if (obj is not IConverter converter) throw new NotSupportedException("Comparing is only supported with other IConverters");
 
-		return converter.ConverterHashCode;
+		return obj.ConverterHashCode;
+	}
+
+
+	/// <inheritdoc cref="object.Equals(object?)"/>
+	public bool Equals(object obj)
+	{
+		if (ReferenceEquals(this, obj))
+		{
+			return true;
+		}
+
+		if (obj is null)
+		{
+			return false;
+		}
+
+		throw new NotImplementedException();
+	}
+
+	/// <inheritdoc />
+	public static bool operator <(IConverter left, IConverter right)
+	{
+		return left is null ? right is not null : left.CompareTo(right) < 0;
+	}
+
+	/// <inheritdoc />
+	public static bool operator <=(IConverter left, IConverter right)
+	{
+		return left is null || left.CompareTo(right) <= 0;
+	}
+
+	/// <inheritdoc />
+	public static bool operator >(IConverter left, IConverter right)
+	{
+		return left is not null && left.CompareTo(right) > 0;
+	}
+
+	/// <inheritdoc />
+	public static bool operator >=(IConverter left, IConverter right)
+	{
+		return left is null ? right is null : left.CompareTo(right) >= 0;
 	}
 }

@@ -3,6 +3,7 @@ using FluentSerializer.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -104,9 +105,9 @@ public abstract class EnumConverterBase
 	private static (string value, bool isNumeric) GetEnumUnderlyingValue(object value)
 	{
 		var underlyingType = Enum.GetUnderlyingType(value.GetType());
-		var numberValue = Convert.ChangeType(value, underlyingType);
+		var numberValue = Convert.ChangeType(value, underlyingType, CultureInfo.CurrentCulture);
 
-		return (Convert.ToString(numberValue)!, true);
+		return (Convert.ToString(numberValue, CultureInfo.CurrentCulture)!, true);
 	}
 
 	private static string GetEnumNameValue(in object value)

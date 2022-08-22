@@ -69,7 +69,7 @@ public class SerializerContext : ISerializerContext
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public INamingStrategy? FindNamingStrategy(in PropertyInfo property) => NamingContext.FindNamingStrategy(in _propertyMappings, property);
+	public INamingStrategy? FindNamingStrategy(in PropertyInfo propertyInfo) => NamingContext.FindNamingStrategy(in _propertyMappings, propertyInfo);
 
 	/// <inheritdoc />
 #if NET6_0_OR_GREATER
@@ -141,7 +141,7 @@ public sealed class SerializerContext<TSerialContainer> : SerializerContext, ISe
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo property) => _coreContext.WithPathSegment(property);
+	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo propertyInfo) => _coreContext.WithPathSegment(propertyInfo);
 
 	/// <inheritdoc />
 #if NET6_0_OR_GREATER

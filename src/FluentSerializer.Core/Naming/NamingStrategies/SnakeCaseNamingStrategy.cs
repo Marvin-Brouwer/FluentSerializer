@@ -16,7 +16,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public sealed class SnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 {
 	/// <inheritdoc />
-	protected override ReadOnlySpan<char> GetName(in string name)
+	protected override ReadOnlySpan<char> GetName(string name)
 	{
 		Span<char> characterSpan = stackalloc char[name.Length *2];
 

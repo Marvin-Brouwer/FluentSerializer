@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Json.Converting;
@@ -38,6 +40,6 @@ internal sealed class MavenlinkResponseMetaDataConverter : IJsonConverter
 		var stringValue = (property?.Value as IJsonValue)?.Value;
 		if (stringValue is null) return default;
 
-		return int.Parse(stringValue);
+		return int.Parse(stringValue, CultureInfo.CurrentCulture);
 	}
 }

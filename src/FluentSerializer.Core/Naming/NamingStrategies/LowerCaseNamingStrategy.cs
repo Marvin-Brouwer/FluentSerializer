@@ -20,7 +20,7 @@ public readonly struct LowerCaseNamingStrategy : INamingStrategy
 	/// <inheritdoc />
 	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
 
-	private ReadOnlySpan<char> GetName(in string name)
+	private ReadOnlySpan<char> GetName(string name)
 	{
 		var genericIndex = name.IndexOf(NamingConstants.GenericTypeMarker);
 		if (genericIndex == -1) return name.ToLowerInvariant();

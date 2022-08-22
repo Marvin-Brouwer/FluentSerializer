@@ -102,12 +102,12 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 
 
 	/// <inheritdoc />
-	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo property)
+	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
 
-		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(propertyTag, property.Name));
+		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
 
 	/// <inheritdoc />

@@ -13,6 +13,8 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 
+#pragma warning disable CA1036 // Override methods on comparable types
+
 /// <summary>
 /// Converter to support the OpenAir date structure. <br />
 /// <see href="https://www.openair.com/download/OpenAirXMLAPIGuide.pdf#page=87&amp;zoom=100,120,822" />
