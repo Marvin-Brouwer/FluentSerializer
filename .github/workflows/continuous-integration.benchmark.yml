@@ -93,7 +93,7 @@ jobs:
         libraryName="${{ inputs.libraryName }}";
         libraryKey="${libraryName,,}";
         echo "libraryKey=${libraryKey}" >>${GITHUB_ENV};
-        cat ./${libraryKey}-benchmark-netcoreapp_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./${libraryKey}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
         cat ./${libraryKey}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
     ###
