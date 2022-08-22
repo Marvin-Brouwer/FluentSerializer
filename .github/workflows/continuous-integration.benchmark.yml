@@ -81,7 +81,7 @@ jobs:
       run: |-
         sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
-        sudo mv ./core-*.md ${{github.workspace}}/benchmark-results/
+        sudo mv ./${{ env.libraryKey }}-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
     # 📈 Report benchmarks
