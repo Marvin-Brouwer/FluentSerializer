@@ -11,7 +11,7 @@ using System.Text;
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 
 [MemoryDiagnoser]
-public abstract class WriteProfile
+public abstract class WriteProfile : IDisposable
 {
 	private MemoryStream? _writeStream;
 	private StreamWriter? _streamWriter;
@@ -33,20 +33,22 @@ public abstract class WriteProfile
 		GC.WaitForPendingFinalizers();
 	}
 
-	[GlobalCleanup]
-	public virtual void GlobalCleanup()
-	{
-		_streamWriter?.Dispose();
-		_writeStream?.Dispose();
-		_streamWriter = null;
-		_writeStream = null;
-	}
-
 	public string Write(TestCase<IDataNode> testCase)
 	{
 		testCase.GetData().WriteTo(TestStringBuilderPool.Default, true);
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());
+	}
+
+	[GlobalCleanup]
+	public void Dispose()
+	{
+		GC.SuppressFinalize(this);
+
+		_streamWriter?.Dispose();
+		_writeStream?.Dispose();
+		_streamWriter = null;
+		_writeStream = null;
 	}
 }

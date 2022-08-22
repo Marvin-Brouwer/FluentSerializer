@@ -8,12 +8,12 @@ using System.IO;
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 
 [MemoryDiagnoser]
-public abstract class ReadProfile
+public abstract class ReadProfile : IDisposable
 {
 	private Stream? _textStream;
 	private StreamReader? _reader;
 
-	protected TestCase<Stream> CaseValue;
+	protected TestCase<Stream> CaseValue { get; set; }
 
 	[GlobalSetup]
 	public void GlobalSetup()
@@ -32,14 +32,16 @@ public abstract class ReadProfile
 		GC.WaitForPendingFinalizers();
 	}
 
+	protected StreamReader CaseReader => _reader ?? StreamReader.Null;
+
 	[GlobalCleanup]
-	public void GlobalCleanup()
+	public void Dispose()
 	{
+		GC.SuppressFinalize(this);
+
 		_textStream?.Dispose();
 		_reader?.Dispose();
 		_textStream = null;
 		_reader = null;
 	}
-
-	protected StreamReader CaseReader => _reader ?? StreamReader.Null;
 }
