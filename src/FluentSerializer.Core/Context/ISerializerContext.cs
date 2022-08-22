@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.Context;
 public interface ISerializerContext : ISerializerCoreContext, INamingContext
 {
 	/// <summary>
-	/// The original propertyInfo used to define this mapping
+	/// The original <see cref="PropertyInfo"/> used to define this mapping
 	/// </summary>
 	PropertyInfo Property { get; }
 	/// <summary>

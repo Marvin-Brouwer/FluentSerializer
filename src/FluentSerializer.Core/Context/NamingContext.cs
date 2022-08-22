@@ -20,15 +20,15 @@ public class NamingContext : INamingContext
 	}
 
 	/// <inheritdoc />
-	public INamingStrategy? FindNamingStrategy(in Type classType, in PropertyInfo property)
+	public INamingStrategy? FindNamingStrategy(in Type classType, in PropertyInfo propertyInfo)
 	{
 		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
 
 		var classMap = _classMappings.GetClassMapFor(in classType);
 		if (classMap is null) return null;
 
-		return classMap.GetPropertyMapFor(in property)?.NamingStrategy;
+		return classMap.GetPropertyMapFor(in propertyInfo)?.NamingStrategy;
 	}
 
 	/// <inheritdoc cref="INamingContext" />

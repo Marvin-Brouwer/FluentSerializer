@@ -21,7 +21,7 @@ public readonly struct CustomNamingStrategy : INamingStrategy
 	}
 
 	/// <inheritdoc />
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => _name;
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => _name;
 	/// <inheritdoc />
 	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => _name;
 }

@@ -11,9 +11,9 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public interface INamingStrategy
 {
 	/// <summary>
-	/// Return a valid serializable name value for this <paramref name="property"/>
+	/// Return a valid serializable name value for this <paramref name="propertyInfo"/>
 	/// </summary>
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext);
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext);
 	/// <summary>
 	/// Return a valid serializable name value for this <paramref name="classType"/>
 	/// </summary>

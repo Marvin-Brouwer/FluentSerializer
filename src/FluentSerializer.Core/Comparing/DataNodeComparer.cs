@@ -14,7 +14,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode
 	/// <summary>
 	/// Static default implementation
 	/// </summary>
-	public static readonly DataNodeComparer Default = new();
+	public static readonly DataNodeComparer Default;
 
 
 	/// <inheritdoc />

@@ -45,12 +45,12 @@ public class SerializerCoreContext : ISerializerCoreContext
 	}
 
 	/// <inheritdoc />
-	public ISerializerCoreContext WithPathSegment(in PropertyInfo property)
+	public ISerializerCoreContext WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
 
-		return new SerializerCoreContext(this, string.Concat(propertyTag, property.Name));
+		return new SerializerCoreContext(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
 
 	/// <inheritdoc />
@@ -90,7 +90,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 	}
 
 	/// <inheritdoc />
-	public bool ContainsReference(in object? instance) => instance is null ? false : _referenceCollection.Contains(instance);
+	public bool ContainsReference(in object? instance) => instance is not null && _referenceCollection.Contains(instance);
 }
 
 /// <inheritdoc cref="ISerializerCoreContext{TDataNode}"/>

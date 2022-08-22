@@ -16,14 +16,13 @@ public abstract class EnumConverterBase
 	private static InvalidCastException UnknownEnumFormatException(in string value) => new(
 		$"The value provided '{value}' was not present in the enum");
 	
-	private static NotSupportedException ValueNotFoundException(in Type enumType, in string member) =>
-		new(
-			$"The value '{member}' was not found on enum '{enumType.FullName}'");
+	private static NotSupportedException ValueNotFoundException(in Type enumType, in string member) => new(
+		$"The value '{member}' was not found on enum '{enumType.FullName}'");
 
 	/// <summary>
 	/// Currently configured <inheritdoc cref="EnumFormat"/>
 	/// </summary>
-	protected readonly EnumFormat EnumFormat;
+	protected virtual EnumFormat EnumFormat { get; } = EnumFormat.Default;
 
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
