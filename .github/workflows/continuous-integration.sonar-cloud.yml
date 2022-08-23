@@ -95,7 +95,7 @@ jobs:
       with:
           script: |
               github.actions.cancelWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: context.runId
+                  owner: github.repository.owner,
+                  repo: github.repository.repo,
+                  run_id: github.run_id
               })

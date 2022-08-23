@@ -34,6 +34,10 @@ jobs:
     name: "QA"
     needs: build
     uses: ./.github/workflows/continuous-integration.test.yml
+    with:
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      runId: context.runId
   sonar-cloud:
     name: "QA"
     needs: [test, code-ql]

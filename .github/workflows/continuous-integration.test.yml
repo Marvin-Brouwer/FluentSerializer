@@ -1,5 +1,19 @@
 name: "Continuous integration - Automated testing"
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      owner:
+        description: 'context.repo.owner'
+        required: true
+        type: string
+      repo:
+        description: 'context.repo.repo'
+        required: true
+        type: string
+      runId:
+        description: 'context.runId'
+        required: true
+        type: string
 
 jobs:
   test:
@@ -30,6 +44,8 @@ jobs:
     ###
     - name: 🧰 Setup .NET tools
       run: |-
+        # TODO Temp
+        exit -1;
         dotnet tool install --global dotnet-reportgenerator-globaltool
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
@@ -149,7 +165,7 @@ jobs:
       with:
           script: |
               github.actions.cancelWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: context.runId
+                  owner: input.owner,
+                  repo: input.repo,
+                  run_id: input.runId
               })
