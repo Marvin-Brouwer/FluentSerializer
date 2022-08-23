@@ -28,6 +28,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     ###
+    # 🧰 Setup variables
+    #
+    # Fix implicit variable definitions
+    ###
+    - name: 🧰 Setup variables
+      run: |-
+        libraryName="${{ inputs.libraryName }}";
+        libraryKey="${libraryName,,}";
+        echo "libraryKey=${libraryKey}" >>${GITHUB_ENV};
+    ###
     # 🧰 Install .Net SDKs
     #
     # Configure the pipeline to use the correct .Net sdk versions
@@ -90,11 +100,8 @@ jobs:
     ###
     - name: 📈 Report benchmarks
       run: |-
-        libraryName="${{ inputs.libraryName }}";
-        libraryKey="${libraryName,,}";
-        echo "libraryKey=${libraryKey}" >>${GITHUB_ENV};
-        cat ./${libraryKey}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
-        cat ./${libraryKey}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./${{ env.libraryKey }}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./${{ env.libraryKey }}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
     ###
     # 🗃 Publish 'benchmark-results' artifacts
