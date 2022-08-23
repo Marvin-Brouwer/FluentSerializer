@@ -22,9 +22,21 @@ public class DateTimeOffsetByFormatConverter : SimpleTypeConverter<DateTimeOffse
 	/// </summary>
 	public DateTimeOffsetByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		Guard.Against.Null(cultureInfo, nameof(cultureInfo));
-		Guard.Against.Null(dateTimeStyle, nameof(dateTimeStyle));
+		Guard.Against.NullOrWhiteSpace(format
+#if NETSTANDARD2_1
+			, nameof(format)
+#endif
+		);
+		Guard.Against.Null(cultureInfo
+#if NETSTANDARD2_1
+			, nameof(cultureInfo)
+#endif
+		);
+		Guard.Against.Null(dateTimeStyle
+#if NETSTANDARD2_1
+			, nameof(dateTimeStyle)
+#endif
+		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -49,4 +61,7 @@ public class DateTimeOffsetByFormatConverter : SimpleTypeConverter<DateTimeOffse
 
 	/// <inheritdoc />
 	public override int GetHashCode() => DateTimeOffset.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

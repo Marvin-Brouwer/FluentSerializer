@@ -51,6 +51,6 @@ public interface IUseJsonConverters
 
 	/// <inheritdoc cref="EnumConverter" />
 	IJsonConverter Enum();
-	/// <inheritdoc cref="EnumConverter(in EnumFormat, in bool)" />
-	Func<IJsonConverter> Enum(EnumFormat format, bool writeNumbersAsString = true);
+	/// <inheritdoc cref="EnumConverter(in EnumFormats, in bool)" />
+	Func<IJsonConverter> Enum(EnumFormats format, bool writeNumbersAsString = false);
 }

@@ -50,7 +50,9 @@ public static class NamingExtensions
 	/// </summary>
 	public static void InvalidName(this IGuardClause guard, in string? value, [CallerArgumentExpression("value")] string name = "")
 	{
+#pragma warning disable S3236 // Caller information arguments should not be provided explicitly
 		guard.NullOrWhiteSpace(value, name);
 		guard.InvalidFormat(value, name, NamingConstants.ValidNamePattern);
+#pragma warning restore S3236 // Caller information arguments should not be provided explicitly
 	}
 }

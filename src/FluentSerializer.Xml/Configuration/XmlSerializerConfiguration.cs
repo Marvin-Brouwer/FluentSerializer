@@ -36,7 +36,7 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 		WriteNull = false;
 		DefaultClassNamingStrategy = Names.Use.PascalCase;
 		DefaultPropertyNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new ConfigurationStack<IConverter>
+		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default)
 		{
 			// Built-in converters
 			UseXmlConverters.ConvertibleConverter,

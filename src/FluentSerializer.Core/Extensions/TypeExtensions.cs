@@ -23,7 +23,11 @@ public static class TypeExtensions
 	/// </summary>
 	public static bool EqualsTopLevel(this Type type, in Type typeToEqual)
 	{
-		Guard.Against.Null(typeToEqual, nameof(typeToEqual));
+		Guard.Against.Null(typeToEqual
+#if NETSTANDARD2_1
+			, nameof(typeToEqual)
+#endif
+		);
 
 		if (type.IsAssignableFrom(typeToEqual)) return true;
 		if (!type.IsGenericType) return false;

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 namespace FluentSerializer.Core.Naming;
 
 #pragma warning disable CS0649
+#pragma warning disable S3459 // Unassigned members should be removed
 
 internal readonly struct UseNamingStrategies : IUseNamingStrategies
 {

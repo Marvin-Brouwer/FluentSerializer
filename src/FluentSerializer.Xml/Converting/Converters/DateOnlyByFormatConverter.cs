@@ -22,9 +22,9 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 	/// </summary>
 	public DateOnlyByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		Guard.Against.Null(cultureInfo, nameof(cultureInfo));
-		Guard.Against.Null(dateTimeStyle, nameof(dateTimeStyle));
+		Guard.Against.NullOrWhiteSpace(format);
+		Guard.Against.Null(cultureInfo);
+		Guard.Against.Null(dateTimeStyle);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -39,5 +39,8 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => DateOnly.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

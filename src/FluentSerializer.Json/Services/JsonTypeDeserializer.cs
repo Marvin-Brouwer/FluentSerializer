@@ -25,7 +25,11 @@ public sealed class JsonTypeDeserializer
 	/// <inheritdoc cref="JsonTypeDeserializer" />
 	public JsonTypeDeserializer(in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
+		Guard.Against.Null(classMapCollection
+#if NETSTANDARD2_1
+			, nameof(classMapCollection)
+#endif
+		);
 
 		_classMappings = classMapCollection;
 	}
@@ -36,8 +40,16 @@ public sealed class JsonTypeDeserializer
 	public TModel? DeserializeFromNode<TModel>(in IJsonNode dataObject, in ISerializerCoreContext<IJsonNode> coreContext)
 		where TModel : new()
 	{
-		Guard.Against.Null(dataObject, nameof(dataObject));
-		Guard.Against.Null(coreContext, nameof(coreContext));
+		Guard.Against.Null(dataObject
+#if NETSTANDARD2_1
+			, nameof(dataObject)
+#endif
+		);
+		Guard.Against.Null(coreContext
+#if NETSTANDARD2_1
+			, nameof(coreContext)
+#endif
+		);
 
 		var classType = typeof(TModel);
 		var deserializedInstance = DeserializeFromNode(in dataObject, in classType, in coreContext);
@@ -51,9 +63,21 @@ public sealed class JsonTypeDeserializer
 	/// </summary>
 	public object? DeserializeFromNode(in IJsonNode dataObject, in Type classType, in ISerializerCoreContext<IJsonNode> coreContext)
 	{
-		Guard.Against.Null(dataObject, nameof(dataObject));
-		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(coreContext, nameof(coreContext));
+		Guard.Against.Null(dataObject
+#if NETSTANDARD2_1
+			, nameof(dataObject)
+#endif
+		);
+		Guard.Against.Null(classType
+#if NETSTANDARD2_1
+			, nameof(classType)
+#endif
+		);
+		Guard.Against.Null(coreContext
+#if NETSTANDARD2_1
+			, nameof(coreContext)
+#endif
+		);
 
 		var currentCoreContext = coreContext.WithPathSegment(classType);
 		if (typeof(IEnumerable).IsAssignableFrom(classType))

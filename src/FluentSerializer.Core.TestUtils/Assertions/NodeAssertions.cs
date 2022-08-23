@@ -50,7 +50,7 @@ public class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 	{
 		try
 		{
-			Guard.Against.InvalidName(name, nameof(IDataNode.Name));
+			Guard.Against.InvalidName(name);
 			return true;
 		}
 		catch

@@ -22,8 +22,16 @@ public class NamingContext : INamingContext
 	/// <inheritdoc />
 	public INamingStrategy? FindNamingStrategy(in Type classType, in PropertyInfo propertyInfo)
 	{
-		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
+		Guard.Against.Null(classType
+#if NETSTANDARD2_1
+			, nameof(classType)
+#endif
+		);
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
 		var classMap = _classMappings.GetClassMapFor(in classType);
 		if (classMap is null) return null;
@@ -32,18 +40,30 @@ public class NamingContext : INamingContext
 	}
 
 	/// <inheritdoc cref="INamingContext" />
-	public static INamingStrategy? FindNamingStrategy(in IPropertyMapCollection propertyMapping, in PropertyInfo property)
+	public static INamingStrategy? FindNamingStrategy(in IPropertyMapCollection propertyMapping, in PropertyInfo propertyInfo)
 	{
-		Guard.Against.Null(propertyMapping, nameof(propertyMapping));
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyMapping
+#if NETSTANDARD2_1
+			, nameof(propertyMapping)
+#endif
+		);
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
-		return propertyMapping.GetPropertyMapFor(in property)?.NamingStrategy;
+		return propertyMapping.GetPropertyMapFor(in propertyInfo)?.NamingStrategy;
 	}
 
 	/// <inheritdoc />
 	public INamingStrategy? FindNamingStrategy(in Type type)
 	{
-		Guard.Against.Null(type, nameof(type));
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 
 		return _classMappings.GetClassMapFor(type)?.NamingStrategy;
 	}

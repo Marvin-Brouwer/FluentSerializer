@@ -9,4 +9,9 @@ using System.Diagnostics.CodeAnalysis;
 	Justification = "This refers to an Enum", Scope = "member", Target = "~M:FluentSerializer.Xml.Converting.IUseXmlConverters.Enum~FluentSerializer.Xml.Converting.IXmlConverter")]
 
 [assembly: SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix",
-	Justification = "This refers to an XmlAttribute", Scope = "namespace", Target = "~N:FluentSerializer.Xml.DataNodes")]
+	Justification = "This refers to an XmlAttribute", Scope = "type", Target = "~T:FluentSerializer.Xml.DataNodes.IXmlAttribute")]
+[assembly: SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix",
+	Justification = "This refers to an XmlAttribute", Scope = "type", Target = "~T:FluentSerializer.Xml.DataNodes.Nodes.XmlAttribute")]
+
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords",
+	Justification = "This refers to an XmlAttribute", Scope = "member", Target = "~M:FluentSerializer.Xml.Converting.IUseXmlConverters.Enum(FluentSerializer.Core.Converting.Converters.EnumFormats)~System.Func{FluentSerializer.Xml.Converting.IXmlConverter}")]

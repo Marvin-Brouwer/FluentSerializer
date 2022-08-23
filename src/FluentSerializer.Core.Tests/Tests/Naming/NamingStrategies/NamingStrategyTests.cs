@@ -10,6 +10,9 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Tests.Tests.Naming.NamingStrategies;
 
+#pragma warning disable S101 // Types should be named in PascalCase
+#pragma warning disable S2326 // Unused type parameters should be removed
+
 public abstract class NamingStrategyTests
 {
 	protected abstract INamingStrategy Sut { get; }

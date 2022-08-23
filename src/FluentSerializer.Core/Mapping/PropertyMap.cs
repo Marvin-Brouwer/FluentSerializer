@@ -42,9 +42,21 @@ public sealed class PropertyMap : IPropertyMap
 		in Func<INamingStrategy> namingStrategy,
 		in Func<IConverter>? customConverter)
 	{
-		Guard.Against.Null(containerType, nameof(containerType));
-		Guard.Against.Null(property, nameof(property));
-		Guard.Against.Null(namingStrategy, nameof(namingStrategy));
+		Guard.Against.Null(containerType
+#if NETSTANDARD2_1
+			, nameof(containerType)
+#endif
+		);
+		Guard.Against.Null(property
+#if NETSTANDARD2_1
+			, nameof(property)
+#endif
+		);
+		Guard.Against.Null(namingStrategy
+#if NETSTANDARD2_1
+			, nameof(namingStrategy)
+#endif
+		);
 
 		_namingStrategy = namingStrategy;
 		_customConverter = customConverter;
@@ -61,8 +73,16 @@ public sealed class PropertyMap : IPropertyMap
 		where TDataContainer : IDataNode
 		where TDataNode : IDataNode
 	{
-		Guard.Against.Null(direction, nameof(direction));
-		Guard.Against.Null(currentSerializer, nameof(currentSerializer));
+		Guard.Against.Null(direction
+#if NETSTANDARD2_1
+			, nameof(direction)
+#endif
+		);
+		Guard.Against.Null(currentSerializer
+#if NETSTANDARD2_1
+			, nameof(currentSerializer)
+#endif
+		);
 
 		var converter = CustomConverter ?? currentSerializer.Configuration.DefaultConverters
 			.Where(converter => converter is IConverter<TDataContainer, TDataNode>)
@@ -71,10 +91,10 @@ public sealed class PropertyMap : IPropertyMap
 		if (converter is null) return null;
 
 		if (!converter.CanConvert(ConcretePropertyType))
-			throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);
+			throw new ConverterNotSupportedException(Property, ConcretePropertyType, converter.GetType(), typeof(TDataContainer), direction);
 		if (converter is IConverter<TDataContainer, TDataNode> specificConverter)
 			return specificConverter;
 
-		throw new ConverterNotSupportedException(this, converter.GetType(), typeof(TDataContainer), direction);
+		throw new ConverterNotSupportedException(Property, ConcretePropertyType, converter.GetType(), typeof(TDataContainer), direction);
 	}
 }

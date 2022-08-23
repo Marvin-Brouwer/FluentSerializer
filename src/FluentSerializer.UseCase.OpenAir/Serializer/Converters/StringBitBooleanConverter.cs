@@ -10,8 +10,6 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 
-#pragma warning disable CA1036 // Override methods on comparable types
-
 /// <summary>
 /// Depicts booleans as 0 and 1 <br />
 /// <example>

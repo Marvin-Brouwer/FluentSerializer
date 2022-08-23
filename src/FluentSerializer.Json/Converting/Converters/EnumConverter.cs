@@ -7,7 +7,7 @@ using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Converting.Converters;
 
-/// <inheritdoc cref="EnumConverter(in EnumFormat, in bool)" />
+/// <inheritdoc cref="EnumConverter(in EnumFormats, in bool)" />
 public sealed class EnumConverter : EnumConverterBase, IJsonConverter
 {
 	private readonly bool _writeNumbersAsString;
@@ -17,7 +17,7 @@ public sealed class EnumConverter : EnumConverterBase, IJsonConverter
 	/// </summary>
 	/// <paramref name="enumFormat">The format to use when reading and writing serialized <c>enum</c> values</paramref>
 	/// <paramref name="writeNumbersAsString">Configure whether to wrap numbers in quotes ("")</paramref>
-	public EnumConverter(in EnumFormat enumFormat, in bool writeNumbersAsString) : base(enumFormat)
+	public EnumConverter(in EnumFormats enumFormat, in bool writeNumbersAsString) : base(enumFormat, null)
 	{
 		_writeNumbersAsString = writeNumbersAsString;
 	}
@@ -30,7 +30,7 @@ public sealed class EnumConverter : EnumConverterBase, IJsonConverter
 		if (convertedValue is null) return null;
 		var (stringValue, isNumeric) = convertedValue.Value;
 
-		if (!_writeNumbersAsString && EnumFormat.HasFlag(EnumFormat.UseNumberValue) && isNumeric)
+		if (!_writeNumbersAsString && EnumFormat.HasFlag(EnumFormats.UseNumberValue) && isNumeric)
 			return Value(in stringValue);
 
 		return Value($"\"{stringValue}\"");

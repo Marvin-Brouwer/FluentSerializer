@@ -22,9 +22,9 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 	/// </summary>
 	public TimeOnlyByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		Guard.Against.Null(cultureInfo, nameof(cultureInfo));
-		Guard.Against.Null(dateTimeStyle, nameof(dateTimeStyle));
+		Guard.Against.NullOrWhiteSpace(format);
+		Guard.Against.Null(cultureInfo);
+		Guard.Against.Null(dateTimeStyle);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -39,5 +39,8 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => TimeOnly.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

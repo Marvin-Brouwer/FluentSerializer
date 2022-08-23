@@ -56,6 +56,6 @@ public interface IUseXmlConverters
 
 	/// <inheritdoc cref="EnumConverter" />
 	IXmlConverter Enum();
-	/// <inheritdoc cref="EnumConverter(in EnumFormat)" />
-	Func<IXmlConverter> Enum(EnumFormat format);
+	/// <inheritdoc cref="EnumConverter(in EnumFormats)" />
+	Func<IXmlConverter> Enum(EnumFormats format);
 }

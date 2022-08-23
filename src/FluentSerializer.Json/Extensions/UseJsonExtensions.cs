@@ -10,8 +10,8 @@ namespace FluentSerializer.Json.Extensions;
 /// </summary>
 public static class UseJsonExtensions
 {
-	/// <inheritdoc cref="IUseJsonConverters.Enum(EnumFormat, bool)"/>
-	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormat format, in bool writeNumbersAsString = false)
+	/// <inheritdoc cref="IUseJsonConverters.Enum(EnumFormats, bool)"/>
+	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormats format, in bool writeNumbersAsString = false)
 	{
 		return converters.Use(Converter.For.Enum(format, writeNumbersAsString)());
 	}

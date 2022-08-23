@@ -5,6 +5,7 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 
 using System;
+using System.Globalization;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
@@ -15,6 +16,12 @@ namespace FluentSerializer.Xml.Converting.Converters;
 /// </summary>
 public sealed class ConvertibleConverter : ConvertibleConverterBase, IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
+	/// <inheritdoc cref="ConvertibleConverter"/>
+	public ConvertibleConverter() : this(null) { }
+
+	/// <inheritdoc cref="ConvertibleConverter"/>
+	public ConvertibleConverter(CultureInfo? formatProvider) : base(formatProvider) { }
+
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{
 		return ConvertToNullableDataType(attributeToDeserialize.Value, context.PropertyType);

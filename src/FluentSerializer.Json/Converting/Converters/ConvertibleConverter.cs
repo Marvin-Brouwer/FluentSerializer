@@ -4,6 +4,7 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Json.DataNodes;
 
 using System;
+using System.Globalization;
 
 using static FluentSerializer.Json.JsonBuilder;
 
@@ -14,6 +15,12 @@ namespace FluentSerializer.Json.Converting.Converters;
 /// </summary>
 public sealed class ConvertibleConverter : ConvertibleConverterBase, IJsonConverter
 {
+	/// <inheritdoc cref="ConvertibleConverter"/>
+	public ConvertibleConverter() : this(null) { }
+
+	/// <inheritdoc cref="ConvertibleConverter"/>
+	public ConvertibleConverter(CultureInfo? formatProvider) : base(formatProvider) { }
+
 	/// <inheritdoc />
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{

@@ -36,8 +36,16 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		in ObjectPoolProvider objectPoolProvider,
 		in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(configuration, nameof(configuration));
-		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
+		Guard.Against.Null(configuration
+#if NETSTANDARD2_1
+			, nameof(configuration)
+#endif
+		);
+		Guard.Against.Null(classMapCollection
+#if NETSTANDARD2_1
+			, nameof(classMapCollection)
+#endif
+		);
 
 		_serializer = new XmlTypeSerializer(in classMapCollection);
 		_deserializer = new XmlTypeDeserializer(in classMapCollection);

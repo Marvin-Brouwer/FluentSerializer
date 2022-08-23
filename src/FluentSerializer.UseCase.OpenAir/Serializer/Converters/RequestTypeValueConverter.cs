@@ -23,7 +23,9 @@ public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(string) == targetType;
 	/// <inheritdoc />
+#pragma warning disable CA1725 // Parameter names should match base declaration
 	public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
+#pragma warning restore CA1725 // Parameter names should match base declaration
 	/// <inheritdoc />
 	public virtual int ConverterHashCode { get; } = typeof(RequestTypeValueConverter).GetHashCode();
 

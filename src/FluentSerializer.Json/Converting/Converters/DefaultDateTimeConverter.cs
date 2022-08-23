@@ -34,4 +34,7 @@ public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => DateTime.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

@@ -69,7 +69,7 @@ public static class TestDataExtensions
 		details.AddRange(new List<IXmlElement>
 		{
 			Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
-			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
+			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)))
 		});
 
 		var children = new List<IXmlNode> {

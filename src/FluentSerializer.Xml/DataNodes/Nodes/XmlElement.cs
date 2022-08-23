@@ -77,7 +77,11 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public IXmlAttribute? GetChildAttribute(in string name)
 	{
-		Guard.Against.NullOrWhiteSpace(name, nameof(name));
+		Guard.Against.NullOrWhiteSpace(name
+#if NETSTANDARD2_1
+			, nameof(name)
+#endif
+		);
 
 		foreach (var attribute in _attributes)
 		{
@@ -101,7 +105,11 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <inheritdoc />
 	public IXmlElement? GetChildElement(in string name)
 	{
-		Guard.Against.NullOrWhiteSpace(name, nameof(name));
+		Guard.Against.NullOrWhiteSpace(name
+#if NETSTANDARD2_1
+			, nameof(name)
+#endif
+		);
 
 		foreach (var child in _children)
 		{

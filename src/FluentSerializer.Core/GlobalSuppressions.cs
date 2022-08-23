@@ -22,3 +22,16 @@ using System.Diagnostics.CodeAnalysis;
 	Justification = "This refers to a Property", Scope = "member", Target = "~P:FluentSerializer.Core.Context.ISerializerContext.Property")]
 [assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords",
 	Justification = "This refers to a Property", Scope = "member", Target = "~P:FluentSerializer.Core.Mapping.IPropertyMap.Property")]
+
+[assembly: SuppressMessage("Minor Code Smell", "S3267:Loops should be simplified with \"LINQ\" expressions",
+	Justification = "We're writing highly optimized code", Scope = "member", Target = "~M:FluentSerializer.Core.Converting.Converters.EnumConverterBase.GetEnumFromName(System.String@,System.Type@)~System.Object")]
+
+[assembly: SuppressMessage("Warning", "S2436: Reduce the number of generic parameters in the 'ISerializerFactory' class to no more than the 2 authorized.",
+	Justification = "This is necessary", Scope = "type", Target = "~T:FluentSerializer.Core.Factories.ISerializerFactory`3")]
+[assembly: SuppressMessage("Warning", "S2436: Reduce the number of generic parameters in the 'IConfiguredSerializerFactory' class to no more than the 2 authorized.",
+	Justification = "This is necessary", Scope = "type", Target = "~T:FluentSerializer.Core.Factories.IConfiguredSerializerFactory`3")]
+[assembly: SuppressMessage("Warning", "S2436: Reduce the number of generic parameters in the 'BaseSerializerFactory' class to no more than the 2 authorized.",
+	Justification = "This is necessary", Scope = "type", Target = "~T:FluentSerializer.Core.Factories.BaseSerializerFactory`3")]
+
+[assembly: SuppressMessage("Warning", "S5766: Make sure not performing data validation after deserialization is safe here.",
+	Justification = "There is no validation to begin with", Scope = "type", Target = "~T:FluentSerializer.Core.SerializerException.ConverterNotSupportedException")]

@@ -106,7 +106,7 @@ public abstract class StaticTestRunner
 
 		return Job.Dry;
 #else
-		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType="));
+		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		if (runType is not null) Console.WriteLine(runType);

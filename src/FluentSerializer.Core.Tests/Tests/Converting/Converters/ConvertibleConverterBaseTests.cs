@@ -156,12 +156,14 @@ public sealed class ConvertibleConverterBaseTests
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
 	private sealed class TestConverter : ConvertibleConverterBase
 	{
+		public TestConverter() : base(null) { }
+
 		/// <inheritdoc cref="ConvertibleConverterBase.ConvertToString"/>
-		public new string? ConvertToString(in object value) => ConvertibleConverterBase.ConvertToString(in value);
+		public new string? ConvertToString(in object value) => base.ConvertToString(in value);
 
 		/// <inheritdoc cref="ConvertibleConverterBase.ConvertToNullableDataType"/>
 		public new object? ConvertToNullableDataType(in string? currentValue, in Type targetType) =>
-			ConvertibleConverterBase.ConvertToNullableDataType(in currentValue, in targetType);
+			base.ConvertToNullableDataType(in currentValue, in targetType);
 	}
 
 }

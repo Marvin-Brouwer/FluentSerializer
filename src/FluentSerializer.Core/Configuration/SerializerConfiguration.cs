@@ -31,7 +31,9 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	public bool WriteNull { get; set; }
 
 	/// <inheritdoc />
-	public IConfigurationStack<IConverter> DefaultConverters { get; set; } = new ConfigurationStack<IConverter>();
+	public IConfigurationStack<IConverter> DefaultConverters { get; set; } = new ConfigurationStack<IConverter>(
+		ConverterComparer.Default
+	);
 	/// <inheritdoc />
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	/// <inheritdoc />

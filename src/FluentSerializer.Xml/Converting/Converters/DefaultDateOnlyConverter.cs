@@ -25,5 +25,8 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => DateOnly.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

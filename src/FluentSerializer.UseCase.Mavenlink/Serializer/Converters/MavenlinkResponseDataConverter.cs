@@ -55,16 +55,16 @@ internal sealed class MavenlinkResponseDataConverter : CollectionConverterBase, 
 			GetEnumerableInstance(context.PropertyType), context.PropertyType);
 
 		var firstChild = arrayToDeserialize.Children[0] as IJsonObject;
-		Guard.Against.Null(firstChild, nameof(firstChild));
+		Guard.Against.Null(firstChild);
 
 		var collectionKeyProperty = (IJsonValue?)firstChild.GetProperty("key")?.Value;
 		var collectionName = collectionKeyProperty?.Value?[1..^1];
-		Guard.Against.NullOrEmpty(collectionName, nameof(collectionName));
+		Guard.Against.NullOrEmpty(collectionName);
 
 		// Find nodes from root
 		var parent = (IJsonObject)context.ParentNode!;
 		var targetCollection = parent.GetProperty(collectionName)?.Value as IJsonObject;
-		Guard.Against.Null(targetCollection, nameof(targetCollection));
+		Guard.Against.Null(targetCollection);
 
 		var flattenedCollection = targetCollection.Children
 			.Cast<IJsonProperty>()

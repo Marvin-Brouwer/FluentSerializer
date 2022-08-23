@@ -21,9 +21,21 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 	/// </summary>
 	public TimeSpanByFormatConverter(in string format, in CultureInfo cultureInfo, in TimeSpanStyles timeSpanStyles)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
-		Guard.Against.Null(cultureInfo, nameof(cultureInfo));
-		Guard.Against.Null(timeSpanStyles, nameof(timeSpanStyles));
+		Guard.Against.NullOrWhiteSpace(format
+#if NETSTANDARD2_1
+			, nameof(format)
+#endif
+		);
+		Guard.Against.Null(cultureInfo
+#if NETSTANDARD2_1
+			, nameof(cultureInfo)
+#endif
+		);
+		Guard.Against.Null(timeSpanStyles
+#if NETSTANDARD2_1
+			, nameof(timeSpanStyles)
+#endif
+		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -38,4 +50,7 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => TimeSpan.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

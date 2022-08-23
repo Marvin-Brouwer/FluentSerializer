@@ -14,11 +14,11 @@ public sealed partial class EnumConverterBaseTests
 {
 	[Theory,
 		Trait("Category", "UnitTest"),
-		InlineData(typeof(EnumFormat)), InlineData(typeof(TestEnum))]
+		InlineData(typeof(EnumFormats)), InlineData(typeof(TestValue))]
 	public void CanConvert_IsEnum_ReturnsTrue(Type input)
 	{
 		// Arrange
-		var sut = new TestConverter(EnumFormat.Default);
+		var sut = new TestConverter(EnumFormats.Default);
 
 		// Act
 		var result = sut.CanConvert(in input);
@@ -33,7 +33,7 @@ public sealed partial class EnumConverterBaseTests
 	public void CanConvert_IsNotEnum_ReturnsFalse(Type input)
 	{
 		// Arrange
-		var sut = new TestConverter(EnumFormat.Default);
+		var sut = new TestConverter(EnumFormats.Default);
 
 		// Act
 		var result = sut.CanConvert(in input);
@@ -42,22 +42,22 @@ public sealed partial class EnumConverterBaseTests
 		result.Should().BeFalse();
 	}
 
-	private const string MemberWithoutDescriptionOrEnumMemberName = nameof(TestEnum.MemberWithoutDescriptionOrEnumMember);
-	private const long MemberWithoutDescriptionOrEnumMemberValue = (int)TestEnum.MemberWithoutDescriptionOrEnumMember;
-	private const string MemberWithEnumMemberName = nameof(TestEnum.MemberWithEnumMember);
-	private const long MemberWithEnumMemberValue = (int)TestEnum.MemberWithEnumMember;
+	private const string MemberWithoutDescriptionOrEnumMemberName = nameof(TestValue.MemberWithoutDescriptionOrEnumMember);
+	private const long MemberWithoutDescriptionOrEnumMemberValue = (int)TestValue.MemberWithoutDescriptionOrEnumMember;
+	private const string MemberWithEnumMemberName = nameof(TestValue.MemberWithEnumMember);
+	private const long MemberWithEnumMemberValue = (int)TestValue.MemberWithEnumMember;
 	private const string MemberWithEnumMemberDataValue = "MemberValue";
-	private const string MemberWithDescriptionName = nameof(TestEnum.MemberWithDescription);
-	private const long MemberWithDescriptionValue = (int)TestEnum.MemberWithDescription;
+	private const string MemberWithDescriptionName = nameof(TestValue.MemberWithDescription);
+	private const long MemberWithDescriptionValue = (int)TestValue.MemberWithDescription;
 	private const string MemberWithDescriptionDataValue = "This member has a description";
-	private const string MemberWithEnumMemberAndDescriptionName = nameof(TestEnum.MemberWithEnumMemberAndDescription);
-	private const long MemberWithEnumMemberAndDescriptionValue = (int)TestEnum.MemberWithEnumMemberAndDescription;
+	private const string MemberWithEnumMemberAndDescriptionName = nameof(TestValue.MemberWithEnumMemberAndDescription);
+	private const long MemberWithEnumMemberAndDescriptionValue = (int)TestValue.MemberWithEnumMemberAndDescription;
 	private const string MemberWithEnumMemberAndDescriptionDataValueMember = "MemberValueWithDescription";
 	private const string MemberWithEnumMemberAndDescriptionDataValueDescription = "This member has a description and an enum member attribute";
-	private const string MemberWithExplicitValueName = nameof(TestEnum.MemberWithExplicitValue);
+	private const string MemberWithExplicitValueName = nameof(TestValue.MemberWithExplicitValue);
 	private const long MemberWithExplicitValueValue = 9239202348;
 
-	private enum TestEnum : long
+	private enum TestValue : long
 	{
 		MemberWithoutDescriptionOrEnumMember,
 		[EnumMember(Value = MemberWithEnumMemberDataValue)]
@@ -85,7 +85,7 @@ public sealed partial class EnumConverterBaseTests
 			return base.ConvertToEnum(in currentValue, in targetType);
 		}
 
-		public TestConverter(EnumFormat enumFormat) : base(enumFormat)
+		public TestConverter(EnumFormats enumFormat) : base(enumFormat, null)
 		{
 		}
 	}

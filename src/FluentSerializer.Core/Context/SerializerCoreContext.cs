@@ -48,7 +48,11 @@ public class SerializerCoreContext : ISerializerCoreContext
 	public ISerializerCoreContext WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
 		return new SerializerCoreContext(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
@@ -57,7 +61,11 @@ public class SerializerCoreContext : ISerializerCoreContext
 	public ISerializerCoreContext WithPathSegment(in Type type)
 	{
 		const string typeTag = "T:";
-		Guard.Against.Null(type, nameof(type));
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 
 		return new SerializerCoreContext(this, string.Concat(typeTag, type.Name));
 	}
@@ -105,7 +113,11 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(propertyInfo, nameof(propertyInfo));
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
 		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
@@ -114,7 +126,11 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in Type type)
 	{
 		const string typeTag = "T:";
-		Guard.Against.Null(type, nameof(type));
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 
 		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(typeTag, type.Name));
 	}

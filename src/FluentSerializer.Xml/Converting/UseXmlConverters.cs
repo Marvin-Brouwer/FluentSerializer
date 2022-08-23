@@ -23,15 +23,20 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	internal static readonly IXmlConverter<IXmlElement> WrappedCollectionConverter = new WrappedCollectionConverter();
 	private static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
-	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormat.Default);
+	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default);
 
 	/// <inheritdoc/>
 	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateTimeConverter;
 
 	/// <inheritdoc/>
-	public Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		Guard.Against.NullOrWhiteSpace(format
+#if NETSTANDARD2_1
+			, nameof(format)
+#endif
+		);
+
 		return () => new DateTimeByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
@@ -39,9 +44,14 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public SimpleTypeConverter<DateTimeOffset> DateTimeOffset() => DefaultDateTimeOffsetConverter;
 
 	/// <inheritdoc />
-	public Func<SimpleTypeConverter<DateTimeOffset>> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<SimpleTypeConverter<DateTimeOffset>> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		Guard.Against.NullOrWhiteSpace(format
+#if NETSTANDARD2_1
+			, nameof(format)
+#endif
+		);
+
 		return () => new DateTimeOffsetByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
@@ -50,9 +60,9 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public SimpleTypeConverter<DateOnly> DateOnly() => DefaultDateOnlyConverter;
 
 	/// <inheritdoc />
-	public Func<SimpleTypeConverter<DateOnly>> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<SimpleTypeConverter<DateOnly>> DateOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		Guard.Against.NullOrWhiteSpace(format);
 		return () => new DateOnlyByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
@@ -60,9 +70,9 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public SimpleTypeConverter<TimeOnly> TimeOnly() => DefaultTimeOnlyConverter;
 
 	/// <inheritdoc />
-	public Func<SimpleTypeConverter<TimeOnly>> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.None)
+	public Func<SimpleTypeConverter<TimeOnly>> TimeOnly(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AllowWhiteSpaces)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		Guard.Against.NullOrWhiteSpace(format);
 		return () => new TimeOnlyByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 #endif
@@ -73,7 +83,12 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	/// <inheritdoc />
 	public Func<SimpleTypeConverter<TimeSpan>> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None)
 	{
-		Guard.Against.NullOrWhiteSpace(format, nameof(format));
+		Guard.Against.NullOrWhiteSpace(format
+#if NETSTANDARD2_1
+			, nameof(format)
+#endif
+		);
+
 		return () => new TimeSpanByFormatConverter(format, culture ?? CultureInfo.CurrentCulture, style);
 	}
 
@@ -87,7 +102,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	/// <inheritdoc />
 	public IXmlConverter Enum() => DefaultEnumConverter;
 	/// <inheritdoc />
-	public Func<IXmlConverter> Enum(EnumFormat format)
+	public Func<IXmlConverter> Enum(EnumFormats format)
 	{
 		return () => new EnumConverter(format);
 	}

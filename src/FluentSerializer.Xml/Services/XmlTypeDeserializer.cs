@@ -27,7 +27,11 @@ public sealed class XmlTypeDeserializer
 	/// <inheritdoc cref="XmlTypeDeserializer" />
 	public XmlTypeDeserializer(in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
+		Guard.Against.Null(classMapCollection
+#if NETSTANDARD2_1
+			, nameof(classMapCollection)
+#endif
+		);
 
 		_classMappings = classMapCollection;
 	}
@@ -38,8 +42,16 @@ public sealed class XmlTypeDeserializer
 	public TModel? DeserializeFromElement<TModel>(in IXmlElement dataObject, in ISerializerCoreContext<IXmlNode> context)
 		where TModel : new()
 	{
-		Guard.Against.Null(dataObject, nameof(dataObject));
-		Guard.Against.Null(context, nameof(context));
+		Guard.Against.Null(dataObject
+#if NETSTANDARD2_1
+			, nameof(dataObject)
+#endif
+		);
+		Guard.Against.Null(context
+#if NETSTANDARD2_1
+			, nameof(context)
+#endif
+		);
 
 		var classType = typeof(TModel);
 		var deserializedInstance = DeserializeFromElement(in dataObject, in classType, in context);
@@ -53,9 +65,21 @@ public sealed class XmlTypeDeserializer
 	/// </summary>
 	public object? DeserializeFromElement(in IXmlElement dataObject, in Type classType, in ISerializerCoreContext<IXmlNode> coreContext)
 	{
-		Guard.Against.Null(dataObject, nameof(dataObject));
-		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(coreContext, nameof(coreContext));
+		Guard.Against.Null(dataObject
+#if NETSTANDARD2_1
+			, nameof(dataObject)
+#endif
+		);
+		Guard.Against.Null(classType
+#if NETSTANDARD2_1
+			, nameof(classType)
+#endif
+		);
+		Guard.Against.Null(coreContext
+#if NETSTANDARD2_1
+			, nameof(coreContext)
+#endif
+		);
 
 		if (typeof(IEnumerable).IsAssignableFrom(classType)) throw new MalConfiguredRootNodeException(in classType);
 

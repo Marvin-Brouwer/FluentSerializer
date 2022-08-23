@@ -62,22 +62,6 @@ public static class ClassMapMother
 	/// <summary>
 	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="classMapCollectionMock"/> on GetClassMapFor
 	/// </summary>
-	public static Mock<IClassMapCollection> Empty(this Mock<IClassMapCollection> classMapCollectionMock)
-	{
-		classMapCollectionMock
-			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny))
-			.Returns((IClassMap?)null);
-
-		classMapCollectionMock
-			.Setup(list => list.GetClassMapFor(It.Ref<Type>.IsAny, It.Ref<SerializerDirection>.IsAny))
-			.Returns((IClassMap?)null);
-
-		return classMapCollectionMock;
-	}
-
-	/// <summary>
-	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="classMapCollectionMock"/> on GetClassMapFor
-	/// </summary>
 	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, Type type, IClassMap mapping)
 	{
 		classMapCollectionMock
@@ -89,6 +73,15 @@ public static class ClassMapMother
 			.Returns((Type typeRequested, SerializerDirection _) => typeRequested == type ? mapping : null);
 
 		return classMapCollectionMock;
+	}
+
+	/// <summary>
+	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mappingMock"/>'s object on GetClassMapFor
+	/// </summary>
+	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, IMock<IClassMap> mappingMock)
+	{
+		return classMapCollectionMock
+			.WithClassMap(mappingMock.Object.ClassType, mappingMock.Object);
 	}
 
 	/// <summary>
@@ -105,15 +98,6 @@ public static class ClassMapMother
 			.Returns((IClassMap?)null);
 
 		return classMapCollectionMock;
-	}
-
-	/// <summary>
-	/// Setup the mock of <see cref="IClassMapCollection"/> to return <paramref name="mappingMock"/>'s object on GetClassMapFor
-	/// </summary>
-	public static Mock<IClassMapCollection> WithClassMap(this Mock<IClassMapCollection> classMapCollectionMock, IMock<IClassMap> mappingMock)
-	{
-		return classMapCollectionMock
-			.WithClassMap(mappingMock.Object.ClassType, mappingMock.Object);
 	}
 
 	/// <summary>

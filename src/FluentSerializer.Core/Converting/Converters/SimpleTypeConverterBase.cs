@@ -38,4 +38,7 @@ public abstract class SimpleTypeConverterBase<TObject> : IConverter
 
 	/// <inheritdoc cref="object.GetHashCode" />
 	public override int GetHashCode() => typeof(TObject).GetHashCode();
+
+	/// <inheritdoc cref="object.Equals(object?)" />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

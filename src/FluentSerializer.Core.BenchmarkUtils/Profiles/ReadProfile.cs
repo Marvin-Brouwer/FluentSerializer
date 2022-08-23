@@ -7,6 +7,8 @@ using System.IO;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 
+#pragma warning disable S3881 // "IDisposable" should be implemented correctly
+
 [MemoryDiagnoser]
 public abstract class ReadProfile : IDisposable
 {
@@ -26,9 +28,11 @@ public abstract class ReadProfile : IDisposable
 	public void IterationSetup()
 	{
 		_textStream!.Seek(0, SeekOrigin.Begin);
+#pragma warning disable S1215 // "GC.Collect" should not be called
 		GC.Collect(0, GCCollectionMode.Forced, true);
 		GC.Collect(1, GCCollectionMode.Forced, true);
 		GC.Collect(2, GCCollectionMode.Forced, true);
+#pragma warning restore S1215 // "GC.Collect" should not be called
 		GC.WaitForPendingFinalizers();
 	}
 

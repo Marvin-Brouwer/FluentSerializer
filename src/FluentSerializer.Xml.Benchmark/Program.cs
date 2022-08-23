@@ -22,7 +22,7 @@ public static class Program
 		StaticTestRunner.RequireElevatedPermissions(in arguments);
 
 		if (!arguments.Contains("--no-generate"))
-			XmlBenchmakData.Default.GenerateTestCaseFiles();
+			XmlBenchmarkData.Default.GenerateTestCaseFiles();
 
 		StaticTestRunner.Run(
 			typeof(Program).Assembly, in arguments,
