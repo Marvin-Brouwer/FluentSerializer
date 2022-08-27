@@ -85,17 +85,3 @@ jobs:
       run: >-
         ./.sonar/scanner/dotnet-sonarscanner end
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-    ###
-    # 🗃 Cancel after test failure
-    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
-    ###
-    - name: 🗃 Cancel after test failure
-      if: ${{ failure() }}
-      uses: actions/github-script@v6
-      with:
-          script: |
-              github.actions.cancelWorkflowRun({
-                  owner: github.repository.owner,
-                  repo: github.repository.repo,
-                  run_id: github.run_id
-              })

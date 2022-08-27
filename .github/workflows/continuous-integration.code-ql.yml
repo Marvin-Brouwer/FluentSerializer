@@ -42,17 +42,3 @@ jobs:
     ###
     - name: 🔬 Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-    ###
-    # 🗃 Cancel after test failure
-    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
-    ###
-    - name: 🗃 Cancel after test failure
-      if: ${{ failure() }}
-      uses: actions/github-script@v6
-      with:
-          script: |
-              github.actions.cancelWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: context.runId
-              })

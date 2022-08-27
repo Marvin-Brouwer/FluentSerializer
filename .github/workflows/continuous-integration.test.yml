@@ -1,19 +1,5 @@
 name: "Continuous integration - Automated testing"
-on:
-  workflow_call:
-    inputs:
-      owner:
-        description: 'context.repo.owner'
-        required: true
-        type: string
-      repo:
-        description: 'context.repo.repo'
-        required: true
-        type: string
-      runId:
-        description: 'context.runId'
-        required: true
-        type: string
+on: workflow_call
 
 jobs:
   test:
@@ -155,17 +141,3 @@ jobs:
         name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
-    ###
-    # 🗃 Cancel after test failure
-    # Because the benchmark run runs in parallel with testing we need to cancel that when tests fail.
-    ###
-    - name: 🗃 Cancel after test failure
-      if: ${{ failure() }}
-      uses: actions/github-script@v6
-      with:
-          script: |
-              github.actions.cancelWorkflowRun({
-                  owner: input.owner,
-                  repo: input.repo,
-                  run_id: input.runId
-              })

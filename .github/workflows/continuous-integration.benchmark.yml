@@ -113,17 +113,3 @@ jobs:
         name: benchmark-results-${{ env.libraryKey }}
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20
-    ###
-    # 🗃 Cancel after benchmark failure
-    # Because the tests run runs in parallel with testing we need to cancel that when benchmarking fails.
-    ###
-    - name: 🗃 Cancel after benchmark failure
-      if: ${{ failure() }}
-      uses: actions/github-script@v6
-      with:
-          script: |
-              github.actions.cancelWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: context.runId
-              })
