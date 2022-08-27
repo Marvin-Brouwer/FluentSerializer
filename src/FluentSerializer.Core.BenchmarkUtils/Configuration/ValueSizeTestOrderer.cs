@@ -1,3 +1,4 @@
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
@@ -10,8 +11,9 @@ using System.Linq;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Configuration;
 
-public sealed class ValueSizeTestOrderer : IOrderer {
-	public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase) =>
+public sealed class ValueSizeTestOrderer : IOrderer
+{
+	public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase, IEnumerable<BenchmarkLogicalGroupRule>? order = null) =>
 		benchmarksCase
 			.OrderBy(benchmark => ((ITestCase)benchmark.Parameters["Value"]).Count)
 			.ThenBy(benchmark => ((ITestCase)benchmark.Parameters["Value"]).SizeInBytes);
@@ -28,7 +30,7 @@ public sealed class ValueSizeTestOrderer : IOrderer {
 	public string GetLogicalGroupKey(ImmutableArray<BenchmarkCase> allBenchmarksCases, BenchmarkCase benchmarkCase) =>
 		string.Empty + benchmarkCase.Descriptor.WorkloadMethodDisplayInfo;
 
-	public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups) =>
+	public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups, IEnumerable<BenchmarkLogicalGroupRule>? order = null) =>
 		logicalGroups.OrderBy(it => it.Key);
 
 	public bool SeparateLogicalGroups => true;
