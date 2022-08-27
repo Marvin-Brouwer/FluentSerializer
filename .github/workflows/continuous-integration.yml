@@ -49,6 +49,7 @@ jobs:
     secrets: inherit
     with:
       libraryName: 'Core'
+      reportPrefix: 'core'
       net_6_0-jobType: "Long"
       netcore_3_1-jobType: "Long"
   benchmark-xml:
@@ -58,6 +59,7 @@ jobs:
     secrets: inherit
     with:
       libraryName: 'Xml'
+      reportPrefix: 'xml-serializer'
   benchmark-json:
     name: "Benchmark"
     needs: [test, code-ql, sonar-cloud]
@@ -65,3 +67,4 @@ jobs:
     secrets: inherit
     with:
       libraryName: 'Json'
+      reportPrefix: 'json-serializer'

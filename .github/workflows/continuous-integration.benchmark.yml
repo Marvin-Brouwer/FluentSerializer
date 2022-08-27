@@ -6,6 +6,10 @@ on:
         description: 'The library to benchmark'
         required: true
         type: string
+      reportPrefix:
+        description: 'The library to benchmark'
+        required: true
+        type: string
       net_6_0-jobType:
         description: 'The jobType for net 6 runtime'
         required: false
@@ -27,16 +31,6 @@ jobs:
     ###
     - name: Checkout repository
       uses: actions/checkout@v3
-    ###
-    # 🧰 Setup variables
-    #
-    # Fix implicit variable definitions
-    ###
-    - name: 🧰 Setup variables
-      run: |-
-        libraryName="${{ inputs.libraryName }}";
-        libraryKey="${libraryName,,}";
-        echo "libraryKey=${libraryKey}" >>${GITHUB_ENV};
     ###
     # 🧰 Install .Net SDKs
     #
@@ -91,7 +85,7 @@ jobs:
       run: |-
         sudo mkdir ${{github.workspace}}/benchmark-results
         cd ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
-        sudo mv ./${{ env.libraryKey }}-*.md ${{github.workspace}}/benchmark-results/
+        sudo mv ./${{ inputs.reportPrefix }}-*.md ${{github.workspace}}/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
     # 📈 Report benchmarks
@@ -100,8 +94,8 @@ jobs:
     ###
     - name: 📈 Report benchmarks
       run: |-
-        cat ./${{ env.libraryKey }}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
-        cat ./${{ env.libraryKey }}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./${{ inputs.reportPrefix }}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
+        cat ./${{ inputs.reportPrefix }}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
     ###
     # 🗃 Publish 'benchmark-results' artifacts
@@ -110,6 +104,6 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: benchmark-results-${{ env.libraryKey }}
+        name: benchmark-results-${{ inputs.reportPrefix }}
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20
