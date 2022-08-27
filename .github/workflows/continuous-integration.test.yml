@@ -30,8 +30,6 @@ jobs:
     ###
     - name: 🧰 Setup .NET tools
       run: |-
-        # TODO Temp
-        exit -1;
         dotnet tool install --global dotnet-reportgenerator-globaltool
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
