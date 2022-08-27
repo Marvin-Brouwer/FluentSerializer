@@ -1,3 +1,4 @@
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
@@ -9,7 +10,7 @@ using System.Linq;
 namespace FluentSerializer.Core.BenchmarkUtils.Configuration;
 
 public sealed class ClassAndCategoryOrderer : IOrderer {
-	public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase) =>
+	public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase, IEnumerable<BenchmarkLogicalGroupRule>? order = null) =>
 		benchmarksCase
 			.OrderBy(benchmark => benchmark.Descriptor.Type.FullName)
 			.ThenBy(benchmark => benchmark.Descriptor.Categories?.FirstOrDefault())
@@ -29,7 +30,7 @@ public sealed class ClassAndCategoryOrderer : IOrderer {
 	public string GetLogicalGroupKey(ImmutableArray<BenchmarkCase> allBenchmarksCases, BenchmarkCase benchmarkCase) =>
 		benchmarkCase.Descriptor.Type.FullName + benchmarkCase.Descriptor.Categories?.FirstOrDefault();
 
-	public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups) =>
+	public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups, IEnumerable<BenchmarkLogicalGroupRule>? order = null) =>
 		logicalGroups.OrderBy(it => it.Key);
 
 	public bool SeparateLogicalGroups => true;
