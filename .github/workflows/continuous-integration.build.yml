@@ -70,6 +70,7 @@ jobs:
         /d:sonar.host.url="https://sonarcloud.io"
         /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
         /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
+        /d:sonar.coverage.jacoco.xmlReportPaths="${{github.workspace}}/test-results/coverage/Cobertura.xml"
     ###
     # 🧰 Initialize CodeQL
     #
@@ -94,10 +95,6 @@ jobs:
     ###
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
-    ###
-    - name: TEST
-      run: |-
-        tree ./.sonar/scanner
     ###
     # 🗃 Publish 'library-binaries' artifacts
     ###
