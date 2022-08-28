@@ -21,7 +21,11 @@ public static class JsonParser
 	/// </remarks>
 	public static IJsonObject Parse(in string value)
 	{
-		Guard.Against.NullOrWhiteSpace(value, nameof(value));
+		Guard.Against.NullOrWhiteSpace(value
+#if NETSTANDARD2_1
+			, nameof(value)
+#endif
+		);
 
 		int offset = 0;
 		return new JsonObject(value.AsSpan(), ref offset);

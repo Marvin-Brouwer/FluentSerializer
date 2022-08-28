@@ -15,12 +15,12 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public readonly struct LowerCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext _) => GetName(property.Name);
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => GetName(propertyInfo.Name);
 
 	/// <inheritdoc />
-	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext _) => GetName(classType.Name);
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
 
-	private ReadOnlySpan<char> GetName(in string name)
+	private ReadOnlySpan<char> GetName(string name)
 	{
 		var genericIndex = name.IndexOf(NamingConstants.GenericTypeMarker);
 		if (genericIndex == -1) return name.ToLowerInvariant();

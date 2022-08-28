@@ -51,7 +51,9 @@ public abstract class CollectionConverterBase : IConverter {
 	/// </summary>
 	protected static IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
 	{
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
 		if (collection is null) return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
 		if (targetType.Equals(typeof(ArrayList))) return new ArrayList(collection);
 		if (targetType.IsArray) return ToArray(collection);

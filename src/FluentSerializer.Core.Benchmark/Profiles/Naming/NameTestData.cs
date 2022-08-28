@@ -11,7 +11,7 @@ internal struct NameTestData
 {
 	public static readonly INamingContext NamingContext = new Mock<INamingContext>().Object;
 
-	internal class ShortNamedClass
+	internal static class ShortNamedClass
 	{
 		public static bool ShortNamedProperty => true;
 
@@ -20,9 +20,9 @@ internal struct NameTestData
 		public static readonly PropertyInfo PropertyInfo = ClassType.GetProperty(nameof(ShortNamedProperty))!;
 	}
 
-	internal class LongNamedWrapperClass
+	internal static class LongNamedWrapperClass
 	{
-		internal class LongNamedInnerClass
+		internal static class LongNamedInnerClass
 		{
 			public static bool SomeVeryLongNamedProperty_WithSomeAddionalText_ForTestingOfCourse => true;
 

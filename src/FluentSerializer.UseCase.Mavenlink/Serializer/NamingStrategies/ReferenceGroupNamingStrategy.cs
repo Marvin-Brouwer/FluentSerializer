@@ -13,7 +13,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 /// </summary>
 internal class ReferenceGroupNamingStrategy : INamingStrategy
 {
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext)
 	{
 		var typeName = GetTypeName(propertyType);
 		return EntityMappings.GetDataReferenceGroupName(in typeName);

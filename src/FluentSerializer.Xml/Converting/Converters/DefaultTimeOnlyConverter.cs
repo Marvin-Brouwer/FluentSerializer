@@ -25,5 +25,8 @@ public sealed class DefaultTimeOnlyConverter : SimpleTypeConverter<TimeOnly>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => TimeOnly.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

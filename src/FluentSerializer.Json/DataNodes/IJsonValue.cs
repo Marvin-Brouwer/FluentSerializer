@@ -8,7 +8,7 @@ namespace FluentSerializer.Json.DataNodes;
 /// https://www.json.org/json-en.html
 /// </see>
 /// </summary>
-public interface IJsonValue : IDataValue, IJsonNode, IJsonPropertyContent, IJsonArrayContent
+public interface IJsonValue : IDataValue, IJsonPropertyContent, IJsonArrayContent
 {
 	/// <summary>
 	/// Property indicating whether the value is null or empty

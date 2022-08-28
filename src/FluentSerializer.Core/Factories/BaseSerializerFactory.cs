@@ -52,7 +52,11 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	/// <inheritdoc/>
 	public IConfiguredSerializerFactory<TSerializer, TConfiguration, TSerializerProfile> WithConfiguration(in TConfiguration configuration, in ObjectPoolProvider? poolProvider = null)
 	{
-		Guard.Against.Null(configuration, nameof(configuration));
+		Guard.Against.Null(configuration
+#if NETSTANDARD2_1
+			, nameof(configuration)
+#endif
+		);
 
 		CurrentConfiguration = configuration;
 		CurrentObjectPoolProvider = poolProvider ?? FactoryConstants.DefaultObjectPoolProvider;
@@ -63,7 +67,11 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	/// <inheritdoc/>
 	public IConfiguredSerializerFactory<TSerializer, TConfiguration, TSerializerProfile> WithConfiguration(in Action<TConfiguration> configurationSetup, in ObjectPoolProvider? poolProvider = null)
 	{
-		Guard.Against.Null(configurationSetup, nameof(configurationSetup));
+		Guard.Against.Null(configurationSetup
+#if NETSTANDARD2_1
+			, nameof(configurationSetup)
+#endif
+		);
 
 		var configuration = new TConfiguration();
 		configurationSetup(configuration);

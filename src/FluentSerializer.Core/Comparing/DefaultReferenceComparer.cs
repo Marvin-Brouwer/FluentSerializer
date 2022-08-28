@@ -10,7 +10,7 @@ public readonly struct DefaultReferenceComparer : IEqualityComparer
 	/// <summary>
 	/// Static default implementation
 	/// </summary>
-	public static readonly DefaultReferenceComparer Default = new();
+	public static readonly DefaultReferenceComparer Default;
 
 	/// <inheritdoc cref="IEqualityComparer"/>
 	public new bool Equals(object? x, object? y)

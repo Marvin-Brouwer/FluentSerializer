@@ -25,7 +25,9 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 
 		foreach (var amount in ItemCount) GenerateTestCase(amount, directory);
 
+#pragma warning disable S1215 // "GC.Collect" should not be called
 		GC.Collect();
+#pragma warning restore S1215 // "GC.Collect" should not be called
 		GC.WaitForPendingFinalizers();
 	}
 

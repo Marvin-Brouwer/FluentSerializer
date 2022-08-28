@@ -36,12 +36,12 @@ public sealed class ConverterNotSupportedException : SerializerException
 	public SerializerDirection Direction { get; }
 
 	/// <inheritdoc />
-	public ConverterNotSupportedException(in IPropertyMap property, in Type converterType, in Type containerType, in SerializerDirection direction) : base(
-		$"The converter of type '{converterType}' selected for '{property.ContainerType.FullName ?? "<dynamic>"}.{property.Property.Name}' cannot convert '{property.ConcretePropertyType.FullName}' \n" +
+	public ConverterNotSupportedException(in PropertyInfo propertyInfo, in Type targetType, in Type converterType, in Type containerType, in SerializerDirection direction) : base(
+		$"The converter of type '{converterType}' selected for '{containerType.FullName ?? "<dynamic>"}.{propertyInfo.Name}' cannot convert '{targetType.FullName}' \n" +
 		"Make sure you've selected a converter that supports this conversion.")
 	{
-		TargetType = property.ConcretePropertyType;
-		Property = property.Property;
+		TargetType = targetType;
+		Property = propertyInfo;
 		ContainerType = containerType;
 		ConverterType = converterType;
 		Direction = direction;

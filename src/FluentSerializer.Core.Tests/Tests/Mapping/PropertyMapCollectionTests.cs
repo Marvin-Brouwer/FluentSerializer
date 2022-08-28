@@ -122,7 +122,7 @@ public sealed class PropertyMapCollectionTests
 	}
 
 	private sealed  class TestClass {
-		public int Id { get; set; }
+		public int Id { get; set; } = default!;
 		public string Name { get; init; } = default!;
 	}
 }

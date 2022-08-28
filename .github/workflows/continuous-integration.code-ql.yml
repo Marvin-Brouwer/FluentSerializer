@@ -1,0 +1,44 @@
+name: "Continuous integration - GitHub Static Quality Analyses"
+on: workflow_call
+
+jobs:
+  code-ql:
+    name: "GitHub Static Quality Analyses"
+    runs-on: ubuntu-latest
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
+    ###
+    # 🗃 Restore 'library-binaries'
+    ###
+    - name: 🗃 Restore 'library-binaries'
+      uses: actions/download-artifact@v3
+      with:
+        name: library-binaries
+        path: ./src
+    ###
+    # 🗃 Restore 'github-codeql'
+    ###
+    - name: 🗃 Restore 'github-codeql'
+      uses: actions/download-artifact@v3
+      with:
+        name: github-codeql
+        path: /home/runner/work/_temp/codeql_databases/csharp
+    ###
+    # 🔬 Perform CodeQL Analysis
+    ###
+    - name: 🔬 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2

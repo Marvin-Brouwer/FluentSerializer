@@ -23,8 +23,16 @@ public sealed class XmlProfileBuilder<TModel> : IXmlProfileBuilder<TModel>
 	/// <inheritdoc cref="XmlProfileBuilder{TMode}" />
 	public XmlProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
-		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
-		Guard.Against.Null(propertyMap, nameof(propertyMap));
+		Guard.Against.Null(defaultNamingStrategy
+#if NETSTANDARD2_1
+			, nameof(defaultNamingStrategy)
+#endif
+		);
+		Guard.Against.Null(propertyMap
+#if NETSTANDARD2_1
+			, nameof(propertyMap)
+#endif
+		);
 
 		_defaultNamingStrategy = defaultNamingStrategy;
 		_propertyMap = propertyMap;

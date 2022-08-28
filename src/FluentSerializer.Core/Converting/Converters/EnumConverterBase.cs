@@ -3,6 +3,7 @@ using FluentSerializer.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -16,14 +17,13 @@ public abstract class EnumConverterBase
 	private static InvalidCastException UnknownEnumFormatException(in string value) => new(
 		$"The value provided '{value}' was not present in the enum");
 	
-	private static NotSupportedException ValueNotFoundException(in Type enumType, in string member) =>
-		new(
-			$"The value '{member}' was not found on enum '{enumType.FullName}'");
+	private static NotSupportedException ValueNotFoundException(in Type enumType, in string member) => new(
+		$"The value '{member}' was not found on enum '{enumType.FullName}'");
 
 	/// <summary>
 	/// Currently configured <inheritdoc cref="EnumFormat"/>
 	/// </summary>
-	protected readonly EnumFormat EnumFormat;
+	protected virtual EnumFormats EnumFormat { get; }
 
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;
@@ -34,11 +34,16 @@ public abstract class EnumConverterBase
 	/// <inheritdoc cref="Enum.GetHashCode" />
 	public int ConverterHashCode { get; } = typeof(Enum).GetHashCode();
 
+
+	private readonly CultureInfo? _formatProvider;
+	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
+
 	/// <inheritdoc cref="EnumConverterBase"/>
 	/// <paramref name="enumFormat">The format to use when reading and writing serialized <c>enum</c> values</paramref>
-	protected EnumConverterBase(EnumFormat enumFormat)
+	protected EnumConverterBase(EnumFormats enumFormat, CultureInfo? formatProvider)
 	{
 		EnumFormat = enumFormat;
+		_formatProvider = formatProvider;
 	}
 
 	/// <summary>
@@ -50,51 +55,51 @@ public abstract class EnumConverterBase
 		var enumMemberNameValue = (nameValue: memberName, false);
 		return EnumFormat switch
 		{
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseName =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseNumberValue =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				GetEnumDescription(in memberName, in enumType) ??
 				GetEnumUnderlyingValue(value),
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
 
-			EnumFormat.UseEnumMember | EnumFormat.UseName =>
+			EnumFormats.UseEnumMember | EnumFormats.UseName =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				enumMemberNameValue,
-			EnumFormat.UseEnumMember | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseNumberValue =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				GetEnumUnderlyingValue(value),
-			EnumFormat.UseEnumMember | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				enumMemberNameValue,
 
-			EnumFormat.UseDescription | EnumFormat.UseName =>
+			EnumFormats.UseDescription | EnumFormats.UseName =>
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
-			EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+			EnumFormats.UseDescription | EnumFormats.UseNumberValue =>
 				GetEnumDescription(in memberName, in enumType) ??
 				GetEnumUnderlyingValue(value),
-			EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseDescription | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumDescription(in memberName, in enumType) ??
 				enumMemberNameValue,
 
-			EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				enumMemberNameValue,
 
-			EnumFormat.UseEnumMember =>
+			EnumFormats.UseEnumMember =>
 				GetEnumMemberValue(in memberName, in enumType) ??
 				throw ValueNotFoundException(value.GetType(), in memberName),
-			EnumFormat.UseDescription =>
+			EnumFormats.UseDescription =>
 				GetEnumDescription(in memberName, in enumType) ??
 				throw ValueNotFoundException(value.GetType(), in memberName),
-			EnumFormat.UseName =>
+			EnumFormats.UseName =>
 				enumMemberNameValue,
-			EnumFormat.UseNumberValue =>
+			EnumFormats.UseNumberValue =>
 				GetEnumUnderlyingValue(value),
 
 			// This should really never happen:
@@ -102,12 +107,12 @@ public abstract class EnumConverterBase
 		};
 	}
 
-	private static (string value, bool isNumeric) GetEnumUnderlyingValue(object value)
+	private (string value, bool isNumeric) GetEnumUnderlyingValue(object value)
 	{
 		var underlyingType = Enum.GetUnderlyingType(value.GetType());
-		var numberValue = Convert.ChangeType(value, underlyingType);
+		var numberValue = Convert.ChangeType(value, underlyingType, FormatProvider);
 
-		return (Convert.ToString(numberValue)!, true);
+		return (Convert.ToString(numberValue, FormatProvider)!, true);
 	}
 
 	private static string GetEnumNameValue(in object value)
@@ -180,50 +185,50 @@ public abstract class EnumConverterBase
 
 		return EnumFormat switch
 		{
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseName =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType),
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseNumberValue =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
-			EnumFormat.UseEnumMember | EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseDescription | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
 
-			EnumFormat.UseEnumMember | EnumFormat.UseName =>
+			EnumFormats.UseEnumMember | EnumFormats.UseName =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType),
-			EnumFormat.UseEnumMember | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseNumberValue =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
-			EnumFormat.UseEnumMember | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseEnumMember | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumFromEnumMember(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
 
-			EnumFormat.UseDescription | EnumFormat.UseName =>
+			EnumFormats.UseDescription | EnumFormats.UseName =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType),
-			EnumFormat.UseDescription | EnumFormat.UseNumberValue =>
+			EnumFormats.UseDescription | EnumFormats.UseNumberValue =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
-			EnumFormat.UseDescription | EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseDescription | EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumFromDescription(in currentValue, in targetType) ??
 				GetEnumFromName(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
 
-			EnumFormat.UseName | EnumFormat.UseNumberValue =>
+			EnumFormats.UseName | EnumFormats.UseNumberValue =>
 				GetEnumFromName(in currentValue, in targetType) ??
 				GetEnumFromNumber(in currentValue, in targetType),
 
-			EnumFormat.UseEnumMember => GetEnumFromEnumMember(in currentValue, in targetType),
-			EnumFormat.UseDescription => GetEnumFromDescription(in currentValue, in targetType),
-			EnumFormat.UseName => GetEnumFromName(in currentValue, in targetType),
-			EnumFormat.UseNumberValue => GetEnumFromNumber(in currentValue, in targetType),
+			EnumFormats.UseEnumMember => GetEnumFromEnumMember(in currentValue, in targetType),
+			EnumFormats.UseDescription => GetEnumFromDescription(in currentValue, in targetType),
+			EnumFormats.UseName => GetEnumFromName(in currentValue, in targetType),
+			EnumFormats.UseNumberValue => GetEnumFromNumber(in currentValue, in targetType),
 
 			// This should really never happen:
 			_ => throw UnknownEnumFormatException(EnumFormat.ToString())
@@ -296,12 +301,12 @@ public abstract class EnumConverterBase
 		return default;
 	}
 
-	private static object? GetEnumFromNumber(in string? currentValue, in Type targetType)
+	private object? GetEnumFromNumber(in string? currentValue, in Type targetType)
 	{
 		try
 		{
 			var underlyingType = Enum.GetUnderlyingType(targetType);
-			var numberValue = Convert.ChangeType(currentValue, underlyingType);
+			var numberValue = Convert.ChangeType(currentValue, underlyingType, FormatProvider);
 			if (numberValue is null) return default;
 
 			return Enum.ToObject(targetType, numberValue);

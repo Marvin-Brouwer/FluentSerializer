@@ -76,7 +76,11 @@ public static class JsonBuilder
 	/// </remarks>
 	public static IJsonComment Comment(in string value)
 	{
-		Guard.Against.NullOrEmpty(value, nameof(value));
+		Guard.Against.NullOrEmpty(value
+#if NETSTANDARD2_1
+			, nameof(value)
+#endif
+		);
 		Guard.Against.InvalidFormat(value, nameof(value), @"^([^#\r\n]?.*)", "A single line comment cannot contain newline characters");
 
 		return new JsonCommentSingleLine(in value);
@@ -86,7 +90,11 @@ public static class JsonBuilder
 	/// <param name="value">The text to display as a comment</param>
 	public static IJsonComment MultilineComment(in string value)
 	{
-		Guard.Against.NullOrEmpty(value, nameof(value));
+		Guard.Against.NullOrEmpty(value
+#if NETSTANDARD2_1
+			, nameof(value)
+#endif
+		);
 
 		return new JsonCommentMultiLine(in value);
 	}

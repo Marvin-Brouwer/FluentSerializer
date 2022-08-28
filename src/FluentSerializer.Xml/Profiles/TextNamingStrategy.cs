@@ -20,6 +20,6 @@ internal sealed class TextNamingStrategy : INamingStrategy
 	);
 
 	private TextNamingStrategy() { }
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => throw UsingException;
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => throw UsingException;
 	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => throw UsingException;
 }

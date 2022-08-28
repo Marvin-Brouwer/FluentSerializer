@@ -13,6 +13,8 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 
+#pragma warning disable CA1036 // Override methods on comparable types
+
 /// <summary>
 /// Converter to support the OpenAir date structure. <br />
 /// <see href="https://www.openair.com/download/OpenAirXMLAPIGuide.pdf#page=87&amp;zoom=100,120,822" />
@@ -78,17 +80,17 @@ public class OpenAirDateConverter : IXmlConverter<IXmlElement>
 		var universalDate = dateToSerialize.ToUniversalTime();
 
 		var dateProperties = new List<IXmlElement> {
-			Element("year", Text(universalDate.ToString("yyyy"))),
-			Element("month", Text(universalDate.ToString("MM"))),
-			Element("day", Text(universalDate.ToString("dd")))
+			Element("year", Text(universalDate.ToString("yyyy", CultureInfo.InvariantCulture))),
+			Element("month", Text(universalDate.ToString("MM", CultureInfo.InvariantCulture))),
+			Element("day", Text(universalDate.ToString("dd", CultureInfo.InvariantCulture)))
 		};
 
 		if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
 			return Element("Date", dateProperties); 
 
-		dateProperties.Add(Element("hour", Text(universalDate.ToString("HH"))));
-		dateProperties.Add(Element("minute", Text(universalDate.ToString("mm"))));
-		dateProperties.Add(Element("second", Text(universalDate.ToString("ss"))));
+		dateProperties.Add(Element("hour", Text(universalDate.ToString("HH", CultureInfo.InvariantCulture))));
+		dateProperties.Add(Element("minute", Text(universalDate.ToString("mm", CultureInfo.InvariantCulture))));
+		dateProperties.Add(Element("second", Text(universalDate.ToString("ss", CultureInfo.InvariantCulture))));
 
 		return Element("Date", dateProperties);
 	}

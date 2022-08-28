@@ -28,10 +28,12 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	/// <inheritdoc />
 	public bool FormatOutput { get; set; } = true;
 	/// <inheritdoc />
-	public bool WriteNull { get; set; } = false;
+	public bool WriteNull { get; set; }
 
 	/// <inheritdoc />
-	public IConfigurationStack<IConverter> DefaultConverters { get; set; } = new ConfigurationStack<IConverter>();
+	public IConfigurationStack<IConverter> DefaultConverters { get; set; } = new ConfigurationStack<IConverter>(
+		ConverterComparer.Default
+	);
 	/// <inheritdoc />
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	/// <inheritdoc />

@@ -31,7 +31,7 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 		FormatOutput = true;
 		WriteNull = false;
 		DefaultNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new ConfigurationStack<IConverter>
+		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default)
 		{
 			// Built-in converters
 			UseJsonConverters.ConvertibleConverter,

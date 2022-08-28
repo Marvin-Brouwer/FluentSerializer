@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Configuration;
 
 using System;
+using System.Globalization;
 
 namespace FluentSerializer.Core.Converting.Converters;
 
@@ -18,18 +19,27 @@ public abstract class ConvertibleConverterBase : IConverter
 	/// <inheritdoc />
 	public int ConverterHashCode { get; } = typeof(IConvertible).GetHashCode();
 
+	private readonly CultureInfo? _formatProvider;
+	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
+
+	/// <inheritdoc cref="ConvertibleConverterBase"/>
+	protected ConvertibleConverterBase(CultureInfo? formatProvider)
+	{
+		_formatProvider = formatProvider;
+	}
+
 	/// <summary>
 	/// Wrapper around <see cref="Convert.ToString(bool)"/>
 	/// </summary>
-	protected static string? ConvertToString(in object value) => Convert.ToString(value);
+	protected string? ConvertToString(in object value) => Convert.ToString(value, FormatProvider);
 
 	/// <summary>
 	/// Wrapper around <see cref="Convert.ChangeType(object?, Type)"/> to support nullable values
 	/// </summary>
-	protected static object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
+	protected object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{
 		if (string.IsNullOrWhiteSpace(currentValue)) return default;
 
-		return Convert.ChangeType(currentValue, targetType);
+		return Convert.ChangeType(currentValue, targetType, FormatProvider);
 	}
 }

@@ -12,7 +12,7 @@ namespace FluentSerializer.Json.Benchmark.Profiles;
 
 public class JsonReadProfile : ReadProfile
 {
-	public static IEnumerable<TestCase<Stream>> Values => JsonDataCollection.Default.StringTestData;
+	public static IEnumerable<TestCase<Stream>> Values => JsonBenchmarkData.Default.StringTestData;
 
 	[ParamsSource(nameof(Values))]
 	public TestCase<Stream> Value { get => CaseValue; set => CaseValue = value; }

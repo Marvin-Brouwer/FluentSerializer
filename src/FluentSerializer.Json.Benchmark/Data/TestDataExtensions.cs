@@ -2,6 +2,7 @@ using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Json.DataNodes;
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using static FluentSerializer.Json.JsonBuilder;
@@ -31,7 +32,7 @@ public static class TestDataExtensions
 			Property("address",
 				Object(
 					Property("street", StringValue(house.StreetName)),
-					Property("number", Value(house.HouseNumber.ToString())),
+					Property("number", Value(house.HouseNumber.ToString(CultureInfo.InvariantCulture))),
 					Property("city", StringValue(house.ZipCode)),
 					Property("zipCode", StringValue(house.ZipCode)),
 					Property("country", StringValue(house.Country))
@@ -63,7 +64,7 @@ public static class TestDataExtensions
 		details.AddRange(new List<IJsonProperty>
 		{
 			Property("gender", StringValue(person.Gender.ToString().ToLowerInvariant())),
-			Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd")))
+			Property("dob", StringValue(person.DateOfBirth.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)))
 		});
 
 		var properties = new List<IJsonProperty> {

@@ -22,7 +22,7 @@ public static class Program
 		StaticTestRunner.RequireElevatedPermissions(in arguments);
 
 		if (!arguments.Contains("--no-generate"))
-			JsonDataCollection.Default.GenerateTestCaseFiles();
+			JsonBenchmarkData.Default.GenerateTestCaseFiles();
 
 		StaticTestRunner.Run(
 			typeof(Program).Assembly, in arguments,

@@ -2,6 +2,7 @@ using FluentSerializer.Core.BenchmarkUtils.TestData;
 using FluentSerializer.Xml.DataNodes;
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -29,7 +30,7 @@ public static class TestDataExtensions
 			Attribute("type", house.Type),
 			Element("Address",
 				Element("street", Text(house.StreetName)),
-				Element("number", Text(house.HouseNumber.ToString())),
+				Element("number", Text(house.HouseNumber.ToString(CultureInfo.InvariantCulture))),
 				Element("city", Text(house.ZipCode)),
 				Element("zipCode", Text(house.ZipCode)),
 				Element("country", Text(house.Country)),
@@ -68,7 +69,7 @@ public static class TestDataExtensions
 		details.AddRange(new List<IXmlElement>
 		{
 			Element("gender", Text(person.Gender.ToString().ToLowerInvariant())),
-			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd")))
+			Element("dob", Text(person.DateOfBirth.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture)))
 		});
 
 		var children = new List<IXmlNode> {

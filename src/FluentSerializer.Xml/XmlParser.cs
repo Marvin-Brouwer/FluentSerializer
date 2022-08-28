@@ -18,7 +18,11 @@ public static class XmlParser
 	/// <param name="value">The XML to parse</param>
 	public static IXmlElement Parse(in string value)
 	{
-		Guard.Against.NullOrWhiteSpace(value, nameof(value));
+		Guard.Against.NullOrWhiteSpace(value
+#if NETSTANDARD2_1
+			, nameof(value)
+#endif
+		);
 
 		var offset = 0;
 		return new XmlElement(value.AsSpan(), ref offset);

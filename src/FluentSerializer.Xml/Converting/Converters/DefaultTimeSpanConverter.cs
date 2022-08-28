@@ -21,4 +21,7 @@ public sealed class DefaultTimeSpanConverter : SimpleTypeConverter<TimeSpan>
 
 	/// <inheritdoc />
 	public override int GetHashCode() => TimeSpan.MinValue.GetHashCode();
+
+	/// <inheritdoc />
+	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

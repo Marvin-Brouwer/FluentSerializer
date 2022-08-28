@@ -7,7 +7,9 @@ namespace FluentSerializer.UseCase.OpenAir.Models.Request;
 
 internal class Request<TRequest>
 {
+#pragma warning disable CA1822 // Mark members as static
 	public IXmlComment Authentication => Comment("Normally this is where the authentication element would be added");
+#pragma warning restore CA1822 // Mark members as static
 
 	public List<ReadRequest<TRequest>>? ReadRequests { get; set; } 
 	public List<AddRequest<TRequest>>? AddRequests { get; set; }

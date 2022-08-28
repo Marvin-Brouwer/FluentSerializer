@@ -8,14 +8,14 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Converting.Converters;
 
-/// <inheritdoc cref="EnumConverter(in EnumFormat)" />
+/// <inheritdoc cref="EnumConverter(in EnumFormats)" />
 public sealed class EnumConverter : EnumConverterBase, IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
 	/// <summary>
 	/// Converter for <c>enum</c>s with specialized settings
 	/// </summary>
 	/// <paramref name="enumFormat">The format to use when reading and writing serialized <c>enum</c> values</paramref>
-	public EnumConverter(in EnumFormat enumFormat) : base(enumFormat) { }
+	public EnumConverter(in EnumFormats enumFormat) : base(enumFormat, null) { }
 
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{

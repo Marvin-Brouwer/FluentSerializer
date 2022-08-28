@@ -12,7 +12,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 /// </summary>
 internal class RequestEntityNamingStrategy : INamingStrategy
 {
-	public ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext)
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext)
 	{
 	    var typeName = propertyType.Name;
 	    return EntityMappings.GetDataItemName(in typeName);

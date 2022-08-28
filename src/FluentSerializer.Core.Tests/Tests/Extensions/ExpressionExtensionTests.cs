@@ -7,6 +7,7 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 using Xunit;
 
@@ -136,7 +137,7 @@ public sealed class ExpressionExtensionTests
 		}
 		for (int number = 0; number <= 9; number++)
 		{
-			yield return new object[] { number.ToString() };
+			yield return new object[] { number.ToString(CultureInfo.InvariantCulture) };
 		}
 		const string validSpecialCharacters = "_+-";
 		foreach (var character in validSpecialCharacters)

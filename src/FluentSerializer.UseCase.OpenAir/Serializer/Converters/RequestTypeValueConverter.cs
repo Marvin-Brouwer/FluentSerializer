@@ -10,6 +10,8 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 
+#pragma warning disable CA1036 // Override methods on comparable types
+
 /// <summary>
 /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.
 /// OpenAir requires this value to be matched exactly on the type attribute.
@@ -21,7 +23,9 @@ public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(string) == targetType;
 	/// <inheritdoc />
+#pragma warning disable CA1725 // Parameter names should match base declaration
 	public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
+#pragma warning restore CA1725 // Parameter names should match base declaration
 	/// <inheritdoc />
 	public virtual int ConverterHashCode { get; } = typeof(RequestTypeValueConverter).GetHashCode();
 

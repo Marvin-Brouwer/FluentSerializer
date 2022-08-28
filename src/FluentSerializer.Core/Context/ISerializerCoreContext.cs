@@ -37,7 +37,8 @@ public interface ISerializerCoreContext
 	/// <summary>
 	/// Create a copy of this context with an additional path segment
 	/// </summary>
-	ISerializerCoreContext WithPathSegment(in PropertyInfo property);
+	ISerializerCoreContext WithPathSegment(in PropertyInfo propertyInfo);
+
 	/// <inheritdoc cref="WithPathSegment(in PropertyInfo)"/>
 	ISerializerCoreContext WithPathSegment(in Type type);
 
@@ -63,7 +64,8 @@ public interface ISerializerCoreContext<out TDataNode> : ISerializerCoreContext 
 	TDataNode RootNode { get; }
 	
 	/// <inheritdoc cref="ISerializerCoreContext.WithPathSegment(in PropertyInfo)"/>
-	new ISerializerCoreContext<TDataNode> WithPathSegment(in PropertyInfo property);
+	new ISerializerCoreContext<TDataNode> WithPathSegment(in PropertyInfo propertyInfo);
+
 	/// <inheritdoc cref="ISerializerCoreContext.WithPathSegment(in PropertyInfo)"/>
 	new ISerializerCoreContext<TDataNode> WithPathSegment(in Type type);
 }

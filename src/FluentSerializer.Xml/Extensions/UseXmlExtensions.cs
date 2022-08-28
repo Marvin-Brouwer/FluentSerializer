@@ -10,8 +10,8 @@ namespace FluentSerializer.Xml.Extensions;
 /// </summary>
 public static class UseXmlExtensions
 {
-	/// <inheritdoc cref="IUseXmlConverters.Enum(EnumFormat)"/>
-	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormat format)
+	/// <inheritdoc cref="IUseXmlConverters.Enum(EnumFormats)"/>
+	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormats format)
 	{
 		return converters.Use(Converter.For.Enum(format)());
 	}

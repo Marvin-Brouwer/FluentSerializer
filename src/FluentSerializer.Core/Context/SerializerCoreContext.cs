@@ -45,19 +45,27 @@ public class SerializerCoreContext : ISerializerCoreContext
 	}
 
 	/// <inheritdoc />
-	public ISerializerCoreContext WithPathSegment(in PropertyInfo property)
+	public ISerializerCoreContext WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
-		return new SerializerCoreContext(this, string.Concat(propertyTag, property.Name));
+		return new SerializerCoreContext(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
 
 	/// <inheritdoc />
 	public ISerializerCoreContext WithPathSegment(in Type type)
 	{
 		const string typeTag = "T:";
-		Guard.Against.Null(type, nameof(type));
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 
 		return new SerializerCoreContext(this, string.Concat(typeTag, type.Name));
 	}
@@ -90,7 +98,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 	}
 
 	/// <inheritdoc />
-	public bool ContainsReference(in object? instance) => instance is null ? false : _referenceCollection.Contains(instance);
+	public bool ContainsReference(in object? instance) => instance is not null && _referenceCollection.Contains(instance);
 }
 
 /// <inheritdoc cref="ISerializerCoreContext{TDataNode}"/>
@@ -102,19 +110,27 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 
 
 	/// <inheritdoc />
-	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo property)
+	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo propertyInfo)
 	{
 		const string propertyTag = "P:";
-		Guard.Against.Null(property, nameof(property));
+		Guard.Against.Null(propertyInfo
+#if NETSTANDARD2_1
+			, nameof(propertyInfo)
+#endif
+		);
 
-		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(propertyTag, property.Name));
+		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(propertyTag, propertyInfo.Name));
 	}
 
 	/// <inheritdoc />
 	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in Type type)
 	{
 		const string typeTag = "T:";
-		Guard.Against.Null(type, nameof(type));
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 
 		return new SerializerCoreContext<TSerialContainer>(this, string.Concat(typeTag, type.Name));
 	}

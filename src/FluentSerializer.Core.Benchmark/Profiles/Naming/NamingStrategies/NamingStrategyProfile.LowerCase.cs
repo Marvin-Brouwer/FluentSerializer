@@ -9,7 +9,12 @@ namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 [MemoryDiagnoser]
 public class NamingStrategyProfile_LowerCase
 {
-	private static readonly LowerCaseNamingStrategy NamingStrategy = new ();
+
+#pragma warning disable CS0649
+#pragma warning disable S3459 // Unassigned members should be removed
+	private static readonly LowerCaseNamingStrategy NamingStrategy;
+#pragma warning restore S3459 // Unassigned members should be removed
+#pragma warning restore CS0649
 
 	[Benchmark]
 	public ReadOnlySpan<char> LowerCase_ShortNamedClass() =>

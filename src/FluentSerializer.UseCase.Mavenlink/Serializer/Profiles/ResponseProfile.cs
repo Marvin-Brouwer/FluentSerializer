@@ -30,25 +30,3 @@ public sealed class ResponseProfile : JsonSerializerProfile
 			);
 	}
 }
-
-
-//{
-//	"count": 1,
-//	"meta": {
-//		"count": 1,
-//		"pageCount": 1,
-//		"page_number": 1,
-//		"page_size": 200
-//	},
-//	"results": [
-//		{
-//			"id": "U1",
-//			"key": "users"
-//		},
-//		{
-//	"id": "U2",
-//			"key": "users"
-//		}
-//	],
-//	....
-//}

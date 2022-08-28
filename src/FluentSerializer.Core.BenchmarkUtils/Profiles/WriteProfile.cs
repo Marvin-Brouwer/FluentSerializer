@@ -10,8 +10,10 @@ using System.Text;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 
+#pragma warning disable S3881 // "IDisposable" should be implemented correctly
+
 [MemoryDiagnoser]
-public abstract class WriteProfile
+public abstract class WriteProfile : IDisposable
 {
 	private MemoryStream? _writeStream;
 	private StreamWriter? _streamWriter;
@@ -27,19 +29,12 @@ public abstract class WriteProfile
 	public virtual void IterationSetup()
 	{
 		_writeStream!.Seek(0, SeekOrigin.Begin);
+#pragma warning disable S1215 // "GC.Collect" should not be called
 		GC.Collect(0, GCCollectionMode.Forced, true);
 		GC.Collect(1, GCCollectionMode.Forced, true);
 		GC.Collect(2, GCCollectionMode.Forced, true);
+#pragma warning restore S1215 // "GC.Collect" should not be called
 		GC.WaitForPendingFinalizers();
-	}
-
-	[GlobalCleanup]
-	public virtual void GlobalCleanup()
-	{
-		_streamWriter?.Dispose();
-		_writeStream?.Dispose();
-		_streamWriter = null;
-		_writeStream = null;
 	}
 
 	public string Write(TestCase<IDataNode> testCase)
@@ -48,5 +43,16 @@ public abstract class WriteProfile
 		_streamWriter!.Flush();
 
 		return Encoding.UTF8.GetString(_writeStream!.ToArray());
+	}
+
+	[GlobalCleanup]
+	public void Dispose()
+	{
+		GC.SuppressFinalize(this);
+
+		_streamWriter?.Dispose();
+		_writeStream?.Dispose();
+		_streamWriter = null;
+		_writeStream = null;
 	}
 }

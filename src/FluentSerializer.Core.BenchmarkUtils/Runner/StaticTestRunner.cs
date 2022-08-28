@@ -26,9 +26,8 @@ using System.Globalization;
 
 using BenchmarkDotNet.Order;
 
-using Microsoft.Extensions.PlatformAbstractions;
-
 using BenchmarkDotNet.Reports;
+using Microsoft.DotNet.PlatformAbstractions;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -107,7 +106,7 @@ public abstract class StaticTestRunner
 
 		return Job.Dry;
 #else
-		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType="));
+		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		if (runType is not null) Console.WriteLine(runType);
@@ -176,12 +175,37 @@ public abstract class StaticTestRunner
 			return;
 		}
 
-		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
-		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
-		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
+		var runtimeVersion = GetRuntimeVersion();
+		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
 		var directory = markdownSummaryFile.Directory!;
 
 		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
+	}
+
+	private static string GetRuntimeVersion()
+	{
+		var versionString = typeof(object).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+		var plusIndex = versionString!.IndexOf('+');
+		if (plusIndex != -1)
+		{
+			versionString = versionString[0..plusIndex];
+		}
+		var dashIndex = versionString!.IndexOf('-');
+		if (dashIndex != -1)
+		{
+			versionString = versionString[0..dashIndex];
+		}
+
+		var version = new Version(versionString);
+
+		var frameworkTag = RuntimeInformation.FrameworkDescription[1..]
+			.Replace(versionString, string.Empty)
+			.Replace(" ", string.Empty)
+			.ToLowerInvariant();
+
+		if (frameworkTag == "netcore") frameworkTag = "netcoreapp";
+
+		return $"{frameworkTag}_{version.Major}_{version.Minor}";
 	}
 
 	/// <summary>
@@ -205,9 +229,8 @@ public abstract class StaticTestRunner
 			return null;
 		}
 
-		var runtimeName = PlatformServices.Default.Application.RuntimeFramework.Identifier[1..].ToLowerInvariant();
-		var runtimeVersion = PlatformServices.Default.Application.RuntimeFramework.Version.ToString().Replace('.', '_');
-		var readableFileName = $"{dataType}-benchmark-{runtimeName}_{runtimeVersion}-github.md";
+		var runtimeVersion = GetRuntimeVersion();
+		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-github.md";
 		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
 		var fullPath = Path.Join(parentDirectory.FullName, readableFileName);
 

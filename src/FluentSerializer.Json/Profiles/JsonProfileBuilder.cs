@@ -23,8 +23,16 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	/// <inheritdoc cref="JsonProfileBuilder{TModel}" />
 	public JsonProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
-		Guard.Against.Null(defaultNamingStrategy, nameof(defaultNamingStrategy));
-		Guard.Against.Null(propertyMap, nameof(propertyMap));
+		Guard.Against.Null(defaultNamingStrategy
+#if NETSTANDARD2_1
+			, nameof(defaultNamingStrategy)
+#endif
+		);
+		Guard.Against.Null(propertyMap
+#if NETSTANDARD2_1
+			, nameof(propertyMap)
+#endif
+		);
 
 		_defaultNamingStrategy = defaultNamingStrategy;
 		_propertyMap = propertyMap;

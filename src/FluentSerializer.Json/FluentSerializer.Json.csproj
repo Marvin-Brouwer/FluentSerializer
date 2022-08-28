@@ -20,7 +20,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<AnalysisLevel>latest</AnalysisLevel>
+		<AnalysisLevel>latest-Recommended</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -44,19 +44,27 @@
 
 	<ItemGroup>
 		<PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
-		<PackageReference Include="FluentAssertions.Analyzers" Version="0.17.2">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.8" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.44.0.52574">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.8" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.2.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>

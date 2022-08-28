@@ -1,5 +1,6 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
+using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.DataNodes;
 
 using System;
@@ -29,7 +30,7 @@ public interface IConverter<TSerialContainer, TDataNode> : IConverter
 /// <summary>
 /// A service implementation responsible for converting Text to and from a specific datatype
 /// </summary>
-public interface IConverter : IComparable
+public interface IConverter
 {
 	/// <summary>
 	/// Test whether this converter can convert <paramref name="targetType"/> 
@@ -44,17 +45,13 @@ public interface IConverter : IComparable
 	/// <inheritdoc cref="object.GetHashCode()"/>
 	int GetHashCode() => ConverterHashCode;
 
+	/// <inheritdoc />
+	bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
+
 	/// <summary>
 	/// The internal hashcode used for the dataType attached to this converter.
 	/// This is mostly used to distinguish between converters when appending to the set.
 	/// </summary>
 	int ConverterHashCode { get; }
 
-	int IComparable.CompareTo(object? obj)
-	{
-		if (obj is null) return 0;
-		if (obj is not IConverter converter) throw new NotSupportedException("Comparing is only supported with other IConverters");
-
-		return converter.ConverterHashCode;
-	}
 }

@@ -8,7 +8,7 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// Formatting configuration for <see cref="EnumConverterBase"/>
 /// </summary>
 [Flags]
-public enum EnumFormat
+public enum EnumFormats
 {
 	/// <summary>
 	/// Use the <see cref="EnumMemberAttribute" /> to read and write,

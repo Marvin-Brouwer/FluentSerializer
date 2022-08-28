@@ -27,7 +27,11 @@ public sealed class JsonTypeSerializer
 	/// <inheritdoc cref="JsonTypeSerializer" />
 	public JsonTypeSerializer(in IClassMapCollection classMapCollection)
 	{
-		Guard.Against.Null(classMapCollection, nameof(classMapCollection));
+		Guard.Against.Null(classMapCollection
+#if NETSTANDARD2_1
+			, nameof(classMapCollection)
+#endif
+		);
 
 		_classMappings = classMapCollection;
 	}
@@ -39,9 +43,21 @@ public sealed class JsonTypeSerializer
 	/// <exception cref="ClassMapNotFoundException"></exception>
 	public IJsonNode? SerializeToNode(in object dataModel, in Type classType, in ISerializerCoreContext coreContext)
 	{
-		Guard.Against.Null(dataModel, nameof(dataModel));
-		Guard.Against.Null(classType, nameof(classType));
-		Guard.Against.Null(coreContext, nameof(coreContext));
+		Guard.Against.Null(dataModel
+#if NETSTANDARD2_1
+			, nameof(dataModel)
+#endif
+		);
+		Guard.Against.Null(classType
+#if NETSTANDARD2_1
+			, nameof(classType)
+#endif
+		);
+		Guard.Against.Null(coreContext
+#if NETSTANDARD2_1
+			, nameof(coreContext)
+#endif
+		);
 
 		var currentCoreContext = coreContext.WithPathSegment(classType);
 		if (typeof(IEnumerable).IsAssignableFrom(classType))

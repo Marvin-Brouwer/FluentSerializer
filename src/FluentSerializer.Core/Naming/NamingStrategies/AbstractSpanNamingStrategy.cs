@@ -14,14 +14,14 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 public abstract class AbstractSpanNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />
-	public virtual ReadOnlySpan<char> GetName(in PropertyInfo property, in Type propertyType, in INamingContext namingContext) => GetName(property.Name);
+	public virtual ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => GetName(propertyInfo.Name);
 	/// <inheritdoc />
 	public virtual ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => GetName(classType.Name);
 
 	/// <summary>
 	/// Convert a string value to camelCase
 	/// </summary>
-	protected virtual ReadOnlySpan<char> GetName(in string name)
+	protected virtual ReadOnlySpan<char> GetName(string name)
 	{
 		Span<char> characterSpan = stackalloc char[name.Length];
 

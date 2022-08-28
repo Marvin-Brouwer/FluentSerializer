@@ -1,0 +1,170 @@
+name: "Continuous integration - Build binaries"
+on:
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
+
+jobs:
+  build:
+    name: "Build binaries"
+    runs-on: ubuntu-latest
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    ###
+    # 🧰 Install .Net SDKs
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Install .Net SDKs
+      uses: actions/setup-dotnet@v2
+      with:
+        include-prerelease: true
+        dotnet-version: |
+          3.1.x
+          6.0.x
+    ###
+    # 🧰 Set up JDK 11
+    ###
+    - name: 🧰 Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    ###
+    # 🧰 Cache SonarCloud packages
+    ###
+    - name: 🧰 Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: ~/sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+    ###
+    # 🧰 Install SonarCloud scanner
+    ###
+    - name: 🧰 Install SonarCloud scanner
+      shell: pwsh
+      run: |-
+        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
+        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
+    ###
+    # 🧰 Initialize SonarCloud scanner
+    ###
+    - name: 🧰 Initialize SonarCloud scanner
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: >-
+        ./.sonar/scanner/dotnet-sonarscanner begin
+        /k:"Marvin-Brouwer_FluentSerializer"
+        /o:"marvin-brouwer"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        /d:sonar.host.url="https://sonarcloud.io"
+        /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
+        /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
+    ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🛠 Build
+    #
+    # Build the library code for later use
+    ###
+    - name: 🛠 Build
+      run: dotnet build --no-restore --nologo --configuration "Release"
+    ###
+    - name: TEST
+      run: |-
+        tree ./.sonar/scanner
+    ###
+    # 🗃 Publish 'library-binaries' artifacts
+    ###
+    - name: 🗃 Publish 'library-binaries' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: library-binaries
+        path: |
+          ./src/**/bin/Release/*/*.*
+          !./src/*.Tests
+          !./src/*.TestUtils
+          !./src/*.Usecase.*
+          !./src/*.Benchmark
+          !./src/*.BenchmarkUtils
+        retention-days: 1
+    ###
+    # 🗃 Publish 'test-binaries' artifacts
+    ###
+    - name: 🗃 Publish 'test-binaries' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-binaries
+        path: |
+          ./src/**/obj/Release/*/*.*
+          ./src/*.Tests/bin/Release/*/*.*
+          ./src/*.Tests/bin/Release/*/Tests/**/*.*
+          ./src/*.TestUtils/bin/Release/*/*.*
+          ./src/*.Usecase.*/bin/Release/*/*.*
+        retention-days: 1
+    ###
+    # 🗃 Publish 'benchmark-binaries' artifacts
+    ###
+    - name: 🗃 Publish 'benchmark-binaries' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-binaries
+        path: |
+          ./src/*.Benchmark/bin/Release/*/*.*
+          ./src/*/bin/Release/*/ref/*.*
+          ./src/*/obj/Release/*/ref/*.*
+          ./src/*/bin/Release/*/apphost
+          ./src/*/obj/Release/*/apphost
+          ./src/*.BenchmarkUtils/bin/Release/*/*.*
+          ./src/*.TestUtils/bin/Release/*/*.*
+        retention-days: 1
+    ###
+    # 🗃 Publish 'SonarCloud' artifacts
+    ###
+    - name: 🗃 Publish 'SonarCloud' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: sonar-cloud
+        path: |
+          ./.sonarqube
+        retention-days: 1
+    ###
+    # 🗃 Publish 'CodeQL' artifacts
+    ###
+    - name: 🗃 Publish 'CodeQL' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: github-codeql
+        path: |
+          /home/runner/work/_temp/codeql_databases/csharp
+        retention-days: 1

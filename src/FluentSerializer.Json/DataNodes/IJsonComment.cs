@@ -1,4 +1,4 @@
-﻿using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Json.DataNodes;
 
@@ -8,4 +8,4 @@ namespace FluentSerializer.Json.DataNodes;
 /// <code>// comment</code>
 /// <code>/* comment */</code>
 /// </summary>
-public interface IJsonComment : IDataValue, IJsonNode, IJsonObjectContent, IJsonArrayContent { }
+public interface IJsonComment : IDataValue, IJsonObjectContent, IJsonArrayContent { }
