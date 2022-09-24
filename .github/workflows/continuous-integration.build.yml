@@ -88,9 +88,7 @@ jobs:
         /o:"marvin-brouwer"
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         /d:sonar.host.url="https://sonarcloud.io"
-        /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
-        /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
-        /d:sonar.coverage.jacoco.xmlReportPaths="${{github.workspace}}/test-results/coverage/Cobertura.xml"
+        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
     ###
     # 🗃 Restore dependencies
     #
@@ -166,7 +164,7 @@ jobs:
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
-        -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
+        -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -211,6 +209,16 @@ jobs:
         name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
+    ###
+    # 🔬 Perform SonarCloud Analysis
+    ###
+    - name: 🔬 TEST
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: >-
+        tree -P '*.xml|*.html|*.trx'
     ###
     # 🔬 Perform CodeQL Analysis
     ###
