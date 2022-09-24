@@ -26,25 +26,9 @@ jobs:
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
 
-  code-ql:
-    name: "QA"
-    needs: build
-    uses: ./.github/workflows/continuous-integration.code-ql.yml
-    secrets: inherit
-  test:
-    name: "QA"
-    needs: build
-    uses: ./.github/workflows/continuous-integration.test.yml
-    secrets: inherit
-  sonar-cloud:
-    name: "QA"
-    needs: [test, code-ql]
-    uses: ./.github/workflows/continuous-integration.sonar-cloud.yml
-    secrets: inherit
-
   benchmark-core:
     name: "Benchmark"
-    needs: [test, code-ql, sonar-cloud]
+    needs: build
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -54,7 +38,7 @@ jobs:
       netcore_3_1-jobType: "Long"
   benchmark-xml:
     name: "Benchmark"
-    needs: [test, code-ql, sonar-cloud]
+    needs: build
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -62,7 +46,7 @@ jobs:
       reportPrefix: 'xml-serializer'
   benchmark-json:
     name: "Benchmark"
-    needs: [test, code-ql, sonar-cloud]
+    needs: build
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:

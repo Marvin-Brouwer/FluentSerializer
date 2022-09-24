@@ -31,6 +31,16 @@ jobs:
           3.1.x
           6.0.x
     ###
+    # 🧰 Setup .Net tools
+    #
+    # Register tools necessary to run the `test` pipeline-job
+    ###
+    - name: 🧰 Setup .NET tools
+      run: |-
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        dotnet tool install --global dotnet-coverage
+        dotnet tool install --global coverlet.console
+    ###
     # 🧰 Set up JDK 11
     ###
     - name: 🧰 Set up JDK 11
@@ -46,6 +56,16 @@ jobs:
         path: ~/sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
+    ###
+    # 🧰 Initialize CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
+    ###
+    - name: 🧰 Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
     ###
     # 🧰 Install SonarCloud scanner
     ###
@@ -71,16 +91,6 @@ jobs:
         /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
         /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
         /d:sonar.coverage.jacoco.xmlReportPaths="${{github.workspace}}/test-results/coverage/Cobertura.xml"
-    ###
-    # 🧰 Initialize CodeQL
-    #
-    # Initializes the CodeQL tools for scanning.
-    ###
-    - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
-        languages: 'csharp'
     ###
     # 🗃 Restore dependencies
     #
@@ -112,21 +122,6 @@ jobs:
           !./src/*.BenchmarkUtils
         retention-days: 1
     ###
-    # 🗃 Publish 'test-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'test-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-binaries
-        path: |
-          ./src/**/obj/Release/*/*.*
-          ./src/*.Tests/bin/Release/*/*.*
-          ./src/*.Tests/bin/Release/*/Tests/**/*.*
-          ./src/*.TestUtils/bin/Release/*/*.*
-          ./src/*.Usecase.*/bin/Release/*/*.*
-        retention-days: 1
-    ###
     # 🗃 Publish 'benchmark-binaries' artifacts
     ###
     - name: 🗃 Publish 'benchmark-binaries' artifacts
@@ -144,24 +139,91 @@ jobs:
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
     ###
-    # 🗃 Publish 'SonarCloud' artifacts
+    # 🧪 Run unit tests
+    #
+    # Run the unit tests of category `UnitTest` and generate a code coverage report.
     ###
-    - name: 🗃 Publish 'SonarCloud' artifacts
+    - name: 🧪 Run unit tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --logger "trx;LogFileName=test-results.trx"
+        --collect "DotnetCodeCoverage"
+        --collect "XPlat Code coverage"
+        --results-directory:"${{github.workspace}}/test-results"
+        --filter:"Category=UnitTest"
+        /p:CollectCoverage="true"
+        /p:CoverletOutputFormat="opencover"
+        /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
+        /p:MergeWith="${{github.workspace}}/test-results/coverage/"
+        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+
+        reportgenerator
+        -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
+        -targetdir:"${{github.workspace}}/test-results/coverage"
+        -reporttypes:HtmlInline_AzurePipelines\;Cobertura;
+      working-directory: ${{github.workspace}}
+    ###
+    # 🧪 Run integration tests
+    #
+    # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
+    ###
+    - name: 🧪 Run integration tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=IntegrationTest"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
+    ###
+    # 🧪 Run use-case tests
+    #
+    # Run the unit tests of category `UseCase` to illustrate the library still works as intended.
+    # This is basically a kind of integration test.
+    ###
+    - name: 🧪 Run use-case tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=UseCase"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
+    ###
+    # 🗃 Publish 'unit-test-coverage' artifacts
+    ###
+    - name: 🗃 Publish 'unit-test-coverage' artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: sonar-cloud
-        path: |
-          ./.sonarqube
+        name: unit-test-coverage
+        path: ./test-results/coverage
         retention-days: 1
     ###
-    # 🗃 Publish 'CodeQL' artifacts
+    # 🔬 Perform CodeQL Analysis
     ###
-    - name: 🗃 Publish 'CodeQL' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: github-codeql
-        path: |
-          /home/runner/work/_temp/codeql_databases/csharp
-        retention-days: 1
+    - name: 🔬 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+    ###
+    # 🔬 Perform SonarCloud Analysis
+    ###
+    - name: 🔬 Perform SonarCloud Analysis
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: >-
+        ./.sonar/scanner/dotnet-sonarscanner end
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
