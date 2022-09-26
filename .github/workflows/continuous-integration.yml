@@ -28,7 +28,7 @@ jobs:
 
   benchmark-core:
     name: "Benchmark"
-    needs: build
+    needs: ci
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -38,7 +38,7 @@ jobs:
       netcore_3_1-jobType: "Long"
   benchmark-xml:
     name: "Benchmark"
-    needs: build
+    needs: ci
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -46,7 +46,7 @@ jobs:
       reportPrefix: 'xml-serializer'
   benchmark-json:
     name: "Benchmark"
-    needs: build
+    needs: ci
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
