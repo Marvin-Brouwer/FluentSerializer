@@ -41,7 +41,7 @@ jobs:
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
     ###
-    # 🧰 Initialize CodeQL
+    # 🧰 Setup CodeQL
     #
     # Initializes the CodeQL tools for scanning.
     ###
@@ -52,8 +52,10 @@ jobs:
         languages: 'csharp'
     ###
     # 🧰 Setup SonarCloud scanner
+    #
+    # Installs and initializes the SonarCloud scanner
     ###
-    - name: 🧰 Initialize SonarCloud scanner
+    - name: 🧰 Setup SonarCloud scanner
       shell: pwsh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
