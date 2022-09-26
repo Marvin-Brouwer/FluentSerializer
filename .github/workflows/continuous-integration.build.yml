@@ -1,4 +1,4 @@
-name: "Continuous integration - Build binaries"
+name: "Continuous integration - Build and Test"
 on:
   workflow_call:
     secrets:
@@ -6,8 +6,8 @@ on:
         required: true
 
 jobs:
-  build:
-    name: "Build binaries"
+  build-test:
+    name: "Build and Test"
     runs-on: ubuntu-latest
     steps:
     ###
@@ -209,16 +209,6 @@ jobs:
         name: unit-test-coverage
         path: ./test-results/coverage
         retention-days: 1
-    ###
-    # 🔬 Perform SonarCloud Analysis
-    ###
-    - name: 🔬 TEST
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: >-
-        tree -P '*.xml|*.html|*.trx'
     ###
     # 🔬 Perform CodeQL Analysis
     ###

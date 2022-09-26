@@ -21,8 +21,8 @@ env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
-  build:
-    name: "Build"
+  ci:
+    name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
 
