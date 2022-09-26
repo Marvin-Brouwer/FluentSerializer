@@ -1,4 +1,4 @@
-name: "Continuous integration - Build binaries"
+name: "Continuous integration - Build and Test"
 on:
   workflow_call:
     secrets:
@@ -6,8 +6,8 @@ on:
         required: true
 
 jobs:
-  build:
-    name: "Build binaries"
+  build-test:
+    name: "Build and Test"
     runs-on: ubuntu-latest
     steps:
     ###
@@ -31,55 +31,46 @@ jobs:
           3.1.x
           6.0.x
     ###
-    # 🧰 Set up JDK 11
+    # 🧰 Setup .Net tools
+    #
+    # Register tools necessary to run the `test` pipeline-job
     ###
-    - name: 🧰 Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: 1.11
-    ###
-    # 🧰 Cache SonarCloud packages
-    ###
-    - name: 🧰 Cache SonarCloud packages
-      uses: actions/cache@v3
-      with:
-        path: ~/sonar/cache
-        key: ${{ runner.os }}-sonar
-        restore-keys: ${{ runner.os }}-sonar
-    ###
-    # 🧰 Install SonarCloud scanner
-    ###
-    - name: 🧰 Install SonarCloud scanner
-      shell: pwsh
+    - name: 🧰 Setup .NET tools
       run: |-
-        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
-        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        dotnet tool install --global dotnet-coverage
+        dotnet tool install --global coverlet.console
     ###
-    # 🧰 Initialize SonarCloud scanner
+    # 🧰 Setup CodeQL
+    #
+    # Initializes the CodeQL tools for scanning.
     ###
-    - name: 🧰 Initialize SonarCloud scanner
+    - name: 🧰 Setup CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
+        languages: 'csharp'
+    ###
+    # 🧰 Setup SonarCloud scanner
+    #
+    # Installs and initializes the SonarCloud scanner
+    ###
+    - name: 🧰 Setup SonarCloud scanner
       shell: pwsh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
+        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
+
+        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
+
         ./.sonar/scanner/dotnet-sonarscanner begin
         /k:"Marvin-Brouwer_FluentSerializer"
         /o:"marvin-brouwer"
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         /d:sonar.host.url="https://sonarcloud.io"
-        /d:sonar.cs.opencover.reportsPaths="${{github.workspace}}/test-results/coverage/*.opencover.xml"
-        /d:sonar.cs.dotcover.reportsPaths="${{github.workspace}}/test-results/coverage/*.html"
-    ###
-    # 🧰 Initialize CodeQL
-    #
-    # Initializes the CodeQL tools for scanning.
-    ###
-    - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
-        languages: 'csharp'
+        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
     ###
     # 🗃 Restore dependencies
     #
@@ -95,10 +86,6 @@ jobs:
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
     ###
-    - name: TEST
-      run: |-
-        tree ./.sonar/scanner
-    ###
     # 🗃 Publish 'library-binaries' artifacts
     ###
     - name: 🗃 Publish 'library-binaries' artifacts
@@ -113,21 +100,6 @@ jobs:
           !./src/*.Usecase.*
           !./src/*.Benchmark
           !./src/*.BenchmarkUtils
-        retention-days: 1
-    ###
-    # 🗃 Publish 'test-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'test-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-binaries
-        path: |
-          ./src/**/obj/Release/*/*.*
-          ./src/*.Tests/bin/Release/*/*.*
-          ./src/*.Tests/bin/Release/*/Tests/**/*.*
-          ./src/*.TestUtils/bin/Release/*/*.*
-          ./src/*.Usecase.*/bin/Release/*/*.*
         retention-days: 1
     ###
     # 🗃 Publish 'benchmark-binaries' artifacts
@@ -147,24 +119,91 @@ jobs:
           ./src/*.TestUtils/bin/Release/*/*.*
         retention-days: 1
     ###
-    # 🗃 Publish 'SonarCloud' artifacts
+    # 🧪 Run unit tests
+    #
+    # Run the unit tests of category `UnitTest` and generate a code coverage report.
     ###
-    - name: 🗃 Publish 'SonarCloud' artifacts
+    - name: 🧪 Run unit tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --logger "trx;LogFileName=test-results.trx"
+        --collect "DotnetCodeCoverage"
+        --collect "XPlat Code coverage"
+        --results-directory:"${{github.workspace}}/test-results"
+        --filter:"Category=UnitTest"
+        /p:CollectCoverage="true"
+        /p:CoverletOutputFormat="opencover"
+        /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
+        /p:MergeWith="${{github.workspace}}/test-results/coverage/"
+        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+
+        reportgenerator
+        -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
+        -targetdir:"${{github.workspace}}/test-results/coverage"
+        -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
+      working-directory: ${{github.workspace}}
+    ###
+    # 🧪 Run integration tests
+    #
+    # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
+    ###
+    - name: 🧪 Run integration tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=IntegrationTest"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
+    ###
+    # 🧪 Run use-case tests
+    #
+    # Run the unit tests of category `UseCase` to illustrate the library still works as intended.
+    # This is basically a kind of integration test.
+    ###
+    - name: 🧪 Run use-case tests
+      run: >-
+        dotnet test --verbosity:normal
+        --no-build --no-restore --nologo
+        --configuration="Release"
+        --logger:"console;verbosity=detailed"
+        --logger:"GitHubActions"
+        --filter:"Category=UseCase"
+        /clp:forceconsolecolor
+        "${{github.workspace}}/FluentSerializer.sln";
+      working-directory: ${{github.workspace}}
+    ###
+    # 🗃 Publish 'unit-test-coverage' artifacts
+    ###
+    - name: 🗃 Publish 'unit-test-coverage' artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: sonar-cloud
-        path: |
-          ./.sonarqube
+        name: unit-test-coverage
+        path: ./test-results/coverage
         retention-days: 1
     ###
-    # 🗃 Publish 'CodeQL' artifacts
+    # 🔬 Perform CodeQL Analysis
     ###
-    - name: 🗃 Publish 'CodeQL' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: github-codeql
-        path: |
-          /home/runner/work/_temp/codeql_databases/csharp
-        retention-days: 1
+    - name: 🔬 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+    ###
+    # 🔬 Perform SonarCloud Analysis
+    ###
+    - name: 🔬 Perform SonarCloud Analysis
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: >-
+        ./.sonar/scanner/dotnet-sonarscanner end
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

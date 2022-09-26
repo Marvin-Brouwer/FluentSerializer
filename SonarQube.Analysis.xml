@@ -1,0 +1,21 @@
+<SonarQubeAnalysisProperties
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+
+	<Property Name="sonar.sources">./**/*.cs</Property>
+	<Property Name="sonar.sourceEncoding">UTF-8</Property>
+	<Property Name="sonar.exclusions">
+		./**/GlobalSuppressions.cs
+		./**/*.Tests
+	</Property>
+
+	<Property Name="sonar.tests">./**/*.Tests</Property>
+	<Property Name="sonar.test.exclusions">
+		./**/GlobalSuppressions.cs
+	</Property>
+	<!-- Because of defaults './' points to './src', hence the '../' -->
+	<Property Name="sonar.coverageReportPaths">../test-results/coverage/SonarQube.xml</Property>
+
+	<Property Name="sonar.cpd.exclusions">./**/GlobalSuppressions.cs</Property>
+</SonarQubeAnalysisProperties>
