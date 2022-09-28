@@ -1,9 +1,8 @@
-name: "Continuous integration - Build and Test"
+name: "Scheduled SonarCloud"
+
 on:
-  workflow_call:
-    secrets:
-      SONAR_TOKEN:
-        required: true
+  schedule:
+    - cron: '0 06 */7 * *'
 
 jobs:
   build-test:
@@ -38,8 +37,6 @@ jobs:
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-reportgenerator-globaltool
-        dotnet tool install --global dotnet-coverage
-        dotnet tool install --global coverlet.console
     ###
     # 🧰 Setup SonarCloud scanner
     #
@@ -76,39 +73,6 @@ jobs:
     - name: 🛠 Build
       run: dotnet build --no-restore --nologo --configuration "Release"
     ###
-    # 🗃 Publish 'library-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'library-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: library-binaries
-        path: |
-          ./src/**/bin/Release/*/*.*
-          !./src/*.Tests
-          !./src/*.TestUtils
-          !./src/*.Usecase.*
-          !./src/*.Benchmark
-          !./src/*.BenchmarkUtils
-        retention-days: 1
-    ###
-    # 🗃 Publish 'benchmark-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'benchmark-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: benchmark-binaries
-        path: |
-          ./src/*.Benchmark/bin/Release/*/*.*
-          ./src/*/bin/Release/*/ref/*.*
-          ./src/*/obj/Release/*/ref/*.*
-          ./src/*/bin/Release/*/apphost
-          ./src/*/obj/Release/*/apphost
-          ./src/*.BenchmarkUtils/bin/Release/*/*.*
-          ./src/*.TestUtils/bin/Release/*/*.*
-        retention-days: 1
-    ###
     # 🧪 Run unit tests
     #
     # Run the unit tests of category `UnitTest` and generate a code coverage report.
@@ -136,7 +100,7 @@ jobs:
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
-        -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
+        -reporttypes:SonarQube;
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -171,16 +135,6 @@ jobs:
         /clp:forceconsolecolor
         "${{github.workspace}}/FluentSerializer.sln";
       working-directory: ${{github.workspace}}
-    ###
-    # 🗃 Publish 'unit-test-coverage' artifacts
-    ###
-    - name: 🗃 Publish 'unit-test-coverage' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: unit-test-coverage
-        path: ./test-results/coverage
-        retention-days: 1
     ###
     # 🔬 Perform SonarCloud Analysis
     ###

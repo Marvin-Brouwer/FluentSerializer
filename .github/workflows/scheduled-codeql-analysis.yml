@@ -2,7 +2,7 @@ name: "Scheduled GitHub CodeQL"
 
 on:
   schedule:
-    - cron: '18 16 * * 0'
+    - cron: '0 06 * * 0'
 
 jobs:
   analyze:
