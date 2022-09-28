@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - '**'
-      - '!dependabot/**'
   pull_request:
     branches:
       - '**'
       - '!main'
-      - '!dependabot/**'
   workflow_dispatch:
 
 concurrency:
