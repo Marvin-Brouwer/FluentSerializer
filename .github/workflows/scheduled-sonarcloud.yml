@@ -23,7 +23,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Install .Net SDKs
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3.0.0
       with:
         include-prerelease: true
         dotnet-version: |
