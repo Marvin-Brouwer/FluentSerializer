@@ -115,6 +115,8 @@ jobs:
     ###
     - name: 🧪 Run unit tests
       run: >-
+        echo "## Test results  " >>$GITHUB_STEP_SUMMARY
+
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -137,6 +139,8 @@ jobs:
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
         -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
+
+        echo "  " >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -193,12 +197,6 @@ jobs:
         ./.sonar/scanner/dotnet-sonarscanner end
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     ###
-    # TEST
-    ###
-    - name: TEST
-      run: >-
-        cat .sonarqube/out/.sonar/report-task.txt
-    ###
     # 🔬 SonarCloud Quality Gate
     ###
     - name: 🔬 SonarCloud Quality Gate
@@ -208,3 +206,14 @@ jobs:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
+    ###
+    # 🔬 Report SonarCloud Quality Gate
+    ###
+    - name: 🔬 Report SonarCloud Quality Gate
+      if: always()
+      run: |-
+        dashboardUrl=$(sed -n '5p' .sonarqube/out/.sonar/report-task.txt | cut -d '=' -f 2-);
+
+        echo "## SonarCloud Scan  " >>$GITHUB_STEP_SUMMARY
+        echo "**Status:** ${{ steps.sonarcloud-quality-gate-check.outputs.quality-gate-status }}  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in SonarCloud](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
