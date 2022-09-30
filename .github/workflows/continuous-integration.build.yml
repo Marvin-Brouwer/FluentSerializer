@@ -192,12 +192,12 @@ jobs:
       run: >-
         ./.sonar/scanner/dotnet-sonarscanner end
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-  quality-gate:
-    runs-on: ubuntu-latest
-    name: "Quality Gate"
-    needs: build-test
-    steps:
+    ###
+    # TEST
+    ###
+    - name: TEST
+      run: >-
+        cat .sonarqube/out/.sonar/report-task.txt
     ###
     # 🔬 SonarCloud Quality Gate
     ###
@@ -206,3 +206,5 @@ jobs:
       uses: sonarsource/sonarqube-quality-gate-action@master
       env:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt

@@ -71,7 +71,7 @@ jobs:
     #
     # Benchmark the code in the given library (in dotnet 6)
     ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
+    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
         sudo ./net6.0/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.net_6_0-jobType }}
@@ -81,7 +81,7 @@ jobs:
     #
     # Benchmark the code in the given library (in dotnet core 3)
     ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
+    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (netcoreapp3.1)
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
         sudo ./netcoreapp3.1/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.netcore_3_1-jobType }}
