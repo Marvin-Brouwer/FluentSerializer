@@ -215,5 +215,4 @@ jobs:
         dashboardUrl=$(sed -n '5p' .sonarqube/out/.sonar/report-task.txt | cut -d '=' -f 2-);
 
         echo "## SonarCloud Scan  " >>$GITHUB_STEP_SUMMARY
-        echo "**Status:** ${{ steps.sonarcloud-quality-gate-check.outputs.quality-gate-status }}  " >>$GITHUB_STEP_SUMMARY
         echo "[Show in SonarCloud](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
