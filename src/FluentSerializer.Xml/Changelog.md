@@ -2,7 +2,7 @@
 
 ## @next
 
-`-`
+- [#91](https://github.com/Marvin-Brouwer/FluentSerializer/issues/91) Improved overall code quality
 
 ## v2.2.0
 
