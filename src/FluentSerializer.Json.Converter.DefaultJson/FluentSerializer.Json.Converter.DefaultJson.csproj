@@ -48,6 +48,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <PackageReference Include="ReflectionAnalyzers" Version="0.3.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Include="SonarAnalyzer.CSharp" Version="8.45.0.54064">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

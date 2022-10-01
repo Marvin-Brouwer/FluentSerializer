@@ -5,6 +5,7 @@
 
 	<Property Name="sonar.sources">./**/*.cs</Property>
 	<Property Name="sonar.sourceEncoding">UTF-8</Property>
+	<Property Name="sonar.pullrequest.provider">GitHub</Property>
 	<Property Name="sonar.exclusions">
 		./**/GlobalSuppressions.cs
 		./**/*.Tests

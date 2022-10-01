@@ -110,7 +110,8 @@ public static class TypeExtensions
 		// Use full name so any runtime will pass
 		var nullableCompilerServiceAttribute = customAttributes
 			.FirstOrDefault(attribute => attribute.AttributeType.FullName == NullableAttributeName);
-		if (nullableCompilerServiceAttribute?.ConstructorArguments.Count != 1) return false;
+		if (nullableCompilerServiceAttribute is null) return false;
+		if (nullableCompilerServiceAttribute.ConstructorArguments.Count != 1) return false;
 
 		var attributeArgument = nullableCompilerServiceAttribute.ConstructorArguments[0];
 		if (attributeArgument.ArgumentType == typeof(byte[]))
