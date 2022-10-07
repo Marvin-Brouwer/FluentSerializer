@@ -1,0 +1,13 @@
+{
+	"stryker-config": {
+		"project": "FluentSerializer.Xml.csproj",
+		"project-info": {
+			"name": "github.com/Marvin-Brouwer/FluentSerializer",
+			"module": "FluentSerializer.Xml"
+		},
+		"reporters": [
+			"dashboard",
+			"cleartext"
+		]
+	}
+}
