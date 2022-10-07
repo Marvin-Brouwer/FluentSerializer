@@ -1,6 +1,11 @@
 name: "Continuous integration - Run Stryker"
 on:
   workflow_call:
+    inputs:
+      libraryName:
+        description: 'The library to mutate'
+        required: true
+        type: string
     secrets:
       STRYKER_DASHBOARD_API_KEY:
         required: true
@@ -55,6 +60,5 @@ jobs:
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
-        --verbosity "debug"
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
-      working-directory: ${{github.workspace}}/src/FluentSerializer.Core.Tests
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Tests

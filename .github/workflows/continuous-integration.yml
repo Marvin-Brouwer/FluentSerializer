@@ -24,10 +24,24 @@ jobs:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
-  stryker:
+  stryker-core:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
+    with:
+      libraryName: 'Core'
+  stryker-xml:
+    name: "CI"
+    uses: ./.github/workflows/continuous-integration.stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Xml'
+  stryker-json:
+    name: "CI"
+    uses: ./.github/workflows/continuous-integration.stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Json'
 
   benchmark-core:
     name: "Benchmark"
