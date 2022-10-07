@@ -1,0 +1,60 @@
+name: "Continuous integration - Run Stryker"
+on:
+  workflow_call:
+    secrets:
+      STRYKER_DASHBOARD_API_KEY:
+        required: true
+
+env:
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+jobs:
+  build-stryker:
+    name: "Build and Run Stryker.Net"
+    runs-on: ubuntu-latest
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    ###
+    # 🧰 Install .Net SDKs
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Install .Net SDKs
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    ###
+    # 🧰 Setup .Net tools
+    #
+    # Register tools necessary to run the `test` pipeline-job
+    ###
+    - name: 🧰 Setup .NET tools
+      run: |-
+        dotnet tool install --global dotnet-stryker
+    ###
+    # 🗃 Restore dependencies
+    #
+    # Fill the NuGet store with necessary libraries
+    ###
+    - name: 🗃 Restore dependencies
+      run: dotnet restore
+    ###
+    # 🛠 Build & Run
+    #
+    # Run Stryker.Net over codebase
+    # debug verbosity because we don't have the progress reporter in pipelines
+    ###
+    - name: 🛠 Build & Run
+      run: >-
+        dotnet stryker
+        --config-file "stryker-config.pipeline.json"
+        --version "${{ github.ref }}"
+        --verbosity "debug"
+        --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+      working-directory: ${{github.workspace}}/src/FluentSerializer.Core.Tests
