@@ -17,11 +17,16 @@ concurrency:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 jobs:
   ci:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
+    secrets: inherit
+  stryker:
+    name: "CI"
+    uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
 
   benchmark-core:
