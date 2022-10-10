@@ -37,11 +37,25 @@ jobs:
     with:
       libraryName: 'Xml'
   stryker-json:
-    name: "CI"
+    name: "CI / Report Stryker Dashboard"
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
     with:
       libraryName: 'Json'
+  report-stryker:
+    name: "Report Stryker dashboard"
+    runs-on: ubuntu-latest
+    steps:
+    ###
+    # 🔬 Report Stryker dashboard
+    ###
+    - name: 🔬 Report Stryker dashboard
+      if: always()
+      run: |-
+        dashboardUrl="https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
+        echo "## Stryker report  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in Stryker dashboard]((${dashboardUrl}))" >>$GITHUB_STEP_SUMMARY
 
   benchmark-core:
     name: "Benchmark"
