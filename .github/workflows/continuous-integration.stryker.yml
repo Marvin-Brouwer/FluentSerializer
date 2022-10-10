@@ -1,11 +1,6 @@
-name: "Continuous integration - Run Stryker"
+name: "Continuous integration - Stryker"
 on:
   workflow_call:
-    inputs:
-      libraryName:
-        description: 'The library to mutate'
-        required: true
-        type: string
     secrets:
       STRYKER_DASHBOARD_API_KEY:
         required: true
@@ -14,52 +9,41 @@ env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 jobs:
-  build-stryker:
-    name: "Run Stryker on ${{ inputs.libraryName }}"
+
+  stryker-core:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Core'
+  stryker-xml:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Xml'
+  stryker-json:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Json'
+
+  finalize-stryker:
+    name: "Finalize"
     runs-on: ubuntu-latest
+    needs: [stryker-core, stryker-xml, stryker-json]
     steps:
     ###
-    # Checkout repository
-    ###
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        lfs: true
-    ###
-    # 🧰 Install .Net SDKs
+    # 🔬 Report Stryker dashboard
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Really all this does is write the dashboard URL to the job overview.
+    # The console output from the stryker report is module specific and gets very weird line endings.
     ###
-    - name: 🧰 Install .Net SDKs
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    ###
-    # 🧰 Setup .Net tools
-    #
-    # Register tools necessary to run the `test` pipeline-job
-    ###
-    - name: 🧰 Setup .NET tools
+    - name: 🔬 Report Stryker dashboard
+      if: always()
       run: |-
-        dotnet tool install --global dotnet-stryker
-    ###
-    # 🗃 Restore dependencies
-    #
-    # Fill the NuGet store with necessary libraries
-    ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    ###
-    # 🛠 Build & Run
-    #
-    # Run Stryker.Net over codebase
-    # debug verbosity because we don't have the progress reporter in pipelines
-    ###
-    - name: 🛠 Build & Run
-      run: >-
-        dotnet stryker
-        --config-file "stryker-config.pipeline.json"
-        --version "${{ github.ref }}"
-        --break-at 40
-        --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Tests
+        dashboardUrl="https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
+        echo "## Stryker report  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in Stryker dashboard](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
