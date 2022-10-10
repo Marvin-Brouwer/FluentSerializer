@@ -32,6 +32,7 @@ jobs:
   finalize-stryker:
     name: "Finalize"
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [stryker-core, stryker-xml, stryker-json]
     steps:
     ###
@@ -41,7 +42,7 @@ jobs:
     # The console output from the stryker report is module specific and gets very weird line endings.
     ###
     - name: 🔬 Report Stryker dashboard
-      if: always()
+      if: ${{ always() }}
       run: |-
         dashboardUrl="https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
 
