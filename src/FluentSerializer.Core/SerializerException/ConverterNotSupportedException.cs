@@ -1,5 +1,4 @@
 using FluentSerializer.Core.Configuration;
-using FluentSerializer.Core.Mapping;
 
 using System;
 using System.Reflection;

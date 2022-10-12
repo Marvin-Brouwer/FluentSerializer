@@ -3,8 +3,6 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-using FluentSerializer.Json.DataNodes;
-
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords",
