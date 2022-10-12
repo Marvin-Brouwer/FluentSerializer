@@ -37,5 +37,4 @@ public interface IDataNode : IEquatable<IDataNode?>
 	/// Append the serialized value of this <see cref="IDataNode"/> to an <see cref="ITextWriter"/>
 	/// </summary>
 	ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true);
-
 }
