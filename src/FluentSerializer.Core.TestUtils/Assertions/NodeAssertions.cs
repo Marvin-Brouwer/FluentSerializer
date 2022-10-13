@@ -12,7 +12,7 @@ namespace FluentSerializer.Core.TestUtils.Assertions;
 /// <summary>
 /// Assertions that are specifically for <see cref="IDataNode"/>s
 /// </summary>
-public class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
+public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 {
 	public NodeAssertions(IDataNode instance) : base(instance) { }
 
@@ -27,7 +27,8 @@ public class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 			.ForCondition(result => result)
 			.FailWith("Expected result to be {0}, but found {1}.",
 				_ => expectation.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0),
-				_ => Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0));
+				_ => Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0)
+			);
 
 		return new AndConstraint<NodeAssertions>(this);
 	}
