@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentAssertions.Collections;
 
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Assertions;
@@ -17,6 +18,17 @@ public static class AssertionExtensions
 	public static AndConstraint<StringAssertions> ShouldBeBinaryEquatableTo(this string assertions, string expectation)
 	{
 		return new StringAssertions(assertions).BeEquatableTo(expectation);
+	}
+
+	/// <summary>
+	/// Custom implementation of <see cref="FluentAssertions.Primitives.StringAssertions"/>
+	/// to make it easier to work with escape characters.
+	/// </summary>
+	[CustomAssertion]
+	public static AndConstraint<GenericCollectionAssertions<T>> AllBeUnique<T>(this GenericCollectionAssertions<T> assertions)
+		where T : struct
+	{
+		return new ValueTypeCollectionAssertions<T>(assertions.Subject).AllBeUnique();
 	}
 
 	/// <summary>

@@ -1,16 +1,14 @@
 using FluentAssertions;
-using FluentAssertions.Equivalency;
 
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
+using FluentSerializer.Core.TestUtils.Extensions;
 
 using Moq;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -155,7 +153,7 @@ public sealed partial class DataNodeComparerTests
 		var sut = DataNodeComparer.Default;
 
 		// Act
-		var results = new []
+		var results = new[]
 		{
 			// Test all Generic versions
 			sut.GetHashCodeForAll(nodes[0]),
@@ -167,7 +165,7 @@ public sealed partial class DataNodeComparerTests
 		};
 
 		// Assert
-		results.Distinct().Should().HaveCount(results.Length);
+		results.Should().AllBeUnique();
 		results.Should().AllSatisfy(result => result.Should().NotBe(NullValueHashCode));
 		results.Should().AllSatisfy(result => result.Should().NotBe(NoItemsHashCode));
 
