@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
@@ -8,6 +9,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -140,117 +143,40 @@ public sealed partial class DataNodeComparerTests
 	}
 
 	[Fact]
-	public void GetHashCodeForAll_OneValue_ReturnsHashCode()
+	public void GetHashCodeForAll_GeneratedValue_ReturnsHashCode()
 	{
 		// Arrange
-		var node = new TestDataNode("One");
+		const int amountOfOverloads = 4;
+		var nodes = Enumerable
+			.Range(0, amountOfOverloads)
+			.Select(item => new TestDataNode($"Item_{item}"))
+			.ToArray();
 
 		var sut = DataNodeComparer.Default;
 
 		// Act
-		var result = sut.GetHashCodeForAll(node);
+		var results = new []
+		{
+			// Test all Generic versions
+			sut.GetHashCodeForAll(nodes[0]),
+			sut.GetHashCodeForAll(nodes[0], nodes[1]),
+			sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]),
+
+			// Test the dynamic version
+			sut.GetHashCodeForAll(nodes.ToArray<object?>())
+		};
 
 		// Assert
-		result.Should().Be(sut.GetHashCodeForAll(node));
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
-	}
+		results.Distinct().Should().HaveCount(results.Length);
+		results.Should().AllSatisfy(result => result.Should().NotBe(NullValueHashCode));
+		results.Should().AllSatisfy(result => result.Should().NotBe(NoItemsHashCode));
 
-	[Fact]
-	public void GetHashCodeForAll_TwoValues_ReturnsHashCode()
-	{
-		// Arrange
-		var node1 = new TestDataNode("One");
-		var node2 = new TestDataNode("Two");
-
-		var sut = DataNodeComparer.Default;
-
-		// Act
-		var result1 = sut.GetHashCodeForAll(node1);
-		var result2 = sut.GetHashCodeForAll(node2);
-
-		// Assert
-		result1.Should().NotBe(result2);
-		result1.Should().NotBe(NullValueHashCode);
-		result1.Should().NotBe(NoItemsHashCode);
-
-		result2.Should().NotBe(result1);
-		result2.Should().NotBe(NullValueHashCode);
-		result2.Should().NotBe(NoItemsHashCode);
-	}
-
-	[Fact]
-	public void GetHashCodeForAll_ThreeValues_ReturnsHashCode()
-	{
-		// Arrange
-		var node1 = new TestDataNode("One");
-		var node2 = new TestDataNode("Two");
-		var node3 = new TestDataNode("Tree");
-
-		var sut = DataNodeComparer.Default;
-
-		// Act
-		var result1 = sut.GetHashCodeForAll(node1);
-		var result2 = sut.GetHashCodeForAll(node2);
-		var result3 = sut.GetHashCodeForAll(node3);
-
-		// Assert
-		result1.Should().NotBe(result2);
-		result1.Should().NotBe(result3);
-		result1.Should().NotBe(NullValueHashCode);
-		result1.Should().NotBe(NoItemsHashCode);
-
-		result2.Should().NotBe(result1);
-		result2.Should().NotBe(result3);
-		result2.Should().NotBe(NullValueHashCode);
-		result2.Should().NotBe(NoItemsHashCode);
-
-		result3.Should().NotBe(result1);
-		result3.Should().NotBe(result2);
-		result3.Should().NotBe(NullValueHashCode);
-		result3.Should().NotBe(NoItemsHashCode);
-	}
-
-	[Fact]
-	public void GetHashCodeForAll_ManyValues_ReturnsHashCode()
-	{
-		// Arrange
-		var node1 = new TestDataNode("One");
-		var node2 = new TestDataNode("Two");
-		var node3 = new TestDataNode("Tree");
-		var node4 = new TestDataNode("Four and more");
-
-		var sut = DataNodeComparer.Default;
-
-		// Act
-		var result1 = sut.GetHashCodeForAll(node1);
-		var result2 = sut.GetHashCodeForAll(node2);
-		var result3 = sut.GetHashCodeForAll(node3);
-		var result4 = sut.GetHashCodeForAll(node4);
-
-		// Assert
-		result1.Should().NotBe(result2);
-		result1.Should().NotBe(result3);
-		result1.Should().NotBe(result4);
-		result1.Should().NotBe(NullValueHashCode);
-		result1.Should().NotBe(NoItemsHashCode);
-
-		result2.Should().NotBe(result1);
-		result2.Should().NotBe(result3);
-		result2.Should().NotBe(result4);
-		result2.Should().NotBe(NullValueHashCode);
-		result2.Should().NotBe(NoItemsHashCode);
-
-		result3.Should().NotBe(result1);
-		result3.Should().NotBe(result2);
-		result3.Should().NotBe(result4);
-		result3.Should().NotBe(NullValueHashCode);
-		result3.Should().NotBe(NoItemsHashCode);
-
-		result4.Should().NotBe(result1);
-		result4.Should().NotBe(result2);
-		result4.Should().NotBe(result3);
-		result4.Should().NotBe(NullValueHashCode);
-		result4.Should().NotBe(NoItemsHashCode);
+		// This test should fail if not all overloads are covered.
+		// If anyone ever adds an (n)th overload for performance gain, we need a new result added.
+		results.Should().HaveCount(amountOfOverloads);
+		sut.GetType().GetMethods()
+			.Where(method => method.Name.Equals(nameof(sut.GetHashCodeForAll), StringComparison.Ordinal))
+			.Should()
+			.HaveCount(amountOfOverloads);
 	}
 }
