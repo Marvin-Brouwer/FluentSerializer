@@ -15,6 +15,8 @@ public readonly struct DefaultReferenceComparer : IEqualityComparer
 	/// <inheritdoc cref="IEqualityComparer"/>
 	public new bool Equals(object? x, object? y)
 	{
+		if (x is null && y is null) return true;
+
 		if (x is null) return false;
 		if (y is null) return false;
 		if (ReferenceEquals(x, y)) return true;
