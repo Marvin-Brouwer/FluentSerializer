@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 
 using FluentAssertions.Collections;
+using System.Globalization;
 
 namespace FluentSerializer.Core.TestUtils.Assertions;
 
@@ -50,7 +51,7 @@ public sealed class ValueTypeCollectionAssertions<T> : GenericCollectionAssertio
 		var stringBuilder = new StringBuilder(64)
 			.Append("\tindexes: [")
 			.AppendJoin(',', indexes)
-			.AppendFormat("]; value: {0};", value);
+			.AppendFormat(CultureInfo.InvariantCulture, "]; value: {0};", value);
 
 		return stringBuilder;
 	}
