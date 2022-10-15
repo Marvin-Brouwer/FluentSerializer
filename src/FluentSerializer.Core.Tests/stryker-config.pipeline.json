@@ -8,6 +8,10 @@
 		"reporters": [
 			"dashboard",
 			"cleartext"
+		],
+		"ignore-methods": [
+			"*Exception.ctor",
+			"SerializerConfiguration.get_FormatOutput"
 		]
 	}
 }
