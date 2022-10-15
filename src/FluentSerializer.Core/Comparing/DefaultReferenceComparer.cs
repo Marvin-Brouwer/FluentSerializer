@@ -1,11 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
 
 namespace FluentSerializer.Core.Comparing;
 
 /// <summary>
-/// Simple comparer between two references
+/// Simple comparer between two references to any type of object or struct
 /// </summary>
-public readonly struct DefaultReferenceComparer : IEqualityComparer
+public readonly struct DefaultReferenceComparer : IEqualityComparer, IEqualityComparer<object>
 {
 	/// <summary>
 	/// Static default implementation

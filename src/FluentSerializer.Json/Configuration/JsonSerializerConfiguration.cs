@@ -31,8 +31,7 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 		FormatOutput = true;
 		WriteNull = false;
 		DefaultNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default)
-		{
+		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default,
 			// Built-in converters
 			UseJsonConverters.ConvertibleConverter,
 			UseJsonConverters.DefaultEnumConverter,
@@ -45,6 +44,6 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 			UseJsonConverters.DefaultTimeSpanConverter,
 			// Collection converters
 			UseJsonConverters.CollectionConverter
-		};
+		);
 	}
 }

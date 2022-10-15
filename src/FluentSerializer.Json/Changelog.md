@@ -3,6 +3,7 @@
 ## @next
 
 - [#91](https://github.com/Marvin-Brouwer/FluentSerializer/issues/91) Improved overall code quality
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Fixed ConfigurationStack overriding
 
 ## v2.2.0
 

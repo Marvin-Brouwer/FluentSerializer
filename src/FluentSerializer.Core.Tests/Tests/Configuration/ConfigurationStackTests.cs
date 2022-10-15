@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Configuration;
 
 using System.Collections.Generic;
@@ -18,34 +19,36 @@ namespace FluentSerializer.Core.Tests.Tests.Configuration;
 /// </summary>
 /// <remarks>
 /// Functionally, this will be used for configuring <see cref"Core.Converting.IConverter"/>s.
-/// Effectively meaning, that new  <see cref"Core.Converting.IConverter"/>s will be lower in the chain for custom types.
-/// But, still allowing to force overloads for system types / OOTB converters to be overridden with the forceTop option.
+/// Effectively meaning, that new <see cref"Core.Converting.IConverter"/>s will be added to the top, existing items will only be updated.
+/// But, still allowing to force overloads for system types / OOTB converters to be repositioned with the forceTop option.
 /// </remarks>
 public sealed class ConfigurationStackTests
 {
-	private sealed class TestComparer : IComparer<int>
+	private sealed class TestComparer : IEqualityComparer<int>
 	{
-		public int Compare(int x, int y) => x.CompareTo(y);
+		public bool Equals(int x, int y) => DefaultReferenceComparer.Default.Equals(x, y);
+
+		public int GetHashCode(int obj) => DefaultReferenceComparer.Default.GetHashCode(obj);
 	}
-	private static ConfigurationStack<int> Sut => new(new TestComparer())
-	{
+
+	private static ConfigurationStack<int> Sut => new(new TestComparer(),
 		1, 2, 3
-	};
+	);
 
 	[Fact]
 	public void Use_ExistingItem_NotAdded()
 	{
 		// Arrange
 		var item = 2;
+		var expected = new[] { 3, 2, 1 };
 
 		// Act
-		var result = Sut.Use(item);
+		var result = Sut.Use(item).ToList();
 
 		// Assert
-		result.AsEnumerable().Should().BeEquivalentTo(new List<int>
-		{
-			3, 2, 1
-		});
+		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
 	}
 
 	[Fact]
@@ -53,31 +56,31 @@ public sealed class ConfigurationStackTests
 	{
 		// Arrange
 		var item = 2;
+		var expected = new[] { 2, 3, 1 };
 
 		// Act
-		var result = Sut.Use(item, true);
+		var result = Sut.Use(item, true).ToList();
 
 		// Assert
-		result.AsEnumerable().Should().BeEquivalentTo(new List<int>
-		{
-			2, 3, 1
-		});
+		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
 	}
 
 	[Fact]
-	public void Use_NewItem_AddedToBottom()
+	public void Use_NewItem_AddedToTop()
 	{
 		// Arrange
 		var item = 4;
+		var expected = new[] { 4, 3, 2, 1 };
 
 		// Act
-		var result = Sut.Use(item);
+		var result = Sut.Use(item).ToList();
 
 		// Assert
-		result.AsEnumerable().Should().BeEquivalentTo(new List<int>
-		{
-			3, 2, 1, 4
-		});
+		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
 	}
 
 	[Fact]
@@ -85,14 +88,43 @@ public sealed class ConfigurationStackTests
 	{
 		// Arrange
 		var item = 4;
+		var expected = new [] { 4, 3, 2, 1 };
 
 		// Act
-		var result = Sut.Use(item, true);
+		var result = Sut.Use(item, true).ToArray();
 
 		// Assert
-		result.AsEnumerable().Should().BeEquivalentTo(new List<int>
+		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+	}
+
+	[Fact]
+	public void GetEnumerator_ShouldBeReversed()
+	{
+		// Arrange
+		var sut = new ConfigurationStack<int>(new TestComparer(),
+			0, 1, 2, 3, 4 ,5 ,6, 7, 8, 9
+		);
+		var expected = new[]
 		{
-			4, 3, 2, 1
-		});
+			9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+		};
+
+		// Act
+		using var enumerator = sut.GetEnumerator();
+
+		// Assert
+		Enumerate(enumerator).Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+
+		static IEnumerable<T> Enumerate<T>(IEnumerator<T> enumerator)
+		{
+			while (enumerator.MoveNext())
+			{
+				yield return enumerator.Current;
+			}
+		}
 	}
 }
