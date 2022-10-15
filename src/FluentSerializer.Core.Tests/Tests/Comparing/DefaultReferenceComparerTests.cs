@@ -35,7 +35,7 @@ public sealed class DefaultReferenceComparerTests
 
 		// Act
 		var resultLeft = Sut.Equals(a, b);
-		var resultRight = Sut.Equals(c, b);
+		var resultRight = Sut.Equals(b, c);
 
 		// Assert
 		resultLeft.Should().BeFalse();
