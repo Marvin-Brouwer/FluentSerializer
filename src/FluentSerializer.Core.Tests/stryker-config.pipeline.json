@@ -9,9 +9,14 @@
 			"dashboard",
 			"cleartext"
 		],
+		"mutate": [
+			"!**/*.generated.cs",
+			"!**/*.g.cs",
+			"!**/GlobalSuppressions.cs",
+			"!**/*Exception.cs"
+		],
 		"ignore-methods": [
-			"*Exception.ctor",
-			"SerializerConfiguration.get_FormatOutput"
+			"*Exception.ctor"
 		]
 	}
 }
