@@ -1,6 +1,5 @@
 using FluentAssertions;
 
-using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Extensions;
 
@@ -11,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Xunit;
-
 
 namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
@@ -30,11 +28,8 @@ public sealed partial class DataNodeComparerTests
 	[Fact]
 	public void GetHashCodeForAll_Null_ReturnsZero()
 	{
-		// Arrange
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll<IDataNode?>(null);
+		var result = Sut.GetHashCodeForAll<IDataNode?>(null);
 
 		// Assert
 		result.Should().Be(NullValueHashCode);
@@ -44,11 +39,8 @@ public sealed partial class DataNodeComparerTests
 	[Fact]
 	public void GetHashCodeForAll_Primitive_ReturnsHashCode()
 	{
-		// Arrange
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll(6);
+		var result = Sut.GetHashCodeForAll(6);
 
 		// Assert
 		result.Should().NotBe(NullValueHashCode);
@@ -58,11 +50,8 @@ public sealed partial class DataNodeComparerTests
 	[Fact]
 	public void GetHashCodeForAll_String_ReturnsHashCode()
 	{
-		// Arrange
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll("SomeString");
+		var result = Sut.GetHashCodeForAll("SomeString");
 
 		// Assert
 		result.Should().NotBe(NullValueHashCode);
@@ -75,10 +64,8 @@ public sealed partial class DataNodeComparerTests
 		// Arrange
 		var data = new Mock<IDataValue>(MockBehavior.Loose);
 
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll(data.Object);
+		var result = Sut.GetHashCodeForAll(data.Object);
 
 		// Assert
 		result.Should().Be(NullValueHashCode);
@@ -94,10 +81,8 @@ public sealed partial class DataNodeComparerTests
 			.SetupGet(node => node.Value)
 			.Returns("SomeValue");
 
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll(data.Object);
+		var result = Sut.GetHashCodeForAll(data.Object);
 
 		// Assert
 		result.Should().NotBe(NullValueHashCode);
@@ -110,10 +95,8 @@ public sealed partial class DataNodeComparerTests
 		// Arrange
 		var data = Enumerable.Empty<IDataNode>();
 
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll(data);
+		var result = Sut.GetHashCodeForAll(data);
 
 		// Assert
 		result.Should().NotBe(NullValueHashCode);
@@ -129,13 +112,11 @@ public sealed partial class DataNodeComparerTests
 			new TestDataNode("Test")
 		};
 
-		var sut = DataNodeComparer.Default;
-
 		// Act
-		var result = sut.GetHashCodeForAll(data);
+		var result = Sut.GetHashCodeForAll(data);
 
 		// Assert
-		result.Should().Be(sut.GetHashCodeForAll(data));
+		result.Should().Be(Sut.GetHashCodeForAll(data));
 		result.Should().NotBe(NullValueHashCode);
 		result.Should().NotBe(NoItemsHashCode);
 	}
@@ -150,18 +131,16 @@ public sealed partial class DataNodeComparerTests
 			.Select(item => new TestDataNode($"Item_{item}"))
 			.ToArray();
 
-		var sut = DataNodeComparer.Default;
-
 		// Act
 		var results = new[]
 		{
 			// Test all Generic versions
-			sut.GetHashCodeForAll(nodes[0]),
-			sut.GetHashCodeForAll(nodes[0], nodes[1]),
-			sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]),
+			Sut.GetHashCodeForAll(nodes[0]),
+			Sut.GetHashCodeForAll(nodes[0], nodes[1]),
+			Sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]),
 
 			// Test the dynamic version
-			sut.GetHashCodeForAll(nodes.ToArray<object?>())
+			Sut.GetHashCodeForAll(nodes.ToArray<object?>())
 		};
 
 		// Assert
@@ -172,8 +151,8 @@ public sealed partial class DataNodeComparerTests
 		// This test should fail if not all overloads are covered.
 		// If anyone ever adds an (n)th overload for performance gain, we need a new result added.
 		results.Should().HaveCount(amountOfOverloads);
-		sut.GetType().GetMethods()
-			.Where(method => method.Name.Equals(nameof(sut.GetHashCodeForAll), StringComparison.Ordinal))
+		Sut.GetType().GetMethods()
+			.Where(method => method.Name.Equals(nameof(Sut.GetHashCodeForAll), StringComparison.Ordinal))
 			.Should()
 			.HaveCount(amountOfOverloads);
 	}
