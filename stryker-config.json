@@ -2,7 +2,17 @@
 	"stryker-config": {
 		"reporters": [
 			"progress",
-			"html"
+			"html",
+			"json"
+		],
+		"mutate": [
+			"!**/*.generated.cs",
+			"!**/*.g.cs",
+			"!**/GlobalSuppressions.cs",
+			"!**/*Exception.cs"
+		],
+		"ignore-methods": [
+			"*Exception.ctor"
 		]
 	}
 }
