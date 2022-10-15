@@ -13,7 +13,8 @@
 			"!**/*.generated.cs",
 			"!**/*.g.cs",
 			"!**/GlobalSuppressions.cs",
-			"!**/*Exception.cs"
+			"!**/*Exception.cs",
+			"!Configuration/XmlSerializerConfiguration.cs"
 		],
 		"ignore-methods": [
 			"*Exception.ctor"
