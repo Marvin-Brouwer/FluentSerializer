@@ -11,6 +11,8 @@ namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
 public sealed partial class DataNodeComparerTests
 {
+	private static readonly DataNodeComparer Sut = DataNodeComparer.Default;
+
 	public sealed class TestDataNode : IDataNode
 	{
 		public string Name { get; }
@@ -29,15 +31,10 @@ public sealed partial class DataNodeComparerTests
 			);
 		}
 
-		public bool Equals(IDataNode? other)
-		{
+		public bool Equals(IDataNode? other) =>
 			throw new NotSupportedException("The equals will be tested through the Comparer");
-		}
 
-		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0,
-			in bool writeNull = true)
-		{
+		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true) =>
 			throw new NotSupportedException("Out of test scope");
-		}
 	}
 }
