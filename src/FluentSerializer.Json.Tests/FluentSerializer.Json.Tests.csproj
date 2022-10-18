@@ -38,7 +38,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.46.0.54807">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.47.0.55603">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
