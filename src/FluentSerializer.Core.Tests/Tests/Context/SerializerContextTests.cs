@@ -34,8 +34,8 @@ public sealed class SerializerContextTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),
-	 InlineData(typeof(int)), InlineData(typeof(int?))]
+		InlineData(typeof(int)), InlineData(typeof(int?)),
+		Trait("Category", "UnitTest")]
 	public void FindNamingStrategy_Constructor(Type input)
 	{
 		// Arrange
