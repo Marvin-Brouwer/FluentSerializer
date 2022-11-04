@@ -16,7 +16,12 @@
 		./**/GlobalSuppressions.cs
 	</Property>
 	<!-- Because of defaults './' points to './src', hence the '../' -->
-	<Property Name="sonar.coverageReportPaths">../test-results/coverage/SonarQube.xml</Property>
+	<Property Name="sonar.coverageReportPaths">
+		../test-results/coverage/SonarQube.xml
+	</Property>
 
-	<Property Name="sonar.cpd.exclusions">./**/GlobalSuppressions.cs</Property>
+	<Property Name="sonar.cpd.exclusions">
+		./**/GlobalSuppressions.cs
+	</Property>
+
 </SonarQubeAnalysisProperties>
