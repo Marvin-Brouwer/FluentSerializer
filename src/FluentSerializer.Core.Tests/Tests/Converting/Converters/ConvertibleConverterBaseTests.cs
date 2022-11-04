@@ -4,7 +4,6 @@ using FluentSerializer.Core.Converting.Converters;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Xunit;
@@ -83,29 +82,10 @@ public sealed class ConvertibleConverterBaseTests
 	#endregion
 
 	#region ConvertToNullableDataType
-	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
-		MemberData(nameof(GenerateConvertibleData))]
-	public void ConvertToNullableDataType_EmptyValue_ReturnsDefault(object requested, string unused)
-	{
-		_ = unused;
-
-		// Arrange
-		var input = string.Empty;
-		var expected = (object?)null;
-
-		// Act
-		var canConvert = _sut.CanConvert(requested.GetType());
-		var result = _sut.ConvertToNullableDataType(input, typeof(bool?));
-
-		// Assert
-		canConvert.Should().BeTrue();
-		result.Should().BeEquivalentTo(expected);
-	}
 
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
-		MemberData(nameof(GenerateConvertibleData))]
+		MemberData(nameof(GenerateConvertibleData)),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ConvertToNullableDataType_Convertible_ReturnsValue(object expected, string input)
 	{
 		// Act
@@ -115,6 +95,18 @@ public sealed class ConvertibleConverterBaseTests
 		// Assert
 		canConvert.Should().BeTrue();
 		result.Should().BeEquivalentTo(expected);
+	}
+
+	[Theory,
+		InlineData(typeof(string)), InlineData(typeof(int)), InlineData(typeof(bool)),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void ConvertToNullableDataType_Convertible_EmptyValue_ReturnsNull(Type type)
+	{
+		// Act
+		var result = _sut.ConvertToNullableDataType(string.Empty, type);
+
+		// Assert
+		result.Should().BeNull();
 	}
 
 	[Fact,
@@ -150,10 +142,10 @@ public sealed class ConvertibleConverterBaseTests
 			.ThrowExactly<InvalidCastException>()
 			.WithMessage("Invalid cast from 'System.String' to 'System.IO.Stream'.");
 	}
+
 	#endregion
 
 	/// <inheritdoc cref="ConvertibleConverterBase"/>
-	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
 	private sealed class TestConverter : ConvertibleConverterBase
 	{
 		public TestConverter() : base(null) { }
