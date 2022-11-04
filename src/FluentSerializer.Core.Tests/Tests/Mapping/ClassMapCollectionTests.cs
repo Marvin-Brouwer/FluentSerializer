@@ -41,7 +41,7 @@ public sealed class ClassMapCollectionTests
 		var result = () => sut.GetClassMapFor(in type, in direction);
 
 		// Assert
-		result.Should().ThrowExactly<NotSupportedException>();
+		result.Should().ThrowExactly<ArgumentException>();
 	}
 
 	[Fact,

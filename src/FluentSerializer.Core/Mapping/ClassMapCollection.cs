@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
 
@@ -20,10 +22,16 @@ public readonly struct ClassMapCollection : IClassMapCollection
 	/// <inheritdoc />
 	public IClassMap? GetClassMapFor(in Type type, in SerializerDirection direction)
 	{
-		if (direction == SerializerDirection.Both)
-			throw new NotSupportedException(
-				$"You cannot get a {nameof(ClassMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
-				"you can only register one as such!");
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
+		Guard.Against.InvalidChoice(
+			direction, SerializerDirection.Both,
+			$"You cannot get a {nameof(ClassMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
+			"you can only register one as such!"
+		);
 
 		foreach (var classMap in _classMaps)
 		{
@@ -39,6 +47,12 @@ public readonly struct ClassMapCollection : IClassMapCollection
 	/// <inheritdoc />
 	public IClassMap? GetClassMapFor(in Type type)
 	{
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
+
 		foreach (var classMap in _classMaps)
 		{
 			if (!MatchType(classMap.ClassType, in type)) continue;
