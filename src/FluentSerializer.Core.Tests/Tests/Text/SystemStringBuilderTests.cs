@@ -34,10 +34,16 @@ public sealed class SystemStringBuilderTests
 
 		// Assert
 		sutSpy1.ToString().Should().BeEquivalentTo("Test");
+		sutSpy1.AsSpan().ToArray().Should().HaveCountGreaterThan(0);
 		sutSpy2.ToString().Should().BeEquivalentTo("Test");
+		sutSpy2.AsSpan().ToArray().Should().HaveCountGreaterThan(0);
 		sutSpy3.ToString().Should().BeEquivalentTo("t");
+		sutSpy3.AsSpan().ToArray().Should().HaveCountGreaterThan(0);
 		sutSpy4.ToString().Should().BeEquivalentTo("ttttttttt");
+		sutSpy4.AsSpan().ToArray().Should().HaveCountGreaterThan(0);
 		sutSpy5.ToString().Should().BeEquivalentTo(sutSpy4.TextConfiguration.NewLine);
+		sutSpy5.AsSpan().ToArray().Should().HaveCountGreaterThan(0);
 		sutSpy6.ToString().Should().BeEmpty();
+		sutSpy6.AsSpan().ToArray().Should().HaveCount(0);
 	}
 }
