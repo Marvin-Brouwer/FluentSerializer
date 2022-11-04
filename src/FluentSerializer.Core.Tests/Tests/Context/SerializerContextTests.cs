@@ -18,7 +18,7 @@ namespace FluentSerializer.Core.Tests.Tests.Context;
 
 public sealed class SerializerContextTests
 {
-	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+	private const SerializerDirection TestDirection = SerializerDirection.Both;
 
 	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 	private readonly Mock<IClassMap> _classMapMock;
