@@ -10,7 +10,7 @@ using System.Reflection;
 namespace FluentSerializer.Core.Extensions;
 
 /// <summary>
-/// Extension methods to help reflecting addtional type information
+/// Extension methods to help reflecting additional type information
 /// </summary>
 public static class TypeExtensions
 {
@@ -19,10 +19,15 @@ public static class TypeExtensions
 	private const string NullableContextAttributeName = "System.Runtime.CompilerServices.NullableContextAttribute";
 
 	/// <summary>
-	/// Check wheter types equal, ignoring generics by pretending they are open generic types
+	/// Check whether types equal, ignoring generics by pretending they are open generic types
 	/// </summary>
 	public static bool EqualsTopLevel(this Type type, in Type typeToEqual)
 	{
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
 		Guard.Against.Null(typeToEqual
 #if NETSTANDARD2_1
 			, nameof(typeToEqual)
@@ -48,6 +53,17 @@ public static class TypeExtensions
 	/// </summary>
 	public static bool Implements(this Type type, Type interfaceType)
 	{
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
+		Guard.Against.Null(interfaceType
+#if NETSTANDARD2_1
+			, nameof(interfaceType)
+#endif
+		);
+
 		if (interfaceType.IsAssignableFrom(type)) return true;
 		return type.GetInterfaces()
 			.Any(typeInterface => typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition().Equals(interfaceType));
@@ -56,29 +72,74 @@ public static class TypeExtensions
 	/// <summary>
 	/// Check if a type is Enumerable but not a string.
 	/// </summary>
-	public static bool IsEnumerable(this Type type) => 
-		!typeof(string).IsAssignableFrom(type) &&
-		type.Implements(typeof(IEnumerable));
+	public static bool IsEnumerable(this Type type)
+	{
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
+
+		return !typeof(string).IsAssignableFrom(type)
+		     && type.Implements(typeof(IEnumerable));
+	}
 
 	/// <inheritdoc cref="IsNullable(Type)"/>
-	public static bool IsNullable(this PropertyInfo property) =>
-		IsNullableHelper(property.PropertyType, property.DeclaringType, property.CustomAttributes);
+	public static bool IsNullable(this PropertyInfo property)
+	{
+		Guard.Against.Null(property
+#if NETSTANDARD2_1
+			, nameof(property)
+#endif
+		);
+
+		return CheckIfNullable(property.PropertyType, property.DeclaringType, property.CustomAttributes);
+	}
+
 	/// <inheritdoc cref="IsNullable(Type)"/>
-	public static bool IsNullable(this FieldInfo field) =>
-		IsNullableHelper(field.FieldType, field.DeclaringType, field.CustomAttributes);
-    /// <inheritdoc cref="IsNullable(Type)"/>
-	public static bool IsNullable(this ParameterInfo parameter) =>
-		IsNullableHelper(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
+	public static bool IsNullable(this FieldInfo field)
+	{
+		Guard.Against.Null(field
+#if NETSTANDARD2_1
+			, nameof(field)
+#endif
+		);
+
+		return CheckIfNullable(field.FieldType, field.DeclaringType, field.CustomAttributes);
+	}
+
+	/// <inheritdoc cref="IsNullable(Type)"/>
+	public static bool IsNullable(this ParameterInfo parameter)
+	{
+		Guard.Against.Null(parameter
+#if NETSTANDARD2_1
+			, nameof(parameter)
+#endif
+		);
+
+		return CheckIfNullable(parameter.ParameterType, parameter.Member, parameter.CustomAttributes);
+	}
+
 	/// <summary>
 	/// Check whether this type is attributed to allow null values
 	/// </summary>
-	public static bool IsNullable(this Type type) =>
-		IsNullableHelper(in type, null, type.CustomAttributes);
-
-	private static bool IsNullableHelper(in Type memberType, in MemberInfo? declaringType, in IEnumerable<CustomAttributeData> customAttributes)
+	public static bool IsNullable(this Type type)
 	{
-		if (memberType.IsValueType)
-			return Nullable.GetUnderlyingType(memberType) != null;
+		Guard.Against.Null(type
+#if NETSTANDARD2_1
+			, nameof(type)
+#endif
+		);
+
+		return CheckIfNullable(type, null, type.CustomAttributes);
+	}
+
+	private static bool CheckIfNullable(in Type memberType, in MemberInfo? declaringType, in IEnumerable<CustomAttributeData> customAttributes)
+	{
+		var typeToCheck = memberType.IsByRef ? memberType.GetElementType()! : memberType;
+
+		if (typeToCheck.IsValueType)
+			return Nullable.GetUnderlyingType(typeToCheck) != null;
 
 		if (HasNullableAttribute(customAttributes)) return true;
 		if (HasNullableContextAttribute(declaringType)) return true;
@@ -97,7 +158,7 @@ public static class TypeExtensions
 			var context = type.CustomAttributes
 				.FirstOrDefault(attribute => attribute.AttributeType.FullName == NullableContextAttributeName);
 			if (context is null) continue;
-                
+
 			if (context.ConstructorArguments.Count == 1 && context.ConstructorArguments[0].ArgumentType == typeof(byte))
 				return (byte)context.ConstructorArguments[0].Value! == NullableArgumentType;
 		}
