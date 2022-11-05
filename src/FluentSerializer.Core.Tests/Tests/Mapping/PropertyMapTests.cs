@@ -177,7 +177,11 @@ public sealed class PropertyMapTests
 		const SerializerDirection direction = SerializerDirection.Deserialize;
 		var configuredConverters = new IConverter[]
 		{
-			new TestConverter<TestClass>(true)
+			new TestConverter<TestClass>(true),
+			new TestConverter<TestClass2>(true)
+			{
+				Direction = direction
+			}
 		};
 
 		_configStackMock
@@ -187,10 +191,12 @@ public sealed class PropertyMapTests
 		var sut = CreateSut(null);
 
 		// Act
-		var result = sut.GetConverter<TestClass, TestClass>(direction, _serializerMock.Object);
+		var result1 = sut.GetConverter<TestClass, TestClass>(direction, _serializerMock.Object);
+		var result2 = sut.GetConverter<TestClass2, TestClass2>(direction, _serializerMock.Object);
 
 		// Assert
-		result.Should().NotBeNull();
+		result1.Should().NotBeNull();
+		result2.Should().NotBeNull();
 	}
 
 	[Fact,
@@ -254,7 +260,7 @@ public sealed class PropertyMapTests
 
 		public bool CanConvert(in Type targetType) => _canConvert;
 
-		public SerializerDirection Direction => SerializerDirection.Both;
+		public SerializerDirection Direction { get; init; } = SerializerDirection.Both;
 
 		public int ConverterHashCode => GetHashCode();
 
