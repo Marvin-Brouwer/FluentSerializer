@@ -22,6 +22,7 @@ namespace FluentSerializer.Core.Tests.Tests.Mapping;
 public sealed class PropertyMapTests
 {
 	private readonly Mock<ISerializer> _serializerMock;
+	private readonly Mock<IConfigurationStack<IConverter>> _configStackMock;
 
 	private static PropertyMap CreateSut(IConverter? converter)
 	{
@@ -36,8 +37,8 @@ public sealed class PropertyMapTests
 
 	public PropertyMapTests()
 	{
-		var configStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
-		configStackMock
+		_configStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
+		_configStackMock
 			.Setup(configStack => configStack.GetEnumerator())
 			.Returns(Enumerable.Empty<IConverter>().GetEnumerator());
 
@@ -46,7 +47,7 @@ public sealed class PropertyMapTests
 			.SetupGet(serializer => serializer.Configuration)
 			.Returns(new TestConfiguration
 			{
-				DefaultConverters = configStackMock.Object
+				DefaultConverters = _configStackMock.Object
 			});
 	}
 
@@ -160,6 +161,30 @@ public sealed class PropertyMapTests
 		const SerializerDirection direction = SerializerDirection.Serialize;
 
 		var sut = CreateSut(new TestConverter<TestClass>(true));
+
+		// Act
+		var result = sut.GetConverter<TestClass, TestClass>(direction, _serializerMock.Object);
+
+		// Assert
+		result.Should().NotBeNull();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void GetConverter_DefaultConverterFound_ReturnsConverter()
+	{
+		// Arrange
+		const SerializerDirection direction = SerializerDirection.Deserialize;
+		var configuredConverters = new IConverter[]
+		{
+			new TestConverter<TestClass>(true)
+		};
+
+		_configStackMock
+			.Setup(configurationStack => configurationStack.GetEnumerator())
+			.Returns(configuredConverters.AsEnumerable().GetEnumerator());
+
+		var sut = CreateSut(null);
 
 		// Act
 		var result = sut.GetConverter<TestClass, TestClass>(direction, _serializerMock.Object);
