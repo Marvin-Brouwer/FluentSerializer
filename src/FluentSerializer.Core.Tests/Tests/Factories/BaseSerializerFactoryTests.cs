@@ -81,11 +81,14 @@ public sealed class BaseSerializerFactoryTests
 	public void WithConfiguration_NullConfiguration_Throws()
 	{
 		// Act
-		var nullConfigurationResult = () => _sut
+		var result1 = () => _sut
 			.WithConfiguration((TestConfiguration)null!);
+		var result2 = () => _sut
+			.WithConfiguration((Action<TestConfiguration>)null!);
 
 		// Assert
-		nullConfigurationResult.Should().ThrowExactly<ArgumentNullException>();
+		result1.Should().ThrowExactly<ArgumentNullException>();
+		result2.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	[Fact,
