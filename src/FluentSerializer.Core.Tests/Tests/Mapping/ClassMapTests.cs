@@ -17,18 +17,25 @@ public sealed class ClassMapTests
 	public void NewPropertyMap_NullValues_Throws()
 	{
 		// Arrange
-		var type = typeof(int);
+		var classType = typeof(int);
 		var namingStrategy = Names.Use.CamelCase;
+		var propertyMap = Array.Empty<PropertyMap>();
 
 		// Act
-		var result1 = () => new ClassMap(null!, SerializerDirection.Serialize, null!, null!);
-		var result2 = () => new ClassMap(type, SerializerDirection.Serialize, null!, null!);
-		var result3 = () => new ClassMap(type, SerializerDirection.Serialize, namingStrategy, null!);
+		var result1 = () => new ClassMap(null!, SerializerDirection.Serialize, namingStrategy, propertyMap);
+		var result2 = () => new ClassMap(classType, SerializerDirection.Serialize, null!, propertyMap);
+		var result3 = () => new ClassMap(classType, SerializerDirection.Serialize, namingStrategy, null!);
 
 		// Assert
-		result1.Should().ThrowExactly<ArgumentNullException>();
-		result2.Should().ThrowExactly<ArgumentNullException>();
-		result3.Should().ThrowExactly<ArgumentNullException>();
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(classType));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(namingStrategy));
+		result3.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(propertyMap));
 	}
 
 	[Fact,

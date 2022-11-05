@@ -98,15 +98,23 @@ public sealed class BaseSerializerFactoryTests
 		Trait("Category", "UnitTest")]
 	public void WithConfiguration_NullConfiguration_Throws()
 	{
+		// Arrange
+		var configuration = (TestConfiguration)null!;
+		var configurationSetup = (Action<TestConfiguration>)null!;
+
 		// Act
 		var result1 = () => _sut
-			.WithConfiguration((TestConfiguration)null!);
+			.WithConfiguration(configuration);
 		var result2 = () => _sut
-			.WithConfiguration((Action<TestConfiguration>)null!);
+			.WithConfiguration(configurationSetup);
 
 		// Assert
-		result1.Should().ThrowExactly<ArgumentNullException>();
-		result2.Should().ThrowExactly<ArgumentNullException>();
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(configuration));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(configurationSetup));
 	}
 
 	[Fact,
