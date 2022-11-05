@@ -65,7 +65,6 @@ public readonly struct ClassMapCollection : IClassMapCollection
 
 	private static bool MatchDirection(in SerializerDirection searchDirection, in SerializerDirection mapDirection)
 	{
-		if (searchDirection == SerializerDirection.Both) return true;
 		if (mapDirection == SerializerDirection.Both) return true;
 
 		return searchDirection == mapDirection;
