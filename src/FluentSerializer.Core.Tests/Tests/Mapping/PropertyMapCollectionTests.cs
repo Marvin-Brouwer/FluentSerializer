@@ -7,6 +7,7 @@ using FluentSerializer.Core.Naming.NamingStrategies;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using Xunit;
@@ -74,6 +75,7 @@ public sealed class PropertyMapCollectionTests
 
 		// Assert
 		result.Should().NotBeEmpty();
+		result.Should().HaveElementAt(0, PropertyMaps.Last());
 	}
 
 	[Fact,
@@ -123,12 +125,14 @@ public sealed class PropertyMapCollectionTests
 		var sut = new PropertyMapCollection(in PropertyMaps);
 
 		// Act
-		var result = sut.GetPropertyMapFor(in propertyInfo, in direction);
+		var result1 = sut.GetPropertyMapFor(in propertyInfo, in direction);
 		var result2 = sut.GetPropertyMapFor(in propertyInfo);
 
 		// Assert
-		result.Should().NotBeNull();
+		result1.Should().NotBeNull();
+		result1.Should().Be(PropertyMaps.Last());
 		result2.Should().NotBeNull();
+		result2.Should().Be(PropertyMaps.Last());
 	}
 
 	[Fact,
