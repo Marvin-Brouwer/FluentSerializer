@@ -21,6 +21,7 @@ public sealed class PropertyMapCollectionTests
 
 	private static readonly IReadOnlyCollection<IPropertyMap> PropertyMaps = new List<IPropertyMap>
 	{
+		new PropertyMap(SerializerDirection.Deserialize, typeof(bool), typeof(TestClass).GetProperty(nameof(TestClass.Name))!, TestNames, null),
 		new PropertyMap(TestDirection, typeof(bool), CorrectProperty, TestNames, null)
 	};
 
@@ -44,19 +45,20 @@ public sealed class PropertyMapCollectionTests
 			.WithParameterName(nameof(direction));
 	}
 
-	[Fact,
+	[Theory,
+		InlineData(SerializerDirection.Deserialize),
+		InlineData(SerializerDirection.Serialize),
 		Trait("Category", "UnitTest")]
-	public void GetAllPropertyMaps_IncorrectDirection_ReturnsNone()
+	public void GetAllPropertyMaps_AnyDirection_ReturnsOne(SerializerDirection direction)
 	{
 		// Arrange
-		var direction = SerializerDirection.Deserialize;
 		var sut = new PropertyMapCollection(in PropertyMaps);
 
 		// Act
 		var result = sut.GetAllPropertyMaps(in direction);
 
 		// Assert
-		result.Should().BeEmpty();
+		result.Should().ContainSingle();
 	}
 
 	[Fact,
