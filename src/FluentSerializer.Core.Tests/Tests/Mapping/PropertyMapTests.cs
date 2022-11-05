@@ -57,21 +57,28 @@ public sealed class PropertyMapTests
 	public void NewPropertyMap_NullValues_Throws()
 	{
 		// Arrange
-		var type = typeof(TestClass);
+		var containerType = typeof(TestClass);
 		var property = typeof(TestClass).GetProperty(nameof(TestClass.NullableProperty))!;
 		var namingStrategy = Names.Use.CamelCase;
 
 		// Act
-		var result1 = () => new PropertyMap(SerializerDirection.Serialize, null!, null!, null!, null);
-		var result2 = () => new PropertyMap(SerializerDirection.Serialize, null!, null!, null!, null);
-		var result3 = () => new PropertyMap(SerializerDirection.Serialize, null!, property, null!, null);
-		var result4 = () => new PropertyMap(SerializerDirection.Serialize, type, property, namingStrategy, null);
+		var result1 = () => new PropertyMap(SerializerDirection.Serialize, null!, property, namingStrategy!, null);
+		var result2 = () => new PropertyMap(SerializerDirection.Serialize, containerType, null!, namingStrategy!, null);
+		var result3 = () => new PropertyMap(SerializerDirection.Serialize, containerType!, property, null!, null);
+		var result4 = () => new PropertyMap(SerializerDirection.Serialize, containerType, property, namingStrategy, null);
 
 		// Assert
-		result1.Should().ThrowExactly<ArgumentNullException>();
-		result2.Should().ThrowExactly<ArgumentNullException>();
-		result3.Should().ThrowExactly<ArgumentNullException>();
-		result4.Should().NotThrow("This argument is optional");
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(containerType));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(property));
+		result3.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(namingStrategy));
+		result4.Should()
+			.NotThrow("This argument is optional");
 	}
 
 	[Fact,
@@ -167,14 +174,17 @@ public sealed class PropertyMapTests
 	{
 		// Arrange
 		const SerializerDirection direction = SerializerDirection.Serialize;
+		var currentSerializer = (ISerializer)null!;
 
 		var sut = CreateSut(null);
 
 		// Act
-		var result = () => sut.GetConverter<TestClass, TestClass>(direction, null!);
+		var result = () => sut.GetConverter<TestClass, TestClass>(direction, currentSerializer);
 
 		// Assert
-		result.Should().ThrowExactly<ArgumentNullException>();
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(currentSerializer));
 	}
 
 	#endregion
