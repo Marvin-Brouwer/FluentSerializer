@@ -72,6 +72,24 @@ public sealed class BaseSerializerFactoryTests
 		resultWithSetConfiguration.PoolProvider.Should().Be(poolProvider);
 	}
 
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void WithConfiguration_ConfigureWithAction_ReturnsWithOverrides()
+	{
+		// Act
+		var resultWithSetConfiguration = _sut
+			.WithConfiguration(config =>
+			{
+				config.NewLine = "TEST";
+			})
+			.UseProfiles(Array.Empty<TestSerializerProfile>());
+
+		// Assert
+		resultWithSetConfiguration.Configuration.Should().NotBe(_sut.GetDefaultConfiguration());
+		resultWithSetConfiguration.Configuration.Should().NotBeEquivalentTo(new TestConfiguration());
+		resultWithSetConfiguration.Configuration.NewLine.Should().Be("TEST");
+	}
+
 	/// <remarks>
 	/// None of these scenarios should ever happen.
 	/// So, we should test it throws an exception.
