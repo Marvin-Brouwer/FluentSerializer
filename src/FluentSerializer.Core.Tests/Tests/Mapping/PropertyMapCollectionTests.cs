@@ -76,20 +76,23 @@ public sealed class PropertyMapCollectionTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
-	public void GetPropertyMapFor_IncorrectProperty_NoMatch_ReturnsNone()
+	public void GetPropertyMapFor_IncorrectDirection_Throws()
 	{
 		// Arrange
 		var propertyInfo = typeof(TestClass).GetProperty(nameof(TestClass.Name))!;
-		var direction = SerializerDirection.Serialize;
+		var direction = SerializerDirection.Both;
 		var sut = new PropertyMapCollection(in PropertyMaps);
 
 		// Act
-		var result = sut.GetPropertyMapFor(in propertyInfo, in direction);
-		var result2 = sut.GetPropertyMapFor(in propertyInfo);
+		var result = () => sut.GetPropertyMapFor(in propertyInfo, in direction);
 
 		// Assert
-		result.Should().BeNull();
-		result2.Should().BeNull();
+		result.Should()
+			.ThrowExactly<ArgumentException>()
+			.WithMessage(
+				"You cannot get a PropertyMap for SerializerDirection.Both *" +
+				"you can only register one as such! (Parameter 'direction')")
+			.WithParameterName(nameof(direction));
 	}
 
 	[Fact,
@@ -139,11 +142,11 @@ public sealed class PropertyMapCollectionTests
 		});
 
 		// Act
-		var result = sut.GetPropertyMapFor(in propertyInfo, in direction);
+		var result1 = sut.GetPropertyMapFor(in propertyInfo, in direction);
 		var result2 = sut.GetPropertyMapFor(in propertyInfo);
 
 		// Assert
-		result.Should().NotBeNull();
+		result1.Should().NotBeNull();
 		result2.Should().NotBeNull();
 	}
 
