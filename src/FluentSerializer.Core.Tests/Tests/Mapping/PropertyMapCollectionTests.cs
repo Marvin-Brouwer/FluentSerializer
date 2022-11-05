@@ -19,7 +19,7 @@ public sealed class PropertyMapCollectionTests
 	private static readonly Func<INamingStrategy> TestNames = Names.Equal("Test");
 	private static readonly PropertyInfo CorrectProperty = typeof(TestClass).GetProperty(nameof(TestClass.Id))!;
 
-	private static readonly IReadOnlyCollection<IPropertyMap> PropertyMaps = new List<IPropertyMap>()
+	private static readonly IReadOnlyCollection<IPropertyMap> PropertyMaps = new List<IPropertyMap>
 	{
 		new PropertyMap(TestDirection, typeof(bool), CorrectProperty, TestNames, null)
 	};
@@ -36,7 +36,12 @@ public sealed class PropertyMapCollectionTests
 		var result = () => sut.GetAllPropertyMaps(in direction);
 
 		// Assert
-		result.Should().ThrowExactly<NotSupportedException>();
+		result.Should()
+			.ThrowExactly<ArgumentException>()
+			.WithMessage(
+				"You cannot get a PropertyMap for SerializerDirection.Both *" +
+				"you can only register one as such! (Parameter 'direction')")
+			.WithParameterName(nameof(direction));
 	}
 
 	[Fact,
@@ -121,8 +126,29 @@ public sealed class PropertyMapCollectionTests
 		result2.Should().NotBeNull();
 	}
 
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void GetPropertyMapFor_Match_PropertyMapForBoth_ReturnsPropertyMap()
+	{
+		// Arrange
+		var propertyInfo = typeof(TestClass).GetProperty(nameof(TestClass.Id))!;
+		var direction = SerializerDirection.Serialize;
+		var sut = new PropertyMapCollection(new List<IPropertyMap>
+		{
+			new PropertyMap(SerializerDirection.Both, typeof(bool), CorrectProperty, TestNames, null)
+		});
+
+		// Act
+		var result = sut.GetPropertyMapFor(in propertyInfo, in direction);
+		var result2 = sut.GetPropertyMapFor(in propertyInfo);
+
+		// Assert
+		result.Should().NotBeNull();
+		result2.Should().NotBeNull();
+	}
+
 	private sealed  class TestClass {
-		public int Id { get; set; } = default!;
+		public int Id { get; init; } = default!;
 		public string Name { get; init; } = default!;
 	}
 }

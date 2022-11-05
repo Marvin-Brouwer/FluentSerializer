@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -22,7 +24,7 @@ public sealed class ClassMap : IClassMap
 	public SerializerDirection Direction { get; }
 
 	/// <inheritdoc />
-	public IPropertyMapCollection PropertyMapCollection { get; private set; }
+	public IPropertyMapCollection PropertyMapCollection { get; }
 
 	/// <inheritdoc cref="ClassMap" />
 	public ClassMap(
@@ -31,6 +33,22 @@ public sealed class ClassMap : IClassMap
 		in Func<INamingStrategy> namingStrategy,
 		in IReadOnlyCollection<IPropertyMap> propertyMap)
 	{
+		Guard.Against.Null(classType
+#if NETSTANDARD2_1
+			, nameof(classType)
+#endif
+		);
+		Guard.Against.Null(namingStrategy
+#if NETSTANDARD2_1
+			, nameof(namingStrategy)
+#endif
+		);
+		Guard.Against.Null(propertyMap
+#if NETSTANDARD2_1
+			, nameof(propertyMap)
+#endif
+		);
+
 		_namingStrategy = namingStrategy;
 
 		Direction = direction;
