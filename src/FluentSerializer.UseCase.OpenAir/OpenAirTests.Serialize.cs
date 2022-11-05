@@ -1,4 +1,4 @@
-﻿using FluentSerializer.UseCase.OpenAir.Models;
+using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Request;
 
 namespace FluentSerializer.UseCase.OpenAir;
@@ -9,7 +9,7 @@ public sealed partial class OpenAirTests
 	{
 		AddRequests = new()
 		{
-			new AddRequest<Project>()
+			new AddRequest<Project>
 			{
 				Data = new()
 				{

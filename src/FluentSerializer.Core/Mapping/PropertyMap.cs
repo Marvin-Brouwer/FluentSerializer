@@ -73,11 +73,6 @@ public sealed class PropertyMap : IPropertyMap
 		where TDataContainer : IDataNode
 		where TDataNode : IDataNode
 	{
-		Guard.Against.Null(direction
-#if NETSTANDARD2_1
-			, nameof(direction)
-#endif
-		);
 		Guard.Against.Null(currentSerializer
 #if NETSTANDARD2_1
 			, nameof(currentSerializer)
