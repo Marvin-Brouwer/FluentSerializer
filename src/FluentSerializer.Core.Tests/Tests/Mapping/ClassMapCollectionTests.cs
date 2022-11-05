@@ -38,10 +38,12 @@ public sealed class ClassMapCollectionTests
 		var sut = new ClassMapCollection(in ClassMaps);
 
 		// Act
-		var result = () => sut.GetClassMapFor(in type, in direction);
+		var result1 = () => sut.GetClassMapFor(in type, in direction);
+		var result2 = () => sut.GetClassMapFor(in type);
 
 		// Assert
-		result.Should().ThrowExactly<ArgumentNullException>();
+		result1.Should().ThrowExactly<ArgumentNullException>();
+		result2.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	[Fact,
