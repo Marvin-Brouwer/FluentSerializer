@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -25,13 +27,29 @@ public sealed class NamingStrategyTests_Equal : NamingStrategyTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),
-		MemberData(nameof(ValidNamingRequests))]
+		MemberData(nameof(ValidNamingRequests)),
+		Trait("Category", "UnitTest")]
 	public override void ValidString_GetName_ConvertsName(
 		in Type typeInput, in PropertyInfo propertyInput,
 		in string expectedClassName, in string expectedPropertyName)
 	{
 		base.ValidString_GetName_ConvertsName(
 			in typeInput, in propertyInput, in expectedClassName, in expectedPropertyName);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void InvalidString_GetName_Throws()
+	{
+		// Arrange
+		const string name = "This name definitely <contains> illegal characters: &&&";
+
+		// Act
+		var result = () => Names.Equal(name);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentException>()
+			.WithParameterName(nameof(name));
 	}
 }
