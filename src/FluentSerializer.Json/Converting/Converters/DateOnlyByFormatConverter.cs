@@ -23,21 +23,8 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 	/// </summary>
 	public DateOnlyByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
-		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
-			, nameof(format)
-#endif
-		);
-		Guard.Against.Null(cultureInfo
-#if NETSTANDARD2_1
-			, nameof(cultureInfo)
-#endif
-		);
-		Guard.Against.Null(dateTimeStyle
-#if NETSTANDARD2_1
-			, nameof(dateTimeStyle)
-#endif
-		);
+		Guard.Against.NullOrWhiteSpace(format);
+		Guard.Against.Null(cultureInfo);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -47,7 +34,7 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 	/// <inheritdoc />
 	protected override DateOnly ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 

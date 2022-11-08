@@ -46,6 +46,32 @@ public sealed class DateOnlyByFormatConverterTests
 		yield return new object[] { "dd-MM-yyyy", "20-04-2096", new CultureInfo("nl-NL") };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var dateTimeStyle = DateTimeStyles.AllowWhiteSpaces;
+
+		// Act
+		var result1 = () => new DateOnlyByFormatConverter(null!, cultureInfo, dateTimeStyle);
+		var result2 = () => new DateOnlyByFormatConverter(format, null!, dateTimeStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
 	#region Serialize
 
 	[Theory,
