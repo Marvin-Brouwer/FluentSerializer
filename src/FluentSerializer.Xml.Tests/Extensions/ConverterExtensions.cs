@@ -8,8 +8,6 @@ namespace FluentSerializer.Xml.Tests.Extensions;
 
 internal static class ConverterExtensions
 {
-	// TODO Use in existing tests
-
 	/// <summary>
 	/// Cast a converter that implements <see cref="IConverter{TSerialContainer, TDataNode}"/> explicitly, to
 	/// it's interface type (for <see cref="IXmlText"/>) so the correct method is tested.
