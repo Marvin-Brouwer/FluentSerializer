@@ -75,8 +75,8 @@ public sealed class DefaultTimeSpanConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
-		MemberData(nameof(GenerateConvertibleData))]
+		MemberData(nameof(GenerateConvertibleData)),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_Convertible_ReturnsValue(string inputValue)
 	{
 		// Arrange
