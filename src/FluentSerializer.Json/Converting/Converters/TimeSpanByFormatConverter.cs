@@ -32,11 +32,6 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 			, nameof(cultureInfo)
 #endif
 		);
-		Guard.Against.Null(timeSpanStyles
-#if NETSTANDARD2_1
-			, nameof(timeSpanStyles)
-#endif
-		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -46,7 +41,7 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 	/// <inheritdoc />
 	protected override TimeSpan ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 

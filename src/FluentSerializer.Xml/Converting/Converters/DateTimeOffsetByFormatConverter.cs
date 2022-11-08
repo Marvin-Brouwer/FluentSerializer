@@ -31,11 +31,6 @@ public class DateTimeOffsetByFormatConverter : SimpleTypeConverter<DateTimeOffse
 			, nameof(cultureInfo)
 #endif
 		);
-		Guard.Against.Null(dateTimeStyle
-#if NETSTANDARD2_1
-			, nameof(dateTimeStyle)
-#endif
-		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;

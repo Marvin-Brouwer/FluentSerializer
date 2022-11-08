@@ -17,7 +17,7 @@ public sealed class DefaultTimeSpanConverter : SimpleTypeConverter<TimeSpan>
 	/// <inheritdoc />
 	protected override TimeSpan ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
 			? currentValue[1..^1]
 			: currentValue;
 		return TimeSpan.Parse(dateValue, CultureInfo.CurrentCulture);

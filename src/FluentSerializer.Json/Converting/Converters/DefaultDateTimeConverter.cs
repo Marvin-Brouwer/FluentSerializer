@@ -20,7 +20,7 @@ public sealed class DefaultDateTimeConverter : SimpleTypeConverter<DateTime>
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
 			? currentValue[1..^1]
 			: currentValue;
 		return DateTime.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AdjustToUniversal);
