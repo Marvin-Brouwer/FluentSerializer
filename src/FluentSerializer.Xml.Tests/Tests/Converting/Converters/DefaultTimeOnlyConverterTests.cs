@@ -85,6 +85,7 @@ public sealed class DefaultTimeOnlyConverterTests
 	#endregion
 
 	#region Deserialize
+
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
