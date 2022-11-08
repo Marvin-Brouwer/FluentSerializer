@@ -1,15 +1,11 @@
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
 
 using Moq;
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Xml.Linq;
 
 using Xunit;
 

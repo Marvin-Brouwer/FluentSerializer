@@ -22,6 +22,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="StrykerOutput\**" />
+	  <EmbeddedResource Remove="StrykerOutput\**" />
+	  <None Remove="StrykerOutput\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="6.7.0" />
 		<PackageReference Include="FluentAssertions.Analyzers" Version="0.17.2">
 		  <PrivateAssets>all</PrivateAssets>
