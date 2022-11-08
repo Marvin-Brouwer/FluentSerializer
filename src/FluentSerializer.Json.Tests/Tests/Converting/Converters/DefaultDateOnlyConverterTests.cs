@@ -118,6 +118,26 @@ public sealed class DefaultDateOnlyConverterTests
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid DateOnly.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Value("\"\"");
+		var sut = new DefaultDateOnlyConverter();
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid DateOnly.");
+	}
 	#endregion
 }
 

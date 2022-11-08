@@ -42,10 +42,10 @@ public sealed class SimpleTypeConverterBaseTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
-	public void ConvertToNullableDataType_Convertible_EmptyValue_ReturnsNull()
+	public void ConvertToNullableDataType_Convertible_NullValue_ReturnsNull()
 	{
 		// Act
-		var result = _sut.ConvertToNullableDataType(string.Empty);
+		var result = _sut.ConvertToNullableDataType(null);
 
 		// Assert
 		result.Should().BeNull();

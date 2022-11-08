@@ -154,6 +154,7 @@ public sealed class DateOnlyByFormatConverterTests
 			.ThrowExactly<FormatException>()
 			.WithMessage("String '' was not recognized as a valid DateOnly.");
 	}
+
 	#endregion
 }
 

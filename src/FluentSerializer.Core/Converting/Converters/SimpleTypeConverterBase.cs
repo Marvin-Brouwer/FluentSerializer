@@ -31,7 +31,7 @@ public abstract class SimpleTypeConverterBase<TObject> : IConverter
 	/// </summary>
 	protected virtual TObject? ConvertToNullableDataType(in string? currentValue)
 	{
-		if (string.IsNullOrWhiteSpace(currentValue)) return default;
+		if (currentValue is null) return default;
 
 		return ConvertToDataType(in currentValue);
 	}

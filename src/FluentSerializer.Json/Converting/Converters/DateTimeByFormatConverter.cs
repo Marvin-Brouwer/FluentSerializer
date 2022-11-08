@@ -32,11 +32,6 @@ public class DateTimeByFormatConverter : SimpleTypeConverter<DateTime>
 			, nameof(cultureInfo)
 #endif
 		);
-		Guard.Against.Null(dateTimeStyle
-#if NETSTANDARD2_1
-			, nameof(dateTimeStyle)
-#endif
-		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -46,7 +41,7 @@ public class DateTimeByFormatConverter : SimpleTypeConverter<DateTime>
 	/// <inheritdoc />
 	protected override DateTime ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 

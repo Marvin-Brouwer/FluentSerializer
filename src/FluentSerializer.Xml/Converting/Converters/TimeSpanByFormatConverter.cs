@@ -31,11 +31,6 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 			, nameof(cultureInfo)
 #endif
 		);
-		Guard.Against.Null(timeSpanStyles
-#if NETSTANDARD2_1
-			, nameof(timeSpanStyles)
-#endif
-		);
 
 		_format = format;
 		_cultureInfo = cultureInfo;

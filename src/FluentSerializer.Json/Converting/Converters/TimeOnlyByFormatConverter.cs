@@ -25,7 +25,6 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 	{
 		Guard.Against.NullOrWhiteSpace(format);
 		Guard.Against.Null(cultureInfo);
-		Guard.Against.Null(dateTimeStyle);
 
 		_format = format;
 		_cultureInfo = cultureInfo;
@@ -35,7 +34,7 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 	/// <inheritdoc />
 	protected override TimeOnly ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length > 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 
