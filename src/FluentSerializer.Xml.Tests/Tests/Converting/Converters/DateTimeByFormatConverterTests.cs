@@ -1,13 +1,13 @@
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Tests.Extensions;
 
 using Moq;
 
@@ -91,9 +91,9 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var textResult = ((IConverter<IXmlText, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
-		var attributeResult = ((IConverter<IXmlAttribute, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
-		var elementResult = ((IConverter<IXmlElement, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
+		var textResult = sut.ForText().Serialize(DateTimeValue, _contextMock.Object)!;
+		var attributeResult = sut.ForAttribute().Serialize(DateTimeValue, _contextMock.Object)!;
+		var elementResult = sut.ForElement().Serialize(DateTimeValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -122,9 +122,9 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var textResult = (DateTime)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(textInput, _contextMock.Object)!;
-		var attributeResult = (DateTime)((IConverter<IXmlAttribute, IXmlNode>)sut).Deserialize(attributeInput, _contextMock.Object)!;
-		var elementResult = (DateTime)((IConverter<IXmlElement, IXmlNode>)sut).Deserialize(elementInput, _contextMock.Object)!;
+		var textResult = (DateTime)sut.ForText().Deserialize(textInput, _contextMock.Object)!;
+		var attributeResult = (DateTime)sut.ForAttribute().Deserialize(attributeInput, _contextMock.Object)!;
+		var elementResult = (DateTime)sut.ForElement().Deserialize(elementInput, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -154,7 +154,7 @@ public sealed class DateTimeByFormatConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTime?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (DateTime?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
@@ -174,7 +174,7 @@ public sealed class DateTimeByFormatConverterTests
 			.WithPropertyType(typeof(string));
 
 		// Act
-		var result = () => (DateOnly?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (DateOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
