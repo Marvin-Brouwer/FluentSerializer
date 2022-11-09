@@ -16,12 +16,6 @@ public readonly partial struct XmlDocument
 	/// <inheritdoc />
 	public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
 	{
-		Guard.Against.Null(RootElement, message: "The document was is an illegal state, it contains no RootElement"
-#if NETSTANDARD2_1
-			, parameterName: nameof(RootElement)
-#endif
-		);
-
 		var stringBuilder = stringBuilders.Get();
 
 		try
