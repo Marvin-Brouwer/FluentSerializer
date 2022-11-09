@@ -1,8 +1,12 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.DataNodes.Nodes;
+
+using System;
 
 using Xunit;
 
@@ -19,6 +23,23 @@ public sealed partial class JsonPropertyTests
 	public JsonPropertyTests()
 	{
 		_textWriter = TestStringBuilderPool.CreateSingleInstance();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void InitializeProperty_InvalidName_Throws()
+	{
+		// Arrange
+		var name = "This name is: <invalid>";
+		var input = (IJsonPropertyContent?)null!;
+
+		// Act
+		var result = () => new JsonProperty(in name, in input);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentException>()
+			.WithParameterName(nameof(name));
 	}
 
 	[Fact,
