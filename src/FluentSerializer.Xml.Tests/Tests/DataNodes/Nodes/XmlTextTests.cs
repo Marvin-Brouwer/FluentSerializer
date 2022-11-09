@@ -21,7 +21,7 @@ public sealed partial class XmlTextTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeText_ChildrenNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -36,7 +36,7 @@ public sealed partial class XmlTextTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeText_ChildrenEmpty_ReturnsEmpty()
 	{
 		// Arrange
@@ -51,7 +51,7 @@ public sealed partial class XmlTextTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeText_HasValue_ReturnsWithValue()
 	{
 		// Arrange

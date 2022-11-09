@@ -1,4 +1,9 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.Json.DataNodes.Nodes;
+
+using System;
 
 using Xunit;
 
@@ -53,5 +58,21 @@ public sealed partial class JsonPropertyTests
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void AppendTo_PropertyInvalid_Throws()
+	{
+		// Arrange
+		var input = new JsonProperty();
+
+		// Act
+		var result = () => input.AppendTo(ref _textWriter, true, 0, false);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The property was is an illegal state, it contains no Name *");
 	}
 }

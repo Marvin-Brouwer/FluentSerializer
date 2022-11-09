@@ -1,4 +1,11 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.Xml.DataNodes.Nodes;
+
+using System;
+using System.IO;
+using System.Reflection;
 
 using Xunit;
 
@@ -40,7 +47,7 @@ public sealed partial class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange
@@ -53,5 +60,21 @@ public sealed partial class XmlAttributeTests
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void AppendTo_AttributeInvalid_Throws()
+	{
+		// Arrange
+		var input = new XmlAttribute();
+
+		// Act
+		var result = () => input.AppendTo(ref _textWriter, true, 0, false);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The attribute was is an illegal state, it contains no Name *");
 	}
 }

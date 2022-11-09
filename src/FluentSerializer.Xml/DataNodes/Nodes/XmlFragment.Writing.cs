@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.Configuration;
@@ -14,6 +16,12 @@ public readonly partial struct XmlFragment
 	/// <inheritdoc />
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
+		Guard.Against.Null(_innerElement, message: "The fragment was is an illegal state, it contains no Element"
+#if NETSTANDARD2_1
+			, parameterName: nameof(_innerElement)
+#endif
+		);
+
 		var childIndent = format ? indent + 1 : 0;
 
 		if (!_innerElement.Children.Any()) return stringBuilder;

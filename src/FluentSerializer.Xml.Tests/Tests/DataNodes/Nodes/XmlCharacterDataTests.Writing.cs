@@ -5,6 +5,7 @@ using Xunit;
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
+
 public sealed partial class XmlCharacterDataTests
 {
 	[Fact,

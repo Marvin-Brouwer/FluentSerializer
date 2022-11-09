@@ -26,7 +26,7 @@ public sealed partial class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeAttribute_InvalidName_Throws()
 	{
 		// Arrange
@@ -43,7 +43,7 @@ public sealed partial class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeAttribute_ChildrenNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -58,7 +58,7 @@ public sealed partial class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeAttribute_ChildrenEmpty_ReturnsEmpty()
 	{
 		// Arrange
@@ -73,7 +73,7 @@ public sealed partial class XmlAttributeTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeAttribute_HasValue_ReturnsWithValue()
 	{
 		// Arrange

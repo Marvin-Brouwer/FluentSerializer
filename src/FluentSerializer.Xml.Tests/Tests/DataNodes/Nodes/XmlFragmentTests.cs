@@ -29,7 +29,7 @@ public sealed partial class XmlFragmentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeFragment_ChildNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -43,7 +43,7 @@ public sealed partial class XmlFragmentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeFragment_ChildrenNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -57,7 +57,7 @@ public sealed partial class XmlFragmentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeFragment_ChildrenEmpty_ReturnsEmpty()
 	{
 		// Arrange
@@ -71,7 +71,7 @@ public sealed partial class XmlFragmentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeFragment_HasValue_ReturnsWithValue()
 	{
 		// Arrange

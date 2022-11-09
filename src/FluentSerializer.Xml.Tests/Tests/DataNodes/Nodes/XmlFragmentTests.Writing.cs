@@ -1,9 +1,14 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes.Nodes;
+
+using System;
 
 using Xunit;
 
 namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
+
 public sealed partial class XmlFragmentTests
 {
 	[Fact,
@@ -21,5 +26,21 @@ public sealed partial class XmlFragmentTests
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void AppendTo_FragmentInvalid_Throws()
+	{
+		// Arrange
+		var input = new XmlFragment();
+
+		// Act
+		var result = () => input.AppendTo(ref _textWriter, true, 0, false);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The fragment was is an illegal state, it contains no Element *");
 	}
 }
