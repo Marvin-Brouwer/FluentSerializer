@@ -23,4 +23,9 @@ internal static class JsonCharacterConstants
 
 	internal const char LineReturnCharacter = '\r';
 	internal const char NewLineCharacter = '\n';
+
+	/// <summary>
+	/// The property name defaulted to if not available.
+	/// </summary>
+	internal const string UnknownPropertyName = "<unknown>";
 }

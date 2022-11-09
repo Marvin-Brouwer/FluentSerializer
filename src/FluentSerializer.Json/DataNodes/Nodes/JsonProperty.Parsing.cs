@@ -13,6 +13,15 @@ public readonly partial struct JsonProperty
 	public JsonProperty(in ReadOnlySpan<char> text, ref int offset)
 	{
 		HasValue = false;
+
+		offset.AdjustForWhiteSpace(in text);
+		if (!text.WithinCapacity(in offset))
+		{
+			_children = Array.Empty<IJsonNode>();
+			Name = JsonCharacterConstants.UnknownPropertyName;
+			return;
+		}
+
 		offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
 
 		var nameStartOffset = offset;

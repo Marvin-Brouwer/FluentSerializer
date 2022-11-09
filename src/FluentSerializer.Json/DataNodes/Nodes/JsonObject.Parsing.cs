@@ -13,6 +13,14 @@ public readonly partial struct JsonObject
 	/// </remarks>
 	public JsonObject(in ReadOnlySpan<char> text, ref int offset)
 	{
+		offset.AdjustForWhiteSpace(in text);
+		if (!text.WithinCapacity(in offset))
+		{
+			_children = Array.Empty<IJsonNode>();
+			_lastPropertyIndex = 0;
+			return;
+		}
+
 		_lastPropertyIndex = null;
 		var children = new List<IJsonNode>();
 		var currentPropertyIndex = 0;
