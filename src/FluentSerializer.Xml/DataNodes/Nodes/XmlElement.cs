@@ -36,7 +36,7 @@ public readonly partial struct XmlElement : IXmlElement
 	/// <remarks>
 	/// <b>Please use <see cref="XmlBuilder.Element(in string, in IEnumerable{IXmlNode})"/> method instead of this constructor</b>
 	/// </remarks>
-	public XmlElement(in string name, in IEnumerable<IXmlNode> childNodes)
+	public XmlElement(in string name, in IEnumerable<IXmlNode>? childNodes)
 	{
 		Guard.Against.InvalidName(in name);
 
@@ -62,13 +62,14 @@ public readonly partial struct XmlElement : IXmlElement
 			children = new ReadOnlyCollectionBuilder<IXmlNode>();
 		}
 
-		foreach (var node in childNodes)
-		{
-			if (node is null) continue;
-			if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
-			if (node is XmlAttribute attribute) attributes.Add(attribute);
-			else children.Add(node);
-		}
+		if (childNodes is not null)
+			foreach (var node in childNodes)
+			{
+				if (node is null) continue;
+				if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
+				if (node is XmlAttribute attribute) attributes.Add(attribute);
+				else children.Add(node);
+			}
 
 		_attributes = attributes.ToReadOnlyCollection();
 		_children = children.ToReadOnlyCollection();
