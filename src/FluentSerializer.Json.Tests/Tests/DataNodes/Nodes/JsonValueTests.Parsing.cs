@@ -64,6 +64,24 @@ public sealed partial class JsonValueTests
 	}
 
 	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
+		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
+		InlineData(LineEndings.ReturnLineFeed)]
+	public void ParseJson_OnlyWhiteSpace_ReturnsObject(string input)
+	{
+		// Arrange
+		var expected = string.Empty;
+
+		// Act
+		var offset = 0;
+		var result = new JsonValue(input, ref offset);
+
+		// Assert
+		result.Value.Should().BeEquivalentTo(expected);
+	}
+
+	[Theory,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
 		InlineData(",", ""), InlineData("null,", null)]
 	public void ParseJson_Empty_ReturnsObject(string? input, string? expectedValue)
@@ -81,22 +99,22 @@ public sealed partial class JsonValueTests
 
 	/// <summary>
 	/// A value knows it's done by either a comma ',' or a whitespace character for regular values.
-	/// Or an endquote '"' for string values
+	/// Or an end-quote '"' for string values
 	/// </summary>
 	[Fact,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void ParseJson_IncompleteValue_Throws()
+	public void ParseJson_IncompleteValue_FailsGracefully()
 	{
 		// Arrange
+		var expected = Value("14");
 		var input = "14";
 
 		// Act
 		var offset = 0;
-		var result = () => new JsonValue(input, ref offset);
+		var result = new JsonValue(input, ref offset);
 
 		// Assert
-		result.Should()
-			.ThrowExactly<IndexOutOfRangeException>();
+		result.Should().BeEquatableTo(expected);
 	}
 
 	/// <summary>

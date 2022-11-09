@@ -25,15 +25,19 @@ public readonly partial struct JsonValue
 
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true;
 
-			offset++;
+			offset.Increment();
+			if (!text.WithinCapacity(in offset)) break;
 
 			if (!stringValue && text.HasWhitespaceAtOffset(in offset)) break;
 		}
 
 		// Append a '"' if it started with a '"'
 		if (stringValue) offset.AdjustForToken(JsonCharacterConstants.PropertyWrapCharacter);
+		
+		Value = valueStartOffset >= offset
+			? string.Empty
+			: text[valueStartOffset..offset].ToString().Trim();
 
-		Value = text[valueStartOffset..offset].ToString().Trim();
 		if (Value.Equals(JsonCharacterConstants.NullValue, StringComparison.OrdinalIgnoreCase))
 			Value = null;
 	}

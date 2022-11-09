@@ -53,6 +53,24 @@ public sealed partial class JsonObjectTests
 		result2.Should().BeEquatableTo(expectedEmpty);
 	}
 
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
+		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
+		InlineData(LineEndings.ReturnLineFeed)]
+	public void ParseJson_OnlyWhiteSpace_ReturnsObject(string input)
+	{
+		// Arrange
+		var expected = Object();
+
+		// Act
+		var offset = 0;
+		var result = new JsonObject(input, ref offset);
+
+		// Assert
+		result.Should().BeEquatableTo(expected);
+	}
+
 	[Fact,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
