@@ -4,8 +4,6 @@ using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.DataNodes.Nodes;
 
 using System;
-using System.IO;
-using System.Reflection;
 
 using Xunit;
 

@@ -5,7 +5,6 @@ using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Xml.DataNodes.Nodes;
 
 using System;
-using System.Linq.Expressions;
 
 using Xunit;
 
