@@ -1,10 +1,16 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
+using FluentSerializer.Xml.DataNodes.Nodes;
+
+using System;
 
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
+
 public sealed partial class XmlElementTests
 {
 	[Fact,
@@ -53,5 +59,21 @@ public sealed partial class XmlElementTests
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void AppendTo_ElementInvalid_Throws()
+	{
+		// Arrange
+		var input = new XmlElement();
+
+		// Act
+		var result = () => input.AppendTo(ref _textWriter, true, 0, false);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The element was is an illegal state, it contains no Name *");
 	}
 }

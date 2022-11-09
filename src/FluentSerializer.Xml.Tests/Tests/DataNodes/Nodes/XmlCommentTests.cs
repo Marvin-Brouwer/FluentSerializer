@@ -21,7 +21,7 @@ public sealed partial class XmlCommentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeComment_ChildrenNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -36,7 +36,7 @@ public sealed partial class XmlCommentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeComment_ChildrenEmpty_ReturnsEmpty()
 	{
 		// Arrange
@@ -51,7 +51,7 @@ public sealed partial class XmlCommentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeComment_HasValue_ReturnsWithValue()
 	{
 		// Arrange

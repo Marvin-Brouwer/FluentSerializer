@@ -16,11 +16,10 @@ public readonly partial struct XmlAttribute
 	{
 		Guard.Against.NullOrWhiteSpace(Name, message: "The attribute was is an illegal state, it contains no Name"
 #if NETSTANDARD2_1
-			, parameterName: nameof(format)
+			, parameterName: nameof(Name)
 #endif
 		);
-
-
+		
 		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
 		stringBuilder

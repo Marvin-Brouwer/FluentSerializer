@@ -1,10 +1,15 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Xml.DataNodes.Nodes;
 
+using System;
+
 using Xunit;
 
 namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
+
 public sealed partial class XmlDocumentTests
 {
 	[Fact,
@@ -37,5 +42,37 @@ public sealed partial class XmlDocumentTests
 
 		// Assert
 		result.ShouldBeBinaryEquatableTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void AppendTo_DocumentInvalid_Throws()
+	{
+		// Arrange
+		var input = new XmlDocument();
+
+		// Act
+		var result = () => input.AppendTo(ref _textWriter, true, 0, false);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The document was is an illegal state, it contains no RootElement *");
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void WriteTo_DocumentInvalid_Throws()
+	{
+		// Arrange
+		var input = new XmlDocument();
+
+		// Act
+		var result = () => input.WriteTo(TestStringBuilderPool.Default, true, false, 0);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithMessage("The document was is an illegal state, it contains no RootElement *");
 	}
 }

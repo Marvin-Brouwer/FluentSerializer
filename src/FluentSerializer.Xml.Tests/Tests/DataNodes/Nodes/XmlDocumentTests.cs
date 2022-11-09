@@ -22,7 +22,7 @@ public sealed partial class XmlDocumentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeDocument_InputNull_ReturnsEmpty()
 	{
 		// Arrange
@@ -36,7 +36,7 @@ public sealed partial class XmlDocumentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void InitializeDocument_HasValue_ReturnsWithValue()
 	{
 		// Act
