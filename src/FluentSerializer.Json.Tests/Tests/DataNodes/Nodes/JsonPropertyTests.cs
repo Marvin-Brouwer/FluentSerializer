@@ -55,6 +55,7 @@ public sealed partial class JsonPropertyTests
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
+		result.HasValue.Should().BeFalse();
 	}
 
 	[Fact,
@@ -70,5 +71,6 @@ public sealed partial class JsonPropertyTests
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
+		result.HasValue.Should().BeTrue();
 	}
 }
