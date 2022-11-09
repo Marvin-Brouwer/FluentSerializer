@@ -5,6 +5,7 @@ using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Xml.DataNodes.Nodes;
 
 using System;
+using System.Linq.Expressions;
 
 using Xunit;
 
@@ -57,7 +58,10 @@ public sealed partial class XmlDocumentTests
 		// Assert
 		result.Should()
 			.ThrowExactly<ArgumentNullException>()
-			.WithMessage("The document was is an illegal state, it contains no RootElement *");
+			.WithMessage("The document was is an illegal state, it contains no RootElement *")
+			.And // This is mostly here to please Stryker
+				.StackTrace!.Split(Environment.NewLine)[1]
+				.Should().Contain(nameof(XmlDocument.AppendTo)); 
 	}
 
 	[Fact,
@@ -66,13 +70,15 @@ public sealed partial class XmlDocumentTests
 	{
 		// Arrange
 		var input = new XmlDocument();
-
 		// Act
 		var result = () => input.WriteTo(TestStringBuilderPool.Default, true, false, 0);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<ArgumentNullException>()
-			.WithMessage("The document was is an illegal state, it contains no RootElement *");
+			.WithMessage("The document was is an illegal state, it contains no RootElement *")
+			.And // This is mostly here to please Stryker
+				.StackTrace!.Split(Environment.NewLine)[2]
+				.Should().Contain(nameof(XmlDocument.WriteTo));
 	}
 }
