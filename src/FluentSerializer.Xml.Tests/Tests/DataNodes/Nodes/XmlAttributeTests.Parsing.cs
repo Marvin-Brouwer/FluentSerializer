@@ -118,4 +118,20 @@ public sealed partial class XmlAttributeTests
 		result.Should()
 			.ThrowExactly<ArgumentOutOfRangeException>();
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void ParseXml_UnTerminatedValue_FailsGracefully()
+	{
+		// Arrange
+		var expected = "The element of surpri...";
+		var input = "attribute=\"The element of surpri... >";
+
+		// Act
+		var offset = 0;
+		var result = new XmlAttribute(input, ref offset);
+
+		// Assert
+		result.Value.Should().BeEquivalentTo(expected);
+	}
 }
