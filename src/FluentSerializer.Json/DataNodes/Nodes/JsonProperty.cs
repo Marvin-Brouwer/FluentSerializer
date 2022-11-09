@@ -49,8 +49,8 @@ public readonly partial struct JsonProperty : IJsonProperty
 		Name = name;
 		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
 
-		_children = value is null
-			? Array.Empty<IJsonNode>()
-			: new ReadOnlyCollection<IJsonNode>(new IJsonNode[] { value });
+		_children = new ReadOnlyCollection<IJsonNode>(new IJsonNode[] {
+			value ?? new JsonValue(null)
+		});
 	}
 }

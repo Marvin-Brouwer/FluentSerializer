@@ -31,7 +31,7 @@ public sealed partial class JsonArrayTests
 		var input = (IEnumerable<IJsonArrayContent>?)null!;
 
 		// Act
-		var result = new JsonArray(input);
+		var result = new JsonArray(in input);
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
@@ -47,7 +47,7 @@ public sealed partial class JsonArrayTests
 		var input2 = System.Array.Empty<IJsonArrayContent>();
 
 		// Act
-		var result1 = new JsonArray(input1);
+		var result1 = new JsonArray(in input1);
 		var result2 = new JsonArray(input2);
 
 		// Assert
