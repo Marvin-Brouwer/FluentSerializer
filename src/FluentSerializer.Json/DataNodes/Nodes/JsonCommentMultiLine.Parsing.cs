@@ -12,6 +12,14 @@ public readonly partial struct JsonCommentMultiLine
 	/// </remarks>
 	public JsonCommentMultiLine(in ReadOnlySpan<char> text, ref int offset)
 	{
+
+		offset.AdjustForWhiteSpace(in text);
+		if (!text.WithinCapacity(in offset))
+		{
+			Value = null;
+			return;
+		}
+
 		offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 
 		var valueStartOffset = offset;
