@@ -54,6 +54,24 @@ public sealed partial class JsonCommentMultiLineTests
 		result2.Should().BeEquatableTo(expectedEmpty);
 	}
 
+	[Theory,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
+		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
+		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
+		InlineData(LineEndings.ReturnLineFeed)]
+	public void ParseJson_OnlyWhiteSpace_ReturnsObject(string input)
+	{
+		// Arrange
+		var expected = (string?)null;
+
+		// Act
+		var offset = 0;
+		var result = new JsonCommentMultiLine(input, ref offset);
+
+		// Assert
+		result.Value.Should().BeEquivalentTo(expected);
+	}
+
 	[Fact,
 		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
