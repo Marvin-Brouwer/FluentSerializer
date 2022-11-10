@@ -14,6 +14,7 @@ using FluentSerializer.Json.Services;
 
 using Moq;
 
+using System;
 using System.Collections.Generic;
 
 using Xunit;
@@ -39,6 +40,46 @@ public sealed class JsonTypeSerializerTests
 			.WithDefaults()
 			.WithoutPropertyMaps();
 		_classMapCollectionMock = new Mock<IClassMapCollection>();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Initialize_NullValue_Throws()
+	{
+		// Act
+
+		var result = () => new JsonTypeSerializer(null!);
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("classMapCollection");
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void SerializeToNode_NullValues_Throws()
+	{
+		// Arrange
+		var dataModel = new TestClass();
+		var classType = typeof(TestClass);
+
+		var sut = new JsonTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result1 = () => sut.SerializeToNode(null!, classType, _coreContextStub);
+		var result2 = () => sut.SerializeToNode(dataModel, null!, _coreContextStub);
+		var result3 = () => sut.SerializeToNode(dataModel, classType, null!);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(dataModel));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(classType));
+		result3.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("coreContext");
 	}
 
 	/// <summary>

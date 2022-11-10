@@ -39,7 +39,7 @@ public sealed class XmlTypeDeserializer
 	/// <summary>
 	/// Deserialize an <see cref="IXmlElement"/> to the requested object type
 	/// </summary>
-	public TModel? DeserializeFromElement<TModel>(in IXmlElement dataObject, in ISerializerCoreContext<IXmlNode> context)
+	public TModel? DeserializeFromElement<TModel>(in IXmlElement dataObject, in ISerializerCoreContext<IXmlNode> coreContext)
 		where TModel : new()
 	{
 		Guard.Against.Null(dataObject
@@ -47,14 +47,14 @@ public sealed class XmlTypeDeserializer
 			, nameof(dataObject)
 #endif
 		);
-		Guard.Against.Null(context
+		Guard.Against.Null(coreContext
 #if NETSTANDARD2_1
-			, nameof(context)
+			, nameof(coreContext)
 #endif
 		);
 
 		var classType = typeof(TModel);
-		var deserializedInstance = DeserializeFromElement(in dataObject, in classType, in context);
+		var deserializedInstance = DeserializeFromElement(in dataObject, in classType, in coreContext);
 		if (deserializedInstance is null) return default;
 
 		return (TModel)deserializedInstance;

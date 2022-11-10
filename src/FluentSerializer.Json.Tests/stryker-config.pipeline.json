@@ -14,7 +14,8 @@
 			"!**/*.g.cs",
 			"!**/GlobalSuppressions.cs",
 			"!**/*Exception.cs",
-			"!Configuration/JsonSerializerConfiguration.cs"
+			"!Configuration/JsonSerializerConfiguration.cs",
+			"!Services/RuntimeJsonSerializer.cs"
 		],
 		"ignore-methods": [
 			"*Exception.ctor"

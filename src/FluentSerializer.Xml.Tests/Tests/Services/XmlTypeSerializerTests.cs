@@ -16,6 +16,7 @@ using FluentSerializer.Xml.Tests.ObjectMother;
 
 using Moq;
 
+using System;
 using System.Collections.Generic;
 
 using Xunit;
@@ -43,6 +44,19 @@ public sealed class XmlTypeSerializerTests
 		_classMapCollectionMock = new Mock<IClassMapCollection>();
 	}
 
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValue_Throws()
+	{
+		// Act
+
+		var result = () => new XmlTypeSerializer(null!);
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("classMapCollection");
+	}
+
 	/// <summary>
 	/// We're either parsing a root node or a document.
 	/// XML specs that a file cannot have more than one root node.
@@ -68,6 +82,33 @@ public sealed class XmlTypeSerializerTests
 		result.Should()
 			.ThrowExactly<MalConfiguredRootNodeException>()
 			.Which.AttemptedType.Should().Be(type);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToElement_NullValues_Throws()
+	{
+		// Arrange
+		var dataModel = new TestClass();
+		var classType = typeof(TestClass);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result1 = () => sut.SerializeToElement(null!, classType, _coreContextStub);
+		var result2 = () => sut.SerializeToElement(dataModel, null!, _coreContextStub);
+		var result3 = () => sut.SerializeToElement(dataModel, classType, null!);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(dataModel));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(classType));
+		result3.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("coreContext");
 	}
 
 	/// <summary>

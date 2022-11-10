@@ -13,6 +13,7 @@ using FluentSerializer.Xml.Tests.ObjectMother;
 
 using Moq;
 
+using System;
 using System.Collections.Generic;
 
 using Xunit;
@@ -38,6 +39,60 @@ public sealed class XmlTypeDeserializerTests
 			.WithDefaults()
 			.WithoutPropertyMaps();
 		_classMapCollectionMock = new Mock<IClassMapCollection>();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValue_Throws()
+	{
+		// Act
+
+		var result = () => new XmlTypeDeserializer(null!);
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("classMapCollection");
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void DeserializeFromElement_NullValues_Throws()
+	{
+		// Arrange
+		var dataObject = Element(nameof(Element));
+		var classType = typeof(TestClass);
+
+		var sut = new XmlTypeDeserializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result1 = () => sut.DeserializeFromElement(null!, classType, _coreContextStub);
+		var result2 = () => sut.DeserializeFromElement(dataObject, null!, _coreContextStub);
+		var result3 = () => sut.DeserializeFromElement(dataObject, classType, null!);
+		var result4 = () => sut.DeserializeFromElement<TestClass>(null!, _coreContextStub);
+		var result5 = () => sut.DeserializeFromElement<TestClass>(dataObject, null!);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(dataObject));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(classType));
+		result3.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("coreContext");
+		result4.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(dataObject))
+			.And // This is mostly here to please Stryker
+				.StackTrace!.Split(Environment.NewLine).Length
+				.Should().Be(5);
+		result5.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName("coreContext")
+			.And // This is mostly here to please Stryker
+				.StackTrace!.Split(Environment.NewLine).Length
+				.Should().Be(5);
 	}
 
 	/// <summary>
@@ -228,9 +283,11 @@ public sealed class XmlTypeDeserializerTests
 
 		// Act
 		var result = sut.DeserializeFromElement(input, type, _coreContextStub);
+		var typedResult = sut.DeserializeFromElement<TestClass>(input, _coreContextStub);
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
+		typedResult.Should().BeEquivalentTo(expected);
 	}
 
 	[Fact,

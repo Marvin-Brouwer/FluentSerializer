@@ -15,7 +15,8 @@
 			"!**/GlobalSuppressions.cs",
 			"!**/*Exception.cs",
 			"!Configuration/XmlSerializerConfiguration.cs",
-			"!Profiles/TextNamingStrategy.cs"
+			"!Profiles/TextNamingStrategy.cs",
+			"!Services/RuntimeXmlSerializer.cs"
 		],
 		"ignore-methods": [
 			"*Exception.ctor"
