@@ -60,7 +60,7 @@ jobs:
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
-        --break-at 70
-        --threshold-low 70
+        --break-at 80
+        --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Tests
