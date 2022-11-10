@@ -4,6 +4,9 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("FluentSerializer.Xml.Tests")]
 
 [assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords",
 	Justification = "This refers to an Enum", Scope = "member", Target = "~M:FluentSerializer.Xml.Converting.IUseXmlConverters.Enum~FluentSerializer.Xml.Converting.IXmlConverter")]

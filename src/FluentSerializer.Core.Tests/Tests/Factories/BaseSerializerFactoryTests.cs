@@ -59,7 +59,10 @@ public sealed class BaseSerializerFactoryTests
 	public void WithConfiguration_SetOverrides_ReturnsWithOverrides()
 	{
 		// Arrange
-		var config = new TestConfiguration();
+		var config = new TestConfiguration
+		{
+			NewLine = "TEST"
+		};
 		var poolProvider = new DefaultObjectPoolProvider();
 
 		// Act
@@ -68,7 +71,9 @@ public sealed class BaseSerializerFactoryTests
 			.UseProfiles(Array.Empty<TestSerializerProfile>());
 
 		// Assert
-		resultWithSetConfiguration.Configuration.Should().Be(config);
+		resultWithSetConfiguration.Configuration.Should().NotBe(_sut.GetDefaultConfiguration());
+		resultWithSetConfiguration.Configuration.Should().NotBeEquivalentTo(new TestConfiguration());
+		resultWithSetConfiguration.Configuration.NewLine.Should().Be("TEST");
 		resultWithSetConfiguration.PoolProvider.Should().Be(poolProvider);
 	}
 
