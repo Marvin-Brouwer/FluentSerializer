@@ -5,6 +5,7 @@ using FluentSerializer.Core.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -12,7 +13,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes;
 [DebuggerDisplay("{Name}: {GetDebugValue(), nq},")]
 public readonly partial struct JsonProperty : IJsonProperty
 {
-	[DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
+	[DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough, ExcludeFromCodeCoverage]
 	private string GetDebugValue()
 	{
 		if (_children.Count == 0) return JsonCharacterConstants.NullValue;
@@ -20,6 +21,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 
 		if (value is JsonValue jsonValue)
 			return jsonValue.Value ?? JsonCharacterConstants.NullValue;
+		
 		return value.Name;
 	}
 
