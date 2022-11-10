@@ -16,7 +16,9 @@
 			"!**/*Exception.cs",
 			"!Configuration/XmlSerializerConfiguration.cs",
 			"!Profiles/TextNamingStrategy.cs",
-			"!Services/RuntimeXmlSerializer.cs"
+			"!Services/RuntimeXmlSerializer.cs",
+			"!Factory/XmlSerializerFactory.cs",
+			"!Converting/UseXmlConverters.cs"
 		],
 		"ignore-methods": [
 			"*Exception.ctor"
