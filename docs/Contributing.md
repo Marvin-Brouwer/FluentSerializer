@@ -134,6 +134,8 @@ Regularly rebase the upstream `main` branch into your topic branch, preferably b
 Use Git's [interactive rebase](https://help.github.com/articles/interactive-rebase) feature to tidy up your commits before making them public.
 
 ### Open a pull request at any time  
+
+[dod]: /.github/pull_request_template.md#definition-of-done
   
 Good pull requests - patches, improvements, new features - are a fantastic help.  
 They should remain focused in scope and avoid containing unrelated commits.
@@ -145,6 +147,8 @@ Please don't squash, we care about the merge history.
 
 [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
 The target branch should be the `main` branch unless you're instructed to use a different branch by a maintainer.  
+When finalizing a PR for merging all items of the [DOD][dod] have to be checked, this [DOD][dod] will be included in the PR by default.  
+You're not allowed to remove items. However, feel free to add any checks if applicable.
 
 #### Final pull request  
   
@@ -155,6 +159,7 @@ When finalizing your change please make sure you:
 * Add release notes to the `Changelog.md` in the projects you changed, with a link to the GitHub issue.
   Make sure it's in the `## @next` chapter so it get's added to the next package publish automagically.
   Eg. `- [#150](https://github.com/Marvin-Brouwer/FluentSerializer/issues/150) Added release notes`
+* Check all the items in the [DOD][dod] that's included in the PR template.
 
 ### Release management  
   

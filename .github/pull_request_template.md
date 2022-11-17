@@ -1,8 +1,8 @@
-<!-- Please refer to your issue number here:
-     A brief summary of what you've done would be appreciated. -->
+<!-- Please refer to your issue number here: -->
 # Pull request for # <!--Number here-->
 
-<!-- Summary here -->
+<!-- Summary here
+     Have a look at: https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/ -->
 
 ## Definition Of Done  
 
@@ -11,5 +11,7 @@
 
 - [ ] Meets acceptance criteria of story / Fixed bug
 - [ ] Added new tests
+- [ ] Checked quality gate results
+- [ ] Checked performance profiles for regression
 - [ ] Updated documentation
 - [ ] Updated release notes
