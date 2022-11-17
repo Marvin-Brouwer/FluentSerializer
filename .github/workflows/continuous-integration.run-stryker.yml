@@ -63,4 +63,4 @@ jobs:
         --break-at 78
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Tests
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}

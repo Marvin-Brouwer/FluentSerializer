@@ -5,6 +5,9 @@
 			"name": "github.com/Marvin-Brouwer/FluentSerializer",
 			"module": "FluentSerializer.Xml"
 		},
+		"test-projects": [
+			"../FluentSerializer.Xml.Tests/FluentSerializer.Xml.Tests.csproj"
+		],
 		"reporters": [
 			"dashboard",
 			"cleartext"
