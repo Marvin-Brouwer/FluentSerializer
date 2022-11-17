@@ -6,7 +6,8 @@
 			"module": "FluentSerializer.Xml"
 		},
 		"test-projects": [
-			"../FluentSerializer.Xml.Tests/FluentSerializer.Xml.Tests.csproj"
+			"../FluentSerializer.Xml.Tests/FluentSerializer.Xml.Tests.csproj",
+			"../FluentSerializer.UseCase.OpenAir/FluentSerializer.UseCase.OpenAir.csproj"
 		],
 		"reporters": [
 			"dashboard",

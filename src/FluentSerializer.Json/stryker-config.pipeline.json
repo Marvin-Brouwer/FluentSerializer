@@ -6,7 +6,8 @@
 			"module": "FluentSerializer.Json"
 		},
 		"test-projects": [
-			"../FluentSerializer.Json.Tests/FluentSerializer.Json.Tests.csproj"
+			"../FluentSerializer.Json.Tests/FluentSerializer.Json.Tests.csproj",
+			"../FluentSerializer.UseCase.Mavenlink/FluentSerializer.UseCase.Mavenlink.csproj"
 		],
 		"reporters": [
 			"dashboard",
