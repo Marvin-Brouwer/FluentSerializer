@@ -1,13 +1,13 @@
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Tests.Extensions;
 
 using Moq;
 
@@ -74,9 +74,9 @@ public sealed class DefaultDateTimeOffsetConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeOffsetValue.GetType());
-		var textResult = ((IConverter<IXmlText, IXmlNode>)sut).Serialize(DateTimeOffsetValue, _contextMock.Object)!;
-		var attributeResult = ((IConverter<IXmlAttribute, IXmlNode>)sut).Serialize(DateTimeOffsetValue, _contextMock.Object)!;
-		var elementResult = ((IConverter<IXmlElement, IXmlNode>)sut).Serialize(DateTimeOffsetValue, _contextMock.Object)!;
+		var textResult = sut.ForText().Serialize(DateTimeOffsetValue, _contextMock.Object)!;
+		var attributeResult = sut.ForAttribute().Serialize(DateTimeOffsetValue, _contextMock.Object)!;
+		var elementResult = sut.ForElement().Serialize(DateTimeOffsetValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -105,9 +105,9 @@ public sealed class DefaultDateTimeOffsetConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeOffsetValue.GetType());
-		var textResult = (DateTimeOffset)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(textInput, _contextMock.Object)!;
-		var attributeResult = (DateTimeOffset)((IConverter<IXmlAttribute, IXmlNode>)sut).Deserialize(attributeInput, _contextMock.Object)!;
-		var elementResult = (DateTimeOffset)((IConverter<IXmlElement, IXmlNode>)sut).Deserialize(elementInput, _contextMock.Object)!;
+		var textResult = (DateTimeOffset)sut.ForText().Deserialize(textInput, _contextMock.Object)!;
+		var attributeResult = (DateTimeOffset)sut.ForAttribute().Deserialize(attributeInput, _contextMock.Object)!;
+		var elementResult = (DateTimeOffset)sut.ForElement().Deserialize(elementInput, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -138,13 +138,34 @@ public sealed class DefaultDateTimeOffsetConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTimeOffset?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (DateTimeOffset?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
 			.WithMessage("The string 'SomeText' was not recognized as a valid DateTime. There is an unknown word starting at index '0'.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Text("");
+		var sut = new DateTimeOffsetByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid DateTime.");
+	}
+
 	#endregion
 }
 

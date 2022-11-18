@@ -8,7 +8,6 @@ using Moq;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 using Xunit;
@@ -46,6 +45,44 @@ public sealed class ProfileScannerTests
 
 	[Fact,
 		Trait("Category", "UnitTest")]
+	public void ScanAssembliesForType_Abstract_ReturnsEmptyList()
+	{
+		// Arrange
+		_assemblyMock
+			.Setup(assembly => assembly.GetTypes())
+			.Returns(new[] { typeof(BaseSerializerProfileFake) });
+
+		// Act
+		var profiles = ProfileScanner
+			.ScanAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object);
+		var result = ProfileScanner.
+			FindClassMapsInProfiles<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(profiles, _configurationMock.Object);
+
+		// Assert
+		result.Should().BeEmpty();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void ScanAssembliesForType_NonProfile_ReturnsEmptyList()
+	{
+		// Arrange
+		_assemblyMock
+			.Setup(assembly => assembly.GetTypes())
+			.Returns(new[] { typeof(ProfileScannerTests) });
+
+		// Act
+		var profiles = ProfileScanner
+			.ScanAssembly<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(_assemblyMock.Object);
+		var result = ProfileScanner.
+			FindClassMapsInProfiles<ISerializerProfile<ISerializerConfiguration>, ISerializerConfiguration>(profiles, _configurationMock.Object);
+
+		// Assert
+		result.Should().BeEmpty();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
 	public void ScanAssembliesForType_Present_ReturnsProfile()
 	{
 		// Arrange
@@ -63,7 +100,9 @@ public sealed class ProfileScannerTests
 		result.Should().NotBeEmpty();
 	}
 
-	private sealed class SerializerProfileFake : ISerializerProfile<ISerializerConfiguration>
+	private sealed class SerializerProfileFake : BaseSerializerProfileFake { }
+
+	private abstract class BaseSerializerProfileFake : ISerializerProfile<ISerializerConfiguration>
 	{
 		private static readonly List<IClassMap> ClassMaps = new()
 		{

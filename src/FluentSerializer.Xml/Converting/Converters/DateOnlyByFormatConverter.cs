@@ -24,7 +24,6 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 	{
 		Guard.Against.NullOrWhiteSpace(format);
 		Guard.Against.Null(cultureInfo);
-		Guard.Against.Null(dateTimeStyle);
 
 		_format = format;
 		_cultureInfo = cultureInfo;

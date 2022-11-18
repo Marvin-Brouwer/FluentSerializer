@@ -1,7 +1,6 @@
 using FluentSerializer.Core.Extensions;
 
 using System;
-using System.IO;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -65,8 +64,6 @@ public readonly partial struct XmlAttribute
 				offset.AdjustForToken(XmlCharacterConstants.PropertyWrapCharacter);
 				break;
 			}
-			if (text.HasWhitespaceAtOffset(in offset)) continue;
-			throw new InvalidDataException("Attribute incorrectly terminated");
 		}
 	}
 }

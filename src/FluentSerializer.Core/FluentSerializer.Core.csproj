@@ -24,6 +24,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="StrykerOutput\**" />
+	  <EmbeddedResource Remove="StrykerOutput\**" />
+	  <None Remove="StrykerOutput\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\..\docs\logo\NuGetIcon.default.png" Visible="false">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

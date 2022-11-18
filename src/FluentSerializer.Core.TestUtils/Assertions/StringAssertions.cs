@@ -7,12 +7,9 @@ using System;
 namespace FluentSerializer.Core.TestUtils.Assertions;
 
 /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
-public class StringAssertions : ReferenceTypeAssertions<string, StringAssertions>
+public sealed class StringAssertions : ReferenceTypeAssertions<string, StringAssertions>
 {
-	public StringAssertions(string instance)
-		: base(instance)
-	{
-	}
+	public StringAssertions(string instance) : base(instance) { }
 
 	protected override string Identifier => Subject;
 

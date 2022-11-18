@@ -47,6 +47,32 @@ public sealed class DateTimeByFormatConverterTests
 		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var dateTimeStyle = DateTimeStyles.AllowWhiteSpaces;
+
+		// Act
+		var result1 = () => new DateTimeByFormatConverter(null!, cultureInfo, dateTimeStyle);
+		var result2 = () => new DateTimeByFormatConverter(format, null!, dateTimeStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
 	#region Serialize
 
 	[Theory,
@@ -110,6 +136,27 @@ public sealed class DateTimeByFormatConverterTests
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid DateTime.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Value("\"\"");
+		var sut = new DateTimeByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid DateTime.");
+	}
+
 	#endregion
 }
 

@@ -36,8 +36,7 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 		WriteNull = false;
 		DefaultClassNamingStrategy = Names.Use.PascalCase;
 		DefaultPropertyNamingStrategy = Names.Use.CamelCase;
-		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default)
-		{
+		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default,
 			// Built-in converters
 			UseXmlConverters.ConvertibleConverter,
 			UseXmlConverters.DefaultEnumConverter,
@@ -50,6 +49,6 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 			UseXmlConverters.DefaultTimeSpanConverter,
 			// Collection converters
 			UseXmlConverters.WrappedCollectionConverter
-		};
+		);
 	}
 }

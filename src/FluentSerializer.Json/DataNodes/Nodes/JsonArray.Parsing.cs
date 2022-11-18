@@ -17,6 +17,13 @@ public readonly partial struct JsonArray
 		_lastNonCommentChildIndex = null;
 		var currentChildIndex = 0;
 
+		offset.AdjustForWhiteSpace(in text);
+		if (!text.WithinCapacity(in offset))
+		{
+			_children = Array.Empty<IJsonNode>();
+			return;
+		}
+
 		offset.AdjustForToken(JsonCharacterConstants.ArrayStartCharacter);
 		while (text.WithinCapacity(in offset))
 		{
@@ -64,9 +71,11 @@ public readonly partial struct JsonArray
 				currentChildIndex++;
 				continue;
 			}
-			offset++;
+
+			offset.Increment();
 		}
-		offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
+		if (text.WithinCapacity(in offset))
+			offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
 
 		_children = children.AsReadOnly();
 	}

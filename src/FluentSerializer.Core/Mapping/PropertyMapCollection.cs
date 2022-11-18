@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Extensions;
 
@@ -11,10 +13,6 @@ namespace FluentSerializer.Core.Mapping;
 /// <inheritdoc />
 public readonly struct PropertyMapCollection : IPropertyMapCollection
 {
-	private static readonly NotSupportedException SerializerDirectionBothException = new(
-		$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
-		"you can only register one as such!");
-
 	private readonly IReadOnlyCollection<IPropertyMap> _propertyMaps;
 
 	/// <inheritdoc cref="IPropertyMapCollection" />
@@ -26,7 +24,11 @@ public readonly struct PropertyMapCollection : IPropertyMapCollection
 	/// <inheritdoc />
 	public IReadOnlyCollection<IPropertyMap> GetAllPropertyMaps(in SerializerDirection direction)
 	{
-		if (direction == SerializerDirection.Both) throw SerializerDirectionBothException;
+		Guard.Against.InvalidChoice(
+			direction, SerializerDirection.Both,
+			$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
+			"you can only register one as such!"
+		);
 
 		return GetPropertyMaps(direction).ToArray();
 	}
@@ -44,7 +46,11 @@ public readonly struct PropertyMapCollection : IPropertyMapCollection
 	/// <inheritdoc />
 	public IPropertyMap? GetPropertyMapFor(in PropertyInfo propertyInfo, in SerializerDirection direction)
 	{
-		if (direction == SerializerDirection.Both) throw SerializerDirectionBothException;
+		Guard.Against.InvalidChoice(
+			direction, SerializerDirection.Both,
+			$"You cannot get a {nameof(PropertyMap)} for {nameof(SerializerDirection)}.{SerializerDirection.Both} \n" +
+			"you can only register one as such!"
+		);
 
 		foreach (var propertyMap in _propertyMaps)
 		{
@@ -72,7 +78,6 @@ public readonly struct PropertyMapCollection : IPropertyMapCollection
 
 	private static bool MatchDirection(in SerializerDirection searchDirection, in SerializerDirection mapDirection)
 	{
-		if (searchDirection == SerializerDirection.Both) return true;
 		if (mapDirection == SerializerDirection.Both) return true;
 
 		return searchDirection == mapDirection;

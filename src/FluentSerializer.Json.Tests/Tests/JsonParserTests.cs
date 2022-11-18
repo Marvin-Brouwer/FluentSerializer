@@ -1,4 +1,8 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.TestUtils.Extensions;
+
+using System;
 
 using Xunit;
 
@@ -23,5 +27,37 @@ public sealed class JsonParserTests
 
 		// Assert
 		result.Should().BeEquatableTo(expected, format);
+	}
+
+	[Fact,
+		Trait("Category", "IntegrationTest"), Trait("DataFormat", "JSON")]
+	public void AllElements_NullValue_Throws()
+	{
+		// Arrange
+		var value = (string)null!;
+
+		// Act
+		var result = () => JsonParser.Parse(value);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(value));
+	}
+
+	[Fact,
+		Trait("Category", "IntegrationTest"), Trait("DataFormat", "JSON")]
+	public void AllElements_EmptyValue_Throws()
+	{
+		// Arrange
+		var value = string.Empty;
+
+		// Act
+		var result = () => JsonParser.Parse(value);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<ArgumentException>()
+			.WithParameterName(nameof(value));
 	}
 }

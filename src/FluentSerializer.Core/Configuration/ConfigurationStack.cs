@@ -1,41 +1,52 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
 
 namespace FluentSerializer.Core.Configuration;
 
 /// <inheritdoc cref="IConfigurationStack{T}" />
-[Serializable]
-public sealed class ConfigurationStack<T> : SortedSet<T>, IConfigurationStack<T>
+public sealed class ConfigurationStack<T> : IConfigurationStack<T>
 {
+	private readonly IEqualityComparer<T> _valueComparer;
+	private readonly List<T> _innerList;
+
 	/// <inheritdoc cref="IConfigurationStack{T}" />
-	public ConfigurationStack(IComparer<T> comparer) : base(comparer) { }
+	public ConfigurationStack(IEqualityComparer<T> valueComparer, params T[] initialValues)
+	{
+		_valueComparer = valueComparer;
+		_innerList = new List<T>(initialValues.Reverse());
+	}
 
 	/// <inheritdoc />
 	public IConfigurationStack<T> Use(T item, bool forceTop = false)
 	{
-		if (forceTop && Contains(item)) Remove(item);
+		var existingIndex = _innerList.FindIndex(listItem => _valueComparer.Equals(item, listItem));
+		if (existingIndex == -1)
+		{
+			_innerList.Insert(0, item);
+			return this;
+		}
+		if (forceTop)
+		{
+			_innerList.RemoveAt(existingIndex);
+			_innerList.Insert(0, item);
+			return this;
+		}
 
-		Add(item);
+		_innerList[existingIndex] = item;
+
 		return this;
 	}
 
 	/// <inheritdoc />
-	public new IEnumerator<T> GetEnumerator()
+	public IEnumerator<T> GetEnumerator()
 	{
-		return Reverse().GetEnumerator();
+		return _innerList.GetEnumerator();
 	}
 
 	/// <inheritdoc />
 	IEnumerator IEnumerable.GetEnumerator()
 	{
-		return Reverse().GetEnumerator();
+		return GetEnumerator();
 	}
-
-	/// <inheritdoc cref="IConfigurationStack{T}" />
-	private ConfigurationStack(SerializationInfo info, StreamingContext context) : base(info, context) { }
-
-	/// <inheritdoc cref="ISerializable" />
-	protected override void GetObjectData(SerializationInfo info, StreamingContext context) => base.GetObjectData(info, context);
 }

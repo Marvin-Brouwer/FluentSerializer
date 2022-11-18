@@ -106,6 +106,27 @@ public sealed class DefaultTimeSpanConverterTests
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid TimeSpan.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Value("\"\"");
+		var sut = new DefaultTimeOnlyConverter();
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid TimeOnly.");
+	}
+
 	#endregion
 }
 

@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Xml.Configuration;
@@ -13,6 +15,12 @@ public readonly partial struct XmlElement
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		const char spacer = ' ';
+
+		Guard.Against.NullOrWhiteSpace(Name, message: "The element was is an illegal state, it contains no Name"
+#if NETSTANDARD2_1
+			, parameterName: nameof(Name)
+#endif
+		);
 
 		var childCount = _attributes.Count + _children.Count;
 		var childIndent = format ? indent + 1 : 0;

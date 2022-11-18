@@ -45,6 +45,32 @@ public sealed class DateOnlyByFormatConverterTests
 		yield return new object[] { "dd-MM-yyyy", "\"20-04-2096\"", new CultureInfo("nl-NL") };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var dateTimeStyle = DateTimeStyles.AllowWhiteSpaces;
+
+		// Act
+		var result1 = () => new DateOnlyByFormatConverter(null!, cultureInfo, dateTimeStyle);
+		var result2 = () => new DateOnlyByFormatConverter(format, null!, dateTimeStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
 	#region Serialize
 
 	[Theory,
@@ -64,6 +90,7 @@ public sealed class DateOnlyByFormatConverterTests
 		canConvert.Should().BeTrue();
 		result.Should().BeEquatableTo(expected);
 	}
+
 	#endregion
 
 	#region Deserialize
@@ -107,6 +134,27 @@ public sealed class DateOnlyByFormatConverterTests
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid DateOnly.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Value("\"\"");
+		var sut = new DateOnlyByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid DateOnly.");
+	}
+
 	#endregion
 }
 

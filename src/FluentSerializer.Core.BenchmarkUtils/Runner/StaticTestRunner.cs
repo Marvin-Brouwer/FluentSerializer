@@ -27,7 +27,6 @@ using System.Globalization;
 using BenchmarkDotNet.Order;
 
 using BenchmarkDotNet.Reports;
-using Microsoft.DotNet.PlatformAbstractions;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;

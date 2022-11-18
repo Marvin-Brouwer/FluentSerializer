@@ -11,6 +11,7 @@ using Moq;
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 
 using Xunit;
@@ -142,8 +143,67 @@ public sealed class ConvertibleConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
+	/// <remarks>
+	/// This is an interesting scenario.
+	/// Since a string without quotes is considered invalid JSON the serializer should never get this far in the first place.
+	/// Because of that the converter just plainly ignores the fact that it doesn't have quotes and snips of the outer characters.
+	/// </remarks>
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_UnquotedString_ReturnsTruncatedValue()
+	{
+		// Arrange
+		var input = Value("This string has no quotes");
+		var expected = "his string has no quote";
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = _sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should().Be(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_EmptyString_ReturnsEmptyString()
+	{
+		// Arrange
+		var input = Value("\"\"");
+		var expected = string.Empty;
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = _sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should().Be(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void Deserialize_Convertible_StringTooShort_Throws()
+	{
+		// Arrange
+		var input = Value("S"); // <-- not surrounded with quotes
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => _sut.Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<DataException>();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

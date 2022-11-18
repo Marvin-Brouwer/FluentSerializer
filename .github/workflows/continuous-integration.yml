@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - '**'
+    tags:
+      - '**'
   pull_request:
     branches:
       - '**'
@@ -17,6 +19,7 @@ concurrency:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 jobs:
   ci:
@@ -24,9 +27,14 @@ jobs:
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
 
+  stryker:
+    name: "Stryker"
+    uses: ./.github/workflows/continuous-integration.stryker.yml
+    secrets: inherit
+
   benchmark-core:
     name: "Benchmark"
-    needs: ci
+    needs: [ci, stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -36,7 +44,7 @@ jobs:
       netcore_3_1-jobType: "Long"
   benchmark-xml:
     name: "Benchmark"
-    needs: ci
+    needs: [ci, stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -44,7 +52,7 @@ jobs:
       reportPrefix: 'xml-serializer'
   benchmark-json:
     name: "Benchmark"
-    needs: ci
+    needs: [ci, stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:

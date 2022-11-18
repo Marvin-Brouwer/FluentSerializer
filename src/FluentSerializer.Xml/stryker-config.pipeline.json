@@ -1,0 +1,31 @@
+{
+	"stryker-config": {
+		"project": "FluentSerializer.Xml.csproj",
+		"project-info": {
+			"name": "github.com/Marvin-Brouwer/FluentSerializer",
+			"module": "FluentSerializer.Xml"
+		},
+		"test-projects": [
+			"../FluentSerializer.Xml.Tests/FluentSerializer.Xml.Tests.csproj",
+			"../FluentSerializer.UseCase.OpenAir/FluentSerializer.UseCase.OpenAir.csproj"
+		],
+		"reporters": [
+			"dashboard",
+			"cleartext"
+		],
+		"mutate": [
+			"!**/*.generated.cs",
+			"!**/*.g.cs",
+			"!**/GlobalSuppressions.cs",
+			"!**/*Exception.cs",
+			"!Configuration/XmlSerializerConfiguration.cs",
+			"!Profiles/TextNamingStrategy.cs",
+			"!Services/RuntimeXmlSerializer.cs",
+			"!Factory/XmlSerializerFactory.cs",
+			"!Converting/UseXmlConverters.cs"
+		],
+		"ignore-methods": [
+			"*Exception.ctor"
+		]
+	}
+}

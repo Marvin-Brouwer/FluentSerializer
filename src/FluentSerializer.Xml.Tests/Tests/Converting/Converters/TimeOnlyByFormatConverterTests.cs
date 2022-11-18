@@ -1,13 +1,13 @@
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Tests.Extensions;
 
 using Moq;
 
@@ -46,6 +46,33 @@ public sealed class TimeOnlyByFormatConverterTests
 		yield return new object[] { "HH:mm", "04:20", new CultureInfo("nl-NL") };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var dateTimeStyle = DateTimeStyles.AllowWhiteSpaces;
+
+		// Act
+		var result1 = () => new TimeOnlyByFormatConverter(null!, cultureInfo, dateTimeStyle);
+		var result2 = () => new TimeOnlyByFormatConverter(format, null!, dateTimeStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
+
 	#region Serialize
 
 	[Theory,
@@ -62,9 +89,9 @@ public sealed class TimeOnlyByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(TimeOnlyValue.GetType());
-		var textResult = ((IConverter<IXmlText, IXmlNode>)sut).Serialize(TimeOnlyValue, _contextMock.Object)!;
-		var attributeResult = ((IConverter<IXmlAttribute, IXmlNode>)sut).Serialize(TimeOnlyValue, _contextMock.Object)!;
-		var elementResult = ((IConverter<IXmlElement, IXmlNode>)sut).Serialize(TimeOnlyValue, _contextMock.Object)!;
+		var textResult = sut.ForText().Serialize(TimeOnlyValue, _contextMock.Object)!;
+		var attributeResult = sut.ForAttribute().Serialize(TimeOnlyValue, _contextMock.Object)!;
+		var elementResult = sut.ForElement().Serialize(TimeOnlyValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -75,6 +102,7 @@ public sealed class TimeOnlyByFormatConverterTests
 	#endregion
 
 	#region Deserialize
+
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
@@ -92,9 +120,9 @@ public sealed class TimeOnlyByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(TimeOnlyValue.GetType());
-		var textResult = (TimeOnly)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(textInput, _contextMock.Object)!;
-		var attributeResult = (TimeOnly)((IConverter<IXmlAttribute, IXmlNode>)sut).Deserialize(attributeInput, _contextMock.Object)!;
-		var elementResult = (TimeOnly)((IConverter<IXmlElement, IXmlNode>)sut).Deserialize(elementInput, _contextMock.Object)!;
+		var textResult = (TimeOnly)sut.ForText().Deserialize(textInput, _contextMock.Object)!;
+		var attributeResult = (TimeOnly)sut.ForAttribute().Deserialize(attributeInput, _contextMock.Object)!;
+		var elementResult = (TimeOnly)sut.ForElement().Deserialize(elementInput, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -115,13 +143,34 @@ public sealed class TimeOnlyByFormatConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (TimeOnly?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (TimeOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid TimeOnly.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Text("");
+		var sut = new TimeOnlyByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid TimeOnly.");
+	}
+
 	#endregion
 }
 

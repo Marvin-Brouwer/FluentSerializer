@@ -1,0 +1,50 @@
+name: "Continuous integration - Stryker"
+on:
+  workflow_call:
+    secrets:
+      STRYKER_DASHBOARD_API_KEY:
+        required: true
+
+env:
+  STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
+jobs:
+
+  stryker-core:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Core'
+  stryker-xml:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Xml'
+  stryker-json:
+    name: "Mutate"
+    uses: ./.github/workflows/continuous-integration.run-stryker.yml
+    secrets: inherit
+    with:
+      libraryName: 'Json'
+
+  finalize-stryker:
+    name: "Finalize"
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [stryker-core, stryker-xml, stryker-json]
+    steps:
+    ###
+    # 🔬 Report Stryker dashboard
+    #
+    # Really all this does is write the dashboard URL to the job overview.
+    # The console output from the stryker report is module specific and gets very weird line endings.
+    ###
+    - name: 🔬 Report Stryker dashboard
+      if: ${{ always() }}
+      run: |-
+        dashboardUrl="https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
+        echo "## Stryker report  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in Stryker dashboard](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY

@@ -1,13 +1,14 @@
+
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Tests.Extensions;
 
 using Moq;
 
@@ -46,6 +47,33 @@ public sealed class TimeSpanByFormatConverterTests
 		yield return new object[] { @"hh\:mm", "04:20" };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var timeSpanStyle = TimeSpanStyles.None;
+
+		// Act
+		var result1 = () => new TimeSpanByFormatConverter(null!, cultureInfo, timeSpanStyle);
+		var result2 = () => new TimeSpanByFormatConverter(format, null!, timeSpanStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
+
 	#region Serialize
 
 	[Theory,
@@ -62,9 +90,9 @@ public sealed class TimeSpanByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(TimeSpanValue.GetType());
-		var textResult = ((IConverter<IXmlText, IXmlNode>)sut).Serialize(TimeSpanValue, _contextMock.Object)!;
-		var attributeResult = ((IConverter<IXmlAttribute, IXmlNode>)sut).Serialize(TimeSpanValue, _contextMock.Object)!;
-		var elementResult = ((IConverter<IXmlElement, IXmlNode>)sut).Serialize(TimeSpanValue, _contextMock.Object)!;
+		var textResult = sut.ForText().Serialize(TimeSpanValue, _contextMock.Object)!;
+		var attributeResult = sut.ForAttribute().Serialize(TimeSpanValue, _contextMock.Object)!;
+		var elementResult = sut.ForElement().Serialize(TimeSpanValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -75,6 +103,7 @@ public sealed class TimeSpanByFormatConverterTests
 	#endregion
 
 	#region Deserialize
+
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
@@ -92,9 +121,9 @@ public sealed class TimeSpanByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(TimeSpanValue.GetType());
-		var textResult = (TimeSpan)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(textInput, _contextMock.Object)!;
-		var attributeResult = (TimeSpan)((IConverter<IXmlAttribute, IXmlNode>)sut).Deserialize(attributeInput, _contextMock.Object)!;
-		var elementResult = (TimeSpan)((IConverter<IXmlElement, IXmlNode>)sut).Deserialize(elementInput, _contextMock.Object)!;
+		var textResult = (TimeSpan)sut.ForText().Deserialize(textInput, _contextMock.Object)!;
+		var attributeResult = (TimeSpan)sut.ForAttribute().Deserialize(attributeInput, _contextMock.Object)!;
+		var elementResult = (TimeSpan)sut.ForElement().Deserialize(elementInput, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -115,13 +144,34 @@ public sealed class TimeSpanByFormatConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (TimeSpan?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (TimeSpan?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid TimeSpan.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Text("");
+		var sut = new TimeSpanByFormatConverter("g", CultureInfo.InvariantCulture, TimeSpanStyles.None);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid TimeSpan.");
+	}
+
 	#endregion
 }
 

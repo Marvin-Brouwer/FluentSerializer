@@ -53,6 +53,7 @@ public sealed class CollectionConverterBaseTests
 		var input2 = typeof(int[]);
 		var input3 = typeof(List<int>);
 		var input4 = typeof(ArrayList);
+		var invalidInput = typeof(bool);
 
 		var sut = new TestConverter();
 
@@ -61,6 +62,7 @@ public sealed class CollectionConverterBaseTests
 		var result2 = sut.GetEnumerableInstance(in input2);
 		var result3 = sut.GetEnumerableInstance(in input3);
 		var result4 = sut.GetEnumerableInstance(in input4);
+		var invalidResult = () => sut.GetEnumerableInstance(in invalidInput);
 
 		// Assert
 		result1.Should().BeOfType<List<object>>();
@@ -68,6 +70,7 @@ public sealed class CollectionConverterBaseTests
 		input2.IsArray.Should().BeTrue();
 		result3.Should().BeOfType<List<int>>();
 		result4.Should().BeOfType<ArrayList>();
+		invalidResult.Should().ThrowExactly<NotSupportedException>();
 	}
 
 	[Fact,
@@ -75,7 +78,7 @@ public sealed class CollectionConverterBaseTests
 	public void FinalizeEnumerableInstance_ReturnsExpectedCollectionType()
 	{
 		// Arrange
-		var input = new List<int>();
+		var input = new List<int>{ 1, 2, 3 };
 
 		var type1 = typeof(IEnumerable);
 		var type2 = typeof(int[]);
@@ -85,16 +88,20 @@ public sealed class CollectionConverterBaseTests
 		var sut = new TestConverter();
 
 		// Act
-		var result1 = sut.FinalizeEnumerableInstance(input, in type1);
-		var result2 = sut.FinalizeEnumerableInstance(input, in type2);
-		var result3 = sut.FinalizeEnumerableInstance(input, in type3);
-		var result4 = sut.FinalizeEnumerableInstance(input, in type4);
+		var result1 = sut.FinalizeEnumerableInstance(input, in type1)!;
+		var result2 = sut.FinalizeEnumerableInstance(input, in type2)!;
+		var result3 = sut.FinalizeEnumerableInstance(input, in type3)!;
+		var result4 = sut.FinalizeEnumerableInstance(input, in type4)!;
 
 		// Assert
 		result1.Should().BeOfType<List<int>>();
+		result1.Count.Should().Be(3);
 		result2.Should().BeOfType<int[]>();
+		result2.Count.Should().Be(3);
 		result3.Should().BeOfType<List<int>>();
+		result3.Count.Should().Be(3);
 		result4.Should().BeOfType<ArrayList>();
+		result4.Count.Should().Be(3);
 	}
 
 	/// <inheritdoc />

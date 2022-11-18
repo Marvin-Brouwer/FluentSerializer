@@ -1,13 +1,13 @@
 using FluentAssertions;
 
 using FluentSerializer.Core.Context;
-using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
+using FluentSerializer.Xml.Tests.Extensions;
 
 using Moq;
 
@@ -48,6 +48,33 @@ public sealed class DateTimeByFormatConverterTests
 		yield return new object[] { "g", "20-04-2096 04:20", new CultureInfo("nl-NL") };
 	}
 
+	#region Initialization
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Initialize_NullValues_Throws()
+	{
+		// Arrange
+		var format = "g";
+		var cultureInfo = CultureInfo.InvariantCulture;
+		var dateTimeStyle = DateTimeStyles.AllowWhiteSpaces;
+
+		// Act
+		var result1 = () => new DateTimeByFormatConverter(null!, cultureInfo, dateTimeStyle);
+		var result2 = () => new DateTimeByFormatConverter(format, null!, dateTimeStyle);
+
+		// Assert
+		result1.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(format));
+		result2.Should()
+			.ThrowExactly<ArgumentNullException>()
+			.WithParameterName(nameof(cultureInfo));
+	}
+
+	#endregion
+
+
 	#region Serialize
 
 	[Theory,
@@ -64,9 +91,9 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var textResult = ((IConverter<IXmlText, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
-		var attributeResult = ((IConverter<IXmlAttribute, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
-		var elementResult = ((IConverter<IXmlElement, IXmlNode>)sut).Serialize(DateTimeValue, _contextMock.Object)!;
+		var textResult = sut.ForText().Serialize(DateTimeValue, _contextMock.Object)!;
+		var attributeResult = sut.ForAttribute().Serialize(DateTimeValue, _contextMock.Object)!;
+		var elementResult = sut.ForElement().Serialize(DateTimeValue, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -77,6 +104,7 @@ public sealed class DateTimeByFormatConverterTests
 	#endregion
 
 	#region Deserialize
+
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
@@ -94,9 +122,9 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Act
 		var canConvert = sut.CanConvert(DateTimeValue.GetType());
-		var textResult = (DateTime)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(textInput, _contextMock.Object)!;
-		var attributeResult = (DateTime)((IConverter<IXmlAttribute, IXmlNode>)sut).Deserialize(attributeInput, _contextMock.Object)!;
-		var elementResult = (DateTime)((IConverter<IXmlElement, IXmlNode>)sut).Deserialize(elementInput, _contextMock.Object)!;
+		var textResult = (DateTime)sut.ForText().Deserialize(textInput, _contextMock.Object)!;
+		var attributeResult = (DateTime)sut.ForAttribute().Deserialize(attributeInput, _contextMock.Object)!;
+		var elementResult = (DateTime)sut.ForElement().Deserialize(elementInput, _contextMock.Object)!;
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -126,13 +154,34 @@ public sealed class DateTimeByFormatConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => (DateTime?)((IConverter<IXmlText, IXmlNode>)sut).Deserialize(input, _contextMock.Object);
+		var result = () => (DateTime?)sut.ForText().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
 			.WithMessage("String 'SomeText' was not recognized as a valid DateTime.");
 	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Deserialize_Convertible_EmptyString_Throws()
+	{
+		// Arrange
+		var input = Text("");
+		var sut = new DateTimeByFormatConverter("g", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+
+		_contextMock
+			.WithPropertyType(typeof(string));
+
+		// Act
+		var result = () => (DateOnly?)sut.ForText().Deserialize(input, _contextMock.Object);
+
+		// Assert
+		result.Should()
+			.ThrowExactly<FormatException>()
+			.WithMessage("String '' was not recognized as a valid DateTime.");
+	}
+
 	#endregion
 }
 

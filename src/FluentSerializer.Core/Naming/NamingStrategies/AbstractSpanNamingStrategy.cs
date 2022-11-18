@@ -9,7 +9,7 @@ using System.Reflection;
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
 /// <summary>
-/// Base clas for convertin class and property names
+/// Base class for converting class and property names
 /// </summary>
 public abstract class AbstractSpanNamingStrategy : INamingStrategy
 {

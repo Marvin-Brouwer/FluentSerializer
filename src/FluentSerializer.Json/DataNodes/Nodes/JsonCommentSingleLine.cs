@@ -19,6 +19,12 @@ public readonly partial struct JsonCommentSingleLine : IJsonComment
 	/// </remarks>
 	public JsonCommentSingleLine(in string value)
 	{
+		if (string.IsNullOrEmpty(value))
+		{
+			Value = value;
+			return;
+		}
+
 		Guard.Against.InvalidFormat(value, nameof(value), @"^([^#\r\n]?.*)", "A single line comment cannot contain newline characters");
 
 		Value = value;

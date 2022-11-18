@@ -2,10 +2,10 @@ using Ardalis.GuardClauses;
 
 using FluentSerializer.Core.Extensions;
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes;
 [DebuggerDisplay("{Name}: {GetDebugValue(), nq},")]
 public readonly partial struct JsonProperty : IJsonProperty
 {
-	[DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough]
+	[DebuggerHidden, DebuggerNonUserCode, DebuggerStepThrough, ExcludeFromCodeCoverage]
 	private string GetDebugValue()
 	{
 		if (_children.Count == 0) return JsonCharacterConstants.NullValue;
@@ -21,6 +21,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 
 		if (value is JsonValue jsonValue)
 			return jsonValue.Value ?? JsonCharacterConstants.NullValue;
+		
 		return value.Name;
 	}
 
@@ -47,10 +48,10 @@ public readonly partial struct JsonProperty : IJsonProperty
 		Guard.Against.InvalidName(in name);
 
 		Name = name;
-		HasValue = value is not IJsonValue jsonValue || jsonValue.HasValue;
+		HasValue = value is not null  && (value is not IJsonValue jsonValue || jsonValue.HasValue);
 
-		_children = value is null
-			? Array.Empty<IJsonNode>()
-			: new ReadOnlyCollection<IJsonNode>(new IJsonNode[] { value });
+		_children = new ReadOnlyCollection<IJsonNode>(new IJsonNode[] {
+			value ?? new JsonValue(null)
+		});
 	}
 }

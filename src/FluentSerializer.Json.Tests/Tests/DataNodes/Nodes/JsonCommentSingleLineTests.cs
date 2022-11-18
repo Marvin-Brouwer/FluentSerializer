@@ -12,7 +12,8 @@ using Xunit;
 using static FluentSerializer.Json.JsonBuilder;
 
 namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
-public sealed class JsonCommentSingleLineTests
+
+public sealed partial class JsonCommentSingleLineTests
 {
 	private ITextWriter _textWriter;
 
@@ -21,142 +22,64 @@ public sealed class JsonCommentSingleLineTests
 		_textWriter = TestStringBuilderPool.CreateSingleInstance();
 	}
 
-	#region Parse
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void ParseJson_Valid_ReturnsObject()
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void InitializeComment_ValueNull_ReturnsEmpty()
 	{
 		// Arrange
-		var expected = Comment("test");
-		var input = "// test\n";
+		var expected = (string?)null;
+		var input = (string)null!;
 
 		// Act
-		var offset = 0;
-		var result = new JsonCommentSingleLine(input, ref offset);
+		var result = new JsonCommentSingleLine(in input);
 
 		// Assert
-		result.Should().BeEquatableTo(expected);
-	}
-
-	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
-		InlineData(" "), InlineData("  "), InlineData("\t")]
-	public void ParseJson_ValidWithWhiteSpace_ReturnsObject(string space)
-	{
-		// Arrange
-		var expected = Comment("test");
-		var expectedEmpty = new JsonCommentSingleLine(string.Empty);
-		var input1 = $"//{space}test{space}\n{space}";
-		var input2 = $"//{space}\n{space}";
-
-		// Act
-		var offset1 = 0;
-		var result1 = new JsonCommentSingleLine(input1, ref offset1);
-		var offset2 = 0;
-		var result2 = new JsonCommentSingleLine(input2, ref offset2);
-
-		// Assert
-		result1.Should().BeEquatableTo(expected);
-		result2.Should().BeEquatableTo(expectedEmpty);
+		result.Value.Should().BeEquivalentTo(expected);
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void ParseJson_Empty_ReturnsObject()
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void InitializeComment_ValueEmpty_ReturnsEmpty()
 	{
 		// Arrange
-		var expected = new JsonCommentSingleLine(string.Empty);
-		var input = "// \n";
+		var expected = string.Empty;
+		var input = string.Empty;
 
 		// Act
-		var offset = 0;
-		var result = new JsonCommentSingleLine(input, ref offset);
+		var result = new JsonCommentSingleLine(in input);
+
+		// Assert
+		result.Value.Should().BeEquivalentTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void InitializeComment_HasValue_ReturnsWithChild()
+	{
+		// Arrange
+		var expected = Comment("I have a value!");
+		var input = "I have a value!";
+
+		// Act
+		var result = new JsonCommentSingleLine(in input);
 
 		// Assert
 		result.Should().BeEquatableTo(expected);
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void ParseJson_Incomplete_Throws()
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void InitializeComment_HasValueWithNewLine_Throws()
 	{
 		// Arrange
-		var input = "// 14";
+		var value = "I have a value! \n but it's not acceptable :(";
 
 		// Act
-		var offset = 0;
-		var result = () => new JsonCommentSingleLine(input, ref offset);
+		var result = () => new JsonCommentSingleLine(in value);
 
 		// Assert
 		result.Should()
-			.ThrowExactly<IndexOutOfRangeException>();
+			.ThrowExactly<ArgumentException>()
+			.WithParameterName(nameof(value));
 	}
-	#endregion
-
-	#region ToString
-	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void AppendTo_HasCommentSingleLine_FormatWriteNull_ReturnsCommentSingleLine()
-	{
-		// Arrange
-		var input = Comment("test");
-		var expected = "// test";
-
-		// Act
-		input.AppendTo(ref _textWriter, true, 0, true);
-		var result = _textWriter.ToString();
-
-		// Assert
-		result.ShouldBeBinaryEquatableTo(expected);
-	}
-
-	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void AppendTo_HasNoCommentSingleLine_FormatWriteNull_ReturnsEmptyCommentSingleLine()
-	{
-		// Arrange
-		var input = new JsonCommentSingleLine(string.Empty);
-		var expected = "// ";
-
-		// Act
-		input.AppendTo(ref _textWriter, true, 0, true);
-		var result = _textWriter.ToString();
-
-		// Assert
-		result.ShouldBeBinaryEquatableTo(expected);
-	}
-
-	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void AppendTo_HasNoCommentSingleLine_FormatDontWriteNull_ReturnsEmptyString()
-	{
-		// Arrange
-		var input = new JsonCommentSingleLine(string.Empty);
-		var expected = string.Empty;
-
-		// Act
-		input.AppendTo(ref _textWriter, true, 0, false);
-		var result = _textWriter.ToString();
-
-		// Assert
-		result.ShouldBeBinaryEquatableTo(expected);
-	}
-
-	// Special case, when formatting is turned of this should print the multiline syntax as a safeguard
-	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
-	public void AppendTo_HasCommentSingleLine_NoFormatWriteNull_ReturnsCommentMultiLine()
-	{
-		// Arrange
-		var input = Comment("test");
-		var expected = "/* test */";
-
-		// Act
-		input.AppendTo(ref _textWriter, false, 0, true);
-		var result = _textWriter.ToString();
-
-		// Assert
-		result.ShouldBeBinaryEquatableTo(expected);
-	}
-	#endregion
 }

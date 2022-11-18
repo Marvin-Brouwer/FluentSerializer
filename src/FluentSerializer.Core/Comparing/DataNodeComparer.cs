@@ -9,6 +9,13 @@ namespace FluentSerializer.Core.Comparing;
 /// <summary>
 /// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="GetHashCode"/>
 /// </summary>
+/// <remarks>
+/// <b>NOTE: </b>This <see cref="IEqualityComparer{T}"/> heavily relies on the <see cref="IDataNode"/>
+/// to have a custom implementation <br />
+/// of the <see cref="object.GetHashCode"/> delegating to the <br />
+/// <see cref="Default"/>.<see cref="GetHashCodeForObject{TObj}"/> or <br />
+/// <see cref="Default"/>.<see cref="GetHashCodeForAll"/> method
+/// </remarks>
 public readonly struct DataNodeComparer : IEqualityComparer<IEquatable<IDataNode>>
 {
 	/// <summary>

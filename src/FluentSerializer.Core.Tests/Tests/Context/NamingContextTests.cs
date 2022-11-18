@@ -9,22 +9,43 @@ using FluentSerializer.Core.Tests.ObjectMother;
 
 using Moq;
 
+using System;
+using System.Reflection;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Context;
 
 public sealed class NamingContextTests
 {
-	private static readonly SerializerDirection TestDirection = SerializerDirection.Both;
+	private const SerializerDirection TestDirection = SerializerDirection.Both;
 
 	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 	private readonly Mock<IClassMap> _classMapMock;
+
+	private readonly NamingContext _sut;
 
 	public NamingContextTests()
 	{
 		_classMapCollectionMock = new Mock<IClassMapCollection>();
 		_classMapMock = new Mock<IClassMap>()
 			.WithoutPropertyMaps();
+
+		_sut = new NamingContext(_classMapCollectionMock.Object);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForType_TypeNull_Throws()
+	{
+		// Arrange
+		var type = (Type)null!;
+
+		// Act
+		var result = () => _sut.FindNamingStrategy(in type);
+
+		// Assert
+		result.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	[Fact,
@@ -40,10 +61,8 @@ public sealed class NamingContextTests
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_classMapCollectionMock.Object);
-
 		// Act
-		var result = sut.FindNamingStrategy(in type);
+		var result = _sut.FindNamingStrategy(in type);
 
 		// Assert
 		result.Should().BeEquivalentTo(Names.Use.CamelCase());
@@ -59,13 +78,24 @@ public sealed class NamingContextTests
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_classMapCollectionMock.Object);
-
 		// Act
-		var result = sut.FindNamingStrategy(in type);
+		var result = _sut.FindNamingStrategy(in type);
 
 		// Assert
 		result.Should().BeNull();
+	}
+
+	[Theory,
+		InlineData(null, null),
+		InlineData(typeof(TestClass), null),
+		Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForProperty_ValueNull_Throws(Type type, PropertyInfo property)
+	{
+		// Act
+		var result = () => _sut.FindNamingStrategy(in type, in property);
+
+		// Assert
+		result.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	[Fact,
@@ -82,10 +112,8 @@ public sealed class NamingContextTests
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_classMapCollectionMock.Object);
-
 		// Act
-		var result = sut.FindNamingStrategy(in type, in property);
+		var result = _sut.FindNamingStrategy(in type, in property);
 
 		// Assert
 		result.Should().BeEquivalentTo(Names.Use.PascalCase());
@@ -102,13 +130,29 @@ public sealed class NamingContextTests
 		_classMapCollectionMock
 			.WithClassMap(_classMapMock);
 
-		var sut = new NamingContext(_classMapCollectionMock.Object);
-
 		// Act
-		var result = sut.FindNamingStrategy(in type, in property);
+		var result = _sut.FindNamingStrategy(in type, in property);
 
 		// Assert
 		result.Should().BeNull();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest")]
+	public void FindNamingStrategy_ForPropertyMapCollection_ValueNull_Throws()
+	{
+		// Arrange
+		var propertyMapping = (IPropertyMapCollection)null!;
+		var propertyMappingMock = new Mock<IPropertyMapCollection>(MockBehavior.Strict);
+		var property = (PropertyInfo)null!;
+
+		// Act
+		var result1 = () => NamingContext.FindNamingStrategy(in propertyMapping, in property);
+		var result2 = () => NamingContext.FindNamingStrategy(propertyMappingMock.Object, in property);
+
+		// Assert
+		result1.Should().ThrowExactly<ArgumentNullException>();
+		result2.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	private sealed class TestClass

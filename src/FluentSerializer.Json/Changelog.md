@@ -3,6 +3,10 @@
 ## @next
 
 - [#91](https://github.com/Marvin-Brouwer/FluentSerializer/issues/91) Improved overall code quality
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Fixed ConfigurationStack overriding
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Simple type converters now allow empty strings to pass through
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Date and Time structures now fail on empty strings
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Incomplete JsonValues now fail Gracefully
 
 ## v2.2.0
 

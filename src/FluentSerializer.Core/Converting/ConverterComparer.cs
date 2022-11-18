@@ -1,8 +1,6 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FluentSerializer.Core.Converting;
 
@@ -14,23 +12,23 @@ namespace FluentSerializer.Core.Converting;
 /// This comparer just misuses the fact that <see cref="IConverter"/> overrides the <see cref="IConverter.Equals(object?)"/> method
 /// to check the <see cref="IConverter.ConverterHashCode"/>
 /// </remarks>
-public readonly struct ConverterComparer : IComparer<IConverter>
+public readonly struct ConverterComparer : IEqualityComparer<IConverter>
 {
 	/// <inheritdoc cref="ConverterComparer" />
 	public static ConverterComparer Default { get; }
 
-	/// <inheritdoc cref="IComparer{T}" />
-	public int Compare(IConverter? x, IConverter? y)
+	/// <inheritdoc cref="IEqualityComparer"/>
+	public bool Equals(IConverter? x, IConverter? y)
 	{
-		if (x is null)
-		{
-			return y is null ? 0 : 1;
-		}
-		if (y is null)
-		{
-			return -1;
-		}
+		if (x is null && y is null) return true;
 
-		return x.Equals(y) ? 0 : 1;
+		if (x is null) return false;
+		if (y is null) return false;
+		if (ReferenceEquals(x, y)) return true;
+
+		return x.GetHashCode().Equals(y.GetHashCode());
 	}
+
+	/// <inheritdoc cref="IEqualityComparer"/>
+	public int GetHashCode(IConverter obj) => obj.GetHashCode();
 }
