@@ -235,7 +235,8 @@ Here are some links to some more advanced topics:
 ### General
 
 - [Recursive references](/docs/help/advanced-concepts/Recursive-references.md#readme)
-- [Custom converters and accessing parent nodes](/docs/help/advanced-concepts/Converter-parent-access.md#readme)
+- [Custom converters and accessing parent nodes](/docs/help/advanced-concepts/Converter-node-access.md#parent-node-reference)
+- [Custom converters and accessing the root node](/docs/help/advanced-concepts/Converter-node-access.md#root-node-reference)
 - [Adding a serializer](/docs/help/advanced-concepts/Adding-a-serializer.md#readme)
 - [Adding a use-case](/docs/help/advanced-concepts/Adding-a-use-case.md#readme)
 
