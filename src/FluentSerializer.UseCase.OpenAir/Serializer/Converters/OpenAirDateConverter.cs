@@ -27,7 +27,7 @@ public class OpenAirDateConverter : IXmlConverter<IXmlElement>
 	public bool CanConvert(in Type targetType) => typeof(DateTime).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public virtual int ConverterHashCode { get; } = typeof(DateTime).GetHashCode();
+	public Guid ConverterId { get; } = typeof(DateTime).GUID;
 
 	/// <inheritdoc />
 	object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement elementToSerialize, in ISerializerContext<IXmlNode> context)

@@ -27,7 +27,7 @@ public interface IConverter<TSerialContainer, TDataNode> : IConverter
 }
 
 /// <summary>
-/// A service implementation responsible for converting Text to and from a specific datatype
+/// A service implementation responsible for converting Text to and from a specific data type
 /// </summary>
 public interface IConverter
 {
@@ -41,16 +41,15 @@ public interface IConverter
 	/// </summary>
 	SerializerDirection Direction { get; }
 
-	/// <inheritdoc cref="object.GetHashCode()"/>
-	int GetHashCode() => ConverterHashCode;
-
-	/// <inheritdoc />
-	bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
-
 	/// <summary>
-	/// The internal hashcode used for the dataType attached to this converter.
-	/// This is mostly used to distinguish between converters when appending to the set.
+	/// The internal id used for the dataType attached to this converter.
+	/// This is used to distinguish between converters when appending to the set of registered converters. <br/>
+	/// See <see cref="ConverterComparer.Default"/> for a reference on how this is used
 	/// </summary>
-	int ConverterHashCode { get; }
+	/// <remarks>
+	/// Even though you don't have to, it's recommended to return <c>typeof(T).GUID</c> so you don't need to manage Guids. <br/>
+	/// When overriding an OOTB type like the serializer for <see cref="DateTime"/> returning <c>typeof(DateTime).GUID</c> will override the registered <see cref="IConverter"/>
+	/// </remarks>
+	Guid ConverterId { get; }
 
 }

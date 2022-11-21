@@ -6,12 +6,8 @@ namespace FluentSerializer.Core.Converting;
 
 /// <summary>
 /// The Default comparer for <see cref="IConverter"/> instances. <br/>
-/// These need a separate <see cref="IComparer{T}"/> like this because implementing <see cref="IComparable{T}"/> would require equality overloads everywhere.
+/// These need a separate <see cref="IComparer{T}"/> like this so the <see cref="IConverter.ConverterId"/> can be used to determine uniqueness
 /// </summary>
-/// <remarks>
-/// This comparer just misuses the fact that <see cref="IConverter"/> overrides the <see cref="IConverter.Equals(object?)"/> method
-/// to check the <see cref="IConverter.ConverterHashCode"/>
-/// </remarks>
 public readonly struct ConverterComparer : IEqualityComparer<IConverter>
 {
 	/// <inheritdoc cref="ConverterComparer" />
@@ -26,9 +22,9 @@ public readonly struct ConverterComparer : IEqualityComparer<IConverter>
 		if (y is null) return false;
 		if (ReferenceEquals(x, y)) return true;
 
-		return x.GetHashCode().Equals(y.GetHashCode());
+		return x.ConverterId.Equals(y.ConverterId);
 	}
 
 	/// <inheritdoc cref="IEqualityComparer"/>
-	public int GetHashCode(IConverter obj) => obj.GetHashCode();
+	public int GetHashCode(IConverter obj) => obj.ConverterId.GetHashCode();
 }

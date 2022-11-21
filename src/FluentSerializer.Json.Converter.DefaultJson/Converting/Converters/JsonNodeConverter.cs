@@ -18,7 +18,7 @@ public sealed class JsonNodeConverter : IJsonConverter
 	public bool CanConvert(in Type targetType) => typeof(IJsonNode).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(IJsonNode).GetHashCode();
+	public Guid ConverterId { get; } = typeof(IJsonNode).GUID;
 
 	/// <inheritdoc />
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)

@@ -17,7 +17,7 @@ public abstract class ConvertibleConverterBase : IConverter
 	public bool CanConvert(in Type targetType) => typeof(IConvertible).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(IConvertible).GetHashCode();
+	public Guid ConverterId { get; } = typeof(IConvertible).GUID;
 
 	private readonly CultureInfo? _formatProvider;
 	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;

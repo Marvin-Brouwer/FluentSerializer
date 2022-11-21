@@ -264,8 +264,8 @@ public sealed class PropertyMapTests
 		public bool CanConvert(in Type targetType) => _canConvert;
 
 		public SerializerDirection Direction { get; init; } = SerializerDirection.Both;
-
-		public int ConverterHashCode => GetHashCode();
+		
+		public Guid ConverterId { get; } = typeof(TestConverter<>).GUID;
 
 		public TNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 			throw new NotSupportedException("Out of test scope");

@@ -46,7 +46,7 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 	public bool CanConvert(in Type targetType) => true;
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(MavenlinkCustomFieldReferenceConverter).GetHashCode();
+	public Guid ConverterId { get; } = typeof(MavenlinkCustomFieldReferenceConverter).GUID;
 
 	public MavenlinkCustomFieldReferenceConverter(Func<INamingStrategy> namingStrategy)
 	{
