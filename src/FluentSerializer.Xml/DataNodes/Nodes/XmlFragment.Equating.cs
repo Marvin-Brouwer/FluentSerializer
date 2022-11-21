@@ -1,6 +1,8 @@
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 
+using System;
+
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
 public readonly partial struct XmlFragment
@@ -13,6 +15,9 @@ public readonly partial struct XmlFragment
 
 	/// <inheritdoc />
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
+
+	/// <inheritdoc />
+	public HashCode GetNodeHash() => _innerElement.GetNodeHash();
 
 	/// <inheritdoc />
 	public override int GetHashCode() => _innerElement.GetHashCode();

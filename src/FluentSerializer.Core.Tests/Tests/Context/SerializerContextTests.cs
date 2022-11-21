@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.DataNodes;
@@ -208,6 +209,8 @@ public sealed class SerializerContextTests
 		public int Id { get; init; } = default!;
 
 		public bool Equals(IDataNode? other) => false;
+		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Id);
+
 		public string Name => throw new NotSupportedException("Out of test scope");
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true) =>
 			throw new NotSupportedException("Out of test scope");

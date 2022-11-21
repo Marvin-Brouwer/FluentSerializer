@@ -1,6 +1,8 @@
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 
+using System;
+
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
 public readonly partial struct XmlAttribute
@@ -17,7 +19,10 @@ public readonly partial struct XmlAttribute
 	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
 
 	/// <inheritdoc />
-	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
+	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
+
+	/// <inheritdoc />
+	public override int GetHashCode() => GetNodeHash().ToHashCode();
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
 	/// <param name="left">The left side object to compare with this object.</param>

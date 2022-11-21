@@ -24,7 +24,7 @@ public sealed partial class DataNodeComparerTests
 			Value = value;
 		}
 
-		public override int GetHashCode()
+		public HashCode GetNodeHash()
 		{
 			return DataNodeComparer.Default.GetHashCodeForAll(
 				nameof(TestDataNode), Name, Value

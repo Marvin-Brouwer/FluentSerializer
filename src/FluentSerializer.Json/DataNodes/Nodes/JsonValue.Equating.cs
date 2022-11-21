@@ -1,6 +1,8 @@
 using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 
+using System;
+
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
 public readonly partial struct JsonValue
@@ -17,7 +19,10 @@ public readonly partial struct JsonValue
 	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
 
 	/// <inheritdoc />
-	public override int GetHashCode() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+
+	/// <inheritdoc />
+	public override int GetHashCode() => GetNodeHash().ToHashCode();
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
 	/// <param name="left">The left side object to compare with this object.</param>

@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
@@ -233,6 +234,7 @@ public sealed class PropertyMapTests
 				.AppendLineEnding();
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
+		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
 	}
 	private sealed record TestClass2 : IDataNode
 	{
@@ -244,6 +246,7 @@ public sealed class PropertyMapTests
 				.AppendLineEnding();
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
+		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
 	}
 
 	private sealed class TestConfiguration : SerializerConfiguration { }

@@ -16,46 +16,38 @@ namespace FluentSerializer.Core.Tests.Tests.Comparing;
 public sealed partial class DataNodeComparerTests
 {
 	/// <summary>
-	/// The hashcode for any <c>null</c> value
-	/// </summary>
-	private const int NullValueHashCode = 0;
-
-	/// <summary>
 	/// The hashcode for collections without values
 	/// </summary>
-	private static readonly int NoItemsHashCode = new HashCode().ToHashCode();
+	private static readonly int DefaultHashCode = new HashCode().ToHashCode();
 
 	[Fact]
 	public void GetHashCodeForAll_Null_ReturnsZero()
 	{
 		// Act
-		var result = Sut.GetHashCodeForAll<IDataNode?>(null);
+		var result = Sut.GetHashCodeForAll<IDataNode?>(null).ToHashCode();
 
 		// Assert
-		result.Should().Be(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().Be(DefaultHashCode);
 	}
 
 	[Fact]
 	public void GetHashCodeForAll_Primitive_ReturnsHashCode()
 	{
 		// Act
-		var result = Sut.GetHashCodeForAll(6);
+		var result = Sut.GetHashCodeForAll(6).ToHashCode();
 
 		// Assert
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().NotBe(DefaultHashCode);
 	}
 
 	[Fact]
 	public void GetHashCodeForAll_String_ReturnsHashCode()
 	{
 		// Act
-		var result = Sut.GetHashCodeForAll("SomeString");
+		var result = Sut.GetHashCodeForAll("SomeString").ToHashCode();
 
 		// Assert
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().NotBe(DefaultHashCode);
 	}
 
 	[Fact]
@@ -65,11 +57,10 @@ public sealed partial class DataNodeComparerTests
 		var data = new Mock<IDataValue>(MockBehavior.Loose);
 
 		// Act
-		var result = Sut.GetHashCodeForAll(data.Object);
+		var result = Sut.GetHashCodeForAll(data.Object).ToHashCode();
 
 		// Assert
-		result.Should().Be(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().Be(DefaultHashCode);
 	}
 
 	[Fact]
@@ -82,11 +73,10 @@ public sealed partial class DataNodeComparerTests
 			.Returns("SomeValue");
 
 		// Act
-		var result = Sut.GetHashCodeForAll(data.Object);
+		var result = Sut.GetHashCodeForAll(data.Object).ToHashCode();
 
 		// Assert
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().NotBe(DefaultHashCode);
 	}
 
 	[Fact]
@@ -96,11 +86,10 @@ public sealed partial class DataNodeComparerTests
 		var data = Enumerable.Empty<IDataNode>();
 
 		// Act
-		var result = Sut.GetHashCodeForAll(data);
+		var result = Sut.GetHashCodeForAll(data).ToHashCode();
 
 		// Assert
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().Be(NoItemsHashCode);
+		result.Should().Be(DefaultHashCode);
 	}
 
 	[Fact]
@@ -113,12 +102,11 @@ public sealed partial class DataNodeComparerTests
 		};
 
 		// Act
-		var result = Sut.GetHashCodeForAll(data);
+		var result = Sut.GetHashCodeForAll(data).ToHashCode();
 
 		// Assert
-		result.Should().Be(Sut.GetHashCodeForAll(data));
-		result.Should().NotBe(NullValueHashCode);
-		result.Should().NotBe(NoItemsHashCode);
+		result.Should().Be(Sut.GetHashCodeForAll(data).ToHashCode());
+		result.Should().NotBe(DefaultHashCode);
 	}
 
 	[Fact]
@@ -135,18 +123,17 @@ public sealed partial class DataNodeComparerTests
 		var results = new[]
 		{
 			// Test all Generic versions
-			Sut.GetHashCodeForAll(nodes[0]),
-			Sut.GetHashCodeForAll(nodes[0], nodes[1]),
-			Sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]),
+			Sut.GetHashCodeForAll(nodes[0]).ToHashCode(),
+			Sut.GetHashCodeForAll(nodes[0], nodes[1]).ToHashCode(),
+			Sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]).ToHashCode(),
 
 			// Test the dynamic version
-			Sut.GetHashCodeForAll(nodes.ToArray<object?>())
+			Sut.GetHashCodeForAll(nodes.ToArray<object?>()).ToHashCode()
 		};
 
 		// Assert
 		results.Should().AllBeUnique();
-		results.Should().AllSatisfy(result => result.Should().NotBe(NullValueHashCode));
-		results.Should().AllSatisfy(result => result.Should().NotBe(NoItemsHashCode));
+		results.Should().AllSatisfy(result => result.Should().NotBe(DefaultHashCode));
 
 		// This test should fail if not all overloads are covered.
 		// If anyone ever adds an (n)th overload for performance gain, we need a new result added.

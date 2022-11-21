@@ -1,5 +1,6 @@
 using FluentAssertions;
 
+using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
@@ -7,6 +8,8 @@ using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 
 using Moq;
+
+using System;
 
 using Xunit;
 
@@ -130,5 +133,6 @@ public sealed class TextWriterExtensionsTests
 				.Append($"{nameof(writeNull)}={writeNull};");
 
 		public bool Equals(IDataNode? other) => false;
+		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
 	}
 }
