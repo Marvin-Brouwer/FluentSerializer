@@ -26,8 +26,9 @@ public class RequestTypeValueConverter : IXmlConverter<IXmlAttribute>
 #pragma warning disable CA1725 // Parameter names should match base declaration
 	public object Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) => throw new NotSupportedException();
 #pragma warning restore CA1725 // Parameter names should match base declaration
+
 	/// <inheritdoc />
-	public virtual int ConverterHashCode { get; } = typeof(RequestTypeValueConverter).GetHashCode();
+	public Guid ConverterId { get; } = typeof(RequestTypeValueConverter).GUID;
 
 	/// <inheritdoc />
 	public IXmlAttribute? Serialize(in object objectToSerialize, in ISerializerContext context)

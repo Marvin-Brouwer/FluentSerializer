@@ -26,8 +26,8 @@ public class StringBitBooleanConverter : IXmlConverter<IXmlAttribute>, IXmlConve
 	/// <inheritdoc />
 	public bool CanConvert(in Type targetType) => typeof(bool).IsAssignableFrom(targetType) || typeof(bool?).IsAssignableFrom(targetType);
 
-		/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(StringBitBooleanConverter).GetHashCode();
+	/// <inheritdoc />
+	public Guid ConverterId { get; } = typeof(StringBitBooleanConverter).GUID;
 
 	private static string ConvertToString(in bool currentValue) => currentValue ? "1" : "0";
 	private static bool? ConvertToBool(in string? currentValue, in bool? defaultValue)

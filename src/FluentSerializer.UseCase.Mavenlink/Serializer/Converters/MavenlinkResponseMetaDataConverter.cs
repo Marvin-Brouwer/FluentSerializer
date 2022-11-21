@@ -21,7 +21,7 @@ internal sealed class MavenlinkResponseMetaDataConverter : IJsonConverter
 	public bool CanConvert(in Type targetType) => typeof(int) == targetType;
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(MavenlinkResponseDataConverter).GetHashCode();
+	public Guid ConverterId { get; } = typeof(MavenlinkResponseDataConverter).GUID;
 
 	/// <inheritdoc cref="MavenlinkResponseMetaDataConverter"/>
 	public MavenlinkResponseMetaDataConverter(in string metaField)
