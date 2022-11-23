@@ -9,6 +9,8 @@
 	<Property Name="sonar.exclusions">
 		./**/GlobalSuppressions.cs
 		./**/*.Tests
+		<!-- Temporary exclusion, should be re-added in #211 -->
+		./**/DataNodes/Nodes/*Equating.cs
 	</Property>
 
 	<Property Name="sonar.tests">./**/*.Tests</Property>
