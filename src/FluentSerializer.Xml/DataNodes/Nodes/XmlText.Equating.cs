@@ -44,5 +44,5 @@ public readonly partial struct XmlText
 	public static bool operator ==(IDataNode left, XmlText right) => Equals(left, right);
 
 	/// <inheritdoc cref="op_Inequality(XmlText, IDataNode)" />
-	public static bool operator !=(IDataNode left, XmlText right) => Equals(left, right);
+	public static bool operator !=(IDataNode left, XmlText right) => !Equals(left, right);
 }

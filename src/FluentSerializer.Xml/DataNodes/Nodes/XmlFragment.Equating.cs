@@ -42,5 +42,5 @@ public readonly partial struct XmlFragment
 	public static bool operator ==(IDataNode left, XmlFragment right) => Equals(left, right);
 
 	/// <inheritdoc cref="op_Inequality(XmlFragment, IDataNode)" />
-	public static bool operator !=(IDataNode left, XmlFragment right) => Equals(left, right);
+	public static bool operator !=(IDataNode left, XmlFragment right) => !Equals(left, right);
 }

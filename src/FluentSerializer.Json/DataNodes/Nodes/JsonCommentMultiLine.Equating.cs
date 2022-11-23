@@ -44,5 +44,5 @@ public readonly partial struct JsonCommentMultiLine
 	public static bool operator ==(IDataNode left, JsonCommentMultiLine right) => Equals(left, right);
 
 	/// <inheritdoc cref="op_Inequality(JsonCommentMultiLine, IDataNode)" />
-	public static bool operator !=(IDataNode left, JsonCommentMultiLine right) => Equals(left, right);
+	public static bool operator !=(IDataNode left, JsonCommentMultiLine right) => !Equals(left, right);
 }

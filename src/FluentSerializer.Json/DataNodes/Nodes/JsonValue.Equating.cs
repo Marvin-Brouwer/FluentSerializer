@@ -44,5 +44,5 @@ public readonly partial struct JsonValue
 	public static bool operator ==(IDataNode left, JsonValue right) => Equals(left, right);
 
 	/// <inheritdoc cref="op_Inequality(JsonValue, IDataNode)" />
-	public static bool operator !=(IDataNode left, JsonValue right) => Equals(left, right);
+	public static bool operator !=(IDataNode left, JsonValue right) => !Equals(left, right);
 }
