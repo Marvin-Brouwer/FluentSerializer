@@ -8,7 +8,7 @@
 	<Property Name="sonar.pullrequest.provider">GitHub</Property>
 	<Property Name="sonar.exclusions">
 		./**/GlobalSuppressions.cs
-		./**/*.Tests
+		./*.Tests/**/*.cs
 		<!-- Temporary exclusion, should be re-added in #211 -->
 		./**/DataNodes/Nodes/*.Equating.cs
 		<!-- Temporary exclusion, should be re-added in #232 -->
@@ -17,7 +17,7 @@
 		./FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
 	</Property>
 
-	<Property Name="sonar.tests">./**/*.Tests</Property>
+	<Property Name="sonar.tests">*.Tests/**/*Tests.cs</Property>
 	<Property Name="sonar.test.exclusions">
 		./**/GlobalSuppressions.cs
 	</Property>
