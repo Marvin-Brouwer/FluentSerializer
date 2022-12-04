@@ -32,7 +32,7 @@ jobs:
   finalize-stryker:
     name: "Finalize"
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: ${{ !cancelled() }}
     needs: [stryker-core, stryker-xml, stryker-json]
     steps:
     ###
