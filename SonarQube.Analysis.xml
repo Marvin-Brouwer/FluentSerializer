@@ -11,6 +11,10 @@
 		./**/*.Tests
 		<!-- Temporary exclusion, should be re-added in #211 -->
 		./**/DataNodes/Nodes/*.Equating.cs
+		<!-- Temporary exclusion, should be re-added in #232 -->
+		./FluentSerializer.Json.Converter.DefaultJson/**/*.cs
+		<!-- Temporary exclusion, should be re-added in #232 -->
+		./FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
 	</Property>
 
 	<Property Name="sonar.tests">./**/*.Tests</Property>
