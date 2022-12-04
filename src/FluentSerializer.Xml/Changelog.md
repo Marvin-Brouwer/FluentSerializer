@@ -3,9 +3,12 @@
 ## @next
 
 - [#91](https://github.com/Marvin-Brouwer/FluentSerializer/issues/91) Improved overall code quality
-- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Fixed ConfigurationStack overriding
+- [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Fixed `ConfigurationStack` overriding
 - [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Simple type converters now allow empty strings to pass through
 - [#93](https://github.com/Marvin-Brouwer/FluentSerializer/issues/93) Date and Time structures now fail on empty strings
+- [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `IDataNode` HashCode calculation to interface member
+- [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `IConverter` unique identifier from HashCode calculation to GUIDs
+- [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `DefaultConverter` uniqueness calculation to `IConverter.ConverterId`
 
 ## v2.2.0
 
