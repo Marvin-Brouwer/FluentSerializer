@@ -123,7 +123,7 @@ public sealed partial class DataNodeComparerTests
 		var results = new[]
 		{
 			// Test all Generic versions
-			Sut.GetHashCodeForAll(nodes[0]).ToHashCode(),
+			Sut.GetHashCodeForAll<IDataNode>(nodes[0]).ToHashCode(),
 			Sut.GetHashCodeForAll(nodes[0], nodes[1]).ToHashCode(),
 			Sut.GetHashCodeForAll(nodes[0], nodes[1], nodes[2]).ToHashCode(),
 
