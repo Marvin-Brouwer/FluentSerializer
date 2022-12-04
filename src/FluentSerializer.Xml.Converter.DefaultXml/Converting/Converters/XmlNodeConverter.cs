@@ -20,7 +20,7 @@ public sealed class XmlNodeConverter : IXmlConverter<IXmlElement>
 	public bool CanConvert(in Type targetType) => typeof(IXmlNode).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(IXmlNode).GetHashCode();
+	public Guid ConverterId { get; } = typeof(IXmlNode).GUID;
 
 	/// <inheritdoc />
 	public object? Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context)

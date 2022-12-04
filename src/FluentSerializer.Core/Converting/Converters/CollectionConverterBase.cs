@@ -19,7 +19,7 @@ public abstract class CollectionConverterBase : IConverter {
 	public virtual bool CanConvert(in Type targetType) => targetType.IsEnumerable();
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(IEnumerable).GetHashCode();
+	public Guid ConverterId { get; } = typeof(IEnumerable).GUID;
 
 	/// <summary>
 	/// Create a new instance of <see cref="IList"/> that matches the passed <paramref name="targetType"/> most closely

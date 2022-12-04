@@ -40,7 +40,7 @@ internal sealed class MavenlinkIdReferenceConverter : IJsonConverter
 	public bool CanConvert(in Type targetType) => typeof(IMavenlinkEntity).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public int ConverterHashCode { get; } = typeof(MavenlinkIdReferenceConverter).GetHashCode();
+	public Guid ConverterId { get; } = typeof(MavenlinkIdReferenceConverter).GUID;
 
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 		throw new NotSupportedException();

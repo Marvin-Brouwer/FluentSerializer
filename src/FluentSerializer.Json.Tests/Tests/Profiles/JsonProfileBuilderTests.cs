@@ -93,7 +93,7 @@ public sealed class JsonProfileBuilderTests
 
 		public bool CanConvert(in Type targetType) => false;
 		public SerializerDirection Direction => SerializerDirection.Both;
-		public int ConverterHashCode => 0000001;
+		public Guid ConverterId { get; } = typeof(TestConverter).GUID;
 
 		public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
 			throw new NotSupportedException("Out of test scope");

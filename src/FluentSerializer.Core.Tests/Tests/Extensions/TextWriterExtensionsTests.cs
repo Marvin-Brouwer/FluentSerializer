@@ -8,6 +8,8 @@ using FluentSerializer.Core.Text;
 
 using Moq;
 
+using System;
+
 using Xunit;
 
 namespace FluentSerializer.Core.Tests.Tests.Extensions;
@@ -130,5 +132,6 @@ public sealed class TextWriterExtensionsTests
 				.Append($"{nameof(writeNull)}={writeNull};");
 
 		public bool Equals(IDataNode? other) => false;
+		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
 	}
 }

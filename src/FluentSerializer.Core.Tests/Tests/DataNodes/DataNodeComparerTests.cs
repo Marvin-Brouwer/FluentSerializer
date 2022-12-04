@@ -1,4 +1,3 @@
-using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text;
 
@@ -24,7 +23,7 @@ public sealed partial class DataNodeComparerTests
 			Value = value;
 		}
 
-		public override int GetHashCode()
+		public HashCode GetNodeHash()
 		{
 			return DataNodeComparer.Default.GetHashCodeForAll(
 				nameof(TestDataNode), Name, Value

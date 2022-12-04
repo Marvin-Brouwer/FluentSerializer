@@ -15,7 +15,7 @@ public abstract class SimpleTypeConverterBase<TObject> : IConverter
 	public virtual bool CanConvert(in Type targetType) => typeof(TObject).IsAssignableFrom(targetType);
 
 	/// <inheritdoc />
-	public virtual int ConverterHashCode { get; } = typeof(TObject).GetHashCode();
+	public Guid ConverterId { get; } = typeof(TObject).GUID;
 
 	/// <summary>
 	/// Abstract placeholder for converting to string logic

@@ -153,18 +153,23 @@ If this is a scenario you need please create an issue for us to write some docum
 
 ## Converter identification
 
-In some specific scenarios you may need to override a converter in the configuration's `DefaultConverters`, for example when picking a different converter for `IEnumerable` types.  
-By default the `IConverter` interface has a default implementation simply looking at the `object.GetHashCode()` to identify uniqueness when configuring.  
-All the converters that are shipped with this library simply calculate the HashCode of the type it's supposed to serialize.  
-So when building a custom collection converter you can override the existing by overriding the `GetHashCode` method:
+In some specific scenarios you may need to override a converter in the configuration's `DefaultConverters`, for example when picking a different converter for `IEnumerable` types, or maybe reconfiguring the way `Enum`s are handled.  
+By default the `IConverter` interface has a default implementation simply looking at the `IConverter.ConverterId` to identify uniqueness when configuring.  
+Most of the OOTB converters will point to `typeof({TToConvert}).GUID` for the `ConverterId` with exceptions for converters like the converters for collections and Enums.  
+When building a custom collection converter you can override the existing by implementing the `IConverter.ConverterId` property:
 
 ```csharp
-/// <inheritdoc />
-public override int GetHashCode() => typeof(IEnumerable).GetHashCode();
+/// <inheritdoc cref="IConverter.ConverterId" />
+public GUID ConverterId => new GUID("{F1AC24F6-79C9-4764-BDD6-21044188003F}");
 ```
 
 When using that, you can simply register it like normal, and the `IConfigurationStack` will replace the existing collection converter:  
 
+```csharp
+/// <inheritdoc cref="IConverter.ConverterId" />
+public Guid ConverterId { get; } = typeof(Enum).GUID;
+```
+  
 ```csharp
 serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration =>
 {
