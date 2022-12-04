@@ -1,6 +1,5 @@
 using FluentAssertions;
 
-using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;

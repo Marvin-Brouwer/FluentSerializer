@@ -1,4 +1,3 @@
-using FluentSerializer.Core.Comparing;
 using FluentSerializer.Core.DataNodes;
 
 using System;

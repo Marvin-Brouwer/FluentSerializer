@@ -1,10 +1,9 @@
-using FluentSerializer.Core.DataNodes;
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace FluentSerializer.Core.Comparing;
+namespace FluentSerializer.Core.DataNodes;
 
 /// <summary>
 /// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="GetHashCode"/>
@@ -24,6 +23,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 	public static readonly DataNodeComparer Default;
 
 	/// <inheritdoc />
+	[ExcludeFromCodeCoverage]
 	public bool Equals(IDataNode? x, IDataNode? y)
 	{
 		if (x is null) return y is null;
@@ -35,6 +35,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 	}
 
 	/// <inheritdoc />
+	[ExcludeFromCodeCoverage]
 	public int GetHashCode(IDataNode? obj) => obj?.GetNodeHash().ToHashCode() ?? 0;
 
 	/// <summary>
@@ -119,7 +120,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 			return GetHashCodeFor(in equatableCollection);
 		if (obj is IDataNode equatable)
 			return GetHashCodeFor(in equatable);
-		
+
 		var hashCode = new HashCode();
 		hashCode.Add(obj.GetHashCode());
 		return hashCode;
@@ -149,7 +150,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 		if (nodeCollection is null) return default;
 
 		var hash = new HashCode();
-		foreach(var obj in nodeCollection) hash.Add(GetHashCode(obj));
+		foreach (var obj in nodeCollection) hash.Add(GetHashCode(obj));
 
 		return hash;
 	}
