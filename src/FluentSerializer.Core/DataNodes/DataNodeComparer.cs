@@ -23,20 +23,12 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 	public static readonly DataNodeComparer Default;
 
 	/// <inheritdoc />
-	[ExcludeFromCodeCoverage]
-	public bool Equals(IDataNode? x, IDataNode? y)
-	{
-		if (x is null) return y is null;
-
-		var left = x.GetNodeHash().ToHashCode();
-		var right = y?.GetNodeHash().ToHashCode() ?? 0;
-
-		return left.Equals(right);
-	}
+	[ExcludeFromCodeCoverage, Obsolete(error: true, message: $"Please create your own implementation of {nameof(Equals)}")]
+	public bool Equals(IDataNode? x, IDataNode? y) => throw new NotSupportedException($"Please create your own implementation of {nameof(Equals)}");
 
 	/// <inheritdoc />
-	[ExcludeFromCodeCoverage]
-	public int GetHashCode(IDataNode? obj) => obj?.GetNodeHash().ToHashCode() ?? 0;
+	[ExcludeFromCodeCoverage, Obsolete(error: true, message: $"Please create your own implementation of {nameof(GetHashCode)}")]
+	public int GetHashCode(IDataNode? obj) => throw new NotSupportedException($"Please create your own implementation of {nameof(GetHashCode)}");
 
 	/// <summary>
 	/// Get the combined HashCode of all objects passed to this method.
