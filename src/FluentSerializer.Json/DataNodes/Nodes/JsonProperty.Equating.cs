@@ -15,10 +15,17 @@ public readonly partial struct JsonProperty
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IJsonNode? other)
+	{
+		if (other is not JsonProperty otherProperty) return false;
+		if (!string.Equals(otherProperty.Name, Name, StringComparison.OrdinalIgnoreCase)) return false;
+		if (!otherProperty.HasValue) return !HasValue;
+
+		return otherProperty.Value.Equals(Value);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _children);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Name, _children);
 
 	/// <inheritdoc />
 	public override int GetHashCode() => GetNodeHash().ToHashCode();

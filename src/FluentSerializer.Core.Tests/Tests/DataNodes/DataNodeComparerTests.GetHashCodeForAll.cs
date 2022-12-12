@@ -11,6 +11,8 @@ using System.Linq;
 
 using Xunit;
 
+using Sut = FluentSerializer.Core.DataNodes.DataNodeHashingHelper;
+
 namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
 public sealed partial class DataNodeComparerTests
@@ -138,7 +140,7 @@ public sealed partial class DataNodeComparerTests
 		// This test should fail if not all overloads are covered.
 		// If anyone ever adds an (n)th overload for performance gain, we need a new result added.
 		results.Should().HaveCount(amountOfOverloads);
-		Sut.GetType().GetMethods()
+		typeof(Sut).GetMethods()
 			.Where(method => method.Name.Equals(nameof(Sut.GetHashCodeForAll), StringComparison.Ordinal))
 			.Should()
 			.HaveCount(amountOfOverloads);

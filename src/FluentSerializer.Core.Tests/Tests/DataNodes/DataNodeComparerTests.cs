@@ -10,8 +10,6 @@ namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
 public sealed partial class DataNodeComparerTests
 {
-	private static readonly DataNodeComparer Sut = DataNodeComparer.Default;
-
 	public sealed class TestDataNode : IDataNode
 	{
 		public string Name { get; }
@@ -23,12 +21,9 @@ public sealed partial class DataNodeComparerTests
 			Value = value;
 		}
 
-		public HashCode GetNodeHash()
-		{
-			return DataNodeComparer.Default.GetHashCodeForAll(
+		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(
 				nameof(TestDataNode), Name, Value
 			);
-		}
 
 		public bool Equals(IDataNode? other) =>
 			throw new NotSupportedException("The equals will be tested through the Comparer");

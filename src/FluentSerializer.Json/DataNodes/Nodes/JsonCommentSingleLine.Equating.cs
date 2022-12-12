@@ -15,10 +15,15 @@ public readonly partial struct JsonCommentSingleLine
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IJsonNode? other)
+	{
+		if (other is not JsonCommentSingleLine otherComment) return false;
+
+		return string.Equals(otherComment.Value, Value, StringComparison.OrdinalIgnoreCase);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Value);
 
 	/// <inheritdoc />
 	public override int GetHashCode() => GetNodeHash().ToHashCode();

@@ -15,10 +15,16 @@ public readonly partial struct JsonValue
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IJsonNode? other)
+	{
+		if (other is not JsonValue otherValue) return false;
+		if (otherValue.HasValue != HasValue) return false;
+
+		return string.Equals(otherValue.Value, Value, StringComparison.OrdinalIgnoreCase);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Value);
 
 	/// <inheritdoc />
 	public override int GetHashCode() => GetNodeHash().ToHashCode();

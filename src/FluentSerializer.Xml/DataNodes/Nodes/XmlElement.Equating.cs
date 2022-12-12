@@ -1,6 +1,7 @@
 using FluentSerializer.Core.DataNodes;
 
 using System;
+using System.Linq;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
@@ -15,10 +16,17 @@ public readonly partial struct XmlElement
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IXmlNode? other)
+	{
+		if (other is not XmlElement otherElement) return false;
+		if (!string.Equals(otherElement.Name, Name, StringComparison.OrdinalIgnoreCase)) return false;
+
+		return Enumerable.SequenceEqual(otherElement._attributes, _attributes)
+			&& Enumerable.SequenceEqual(otherElement._children, _children);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, _attributes, _children);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Name, _attributes, _children);
 
 	/// <inheritdoc />
 	public override int GetHashCode() => GetNodeHash().ToHashCode();

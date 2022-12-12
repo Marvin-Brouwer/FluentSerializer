@@ -233,7 +233,7 @@ public sealed class PropertyMapTests
 				.AppendLineEnding();
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
-		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
+		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);
 	}
 	private sealed record TestClass2 : IDataNode
 	{
@@ -245,7 +245,7 @@ public sealed class PropertyMapTests
 				.AppendLineEnding();
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
-		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
+		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);
 	}
 
 	private sealed class TestConfiguration : SerializerConfiguration { }

@@ -13,7 +13,13 @@ public readonly partial struct XmlFragment
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IXmlNode? other)
+	{
+		if (other is not XmlFragment otherFragment) return false;
+		if (otherFragment._innerElement is null) return _innerElement is null;
+
+		return otherFragment._innerElement.Equals(_innerElement);
+	}
 
 	/// <inheritdoc />
 	public HashCode GetNodeHash() => _innerElement.GetNodeHash();

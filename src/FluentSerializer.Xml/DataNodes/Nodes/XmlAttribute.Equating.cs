@@ -15,10 +15,16 @@ public readonly partial struct XmlAttribute
 	public bool Equals(IDataNode? other) => other is IXmlNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IXmlNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IXmlNode? other)
+	{
+		if (other is not XmlAttribute otherAttribute) return false;
+		if (!string.Equals(otherAttribute.Name, Name, StringComparison.OrdinalIgnoreCase)) return false;
+
+		return string.Equals(otherAttribute.Value ?? string.Empty, Value ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Name, Value);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Name, Value);
 
 	/// <inheritdoc />
 	public override int GetHashCode() => GetNodeHash().ToHashCode();

@@ -30,6 +30,9 @@ public readonly partial struct JsonProperty : IJsonProperty
 
 	private readonly IReadOnlyList<IJsonNode> _children;
 
+#if NET5_0_OR_GREATER
+	[MemberNotNullWhen(true, nameof(Value))]
+#endif
 	/// <inheritdoc />
 	public bool HasValue { get; }
 
