@@ -21,7 +21,7 @@ public readonly partial struct JsonProperty
 		if (!string.Equals(otherProperty.Name, Name, StringComparison.OrdinalIgnoreCase)) return false;
 		if (!otherProperty.HasValue) return !HasValue;
 
-		return otherProperty.Value.Equals(Value);
+		return otherProperty.Value!.Equals(Value);
 	}
 
 	/// <inheritdoc />

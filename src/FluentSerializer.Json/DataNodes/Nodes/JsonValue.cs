@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -15,6 +16,9 @@ public readonly partial struct JsonValue : IJsonValue
 	public string? Value { get; }
 
 	/// <inheritdoc />
+#if NET5_0_OR_GREATER
+	[MemberNotNullWhen(true, nameof(Value))]
+#endif
 	public bool HasValue => Value is not null && !Value.Equals(JsonCharacterConstants.NullValue, StringComparison.Ordinal);
 
 	/// <inheritdoc cref="JsonBuilder.Value(in string?)"/>

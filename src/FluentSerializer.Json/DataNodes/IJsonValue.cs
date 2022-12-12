@@ -1,5 +1,7 @@
 using FluentSerializer.Core.DataNodes;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace FluentSerializer.Json.DataNodes;
 
 /// <summary>
@@ -10,8 +12,14 @@ namespace FluentSerializer.Json.DataNodes;
 /// </summary>
 public interface IJsonValue : IDataValue, IJsonPropertyContent, IJsonArrayContent
 {
+	/// <inheritdoc cref="IDataValue.Value" />
+	new string? Value { get; }
+
 	/// <summary>
 	/// Property indicating whether the value is null or empty
 	/// </summary>
+#if NET5_0_OR_GREATER
+	[MemberNotNullWhen(true, nameof(Value))]
+#endif
 	bool HasValue { get; }
 }
