@@ -6,7 +6,7 @@ using System;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 #pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
 
-namespace FluentSerializer.Core.Tests.Tests.Comparing;
+namespace FluentSerializer.Core.Tests.Tests.DataNodes;
 
 public sealed partial class DataNodeHashingHelperTests
 {

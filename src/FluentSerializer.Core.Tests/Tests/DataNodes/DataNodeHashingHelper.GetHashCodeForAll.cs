@@ -13,7 +13,7 @@ using Xunit;
 
 using Sut = FluentSerializer.Core.DataNodes.DataNodeHashingHelper;
 
-namespace FluentSerializer.Core.Tests.Tests.Comparing;
+namespace FluentSerializer.Core.Tests.Tests.DataNodes;
 
 public sealed partial class DataNodeHashingHelperTests
 {
