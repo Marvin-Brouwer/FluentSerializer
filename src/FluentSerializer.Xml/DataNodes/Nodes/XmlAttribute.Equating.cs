@@ -27,6 +27,7 @@ public readonly partial struct XmlAttribute
 	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Name, Value);
 
 	/// <inheritdoc />
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public override int GetHashCode() => GetNodeHash().ToHashCode();
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
@@ -35,6 +36,7 @@ public readonly partial struct XmlAttribute
 	/// <returns>
 	/// <see langword="true" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="false" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator ==(XmlAttribute left, IDataNode right) => left.Equals(right);
 
 	/// <summary>Indicates whether the current object is <strong>not</strong> equal to another object of the same interface.</summary>
@@ -43,11 +45,14 @@ public readonly partial struct XmlAttribute
 	/// <returns>
 	/// <see langword="false" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="true" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator !=(XmlAttribute left, IDataNode right) => !left.Equals(right);
 
 	/// <inheritdoc cref="op_Equality(XmlAttribute, IDataNode)"/>
-	public static bool operator ==(IDataNode left, XmlAttribute right) => Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator ==(IDataNode left, XmlAttribute right) => left.Equals(right);
 
 	/// <inheritdoc cref="op_Inequality(XmlAttribute, IDataNode)" />
-	public static bool operator !=(IDataNode left, XmlAttribute right) => !Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator !=(IDataNode left, XmlAttribute right) => !left.Equals(right);
 }
