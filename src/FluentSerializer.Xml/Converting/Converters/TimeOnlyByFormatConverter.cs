@@ -35,11 +35,5 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in TimeOnly value) => value.ToString(_format, _cultureInfo);
-
-	/// <inheritdoc />
-	public override int GetHashCode() => TimeOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

@@ -46,11 +46,5 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
-
-	/// <inheritdoc />
-	public override int GetHashCode() => TimeOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

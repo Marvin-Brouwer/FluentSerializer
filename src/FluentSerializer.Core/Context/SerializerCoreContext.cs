@@ -90,7 +90,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 
 		var hash = CurrentSerializer.Configuration.ReferenceComparer.GetHashCode(instance);
 		if(_referenceCollection.ContainsKey(hash)) return false;
-		if(_referenceCollection.Contains(instance)) return false;
+		if(_referenceCollection.ContainsValue(instance)) return false;
 
 		_referenceCollection.Add(hash, instance);
 
@@ -98,7 +98,16 @@ public class SerializerCoreContext : ISerializerCoreContext
 	}
 
 	/// <inheritdoc />
-	public bool ContainsReference(in object? instance) => instance is not null && _referenceCollection.Contains(instance);
+	public bool ContainsReference(in object? instance)
+	{
+		if (instance is null) return false;
+
+		var hash = CurrentSerializer.Configuration.ReferenceComparer.GetHashCode(instance);
+		if (_referenceCollection.ContainsKey(hash)) return true;
+		if (_referenceCollection.ContainsValue(instance)) return true;
+
+		return false;
+	}
 }
 
 /// <inheritdoc cref="ISerializerCoreContext{TDataNode}"/>

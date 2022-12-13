@@ -31,10 +31,4 @@ public sealed class DefaultDateTimeOffsetConverter : SimpleTypeConverter<DateTim
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToUniversalTime().ToString(DateTimeConstants.IsoDateTimeFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
-
-	/// <inheritdoc />
-	public override int GetHashCode() => DateTimeOffset.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

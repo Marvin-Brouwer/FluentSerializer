@@ -46,11 +46,5 @@ public class DateOnlyByFormatConverter : SimpleTypeConverter<DateOnly>
 		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
-
-	/// <inheritdoc />
-	public override int GetHashCode() => DateOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

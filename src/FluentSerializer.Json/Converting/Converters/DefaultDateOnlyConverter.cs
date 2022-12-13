@@ -32,11 +32,5 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToString(DateTimeConstants.IsoDateFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
-
-	/// <inheritdoc />
-	public override int GetHashCode() => DateOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

@@ -22,11 +22,5 @@ public sealed class DefaultTimeOnlyConverter : SimpleTypeConverter<TimeOnly>
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in TimeOnly value) => value.ToString(DateTimeConstants.IsoTimeFormat, CultureInfo.CurrentCulture);
-
-	/// <inheritdoc />
-	public override int GetHashCode() => TimeOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

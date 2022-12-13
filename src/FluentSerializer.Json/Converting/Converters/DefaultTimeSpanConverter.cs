@@ -28,10 +28,4 @@ public sealed class DefaultTimeSpanConverter : SimpleTypeConverter<TimeSpan>
 		JsonCharacterConstants.PropertyWrapCharacter + 
 		value.ToString(null, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
-
-	/// <inheritdoc />
-	public override int GetHashCode() => TimeSpan.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

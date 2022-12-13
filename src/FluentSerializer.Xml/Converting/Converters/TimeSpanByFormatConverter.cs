@@ -42,10 +42,4 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in TimeSpan value) => value.ToString(_format, _cultureInfo);
-
-	/// <inheritdoc />
-	public override int GetHashCode() => TimeSpan.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
