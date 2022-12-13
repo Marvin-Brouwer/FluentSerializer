@@ -8,7 +8,7 @@ using System;
 
 namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
-public sealed partial class DataNodeComparerTests
+public sealed partial class DataNodeHashingHelperTests
 {
 	public sealed class TestDataNode : IDataNode
 	{

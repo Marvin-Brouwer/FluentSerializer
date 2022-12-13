@@ -15,7 +15,7 @@ using Sut = FluentSerializer.Core.DataNodes.DataNodeHashingHelper;
 
 namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
-public sealed partial class DataNodeComparerTests
+public sealed partial class DataNodeHashingHelperTests
 {
 	/// <summary>
 	/// The hashcode for collections without values
