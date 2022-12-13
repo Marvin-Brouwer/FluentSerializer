@@ -57,7 +57,63 @@ public sealed class DefaultReferenceComparerTests
 	}
 
 	[Fact]
-	public void Equals_AreEqual_ReturnsTrue()
+	public void Equals_Overloaded_AreNotEqual_ReturnsFalse()
+	{
+		// Arrange
+		var a = new EqualsOverloaded(false, 0);
+		var b = new EqualsOverloaded(false, 1);
+
+		// Act
+		var result = Sut.Equals(a, b);
+
+		// Assert
+		result.Should().BeFalse();
+	}
+
+	[Fact]
+	public void Equals_Overloaded_AreEqual_ReturnsTrue()
+	{
+		// Arrange
+		var a = new EqualsOverloaded(true, 0);
+		var b = new EqualsOverloaded(true, 1);
+
+		// Act
+		var result = Sut.Equals(a, b);
+
+		// Assert
+		result.Should().BeTrue();
+	}
+
+	[Fact]
+	public void Equals_ValueTypes_AreEqual_ReturnsTrue()
+	{
+		// Arrange
+		var a = new CompareValue("Same");
+		var b = new CompareValue("Same");
+
+		// Act
+		var result = Sut.Equals(a, b);
+
+		// Assert
+		result.Should().BeTrue();
+	}
+
+	[Fact]
+	public void Equals_ClassTypes_AreEqual_ReturnsTrue()
+	{
+		// Arrange
+		var a = new CompareInstance("Same");
+		var b = new CompareInstance("Same");
+
+		// Act
+		var result = Sut.Equals(a, b);
+
+		// Assert
+		result.Should().BeTrue();
+	}
+
+	[Fact]
+	public void Equals_Comparable_AreEqual_ReturnsTrue()
 	{
 		// Arrange
 		var a = "Same";
@@ -85,5 +141,23 @@ public sealed class DefaultReferenceComparerTests
 		// Assert
 		resultName.Should().BeFalse();
 		resultValue.Should().BeFalse();
+	}
+
+	private readonly record struct CompareValue(string Value);
+	private sealed record CompareInstance(string Value);
+	private sealed class EqualsOverloaded
+	{
+		private readonly bool _equalsReturns;
+		private readonly int _hashCode;
+
+		public EqualsOverloaded(bool equalsReturns, int hashCode)
+		{
+			_equalsReturns = equalsReturns;
+			_hashCode = hashCode;
+		}
+
+		public override bool Equals(object? obj) => _equalsReturns;
+
+		public override int GetHashCode() => _hashCode;
 	}
 }

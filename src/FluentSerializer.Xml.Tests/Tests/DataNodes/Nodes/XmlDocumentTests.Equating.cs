@@ -17,6 +17,14 @@ public sealed partial class XmlDocumentTests
 
 	[Fact, DebuggerStepThrough,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Equals_BothAreNull_ReturnsTrue() => XmlNodeTests
+		.Equating.Equals_AreEqual_ReturnsTrue(
+			new XmlDocument(null),
+			new XmlDocument(null)
+		);
+
+	[Fact, DebuggerStepThrough,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Equals_DifferentType_ReturnsFalse() => XmlNodeTests
 		.Equating.Equals_DifferentType_ReturnsFalse(new XmlDocument(Element(nameof(Element))));
 

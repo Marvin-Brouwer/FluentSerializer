@@ -24,7 +24,7 @@ public readonly struct DefaultReferenceComparer : IEqualityComparer, IEqualityCo
 		if (ReferenceEquals(x, y)) return true;
 		if (x is IComparable comparableX && y is IComparable comparableY) return comparableX.CompareTo(comparableY) == 0;
 
-		return x == y;
+		return x.Equals(y);
 	}
 
 	/// <inheritdoc cref="IEqualityComparer"/>
