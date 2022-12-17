@@ -132,6 +132,6 @@ public sealed class TextWriterExtensionsTests
 				.Append($"{nameof(writeNull)}={writeNull};");
 
 		public bool Equals(IDataNode? other) => false;
-		public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(Name);
+		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);
 	}
 }

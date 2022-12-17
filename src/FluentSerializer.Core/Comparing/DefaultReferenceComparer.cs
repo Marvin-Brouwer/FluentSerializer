@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -21,8 +22,9 @@ public readonly struct DefaultReferenceComparer : IEqualityComparer, IEqualityCo
 		if (x is null) return false;
 		if (y is null) return false;
 		if (ReferenceEquals(x, y)) return true;
+		if (x is IComparable comparableX && y is IComparable comparableY) return comparableX.CompareTo(comparableY) == 0;
 
-		return x.GetHashCode().Equals(y.GetHashCode());
+		return x.Equals(y);
 	}
 
 	/// <inheritdoc cref="IEqualityComparer"/>

@@ -15,12 +15,18 @@ public readonly partial struct JsonCommentSingleLine
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IJsonNode? other)
+	{
+		if (other is not JsonCommentSingleLine otherComment) return false;
+
+		return string.Equals(otherComment.Value, Value, StringComparison.OrdinalIgnoreCase);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, Value);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, Value);
 
 	/// <inheritdoc />
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public override int GetHashCode() => GetNodeHash().ToHashCode();
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
@@ -29,6 +35,7 @@ public readonly partial struct JsonCommentSingleLine
 	/// <returns>
 	/// <see langword="true" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="false" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator ==(JsonCommentSingleLine left, IDataNode right) => left.Equals(right);
 
 	/// <summary>Indicates whether the current object is <strong>not</strong> equal to another object of the same interface.</summary>
@@ -37,11 +44,14 @@ public readonly partial struct JsonCommentSingleLine
 	/// <returns>
 	/// <see langword="false" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="true" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator !=(JsonCommentSingleLine left, IDataNode right) => !left.Equals(right);
 
 	/// <inheritdoc cref="op_Equality(JsonCommentSingleLine, IDataNode)"/>
-	public static bool operator ==(IDataNode left, JsonCommentSingleLine right) => Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator ==(IDataNode left, JsonCommentSingleLine right) => left.Equals(right);
 
 	/// <inheritdoc cref="op_Inequality(JsonCommentSingleLine, IDataNode)" />
-	public static bool operator !=(IDataNode left, JsonCommentSingleLine right) => !Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator !=(IDataNode left, JsonCommentSingleLine right) => !left.Equals(right);
 }

@@ -21,10 +21,4 @@ public sealed class DefaultDateTimeOffsetConverter : SimpleTypeConverter<DateTim
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateTimeOffset value) => value.ToUniversalTime().ToString(DateTimeConstants.IsoDateTimeFormat, CultureInfo.CurrentCulture);
-
-	/// <inheritdoc />
-	public override int GetHashCode() => DateTimeOffset.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }

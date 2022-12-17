@@ -22,11 +22,5 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateOnly value) => value.ToString(DateTimeConstants.IsoDateFormat, CultureInfo.CurrentCulture);
-
-	/// <inheritdoc />
-	public override int GetHashCode() => DateOnly.MinValue.GetHashCode();
-
-	/// <inheritdoc />
-	public override bool Equals(object? obj) => GetHashCode() == (obj?.GetHashCode() ?? 0);
 }
 #endif

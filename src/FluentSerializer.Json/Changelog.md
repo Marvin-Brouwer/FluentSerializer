@@ -10,6 +10,7 @@
 - [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `IDataNode` HashCode calculation to interface member
 - [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `IConverter` unique identifier from HashCode calculation to GUIDs
 - [#206](https://github.com/Marvin-Brouwer/FluentSerializer/issues/206) Moved `DefaultConverter` uniqueness calculation to `IConverter.ConverterId`
+- [#211](https://github.com/Marvin-Brouwer/FluentSerializer/issues/211) Internal Equality checks no longer rely on GetHashCode
 
 ## v2.2.0
 
