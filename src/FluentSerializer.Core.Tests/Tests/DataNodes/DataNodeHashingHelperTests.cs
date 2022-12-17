@@ -6,12 +6,10 @@ using System;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 #pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
 
-namespace FluentSerializer.Core.Tests.Tests.Comparing;
+namespace FluentSerializer.Core.Tests.Tests.DataNodes;
 
-public sealed partial class DataNodeComparerTests
+public sealed partial class DataNodeHashingHelperTests
 {
-	private static readonly DataNodeComparer Sut = DataNodeComparer.Default;
-
 	public sealed class TestDataNode : IDataNode
 	{
 		public string Name { get; }
@@ -23,12 +21,9 @@ public sealed partial class DataNodeComparerTests
 			Value = value;
 		}
 
-		public HashCode GetNodeHash()
-		{
-			return DataNodeComparer.Default.GetHashCodeForAll(
+		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(
 				nameof(TestDataNode), Name, Value
 			);
-		}
 
 		public bool Equals(IDataNode? other) =>
 			throw new NotSupportedException("The equals will be tested through the Comparer");

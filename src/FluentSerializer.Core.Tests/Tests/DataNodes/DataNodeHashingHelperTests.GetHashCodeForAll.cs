@@ -11,9 +11,11 @@ using System.Linq;
 
 using Xunit;
 
-namespace FluentSerializer.Core.Tests.Tests.Comparing;
+using Sut = FluentSerializer.Core.DataNodes.DataNodeHashingHelper;
 
-public sealed partial class DataNodeComparerTests
+namespace FluentSerializer.Core.Tests.Tests.DataNodes;
+
+public sealed partial class DataNodeHashingHelperTests
 {
 	/// <summary>
 	/// The hashcode for collections without values
@@ -138,7 +140,7 @@ public sealed partial class DataNodeComparerTests
 		// This test should fail if not all overloads are covered.
 		// If anyone ever adds an (n)th overload for performance gain, we need a new result added.
 		results.Should().HaveCount(amountOfOverloads);
-		Sut.GetType().GetMethods()
+		typeof(Sut).GetMethods()
 			.Where(method => method.Name.Equals(nameof(Sut.GetHashCodeForAll), StringComparison.Ordinal))
 			.Should()
 			.HaveCount(amountOfOverloads);

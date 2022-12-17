@@ -1,6 +1,7 @@
 using FluentSerializer.Core.DataNodes;
 
 using System;
+using System.Linq;
 
 namespace FluentSerializer.Json.DataNodes.Nodes;
 
@@ -15,12 +16,19 @@ public readonly partial struct JsonObject
 	public bool Equals(IDataNode? other) => other is IJsonNode node && Equals(node);
 
 	/// <inheritdoc />
-	public bool Equals(IJsonNode? other) => DataNodeComparer.Default.Equals(this, other);
+	public bool Equals(IJsonNode? other)
+	{
+		if (other is not JsonObject otherObject) return false;
+		if (otherObject.Children.Count != Children.Count) return false;
+
+		return Enumerable.SequenceEqual(otherObject._children, _children);
+	}
 
 	/// <inheritdoc />
-	public HashCode GetNodeHash() => DataNodeComparer.Default.GetHashCodeForAll(TypeHashCode, _children);
+	public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(TypeHashCode, _children);
 
 	/// <inheritdoc />
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public override int GetHashCode() => GetNodeHash().ToHashCode();
 
 	/// <summary>Indicates whether the current object is equal to another object of the same interface.</summary>
@@ -29,6 +37,7 @@ public readonly partial struct JsonObject
 	/// <returns>
 	/// <see langword="true" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="false" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator ==(JsonObject left, IDataNode right) => left.Equals(right);
 
 	/// <summary>Indicates whether the current object is <strong>not</strong> equal to another object of the same interface.</summary>
@@ -37,11 +46,14 @@ public readonly partial struct JsonObject
 	/// <returns>
 	/// <see langword="false" /> if the <paramref name="left" /> object is equal to the <paramref name="right" /> parameter;
 	/// otherwise, <see langword="true" />.</returns>
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 	public static bool operator !=(JsonObject left, IDataNode right) => !left.Equals(right);
 
 	/// <inheritdoc cref="op_Equality(JsonObject, IDataNode)"/>
-	public static bool operator ==(IDataNode left, JsonObject right) => Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator ==(IDataNode left, JsonObject right) => left.Equals(right);
 
 	/// <inheritdoc cref="op_Inequality(JsonObject, IDataNode)" />
-	public static bool operator !=(IDataNode left, JsonObject right) => !Equals(left, right);
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+	public static bool operator !=(IDataNode left, JsonObject right) => !left.Equals(right);
 }

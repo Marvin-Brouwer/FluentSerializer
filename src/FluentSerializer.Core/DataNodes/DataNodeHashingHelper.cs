@@ -6,38 +6,15 @@ using System.Runtime.CompilerServices;
 namespace FluentSerializer.Core.DataNodes;
 
 /// <summary>
-/// Simple comparer between <see cref="IDataNode"/>s, relying on <see cref="GetHashCode"/>
+/// Simple helper to calculate HashCodes on <see cref="IDataNode"/>s
 /// </summary>
 /// <remarks>
-/// <b>NOTE: </b>This <see cref="IEqualityComparer{T}"/> heavily relies on the <see cref="IDataNode"/>
-/// to have a custom implementation <br />
-/// of the <see cref="object.GetHashCode"/> delegating to the <br />
-/// <see cref="Default"/>.<see cref="GetHashCodeForObject{TObj}"/> or <br />
-/// <see cref="Default"/>.<see cref="GetHashCodeForAll"/> method
+/// Temporarily excluded from coverage due to coverage reports not picking up on this test.
+/// See: https://github.com/Marvin-Brouwer/FluentSerializer/issues/237
 /// </remarks>
-public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
+[ExcludeFromCodeCoverage]
+public static class DataNodeHashingHelper
 {
-	/// <summary>
-	/// Static default implementation
-	/// </summary>
-	public static readonly DataNodeComparer Default;
-
-	/// <inheritdoc />
-	[ExcludeFromCodeCoverage]
-	public bool Equals(IDataNode? x, IDataNode? y)
-	{
-		if (x is null) return y is null;
-
-		var left = x.GetNodeHash().ToHashCode();
-		var right = y?.GetNodeHash().ToHashCode() ?? 0;
-
-		return left.Equals(right);
-	}
-
-	/// <inheritdoc />
-	[ExcludeFromCodeCoverage]
-	public int GetHashCode(IDataNode? obj) => obj?.GetNodeHash().ToHashCode() ?? 0;
-
 	/// <summary>
 	/// Get the combined HashCode of all objects passed to this method.
 	/// This will call <see cref="GetHashCodeFor(in IEnumerable{IDataNode})"/> for collections
@@ -50,7 +27,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public HashCode GetHashCodeForAll(params object?[] objects)
+	public static HashCode GetHashCodeForAll(params object?[] objects)
 	{
 		var hashCode = new HashCode();
 		foreach (var obj in objects)
@@ -65,7 +42,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public HashCode GetHashCodeForAll<TObj1>(in TObj1 obj1)
+	public static HashCode GetHashCodeForAll<TObj1>(in TObj1 obj1)
 	{
 		return GetHashCodeForObject(in obj1);
 	}
@@ -76,7 +53,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public HashCode GetHashCodeForAll<TObj1, TObj2>(in TObj1 obj1, in TObj2 obj2)
+	public static HashCode GetHashCodeForAll<TObj1, TObj2>(in TObj1 obj1, in TObj2 obj2)
 	{
 		var hashCode = new HashCode();
 
@@ -92,7 +69,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	public HashCode GetHashCodeForAll<TObj1, TObj2, TObj3>(in TObj1 obj1, in TObj2 obj2, in TObj3 obj3)
+	public static HashCode GetHashCodeForAll<TObj1, TObj2, TObj3>(in TObj1 obj1, in TObj2 obj2, in TObj3 obj3)
 	{
 		var hashCode = new HashCode();
 
@@ -108,7 +85,7 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	private HashCode GetHashCodeForObject<TObj>(in TObj? obj)
+	private static HashCode GetHashCodeForObject<TObj>(in TObj? obj)
 	{
 		if (obj is null)
 			return default;
@@ -145,12 +122,12 @@ public readonly struct DataNodeComparer : IEqualityComparer<IDataNode>
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	private HashCode GetHashCodeFor(in IEnumerable<IDataNode>? nodeCollection)
+	private static HashCode GetHashCodeFor(in IEnumerable<IDataNode>? nodeCollection)
 	{
 		if (nodeCollection is null) return default;
 
 		var hash = new HashCode();
-		foreach (var obj in nodeCollection) hash.Add(GetHashCode(obj));
+		foreach (var obj in nodeCollection) hash.Add(GetHashCodeForObject(obj).ToHashCode());
 
 		return hash;
 	}
