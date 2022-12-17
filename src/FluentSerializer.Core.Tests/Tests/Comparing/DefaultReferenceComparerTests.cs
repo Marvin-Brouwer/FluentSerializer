@@ -4,7 +4,6 @@ using FluentSerializer.Core.Comparing;
 
 using Xunit;
 
-
 namespace FluentSerializer.Core.Tests.Tests.Comparing;
 
 public sealed class DefaultReferenceComparerTests

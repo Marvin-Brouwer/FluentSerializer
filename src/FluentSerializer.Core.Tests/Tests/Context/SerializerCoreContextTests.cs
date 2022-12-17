@@ -137,7 +137,6 @@ public sealed class SerializerCoreContextTests
 		result.Path.Should().BeEquivalentTo("T:TestClass", "P:Id");
 	}
 
-
 	[Theory,
 		InlineData(null, null),
 		InlineData(typeof (TestClass), null),

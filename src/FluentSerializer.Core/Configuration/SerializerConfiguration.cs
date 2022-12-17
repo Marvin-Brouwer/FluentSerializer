@@ -24,7 +24,6 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	/// <inheritdoc />
 	public IEqualityComparer ReferenceComparer { get; set; } = DefaultReferenceComparer.Default;
 
-
 	/// <inheritdoc />
 	public bool FormatOutput { get; set; } = true;
 	/// <inheritdoc />

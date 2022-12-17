@@ -24,7 +24,6 @@ public readonly partial struct XmlAttribute
 		MoveToElementOrAttributeEnd(in text, ref offset);
 	}
 
-
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
@@ -48,7 +47,6 @@ public readonly partial struct XmlAttribute
 		return text[nameStartOffset..nameEndOffset].ToString().Trim();
 	}
 
-
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
 #else
@@ -70,7 +68,6 @@ public readonly partial struct XmlAttribute
 			offset++;
 		}
 	}
-
 
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -94,7 +91,6 @@ public readonly partial struct XmlAttribute
 
 		return text[valueStartOffset..valueEndOffset].ToString().Trim();
 	}
-
 
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]

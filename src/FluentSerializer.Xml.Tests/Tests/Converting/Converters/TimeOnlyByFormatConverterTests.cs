@@ -72,7 +72,6 @@ public sealed class TimeOnlyByFormatConverterTests
 
 	#endregion
 
-
 	#region Serialize
 
 	[Theory,

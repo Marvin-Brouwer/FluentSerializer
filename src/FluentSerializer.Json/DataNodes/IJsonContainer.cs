@@ -2,7 +2,6 @@ using FluentSerializer.Core.DataNodes;
 
 namespace FluentSerializer.Json.DataNodes;
 
-
 /// <summary>
 /// An implementation of <see cref="IDataContainer{TValue}"/> for JSON
 /// </summary>

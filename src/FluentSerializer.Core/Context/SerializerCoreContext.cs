@@ -117,7 +117,6 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 	/// <inheritdoc />
 	public TSerialContainer RootNode { get; init; } = default!;
 
-
 	/// <inheritdoc />
 	public new ISerializerCoreContext<TSerialContainer> WithPathSegment(in PropertyInfo propertyInfo)
 	{

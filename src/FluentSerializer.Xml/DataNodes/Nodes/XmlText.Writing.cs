@@ -4,7 +4,6 @@ using FluentSerializer.Xml.Configuration;
 
 namespace FluentSerializer.Xml.DataNodes.Nodes;
 
-
 public readonly partial struct XmlText
 {
 	/// <inheritdoc />

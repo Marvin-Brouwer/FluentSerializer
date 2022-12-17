@@ -134,7 +134,6 @@ public sealed class SerializerContext<TSerialContainer> : SerializerContext, ISe
 	/// <inheritdoc />
 	public TSerialContainer? ParentNode { get; init; }
 
-
 	/// <inheritdoc />
 #if NET6_0_OR_GREATER
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]

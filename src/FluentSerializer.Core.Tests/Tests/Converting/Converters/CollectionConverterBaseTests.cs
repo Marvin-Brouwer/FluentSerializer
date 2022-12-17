@@ -114,7 +114,6 @@ public sealed class CollectionConverterBaseTests
 			return CollectionConverterBase.GetEnumerableInstance(in targetType);
 		}
 
-
 		/// <inheritdoc cref="CollectionConverterBase.FinalizeEnumerableInstance" />
 		public new IList? FinalizeEnumerableInstance(in IList? collection, in Type targetType)
 		{

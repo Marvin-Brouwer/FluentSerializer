@@ -40,7 +40,6 @@ public sealed class StringExtensionTests
 		result.Should().BeFalse();
 	}
 
-
 	[Theory,
 		Trait("Category", "UnitTest"),
 		InlineData('y', 0, true), InlineData('y', 2, false), InlineData('n', 0, false)]

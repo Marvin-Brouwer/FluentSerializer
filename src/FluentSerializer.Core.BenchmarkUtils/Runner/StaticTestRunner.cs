@@ -271,7 +271,6 @@ public abstract class StaticTestRunner
 		return markdownSummaryFile;
 	}
 
-
 	/// <summary>
 	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 	/// </summary>
@@ -321,7 +320,6 @@ public abstract class StaticTestRunner
 #else
 		private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
 #endif
-
 
 	private static bool IsWindowsAdministrator()
 	{

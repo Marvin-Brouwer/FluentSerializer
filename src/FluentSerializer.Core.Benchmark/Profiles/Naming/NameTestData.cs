@@ -15,7 +15,6 @@ internal struct NameTestData
 	{
 		public static bool ShortNamedProperty => true;
 
-
 		public static readonly Type ClassType = typeof(ShortNamedClass);
 		public static readonly PropertyInfo PropertyInfo = ClassType.GetProperty(nameof(ShortNamedProperty))!;
 	}
@@ -25,7 +24,6 @@ internal struct NameTestData
 		internal static class LongNamedInnerClass
 		{
 			public static bool SomeVeryLongNamedProperty_WithSomeAddionalText_ForTestingOfCourse => true;
-
 
 			public static readonly Type ClassType = typeof(LongNamedInnerClass);
 			public static readonly PropertyInfo PropertyInfo = ClassType.GetProperty(nameof(SomeVeryLongNamedProperty_WithSomeAddionalText_ForTestingOfCourse))!;
