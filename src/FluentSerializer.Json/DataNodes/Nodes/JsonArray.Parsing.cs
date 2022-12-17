@@ -42,51 +42,78 @@ public readonly partial struct JsonArray
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter))
 				offset.AdjustForToken(JsonCharacterConstants.DividerCharacter);
 
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
-			{
-				children.Add(new JsonObject(in text, ref offset));
-				lastNonCommentChildIndex = currentChildIndex;
-
-				currentChildIndex++;
+			if (ParseJsonArrayStructureItem(in text, ref offset, ref children, ref currentChildIndex, ref lastNonCommentChildIndex))
 				continue;
-			}
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
-			{
-				children.Add(new JsonArray(in text, ref offset));
-				lastNonCommentChildIndex = currentChildIndex;
 
-				currentChildIndex++;
+			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter))
+				break;
+
+			if (ParseJsonArrayValueItem(in text, ref offset, ref children, ref currentChildIndex, ref lastNonCommentChildIndex))
 				continue;
-			}
-
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
-
-			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
-			{
-				children.Add(new JsonCommentSingleLine(in text, ref offset));
-
-				currentChildIndex++;
-				continue;
-			}
-			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
-			{
-				children.Add(new JsonCommentMultiLine(in text, ref offset));
-
-				currentChildIndex++;
-				continue;
-			}
-			if (!text.HasWhitespaceAtOffset(in offset))
-			{
-				children.Add(new JsonValue(in text, ref offset));
-				lastNonCommentChildIndex = currentChildIndex;
-
-				currentChildIndex++;
-				continue;
-			}
 
 			offset.Increment();
 		}
 		if (text.WithinCapacity(in offset))
 			offset.AdjustForToken(JsonCharacterConstants.ArrayEndCharacter);
+	}
+
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	private static bool ParseJsonArrayStructureItem(in ReadOnlySpan<char> text, ref int offset, ref List<IJsonNode> children, ref int currentChildIndex, ref int? lastNonCommentChildIndex)
+	{
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
+		{
+			children.Add(new JsonObject(in text, ref offset));
+			lastNonCommentChildIndex = currentChildIndex;
+
+			currentChildIndex++;
+			return true;
+		}
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
+		{
+			children.Add(new JsonArray(in text, ref offset));
+			lastNonCommentChildIndex = currentChildIndex;
+
+			currentChildIndex++;
+			return true;
+		}
+
+		return false;
+	}
+
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	private static bool ParseJsonArrayValueItem(in ReadOnlySpan<char> text, ref int offset, ref List<IJsonNode> children, ref int currentChildIndex, ref int? lastNonCommentChildIndex)
+	{
+		if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.SingleLineCommentMarker))
+		{
+			children.Add(new JsonCommentSingleLine(in text, ref offset));
+
+			currentChildIndex++;
+			return true;
+		}
+		if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentStart))
+		{
+			children.Add(new JsonCommentMultiLine(in text, ref offset));
+
+			currentChildIndex++;
+			return true;
+		}
+		if (!text.HasWhitespaceAtOffset(in offset))
+		{
+			children.Add(new JsonValue(in text, ref offset));
+			lastNonCommentChildIndex = currentChildIndex;
+
+			currentChildIndex++;
+			return true;
+		}
+
+		return false;
 	}
 }

@@ -38,11 +38,7 @@ public readonly partial struct JsonValue
 	{
 		while (text.WithinCapacity(in offset))
 		{
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter) && stringValue) break;
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter) && !stringValue) break;
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) break;
-			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) break;
-
+			if (EndingCharacterAtCurrentOffset(in text, in offset, in stringValue)) break;
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter)) stringValue = true;
 
 			offset.Increment();
@@ -50,5 +46,20 @@ public readonly partial struct JsonValue
 
 			if (!stringValue && text.HasWhitespaceAtOffset(in offset)) break;
 		}
+	}
+
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	private static bool EndingCharacterAtCurrentOffset(in ReadOnlySpan<char> text, in int offset, in bool stringValue)
+	{
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.PropertyWrapCharacter) && stringValue) return true;
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.DividerCharacter) && !stringValue) return true;
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectEndCharacter)) return true;
+		if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayEndCharacter)) return true;
+
+		return false;
 	}
 }
