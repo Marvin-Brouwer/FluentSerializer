@@ -22,19 +22,51 @@ env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 jobs:
+  summary:
+    name: "Prepare summary"
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() }}
+    steps:
+    ###
+    # 🔬 Report SonarCloud dashboard
+    #
+    # Really all this does is write the dashboard URL to the job overview.
+    ###
+    - name: 🔬 Report SonarCloud
+      if: always()
+      run: |-
+        branchName=`echo ${GITHUB_REF#refs/heads/}`;
+        dashboardUrl=https://sonarcloud.io/summary/new_code?id=Marvin-Brouwer_FluentSerializer&branch=$branchName
+
+        echo "## SonarCloud Scan  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in SonarCloud](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
+    ###
+    # 🔬 Report Stryker dashboard
+    #
+    # Really all this does is write the dashboard URL to the job overview.
+    # The console output from the stryker report is module specific and gets very weird line endings.
+    ###
+    - name: 🔬 Report Stryker dashboard
+      if: ${{ always() }}
+      run: |-
+        dashboardUrl="https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
+        echo "## Stryker report  " >>$GITHUB_STEP_SUMMARY
+        echo "[Show in Stryker dashboard](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
+
   ci:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
   ci-qa:
     name: "CI"
-    needs: [ci]
+    needs: [ci, summary]
     uses: ./.github/workflows/continuous-integration.build-qa.yml
     secrets: inherit
 
   stryker:
     name: "Stryker"
-    needs: [ci]
+    needs: [ci, summary]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
 

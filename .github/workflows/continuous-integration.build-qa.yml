@@ -163,13 +163,3 @@ jobs:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
-    ###
-    # 🔬 Report SonarCloud Quality Gate
-    ###
-    - name: 🔬 Report SonarCloud Quality Gate
-      if: always()
-      run: |-
-        dashboardUrl=$(sed -n '5p' .sonarqube/out/.sonar/report-task.txt | cut -d '=' -f 2-);
-
-        echo "## SonarCloud Scan  " >>$GITHUB_STEP_SUMMARY
-        echo "[Show in SonarCloud](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
