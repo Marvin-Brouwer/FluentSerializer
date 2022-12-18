@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentSerializer.UseCase.OpenAir.Models.Base;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Response;
 
-internal class Response<TResponse> where TResponse : OpenAirEntity
+internal sealed class Response<TResponse> where TResponse : OpenAirEntity
 {
 	public List<ReadResponse<TResponse>> ReadResponses { get; set; } = new();
 	public List<AddResponse<TResponse>> AddResponses { get; set; } = new();

@@ -5,7 +5,7 @@ using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Request;
 
-internal class Request<TRequest>
+internal sealed class Request<TRequest>
 {
 #pragma warning disable CA1822 // Mark members as static
 	public IXmlComment Authentication => Comment("Normally this is where the authentication element would be added");
@@ -23,16 +23,16 @@ internal class RequestObject<TRequest>
 	public string Type { get; set; } = string.Empty;
 }
 
-internal class ReadRequest<TRequest> : RequestObject<TRequest>
+internal sealed class ReadRequest<TRequest> : RequestObject<TRequest>
 {
 	public string Filter { get; set; } = string.Empty;
 }
-internal class AddRequest<TRequest> : RequestObject<TRequest>
+internal sealed class AddRequest<TRequest> : RequestObject<TRequest>
 {
 }
-internal class ModifyRequest<TRequest> : RequestObject<TRequest>
+internal sealed class ModifyRequest<TRequest> : RequestObject<TRequest>
 {
 }
-internal class DeleteRequest<TRequest> : RequestObject<TRequest>
+internal sealed class DeleteRequest<TRequest> : RequestObject<TRequest>
 {
 }

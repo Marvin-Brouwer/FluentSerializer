@@ -106,7 +106,7 @@ public sealed class CollectionConverterBaseTests
 
 	/// <inheritdoc />
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
-	private class TestConverter : CollectionConverterBase
+	private sealed class TestConverter : CollectionConverterBase
 	{
 		/// <inheritdoc cref="CollectionConverterBase.GetEnumerableInstance" />
 		public new IList GetEnumerableInstance(in Type targetType)
