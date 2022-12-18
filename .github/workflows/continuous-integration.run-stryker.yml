@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-stryker:
-    name: "Run on ${{ inputs.libraryName }}"
+    name: "${{ inputs.libraryName }}"
     runs-on: ubuntu-latest
     steps:
     ###
