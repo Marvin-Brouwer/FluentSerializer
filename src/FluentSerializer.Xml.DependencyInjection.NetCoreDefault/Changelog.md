@@ -2,6 +2,8 @@
 
 ## @next
 
+## v2.0.1
+
 - [#91](https://github.com/Marvin-Brouwer/FluentSerializer/issues/91) Improved overall code quality
 
 ## v2.0.0
