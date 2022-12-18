@@ -40,6 +40,7 @@ jobs:
     with:
       libraryName: 'Core'
       reportPrefix: 'core'
+      net_7_0-jobType: "Long"
       net_6_0-jobType: "Long"
       netcore_3_1-jobType: "Long"
   benchmark-xml:

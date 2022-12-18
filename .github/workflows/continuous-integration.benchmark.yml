@@ -10,6 +10,11 @@ on:
         description: 'The library to benchmark'
         required: true
         type: string
+      net_7_0-jobType:
+        description: 'The jobType for net 6 runtime'
+        required: false
+        default: "Default"
+        type: string
       net_6_0-jobType:
         description: 'The jobType for net 6 runtime'
         required: false
@@ -39,10 +44,11 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        include-prerelease: true
+        dotnet-quality: 'preview'
         dotnet-version: |
           3.1.x
           6.0.x
+          7.0.x
     ###
     # 🗃 Restore dependencies
     #
@@ -66,6 +72,16 @@ jobs:
       with:
         name: benchmark-binaries
         path: ./src
+    ###
+    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net7.0)
+    #
+    # Benchmark the code in the given library (in dotnet 7)
+    ###
+    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net7.0)
+      run: |-
+        sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
+        sudo ./net7.0/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.net_7_0-jobType }}
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
     ###
     # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
     #

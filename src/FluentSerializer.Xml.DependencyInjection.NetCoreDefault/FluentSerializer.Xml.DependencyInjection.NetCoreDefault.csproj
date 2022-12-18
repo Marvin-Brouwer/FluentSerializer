@@ -2,10 +2,11 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+		<TargetFrameworks>net7.0;net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<LangVersion>10</LangVersion>
+		<LangVersion Condition="'$(TargetFramework)' == 'net6'">10</LangVersion>
+		<LangVersion Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'net'">10</LangVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\docs\logo\NuGetIcon.xml.ico</ApplicationIcon>
 		<PackageIcon>NuGetIcon.xml.png</PackageIcon>

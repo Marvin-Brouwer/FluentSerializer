@@ -2,8 +2,9 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
-		<LangVersion>10</LangVersion>
+		<TargetFrameworks>net7.0;net6.0;netcoreapp3.1</TargetFrameworks>
+		<LangVersion Condition="'$(TargetFramework)' == 'net6'">10</LangVersion>
+		<LangVersion Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'net'">10</LangVersion>
 		<StartupObject>FluentSerializer.Core.Benchmark.Program</StartupObject>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>

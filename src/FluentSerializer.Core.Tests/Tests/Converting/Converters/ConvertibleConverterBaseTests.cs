@@ -122,7 +122,7 @@ public sealed class ConvertibleConverterBaseTests
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
-			.WithMessage("Input string was not in a correct format.");
+			.WithMessage($"The input string '{input}' was not in a correct format.");
 	}
 
 	[Fact,
