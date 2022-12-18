@@ -34,7 +34,6 @@ public abstract class EnumConverterBase
 	/// <inheritdoc cref="IConverter.ConverterId" />
 	public Guid ConverterId { get; } = typeof(Enum).GUID;
 
-
 	private readonly CultureInfo? _formatProvider;
 	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
 

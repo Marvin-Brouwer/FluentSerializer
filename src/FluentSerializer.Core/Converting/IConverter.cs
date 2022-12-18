@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Core.Converting;
 
-
 /// <summary>
 /// A service implementation responsible for converting Text to and from <typeparamref name="TSerialContainer"/>
 /// </summary>

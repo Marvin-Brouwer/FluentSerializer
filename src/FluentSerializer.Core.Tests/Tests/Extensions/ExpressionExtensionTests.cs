@@ -155,7 +155,6 @@ public sealed class ExpressionExtensionTests
 		}
 	}
 
-
 	private sealed class TestClass
 	{
 		public int Id { get; init; } = default!;

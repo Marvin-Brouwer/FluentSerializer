@@ -73,7 +73,6 @@ public sealed class TimeSpanByFormatConverterTests
 
 	#endregion
 
-
 	#region Serialize
 
 	[Theory,

@@ -24,7 +24,6 @@ public class NamingStrategyProfile_Equal
 		NamingStrategy.GetName(NameTestData.ShortNamedClass.PropertyInfo,
 			NameTestData.ShortNamedClass.ClassType, NameTestData.NamingContext);
 
-
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_LongNamedClass() =>
 		NamingStrategy.GetName(NameTestData.LongNamedWrapperClass.LongNamedInnerClass.ClassType, NameTestData.NamingContext);

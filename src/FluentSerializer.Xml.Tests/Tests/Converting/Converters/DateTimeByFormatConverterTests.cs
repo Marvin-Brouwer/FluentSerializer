@@ -74,7 +74,6 @@ public sealed class DateTimeByFormatConverterTests
 
 	#endregion
 
-
 	#region Serialize
 
 	[Theory,

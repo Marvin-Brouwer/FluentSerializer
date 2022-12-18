@@ -74,14 +74,21 @@ public sealed class JsonTypeSerializer
 
 		currentCoreContext.TryAddReference(dataModel);
 
+		var properties = SerializeModelProperties(in dataModel, in instanceType, in classType, in classMap, in currentCoreContext);
+		return Object(properties);
+	}
+
+	private List<IJsonObjectContent> SerializeModelProperties(in object dataModel,
+		in Type instanceType, in Type classType, in IClassMap classMap, in ISerializerCoreContext currentCoreContext)
+	{
 		var properties = new List<IJsonObjectContent>();
-		foreach(var property in instanceType.GetProperties())
+		foreach (var property in instanceType.GetProperties())
 		{
 			var propertyMapping = classMap.GetPropertyMapFor(property, SerializerDirection.Deserialize);
 			if (propertyMapping is null) continue;
 
 			var propertyValue = property.GetValue(dataModel);
-			if (propertyValue is null && !coreContext.CurrentSerializer.Configuration.WriteNull) continue;
+			if (propertyValue is null && !currentCoreContext.CurrentSerializer.Configuration.WriteNull) continue;
 
 			if (currentCoreContext.ContainsReference(propertyValue))
 			{
@@ -93,14 +100,14 @@ public sealed class JsonTypeSerializer
 
 			var serializerContext = new SerializerContext(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
-				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy, 
+				propertyMapping.Property, property.PropertyType, in classType, propertyMapping.NamingStrategy,
 				classMap.PropertyMapCollection, _classMappings);
 
 			var jsonNode = SerializeObjectContent(in propertyValue, in propertyMapping, in serializerContext);
 			if (jsonNode is not null) properties.Add(jsonNode);
 		}
 
-		return Object(properties);
+		return properties;
 	}
 
 	private IJsonObjectContent? SerializeObjectContent(

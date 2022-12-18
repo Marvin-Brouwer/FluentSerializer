@@ -42,10 +42,39 @@ public readonly partial struct XmlElement : IXmlElement
 
 		Name = name;
 
+		if (childNodes is null)
+		{
+			_attributes = Array.Empty<IXmlAttribute>();
+			_children = Array.Empty<IXmlNode>();
+			return;
+		}
+
 		// This does not have the same impact as when you'd have one collection.
 		// However, it will still ensure a smaller initial size than the dotnet default on smaller element collections.
-		ReadOnlyCollectionBuilder<IXmlAttribute> attributes;
-		ReadOnlyCollectionBuilder<IXmlNode> children;
+		InitializeChildNodes(in childNodes,
+			out ReadOnlyCollectionBuilder<IXmlAttribute> attributes,
+			out ReadOnlyCollectionBuilder<IXmlNode> children);
+
+		if (childNodes is not null)
+			foreach (var node in childNodes)
+			{
+				if (node is null) continue;
+				if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
+				if (node is XmlAttribute attribute) attributes.Add(attribute);
+				else children.Add(node);
+			}
+
+		_attributes = attributes.ToReadOnlyCollection();
+		_children = children.ToReadOnlyCollection();
+	}
+
+#if NET6_0_OR_GREATER
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+#else
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+	private static void InitializeChildNodes(in IEnumerable<IXmlNode> childNodes, out ReadOnlyCollectionBuilder<IXmlAttribute> attributes, out ReadOnlyCollectionBuilder<IXmlNode> children)
+	{
 		if (childNodes is ICollection<IXmlNode> childrenCollection)
 		{
 			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>(childrenCollection.Count);
@@ -61,18 +90,6 @@ public readonly partial struct XmlElement : IXmlElement
 			attributes = new ReadOnlyCollectionBuilder<IXmlAttribute>();
 			children = new ReadOnlyCollectionBuilder<IXmlNode>();
 		}
-
-		if (childNodes is not null)
-			foreach (var node in childNodes)
-			{
-				if (node is null) continue;
-				if (node is IXmlText text && string.IsNullOrEmpty(text.Value)) continue;
-				if (node is XmlAttribute attribute) attributes.Add(attribute);
-				else children.Add(node);
-			}
-
-		_attributes = attributes.ToReadOnlyCollection();
-		_children = children.ToReadOnlyCollection();
 	}
 
 	/// <inheritdoc />

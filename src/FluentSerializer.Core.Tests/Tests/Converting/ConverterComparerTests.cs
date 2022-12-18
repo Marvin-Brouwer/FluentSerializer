@@ -9,7 +9,6 @@ using System;
 
 using Xunit;
 
-
 namespace FluentSerializer.Core.Tests.Tests.Converting;
 
 public sealed class ConverterComparerTests
