@@ -57,6 +57,12 @@ jobs:
     ###
     - name: 🛠 Build & Run
       run: >-
+        dotnet build
+        --no-restore
+        --nologo
+        --configuration "Debug"
+        --verbosity quiet
+
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"

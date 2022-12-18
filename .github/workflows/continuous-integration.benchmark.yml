@@ -10,18 +10,8 @@ on:
         description: 'The library to benchmark'
         required: true
         type: string
-      net_7_0-jobType:
+      jobType:
         description: 'The jobType for net 6 runtime'
-        required: false
-        default: "Default"
-        type: string
-      net_6_0-jobType:
-        description: 'The jobType for net 6 runtime'
-        required: false
-        default: "Default"
-        type: string
-      netcore_3_1-jobType:
-        description: 'The jobType for netcore 3.1 runtime'
         required: false
         default: "Default"
         type: string
@@ -29,7 +19,12 @@ on:
 jobs:
   benchmark:
     name: "Benchmark ${{ inputs.libraryName }}"
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        version: [net7.0, net6.0, netcoreapp3.1]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     ###
     # Checkout repository
@@ -45,10 +40,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-quality: 'preview'
-        dotnet-version: |
-          3.1.x
-          6.0.x
-          7.0.x
+        dotnet-version: ${{ matrix.version }}
     ###
     # 🗃 Restore dependencies
     #
@@ -57,12 +49,22 @@ jobs:
     - name: 🗃 Restore dependencies
       run: dotnet restore
     ###
-    # 🗃 Restore 'library-binaries'
+    # 🗃 Set library version
     ###
-    - name: 🗃 Restore 'library-binaries'
+    - name: 🗃 Set library version
+      run: |
+        if ${matrix.version} == "netcoreapp3.1"; then
+          echo "libVersion=netcore2.1" >> $GITHUB_ENV
+        else
+          echo "libVersion=${matrix.version}" >> $GITHUB_ENV
+        fi
+    ###
+    # 🗃 Restore 'library-binaries-${{ env.libVersion }}'
+    ###
+    - name: 🗃 Restore 'library-binaries-${{ env.libVersion }}'
       uses: actions/download-artifact@v3
       with:
-        name: library-binaries
+        name: library-binaries-${{ env.libVersion }}
         path: ./src
     ###
     # 🗃 Restore 'benchmark-binaries'
@@ -73,34 +75,14 @@ jobs:
         name: benchmark-binaries
         path: ./src
     ###
-    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net7.0)
+    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (${{ matrix.version }})
     #
     # Benchmark the code in the given library (in dotnet 7)
     ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net7.0)
+    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (${{ matrix.version }})
       run: |-
         sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
-        sudo ./net7.0/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.net_7_0-jobType }}
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
-    ###
-    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
-    #
-    # Benchmark the code in the given library (in dotnet 6)
-    ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
-      run: |-
-        sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
-        sudo ./net6.0/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.net_6_0-jobType }}
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
-    ###
-    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (netcoreapp3.1)
-    #
-    # Benchmark the code in the given library (in dotnet core 3)
-    ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (netcoreapp3.1)
-      run: |-
-        sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.netcore_3_1-jobType }}
+        sudo ./${{ matrix.version }}/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.jobType }}
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
     ###
     # 🗃 Collect benchmark reports
@@ -129,6 +111,6 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: benchmark-results-${{ inputs.reportPrefix }}
+        name: benchmark-results-${{ inputs.reportPrefix }}-${{ matrix.version }}-${{ matrix.os }}
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20

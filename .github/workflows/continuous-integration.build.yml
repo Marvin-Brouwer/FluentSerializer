@@ -28,9 +28,9 @@ jobs:
       with:
         dotnet-quality: 'preview'
         dotnet-version: |
-          3.1.x
-          6.0.x
           7.0.x
+          6.0.x
+          3.1.x
     ###
     # 🧰 Setup .Net tools
     #
@@ -75,17 +75,53 @@ jobs:
     # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release"
+      run: >-
+        dotnet build
+        --no-restore
+        --nologo
+        --configuration "Release"
     ###
-    # 🗃 Publish 'library-binaries' artifacts
+    # 🗃 Publish 'library-binaries-net7.0' artifacts
     ###
-    - name: 🗃 Publish 'library-binaries' artifacts
+    - name: 🗃 Publish 'library-binaries-net7.0' artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: library-binaries
+        name: library-binaries-net7.0
         path: |
-          ./src/**/bin/Release/*/*.*
+          ./src/**/bin/Release/net7.0/*.*
+          !./src/*.Tests
+          !./src/*.TestUtils
+          !./src/*.Usecase.*
+          !./src/*.Benchmark
+          !./src/*.BenchmarkUtils
+        retention-days: 1
+    ###
+    # 🗃 Publish 'library-binaries-net6.0' artifacts
+    ###
+    - name: 🗃 Publish 'library-binaries-net6.0' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: library-binaries-net6.0
+        path: |
+          ./src/**/bin/Release/net6.0/*.*
+          !./src/*.Tests
+          !./src/*.TestUtils
+          !./src/*.Usecase.*
+          !./src/*.Benchmark
+          !./src/*.BenchmarkUtils
+        retention-days: 1
+    ###
+    # 🗃 Publish 'library-binaries-netstandard2.1' artifacts
+    ###
+    - name: 🗃 Publish 'library-binaries-netstandard2.1' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: library-binaries-netstandard2.1
+        path: |
+          ./src/**/bin/Release/netstandard2.1/*.*
           !./src/*.Tests
           !./src/*.TestUtils
           !./src/*.Usecase.*
