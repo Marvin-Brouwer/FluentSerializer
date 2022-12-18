@@ -43,25 +43,22 @@ jobs:
       run: |-
         dotnet tool install --global dotnet-stryker
     ###
-    # 🗃 Restore dependencies
-    #
-    # Fill the NuGet store with necessary libraries
-    ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    ###
     # 🛠 Build & Run
     #
     # Run Stryker.Net over codebase
     # debug verbosity because we don't have the progress reporter in pipelines
+    #
+    # Note: The dotnet build before stryker is necessary for net7
+    # Hopefully, this is a temporary fix
     ###
     - name: 🛠 Build & Run
       run: >-
         dotnet build
-        --no-restore
         --nologo
         --configuration "Debug"
         --verbosity quiet
+
+        echo "::remove-matcher owner=dotnet::"
 
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
