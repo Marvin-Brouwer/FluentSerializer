@@ -55,10 +55,6 @@ public abstract class StaticTestRunner
 			.AddExporter(MarkdownExporter.Console)
 			.WithSummaryStyle(SummaryStyle.Default
 				.WithCultureInfo(AppCulture)
-				// We'd actually like it to grow when the size grows but this doesn't seem to be consistent between
-				// the XML and JSON benchmarks so we set it to a constant metric.
-				.WithSizeUnit(SizeUnit.MB)
-				.WithTimeUnit(TimeUnit.Millisecond)
 			);
 
 		if (orderer is not null)
