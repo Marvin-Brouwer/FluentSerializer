@@ -152,7 +152,11 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
         ./.sonar/scanner/dotnet-sonarscanner end
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}";
+
+        $branchName = "${{ github.ref }}".Replace("refs/heads/", "");
+
+        Write-Host "https://sonarcloud.io/summary/new_code?id=Marvin-Brouwer_FluentSerializer&branch=$branchName";
     ###
     # 🔬 SonarCloud Quality Gate
     ###

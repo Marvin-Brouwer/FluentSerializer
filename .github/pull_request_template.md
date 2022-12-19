@@ -11,8 +11,8 @@
 
 - [ ] Meets acceptance criteria of story / Fixed bug
 - [ ] Added new tests
-- [ ] Checked quality gate results
-- [ ] Checked stryker report for score regression
+- [ ] Checked quality gate results <!-- https://sonarcloud.io/summary/new_code?id=Marvin-Brouwer_FluentSerializer -->
+- [ ] Checked stryker report for score regression 
 - [ ] Checked performance profiles for regression
 - [ ] Updated documentation
 - [ ] Updated release notes

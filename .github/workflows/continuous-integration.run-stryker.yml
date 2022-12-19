@@ -50,6 +50,8 @@ jobs:
     #
     # Note: The dotnet build before stryker is necessary for net7
     # Hopefully, this is a temporary fix
+    #
+    # The additional echo is because the stryker report URL get's weird line cutoff.
     ###
     - name: 🛠 Build & Run
       run: >-
@@ -66,4 +68,6 @@ jobs:
         --break-at 80
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+
+        echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}
