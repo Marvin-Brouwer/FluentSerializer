@@ -55,6 +55,8 @@ jobs:
     ###
     - name: 🛠 Build & Run
       run: >-
+        echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
         echo "::echo::off"
 
         dotnet build
@@ -75,6 +77,4 @@ jobs:
         echo "::remove-matcher owner=csc::"
 
         echo "::remove-matcher owner=dotnet::"
-
-        echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}
