@@ -39,6 +39,6 @@ jobs:
 
   benchmark-core:
     name: "Benchmark"
-    needs: [ci-qa]
+    needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
