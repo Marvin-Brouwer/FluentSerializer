@@ -1,4 +1,4 @@
-name: "Continuous integration - Stryker"
+name: "Continuous integration - Run Stryker"
 on:
   workflow_call:
     secrets:
@@ -9,13 +9,71 @@ env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
 jobs:
-  stryker-core:
-    name: "Mutate"
+  stryker:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         libraryName: [ "Core", "Xml", "Json" ]
-    uses: ./.github/workflows/continuous-integration.run-stryker.yml
-    secrets: inherit
-    with:
-      libraryName: ${{ matrix.libraryName }}
+    name: "${{ matrix.libraryName }}"
+    runs-on: ubuntu-latest
+    steps:
+    ###
+    # Checkout repository
+    ###
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        lfs: true
+    ###
+    # 🧰 Install .Net SDKs
+    #
+    # Configure the pipeline to use the correct .Net sdk versions
+    ###
+    - name: 🧰 Install .Net SDKs
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    ###
+    # 🧰 Setup .Net tools
+    #
+    # Register tools necessary to run the `test` pipeline-job
+    ###
+    - name: 🧰 Setup .NET tools
+      run: |-
+        dotnet tool install --global dotnet-stryker
+    ###
+    # 🛠 Build & Run
+    #
+    # Run Stryker.Net over codebase
+    # debug verbosity because we don't have the progress reporter in pipelines
+    #
+    # Note: The dotnet build before stryker is necessary for net7
+    # Hopefully, this is a temporary fix
+    #
+    # The additional echo is because the stryker report URL get's weird line cutoff.
+    ###
+    - name: 🛠 Build & Run
+      run: >-
+        echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
+
+        echo "::echo::off"
+
+        dotnet build
+        --nologo
+        --configuration "Debug"
+        --verbosity quiet
+
+        echo "::echo::on"
+
+        dotnet stryker
+        --config-file "stryker-config.pipeline.json"
+        --version "${{ github.ref }}"
+        --mutation-level "Advanced"
+        --break-at 80
+        --threshold-low 80
+        --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+
+        echo "::remove-matcher owner=csc::"
+
+        echo "::remove-matcher owner=dotnet::"
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ matrix.libraryName }}

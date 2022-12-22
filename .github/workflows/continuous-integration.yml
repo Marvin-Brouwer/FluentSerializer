@@ -33,7 +33,7 @@ jobs:
 
   stryker:
     name: "Stryker"
-    needs: [ci-qa]
+    needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
 
