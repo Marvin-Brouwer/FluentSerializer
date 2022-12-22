@@ -27,6 +27,7 @@ using System.Globalization;
 using BenchmarkDotNet.Order;
 
 using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Extensions;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -104,19 +105,32 @@ public abstract class StaticTestRunner
 		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
-		if (runType is not null) Console.WriteLine(runType);
-		Console.ResetColor();
-		Console.WriteLine();
 
-		return runType switch
+		var parsedRunType = runType switch
 		{
 			null => Job.Default,
 			"--jobType=Dry" => Job.Dry,
 			"--jobType=Short" => Job.ShortRun,
+			"--jobType=Medium" => Job.MediumRun,
 			"--jobType=Long" => Job.LongRun,
 			"--jobType=VeryLong" => Job.VeryLongRun,
-			_ => Job.Default
+			_ => null
 		};
+
+		if (parsedRunType is not null)
+		{
+			Console.WriteLine(runType);
+		}
+		else
+		{
+			Console.WriteLine($"Input '{runType}' is not a valid jobType");
+			Console.WriteLine($"Using '--jobType=Default' instead");
+		}
+
+		Console.ResetColor();
+		Console.WriteLine();
+
+		return parsedRunType ?? Job.Default;
 #endif
 	}
 
@@ -130,6 +144,16 @@ public abstract class StaticTestRunner
 
 		var jobDate = DateTime.UtcNow;
 		var config = CreateConfig(arguments, orderer);
+		if (arguments.Contains("--quick-exit"))
+		{
+			Console.WriteLine("Quick exit mode enabled.");
+			Console.CancelKeyPress += (_, _) =>
+			{
+				Console.WriteLine("Cancellation signal recieved.");
+				// Quick kill child processes
+				Process.GetCurrentProcess().KillTree(TimeSpan.Zero);
+			};
+		}
 
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("Starting benchmark runner...");
