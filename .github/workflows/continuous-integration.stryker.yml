@@ -68,7 +68,7 @@ jobs:
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
-        --mutation-level "Advanced"
+        --mutation-level "Complete"
         --break-at 80
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
