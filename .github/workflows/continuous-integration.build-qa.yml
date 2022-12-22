@@ -144,6 +144,8 @@ jobs:
         retention-days: 1
     ###
     # 🔬 Perform SonarCloud Analysis
+    #
+    # The Write-Host at the start is just to make it easier to find the link when opening the step in the pipeline
     ###
     - name: 🔬 Perform SonarCloud Analysis
       shell: pwsh
@@ -151,12 +153,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
-        ./.sonar/scanner/dotnet-sonarscanner end
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}";
-
         $branchName = "${{ github.ref }}".Replace("refs/heads/", "");
 
         Write-Host "https://sonarcloud.io/summary/new_code?id=Marvin-Brouwer_FluentSerializer&branch=$branchName";
+
+        ./.sonar/scanner/dotnet-sonarscanner end
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}";
     ###
     # 🔬 SonarCloud Quality Gate
     ###

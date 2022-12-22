@@ -55,12 +55,15 @@ jobs:
     ###
     - name: 🛠 Build & Run
       run: >-
+        echo "::echo::off"
+
         dotnet build
         --nologo
         --configuration "Debug"
         --verbosity quiet
+        2>/dev/null
 
-        echo "::remove-matcher owner=dotnet::"
+        echo "::echo::on"
 
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
@@ -68,6 +71,10 @@ jobs:
         --break-at 80
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
+
+        echo "::remove-matcher owner=csc::"
+
+        echo "::remove-matcher owner=dotnet::"
 
         echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}

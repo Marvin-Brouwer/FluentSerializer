@@ -51,8 +51,17 @@ jobs:
     ###
     - name: ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
       shell: bash
-      run: |-
-        dotnet run --configuration "Release" --framework ${{ matrix.version.framework }} --jobType=${{matrix.library.jobType}}
+      run: >-
+        dotnet run
+        --configuration "Release"
+        --framework ${{ matrix.version.framework }}
+        --jobType=${{matrix.library.jobType}}
+        2>/dev/null
+
+        echo "::remove-matcher owner=csc::"
+
+        echo "::remove-matcher owner=dotnet::"
+
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ matrix.library.name }}.Benchmark/
     ###
     # 🗃 Collect benchmark reports
