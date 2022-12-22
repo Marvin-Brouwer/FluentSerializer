@@ -1,13 +1,12 @@
-using FluentAssertions.Execution;
 using FluentAssertions;
+using FluentAssertions.Collections;
+using FluentAssertions.Execution;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-
-using FluentAssertions.Collections;
-using System.Globalization;
 
 namespace FluentSerializer.Core.TestUtils.Assertions;
 
@@ -25,7 +24,7 @@ public sealed class ValueTypeCollectionAssertions<T> : GenericCollectionAssertio
 			.ForCondition(result => result.Equals(Subject.Count()))
 			.FailWith(
 			$"Expected collection to contain only unique values, {Environment.NewLine}" +
-		            "Values at these positions were duplicated: {0}",
+					"Values at these positions were duplicated: {0}",
 			_ => GetValueGroups());
 		return new AndConstraint<GenericCollectionAssertions<T>>(this);
 	}

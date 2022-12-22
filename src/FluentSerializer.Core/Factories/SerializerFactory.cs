@@ -11,5 +11,5 @@ public sealed class SerializerFactory
 	/// Get a <see cref="ISerializerFactory{TSerializer, TConfiguration, TSerializerProfile}"/> for your requested type
 	/// </summary>
 
-	public static readonly SerializerFactory For = new ();
+	public static readonly SerializerFactory For = new();
 }

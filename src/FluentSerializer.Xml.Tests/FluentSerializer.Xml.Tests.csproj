@@ -10,6 +10,7 @@
 		<IsPackable>false</IsPackable>
 		<ApplicationIcon>..\..\docs\logo\NuGetIcon.xml.ico</ApplicationIcon>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest-Recommended</AnalysisLevel>
 	</PropertyGroup>

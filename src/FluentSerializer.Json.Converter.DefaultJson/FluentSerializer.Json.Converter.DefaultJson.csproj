@@ -20,6 +20,7 @@
 		<PackageReleaseNotes /> <!-- PackageReleaseNotes will be replaced by release pipeline -->
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest-Recommended</AnalysisLevel>
 	</PropertyGroup>

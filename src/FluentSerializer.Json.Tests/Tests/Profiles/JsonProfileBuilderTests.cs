@@ -87,7 +87,7 @@ public sealed class JsonProfileBuilderTests
 		public string Name => nameof(TestModel);
 	}
 
-	private sealed class TestConverter: IJsonConverter
+	private sealed class TestConverter : IJsonConverter
 	{
 		public static IJsonConverter New() => new TestConverter();
 

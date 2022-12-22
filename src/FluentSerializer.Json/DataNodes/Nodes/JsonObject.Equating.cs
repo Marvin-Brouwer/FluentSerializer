@@ -8,7 +8,7 @@ namespace FluentSerializer.Json.DataNodes.Nodes;
 public readonly partial struct JsonObject
 {
 	private static readonly int TypeHashCode = typeof(JsonObject).GetHashCode();
-	
+
 	/// <inheritdoc />
 	public override bool Equals(object? obj) => obj is IDataNode node && Equals(node);
 

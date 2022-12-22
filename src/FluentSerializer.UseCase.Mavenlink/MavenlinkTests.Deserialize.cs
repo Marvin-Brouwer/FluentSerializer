@@ -52,7 +52,7 @@ public sealed partial class MavenlinkTests
 		Name = "Jane Doe",
 		Age = 22,
 		AccountMembershipId = "UA2",
-		AccountMembership = new ()
+		AccountMembership = new()
 		{
 			Id = "UA2",
 			LineManagerId = null
@@ -77,7 +77,7 @@ public sealed partial class MavenlinkTests
 		Count = 1,
 		CurrentPage = 1,
 		PageCount = 1,
-		Data = new ()
+		Data = new()
 		{
 			JohnDoe,
 			JaneDoe,

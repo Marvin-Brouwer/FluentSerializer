@@ -139,7 +139,7 @@ public sealed class SerializerCoreContextTests
 
 	[Theory,
 		InlineData(null, null),
-		InlineData(typeof (TestClass), null),
+		InlineData(typeof(TestClass), null),
 		Trait("Category", "UnitTest")]
 	public void WithPathSegment_ValueNull_Throws(Type type, PropertyInfo property)
 	{
@@ -170,6 +170,6 @@ public sealed class SerializerCoreContextTests
 
 	private sealed class TestSerializerConfiguration : SerializerConfiguration
 	{
-		public static readonly TestSerializerConfiguration Default = new ();
+		public static readonly TestSerializerConfiguration Default = new();
 	}
 }

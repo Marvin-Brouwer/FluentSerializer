@@ -179,7 +179,7 @@ public sealed class BaseSerializerFactoryTests
 		protected override TestSerializer CreateSerializer(
 			in TestConfiguration configuration,
 			in ObjectPoolProvider poolProvider,
-			in IReadOnlyCollection<IClassMap> mappings) => new (configuration, poolProvider, mappings);
+			in IReadOnlyCollection<IClassMap> mappings) => new(configuration, poolProvider, mappings);
 	}
 
 	private sealed class TestSerializer : ISerializer
@@ -203,7 +203,7 @@ public sealed class BaseSerializerFactoryTests
 #pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 	}
 
-	private sealed class TestConfiguration: SerializerConfiguration { }
+	private sealed class TestConfiguration : SerializerConfiguration { }
 
 	private sealed class TestSerializerProfile : ISerializerProfile<TestConfiguration>
 	{

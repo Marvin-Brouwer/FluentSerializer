@@ -36,10 +36,10 @@ public static class TestDataExtensions
 				Element("country", Text(house.Country)),
 				Element("letterValue",
 					CData("\r\n" +
-					      $"{house.StreetName} {house.HouseNumber}, " +
-					      $"{house.ZipCode} {house.City}" + "\r\n" +
-					      house.Country
-					      +  "\r\n")
+						  $"{house.StreetName} {house.HouseNumber}, " +
+						  $"{house.ZipCode} {house.City}" + "\r\n" +
+						  house.Country
+						  +  "\r\n")
 				)
 			),
 			Element("Residents",

@@ -67,7 +67,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	public object? Deserialize([MaybeNull, AllowNull] in IJsonContainer? element, in Type modelType, in ISerializerCoreContext<IJsonNode> context)
 	{
 		if (element is null) return default;
-		
+
 		return _deserializer.DeserializeFromNode(element, in modelType, in context);
 	}
 
@@ -86,7 +86,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		var container = SerializeToContainer(in model);
 		if (container is null) return string.Empty;
 
-		var stringValue =  container.WriteTo(in _stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
+		var stringValue = container.WriteTo(in _stringBuilderPool, Configuration.FormatOutput, Configuration.WriteNull);
 
 		return stringValue;
 	}

@@ -31,7 +31,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 		_referenceCollection = new Hashtable(currentSerializer.Configuration.ReferenceComparer);
 		CurrentSerializer = currentSerializer;
 	}
-	
+
 	/// <inheritdoc cref="ISerializerCoreContext"/>
 	protected SerializerCoreContext(SerializerCoreContext serializerCoreContext, in string name)
 	{
@@ -89,8 +89,8 @@ public class SerializerCoreContext : ISerializerCoreContext
 		if (instance is null) return false;
 
 		var hash = CurrentSerializer.Configuration.ReferenceComparer.GetHashCode(instance);
-		if(_referenceCollection.ContainsKey(hash)) return false;
-		if(_referenceCollection.ContainsValue(instance)) return false;
+		if (_referenceCollection.ContainsKey(hash)) return false;
+		if (_referenceCollection.ContainsValue(instance)) return false;
 
 		_referenceCollection.Add(hash, instance);
 

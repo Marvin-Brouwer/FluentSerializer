@@ -1,4 +1,5 @@
 using FluentSerializer.Xml.DataNodes;
+
 using System.Collections.Generic;
 
 using static FluentSerializer.Xml.XmlBuilder;
@@ -11,7 +12,7 @@ internal sealed class Request<TRequest>
 	public IXmlComment Authentication => Comment("Normally this is where the authentication element would be added");
 #pragma warning restore CA1822 // Mark members as static
 
-	public List<ReadRequest<TRequest>>? ReadRequests { get; set; } 
+	public List<ReadRequest<TRequest>>? ReadRequests { get; set; }
 	public List<AddRequest<TRequest>>? AddRequests { get; set; }
 	public List<ModifyRequest<TRequest>>? ModifyRequests { get; set; }
 	public List<DeleteRequest<TRequest>>? DeleteRequests { get; set; }

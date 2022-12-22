@@ -79,7 +79,7 @@ internal sealed class MavenlinkCustomFieldReferenceConverter : IJsonConverter
 			if (!rawValue.HasValue) return default;
 
 			if (context.PropertyType == typeof(string)) return rawValue.Value![1..^1];
-			
+
 			return Convert.ChangeType(customFieldValue.Value, context.PropertyType, CultureInfo.CurrentCulture);
 		}
 

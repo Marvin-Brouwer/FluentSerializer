@@ -156,7 +156,8 @@ public sealed class PropertyMapCollectionTests
 		result2.Should().NotBeNull();
 	}
 
-	private sealed  class TestClass {
+	private sealed class TestClass
+	{
 		public int Id { get; init; } = default!;
 		public string Name { get; init; } = default!;
 	}

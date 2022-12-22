@@ -10,12 +10,12 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 /// <summary>
 /// Get's the name of the current request's data type
 /// </summary>
-internal class RequestEntityNamingStrategy : INamingStrategy
+internal sealed class RequestEntityNamingStrategy : INamingStrategy
 {
 	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext)
 	{
-	    var typeName = propertyType.Name;
-	    return EntityMappings.GetDataItemName(in typeName);
+		var typeName = propertyType.Name;
+		return EntityMappings.GetDataItemName(in typeName);
 	}
 
 	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext)

@@ -36,4 +36,5 @@ public abstract class SerializerConfiguration : ITextConfiguration, ISerializerC
 	/// <inheritdoc />
 	public Encoding Encoding { get; set; } = Encoding.Default;
 	/// <inheritdoc />
-	public string NewLine { get; set; } = LineEndings.Environment;}
+	public string NewLine { get; set; } = LineEndings.Environment;
+}

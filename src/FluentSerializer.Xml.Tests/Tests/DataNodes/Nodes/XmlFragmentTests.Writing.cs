@@ -12,7 +12,7 @@ namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
 public sealed partial class XmlFragmentTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange

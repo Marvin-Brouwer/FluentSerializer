@@ -21,7 +21,7 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 	/// <inheritdoc />
 	protected override DateOnly ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 		return DateOnly.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces);
@@ -29,7 +29,7 @@ public sealed class DefaultDateOnlyConverter : SimpleTypeConverter<DateOnly>
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateOnly value) =>
-		JsonCharacterConstants.PropertyWrapCharacter + 
+		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToString(DateTimeConstants.IsoDateFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 }

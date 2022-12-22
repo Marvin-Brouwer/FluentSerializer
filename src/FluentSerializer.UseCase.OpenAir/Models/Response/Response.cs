@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using FluentSerializer.UseCase.OpenAir.Models.Base;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Response;
 

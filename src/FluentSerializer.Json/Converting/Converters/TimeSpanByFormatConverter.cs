@@ -49,8 +49,8 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 	}
 
 	/// <inheritdoc />
-	protected override string ConvertToString(in TimeSpan value) => 
-		JsonCharacterConstants.PropertyWrapCharacter + 
+	protected override string ConvertToString(in TimeSpan value) =>
+		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 }

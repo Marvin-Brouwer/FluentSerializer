@@ -10,7 +10,7 @@ namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
 public sealed partial class JsonCommentMultiLineTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentMultiLine_FormatWriteNull_ReturnsCommentMultiLine()
 	{
 		// Arrange
@@ -26,7 +26,7 @@ public sealed partial class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentMultiLine_FormatWriteNull_ReturnsEmptyCommentMultiLine()
 	{
 		// Arrange
@@ -42,7 +42,7 @@ public sealed partial class JsonCommentMultiLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentMultiLine_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

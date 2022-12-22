@@ -10,7 +10,7 @@ namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
 /// <summary>
 /// Get's the name of the current response's data type
 /// </summary>
-internal class ResponseTypeNamingStrategy : INamingStrategy
+internal sealed class ResponseTypeNamingStrategy : INamingStrategy
 {
 	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext)
 	{
@@ -19,7 +19,7 @@ internal class ResponseTypeNamingStrategy : INamingStrategy
 			: propertyType;
 
 		var itemNamingStrategy = namingContext.FindNamingStrategy(in genericTargetType)
-		                         ?? throw new NotSupportedException("Cannot support a type that is has no registered naming strategy");
+								 ?? throw new NotSupportedException("Cannot support a type that is has no registered naming strategy");
 
 		return itemNamingStrategy.SafeGetName(propertyInfo, propertyType, namingContext);
 	}

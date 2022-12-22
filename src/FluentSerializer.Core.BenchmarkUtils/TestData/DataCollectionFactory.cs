@@ -15,7 +15,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 #if (RELEASE)
 	protected virtual int[] ItemCount => new [] { 20, 200, 2000, 20000 };
 #else
-	protected virtual int[] ItemCount =>  new[] { 10, 20 };
+	protected virtual int[] ItemCount => new[] { 10, 20 };
 #endif
 
 	public void GenerateTestCaseFiles()
@@ -37,7 +37,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 		Console.Write($"Generating with bogus with a top level count of {dataCount}; ");
 		var (data, houseCount, peopleCount) = BogusConfiguration.Generate(BogusSeed, dataCount);
 		Console.ForegroundColor = ConsoleColor.DarkYellow;
-		Console.WriteLine($"Data composition: {dataCount:N0}/{houseCount:N0}/{peopleCount:N0}; Total unique items: {dataCount + houseCount + peopleCount :N0}");
+		Console.WriteLine($"Data composition: {dataCount:N0}/{houseCount:N0}/{peopleCount:N0}; Total unique items: {dataCount + houseCount + peopleCount:N0}");
 		Console.ResetColor();
 
 		try

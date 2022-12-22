@@ -1,5 +1,6 @@
-using System.Globalization;
 using FluentSerializer.Xml.Converting.Converters;
+
+using System.Globalization;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
 

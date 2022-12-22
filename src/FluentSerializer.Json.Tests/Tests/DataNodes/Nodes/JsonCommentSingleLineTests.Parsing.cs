@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
 public sealed partial class JsonCommentSingleLineTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
@@ -29,7 +29,7 @@ public sealed partial class JsonCommentSingleLineTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		InlineData(" "), InlineData("  "), InlineData("\t")]
 	public void ParseJson_ValidWithWhiteSpace_ReturnsObject(string space)
 	{
@@ -67,7 +67,7 @@ public sealed partial class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
 	{
 		// Arrange
@@ -83,7 +83,7 @@ public sealed partial class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange

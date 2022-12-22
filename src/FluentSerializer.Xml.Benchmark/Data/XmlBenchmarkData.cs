@@ -15,7 +15,7 @@ public sealed class XmlBenchmarkData : DataCollectionFactory<IXmlElement>
 
 	protected override string GetStringFileName(int dataCount) => $"{nameof(XmlBenchmarkData)}-{dataCount}.xml";
 	protected override IXmlElement ConvertToData(List<ResidentialArea> data, int residentialAreaCount, long houseCount, long peopleCount) =>
-		Element("Data", 
+		Element("Data",
 			data.Select(area => area.ToXmlElement())
 				.Append(Attribute(nameof(residentialAreaCount), residentialAreaCount.ToString(CultureInfo.InvariantCulture)))
 				.Append(Attribute(nameof(houseCount), houseCount.ToString(CultureInfo.InvariantCulture)))

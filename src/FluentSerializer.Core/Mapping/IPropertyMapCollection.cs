@@ -1,6 +1,7 @@
+using FluentSerializer.Core.Configuration;
+
 using System.Collections.Generic;
 using System.Reflection;
-using FluentSerializer.Core.Configuration;
 
 namespace FluentSerializer.Core.Mapping;
 

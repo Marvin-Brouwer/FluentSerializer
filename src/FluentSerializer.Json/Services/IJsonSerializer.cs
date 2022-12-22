@@ -22,5 +22,5 @@ public interface IJsonSerializer : ISerializer
 	/// <summary>
 	/// Deserialize <paramref name="element"/> from a node representation to an instance of <typeparamref name="TModel"/>
 	/// </summary>
-	[return: MaybeNull] TModel? Deserialize<TModel>([MaybeNull, AllowNull] in IJsonContainer? element) where TModel: new ();
+	[return: MaybeNull] TModel? Deserialize<TModel>([MaybeNull, AllowNull] in IJsonContainer? element) where TModel : new();
 }

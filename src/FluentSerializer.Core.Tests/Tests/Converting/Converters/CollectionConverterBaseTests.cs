@@ -78,7 +78,7 @@ public sealed class CollectionConverterBaseTests
 	public void FinalizeEnumerableInstance_ReturnsExpectedCollectionType()
 	{
 		// Arrange
-		var input = new List<int>{ 1, 2, 3 };
+		var input = new List<int> { 1, 2, 3 };
 
 		var type1 = typeof(IEnumerable);
 		var type2 = typeof(int[]);

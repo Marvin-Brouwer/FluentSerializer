@@ -69,7 +69,7 @@ internal static class XmlNodeTests
 		public bool Equals(IDataNode? other) => throw new NotSupportedException("Out of test scope");
 		public bool Equals(IXmlNode? other) => throw new NotSupportedException("Out of test scope");
 
-		public HashCode GetNodeHash() => new ();
+		public HashCode GetNodeHash() => new();
 #pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
 	}
 }

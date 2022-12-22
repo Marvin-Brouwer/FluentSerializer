@@ -19,7 +19,7 @@ public readonly partial struct XmlAttribute
 			, parameterName: nameof(Name)
 #endif
 		);
-		
+
 		if (!writeNull && string.IsNullOrEmpty(Value)) return stringBuilder;
 
 		stringBuilder

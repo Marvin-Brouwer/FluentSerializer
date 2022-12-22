@@ -121,8 +121,8 @@ public abstract class StaticTestRunner
 	}
 
 #if (!NET6_0_OR_GREATER)
-		[System.Security.Permissions.PrincipalPermission(
-			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+	[System.Security.Permissions.PrincipalPermission(
+		System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
 	public static void Run(Assembly assembly, in string[] arguments, string dataType, IOrderer? orderer = null)
 	{
@@ -330,7 +330,7 @@ public abstract class StaticTestRunner
 #if (NET6_0_OR_GREATER)
 	private static string GetProcessFileName() => Environment.ProcessPath!;
 #else
-		private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
+	private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
 #endif
 
 	private static bool IsWindowsAdministrator()

@@ -1,6 +1,7 @@
 using BenchmarkDotNet.Attributes;
 
 using FluentSerializer.Core.Naming.NamingStrategies;
+
 using System;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
@@ -8,7 +9,7 @@ namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 [MemoryDiagnoser]
 public class NamingStrategyProfile_SnakeCase
 {
-	private static readonly SnakeCaseNamingStrategy NamingStrategy = new ();
+	private static readonly SnakeCaseNamingStrategy NamingStrategy = new();
 
 	[Benchmark]
 	public ReadOnlySpan<char> SnakeCase_ShortNamedClass() =>

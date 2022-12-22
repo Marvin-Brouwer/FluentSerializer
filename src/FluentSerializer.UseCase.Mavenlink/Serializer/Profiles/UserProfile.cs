@@ -8,13 +8,13 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.Profiles;
 public sealed class UserProfile : JsonSerializerProfile
 {
 	protected override void Configure()
-    {
-        For<User>()
-	        .Property(user => user.Id)
-	        .Property(user => user.Name)
-	        .Property(user => user.Age)
-	        .Property(user => user.AccountMembershipId)
-	        .PropertyForReference(user => user.AccountMembership)
+	{
+		For<User>()
+			.Property(user => user.Id)
+			.Property(user => user.Name)
+			.Property(user => user.Age)
+			.Property(user => user.AccountMembershipId)
+			.PropertyForReference(user => user.AccountMembership)
 			// Because of the custom fields allowing different types of values you don't know up front,
 			// you'll have to use a value of <see cref="IJsonValue"/>.
 			// Therefore, it's provably better to specifically target custom field values.

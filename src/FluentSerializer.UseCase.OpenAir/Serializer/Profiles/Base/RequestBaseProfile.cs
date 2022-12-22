@@ -13,7 +13,7 @@ public static class RequestBaseProfile
 	internal static IXmlProfileBuilder<TRequestObject> UseBase<TRequestObject>(this IXmlProfileBuilder<TRequestObject> builder)
 		where TRequestObject : RequestObject<object>, new()
 	{
-		builder 
+		builder
 			.Attribute(responseObject => responseObject.Type,
 				converter: Converter.For.RequestTypeValue)
 			.Child(response => response.Data,

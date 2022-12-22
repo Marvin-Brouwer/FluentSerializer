@@ -46,7 +46,7 @@ public class NonWrappedCollectionConverter : CollectionConverterBase, IXmlConver
 			: collection.GetEnumerator().Current?.GetType() ?? typeof(object);
 
 		var itemNamingStrategy = context.FindNamingStrategy(in genericTargetType)
-		                         ?? context.NamingStrategy;
+								 ?? context.NamingStrategy;
 
 		var itemName = itemNamingStrategy.SafeGetName(genericTargetType, context);
 		var elementsToDeserialize = parent.GetChildElements(itemName);

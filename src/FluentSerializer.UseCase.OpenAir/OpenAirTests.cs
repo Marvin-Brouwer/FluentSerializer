@@ -1,20 +1,23 @@
-using System;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
+
 using FluentSerializer.Core.Constants;
+using FluentSerializer.Core.Factories;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.TestUtils.Extensions;
 using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
 using FluentSerializer.Xml.Converter.DefaultXml.Converting.Extensions;
 using FluentSerializer.Xml.Converting;
-using FluentSerializer.Xml.Services;
-using Xunit;
-using FluentSerializer.Core.Factories;
 using FluentSerializer.Xml.Extensions;
+using FluentSerializer.Xml.Services;
+
+using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+
+using Xunit;
 
 namespace FluentSerializer.UseCase.OpenAir;
 

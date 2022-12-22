@@ -26,7 +26,7 @@ public abstract class XmlSerializerProfile : ISerializerProfile<XmlSerializerCon
 	/// <remarks>
 	/// Using an explicit interface here so it's not confusing to users of the <see cref="XmlSerializerProfile"/> but it's also not internal.
 	/// </remarks>
-	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough, 
+	[System.Diagnostics.DebuggerNonUserCode, System.Diagnostics.DebuggerStepThrough,
 	 System.Diagnostics.DebuggerHidden]
 	IReadOnlyCollection<IClassMap> ISerializerProfile<XmlSerializerConfiguration>.Configure(in XmlSerializerConfiguration configuration)
 	{
@@ -64,9 +64,9 @@ public abstract class XmlSerializerProfile : ISerializerProfile<XmlSerializerCon
 
 		// Store in a tuple for lazy evaluation
 		_classMaps.Add(new ClassMap(
-			in classType, 
+			in classType,
 			in direction,
-			tagNamingStrategy ?? _configuration.DefaultClassNamingStrategy, 
+			tagNamingStrategy ?? _configuration.DefaultClassNamingStrategy,
 			propertyMap.AsReadOnly()));
 
 		return builder;

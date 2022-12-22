@@ -13,7 +13,7 @@ namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
 public sealed partial class JsonPropertyTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -29,7 +29,7 @@ public sealed partial class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsNullValue()
 	{
 		// Arrange
@@ -45,7 +45,7 @@ public sealed partial class JsonPropertyTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

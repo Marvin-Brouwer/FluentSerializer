@@ -66,8 +66,8 @@ public sealed class ClassMapCollectionTests
 		result.Should()
 			.ThrowExactly<ArgumentException>()
 			.WithMessage(
-				"You cannot get a ClassMap for SerializerDirection.Both *"+
-			    "you can only register one as such! (Parameter 'direction')")
+				"You cannot get a ClassMap for SerializerDirection.Both *" +
+				"you can only register one as such! (Parameter 'direction')")
 			.WithParameterName(nameof(direction));
 	}
 
@@ -144,7 +144,8 @@ public sealed class ClassMapCollectionTests
 		result2.Should().NotBeNull();
 	}
 
-	private sealed  class TestClass {
+	private sealed class TestClass
+	{
 		public int Id { get; init; } = default!;
 	}
 }

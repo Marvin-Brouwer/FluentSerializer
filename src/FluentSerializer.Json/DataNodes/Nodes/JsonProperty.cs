@@ -21,7 +21,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 
 		if (value is JsonValue jsonValue)
 			return jsonValue.Value ?? JsonCharacterConstants.NullValue;
-		
+
 		return value.Name;
 	}
 
@@ -51,7 +51,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 		Guard.Against.InvalidName(in name);
 
 		Name = name;
-		HasValue = value is not null  && (value is not IJsonValue jsonValue || jsonValue.HasValue);
+		HasValue = value is not null && (value is not IJsonValue jsonValue || jsonValue.HasValue);
 
 		_children = new ReadOnlyCollection<IJsonNode>(new IJsonNode[] {
 			value ?? new JsonValue(null)

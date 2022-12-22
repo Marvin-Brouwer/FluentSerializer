@@ -80,7 +80,7 @@ public sealed partial class EnumConverterBaseTests
 	{
 		// Arrange
 		var sut = new TestConverter(EnumFormats.UseNumberValue);
-		
+
 		// Act
 		var result1 = sut.ConvertToEnum(MemberWithoutDescriptionOrEnumMemberValue.ToString(CultureInfo.InvariantCulture), typeof(TestValue));
 		var result2 = sut.ConvertToEnum(MemberWithDescriptionDataValue, typeof(TestValue));

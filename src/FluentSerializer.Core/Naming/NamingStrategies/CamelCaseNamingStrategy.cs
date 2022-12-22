@@ -31,8 +31,8 @@ public sealed class CamelCaseNamingStrategy : AbstractSpanNamingStrategy
 				continue;
 			}
 			if (currentChar == NamingConstants.SpecialCharacters.Underscore
-			||  currentChar == NamingConstants.SpecialCharacters.Plus
-			||  currentChar == NamingConstants.SpecialCharacters.Minus)
+			|| currentChar == NamingConstants.SpecialCharacters.Plus
+			|| currentChar == NamingConstants.SpecialCharacters.Minus)
 			{
 				if (sourceSpan.Length > iteration)
 				{

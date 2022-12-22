@@ -21,7 +21,7 @@ public sealed class UseXmlExtensionsTests
 
 		// Act
 		configurationStackMock.Object.UseEnum(EnumFormats.Default);
-		
+
 		// Assert
 		configurationStackMock
 			.Verify(

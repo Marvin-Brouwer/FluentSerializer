@@ -15,7 +15,7 @@ public sealed class ProjectProfile : JsonSerializerProfile
 	protected override void Configure()
 	{
 		For<Project>(
-				direction:SerializerDirection.Serialize
+				direction: SerializerDirection.Serialize
 			)
 			.Property(project => project.Id)
 			.Property(project => project.Name)

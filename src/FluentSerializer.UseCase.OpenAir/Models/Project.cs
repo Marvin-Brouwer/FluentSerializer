@@ -1,5 +1,6 @@
-﻿using System;
-using FluentSerializer.UseCase.OpenAir.Models.Base;
+﻿using FluentSerializer.UseCase.OpenAir.Models.Base;
+
+using System;
 
 namespace FluentSerializer.UseCase.OpenAir.Models;
 

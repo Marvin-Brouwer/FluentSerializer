@@ -71,7 +71,7 @@ public sealed partial class EnumConverterBaseTests
 	}
 
 	/// <inheritdoc />
-	private class TestConverter : EnumConverterBase
+	private sealed class TestConverter : EnumConverterBase
 	{
 		/// <inheritdoc cref="EnumConverterBase.ConvertToString" />
 		public new (string value, bool isNumeric)? ConvertToString(in object value, in Type enumType)

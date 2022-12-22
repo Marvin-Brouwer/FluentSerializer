@@ -88,7 +88,7 @@ public sealed class ConfigurationStackTests
 	{
 		// Arrange
 		var item = 4;
-		var expected = new [] { 4, 3, 2, 1 };
+		var expected = new[] { 4, 3, 2, 1 };
 
 		// Act
 		var result = Sut.Use(item, true).ToArray();
@@ -104,7 +104,7 @@ public sealed class ConfigurationStackTests
 	{
 		// Arrange
 		var sut = new ConfigurationStack<int>(new TestComparer(),
-			0, 1, 2, 3, 4 ,5 ,6, 7, 8, 9
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9
 		);
 		var expected = new[]
 		{

@@ -67,7 +67,8 @@ public sealed class NamingExtensionTests
 		result.Should().ThrowExactly<InvalidCastException>();
 	}
 
-	private sealed class TestClass {
+	private sealed class TestClass
+	{
 
 		public int Field = default!;
 		public int Id { get; init; } = default!;

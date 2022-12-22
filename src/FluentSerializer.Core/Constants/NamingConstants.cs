@@ -17,9 +17,9 @@ internal static class NamingConstants
 	/// </remarks>
 	internal static readonly string ValidNamePattern =
 		@"^[" +
-			@"\w" + 
-			SpecialCharacters.Underscore + 
-			@"\" + SpecialCharacters.Minus + 
+			@"\w" +
+			SpecialCharacters.Underscore +
+			@"\" + SpecialCharacters.Minus +
 			SpecialCharacters.Plus +
 		@"]*$";
 

@@ -1,14 +1,15 @@
+using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Naming;
+using FluentSerializer.Core.Naming.NamingStrategies;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Profiles;
+using FluentSerializer.UseCase.Mavenlink.Models;
+using FluentSerializer.UseCase.Mavenlink.Models.Entities;
+using FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
+using FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
+
 using System;
 using System.Linq.Expressions;
-using FluentSerializer.Json.Converting;
-using FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
-using FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
-using FluentSerializer.Core.Configuration;
-using FluentSerializer.UseCase.Mavenlink.Models.Entities;
-using FluentSerializer.Core.Naming.NamingStrategies;
-using FluentSerializer.UseCase.Mavenlink.Models;
 
 namespace FluentSerializer.UseCase.Mavenlink.Extensions;
 

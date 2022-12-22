@@ -14,7 +14,7 @@ public static class ConverterExtensions
 	/// <inheritdoc cref="Converters.RequestTypeValueConverter"/>
 	public static RequestTypeValueConverter RequestTypeValue(this IUseXmlConverters _) => RequestTypeValueConverter;
 	/// <inheritdoc cref="Converters.StringBitBooleanConverter"/>
-	public static StringBitBooleanConverter StringBitBoolean (this IUseXmlConverters _) => StringBitBooleanConverter;
+	public static StringBitBooleanConverter StringBitBoolean(this IUseXmlConverters _) => StringBitBooleanConverter;
 	/// <inheritdoc cref="Converters.SimpleDateConverter"/>
 	public static SimpleDateConverter SimpleDate(this IUseXmlConverters _) => SimpleDateConverter;
 }

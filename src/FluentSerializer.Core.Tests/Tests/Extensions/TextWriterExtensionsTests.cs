@@ -116,8 +116,8 @@ public sealed class TextWriterExtensionsTests
 		// Assert
 		result.ToString().Should()
 			.Be($"{nameof(format)}={format};" +
-			    $"{nameof(indent)}={(format ? indent : 0)};" +
-			    $"{nameof(writeNull)}={writeNull};");
+				$"{nameof(indent)}={(format ? indent : 0)};" +
+				$"{nameof(writeNull)}={writeNull};");
 	}
 
 	private sealed class TestSerializerConfiguration : SerializerConfiguration { }

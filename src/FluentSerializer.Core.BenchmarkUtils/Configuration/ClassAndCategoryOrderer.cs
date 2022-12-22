@@ -9,7 +9,8 @@ using System.Linq;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Configuration;
 
-public sealed class ClassAndCategoryOrderer : IOrderer {
+public sealed class ClassAndCategoryOrderer : IOrderer
+{
 	public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase, IEnumerable<BenchmarkLogicalGroupRule>? order = null) =>
 		benchmarksCase
 			.OrderBy(benchmark => benchmark.Descriptor.Type.FullName)

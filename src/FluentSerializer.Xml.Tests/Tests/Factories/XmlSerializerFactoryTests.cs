@@ -176,7 +176,7 @@ public sealed class XmlSerializerFactoryTests
 		resultWithSetConfiguration.Should().NotBeNull();
 	}
 
-	private sealed class TestConfiguration: SerializerConfiguration { }
+	private sealed class TestConfiguration : SerializerConfiguration { }
 
 	private sealed class TestSerializerProfile : XmlSerializerProfile, ISerializerProfile<XmlSerializerConfiguration>
 	{

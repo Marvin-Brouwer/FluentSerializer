@@ -11,7 +11,7 @@ namespace FluentSerializer.UseCase.Mavenlink.Serializer.NamingStrategies;
 /// <summary>
 /// Get's the name of the reference group pointer for this reference
 /// </summary>
-internal class ReferenceGroupNamingStrategy : INamingStrategy
+internal sealed class ReferenceGroupNamingStrategy : INamingStrategy
 {
 	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext)
 	{
