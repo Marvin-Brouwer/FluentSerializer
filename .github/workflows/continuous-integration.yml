@@ -42,3 +42,25 @@ jobs:
     needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
+    with:
+      libraryName: "Core"
+      reportPrefix: "core"
+      jobType: "Long"
+  benchmark-json:
+    name: "Benchmark"
+    needs: [benchmark-core]
+    uses: ./.github/workflows/continuous-integration.benchmark.yml
+    secrets: inherit
+    with:
+      libraryName: "Json"
+      reportPrefix: "json-serializer"
+      jobType: "Default"
+  benchmark-xml:
+    name: "Benchmark"
+    needs: [benchmark-core]
+    uses: ./.github/workflows/continuous-integration.benchmark.yml
+    secrets: inherit
+    with:
+      libraryName: "Xml"
+      reportPrefix: "xml-serializer"
+      jobType: "Default"
