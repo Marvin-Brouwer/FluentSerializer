@@ -21,8 +21,8 @@ internal static class EntityMappings
 
 	internal static string GetDataItemName(in string entityName)
 	{
-		if (SingularOverrides.ContainsKey(entityName))
-			return SingularOverrides[entityName];
+		if (SingularOverrides.TryGetValue(entityName, out var value))
+			return value;
 
 		return ConvertName(in entityName);
 	}
