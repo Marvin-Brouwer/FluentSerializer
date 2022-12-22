@@ -170,11 +170,27 @@ public abstract class StaticTestRunner
 			return;
 		}
 
+		var osName = GetOsName();
 		var runtimeVersion = GetRuntimeVersion();
-		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
+		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{osName}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
 		var directory = markdownSummaryFile.Directory!;
 
 		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
+	}
+
+	private static string GetOsName()
+	{
+#if NET5_0_OR_GREATER
+		var runtimeIdentifier = RuntimeInformation.RuntimeIdentifier;
+#else
+		var runtimeIdentifier = (string?)AppContext.GetData("RUNTIME_IDENTIFIER");
+		if (runtimeIdentifier is null) return "unknown";
+#endif
+
+		return runtimeIdentifier
+			.Split('-')[0]
+			.Split('.')[0]
+			.ToLowerInvariant();
 	}
 
 	private static string GetRuntimeVersion()
