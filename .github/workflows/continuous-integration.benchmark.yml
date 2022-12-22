@@ -56,7 +56,6 @@ jobs:
         --configuration "Release"
         --framework ${{ matrix.version.framework }}
         --jobType=${{matrix.library.jobType}}
-        2>/dev/null
 
         echo "::remove-matcher owner=csc::"
 

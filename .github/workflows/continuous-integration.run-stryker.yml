@@ -63,7 +63,6 @@ jobs:
         --nologo
         --configuration "Debug"
         --verbosity quiet
-        2>/dev/null
 
         echo "::echo::on"
 
