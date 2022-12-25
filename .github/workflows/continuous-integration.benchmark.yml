@@ -13,7 +13,8 @@ on:
         required: true
       jobTypeSecondary:
         type: string
-        required: true
+        required: false
+        default: "Default"
 
 
 defaults:
@@ -31,8 +32,6 @@ jobs:
           {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
-        # Removed `windows-latest` because of provisioning issues
-        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
         os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
