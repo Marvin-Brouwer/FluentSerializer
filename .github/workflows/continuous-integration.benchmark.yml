@@ -31,8 +31,9 @@ jobs:
           {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
-        # Using `windows-2019` because of provisioning issues
-        os: [ubuntu-latest, windows-2019]
+        # Removed `windows-latest` because of provisioning issues
+        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: 🗃 Setup WSL

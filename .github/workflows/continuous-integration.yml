@@ -39,7 +39,7 @@ jobs:
 
   benchmark-core:
     name: "Benchmark Core libraries"
-    # needs: [stryker]
+    needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -49,7 +49,7 @@ jobs:
       jobTypeSecondary: "Default"
   benchmark-json:
     name: "Benchmark JSON serializer"
-    # needs: [stryker]
+    needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -59,7 +59,7 @@ jobs:
       jobTypeSecondary: "Short"
   benchmark-xml:
     name: "Benchmark XML serializer"
-    # needs: [stryker]
+    needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
