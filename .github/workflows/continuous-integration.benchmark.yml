@@ -33,7 +33,7 @@ jobs:
         ]
         # Removed `windows-latest` because of provisioning issues
         # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
-        os: [ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: 🗃 Setup WSL
@@ -61,7 +61,6 @@ jobs:
     # Benchmark the code in the given library
     ###
     - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
-      shell: bash
       run: >-
         dotnet run
         --configuration "Release"
