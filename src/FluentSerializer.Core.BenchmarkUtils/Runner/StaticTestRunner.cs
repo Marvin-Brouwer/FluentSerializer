@@ -28,6 +28,7 @@ using BenchmarkDotNet.Order;
 
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Extensions;
+using System.Collections.Immutable;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -99,16 +100,16 @@ public abstract class StaticTestRunner
 	{
 #if DEBUG
 		_ = parameters;
-
 		return Job.Dry;
 #else
-		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
+		var runType = Array.Find(parameters, parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 
 		var parsedRunType = runType switch
 		{
 			null => Job.Default,
+			"--jobType=Default" => Job.Default,
 			"--jobType=Dry" => Job.Dry,
 			"--jobType=Short" => Job.ShortRun,
 			"--jobType=Medium" => Job.MediumRun,
@@ -124,7 +125,7 @@ public abstract class StaticTestRunner
 		else
 		{
 			Console.WriteLine($"Input '{runType}' is not a valid jobType");
-			Console.WriteLine($"Using '--jobType=Default' instead");
+			Console.WriteLine("Using '--jobType=Default' instead");
 		}
 
 		Console.ResetColor();
@@ -146,12 +147,18 @@ public abstract class StaticTestRunner
 		var config = CreateConfig(arguments, orderer);
 		if (arguments.Contains("--quick-exit"))
 		{
+			var cancellationValidator = CancellationValidator.Default;
+
 			Console.WriteLine("Quick exit mode enabled.");
-			Console.CancelKeyPress += (_, _) =>
+			config  = config.AddValidator(cancellationValidator);
+			Console.CancelKeyPress += (_, e) =>
 			{
 				Console.WriteLine("Cancellation signal recieved.");
+				cancellationValidator.RequestCancellation();
+
 				// Quick kill child processes
 				Process.GetCurrentProcess().KillTree(TimeSpan.Zero);
+				Process.GetCurrentProcess().Kill();
 			};
 		}
 
@@ -183,7 +190,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting console summary fileName");
 		Console.ResetColor();
 
-		var consoleFilePattern = "*-report-console.md";
+		const string consoleFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(consoleFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -253,7 +260,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting GitHub summary filename");
 		Console.ResetColor();
 
-		var gitHubFilePattern = "*-report-console.md";
+		const string gitHubFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(gitHubFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -285,9 +292,9 @@ public abstract class StaticTestRunner
 		content.Close();
 
 		text = text.Replace(
-			@$"{Environment.NewLine}{Environment.NewLine}|",
-			@$"{Environment.NewLine}{Environment.NewLine}```txt{Environment.NewLine}|");
-		text += @$"``` {Environment.NewLine}";
+			$"{Environment.NewLine}{Environment.NewLine}|",
+			$"{Environment.NewLine}{Environment.NewLine}```txt{Environment.NewLine}|");
+		text += $"``` {Environment.NewLine}";
 
 		File.WriteAllText(gitHubSummaryFileName, text);
 	}

@@ -31,7 +31,8 @@ jobs:
           {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
-        os: [ubuntu-latest, windows-latest]
+        # Using `windows-2019` because of provisioning issues
+        os: [ubuntu-latest, windows-2019]
     runs-on: ${{ matrix.os }}
     steps:
     - name: 🗃 Setup WSL
