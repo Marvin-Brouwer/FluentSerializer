@@ -14,8 +14,7 @@ on:
       jobTypeSecondary:
         type: string
         required: false
-        default: "Default"
-
+        default: "Short"
 
 defaults:
   run:
@@ -23,17 +22,21 @@ defaults:
 
 jobs:
   benchmark:
-    name: "${{ matrix.version.framework }} ${{ matrix.os }}"
+    name: "${{ matrix.version.framework }} ${{ matrix.os.displayName }}"
     strategy:
       fail-fast: true
+      max-parallel: 1
       matrix:
         version: [
           {tag: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
           {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
-        os: [windows-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        os: [
+          { name: windows-latest, displayName: windows, rid: "win-x64" },
+          { name: ubuntu-latest, displayName: linux, rid: "linux-x64" }
+        ]
+    runs-on: ${{ matrix.os.name }}
     steps:
     - name: 🗃 Setup WSL
       if: runner.os == 'Windows'
@@ -60,23 +63,27 @@ jobs:
     # Benchmark the code in the given library
     ###
     - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
+      shell: pwsh
       run: >-
         dotnet run
         --configuration "Release"
         --framework ${{ matrix.version.framework }}
+        --runtime ${{ matrix.os.rid }}
+        --verbosity "detailed"
+        --
         --jobType=${{ matrix.version.jobType }}
         --quick-exit
 
-        echo "::remove-matcher owner=csc::"
+        Write-Host "::remove-matcher owner=csc::"
 
-        echo "::remove-matcher owner=dotnet::"
+        Write-Host "::remove-matcher owner=dotnet::"
 
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/
     ###
     # 🗃 Collect benchmark reports
     ###
     - name: 🗃 Collect benchmark reports
-      if: ${{ !cancelled() }}
+      if: ${{ !cancelled() && success() }}
       run: |-
         dir=$(pwd);
         mkdir $dir/benchmark-results
@@ -89,7 +96,7 @@ jobs:
     # Publish benchmark results to job overview
     ###
     - name: 📈 Report benchmarks
-      if: ${{ !cancelled() && matrix.reportSummary }}
+      if: ${{ !cancelled() && success() && matrix.reportSummary }}
       run: |-
         cat ./${{ inputs.reportPrefix }}-benchmark-${{ matrix.version.report }}-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/BenchmarkDotNet.Artifacts/
@@ -97,7 +104,7 @@ jobs:
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
-      if: ${{ !cancelled() }}
+      if: ${{ !cancelled() && success() }}
       uses: actions/upload-artifact@v3
       with:
         name: benchmark-results

@@ -5,7 +5,9 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.TestUtils.Helpers;
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
@@ -21,6 +23,9 @@ public abstract class WriteProfile : IDisposable
 	[GlobalSetup]
 	public virtual void GlobalSetup()
 	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+
 		_writeStream = new MemoryStream();
 		_streamWriter = new StreamWriter(_writeStream);
 	}

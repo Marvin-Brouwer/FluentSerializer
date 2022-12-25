@@ -29,6 +29,7 @@ using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Extensions;
 using System.Collections.Immutable;
+using BenchmarkDotNet.Environments;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -55,6 +56,8 @@ public abstract class StaticTestRunner
 			.AddJob(CreateJob(arguments))
 			.WithCultureInfo(AppCulture)
 			.AddExporter(MarkdownExporter.Console)
+			.StopOnFirstError(true)
+			.WithOptions(ConfigOptions.GenerateMSBuildBinLog)
 			.WithSummaryStyle(SummaryStyle.Default
 				.WithCultureInfo(AppCulture)
 			);
@@ -75,34 +78,36 @@ public abstract class StaticTestRunner
 
 	private static Job CreateJob(string[] parameters)
 	{
-		return CreateBasicJob(parameters)
+		var runType = Array.Find(parameters, parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
+
+		return CreateBasicJob(runType)
 #if (DEBUG)
 			.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
 #endif
 			.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 			.WithMinIterationCount(1)
 #if (!DEBUG)
-			.WithMaxRelativeError(0.001)
-			.WithMaxAbsoluteError(TimeInterval.FromNanoseconds(10))
+			.WithMaxRelativeError(0.5)
+			.WithMaxAbsoluteError(TimeInterval.FromMicroseconds(10))
 #endif
 			// Make sure the compile projects have access to the correct build tool
 			.WithNuGet("Microsoft.Net.Compilers.Toolset")
 			.WithId(typeof(BenchmarkRunner).Assembly.FullName)
 			.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects") ?? "0")
 			.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects") ?? "0")
-			.WithGcForce(true)
 			// This is set to false until the new benchmark dotnet version is released:
 			// https://github.com/dotnet/BenchmarkDotNet/issues/1519
-			.WithGcAllowVeryLargeObjects(false);
+			.WithGcAllowVeryLargeObjects(false)
+			.WithGcForce(true)
+			.WithPowerPlan(PowerPlan.HighPerformance);
 	}
 
-	private static Job CreateBasicJob(string[] parameters)
+	private static Job CreateBasicJob(string? runType)
 	{
 #if DEBUG
-		_ = parameters;
+		_ = runType;
 		return Job.Dry;
 #else
-		var runType = Array.Find(parameters, parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 
@@ -142,6 +147,8 @@ public abstract class StaticTestRunner
 	public static void Run(Assembly assembly, in string[] arguments, string dataType, IOrderer? orderer = null)
 	{
 		RequireElevatedPermissions(in arguments);
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
 
 		var jobDate = DateTime.UtcNow;
 		var config = CreateConfig(arguments, orderer);

@@ -50,7 +50,7 @@ jobs:
       jobTypeSecondary: "Medium"
   benchmark-json:
     name: "Benchmark JSON serializer"
-    needs: [stryker]
+    # needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
@@ -59,7 +59,7 @@ jobs:
       jobTypePrimary: "Default"
   benchmark-xml:
     name: "Benchmark XML serializer"
-    needs: [stryker]
+    # needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:

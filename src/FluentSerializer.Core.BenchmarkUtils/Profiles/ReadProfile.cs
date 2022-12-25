@@ -3,7 +3,9 @@ using BenchmarkDotNet.Attributes;
 using FluentSerializer.Core.BenchmarkUtils.TestData;
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Profiles;
 
@@ -20,6 +22,9 @@ public abstract class ReadProfile : IDisposable
 	[GlobalSetup]
 	public void GlobalSetup()
 	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+
 		_textStream = CaseValue.GetData();
 		_reader = new StreamReader(_textStream);
 	}
