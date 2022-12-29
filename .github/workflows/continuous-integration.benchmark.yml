@@ -108,7 +108,7 @@ jobs:
     # Publish benchmark results to job overview
     ###
     - name: 📈 Report benchmarks
-      if: ${{ !cancelled() && success() && matrix.reportSummary }}
+      if: ${{ !cancelled() && success() && matrix.version.reportSummary }}
       run: |-
         cat ./${{ inputs.reportPrefix }}-benchmark-${{ matrix.version.report }}-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/BenchmarkDotNet.Artifacts/
