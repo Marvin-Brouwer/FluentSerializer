@@ -20,15 +20,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
-		<PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.2" />
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
+		<PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.3" />
 		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.4.0" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.50.0.58025">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.51.0.59060">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
