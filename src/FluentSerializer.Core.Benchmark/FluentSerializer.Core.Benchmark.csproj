@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
-		<PackageReference Include="Moq" Version="4.18.3" />
+		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.51.0.59060">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
