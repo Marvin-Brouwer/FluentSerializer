@@ -86,10 +86,8 @@ public abstract class StaticTestRunner
 #endif
 			.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 			.WithMinIterationCount(1)
-#if (!DEBUG)
-			.WithMaxRelativeError(0.5)
-			.WithMaxAbsoluteError(TimeInterval.FromMicroseconds(10))
-#endif
+			.WithMaxRelativeError(0.001)
+			.WithMaxAbsoluteError(TimeInterval.FromNanoseconds(10))
 			// Make sure the compile projects have access to the correct build tool
 			.WithNuGet("Microsoft.Net.Compilers.Toolset")
 			.WithId(typeof(BenchmarkRunner).Assembly!.FullName!)
