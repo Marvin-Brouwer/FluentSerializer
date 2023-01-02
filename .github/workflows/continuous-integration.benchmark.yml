@@ -18,6 +18,8 @@ on:
 
 defaults:
   run:
+    # Set the shell to wsl default, however empty bash caused issues so using this:
+    # https://github.com/Vampire/setup-wsl#wsl-shell-command
     shell: bash --noprofile --norc -euo pipefail {0}
 
 jobs:
@@ -25,18 +27,27 @@ jobs:
     name: "${{ matrix.version.framework }} ${{ matrix.os.displayName }}"
     strategy:
       fail-fast: true
-      max-parallel: 1
       matrix:
+        # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
         version: [
           {tag: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
           {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
+        # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
+        # ---
+        # Temporarily removed `windows-latest`, because of provisioning issues
+        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
         os: [
-          { name: windows-latest, displayName: windows, rid: "win-x64" },
+          # { name: windows-latest, displayName: windows, rid: "win-x64" },
           { name: ubuntu-latest, displayName: linux, rid: "linux-x64" }
         ]
     runs-on: ${{ matrix.os.name }}
+    ###
+    # 🗃 Setup WSL
+    #
+    # Enable WSL when running on windows, this will help making the scripts more uniform
+    ###
     steps:
     - name: 🗃 Setup WSL
       if: runner.os == 'Windows'
@@ -61,6 +72,7 @@ jobs:
     # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #
     # Benchmark the code in the given library
+    # `shell: pwsh` because that'll ensure the native process is used when `dotnet run` is called.
     ###
     - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
       shell: pwsh
@@ -96,7 +108,7 @@ jobs:
     # Publish benchmark results to job overview
     ###
     - name: 📈 Report benchmarks
-      if: ${{ !cancelled() && success() && matrix.reportSummary }}
+      if: ${{ !cancelled() && success() && matrix.version.reportSummary }}
       run: |-
         cat ./${{ inputs.reportPrefix }}-benchmark-${{ matrix.version.report }}-github.md >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/BenchmarkDotNet.Artifacts/

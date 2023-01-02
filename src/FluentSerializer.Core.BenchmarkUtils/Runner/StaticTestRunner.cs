@@ -92,7 +92,7 @@ public abstract class StaticTestRunner
 #endif
 			// Make sure the compile projects have access to the correct build tool
 			.WithNuGet("Microsoft.Net.Compilers.Toolset")
-			.WithId(typeof(BenchmarkRunner).Assembly.FullName)
+			.WithId(typeof(BenchmarkRunner).Assembly!.FullName!)
 			.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects") ?? "0")
 			.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects") ?? "0")
 			// This is set to false until the new benchmark dotnet version is released:
