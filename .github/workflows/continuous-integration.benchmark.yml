@@ -18,7 +18,7 @@ on:
 
 defaults:
   run:
-    # Set the shell to wsl default, however empty bash caused issues so using this:
+    # Set the shell to wsl default, empty bash caused issues so using this:
     # https://github.com/Vampire/setup-wsl#wsl-shell-command
     shell: bash --noprofile --norc -euo pipefail {0}
 
