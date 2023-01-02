@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using FluentSerializer.UseCase.Mavenlink.Extensions;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
+
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FluentSerializer.UseCase.Mavenlink.Models;
 
@@ -21,16 +22,16 @@ internal static class EntityMappings
 
 	internal static string GetDataItemName(in string entityName)
 	{
-		if (SingularOverrides.ContainsKey(entityName))
-			return SingularOverrides[entityName];
+		if (SingularOverrides.TryGetValue(entityName, out var value))
+			return value;
 
 		return ConvertName(in entityName);
 	}
 
 	internal static string GetDataGroupName(in string entityName)
 	{
-		if (PluralOverrides.ContainsKey(entityName))
-			return PluralOverrides[entityName];
+		if (PluralOverrides.TryGetValue(entityName, out var value))
+			return value!;
 
 		return string.Concat(GetDataItemName(in entityName), 's');
 	}

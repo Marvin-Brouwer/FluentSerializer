@@ -34,8 +34,8 @@ public readonly partial struct JsonObject : IJsonObject
 		_lastPropertyIndex = null;
 
 		if (properties is null
-		    || properties.Equals(Enumerable.Empty<IJsonObjectContent>())
-		    || properties.Equals(Array.Empty<IJsonObjectContent>()))
+			|| properties.Equals(Enumerable.Empty<IJsonObjectContent>())
+			|| properties.Equals(Array.Empty<IJsonObjectContent>()))
 		{
 			_children = Array.Empty<IJsonNode>();
 		}

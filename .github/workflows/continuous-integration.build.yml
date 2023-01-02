@@ -1,14 +1,19 @@
-name: "Continuous integration - Build and Test"
+name: "Continuous integration - Build"
 on:
   workflow_call:
-    secrets:
-      SONAR_TOKEN:
-        required: true
 
 jobs:
-  build-test:
-    name: "Build and Test"
+  build:
+    name: "Build ${{ matrix.version.framework }}"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        version: [
+          {tag: "7.0.x", framework: "net7.0"},
+          {tag: "6.0.x", framework: "net6.0"},
+          {tag: "3.1.x", framework: "netstandard2.1"}
+        ]
     steps:
     ###
     # Checkout repository
@@ -17,7 +22,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         lfs: true
-        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
     ###
     # 🧰 Install .Net SDKs
     #
@@ -26,193 +30,26 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        include-prerelease: true
-        dotnet-version: |
-          3.1.x
-          6.0.x
-    ###
-    # 🧰 Setup .Net tools
-    #
-    # Register tools necessary to run the `test` pipeline-job
-    ###
-    - name: 🧰 Setup .NET tools
-      run: |-
-        dotnet tool install --global dotnet-reportgenerator-globaltool
-        dotnet tool install --global dotnet-coverage
-        dotnet tool install --global coverlet.console
-    ###
-    # 🧰 Setup SonarCloud scanner
-    #
-    # Installs and initializes the SonarCloud scanner
-    ###
-    - name: 🧰 Setup SonarCloud scanner
-      shell: pwsh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: >-
-        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
-
-        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
-
-        ./.sonar/scanner/dotnet-sonarscanner begin
-        /k:"Marvin-Brouwer_FluentSerializer"
-        /o:"marvin-brouwer"
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        /d:sonar.host.url="https://sonarcloud.io"
-        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
-    ###
-    # 🗃 Restore dependencies
-    #
-    # Fill the NuGet store with necessary libraries
-    ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
+        dotnet-version: ${{ matrix.version.tag }}
     ###
     # 🛠 Build
-    #
-    # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release"
+      run: |-
+        dotnet build --nologo --configuration "Release"
     ###
-    # 🗃 Publish 'library-binaries' artifacts
+    # 🗃 Publish 'library-binaries-${{ matrix.version }}' artifacts
     ###
-    - name: 🗃 Publish 'library-binaries' artifacts
+    - name: 🗃 Publish 'library-binaries-${{ matrix.version.tag }}' artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: library-binaries
+        name: library-binaries-${{ matrix.version.tag }}
         path: |
-          ./src/**/bin/Release/*/*.*
+          ./src/**/bin/Release/${{ matrix.version.framework }}/*.*
           !./src/*.Tests
           !./src/*.TestUtils
           !./src/*.Usecase.*
           !./src/*.Benchmark
           !./src/*.BenchmarkUtils
-        retention-days: 1
-    ###
-    # 🗃 Publish 'benchmark-binaries' artifacts
-    ###
-    - name: 🗃 Publish 'benchmark-binaries' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: benchmark-binaries
-        path: |
-          ./src/*.Benchmark/bin/Release/*/*.*
-          ./src/*/bin/Release/*/ref/*.*
-          ./src/*/obj/Release/*/ref/*.*
-          ./src/*/bin/Release/*/apphost
-          ./src/*/obj/Release/*/apphost
-          ./src/*.BenchmarkUtils/bin/Release/*/*.*
-          ./src/*.TestUtils/bin/Release/*/*.*
-        retention-days: 1
-    ###
-    # 🧪 Run unit tests
-    #
-    # Run the unit tests of category `UnitTest` and generate a code coverage report.
-    ###
-    - name: 🧪 Run unit tests
-      run: >-
-        echo "## Test results  " >>$GITHUB_STEP_SUMMARY
-
-        dotnet test --verbosity:normal
-        --no-build --no-restore --nologo
-        --configuration="Release"
-        --logger:"console;verbosity=detailed"
-        --logger:"GitHubActions"
-        --logger "trx;LogFileName=test-results.trx"
-        --collect "DotnetCodeCoverage"
-        --collect "XPlat Code coverage"
-        --results-directory:"${{github.workspace}}/test-results"
-        --filter:"Category=UnitTest"
-        /p:CollectCoverage="true"
-        /p:CoverletOutputFormat="opencover"
-        /p:CoverletOutput="${{github.workspace}}/test-results/coverage/"
-        /p:MergeWith="${{github.workspace}}/test-results/coverage/"
-        /p:Exclude="[*Tests]*%2c[*TestUtils]*%2c[*UseCase*]*"
-        /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
-
-        reportgenerator
-        -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
-        -targetdir:"${{github.workspace}}/test-results/coverage"
-        -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
-
-        echo "  " >>$GITHUB_STEP_SUMMARY
-      working-directory: ${{github.workspace}}
-    ###
-    # 🧪 Run integration tests
-    #
-    # Run the unit tests of category `IntegrationTest` to verify the integration of various unit-tests.
-    ###
-    - name: 🧪 Run integration tests
-      run: >-
-        dotnet test --verbosity:normal
-        --no-build --no-restore --nologo
-        --configuration="Release"
-        --logger:"console;verbosity=detailed"
-        --logger:"GitHubActions"
-        --filter:"Category=IntegrationTest"
-        /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
-      working-directory: ${{github.workspace}}
-    ###
-    # 🧪 Run use-case tests
-    #
-    # Run the unit tests of category `UseCase` to illustrate the library still works as intended.
-    # This is basically a kind of integration test.
-    ###
-    - name: 🧪 Run use-case tests
-      run: >-
-        dotnet test --verbosity:normal
-        --no-build --no-restore --nologo
-        --configuration="Release"
-        --logger:"console;verbosity=detailed"
-        --logger:"GitHubActions"
-        --filter:"Category=UseCase"
-        /clp:forceconsolecolor
-        "${{github.workspace}}/FluentSerializer.sln";
-      working-directory: ${{github.workspace}}
-    ###
-    # 🗃 Publish 'unit-test-coverage' artifacts
-    ###
-    - name: 🗃 Publish 'unit-test-coverage' artifacts
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: unit-test-coverage
-        path: ./test-results/coverage
-        retention-days: 1
-    ###
-    # 🔬 Perform SonarCloud Analysis
-    ###
-    - name: 🔬 Perform SonarCloud Analysis
-      shell: pwsh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: >-
-        ./.sonar/scanner/dotnet-sonarscanner end
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-    ###
-    # 🔬 SonarCloud Quality Gate
-    ###
-    - name: 🔬 SonarCloud Quality Gate
-      id: sonarcloud-quality-gate-check
-      uses: sonarsource/sonarqube-quality-gate-action@master
-      env:
-       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
-    ###
-    # 🔬 Report SonarCloud Quality Gate
-    ###
-    - name: 🔬 Report SonarCloud Quality Gate
-      if: always()
-      run: |-
-        dashboardUrl=$(sed -n '5p' .sonarqube/out/.sonar/report-task.txt | cut -d '=' -f 2-);
-
-        echo "## SonarCloud Scan  " >>$GITHUB_STEP_SUMMARY
-        echo "[Show in SonarCloud](${dashboardUrl})" >>$GITHUB_STEP_SUMMARY
+        retention-days: 20

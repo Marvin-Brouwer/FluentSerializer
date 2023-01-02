@@ -69,8 +69,8 @@ public static class TestDataExtensions
 
 		var properties = new List<IJsonProperty> {
 			Property("fullName", StringValue(
-				person.MiddleName is null 
-					? string.Join(" ", person.FirstName, person.LastName) 
+				person.MiddleName is null
+					? string.Join(" ", person.FirstName, person.LastName)
 					: string.Join(" ", person.FirstName, person.MiddleName, person.LastName))),
 
 			Property("details",

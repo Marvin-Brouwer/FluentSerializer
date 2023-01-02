@@ -13,7 +13,7 @@ namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
 public sealed partial class XmlDocumentTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -29,7 +29,7 @@ public sealed partial class XmlDocumentTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void WriteTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -60,7 +60,7 @@ public sealed partial class XmlDocumentTests
 			.WithMessage("The document was is an illegal state, it contains no RootElement *")
 			.And // This is mostly here to please Stryker
 				.StackTrace!.Split(Environment.NewLine)[1]
-				.Should().Contain(nameof(XmlDocument.AppendTo)); 
+				.Should().Contain(nameof(XmlDocument.AppendTo));
 	}
 
 	[Fact,

@@ -23,7 +23,7 @@ public sealed class AbstractSpanNamingStrategyTests : NamingStrategyTests
 		var namingContextMock = new Mock<INamingContext>();
 		var typeInput = typeof(ClassNameWithMultipleParts);
 		var propertyInput = typeInput.GetProperty(nameof(ClassNameWithMultipleParts.PropertyNameWithMultipleParts))!;
-		
+
 		// Act
 		var typeResult = () => Sut.GetName(in typeInput, namingContextMock.Object).ToString();
 		var propertyResult = () => Sut.GetName(in propertyInput, propertyInput.PropertyType, namingContextMock.Object).ToString();

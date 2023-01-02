@@ -18,7 +18,7 @@ public sealed class KebabCaseNamingStrategy : AbstractSpanNamingStrategy
 	/// <inheritdoc />
 	protected override ReadOnlySpan<char> GetName(string name)
 	{
-		Span<char> characterSpan = stackalloc char[name.Length *2];
+		Span<char> characterSpan = stackalloc char[name.Length * 2];
 
 		ConvertCasing(name, ref characterSpan);
 

@@ -1,6 +1,7 @@
-using System;
 using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Naming.NamingStrategies;
+
+using System;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.NamingStrategies;
 
@@ -15,5 +16,5 @@ public static class ConverterExtensions
 	public static Func<INamingStrategy> CustomFieldName(this IUseNamingStrategies _, string name) => () => new CustomFieldNamingStrategy(name);
 
 	/// <inheritdoc cref="NamingStrategies.ResponseTypeNamingStrategy"/>
-	public static INamingStrategy ResponseTypeName (this IUseNamingStrategies _) => ResponseTypeNamingStrategy;
+	public static INamingStrategy ResponseTypeName(this IUseNamingStrategies _) => ResponseTypeNamingStrategy;
 }

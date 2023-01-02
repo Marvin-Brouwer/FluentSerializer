@@ -21,16 +21,16 @@ internal static class AllJsonNodes
 				format
 					? Comment("array level comment")
 					: MultilineComment("array level comment"),
-                MultilineComment(
-                    "array level comment\n" +
-                    "With a new line"),
-                Object(),
-                Array()
-            )),
-            Property("prop3", Value("1")),
-            Property("prop4", Value("true")),
-            Property("prop5", Value(null))
-        )),
+				MultilineComment(
+					"array level comment\n" +
+					"With a new line"),
+				Object(),
+				Array()
+			)),
+			Property("prop3", Value("1")),
+			Property("prop4", Value("true")),
+			Property("prop5", Value(null))
+		)),
 		Property("prop6", Object(
 			Property("prop7", Object()),
 			Property("prop8", Object())

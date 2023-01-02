@@ -53,7 +53,7 @@ public static class StringExtensions
 #endif
 	public static bool HasCharactersAtOffset(in this ReadOnlySpan<char> text, in int offset, in char character1, in char character2) =>
 		HasCharacterAtOffset(in text, in offset, in character1) &&
-		HasCharacterAtOffset(in text, offset +1, in character2);
+		HasCharacterAtOffset(in text, offset + 1, in character2);
 
 	/// <summary>
 	/// Check if the <paramref name="text"/> contains whitespace at the current <paramref name="offset"/>

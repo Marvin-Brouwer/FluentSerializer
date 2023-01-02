@@ -15,7 +15,7 @@ public static class ResponseBaseProfile
 	internal static IXmlProfileBuilder<TResponseObject> UseBase<TResponseObject>(this IXmlProfileBuilder<TResponseObject> builder)
 		where TResponseObject : ResponseObject<OpenAirEntity>, new()
 	{
-		builder 
+		builder
 			.Attribute(responseObject => responseObject.StatusCode,
 				namingStrategy: Names.Equal("status"))
 			.Child(response => response.Data,

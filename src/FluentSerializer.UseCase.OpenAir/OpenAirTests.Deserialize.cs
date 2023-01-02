@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using FluentSerializer.UseCase.OpenAir.Models;
+﻿using FluentSerializer.UseCase.OpenAir.Models;
 using FluentSerializer.UseCase.OpenAir.Models.Response;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.UseCase.OpenAir;
 

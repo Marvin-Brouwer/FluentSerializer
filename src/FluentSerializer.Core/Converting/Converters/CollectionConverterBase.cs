@@ -11,7 +11,8 @@ namespace FluentSerializer.Core.Converting.Converters;
 /// <summary>
 /// Converts most dotnet collections
 /// </summary>
-public abstract class CollectionConverterBase : IConverter {
+public abstract class CollectionConverterBase : IConverter
+{
 
 	/// <inheritdoc cref="IConverter.Direction" />
 	public virtual SerializerDirection Direction { get; } = SerializerDirection.Both;

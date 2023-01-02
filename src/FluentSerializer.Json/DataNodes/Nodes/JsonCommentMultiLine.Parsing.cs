@@ -29,7 +29,7 @@ public readonly partial struct JsonCommentMultiLine
 		{
 			valueEndOffset = offset;
 
-			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentEnd)) 
+			if (text.HasCharactersAtOffset(in offset, JsonCharacterConstants.MultiLineCommentEnd))
 			{
 				offset.AdjustForToken(JsonCharacterConstants.MultiLineCommentStart);
 				break;

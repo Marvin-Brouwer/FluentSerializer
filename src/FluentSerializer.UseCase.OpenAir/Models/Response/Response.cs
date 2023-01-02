@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
 using FluentSerializer.UseCase.OpenAir.Models.Base;
+
+using System.Collections.Generic;
 
 namespace FluentSerializer.UseCase.OpenAir.Models.Response;
 
-internal class Response<TResponse> where TResponse : OpenAirEntity
+internal sealed class Response<TResponse> where TResponse : OpenAirEntity
 {
 	public List<ReadResponse<TResponse>> ReadResponses { get; set; } = new();
 	public List<AddResponse<TResponse>> AddResponses { get; set; } = new();
@@ -18,24 +19,24 @@ internal abstract class ResponseObject<TResponse>
 	public List<TResponse> Data { get; set; } = new();
 }
 
-internal class ReadResponse<TResponse> : ResponseObject<TResponse>
+internal sealed class ReadResponse<TResponse> : ResponseObject<TResponse>
 	where TResponse : OpenAirEntity
 {
 }
 
-internal class AddResponse<TResponse> : ResponseObject<TResponse>
-	where TResponse : OpenAirEntity
-{
-
-}
-
-internal class ModifyResponse<TResponse> : ResponseObject<TResponse>
+internal sealed class AddResponse<TResponse> : ResponseObject<TResponse>
 	where TResponse : OpenAirEntity
 {
 
 }
 
-internal class DeleteResponse<TResponse> : ResponseObject<TResponse>
+internal sealed class ModifyResponse<TResponse> : ResponseObject<TResponse>
+	where TResponse : OpenAirEntity
+{
+
+}
+
+internal sealed class DeleteResponse<TResponse> : ResponseObject<TResponse>
 	where TResponse : OpenAirEntity
 {
 

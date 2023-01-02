@@ -9,7 +9,7 @@ namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
 public sealed partial class JsonCommentSingleLineTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentSingleLine_FormatWriteNull_ReturnsCommentSingleLine()
 	{
 		// Arrange
@@ -25,7 +25,7 @@ public sealed partial class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentSingleLine_FormatWriteNull_ReturnsEmptyCommentSingleLine()
 	{
 		// Arrange
@@ -41,7 +41,7 @@ public sealed partial class JsonCommentSingleLineTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasNoCommentSingleLine_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange
@@ -58,7 +58,7 @@ public sealed partial class JsonCommentSingleLineTests
 
 	// Special case, when formatting is turned of this should print the multiline syntax as a safeguard
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void AppendTo_HasCommentSingleLine_NoFormatWriteNull_ReturnsCommentMultiLine()
 	{
 		// Arrange

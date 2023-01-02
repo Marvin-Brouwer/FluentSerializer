@@ -27,7 +27,7 @@ namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 public sealed class DateOnlyByFormatConverterTests
 {
 	private static readonly DateOnly DateOnlyValue = DateOnly.Parse("2096-04-20", CultureInfo.InvariantCulture);
-	
+
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
 	public DateOnlyByFormatConverterTests()
@@ -74,7 +74,7 @@ public sealed class DateOnlyByFormatConverterTests
 	#region Serialize
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
@@ -95,7 +95,7 @@ public sealed class DateOnlyByFormatConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(string pattern, string inputValue, CultureInfo cultureInfo)
 	{
@@ -116,7 +116,7 @@ public sealed class DateOnlyByFormatConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

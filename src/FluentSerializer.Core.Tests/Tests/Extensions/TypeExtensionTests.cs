@@ -312,7 +312,7 @@ public sealed class TypeExtensionTests
 	{
 #pragma warning disable IDE0052 // Remove unread private members
 #pragma warning disable S1144 // Unused private types or members should be removed
-		private readonly TestClass _testField = new ();
+		private readonly TestClass _testField = new();
 #pragma warning restore S1144 // Unused private types or members should be removed
 #pragma warning restore IDE0052 // Remove unread private members
 		private readonly TestClass? _testFieldNullable = new();

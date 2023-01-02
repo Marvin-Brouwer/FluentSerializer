@@ -6,7 +6,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("FluentSerializer.Json.Tests")]
+[assembly: InternalsVisibleTo("FluentSerializer.Json.Tests")]
 
 [assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords",
 	Justification = "This refers to an Enum", Scope = "member", Target = "~M:FluentSerializer.Json.Converting.IUseJsonConverters.Enum~FluentSerializer.Json.Converting.IJsonConverter")]

@@ -27,7 +27,7 @@ namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 public sealed class TimeSpanByFormatConverterTests
 {
 	private static readonly TimeSpan TimeSpanValue = TimeSpan.Parse("04:20:00", CultureInfo.InvariantCulture);
-	
+
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
 	public TimeSpanByFormatConverterTests()
@@ -74,7 +74,7 @@ public sealed class TimeSpanByFormatConverterTests
 	#region Serialize
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue)
 	{
@@ -94,7 +94,7 @@ public sealed class TimeSpanByFormatConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(string pattern, string inputValue)
 	{
@@ -115,7 +115,7 @@ public sealed class TimeSpanByFormatConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

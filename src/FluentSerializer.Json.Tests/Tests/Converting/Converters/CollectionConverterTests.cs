@@ -55,7 +55,7 @@ public sealed class CollectionConverterTests
 
 	#region Failing checks
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Serialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -74,7 +74,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -96,7 +96,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_NotArray_Throws()
 	{
 		// Arrange
@@ -120,7 +120,7 @@ public sealed class CollectionConverterTests
 
 	#region Serialize
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Serialize_EmptyListOfIJsonObject()
 	{
 		// Arrange
@@ -137,7 +137,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Serialize_ListOfIJsonObject()
 	{
 		// Arrange
@@ -165,7 +165,7 @@ public sealed class CollectionConverterTests
 
 	#region Deserialize
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_EmptyListOfIJsonObject()
 	{
 		// Arrange
@@ -186,7 +186,7 @@ public sealed class CollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_ListOfIJsonObject()
 	{
 		// Arrange

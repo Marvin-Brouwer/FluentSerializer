@@ -1,12 +1,13 @@
-name: "Scheduled SonarCloud"
-
+name: "Continuous integration - Quality Assurance"
 on:
-  schedule:
-    - cron: '0 06 */7 * *'
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
 
 jobs:
   build-test:
-    name: "Build and Test"
+    name: "QA"
     runs-on: ubuntu-latest
     steps:
     ###
@@ -25,6 +26,7 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
+        dotnet-quality: 'preview'
         dotnet-version: 7.0.x
     ###
     # 🧰 Setup .Net tools
@@ -34,6 +36,8 @@ jobs:
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-reportgenerator-globaltool
+        dotnet tool install --global dotnet-coverage
+        dotnet tool install --global coverlet.console
     ###
     # 🧰 Setup SonarCloud scanner
     #
@@ -56,19 +60,11 @@ jobs:
         /d:sonar.host.url="https://sonarcloud.io"
         /s:"${{github.workspace}}/SonarQube.Analysis.xml"
     ###
-    # 🗃 Restore dependencies
-    #
-    # Fill the NuGet store with necessary libraries
-    ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    ###
     # 🛠 Build
-    #
-    # Build the library code for later use
     ###
     - name: 🛠 Build
-      run: dotnet build --no-restore --nologo --configuration "Release"
+      run: |-
+        dotnet build --nologo --configuration "Release"
     ###
     # 🧪 Run unit tests
     #
@@ -76,6 +72,8 @@ jobs:
     ###
     - name: 🧪 Run unit tests
       run: >-
+        echo "## Test results  " >>$GITHUB_STEP_SUMMARY
+
         dotnet test --verbosity:normal
         --no-build --no-restore --nologo
         --configuration="Release"
@@ -97,7 +95,9 @@ jobs:
         reportgenerator
         -reports:"${{github.workspace}}/test-results/*/coverage.cobertura.xml"
         -targetdir:"${{github.workspace}}/test-results/coverage"
-        -reporttypes:SonarQube;
+        -reporttypes:HtmlInline_AzurePipelines\;Cobertura\;SonarQube;
+
+        echo "  " >>$GITHUB_STEP_SUMMARY
       working-directory: ${{github.workspace}}
     ###
     # 🧪 Run integration tests
@@ -133,7 +133,19 @@ jobs:
         "${{github.workspace}}/FluentSerializer.sln";
       working-directory: ${{github.workspace}}
     ###
+    # 🗃 Publish 'unit-test-coverage' artifacts
+    ###
+    - name: 🗃 Publish 'unit-test-coverage' artifacts
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-coverage
+        path: ./test-results/coverage
+        retention-days: 1
+    ###
     # 🔬 Perform SonarCloud Analysis
+    #
+    # The Write-Host at the start is just to make it easier to find the link when opening the step in the pipeline
     ###
     - name: 🔬 Perform SonarCloud Analysis
       shell: pwsh
@@ -141,5 +153,19 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
+        $branchName = "${{ github.ref }}".Replace("refs/heads/", "");
+
+        Write-Host "https://sonarcloud.io/summary/new_code?id=Marvin-Brouwer_FluentSerializer&branch=$branchName";
+
         ./.sonar/scanner/dotnet-sonarscanner end
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        /d:sonar.login="${{ secrets.SONAR_TOKEN }}";
+    ###
+    # 🔬 SonarCloud Quality Gate
+    ###
+    - name: 🔬 SonarCloud Quality Gate
+      id: sonarcloud-quality-gate-check
+      uses: sonarsource/sonarqube-quality-gate-action@master
+      env:
+       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt

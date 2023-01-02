@@ -14,7 +14,7 @@ using System.Reflection;
 namespace FluentSerializer.Core.Mapping;
 
 /// <inheritdoc />
-public sealed class PropertyMap : IPropertyMap 
+public sealed class PropertyMap : IPropertyMap
 {
 
 	private readonly Func<INamingStrategy> _namingStrategy;

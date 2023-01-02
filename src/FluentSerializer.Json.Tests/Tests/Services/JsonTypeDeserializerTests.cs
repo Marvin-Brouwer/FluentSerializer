@@ -98,7 +98,7 @@ public sealed class JsonTypeDeserializerTests
 	/// We need a profile to deserialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -124,7 +124,7 @@ public sealed class JsonTypeDeserializerTests
 	/// We need a node to get values
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NodeIsNotPresent_Throws()
 	{
 		// Arrange
@@ -152,7 +152,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NonNullableValueIsNull_Throws()
 	{
 		// Arrange
@@ -180,7 +180,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -204,7 +204,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -233,7 +233,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_ObjectPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -265,7 +265,7 @@ public sealed class JsonTypeDeserializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void DeserializeFromNode_TypeIsEnumerable_ReturnsEnumerable()
 	{
 		// Arrange

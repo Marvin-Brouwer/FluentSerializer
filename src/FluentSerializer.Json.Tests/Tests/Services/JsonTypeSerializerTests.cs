@@ -86,7 +86,7 @@ public sealed class JsonTypeSerializerTests
 	/// We need a profile to serialize
 	/// </summary>
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void SerializeToNode_TypeIsNotRegistered_Throws()
 	{
 		// Arrange
@@ -109,7 +109,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void SerializeToNode_NoPropertiesMapped_ReturnsEmptyNode()
 	{
 		// Arrange
@@ -136,7 +136,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void SerializeToNode_InvalidPropertyMapping_Throws()
 	{
 		// Arrange
@@ -168,7 +168,7 @@ public sealed class JsonTypeSerializerTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void SerializeToNode_ObjectPropertyMapping_ReturnsValue()
 	{
 		// Arrange

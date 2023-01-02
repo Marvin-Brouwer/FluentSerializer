@@ -57,7 +57,7 @@ public sealed class NonWrappedCollectionConverterTests
 	#region Failing checks
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -76,7 +76,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_NoParent_Throws()
 	{
 		// Arrange
@@ -94,7 +94,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_IncorrectParent_Throws()
 	{
 		// Arrange
@@ -115,7 +115,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_NotEnumerable_Throws()
 	{
 		// Arrange
@@ -140,7 +140,7 @@ public sealed class NonWrappedCollectionConverterTests
 
 	#region Serialize
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -157,7 +157,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Serialize_ListOfIXmlElement()
 	{
 		// Arrange
@@ -185,7 +185,7 @@ public sealed class NonWrappedCollectionConverterTests
 
 	#region Deserialize
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_EmptyListOfIXmlElement()
 	{
 		// Arrange
@@ -207,7 +207,7 @@ public sealed class NonWrappedCollectionConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_ListOfIXmlElement()
 	{
 		// Arrange

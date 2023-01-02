@@ -28,7 +28,8 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	/// <summary>
 	/// The <typeparamref name="TConfiguration"/> currently configured, defaults to the <see cref="DefaultConfiguration"/>
 	/// </summary>
-	protected TConfiguration CurrentConfiguration {
+	protected TConfiguration CurrentConfiguration
+	{
 		get => _currentConfiguration ?? DefaultConfiguration;
 		set => _currentConfiguration = value;
 	}

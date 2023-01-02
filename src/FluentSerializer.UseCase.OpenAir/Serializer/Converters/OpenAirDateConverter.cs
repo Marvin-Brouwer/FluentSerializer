@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
@@ -9,11 +5,14 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
-
-#pragma warning disable CA1036 // Override methods on comparable types
 
 /// <summary>
 /// Converter to support the OpenAir date structure. <br />
@@ -86,7 +85,7 @@ public class OpenAirDateConverter : IXmlConverter<IXmlElement>
 		};
 
 		if (dateToSerialize.TimeOfDay.TotalSeconds == 0)
-			return Element("Date", dateProperties); 
+			return Element("Date", dateProperties);
 
 		dateProperties.Add(Element("hour", Text(universalDate.ToString("HH", CultureInfo.InvariantCulture))));
 		dateProperties.Add(Element("minute", Text(universalDate.ToString("mm", CultureInfo.InvariantCulture))));

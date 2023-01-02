@@ -48,7 +48,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Serialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		InlineData(null, ""), InlineData("", "\"\"")]
 	public void Serialize_NullOrEmpty_ReturnsEmptyString(string input, string expectedValue)
 	{
@@ -65,7 +65,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Serialize_NonConvertible_ReturnsToString()
 	{
 		// Arrange
@@ -82,7 +82,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializeAttributeConvertible_ReturnsString(object input, string expectedValue)
 	{
@@ -101,7 +101,7 @@ public sealed class ConvertibleConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_EmptyValue_ReturnsDefault(object requested, string unused)
 	{
@@ -124,7 +124,7 @@ public sealed class ConvertibleConverterTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(object expected, string inputValue)
 	{
@@ -218,11 +218,11 @@ public sealed class ConvertibleConverterTests
 		// Assert
 		result.Should()
 			.ThrowExactly<FormatException>()
-			.WithMessage("Input string was not in a correct format.");
+			.WithMessage($"The input string '{input.Value}' was not in a correct format.");
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_NonConvertible_Throws()
 	{
 		// Arrange

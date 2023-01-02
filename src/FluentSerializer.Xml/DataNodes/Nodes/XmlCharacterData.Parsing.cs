@@ -16,7 +16,7 @@ public readonly partial struct XmlCharacterData
 
 		var valueStartOffset = offset;
 		var valueEndOffset = offset;
-            
+
 		while (text.WithinCapacity(in offset))
 		{
 			valueEndOffset = offset;
@@ -25,7 +25,7 @@ public readonly partial struct XmlCharacterData
 				offset.AdjustForToken(XmlCharacterConstants.CharacterDataEnd);
 				break;
 			}
-                
+
 			offset++;
 		}
 

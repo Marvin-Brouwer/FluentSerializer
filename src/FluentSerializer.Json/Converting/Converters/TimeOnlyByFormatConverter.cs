@@ -42,8 +42,8 @@ public class TimeOnlyByFormatConverter : SimpleTypeConverter<TimeOnly>
 	}
 
 	/// <inheritdoc />
-	protected override string ConvertToString(in TimeOnly value) => 
-		JsonCharacterConstants.PropertyWrapCharacter + 
+	protected override string ConvertToString(in TimeOnly value) =>
+		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 }

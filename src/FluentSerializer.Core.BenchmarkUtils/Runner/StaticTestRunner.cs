@@ -27,6 +27,9 @@ using System.Globalization;
 using BenchmarkDotNet.Order;
 
 using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Extensions;
+using System.Collections.Immutable;
+using BenchmarkDotNet.Environments;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -53,12 +56,10 @@ public abstract class StaticTestRunner
 			.AddJob(CreateJob(arguments))
 			.WithCultureInfo(AppCulture)
 			.AddExporter(MarkdownExporter.Console)
+			.StopOnFirstError(true)
+			.WithOptions(ConfigOptions.GenerateMSBuildBinLog)
 			.WithSummaryStyle(SummaryStyle.Default
 				.WithCultureInfo(AppCulture)
-				// We'd actually like it to grow when the size grows but this doesn't seem to be consistent between
-				// the XML and JSON benchmarks so we set it to a constant metric.
-				.WithSizeUnit(SizeUnit.MB)
-				.WithTimeUnit(TimeUnit.Millisecond)
 			);
 
 		if (orderer is not null)
@@ -77,63 +78,94 @@ public abstract class StaticTestRunner
 
 	private static Job CreateJob(string[] parameters)
 	{
-		return CreateBasicJob(parameters)
+		var runType = Array.Find(parameters, parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
+
+		return CreateBasicJob(runType)
 #if (DEBUG)
 			.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1.0), true))
 #endif
 			.WithMinIterationTime(TimeInterval.FromMilliseconds(10))
 			.WithMinIterationCount(1)
-#if (!DEBUG)
 			.WithMaxRelativeError(0.001)
 			.WithMaxAbsoluteError(TimeInterval.FromNanoseconds(10))
-#endif
 			// Make sure the compile projects have access to the correct build tool
 			.WithNuGet("Microsoft.Net.Compilers.Toolset")
-			.WithId(typeof(BenchmarkRunner).Assembly.FullName)
+			.WithId(typeof(BenchmarkRunner).Assembly!.FullName!)
 			.WithEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("COMPlus_gcAllowVeryLargeObjects") ?? "0")
 			.WithEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects", Environment.GetEnvironmentVariable("DOTNET_gcAllowVeryLargeObjects") ?? "0")
-			.WithGcForce(true)
 			// This is set to false until the new benchmark dotnet version is released:
 			// https://github.com/dotnet/BenchmarkDotNet/issues/1519
-			.WithGcAllowVeryLargeObjects(false);
+			.WithGcAllowVeryLargeObjects(false)
+			.WithGcForce(true)
+			.WithPowerPlan(PowerPlan.HighPerformance);
 	}
 
-	private static Job CreateBasicJob(string[] parameters)
+	private static Job CreateBasicJob(string? runType)
 	{
 #if DEBUG
-		_ = parameters;
-
+		_ = runType;
 		return Job.Dry;
 #else
-		var runType = parameters.FirstOrDefault(parameter => parameter.StartsWith("--jobType=", StringComparison.Ordinal));
 
 		Console.ForegroundColor = ConsoleColor.DarkGray;
-		if (runType is not null) Console.WriteLine(runType);
+
+		var parsedRunType = runType switch
+		{
+			null => Job.Default,
+			"--jobType=Default" => Job.Default,
+			"--jobType=Dry" => Job.Dry,
+			"--jobType=Short" => Job.ShortRun,
+			"--jobType=Medium" => Job.MediumRun,
+			"--jobType=Long" => Job.LongRun,
+			"--jobType=VeryLong" => Job.VeryLongRun,
+			_ => null
+		};
+
+		if (parsedRunType is not null)
+		{
+			Console.WriteLine(runType);
+		}
+		else
+		{
+			Console.WriteLine($"Input '{runType}' is not a valid jobType");
+			Console.WriteLine("Using '--jobType=Default' instead");
+		}
+
 		Console.ResetColor();
 		Console.WriteLine();
 
-		return runType switch
-		{
-			null => Job.Default,
-			"--jobType=Dry" => Job.Dry,
-			"--jobType=Short" => Job.ShortRun,
-			"--jobType=Long" => Job.LongRun,
-			"--jobType=VeryLong" => Job.VeryLongRun,
-			_ => Job.Default
-		};
+		return parsedRunType ?? Job.Default;
 #endif
 	}
 
 #if (!NET6_0_OR_GREATER)
-		[System.Security.Permissions.PrincipalPermission(
-			System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
+	[System.Security.Permissions.PrincipalPermission(
+		System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
 #endif
 	public static void Run(Assembly assembly, in string[] arguments, string dataType, IOrderer? orderer = null)
 	{
 		RequireElevatedPermissions(in arguments);
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
 
 		var jobDate = DateTime.UtcNow;
 		var config = CreateConfig(arguments, orderer);
+		if (arguments.Contains("--quick-exit"))
+		{
+			var cancellationValidator = CancellationValidator.Default;
+
+			Console.WriteLine("Quick exit mode enabled.");
+			config  = config.AddValidator(cancellationValidator);
+			Console.CancelKeyPress += (_, e) =>
+			{
+				Console.WriteLine("Cancellation signal recieved.");
+				cancellationValidator.RequestCancellation();
+
+				// Quick kill child processes
+				Process.GetCurrentProcess().KillTree(TimeSpan.Zero);
+				Process.GetCurrentProcess().Kill();
+			};
+		}
 
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("Starting benchmark runner...");
@@ -163,7 +195,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting console summary fileName");
 		Console.ResetColor();
 
-		var consoleFilePattern = "*-report-console.md";
+		const string consoleFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(consoleFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -174,11 +206,27 @@ public abstract class StaticTestRunner
 			return;
 		}
 
+		var osName = GetOsName();
 		var runtimeVersion = GetRuntimeVersion();
-		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
+		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{osName}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
 		var directory = markdownSummaryFile.Directory!;
 
 		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
+	}
+
+	private static string GetOsName()
+	{
+#if NET5_0_OR_GREATER
+		var runtimeIdentifier = RuntimeInformation.RuntimeIdentifier;
+#else
+		var runtimeIdentifier = (string?)AppContext.GetData("RUNTIME_IDENTIFIER");
+		if (runtimeIdentifier is null) return "unknown";
+#endif
+
+		return runtimeIdentifier
+			.Split('-')[0]
+			.Split('.')[0]
+			.ToLowerInvariant();
 	}
 
 	private static string GetRuntimeVersion()
@@ -217,7 +265,7 @@ public abstract class StaticTestRunner
 		Console.WriteLine("Correcting GitHub summary filename");
 		Console.ResetColor();
 
-		var gitHubFilePattern = "*-report-console.md";
+		const string gitHubFilePattern = "*-report-console.md";
 		var markdownSummaryFile = FindFileName(gitHubFilePattern, config);
 		if (markdownSummaryFile is null)
 		{
@@ -249,9 +297,9 @@ public abstract class StaticTestRunner
 		content.Close();
 
 		text = text.Replace(
-			@$"{Environment.NewLine}{Environment.NewLine}|",
-			@$"{Environment.NewLine}{Environment.NewLine}```txt{Environment.NewLine}|");
-		text += @$"``` {Environment.NewLine}";
+			$"{Environment.NewLine}{Environment.NewLine}|",
+			$"{Environment.NewLine}{Environment.NewLine}```txt{Environment.NewLine}|");
+		text += $"``` {Environment.NewLine}";
 
 		File.WriteAllText(gitHubSummaryFileName, text);
 	}
@@ -318,7 +366,7 @@ public abstract class StaticTestRunner
 #if (NET6_0_OR_GREATER)
 	private static string GetProcessFileName() => Environment.ProcessPath!;
 #else
-		private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
+	private static string GetProcessFileName() => Process.GetCurrentProcess().MainModule.FileName;
 #endif
 
 	private static bool IsWindowsAdministrator()

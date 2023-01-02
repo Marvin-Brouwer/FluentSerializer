@@ -49,8 +49,8 @@ public class DateTimeOffsetByFormatConverter : SimpleTypeConverter<DateTimeOffse
 	}
 
 	/// <inheritdoc />
-	protected override string ConvertToString(in DateTimeOffset value) => 
-		JsonCharacterConstants.PropertyWrapCharacter + 
+	protected override string ConvertToString(in DateTimeOffset value) =>
+		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToString(_format, _cultureInfo) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 }

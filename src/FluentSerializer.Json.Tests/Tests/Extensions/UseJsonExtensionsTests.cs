@@ -21,7 +21,7 @@ public sealed class UseJsonExtensionsTests
 
 		// Act
 		configurationStackMock.Object.UseEnum(EnumFormats.Default);
-		
+
 		// Assert
 		configurationStackMock
 			.Verify(

@@ -20,7 +20,7 @@ public sealed class DefaultDateTimeOffsetConverter : SimpleTypeConverter<DateTim
 	/// <inheritdoc />
 	protected override DateTimeOffset ConvertToDataType(in string currentValue)
 	{
-		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter) 
+		var dateValue = currentValue.Length >= 2 && currentValue.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
 			? currentValue[1..^1]
 			: currentValue;
 		return DateTimeOffset.Parse(dateValue, CultureInfo.CurrentCulture, DateTimeStyles.AdjustToUniversal);
@@ -28,7 +28,7 @@ public sealed class DefaultDateTimeOffsetConverter : SimpleTypeConverter<DateTim
 
 	/// <inheritdoc />
 	protected override string ConvertToString(in DateTimeOffset value) =>
-		JsonCharacterConstants.PropertyWrapCharacter + 
+		JsonCharacterConstants.PropertyWrapCharacter +
 		value.ToUniversalTime().ToString(DateTimeConstants.IsoDateTimeFormat, CultureInfo.CurrentCulture) +
 		JsonCharacterConstants.PropertyWrapCharacter;
 }

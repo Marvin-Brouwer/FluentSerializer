@@ -61,7 +61,7 @@ public sealed partial class JsonArrayTests
 	{
 		// Arrange
 		var expected = Array(Object());
-		var input = new []
+		var input = new[]
 		{
 			Object()
 		};

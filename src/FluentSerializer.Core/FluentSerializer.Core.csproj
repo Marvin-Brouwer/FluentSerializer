@@ -2,10 +2,11 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+		<TargetFrameworks>net7.0;net6.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<LangVersion>10</LangVersion>
+		<LangVersion Condition="'$(TargetFramework)' == 'net6'">10</LangVersion>
+		<LangVersion Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' != 'net'">10</LangVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\docs\logo\NuGetIcon.default.ico</ApplicationIcon>
 		<PackageIcon>NuGetIcon.default.png</PackageIcon>
@@ -19,6 +20,7 @@
 		<PackageReleaseNotes /> <!-- PackageReleaseNotes will be replaced by release pipeline -->
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest-Recommended</AnalysisLevel>
 	</PropertyGroup>

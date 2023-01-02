@@ -28,8 +28,8 @@ public readonly partial struct JsonArray : IJsonArray
 		_lastNonCommentChildIndex = null;
 
 		if (elements is null
-		    || elements.Equals(Enumerable.Empty<IJsonArrayContent>())
-		    || elements.Equals(Array.Empty<IJsonArrayContent>()))
+			|| elements.Equals(Enumerable.Empty<IJsonArrayContent>())
+			|| elements.Equals(Array.Empty<IJsonArrayContent>()))
 		{
 			_children = Array.Empty<IJsonNode>();
 		}

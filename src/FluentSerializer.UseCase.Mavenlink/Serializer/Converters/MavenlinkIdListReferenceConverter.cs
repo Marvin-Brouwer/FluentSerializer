@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
@@ -7,6 +5,9 @@ using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.UseCase.Mavenlink.Models;
 using FluentSerializer.UseCase.Mavenlink.Models.Entities;
+
+using System;
+using System.Collections.Generic;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 

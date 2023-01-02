@@ -13,7 +13,7 @@ namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 [MemoryDiagnoser]
 public class NamingStrategyProfile_Equal
 {
-	private static readonly CustomNamingStrategy NamingStrategy = new ("Override");
+	private static readonly CustomNamingStrategy NamingStrategy = new("Override");
 
 	[Benchmark]
 	public ReadOnlySpan<char> Equal_ShortNamedClass() =>

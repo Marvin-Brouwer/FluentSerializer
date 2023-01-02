@@ -64,13 +64,13 @@ public class WrappedCollectionConverter : CollectionConverterBase, IXmlConverter
 	/// <inheritdoc />
 	public IXmlElement? Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
-		if (objectToSerialize is not IEnumerable enumerableToSerialize) 
+		if (objectToSerialize is not IEnumerable enumerableToSerialize)
 			throw new NotSupportedException($"Type '{objectToSerialize.GetType().FullName}' does not implement IEnumerable");
 
 		var elementName = context.NamingStrategy.SafeGetName(context.Property, context.PropertyType, context);
 
 		var elements = GetArrayElements((IAdvancedXmlSerializer)context.CurrentSerializer, enumerableToSerialize);
-		return Element(in elementName, elements) ;
+		return Element(in elementName, elements);
 	}
 
 	private static IEnumerable<IXmlElement> GetArrayElements(IAdvancedXmlSerializer serializer, IEnumerable enumerableToSerialize)

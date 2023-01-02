@@ -14,7 +14,7 @@ namespace FluentSerializer.Json.Tests.Tests.DataNodes.Nodes;
 public sealed partial class JsonObjectTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Valid_ReturnsObject()
 	{
 		// Arrange
@@ -30,7 +30,7 @@ public sealed partial class JsonObjectTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		InlineData(""), InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -72,7 +72,7 @@ public sealed partial class JsonObjectTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Empty_ReturnsObject()
 	{
 		// Arrange
@@ -88,7 +88,7 @@ public sealed partial class JsonObjectTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void ParseJson_Incomplete_Throws()
 	{
 		// Arrange

@@ -81,7 +81,7 @@ public static class TypeExtensions
 		);
 
 		return !typeof(string).IsAssignableFrom(type)
-		     && type.Implements(typeof(IEnumerable));
+			 && type.Implements(typeof(IEnumerable));
 	}
 
 	/// <inheritdoc cref="IsNullable(Type)"/>
@@ -178,8 +178,8 @@ public static class TypeExtensions
 		if (attributeArgument.ArgumentType == typeof(byte[]))
 		{
 			var attributeArguments = (ReadOnlyCollection<CustomAttributeTypedArgument>)attributeArgument.Value!;
-			if (attributeArguments.Count > 0 
-			    && attributeArguments[0].ArgumentType == typeof(byte)) return (byte)attributeArguments[0].Value! == NullableArgumentType;
+			if (attributeArguments.Count > 0
+				&& attributeArguments[0].ArgumentType == typeof(byte)) return (byte)attributeArguments[0].Value! == NullableArgumentType;
 		}
 
 		if (attributeArgument.ArgumentType == typeof(byte))

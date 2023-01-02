@@ -1,16 +1,15 @@
-using System;
-using System.Reflection;
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
 
+using System;
+using System.Reflection;
+
 using static FluentSerializer.Xml.XmlBuilder;
 
 namespace FluentSerializer.UseCase.OpenAir.Serializer.Converters;
-
-#pragma warning disable CA1036 // Override methods on comparable types
 
 /// <summary>
 /// The RequestTypeValueConverter is used to reflect out the element name of the data passed.

@@ -48,7 +48,7 @@ public sealed class DefaultTimeSpanConverterTests
 	#region Serialize
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void SerializePattern_ReturnsString()
 	{
 		// Arrange
@@ -67,7 +67,7 @@ public sealed class DefaultTimeSpanConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(string inputValue)
 	{
@@ -88,7 +88,7 @@ public sealed class DefaultTimeSpanConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

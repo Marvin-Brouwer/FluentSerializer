@@ -164,7 +164,7 @@ public sealed class XmlProfileBuilderTests
 		IXmlConverter<IXmlElement>,
 		IXmlConverter<IXmlText>
 	{
-		public static TestConverter New() => new ();
+		public static TestConverter New() => new();
 
 		public bool CanConvert(in Type targetType) => false;
 		public SerializerDirection Direction => SerializerDirection.Both;

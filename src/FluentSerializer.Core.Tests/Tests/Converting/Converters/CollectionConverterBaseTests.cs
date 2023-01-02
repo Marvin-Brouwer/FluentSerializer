@@ -78,7 +78,7 @@ public sealed class CollectionConverterBaseTests
 	public void FinalizeEnumerableInstance_ReturnsExpectedCollectionType()
 	{
 		// Arrange
-		var input = new List<int>{ 1, 2, 3 };
+		var input = new List<int> { 1, 2, 3 };
 
 		var type1 = typeof(IEnumerable);
 		var type2 = typeof(int[]);
@@ -106,7 +106,7 @@ public sealed class CollectionConverterBaseTests
 
 	/// <inheritdoc />
 	[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "TestImplementation")]
-	private class TestConverter : CollectionConverterBase
+	private sealed class TestConverter : CollectionConverterBase
 	{
 		/// <inheritdoc cref="CollectionConverterBase.GetEnumerableInstance" />
 		public new IList GetEnumerableInstance(in Type targetType)

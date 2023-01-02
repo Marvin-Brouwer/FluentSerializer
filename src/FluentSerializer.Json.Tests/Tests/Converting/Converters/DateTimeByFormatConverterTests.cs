@@ -28,7 +28,7 @@ public sealed class DateTimeByFormatConverterTests
 {
 	private static readonly DateTime DateTimeValue = DateTime.Parse(
 		"2096-04-20T04:20:00Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
-	
+
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 
 	public DateTimeByFormatConverterTests()
@@ -76,7 +76,7 @@ public sealed class DateTimeByFormatConverterTests
 	#region Serialize
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
@@ -96,7 +96,7 @@ public sealed class DateTimeByFormatConverterTests
 
 	#region Deserialize
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(string pattern, string inputValue, CultureInfo cultureInfo)
 	{
@@ -118,7 +118,7 @@ public sealed class DateTimeByFormatConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "JSON")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

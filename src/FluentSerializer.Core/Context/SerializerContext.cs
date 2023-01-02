@@ -27,7 +27,7 @@ public class SerializerContext : ISerializerContext
 	/// <inheritdoc />
 	public Type ClassType { get; }
 	/// <inheritdoc />
-	public INamingStrategy NamingStrategy  { get; }
+	public INamingStrategy NamingStrategy { get; }
 
 	/// <inheritdoc />
 	public ISerializer CurrentSerializer => _coreContext.CurrentSerializer;

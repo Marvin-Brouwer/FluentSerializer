@@ -28,7 +28,7 @@ namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 public sealed class DateOnlyByFormatConverterTests
 {
 	private static readonly DateOnly DateOnlyValue = DateOnly.Parse("2096-04-20", CultureInfo.InvariantCulture);
-	
+
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
 
 	public DateOnlyByFormatConverterTests()
@@ -75,7 +75,7 @@ public sealed class DateOnlyByFormatConverterTests
 	#region Serialize
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
@@ -103,7 +103,7 @@ public sealed class DateOnlyByFormatConverterTests
 	#region Deserialize
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		MemberData(nameof(GenerateConvertibleData))]
 	public void Deserialize_Convertible_ReturnsValue(string pattern, string inputValue, CultureInfo cultureInfo)
 	{
@@ -131,7 +131,7 @@ public sealed class DateOnlyByFormatConverterTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void Deserialize_Convertible_IncorrectFormat_Throws()
 	{
 		// Arrange

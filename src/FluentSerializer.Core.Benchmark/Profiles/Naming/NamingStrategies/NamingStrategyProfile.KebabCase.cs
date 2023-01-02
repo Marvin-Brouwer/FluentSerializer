@@ -9,7 +9,7 @@ namespace FluentSerializer.Core.Benchmark.Profiles.Naming.NamingStrategies;
 [MemoryDiagnoser]
 public class NamingStrategyProfile_KebabCase
 {
-	private static readonly KebabCaseNamingStrategy NamingStrategy = new ();
+	private static readonly KebabCaseNamingStrategy NamingStrategy = new();
 
 	[Benchmark]
 	public ReadOnlySpan<char> KebabCase_ShortNamedClass() =>

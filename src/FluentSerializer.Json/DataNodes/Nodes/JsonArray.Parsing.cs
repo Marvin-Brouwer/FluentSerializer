@@ -20,7 +20,7 @@ public readonly partial struct JsonArray
 		var currentChildIndex = 0;
 
 		offset.AdjustForWhiteSpace(in text);
-		if (!text.WithinCapacity(in offset)) return; 
+		if (!text.WithinCapacity(in offset)) return;
 
 		ParseJsonArray(in text, ref offset, ref children, ref currentChildIndex, ref _lastNonCommentChildIndex);
 		_children = children.AsReadOnly();

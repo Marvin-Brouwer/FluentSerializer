@@ -1,36 +1,64 @@
-name: "Continuous integration - Benchmarking"
+name: "Continuous integration - Benchmark"
 on:
   workflow_call:
     inputs:
       libraryName:
-        description: 'The library to benchmark'
-        required: true
         type: string
+        required: true
       reportPrefix:
-        description: 'The library to benchmark'
+        type: string
         required: true
+      jobTypePrimary:
         type: string
-      net_6_0-jobType:
-        description: 'The jobType for net 6 runtime'
+        required: true
+      jobTypeSecondary:
+        type: string
         required: false
-        default: "Default"
-        type: string
-      netcore_3_1-jobType:
-        description: 'The jobType for netcore 3.1 runtime'
-        required: false
-        default: "Default"
-        type: string
+        default: "Short"
+
+defaults:
+  run:
+    # Set the shell to wsl default, empty bash caused issues so using this:
+    # https://github.com/Vampire/setup-wsl#wsl-shell-command
+    shell: bash --noprofile --norc -euo pipefail {0}
 
 jobs:
   benchmark:
-    name: "Benchmark ${{ inputs.libraryName }}"
-    runs-on: ubuntu-latest
+    name: "${{ matrix.version.framework }} ${{ matrix.os.displayName }}"
+    strategy:
+      fail-fast: true
+      matrix:
+        # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
+        version: [
+          {tag: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
+          {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+        ]
+        # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
+        # ---
+        # Temporarily removed `windows-latest`, because of provisioning issues
+        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
+        os: [
+          # { name: windows-latest, displayName: windows, rid: "win-x64" },
+          { name: ubuntu-latest, displayName: linux, rid: "linux-x64" }
+        ]
+    runs-on: ${{ matrix.os.name }}
+    ###
+    # 🗃 Setup WSL
+    #
+    # Enable WSL when running on windows, this will help making the scripts more uniform
+    ###
     steps:
+    - name: 🗃 Setup WSL
+      if: runner.os == 'Windows'
+      uses: Vampire/setup-wsl@v1
     ###
     # Checkout repository
     ###
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        lfs: true
     ###
     # 🧰 Install .Net SDKs
     #
@@ -39,62 +67,40 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        include-prerelease: true
-        dotnet-version: |
-          3.1.x
-          6.0.x
+        dotnet-version: ${{ matrix.version.tag }}
     ###
-    # 🗃 Restore dependencies
+    # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #
-    # Fill the NuGet store with necessary libraries
+    # Benchmark the code in the given library
+    # `shell: pwsh` because that'll ensure the native process is used when `dotnet run` is called.
     ###
-    - name: 🗃 Restore dependencies
-      run: dotnet restore
-    ###
-    # 🗃 Restore 'library-binaries'
-    ###
-    - name: 🗃 Restore 'library-binaries'
-      uses: actions/download-artifact@v3
-      with:
-        name: library-binaries
-        path: ./src
-    ###
-    # 🗃 Restore 'benchmark-binaries'
-    ###
-    - name: 🗃 Restore 'benchmark-binaries'
-      uses: actions/download-artifact@v3
-      with:
-        name: benchmark-binaries
-        path: ./src
-    ###
-    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
-    #
-    # Benchmark the code in the given library (in dotnet 6)
-    ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (net6.0)
-      run: |-
-        sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
-        sudo ./net6.0/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.net_6_0-jobType }}
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
-    ###
-    # ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (netcoreapp3.1)
-    #
-    # Benchmark the code in the given library (in dotnet core 3)
-    ###
-    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }} (netcoreapp3.1)
-      run: |-
-        sudo chmod +rwx ./*/FluentSerializer.${{ inputs.libraryName }}.Benchmark
-        sudo ./netcoreapp3.1/FluentSerializer.${{ inputs.libraryName }}.Benchmark --jobType=${{ inputs.netcore_3_1-jobType }}
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release
+    - name: ⏱ Benchmark FluentSerializer.${{ inputs.libraryName }}
+      shell: pwsh
+      run: >-
+        dotnet run
+        --configuration "Release"
+        --framework ${{ matrix.version.framework }}
+        --runtime ${{ matrix.os.rid }}
+        --verbosity "detailed"
+        --
+        --jobType=${{ matrix.version.jobType }}
+        --quick-exit
+
+        Write-Host "::remove-matcher owner=csc::"
+
+        Write-Host "::remove-matcher owner=dotnet::"
+
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/
     ###
     # 🗃 Collect benchmark reports
     ###
     - name: 🗃 Collect benchmark reports
-      if: ${{ always() }}
+      if: ${{ !cancelled() && success() }}
       run: |-
-        sudo mkdir ${{github.workspace}}/benchmark-results
-        cd ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/results
-        sudo mv ./${{ inputs.reportPrefix }}-*.md ${{github.workspace}}/benchmark-results/
+        dir=$(pwd);
+        mkdir $dir/benchmark-results
+        cd $dir/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/BenchmarkDotNet.Artifacts/results
+        mv ./${{ inputs.reportPrefix }}-*.md $dir/benchmark-results/
       working-directory: ${{github.workspace}}
     ###
     # 📈 Report benchmarks
@@ -102,17 +108,17 @@ jobs:
     # Publish benchmark results to job overview
     ###
     - name: 📈 Report benchmarks
+      if: ${{ !cancelled() && success() && matrix.version.reportSummary }}
       run: |-
-        cat ./${{ inputs.reportPrefix }}-benchmark-net_6_0-github.md >>$GITHUB_STEP_SUMMARY
-        cat ./${{ inputs.reportPrefix }}-benchmark-netcoreapp_3_1-github.md >>$GITHUB_STEP_SUMMARY
-      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/bin/Release/BenchmarkDotNet.Artifacts/
+        cat ./${{ inputs.reportPrefix }}-benchmark-${{ matrix.version.report }}-github.md >>$GITHUB_STEP_SUMMARY
+      working-directory: ${{github.workspace}}/src/FluentSerializer.${{ inputs.libraryName }}.Benchmark/BenchmarkDotNet.Artifacts/
     ###
     # 🗃 Publish 'benchmark-results' artifacts
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
-      if: ${{ always() }}
+      if: ${{ !cancelled() && success() }}
       uses: actions/upload-artifact@v3
       with:
-        name: benchmark-results-${{ inputs.reportPrefix }}
+        name: benchmark-results
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20

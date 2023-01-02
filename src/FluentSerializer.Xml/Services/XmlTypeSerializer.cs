@@ -74,7 +74,7 @@ public sealed class XmlTypeSerializer
 		currentCoreContext.TryAddReference(dataModel);
 
 		var childNodes = new List<IXmlNode>();
-		foreach(var property in classType.GetProperties())
+		foreach (var property in classType.GetProperties())
 		{
 			var propertyMapping = classMap.GetPropertyMapFor(in property, SerializerDirection.Deserialize);
 			if (propertyMapping is null) continue;
@@ -159,7 +159,7 @@ public sealed class XmlTypeSerializer
 	}
 
 	private static TNode? SerializeNode<TNode>(
-		in object propertyValue, in IPropertyMap propertyMapping, 
+		in object propertyValue, in IPropertyMap propertyMapping,
 		in SerializerContext serializerContext)
 		where TNode : IXmlNode
 	{
@@ -167,7 +167,7 @@ public sealed class XmlTypeSerializer
 			TypeSerializerDirection, serializerContext.CurrentSerializer);
 		if (matchingConverter is null) throw new ConverterNotFoundException(
 			propertyMapping.Property.PropertyType, propertyMapping.ContainerType, TypeSerializerDirection);
-			
+
 		return matchingConverter.Serialize(in propertyValue, serializerContext);
 	}
 

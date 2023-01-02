@@ -102,15 +102,15 @@ public sealed class JsonTypeDeserializer
 			var realPropertyInfo = classType.GetProperty(propertyMapping.Property.Name)!;
 			var serializerContext = new SerializerContext<IJsonNode>(
 				currentCoreContext.WithPathSegment(propertyMapping.Property),
-				in realPropertyInfo, realPropertyInfo.PropertyType, in classType, propertyMapping.NamingStrategy, 
+				in realPropertyInfo, realPropertyInfo.PropertyType, in classType, propertyMapping.NamingStrategy,
 				classMap.PropertyMapCollection, _classMappings)
 			{
 				ParentNode = dataObject
 			};
-			
+
 			var concretePropertyType = Nullable.GetUnderlyingType(realPropertyInfo.PropertyType) ?? realPropertyInfo.PropertyType;
 			var propertyName = propertyMapping.NamingStrategy.SafeGetName(in realPropertyInfo, in concretePropertyType, serializerContext);
-			
+
 			DeserializeProperty(in jsonObject, in propertyName, in propertyMapping, in instance, in serializerContext);
 		}
 
@@ -118,7 +118,7 @@ public sealed class JsonTypeDeserializer
 	}
 
 	private void DeserializeProperty(
-		in IJsonObject dataObject, in string propertyName, in IPropertyMap propertyMapping, in object instance, 
+		in IJsonObject dataObject, in string propertyName, in IPropertyMap propertyMapping, in object instance,
 		in SerializerContext<IJsonNode> serializerContext)
 	{
 		if (propertyMapping.ContainerType == typeof(IJsonProperty))
@@ -132,7 +132,7 @@ public sealed class JsonTypeDeserializer
 	}
 
 	private void DeserializeJsonNode(
-		in IJsonNode? propertyValue, in string propertyName, in IPropertyMap propertyMapping, in object instance, 
+		in IJsonNode? propertyValue, in string propertyName, in IPropertyMap propertyMapping, in object instance,
 		in SerializerContext<IJsonNode> serializerContext)
 	{
 		var empty = propertyValue is null || propertyValue is IJsonValue jsonValue && string.IsNullOrEmpty(jsonValue.Value);

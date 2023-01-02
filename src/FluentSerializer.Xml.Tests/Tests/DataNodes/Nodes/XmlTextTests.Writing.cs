@@ -9,7 +9,7 @@ namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
 public sealed partial class XmlTextTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasValue_FormatWriteNull_ReturnsValue()
 	{
 		// Arrange
@@ -25,7 +25,7 @@ public sealed partial class XmlTextTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatWriteNull_ReturnsEmptyText()
 	{
 		// Arrange
@@ -41,7 +41,7 @@ public sealed partial class XmlTextTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void AppendTo_HasNoValue_FormatDontWriteNull_ReturnsEmptyString()
 	{
 		// Arrange

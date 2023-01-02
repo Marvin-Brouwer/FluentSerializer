@@ -26,35 +26,43 @@ jobs:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
+  ci-qa:
+    name: "CI"
+    needs: [ci]
+    uses: ./.github/workflows/continuous-integration.build-qa.yml
+    secrets: inherit
 
   stryker:
     name: "Stryker"
+    needs: [ci]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
 
   benchmark-core:
-    name: "Benchmark"
-    needs: [ci, stryker]
+    name: "Benchmark Core libraries"
+    needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
-      libraryName: 'Core'
-      reportPrefix: 'core'
-      net_6_0-jobType: "Long"
-      netcore_3_1-jobType: "Long"
-  benchmark-xml:
-    name: "Benchmark"
-    needs: [ci, stryker]
-    uses: ./.github/workflows/continuous-integration.benchmark.yml
-    secrets: inherit
-    with:
-      libraryName: 'Xml'
-      reportPrefix: 'xml-serializer'
+      libraryName: "Core"
+      reportPrefix: "core"
+      jobTypePrimary: "VeryLong"
+      jobTypeSecondary: "Medium"
   benchmark-json:
-    name: "Benchmark"
-    needs: [ci, stryker]
+    name: "Benchmark JSON serializer"
+    needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
-      libraryName: 'Json'
-      reportPrefix: 'json-serializer'
+      libraryName: "Json"
+      reportPrefix: "json-serializer"
+      jobTypePrimary: "Default"
+  benchmark-xml:
+    name: "Benchmark XML serializer"
+    needs: [stryker]
+    uses: ./.github/workflows/continuous-integration.benchmark.yml
+    secrets: inherit
+    with:
+      libraryName: "Xml"
+      reportPrefix: "xml-serializer"
+      jobTypePrimary: "Default"

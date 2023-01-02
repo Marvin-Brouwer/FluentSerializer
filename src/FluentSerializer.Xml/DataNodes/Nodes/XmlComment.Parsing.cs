@@ -25,7 +25,7 @@ public readonly partial struct XmlComment
 				offset.AdjustForToken(XmlCharacterConstants.CommentEnd);
 				break;
 			}
-                
+
 			offset++;
 		}
 

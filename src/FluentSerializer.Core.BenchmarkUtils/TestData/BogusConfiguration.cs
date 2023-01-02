@@ -17,8 +17,8 @@ public static class BogusConfiguration
 			.UseSeed(seed)
 			.RuleFor(person => person.Gender, (f) => f.PickRandom<Bogus.DataSets.Name.Gender>())
 			.RuleFor(person => person.FirstName, (f, p) => f.Name.FirstName(p.Gender))
-			.RuleFor(person => person.MiddleName, f =>  f.Random
-				.WeightedRandom(new[] { true, false }, new [] { .7f, .3f }) ? null : f.Name.LastName())
+			.RuleFor(person => person.MiddleName, f => f.Random
+				.WeightedRandom(new[] { true, false }, new[] { .7f, .3f }) ? null : f.Name.LastName())
 			.RuleFor(person => person.LastName, (f, p) => f.Name.LastName(p.Gender))
 			.RuleFor(person => person.DateOfBirth, f => f.Date.Past(f.Random.Number(18, 90)));
 
@@ -41,7 +41,8 @@ public static class BogusConfiguration
 			.UseSeed(seed)
 			.RuleFor(residentialArea => residentialArea.Type, f => f.PickRandom(AreaTypes))
 			.RuleFor(residentialArea => residentialArea.Name, f => f.Address.City())
-			.RuleFor(residentialArea => residentialArea.Houses, (f, c) => {
+			.RuleFor(residentialArea => residentialArea.Houses, (f, c) =>
+			{
 
 				var areaAmount = f.Random.Number(3, 20);
 				houseCount += areaAmount;

@@ -26,7 +26,7 @@ public readonly partial struct JsonObject
 				.AppendOptionalNewline(in format)
 				.AppendOptionalIndent(in childIndent, in format)
 				.AppendNode(child, in format, in childIndent, in writeNull);
-                
+
 			// Make sure the last item does not append a comma to confirm to JSON spec.
 			if (child is not IJsonComment && !currentPropertyIndex.Equals(_lastPropertyIndex))
 				stringBuilder.Append(JsonCharacterConstants.DividerCharacter);

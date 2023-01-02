@@ -66,7 +66,7 @@ public readonly partial struct XmlElement
 #else
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-	private void AppendElementAttributes(
+	private static void AppendElementAttributes(
 		ref ITextWriter stringBuilder, in IReadOnlyList<IXmlAttribute> attributes,
 		in bool format, in int indent, in bool writeNull, in int childIndent)
 	{

@@ -1,10 +1,10 @@
-using System;
-using System.Globalization;
-
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Context;
 using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.DataNodes;
+
+using System;
+using System.Globalization;
 
 namespace FluentSerializer.UseCase.Mavenlink.Serializer.Converters;
 

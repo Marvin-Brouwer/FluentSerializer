@@ -17,7 +17,7 @@ public readonly partial struct JsonArray
 
 		stringBuilder
 			.Append(JsonCharacterConstants.ArrayStartCharacter);
-            
+
 		foreach (var child in Children)
 		{
 			stringBuilder

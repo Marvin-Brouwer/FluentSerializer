@@ -15,7 +15,7 @@ namespace FluentSerializer.Xml.Tests.Tests.DataNodes.Nodes;
 public sealed partial class XmlCharacterDataTests
 {
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void ParseXml_Valid_ReturnsCharacterData()
 	{
 		// Arrange
@@ -31,7 +31,7 @@ public sealed partial class XmlCharacterDataTests
 	}
 
 	[Theory,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML"),
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML"),
 		InlineData(" "), InlineData("  "), InlineData("\t"),
 		InlineData(LineEndings.LineFeed), InlineData(LineEndings.CarriageReturn),
 		InlineData(LineEndings.ReturnLineFeed)]
@@ -51,7 +51,7 @@ public sealed partial class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void ParseXml_Empty_ReturnsCharacterData()
 	{
 		// Arrange
@@ -67,7 +67,7 @@ public sealed partial class XmlCharacterDataTests
 	}
 
 	[Fact,
-		Trait("Category", "UnitTest"),	Trait("DataFormat", "XML")]
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void ParseXml_Incomplete_Throws()
 	{
 		// Arrange

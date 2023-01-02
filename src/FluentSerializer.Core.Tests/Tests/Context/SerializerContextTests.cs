@@ -113,7 +113,7 @@ public sealed class SerializerContextTests
 	#endregion
 
 	#region ISerializerCoreContext
-	
+
 	[Fact,
 		Trait("Category", "UnitTest")]
 	public void WithPathSegment_Class_ReturnsExpectedPath()
@@ -216,6 +216,6 @@ public sealed class SerializerContextTests
 
 	private sealed class TestSerializerConfiguration : SerializerConfiguration
 	{
-		public static readonly TestSerializerConfiguration Default = new ();
+		public static readonly TestSerializerConfiguration Default = new();
 	}
 }

@@ -17,7 +17,7 @@ namespace FluentSerializer.Xml.Tests.Tests;
 public sealed class XmlBuilderTests
 {
 	[Theory,
-		Trait("Category", "IntegrationTest"),	Trait("DataFormat", "XML"),
+		Trait("Category", "IntegrationTest"), Trait("DataFormat", "XML"),
 		InlineData(true), InlineData(false)]
 	public void AllElements_EqualsExpectedTextData(bool format)
 	{
@@ -39,7 +39,7 @@ public sealed class XmlBuilderTests
 		// Act
 		var result1 = () => XmlBuilder.Element(null!, XmlBuilder.Text(null));
 		var result2 = () => XmlBuilder.Element(null!, XmlBuilder.Text(null), XmlBuilder.Text(null));
-		var result3 = () => XmlBuilder.Element(null!, new List<IXmlNode>{ XmlBuilder.Text(null) });
+		var result3 = () => XmlBuilder.Element(null!, new List<IXmlNode> { XmlBuilder.Text(null) });
 
 		// Assert
 		result1

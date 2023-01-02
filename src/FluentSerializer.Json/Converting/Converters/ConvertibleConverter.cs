@@ -30,8 +30,8 @@ public sealed class ConvertibleConverter : ConvertibleConverterBase, IJsonConver
 
 		var stringValue = ConvertToString(objectToSerialize);
 
-		return stringValue is null 
-			? null 
+		return stringValue is null
+			? null
 			: Value(in stringValue);
 	}
 
