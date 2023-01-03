@@ -53,4 +53,20 @@ public interface IUseJsonConverters
 	IJsonConverter Enum();
 	/// <inheritdoc cref="EnumConverter(in EnumFormats, in bool)" />
 	Func<IJsonConverter> Enum(EnumFormats format, bool writeNumbersAsString = false);
+
+#if NET7_0_OR_GREATER
+
+	/// <inheritdoc cref="ParsableConverter" />
+	IJsonConverter Parse();
+
+	/// <inheritdoc cref="ParsableConverter.Parse(in CultureInfo?)" />
+	Func<IJsonConverter> Parse(CultureInfo formatProvider);
+
+	/// <inheritdoc cref="ParsableConverter" />
+	IJsonConverter TryParse();
+
+	/// <inheritdoc cref="ParsableConverter.TryParse(in CultureInfo?)" />
+	Func<IJsonConverter> TryParse(CultureInfo formatProvider);
+
+#endif
 }
