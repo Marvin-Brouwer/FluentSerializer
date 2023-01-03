@@ -62,16 +62,13 @@ public interface IUseXmlConverters
 #if NET7_0_OR_GREATER
 
 	/// <inheritdoc cref="ParsableConverter" />
-	IXmlConverter Parse();
-
-	/// <inheritdoc cref="ParsableConverter.Parse(in CultureInfo?)" />
-	Func<IXmlConverter> Parse(CultureInfo formatProvider);
+	IXmlConverter Parsable();
 
 	/// <inheritdoc cref="ParsableConverter" />
-	IXmlConverter TryParse();
+	Func<IXmlConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
 
-	/// <inheritdoc cref="ParsableConverter.TryParse(in CultureInfo?)" />
-	Func<IXmlConverter> TryParse(CultureInfo formatProvider);
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IXmlConverter> Parsable(bool tryParse);
 
 #endif
 }

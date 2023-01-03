@@ -32,10 +32,10 @@ public sealed partial class ParsableConverterTests
 		const int input = 0;
 
 		// Act
-		var canConvert = Sut.Parse().CanConvert(input.GetType());
-		var resultText = () => Sut.Parse().As<IXmlConverter<IXmlText>>().Serialize(input, _contextMock.Object);
-		var resultAttribute = () => Sut.Parse().As<IXmlConverter<IXmlAttribute>>().Serialize(input, _contextMock.Object);
-		var resultElement = () => Sut.Parse().As<IXmlConverter<IXmlElement>>().Serialize(input, _contextMock.Object);
+		var canConvert = SutParse().CanConvert(input.GetType());
+		var resultText = () => SutParse().As<IXmlConverter<IXmlText>>().Serialize(input, _contextMock.Object);
+		var resultAttribute = () => SutParse().As<IXmlConverter<IXmlAttribute>>().Serialize(input, _contextMock.Object);
+		var resultElement = () => SutParse().As<IXmlConverter<IXmlElement>>().Serialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -64,8 +64,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(requested.GetType());
 
 		// Act
-		var canConvert = Sut.Parse().CanConvert(requested.GetType());
-		var result = Sut.Parse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
+		var canConvert = SutParse().CanConvert(requested.GetType());
+		var result = SutParse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -84,8 +84,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(expected.GetType());
 
 		// Act
-		var canConvert = Sut.Parse(TestCulture).CanConvert(expected.GetType());
-		var result = Sut.Parse(TestCulture).As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
+		var canConvert = SutParse(TestCulture).CanConvert(expected.GetType());
+		var result = SutParse(TestCulture).As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -104,7 +104,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = Sut.Parse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
+		var result = SutParse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should().Be(expected);
@@ -121,7 +121,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = () => Sut.Parse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
+		var result = () => SutParse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
@@ -140,8 +140,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(Stream));
 
 		// Act
-		var canConvert = Sut.Parse().CanConvert(typeof(Stream));
-		var result = () => Sut.Parse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
+		var canConvert = SutParse().CanConvert(typeof(Stream));
+		var result = () => SutParse().As<IXmlConverter<IXmlText>>().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeFalse();

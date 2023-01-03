@@ -1,6 +1,8 @@
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Xml.Configuration;
+using FluentSerializer.Xml.Converting;
+using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
 
@@ -20,6 +22,9 @@ public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
 	private static readonly CultureInfo TestCulture = new ("nl-NL");
+
+	private static IXmlConverter SutParse(CultureInfo? format = null) => new ParsableConverter(format, false);
+	private static IXmlConverter SutTryParse(CultureInfo? format = null) => new ParsableConverter(format, true);
 
 	public ParsableConverterTests()
 	{

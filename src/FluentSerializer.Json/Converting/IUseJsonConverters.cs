@@ -57,16 +57,13 @@ public interface IUseJsonConverters
 #if NET7_0_OR_GREATER
 
 	/// <inheritdoc cref="ParsableConverter" />
-	IJsonConverter Parse();
-
-	/// <inheritdoc cref="ParsableConverter.Parse(in CultureInfo?)" />
-	Func<IJsonConverter> Parse(CultureInfo formatProvider);
+	IJsonConverter Parsable();
 
 	/// <inheritdoc cref="ParsableConverter" />
-	IJsonConverter TryParse();
+	Func<IJsonConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
 
-	/// <inheritdoc cref="ParsableConverter.TryParse(in CultureInfo?)" />
-	Func<IJsonConverter> TryParse(CultureInfo formatProvider);
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IJsonConverter> Parsable(bool tryParse);
 
 #endif
 }

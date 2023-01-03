@@ -22,7 +22,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default, false);
 #if NET7_0_OR_GREATER
-	internal static readonly IJsonConverter DefaultParseConverter = ParsableConverter.Parse();
+	internal static readonly IJsonConverter DefaultParseConverter = new ParsableConverter(null, false);
 #endif
 
 	/// <inheritdoc />
@@ -106,21 +106,19 @@ public sealed class UseJsonConverters : IUseJsonConverters
 #if NET7_0_OR_GREATER
 
 	/// <inheritdoc />
-	public IJsonConverter Parse() => DefaultParseConverter;
+	public IJsonConverter Parsable() => DefaultParseConverter;
 
 	/// <inheritdoc />
-	public Func<IJsonConverter> Parse(CultureInfo formatProvider)
+	public Func<IJsonConverter> Parsable(CultureInfo formatProvider, bool tryParse = false)
 	{
-		return () => ParsableConverter.Parse(formatProvider);
+		return () => new ParsableConverter(formatProvider, tryParse);
 	}
 
 	/// <inheritdoc />
-	public IJsonConverter TryParse() => ParsableConverter.TryParse();
-
-	/// <inheritdoc />
-	public Func<IJsonConverter> TryParse(CultureInfo formatProvider)
+	public Func<IJsonConverter> Parsable(bool tryParse)
 	{
-		return () => ParsableConverter.TryParse(formatProvider);
+		return () => new ParsableConverter(null, tryParse);
 	}
+
 #endif
 }

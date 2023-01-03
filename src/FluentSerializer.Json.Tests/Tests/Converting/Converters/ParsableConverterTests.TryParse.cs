@@ -29,8 +29,8 @@ public sealed partial class ParsableConverterTests
 		const int input = 0;
 
 		// Act
-		var canConvert = Sut.TryParse().CanConvert(input.GetType());
-		var result = () => Sut.TryParse().Serialize(input, _contextMock.Object);
+		var canConvert = SutTryParse().CanConvert(input.GetType());
+		var result = () => SutTryParse().Serialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -55,8 +55,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(requested.GetType());
 
 		// Act
-		var canConvert = Sut.TryParse().CanConvert(requested.GetType());
-		var result = Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var canConvert = SutTryParse().CanConvert(requested.GetType());
+		var result = SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -75,8 +75,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(expected.GetType());
 
 		// Act
-		var canConvert = Sut.TryParse(TestCulture).CanConvert(expected.GetType());
-		var result = Sut.TryParse(TestCulture).Deserialize(input, _contextMock.Object);
+		var canConvert = SutTryParse(TestCulture).CanConvert(expected.GetType());
+		var result = SutTryParse(TestCulture).Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
@@ -100,7 +100,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(string));
 
 		// Act
-		var result = Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var result = SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should().Be(expected);
@@ -118,7 +118,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(string));
 
 		// Act
-		var result = Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var result = SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should().Be(expected);
@@ -135,7 +135,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(string));
 
 		// Act
-		var result = () => Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var result = () => SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should()
@@ -153,7 +153,7 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(int));
 
 		// Act
-		var result = Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var result = SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		result.Should().BeNull();
@@ -170,8 +170,8 @@ public sealed partial class ParsableConverterTests
 			.WithPropertyType(typeof(Stream));
 
 		// Act
-		var canConvert = Sut.TryParse().CanConvert(typeof(Stream));
-		var result = () => Sut.TryParse().Deserialize(input, _contextMock.Object);
+		var canConvert = SutTryParse().CanConvert(typeof(Stream));
+		var result = () => SutTryParse().Deserialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeFalse();

@@ -1,6 +1,7 @@
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Json.Configuration;
+using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.DataNodes;
 using FluentSerializer.Json.Services;
 
@@ -20,6 +21,9 @@ public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 	private static readonly CultureInfo TestCulture = new ("nl-NL");
+
+	private static ParsableConverter SutParse(CultureInfo? format = null) => new ParsableConverter(format, false);
+	private static ParsableConverter SutTryParse(CultureInfo? format = null) => new ParsableConverter(format, true);
 
 	public ParsableConverterTests()
 	{
