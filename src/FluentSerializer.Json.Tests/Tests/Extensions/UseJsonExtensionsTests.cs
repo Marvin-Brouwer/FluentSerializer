@@ -8,6 +8,7 @@ using FluentSerializer.Json.Extensions;
 using Moq;
 
 using System;
+using System.Globalization;
 
 using Xunit;
 
@@ -30,6 +31,29 @@ public sealed class UseJsonExtensionsTests
 			.Verify(
 				stack => stack.Use(It.IsAny<Func<IJsonConverter>>(), false),
 				Times.Once
+			);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void UseParsable_UseCalled()
+	{
+		// Arrange
+		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
+
+		// Act
+		configurationStackMock.Object.UseParsable();
+		configurationStackMock.Object.UseParsable(true);
+		configurationStackMock.Object.UseParsable(false);
+		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture);
+		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, true);
+		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, false);
+
+		// Assert
+		configurationStackMock
+			.Verify(
+				stack => stack.Use(It.IsAny<Func<IJsonConverter>>(), It.IsAny<bool>()),
+				Times.Exactly(5)
 			);
 	}
 }
