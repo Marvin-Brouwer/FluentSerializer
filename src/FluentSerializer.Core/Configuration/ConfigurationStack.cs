@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,9 @@ public sealed class ConfigurationStack<T> : IConfigurationStack<T>
 
 		return this;
 	}
+
+	/// <inheritdoc />
+	public IConfigurationStack<T> Use(Func<T> item, bool forceTop = false) => Use(item(), forceTop);
 
 	/// <inheritdoc />
 	public IEnumerator<T> GetEnumerator()
