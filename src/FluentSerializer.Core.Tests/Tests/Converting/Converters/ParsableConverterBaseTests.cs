@@ -16,7 +16,6 @@ public sealed partial class ParsableConverterBaseTests
 	public ParsableConverterBaseTests()
 	{
 		Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
-		Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 	}
 
 	public static IEnumerable<object[]> GenerateParsableData()

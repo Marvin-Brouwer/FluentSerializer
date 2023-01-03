@@ -40,7 +40,7 @@ public abstract class ParsableConverterBase : IConverter
 	}
 
 	/// <summary>
-	/// Wrapper around <see cref="Convert.ChangeType(object?, Type)"/> to support nullable values
+	/// Wrapper around <see cref="IParsable{TSelf}"/> to support nullable values
 	/// </summary>
 	protected object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{
