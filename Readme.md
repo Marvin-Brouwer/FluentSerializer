@@ -227,6 +227,7 @@ Here are some links to some basic concepts:
 - [Naming strategies](/docs/help/basic-concepts/Naming-strategies.md#readme)
 - [Converters](/docs/help/basic-concepts/Converters.md#readme)
 - [Converters, EnumConverter](/docs/help/basic-concepts/Converters-EnumConverter.md#readme)
+- [Converters, ParsableConverter](/docs/help/basic-concepts/Converters-ParsableConverter.md#readme)
 
 ## Advanced concepts
 

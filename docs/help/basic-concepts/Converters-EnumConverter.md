@@ -14,7 +14,7 @@
 [//]: # (Body)
 
 To support every flavour of `enum` the library ships with a specialized converter for these `enum`s.  
-It can be converted by replacing the default version by calling an extension method on the `Configuration.DefaultConverters` or like any convert by calling `Converter.For.Enum` / `Converter.For.Enum(EnumFormat format)`.
+It can be configured by replacing the default version by calling an extension method on the `Configuration.DefaultConverters` or it can be used like any converter by calling `Converter.For.Enum` / `Converter.For.Enum(EnumFormat format)`.
 
 ```csharp
 serviceCollection.AddFluentJsonSerializer<TAssemblyMarker>(static configuration =>
