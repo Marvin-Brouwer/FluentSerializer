@@ -34,6 +34,7 @@ public sealed class JsonSerializerConfiguration : SerializerConfiguration
 		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default,
 			// Built-in converters
 			UseJsonConverters.ConvertibleConverter,
+			UseJsonConverters.DefaultFormattableConverter,
 #if NET7_0_OR_GREATER
 			UseJsonConverters.DefaultParseConverter,
 #endif

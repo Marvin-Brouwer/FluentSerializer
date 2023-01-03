@@ -72,7 +72,7 @@ public sealed class FormattibleConverterBaseTests
 	/// <inheritdoc cref="FormattableConverterBase"/>
 	private sealed class TestConverter : FormattableConverterBase
 	{
-		public TestConverter() : base(null) { }
+		public TestConverter() : base(null, null) { }
 
 		/// <inheritdoc cref="FormattableConverterBase.ConvertToString"/>
 		public new string? ConvertToString(in object value) => base.ConvertToString(in value);

@@ -7,3 +7,11 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
 	Justification = "Underscores are common in test method naming", Scope = "module")]
+
+[assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider",
+	Justification = "Not important",
+	Scope = "member", Target = "~M:FluentSerializer.Xml.Tests.Tests.Converting.Converters.ParsableConverterTests.Deserialize_Parse_EmptyText_ReturnsDefault(System.Object,System.String)")]
+
+[assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider",
+	Justification = "Not important",
+	Scope = "member", Target = "~M:FluentSerializer.Xml.Tests.Tests.Converting.Converters.ParsableConverterTests.Deserialize_TryParse_EmptyText_ReturnsDefault(System.Object,System.String)")]

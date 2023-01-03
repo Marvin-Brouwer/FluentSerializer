@@ -59,6 +59,18 @@ public interface IUseXmlConverters
 	/// <inheritdoc cref="EnumConverter(in EnumFormats)" />
 	Func<IXmlConverter> Enum(EnumFormats format);
 
+	/// <inheritdoc cref="FormattableConverter" />
+	IXmlConverter Formattable();
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IXmlConverter> Formattable(IFormatProvider formatProvider);
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IXmlConverter> Formattable(string formatString);
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IXmlConverter> Formattable(string formatString, IFormatProvider formatProvider);
+
 #if NET7_0_OR_GREATER
 
 	/// <inheritdoc cref="ParsableConverter" />

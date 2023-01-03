@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
@@ -17,6 +19,46 @@ public static class UseJsonExtensions
 	public static IConfigurationStack<IConverter> UseEnum(this IConfigurationStack<IConverter> converters, in EnumFormats format, in bool writeNumbersAsString = false)
 	{
 		return converters.Use(Converter.For.Enum(format, writeNumbersAsString));
+	}
+
+	/// <inheritdoc cref="IUseJsonConverters.Formattable()"/>
+	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters)
+	{
+		return converters.Use(UseJsonConverters.DefaultFormattableConverter);
+	}
+
+	/// <inheritdoc cref="IUseJsonConverters.Formattable(IFormatProvider)"/>
+	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters, CultureInfo formatProvder)
+	{
+		return converters.Use(Converter.For.Formattable(formatProvder));
+	}
+
+	/// <inheritdoc cref="IUseJsonConverters.Formattable(string)"/>
+	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters, in string formatString)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return converters.Use(
+#pragma warning disable CA1305 // Specify CultureInfo
+			Converter.For.Formattable(formatString)
+#pragma warning restore CA1305 // Specify CultureInfo
+		);
+	}
+
+	/// <inheritdoc cref="IUseJsonConverters.Formattable(string, IFormatProvider)"/>
+	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters, in string formatString, CultureInfo formatProvder)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return converters.Use(Converter.For.Formattable(formatString, formatProvder));
 	}
 
 #if NET7_0_OR_GREATER

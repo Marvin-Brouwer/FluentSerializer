@@ -24,6 +24,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	private static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default);
+	internal static readonly IXmlConverter DefaultFormattableConverter = new FormattableConverter(null, null);
 #if NET7_0_OR_GREATER
 	internal static readonly IXmlConverter DefaultParseConverter = new ParsableConverter(false, null);
 #endif
@@ -108,6 +109,39 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<IXmlConverter> Enum(EnumFormats format)
 	{
 		return () => new EnumConverter(format);
+	}
+
+	/// <inheritdoc />
+	public IXmlConverter Formattable() => DefaultFormattableConverter;
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> Formattable(IFormatProvider formatProvider)
+	{
+		return () => new FormattableConverter(null, formatProvider);
+	}
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> Formattable(string formatString)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return () => new FormattableConverter(formatString, null);
+	}
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> Formattable(string formatString, IFormatProvider formatProvider)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return () => new FormattableConverter(formatString, formatProvider);
 	}
 
 #if NET7_0_OR_GREATER

@@ -26,7 +26,7 @@ public abstract class FormattableConverterBase : IConverter
 	private IFormatProvider FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
 
 	/// <inheritdoc cref="ConvertibleConverterBase"/>
-	protected FormattableConverterBase(in IFormatProvider? formatProvider, in string? format = null)
+	protected FormattableConverterBase(in string? format, in IFormatProvider? formatProvider)
 	{
 		_formatProvider = formatProvider;
 		_format = format;

@@ -21,6 +21,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default, false);
+	internal static readonly IJsonConverter DefaultFormattableConverter = new FormattableConverter(null, null);
 #if NET7_0_OR_GREATER
 	internal static readonly IJsonConverter DefaultParseConverter = new ParsableConverter(false, null);
 #endif
@@ -101,6 +102,39 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> Enum(EnumFormats format, bool writeNumbersAsString = false)
 	{
 		return () => new EnumConverter(format, writeNumbersAsString);
+	}
+
+	/// <inheritdoc />
+	public IJsonConverter Formattable() => DefaultFormattableConverter;
+
+	/// <inheritdoc />
+	public Func<IJsonConverter> Formattable(IFormatProvider formatProvider)
+	{
+		return () => new FormattableConverter(null, formatProvider);
+	}
+
+	/// <inheritdoc />
+	public Func<IJsonConverter> Formattable(string formatString)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return () => new FormattableConverter(formatString, null);
+	}
+
+	/// <inheritdoc />
+	public Func<IJsonConverter> Formattable(string formatString, IFormatProvider formatProvider)
+	{
+		Guard.Against.NullOrWhiteSpace(formatString
+#if NETSTANDARD2_1
+			, nameof(formatString)
+#endif
+		);
+
+		return () => new FormattableConverter(formatString, formatProvider);
 	}
 
 #if NET7_0_OR_GREATER
