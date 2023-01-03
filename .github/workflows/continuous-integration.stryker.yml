@@ -56,15 +56,6 @@ jobs:
       run: >-
         echo "https://dashboard.stryker-mutator.io/reports/github.com/Marvin-Brouwer/FluentSerializer/${{ github.ref }}";
 
-        echo "::echo::off"
-
-        dotnet build
-        --nologo
-        --configuration "Debug"
-        --verbosity quiet
-
-        echo "::echo::on"
-
         dotnet stryker
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
