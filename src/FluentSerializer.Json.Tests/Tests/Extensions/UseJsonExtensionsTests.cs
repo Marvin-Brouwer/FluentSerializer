@@ -1,10 +1,13 @@
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
+using FluentSerializer.Json.Converting;
 using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.Extensions;
 
 using Moq;
+
+using System;
 
 using Xunit;
 
@@ -25,7 +28,7 @@ public sealed class UseJsonExtensionsTests
 		// Assert
 		configurationStackMock
 			.Verify(
-				stack => stack.Use(It.IsAny<EnumConverter>(), false),
+				stack => stack.Use(It.IsAny<Func<IJsonConverter>>(), false),
 				Times.Once
 			);
 	}
