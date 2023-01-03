@@ -3,6 +3,7 @@
 ## @next
 
 - [#146](https://github.com/Marvin-Brouwer/FluentSerializer/issues/146) Added `net7` support
+- [#227](https://github.com/Marvin-Brouwer/FluentSerializer/issues/227) Added `IParsable` converter
 
 ## v3.0.0
 

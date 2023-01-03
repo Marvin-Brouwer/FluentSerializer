@@ -1,3 +1,4 @@
+#if NET7_0_OR_GREATER
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.DataNodes;
@@ -7,33 +8,19 @@ using System;
 using System.Data;
 using System.Globalization;
 
-using static FluentSerializer.Json.JsonBuilder;
-
 namespace FluentSerializer.Json.Converting.Converters;
 
 /// <summary>
-/// Converts types that implement <see cref="IConvertible"/>
+/// Converts types that implement <see cref="IParsable{TSelf}"/>
 /// </summary>
-public sealed class ConvertibleConverter : ConvertibleConverterBase, IJsonConverter
+public sealed class ParsableConverter : ParsableConverterBase, IJsonConverter
 {
-	/// <inheritdoc cref="ConvertibleConverter"/>
-	public ConvertibleConverter() : this(null) { }
-
-	/// <inheritdoc cref="ConvertibleConverter"/>
-	public ConvertibleConverter(CultureInfo? formatProvider) : base(formatProvider) { }
+	/// <inheritdoc cref="ParsableConverter"/>
+	public ParsableConverter(in CultureInfo? formatProvider, in bool tryParse) : base(in formatProvider, in tryParse) { }
 
 	/// <inheritdoc />
-	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context)
-	{
-		if (objectToSerialize is string stringToSerialize)
-			return Value($"\"{stringToSerialize}\"");
-
-		var stringValue = ConvertToString(objectToSerialize);
-
-		return stringValue is null
-			? null
-			: Value(in stringValue);
-	}
+	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>
+		throw new NotSupportedException("This is a Deserialize only converter.");
 
 	/// <inheritdoc />
 	public object? Deserialize(in IJsonNode objectToDeserialize, in ISerializerContext<IJsonNode> context)
@@ -46,7 +33,7 @@ public sealed class ConvertibleConverter : ConvertibleConverterBase, IJsonConver
 	}
 
 	/// <summary>
-	/// The <see cref="ConvertibleConverterBase.ConvertToNullableDataType"/> can probably handle string very well.
+	/// The <see cref="ParsableConverterBase.ConvertToNullableDataType"/> can probably handle string very well.
 	/// However, because of how the quotes work in JSON, we'd like some more control when it comes to strings.
 	/// </summary>
 	private static string? HandleStringData(in IDataValue data)
@@ -57,3 +44,4 @@ public sealed class ConvertibleConverter : ConvertibleConverterBase, IJsonConver
 		throw new DataException("A string type cannot be smaller than 2 since it should be surrounded in quotes");
 	}
 }
+#endif

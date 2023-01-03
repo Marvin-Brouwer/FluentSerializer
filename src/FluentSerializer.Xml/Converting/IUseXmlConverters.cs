@@ -58,4 +58,17 @@ public interface IUseXmlConverters
 	IXmlConverter Enum();
 	/// <inheritdoc cref="EnumConverter(in EnumFormats)" />
 	Func<IXmlConverter> Enum(EnumFormats format);
+
+#if NET7_0_OR_GREATER
+
+	/// <inheritdoc cref="ParsableConverter" />
+	IXmlConverter Parsable();
+
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IXmlConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
+
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IXmlConverter> Parsable(bool tryParse);
+
+#endif
 }

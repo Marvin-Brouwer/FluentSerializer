@@ -1,5 +1,6 @@
 {
 	"stryker-config": {
+		"target-framework": "net7.0",
 		"project": "FluentSerializer.Xml.csproj",
 		"project-info": {
 			"name": "github.com/Marvin-Brouwer/FluentSerializer",

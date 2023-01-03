@@ -39,14 +39,18 @@ public sealed class ConfigurationStackTests
 	public void Use_ExistingItem_NotAdded()
 	{
 		// Arrange
-		var item = 2;
+		const int item = 2;
 		var expected = new[] { 3, 2, 1 };
 
 		// Act
 		var result = Sut.Use(item).ToList();
+		var funcResult = Sut.Use(() => item).ToList();
 
 		// Assert
 		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+		funcResult.Should().BeEquivalentTo(expected,
 			config => config.WithStrictOrdering()
 		);
 	}
@@ -55,14 +59,18 @@ public sealed class ConfigurationStackTests
 	public void Use_ExistingItem_ForceTop_MovedToTop()
 	{
 		// Arrange
-		var item = 2;
+		const int item = 2;
 		var expected = new[] { 2, 3, 1 };
 
 		// Act
 		var result = Sut.Use(item, true).ToList();
+		var funcResult = Sut.Use(() => item, true).ToList();
 
 		// Assert
 		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+		funcResult.Should().BeEquivalentTo(expected,
 			config => config.WithStrictOrdering()
 		);
 	}
@@ -71,14 +79,18 @@ public sealed class ConfigurationStackTests
 	public void Use_NewItem_AddedToTop()
 	{
 		// Arrange
-		var item = 4;
+		const int item = 4;
 		var expected = new[] { 4, 3, 2, 1 };
 
 		// Act
 		var result = Sut.Use(item).ToList();
+		var funcResult = Sut.Use(() => item).ToList();
 
 		// Assert
 		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+		funcResult.Should().BeEquivalentTo(expected,
 			config => config.WithStrictOrdering()
 		);
 	}
@@ -87,14 +99,18 @@ public sealed class ConfigurationStackTests
 	public void Use_NewItem_ForceTop_AddedToTop()
 	{
 		// Arrange
-		var item = 4;
+		const int item = 4;
 		var expected = new[] { 4, 3, 2, 1 };
 
 		// Act
 		var result = Sut.Use(item, true).ToArray();
+		var funcResult = Sut.Use(() => item, true).ToList();
 
 		// Assert
 		result.Should().BeEquivalentTo(expected,
+			config => config.WithStrictOrdering()
+		);
+		funcResult.Should().BeEquivalentTo(expected,
 			config => config.WithStrictOrdering()
 		);
 	}

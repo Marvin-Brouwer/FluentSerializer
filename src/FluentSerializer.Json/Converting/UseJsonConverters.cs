@@ -21,6 +21,9 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter CollectionConverter = new CollectionConverter();
 	internal static readonly IJsonConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default, false);
+#if NET7_0_OR_GREATER
+	internal static readonly IJsonConverter DefaultParseConverter = new ParsableConverter(null, false);
+#endif
 
 	/// <inheritdoc />
 	public IJsonConverter DateTime() => DefaultDateTimeConverter;
@@ -99,4 +102,23 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	{
 		return () => new EnumConverter(format, writeNumbersAsString);
 	}
+
+#if NET7_0_OR_GREATER
+
+	/// <inheritdoc />
+	public IJsonConverter Parsable() => DefaultParseConverter;
+
+	/// <inheritdoc />
+	public Func<IJsonConverter> Parsable(CultureInfo formatProvider, bool tryParse = false)
+	{
+		return () => new ParsableConverter(formatProvider, tryParse);
+	}
+
+	/// <inheritdoc />
+	public Func<IJsonConverter> Parsable(bool tryParse)
+	{
+		return () => new ParsableConverter(null, tryParse);
+	}
+
+#endif
 }

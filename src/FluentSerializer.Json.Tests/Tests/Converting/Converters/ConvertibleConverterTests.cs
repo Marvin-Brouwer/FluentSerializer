@@ -143,18 +143,18 @@ public sealed class ConvertibleConverterTests
 		result.Should().BeEquivalentTo(expected);
 	}
 
-	/// <remarks>
+	/// <summary>
 	/// This is an interesting scenario.
 	/// Since a string without quotes is considered invalid JSON the serializer should never get this far in the first place.
 	/// Because of that the converter just plainly ignores the fact that it doesn't have quotes and snips of the outer characters.
-	/// </remarks>
+	/// </summary>
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
 	public void Deserialize_Convertible_UnquotedString_ReturnsTruncatedValue()
 	{
 		// Arrange
 		var input = Value("This string has no quotes");
-		var expected = "his string has no quote";
+		const string expected = "his string has no quote";
 
 		_contextMock
 			.WithPropertyType(typeof(string));
@@ -243,4 +243,3 @@ public sealed class ConvertibleConverterTests
 	}
 	#endregion
 }
-
