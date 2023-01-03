@@ -24,6 +24,9 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	private static readonly IXmlConverter<IXmlElement> NonWrappedCollectionConverter = new NonWrappedCollectionConverter();
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default);
+#if NET7_0_OR_GREATER
+	internal static readonly IXmlConverter DefaultParseConverter = ParsableConverter.Parse();
+#endif
 
 	/// <inheritdoc/>
 	public SimpleTypeConverter<DateTime> DateTime() => DefaultDateTimeConverter;
@@ -106,4 +109,25 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	{
 		return () => new EnumConverter(format);
 	}
+
+#if NET7_0_OR_GREATER
+
+	/// <inheritdoc />
+	public IXmlConverter Parse() => DefaultParseConverter;
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> Parse(CultureInfo formatProvider)
+	{
+		return () => ParsableConverter.Parse(formatProvider);
+	}
+
+	/// <inheritdoc />
+	public IXmlConverter TryParse() => ParsableConverter.TryParse();
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> TryParse(CultureInfo formatProvider)
+	{
+		return () => ParsableConverter.TryParse(formatProvider);
+	}
+#endif
 }

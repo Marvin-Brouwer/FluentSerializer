@@ -39,6 +39,9 @@ public sealed class XmlSerializerConfiguration : SerializerConfiguration
 		DefaultConverters = new ConfigurationStack<IConverter>(ConverterComparer.Default,
 			// Built-in converters
 			UseXmlConverters.ConvertibleConverter,
+#if NET7_0_OR_GREATER
+			UseXmlConverters.DefaultParseConverter,
+#endif
 			UseXmlConverters.DefaultEnumConverter,
 			UseXmlConverters.DefaultDateTimeConverter,
 			UseXmlConverters.DefaultDateTimeOffsetConverter,

@@ -23,8 +23,8 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	internal static readonly IJsonConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default, false);
 #if NET7_0_OR_GREATER
 	internal static readonly IJsonConverter DefaultParseConverter = ParsableConverter.Parse();
-
 #endif
+
 	/// <inheritdoc />
 	public IJsonConverter DateTime() => DefaultDateTimeConverter;
 
