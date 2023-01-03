@@ -60,10 +60,13 @@ public interface IUseJsonConverters
 	IJsonConverter Parsable();
 
 	/// <inheritdoc cref="ParsableConverter" />
-	Func<IJsonConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
+	Func<IJsonConverter> Parsable(IFormatProvider formatProvider);
 
 	/// <inheritdoc cref="ParsableConverter" />
 	Func<IJsonConverter> Parsable(bool tryParse);
+
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IJsonConverter> Parsable(bool tryParse, IFormatProvider formatProvider);
 
 #endif
 }

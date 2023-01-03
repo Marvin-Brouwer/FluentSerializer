@@ -25,7 +25,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	internal static readonly IXmlConverter ConvertibleConverter = new ConvertibleConverter();
 	internal static readonly IXmlConverter DefaultEnumConverter = new EnumConverter(EnumFormats.Default);
 #if NET7_0_OR_GREATER
-	internal static readonly IXmlConverter DefaultParseConverter = new ParsableConverter(null, false);
+	internal static readonly IXmlConverter DefaultParseConverter = new ParsableConverter(false, null);
 #endif
 
 	/// <inheritdoc/>
@@ -116,15 +116,21 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public IXmlConverter Parsable() => DefaultParseConverter;
 
 	/// <inheritdoc />
-	public Func<IXmlConverter> Parsable(CultureInfo formatProvider, bool tryParse = false)
+	public Func<IXmlConverter> Parsable(IFormatProvider formatProvider)
 	{
-		return () => new ParsableConverter(formatProvider, tryParse);
+		return () => new ParsableConverter(false, formatProvider);
 	}
 
 	/// <inheritdoc />
 	public Func<IXmlConverter> Parsable(bool tryParse)
 	{
-		return () => new ParsableConverter(null, tryParse);
+		return () => new ParsableConverter(tryParse, null);
+	}
+
+	/// <inheritdoc />
+	public Func<IXmlConverter> Parsable(bool tryParse, IFormatProvider formatProvider)
+	{
+		return () => new ParsableConverter(tryParse, formatProvider);
 	}
 
 #endif

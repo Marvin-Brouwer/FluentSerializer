@@ -10,13 +10,10 @@ using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
 
-using Sut = FluentSerializer.Json.Converting.Converters.ParsableConverter;
-
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
-/// and <see cref="Convert.ChangeType(object?, Type)"/>
+/// Basically test if this converter behaves exactly like <see cref="IParsable{TSelf}"/>
 /// </summary>
 public sealed partial class ParsableConverterTests
 {
@@ -42,7 +39,7 @@ public sealed partial class ParsableConverterTests
 	#region Deserialize
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
-		MemberData(nameof(GenerateConvertibleData))]
+		MemberData(nameof(GenerateParsibleData))]
 	public void Deserialize_TryParse_EmptyValue_ReturnsDefault(object requested, string unused)
 	{
 		_ = unused;
@@ -65,7 +62,7 @@ public sealed partial class ParsableConverterTests
 
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
-		MemberData(nameof(GenerateConvertibleData))]
+		MemberData(nameof(GenerateParsibleData))]
 	public void Deserialize_TryParse_Parsible_ReturnsValue(object expected, string inputValue)
 	{
 		// Arrange

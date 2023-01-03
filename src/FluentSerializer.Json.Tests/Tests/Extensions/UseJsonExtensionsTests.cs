@@ -2,7 +2,6 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting;
-using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.Extensions;
 
 using Moq;
@@ -42,12 +41,14 @@ public sealed class UseJsonExtensionsTests
 		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
 
 		// Act
+#pragma warning disable CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseParsable();
 		configurationStackMock.Object.UseParsable(true);
 		configurationStackMock.Object.UseParsable(false);
+#pragma warning restore CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture);
-		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, true);
-		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, false);
+		configurationStackMock.Object.UseParsable(true, CultureInfo.InvariantCulture);
+		configurationStackMock.Object.UseParsable(false, CultureInfo.InvariantCulture);
 
 		// Assert
 		configurationStackMock

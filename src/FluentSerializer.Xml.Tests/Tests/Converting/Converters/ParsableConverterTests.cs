@@ -15,16 +15,15 @@ using System.Globalization;
 namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
-/// and <see cref="Convert.ChangeType(object?, Type)"/>
+/// Basically test if this converter behaves exactly like <see cref="IParsable{TSelf}"/>
 /// </summary>
 public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
 	private static readonly CultureInfo TestCulture = new ("nl-NL");
 
-	private static IXmlConverter SutParse(CultureInfo? format = null) => new ParsableConverter(format, false);
-	private static IXmlConverter SutTryParse(CultureInfo? format = null) => new ParsableConverter(format, true);
+	private static IXmlConverter SutParse(IFormatProvider? formatProvider = null) => new ParsableConverter(false, formatProvider);
+	private static IXmlConverter SutTryParse(IFormatProvider? formatProvider = null) => new ParsableConverter(true, formatProvider);
 
 	public ParsableConverterTests()
 	{

@@ -3,7 +3,6 @@ using FluentSerializer.Core.Extensions;
 
 using System;
 using System.Globalization;
-using System.Reflection;
 
 namespace FluentSerializer.Core.Converting.Converters;
 
@@ -21,13 +20,13 @@ public abstract class FormattableConverterBase : IConverter
 	/// <inheritdoc />
 	public Guid ConverterId { get; } = typeof(IFormattable).GUID;
 
-	private readonly CultureInfo? _formatProvider;
+	private readonly IFormatProvider? _formatProvider;
 	private readonly string? _format;
 
-	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
+	private IFormatProvider FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
 
 	/// <inheritdoc cref="ConvertibleConverterBase"/>
-	protected FormattableConverterBase(in CultureInfo? formatProvider, in string? format = null)
+	protected FormattableConverterBase(in IFormatProvider? formatProvider, in string? format = null)
 	{
 		_formatProvider = formatProvider;
 		_format = format;

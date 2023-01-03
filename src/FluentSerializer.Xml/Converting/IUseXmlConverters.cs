@@ -65,10 +65,13 @@ public interface IUseXmlConverters
 	IXmlConverter Parsable();
 
 	/// <inheritdoc cref="ParsableConverter" />
-	Func<IXmlConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
+	Func<IXmlConverter> Parsable(IFormatProvider formatProvider);
 
 	/// <inheritdoc cref="ParsableConverter" />
 	Func<IXmlConverter> Parsable(bool tryParse);
+
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IXmlConverter> Parsable(bool tryParse, IFormatProvider formatProvider);
 
 #endif
 }
