@@ -3,21 +3,21 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
 
-	<Property Name="sonar.sources">./**/*.cs</Property>
+	<Property Name="sonar.sources">**/*.cs</Property>
 	<Property Name="sonar.sourceEncoding">UTF-8</Property>
 	<Property Name="sonar.pullrequest.provider">GitHub</Property>
 	<Property Name="sonar.exclusions">
-		./**/GlobalSuppressions.cs
-		./*.Tests/**/*.cs
+		**/GlobalSuppressions.cs
+		*.Tests/**/*.cs
 		<!-- Temporary exclusion, should be re-added in #232 -->
-		./FluentSerializer.Json.Converter.DefaultJson/**/*.cs
+		FluentSerializer.Json.Converter.DefaultJson/**/*.cs
 		<!-- Temporary exclusion, should be re-added in #232 -->
-		./FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
+		FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
 	</Property>
 
 	<Property Name="sonar.tests">*.Tests/**/*Tests.cs</Property>
 	<Property Name="sonar.test.exclusions">
-		./**/GlobalSuppressions.cs
+		**/GlobalSuppressions.cs
 	</Property>
 	<!-- Because of defaults './' points to './src', hence the '../' -->
 	<Property Name="sonar.coverageReportPaths">
@@ -25,7 +25,8 @@
 	</Property>
 
 	<Property Name="sonar.cpd.exclusions">
-		./**/GlobalSuppressions.cs
+		**/GlobalSuppressions.cs
+		**/Extensions/Use*Extensions.cs
 	</Property>
 
 </SonarQubeAnalysisProperties>

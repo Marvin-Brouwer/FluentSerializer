@@ -19,14 +19,14 @@ public sealed class FormattableConverter : FormattableConverterBase, IXmlConvert
 	/// <inheritdoc cref="ConvertibleConverter"/>
 	public FormattableConverter(in string? format, in IFormatProvider? formatProvider) : base(in format, in formatProvider) { }
 
+	private static object ThrowDeserializeNotSupported() => throw new NotSupportedException("This is a Serialize only converter.");
+
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context) =>
-		throw new NotSupportedException("This is a Serialize only converter.");
-
+		ThrowDeserializeNotSupported();
 	object? IConverter<IXmlElement, IXmlNode>.Deserialize(in IXmlElement objectToDeserialize, in ISerializerContext<IXmlNode> context) =>
-		throw new NotSupportedException("This is a Serialize only converter.");
-
+		ThrowDeserializeNotSupported();
 	object? IConverter<IXmlText, IXmlNode>.Deserialize(in IXmlText objectToDeserialize, in ISerializerContext<IXmlNode> context) =>
-		throw new NotSupportedException("This is a Serialize only converter.");
+		ThrowDeserializeNotSupported();
 
 	IXmlAttribute? IConverter<IXmlAttribute, IXmlNode>.Serialize(in object objectToSerialize, in ISerializerContext context)
 	{
