@@ -2,7 +2,6 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Json.Converting;
-using FluentSerializer.Json.Converting.Converters;
 using FluentSerializer.Json.Extensions;
 
 using Moq;

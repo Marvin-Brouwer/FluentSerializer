@@ -2,7 +2,6 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting;
-using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Extensions;
 
 using Moq;

@@ -10,8 +10,6 @@ using Xunit;
 
 using static FluentSerializer.Json.JsonBuilder;
 
-using Sut = FluentSerializer.Json.Converting.Converters.ParsableConverter;
-
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>

@@ -32,9 +32,9 @@ public abstract class AbstractSpanNamingStrategy : INamingStrategy
 		return newName;
 	}
 
-	/// <remarks>
+	/// <summary>
 	/// Convert the <paramref name="sourceSpan"/> and push into the <paramref name="characterSpan"/>.
-	/// </remarks>
+	/// </summary>
 	/// <param name="sourceSpan">
 	/// The <see cref="ReadOnlySpan{T}"/> refering to the original input string.
 	/// By default just pointing to <c>Type.Name</c> for classes and <c>PopertyInfo.Name</c> for properties.
