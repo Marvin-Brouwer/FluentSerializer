@@ -59,6 +59,7 @@ jobs:
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         /d:sonar.host.url="https://sonarcloud.io"
         /s:"${{github.workspace}}/SonarQube.Analysis.xml"
+        /d:sonar.verbose=${{ secrets.ACTIONS_STEP_DEBUG || false }}
     ###
     # 🛠 Build
     ###

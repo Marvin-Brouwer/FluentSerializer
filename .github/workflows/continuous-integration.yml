@@ -28,13 +28,12 @@ jobs:
     secrets: inherit
   ci-qa:
     name: "CI"
-    needs: [ci]
     uses: ./.github/workflows/continuous-integration.build-qa.yml
     secrets: inherit
 
   stryker:
     name: "Stryker"
-    needs: [ci]
+    needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
 
