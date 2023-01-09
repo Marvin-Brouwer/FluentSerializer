@@ -5,26 +5,38 @@
 
 	<Property Name="sonar.sourceEncoding">UTF-8</Property>
 	<Property Name="sonar.pullrequest.provider">GitHub</Property>
+
+	<!--
+		**/GlobalSuppressions.cs:
+		Ignore these completely, this is not code
+
+		FluentSerializer.Json.Converter.DefaultJson/**/*.cs:
+		Temporary exclusion, should be re-added in #232
+
+		FluentSerializer.Xml.Converter.DefaultXml/**/*.cs:
+		Temporary exclusion, should be re-added in #232
+	 -->
 	<Property Name="sonar.exclusions">
 		**/GlobalSuppressions.cs,
-		<!-- Temporary exclusion, should be re-added in #232 -->
 		FluentSerializer.Json.Converter.DefaultJson/**/*.cs,
-		<!-- Temporary exclusion, should be re-added in #232 -->
 		FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
 	</Property>
 
-	<Property Name="sonar.test.exclusions">
-		**/GlobalSuppressions.cs
-	</Property>
 	<!-- Because of defaults './' points to './src', hence the '../' -->
 	<Property Name="sonar.coverageReportPaths">
 		../test-results/coverage/SonarQube.xml
 	</Property>
 
+	<!--
+		**/Extensions/Use*Extensions.cs:
+		These extensions are purely for consumers of the package and will be duplicate by design
+
+		FluentSerializer.Xml/Converting/Converters/FormattableConverter.cs:
+		This converter is different but very similar to the ConvertibleConverter, this is by design
+	-->
 	<Property Name="sonar.cpd.exclusions">
-		**/GlobalSuppressions.cs,
-		<!-- These extensions are purely for consumers of the package and will be duplicate by design -->
-		**/Extensions/Use*Extensions.cs
+		**/Extensions/Use*Extensions.cs,
+		FluentSerializer.Xml/Converting/Converters/FormattableConverter.cs
 	</Property>
 
 </SonarQubeAnalysisProperties>
