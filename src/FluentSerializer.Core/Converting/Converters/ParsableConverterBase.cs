@@ -9,7 +9,7 @@ using System.Reflection;
 namespace FluentSerializer.Core.Converting.Converters;
 
 /// <summary>
-/// Converts types that implement <see cref="IConvertible"/>
+/// Converts types that implement <see cref="IParsable{TSelf}"/>
 /// </summary>
 public abstract class ParsableConverterBase : IConverter
 {
@@ -22,16 +22,16 @@ public abstract class ParsableConverterBase : IConverter
 	/// <inheritdoc />
 	public Guid ConverterId { get; } = typeof(IParsable<>).GUID;
 
-	private readonly CultureInfo? _formatProvider;
+	private readonly IFormatProvider? _formatProvider;
 	private readonly bool _tryParse;
 	private readonly string _tryParseMethodName;
 	private readonly string _parseMethodName;
 	private const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod;
 
-	private CultureInfo FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
+	private IFormatProvider FormatProvider => _formatProvider ?? CultureInfo.CurrentCulture;
 
 	/// <inheritdoc cref="ConvertibleConverterBase"/>
-	protected ParsableConverterBase(in CultureInfo? formatProvider, in bool tryParse)
+	protected ParsableConverterBase(in bool tryParse, in IFormatProvider? formatProvider)
 	{
 		_formatProvider = formatProvider;
 		_tryParse = tryParse;
@@ -40,7 +40,7 @@ public abstract class ParsableConverterBase : IConverter
 	}
 
 	/// <summary>
-	/// Wrapper around <see cref="Convert.ChangeType(object?, Type)"/> to support nullable values
+	/// Wrapper around <see cref="IParsable{TSelf}"/> to support nullable values
 	/// </summary>
 	protected object? ConvertToNullableDataType(in string? currentValue, in Type targetType)
 	{

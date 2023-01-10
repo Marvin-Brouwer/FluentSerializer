@@ -16,7 +16,6 @@ public sealed partial class ParsableConverterBaseTests
 	public ParsableConverterBaseTests()
 	{
 		Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
-		Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 	}
 
 	public static IEnumerable<object[]> GenerateParsableData()
@@ -33,7 +32,7 @@ public sealed partial class ParsableConverterBaseTests
 		public static Sut Parse => new(false);
 		public static Sut TryParse => new(true);
 
-		private Sut(bool tryParse) : base(null, tryParse) { }
+		private Sut(bool tryParse) : base(tryParse, null) { }
 
 		/// <inheritdoc cref="ParsableConverterBase.ConvertToNullableDataType"/>
 		public new object? ConvertToNullableDataType(in string? currentValue, in Type targetType) =>

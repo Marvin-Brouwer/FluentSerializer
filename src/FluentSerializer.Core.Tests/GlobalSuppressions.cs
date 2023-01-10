@@ -7,3 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
 	Justification = "Underscores are common in test method naming", Scope = "module")]
+
+[assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider",
+	Justification = "The no-format alternatives also require testing",
+	Scope = "module")]

@@ -69,7 +69,7 @@ public sealed class ConvertibleConverterBaseTests
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void ConvertToStringAttributeConvertible_ReturnsString(object input, string expected)
+	public void ConvertToString_Convertible_ReturnsString(object input, string expected)
 	{
 		// Act
 		var canConvert = _sut.CanConvert(input.GetType());

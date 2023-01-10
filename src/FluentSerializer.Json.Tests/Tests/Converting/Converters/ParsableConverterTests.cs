@@ -14,16 +14,15 @@ using System.Globalization;
 namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
-/// and <see cref="Convert.ChangeType(object?, Type)"/>
+/// Basically test if this converter behaves exactly like <see cref="IParsable{TSelf}"/>
 /// </summary>
 public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
 	private static readonly CultureInfo TestCulture = new ("nl-NL");
 
-	private static ParsableConverter SutParse(CultureInfo? format = null) => new ParsableConverter(format, false);
-	private static ParsableConverter SutTryParse(CultureInfo? format = null) => new ParsableConverter(format, true);
+	private static ParsableConverter SutParse(IFormatProvider? formatProvider = null) => new (false, formatProvider);
+	private static ParsableConverter SutTryParse(IFormatProvider? formatProvider = null) => new (true, formatProvider);
 
 	public ParsableConverterTests()
 	{
@@ -33,7 +32,7 @@ public sealed partial class ParsableConverterTests
 			.SetupDefault(serializerMock);
 	}
 
-	public static IEnumerable<object[]> GenerateConvertibleData()
+	public static IEnumerable<object[]> GenerateParsibleData()
 	{
 		yield return new object[] { 1, "1" };
 		yield return new object[] { new DateOnly(1991, 11, 28), "28-11-1991" };

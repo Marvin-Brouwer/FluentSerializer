@@ -2,7 +2,6 @@ using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Xml.Converting;
-using FluentSerializer.Xml.Converting.Converters;
 using FluentSerializer.Xml.Extensions;
 
 using Moq;
@@ -42,18 +41,53 @@ public sealed class UseXmlExtensionsTests
 		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
 
 		// Act
+#pragma warning disable CA1305 // Specify IFormatProvider
 		configurationStackMock.Object.UseParsable();
 		configurationStackMock.Object.UseParsable(true);
 		configurationStackMock.Object.UseParsable(false);
+#pragma warning restore CA1305 // Specify IFormatProvider
 		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture);
-		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, true);
-		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture, false);
+		configurationStackMock.Object.UseParsable(true, CultureInfo.InvariantCulture);
+		configurationStackMock.Object.UseParsable(false, CultureInfo.InvariantCulture);
 
 		// Assert
 		configurationStackMock
 			.Verify(
+				stack => stack.Use(It.IsAny<IXmlConverter>(), It.IsAny<bool>()),
+				Times.Once
+			);
+		configurationStackMock
+			.Verify(
 				stack => stack.Use(It.IsAny<Func<IXmlConverter>>(), It.IsAny<bool>()),
 				Times.Exactly(5)
+			);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void UseFormattable_UseCalled()
+	{
+		// Arrange
+		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
+
+		// Act
+#pragma warning disable CA1304 // Specify CultureInfo
+		configurationStackMock.Object.UseFormattable();
+		configurationStackMock.Object.UseFormattable("G");
+#pragma warning restore CA1304 // Specify CultureInfo
+		configurationStackMock.Object.UseFormattable(CultureInfo.InvariantCulture);
+		configurationStackMock.Object.UseFormattable("G", CultureInfo.InvariantCulture);
+
+		// Assert
+		configurationStackMock
+			.Verify(
+				stack => stack.Use(It.IsAny<IXmlConverter>(), It.IsAny<bool>()),
+				Times.Once
+			);
+		configurationStackMock
+			.Verify(
+				stack => stack.Use(It.IsAny<Func<IXmlConverter>>(), It.IsAny<bool>()),
+				Times.Exactly(3)
 			);
 	}
 }

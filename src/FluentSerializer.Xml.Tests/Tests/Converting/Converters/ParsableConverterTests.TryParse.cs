@@ -5,20 +5,16 @@ using FluentSerializer.Xml.Converting;
 using FluentSerializer.Xml.DataNodes;
 
 using System;
-using System.Data;
 using System.IO;
 
 using Xunit;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
-using Sut = FluentSerializer.Xml.Converting.Converters.ParsableConverter;
-
 namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 
 /// <summary>
-/// Basically test if this converter behaves exactly like <see cref="Convert.Tostring"/>
-/// and <see cref="Convert.ChangeType(object?, Type)"/>
+/// Basically test if this converter behaves exactly like <see cref="IParsable{TSelf}"/>
 /// </summary>
 public sealed partial class ParsableConverterTests
 {
