@@ -13,5 +13,5 @@ using System.Diagnostics.CodeAnalysis;
 	Scope = "member", Target = "~M:FluentSerializer.Xml.Tests.Tests.Converting.Converters.ParsableConverterTests.Deserialize_Parse_EmptyText_ReturnsDefault(System.Object,System.String)")]
 
 [assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider",
-	Justification = "Not important",
-	Scope = "member", Target = "~M:FluentSerializer.Xml.Tests.Tests.Converting.Converters.ParsableConverterTests.Deserialize_TryParse_EmptyText_ReturnsDefault(System.Object,System.String)")]
+	Justification = "The no-format alternatives also require testing",
+	Scope = "module")]
