@@ -18,7 +18,7 @@ namespace FluentSerializer.Xml.Converting.Converters;
 public sealed class ParsableConverter : ParsableConverterBase, IXmlConverter<IXmlAttribute>, IXmlConverter<IXmlElement>, IXmlConverter<IXmlText>
 {
 	/// <inheritdoc cref="ParsableConverter"/>
-	public ParsableConverter(in CultureInfo? formatProvider, in bool tryParse) : base(in formatProvider, in tryParse) { }
+	public ParsableConverter(in bool tryParse, in IFormatProvider? formatProvider) : base(in tryParse, in formatProvider) { }
 
 	object? IConverter<IXmlAttribute, IXmlNode>.Deserialize(in IXmlAttribute attributeToDeserialize, in ISerializerContext<IXmlNode> context)
 	{

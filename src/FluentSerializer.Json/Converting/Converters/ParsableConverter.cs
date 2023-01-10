@@ -16,7 +16,7 @@ namespace FluentSerializer.Json.Converting.Converters;
 public sealed class ParsableConverter : ParsableConverterBase, IJsonConverter
 {
 	/// <inheritdoc cref="ParsableConverter"/>
-	public ParsableConverter(in CultureInfo? formatProvider, in bool tryParse) : base(in formatProvider, in tryParse) { }
+	public ParsableConverter(in bool tryParse, in IFormatProvider? formatProvider) : base(in tryParse, in formatProvider) { }
 
 	/// <inheritdoc />
 	public IJsonNode? Serialize(in object objectToSerialize, in ISerializerContext context) =>

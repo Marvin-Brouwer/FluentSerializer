@@ -17,14 +17,14 @@
 > **Note:** This converter is only available for `net7` and up.  
 > Older versions will use the `ConvertibleConverter` instead.
 
-To support the new [`IParsable<TSelf>` interface][parsable-interface-doc] the library ships with a specialized converter for the types implementing this interface.
+To support the new [`IParsable<TSelf>` interface][parsable-interface-doc] the library ships with a specialized converter for the types implementing this interface. By default it will use `Parse` and throw `FormatException`s, as well as use `CultureInfo.CurrentCulture` as the formatProvider.
 
 It can be configured by replacing the default version by calling an extension method on the `Configuration.DefaultConverters` or it can be used like any converter by calling any of the following options:
 
 - `Converter.For.Parsable`
-- `Converter.For.Parsable(true)` _technically you can use `false` here, but that would be the same as `Converter.For.Parsable`_
-- `Converter.For.Parsable(CultureInfo formatProvider)`
-- `Converter.For.Parsable(CultureInfo formatProvider, true)` _technically you can use `false` here, but that would be the same as `Converter.For.Parsable(CultureInfo formatProvider)`_
+- `Converter.For.Parsable(bool useTryParse)` _technically you can use `false` here, but that would be the same as `Converter.For.Parsable`_
+- `Converter.For.Parsable(IFormatProvider formatProvider)`
+- `Converter.For.Parsable(bool useTryParse, IFormatProvider formatProvider)` _technically you can use `false` here, but that would be the same as `Converter.For.Parsable(IFormatProvider formatProvider)`_
 
 Overriding the default converter can be done one the `DefaultConverters` configuration with the same parameter options, like this:
 

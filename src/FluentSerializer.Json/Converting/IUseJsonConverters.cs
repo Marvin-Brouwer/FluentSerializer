@@ -54,16 +54,31 @@ public interface IUseJsonConverters
 	/// <inheritdoc cref="EnumConverter(in EnumFormats, in bool)" />
 	Func<IJsonConverter> Enum(EnumFormats format, bool writeNumbersAsString = false);
 
+	/// <inheritdoc cref="FormattableConverter" />
+	IJsonConverter Formattable();
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IJsonConverter> Formattable(IFormatProvider formatProvider);
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IJsonConverter> Formattable(string formatString);
+
+	/// <inheritdoc cref="FormattableConverter" />
+	Func<IJsonConverter> Formattable(string formatString, IFormatProvider formatProvider);
+
 #if NET7_0_OR_GREATER
 
 	/// <inheritdoc cref="ParsableConverter" />
 	IJsonConverter Parsable();
 
 	/// <inheritdoc cref="ParsableConverter" />
-	Func<IJsonConverter> Parsable(CultureInfo formatProvider, bool tryParse = false);
+	Func<IJsonConverter> Parsable(IFormatProvider formatProvider);
 
 	/// <inheritdoc cref="ParsableConverter" />
 	Func<IJsonConverter> Parsable(bool tryParse);
+
+	/// <inheritdoc cref="ParsableConverter" />
+	Func<IJsonConverter> Parsable(bool tryParse, IFormatProvider formatProvider);
 
 #endif
 }

@@ -84,7 +84,7 @@ public sealed class ConvertibleConverterTests
 	[Theory,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON"),
 		MemberData(nameof(GenerateConvertibleData))]
-	public void SerializeAttributeConvertible_ReturnsString(object input, string expectedValue)
+	public void Serialize_Convertible_ReturnsString(object input, string expectedValue)
 	{
 		// Arrange
 		var expected = Value(expectedValue);
