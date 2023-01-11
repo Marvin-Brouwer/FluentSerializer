@@ -33,10 +33,14 @@
 
 		FluentSerializer.Xml/Converting/Converters/FormattableConverter.cs:
 		This converter is different but very similar to the ConvertibleConverter, this is by design
+
+		FluentSerializer.Core/Naming/NamingStrategies/*NamingStrategy.cs:
+		The naming stragegies do basically the same thing. They need to be this similar.
 	-->
 	<Property Name="sonar.cpd.exclusions">
 		**/Extensions/Use*Extensions.cs,
-		FluentSerializer.Xml/Converting/Converters/FormattableConverter.cs
+		FluentSerializer.Xml/Converting/Converters/FormattableConverter.cs,
+		FluentSerializer.Core/Naming/NamingStrategies/*NamingStrategy.cs
 	</Property>
 
 </SonarQubeAnalysisProperties>

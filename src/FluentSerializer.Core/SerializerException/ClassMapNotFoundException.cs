@@ -35,5 +35,5 @@ public sealed class ClassMapNotFoundException : SerializerException
 
 		base.GetObjectData(info, context);
 	}
-	#endregion
+	#endregion Serializable
 }

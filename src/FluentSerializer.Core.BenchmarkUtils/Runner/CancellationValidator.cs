@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-
-using System.Threading;
-
 using BenchmarkDotNet.Validators;
+
+using System.Collections.Generic;
+using System.Threading;
 
 namespace FluentSerializer.Core.BenchmarkUtils.Runner;
 
@@ -17,7 +16,7 @@ public sealed class CancellationValidator : IValidator
 
 	public bool TreatsWarningsAsErrors => true;
 
-	public static readonly CancellationValidator Default = new (new CancellationTokenSource());
+	public static readonly CancellationValidator Default = new(new CancellationTokenSource());
 	private CancellationValidator(CancellationTokenSource cancellationTokenSource)
 	{
 		_cancellationToken = cancellationTokenSource.Token;

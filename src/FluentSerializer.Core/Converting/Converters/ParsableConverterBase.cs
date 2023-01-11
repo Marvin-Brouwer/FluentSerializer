@@ -78,7 +78,7 @@ public abstract class ParsableConverterBase : IConverter
 			var parseArugments = new object?[] { currentValue, FormatProvider };
 			return parse.Invoke(null, parseArugments)!;
 		}
-		catch(TargetInvocationException invocationException)
+		catch (TargetInvocationException invocationException)
 		{
 			throw invocationException.InnerException!;
 		}

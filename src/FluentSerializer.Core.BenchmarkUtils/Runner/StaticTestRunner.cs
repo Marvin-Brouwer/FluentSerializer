@@ -28,7 +28,9 @@ using BenchmarkDotNet.Order;
 
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Extensions;
+
 using System.Collections.Immutable;
+
 using BenchmarkDotNet.Environments;
 
 #if (DEBUG)
@@ -155,7 +157,7 @@ public abstract class StaticTestRunner
 			var cancellationValidator = CancellationValidator.Default;
 
 			Console.WriteLine("Quick exit mode enabled.");
-			config  = config.AddValidator(cancellationValidator);
+			config = config.AddValidator(cancellationValidator);
 			Console.CancelKeyPress += (_, e) =>
 			{
 				Console.WriteLine("Cancellation signal recieved.");

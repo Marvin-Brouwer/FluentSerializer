@@ -41,11 +41,9 @@ public sealed class UseJsonExtensionsTests
 		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
 
 		// Act
-#pragma warning disable CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseParsable();
 		configurationStackMock.Object.UseParsable(true);
 		configurationStackMock.Object.UseParsable(false);
-#pragma warning restore CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseParsable(CultureInfo.InvariantCulture);
 		configurationStackMock.Object.UseParsable(true, CultureInfo.InvariantCulture);
 		configurationStackMock.Object.UseParsable(false, CultureInfo.InvariantCulture);
@@ -71,10 +69,8 @@ public sealed class UseJsonExtensionsTests
 		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
 
 		// Act
-#pragma warning disable CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseFormattable();
 		configurationStackMock.Object.UseFormattable("G");
-#pragma warning restore CA1304 // Specify CultureInfo
 		configurationStackMock.Object.UseFormattable(CultureInfo.InvariantCulture);
 		configurationStackMock.Object.UseFormattable("G", CultureInfo.InvariantCulture);
 

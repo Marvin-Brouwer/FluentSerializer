@@ -5,7 +5,6 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Xml.DataNodes;
 
 using System;
-using System.Globalization;
 
 using static FluentSerializer.Xml.XmlBuilder;
 
