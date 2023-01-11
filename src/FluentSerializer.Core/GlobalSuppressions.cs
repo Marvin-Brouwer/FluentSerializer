@@ -35,3 +35,10 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Warning", "S5766: Make sure not performing data validation after deserialization is safe here.",
 	Justification = "There is no validation to begin with", Scope = "type", Target = "~T:FluentSerializer.Core.SerializerException.ConverterNotSupportedException")]
+
+[assembly: SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix",
+	Justification = "This is a similar construction as Array.Empty<T>()",
+	Scope = "type", Target = "~T:FluentSerializer.Core.DataNodes.SingleItemCollection")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
+	Justification = "This is the correct exception type",
+	Scope = "member", Target = "~P:FluentSerializer.Core.DataNodes.SingleItemCollection`1.Item(System.Int32)")]

@@ -24,7 +24,7 @@ public readonly partial struct JsonProperty
 
 		if (!writeNull && !HasValue) return stringBuilder;
 
-		var childValue = Children[0];
+		var childValue = _children.SingleItem;
 
 		stringBuilder
 			.Append(JsonCharacterConstants.PropertyWrapCharacter)

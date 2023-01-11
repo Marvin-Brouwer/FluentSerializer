@@ -1,9 +1,9 @@
 using Ardalis.GuardClauses;
 
+using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -28,19 +28,19 @@ public readonly partial struct JsonProperty : IJsonProperty
 	/// <inheritdoc />
 	public string Name { get; }
 
-	private readonly IReadOnlyList<IJsonNode> _children;
+	private readonly ISingleItemCollection<IJsonNode> _children;
 
 	/// <inheritdoc />
 #if NET5_0_OR_GREATER
 	[MemberNotNullWhen(true, nameof(Value))]
 #endif
-	public bool HasValue { get; }
+	public bool HasValue => !_children.IsEmpty && (_children.SingleItem is not IJsonValue jsonValue || jsonValue.HasValue);
 
 	/// <inheritdoc />
 	public IReadOnlyList<IJsonNode> Children => _children;
 
 	/// <inheritdoc />
-	public IJsonNode? Value => _children.Count > 0 ? _children[0] : null;
+	public IJsonNode? Value => _children.SingleItem;
 
 	/// <inheritdoc cref="JsonBuilder.Property(in string, in IJsonPropertyContent)"/>
 	/// <remarks>
@@ -51,10 +51,7 @@ public readonly partial struct JsonProperty : IJsonProperty
 		Guard.Against.InvalidName(in name);
 
 		Name = name;
-		HasValue = value is not null && (value is not IJsonValue jsonValue || jsonValue.HasValue);
 
-		_children = new ReadOnlyCollection<IJsonNode>(new IJsonNode[] {
-			value ?? new JsonValue(null)
-		});
+		_children = new SingleItemCollection<IJsonNode>(value ?? new JsonValue(null));
 	}
 }
