@@ -5,10 +5,12 @@ using FluentSerializer.Core.Extensions;
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.Mapping;
 
 /// <inheritdoc />
+[StructLayout(LayoutKind.Sequential, Pack = 0)]
 public readonly struct ClassMapCollection : IClassMapCollection
 {
 	private readonly IReadOnlyCollection<IClassMap> _classMaps;

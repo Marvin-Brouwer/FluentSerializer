@@ -2,14 +2,17 @@ using FluentSerializer.Core.Context;
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
 /// <summary>
 /// Use a preconfigured value
 /// </summary>
+[StructLayout(LayoutKind.Explicit, Pack = 0)]
 public readonly struct CustomNamingStrategy : INamingStrategy
 {
+	[FieldOffset(0)]
 	private readonly string _name;
 
 	/// <summary>

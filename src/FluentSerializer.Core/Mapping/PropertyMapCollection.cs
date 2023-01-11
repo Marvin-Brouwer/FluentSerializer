@@ -7,10 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.Mapping;
 
 /// <inheritdoc />
+[StructLayout(LayoutKind.Sequential, Pack = 0)]
 public readonly struct PropertyMapCollection : IPropertyMapCollection
 {
 	private readonly IReadOnlyCollection<IPropertyMap> _propertyMaps;

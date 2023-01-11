@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.DataNodes;
 
@@ -38,7 +38,7 @@ public interface ISingleItemCollection<out TItem> : IReadOnlyList<TItem>
 	Justification = "Array.Empty<T>() like passthrough"
 #endif
 )]
-public readonly struct SingleItemCollection
+public static class SingleItemCollection
 {
 	/// <summary>
 	/// Reference the empty <see cref="ISingleItemCollection{TItem}"/>
@@ -53,9 +53,9 @@ public readonly struct SingleItemCollection
 	Justification = "TEMP for benchmark"
 #endif
 )]
+[StructLayout(LayoutKind.Sequential, Pack = 0)]
 internal readonly struct EmptySingleItemCollection<TItem> : ISingleItemCollection<TItem>, IEnumerator<TItem>
 {
-
 	public static readonly ISingleItemCollection<TItem> Value = new EmptySingleItemCollection<TItem>();
 
 	/// <inheritdoc cref="ISingleItemCollection{TItem}.IsEmpty"/>
