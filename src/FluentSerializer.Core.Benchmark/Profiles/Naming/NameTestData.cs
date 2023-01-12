@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace FluentSerializer.Core.Benchmark.Profiles.Naming;
 
-internal struct NameTestData
+internal readonly struct NameTestData
 {
 	public static readonly INamingContext NamingContext = new Mock<INamingContext>().Object;
 

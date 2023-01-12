@@ -20,7 +20,7 @@ namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
-	private static readonly CultureInfo TestCulture = new ("nl-NL");
+	private static readonly CultureInfo TestCulture = new("nl-NL");
 
 	private static IXmlConverter SutParse(IFormatProvider? formatProvider = null) => new ParsableConverter(false, formatProvider);
 	private static IXmlConverter SutTryParse(IFormatProvider? formatProvider = null) => new ParsableConverter(true, formatProvider);

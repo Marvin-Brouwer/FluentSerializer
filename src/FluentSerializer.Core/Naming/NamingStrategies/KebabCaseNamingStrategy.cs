@@ -4,6 +4,8 @@ using FluentSerializer.Core.Constants;
 using FluentSerializer.Core.Extensions;
 
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -32,15 +34,20 @@ public sealed class KebabCaseNamingStrategy : AbstractSpanNamingStrategy
 	{
 		var charCount = 0;
 
-		for (var iteration = 0; iteration < sourceSpan.Length; iteration++)
+		ref var sourceSearchSpace = ref MemoryMarshal.GetReference(sourceSpan);
+		ref var targetSearchSpace = ref MemoryMarshal.GetReference(characterSpan);
+
+		for (var iteration = 0; iteration < sourceSpan.Length; iteration.Increment())
 		{
-			var currentChar = sourceSpan[iteration];
+			ref var currentChar = ref Unsafe.Add(ref sourceSearchSpace, iteration);
+			ref var targetChar = ref Unsafe.Add(ref targetSearchSpace, charCount);
 
 			if (char.IsUpper(currentChar))
 			{
-				characterSpan[charCount] = NamingConstants.SpecialCharacters.Minus;
+				targetChar = NamingConstants.SpecialCharacters.Minus;
 				charCount.Increment();
-				characterSpan[charCount] = char.ToLowerInvariant(currentChar);
+				targetChar = ref Unsafe.Add(ref targetSearchSpace, charCount);
+				targetChar = char.ToLowerInvariant(currentChar);
 				charCount.Increment();
 				continue;
 			}
@@ -49,12 +56,12 @@ public sealed class KebabCaseNamingStrategy : AbstractSpanNamingStrategy
 			 || currentChar == NamingConstants.SpecialCharacters.Plus
 			 || currentChar == NamingConstants.SpecialCharacters.Minus)
 			{
-				characterSpan[charCount] = NamingConstants.SpecialCharacters.Minus;
+				targetChar = NamingConstants.SpecialCharacters.Minus;
 				charCount.Increment();
 				continue;
 			}
 
-			characterSpan[charCount] = char.ToLowerInvariant(currentChar);
+			targetChar = char.ToLowerInvariant(currentChar);
 
 			// Stop if we encounter a generic type indicator
 			if (currentChar == NamingConstants.GenericTypeMarker) break;

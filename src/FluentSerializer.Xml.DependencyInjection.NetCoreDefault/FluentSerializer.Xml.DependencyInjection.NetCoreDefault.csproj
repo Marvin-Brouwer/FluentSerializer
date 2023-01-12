@@ -22,7 +22,7 @@
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<AnalysisLevel>latest-Recommended</AnalysisLevel>
+		<AnalysisLevel>latest-recommended</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>

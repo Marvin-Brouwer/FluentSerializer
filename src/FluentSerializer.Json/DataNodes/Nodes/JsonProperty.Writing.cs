@@ -24,8 +24,6 @@ public readonly partial struct JsonProperty
 
 		if (!writeNull && !HasValue) return stringBuilder;
 
-		var childValue = Children[0];
-
 		stringBuilder
 			.Append(JsonCharacterConstants.PropertyWrapCharacter)
 			.Append(Name)
@@ -35,7 +33,7 @@ public readonly partial struct JsonProperty
 		if (format) stringBuilder.Append(spacer);
 
 		if (!HasValue) stringBuilder.Append(JsonCharacterConstants.NullValue);
-		else stringBuilder.AppendNode(childValue, in format, in indent, in writeNull);
+		else stringBuilder.AppendNode(Value!, in format, in indent, in writeNull);
 
 		return stringBuilder;
 	}

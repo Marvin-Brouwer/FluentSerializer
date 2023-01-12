@@ -29,7 +29,7 @@ public readonly partial struct JsonArray
 			if (child is not IJsonComment && !currentChildIndex.Equals(_lastNonCommentChildIndex))
 				stringBuilder.Append(JsonCharacterConstants.DividerCharacter);
 
-			currentChildIndex++;
+			currentChildIndex.Increment();
 		}
 
 		stringBuilder

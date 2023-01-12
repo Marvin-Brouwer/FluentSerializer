@@ -3,6 +3,7 @@ using FluentSerializer.Core.Context;
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace FluentSerializer.Core.Naming.NamingStrategies;
 
@@ -12,6 +13,7 @@ namespace FluentSerializer.Core.Naming.NamingStrategies;
 /// SomeName => somename
 /// </example>
 /// </summary>
+[StructLayout(LayoutKind.Explicit, Pack = 0, Size = 1)]
 public readonly struct LowerCaseNamingStrategy : INamingStrategy
 {
 	/// <inheritdoc />

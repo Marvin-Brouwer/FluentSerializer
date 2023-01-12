@@ -19,10 +19,10 @@ namespace FluentSerializer.Json.Tests.Tests.Converting.Converters;
 public sealed partial class ParsableConverterTests
 {
 	private readonly Mock<ISerializerContext<IJsonNode>> _contextMock;
-	private static readonly CultureInfo TestCulture = new ("nl-NL");
+	private static readonly CultureInfo TestCulture = new("nl-NL");
 
-	private static ParsableConverter SutParse(IFormatProvider? formatProvider = null) => new (false, formatProvider);
-	private static ParsableConverter SutTryParse(IFormatProvider? formatProvider = null) => new (true, formatProvider);
+	private static ParsableConverter SutParse(IFormatProvider? formatProvider = null) => new(false, formatProvider);
+	private static ParsableConverter SutTryParse(IFormatProvider? formatProvider = null) => new(true, formatProvider);
 
 	public ParsableConverterTests()
 	{

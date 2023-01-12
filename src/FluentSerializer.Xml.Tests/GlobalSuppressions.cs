@@ -15,3 +15,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider",
 	Justification = "The no-format alternatives also require testing",
 	Scope = "module")]
+[assembly: SuppressMessage("Globalization", "CA1304:Specify CultureInfo",
+	Justification = "The no-format alternatives also require testing",
+	Scope = "module")]
