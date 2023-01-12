@@ -1,37 +1,28 @@
-using System;
-using System.Collections.Generic;
-
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Order;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
-
-using System.Reflection;
 
 using FluentSerializer.Core.BenchmarkUtils.Configuration;
 
-using System.Diagnostics;
-using System.Security.Principal;
-using System.Runtime.InteropServices;
-
 using Perfolizer.Horology;
 
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-
-using BenchmarkDotNet.Columns;
-
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading;
-using System.Globalization;
-
-using BenchmarkDotNet.Order;
-
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Extensions;
-
-using System.Collections.Immutable;
-
-using BenchmarkDotNet.Environments;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;

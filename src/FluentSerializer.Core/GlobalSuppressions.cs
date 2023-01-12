@@ -42,3 +42,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
 	Justification = "This is the correct exception type",
 	Scope = "member", Target = "~P:FluentSerializer.Core.DataNodes.SingleItemCollectionForItem`1.Item(System.Int32)")]
+[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types",
+	Justification = "This is the correct exception type",
+	Scope = "member", Target = "~P:FluentSerializer.Core.DataNodes.EmptySingleItemCollection`1.Item(System.Int32)")]

@@ -13,7 +13,7 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 	private const int BogusSeed = 98123600;
 
 #if (RELEASE)
-	protected virtual int[] ItemCount => new [] { 20, 200, 2000, 20000 };
+	protected virtual int[] ItemCount => new[] { 20, 200, 2000, 20000 };
 #else
 	protected virtual int[] ItemCount => new[] { 10, 20 };
 #endif

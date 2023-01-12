@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FluentSerializer.Core.DataNodes;
 
@@ -13,6 +14,7 @@ public sealed class SingleItemCollectionForItem<TItem> : ISingleItemCollection<T
 	public bool IsEmpty => false;
 
 	/// <inheritdoc cref="ISingleItemCollection{TItem}.SingleItem"/>
+	[NotNull]
 	public TItem? SingleItem { get; }
 
 	internal bool Iterated { get; set; }
@@ -22,20 +24,36 @@ public sealed class SingleItemCollectionForItem<TItem> : ISingleItemCollection<T
 
 	/// <inheritdoc cref="IReadOnlyList{T}"/>
 	public TItem this[int index] => index == 0
-		? SingleItem ?? throw new IndexOutOfRangeException()
-		: throw new IndexOutOfRangeException() ;
+		? SingleItem!
+		: throw new IndexOutOfRangeException();
 
 	/// <inheritdoc cref="ISingleItemCollection{TItem}"/>
-	internal SingleItemCollectionForItem(TItem  item)
+	internal SingleItemCollectionForItem(TItem item)
 	{
 		SingleItem = item;
 		_iterator = new SingleItemIterator(this);
 	}
 
 	/// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
+	[ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+	Justification = "The iterator is tested by the foreach test, and that should be enough"
+#endif
+	)]
 	public IEnumerator<TItem> GetEnumerator() => _iterator;
+
+	[ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+	Justification = "The iterator is tested by the foreach test, and that should be enough"
+#endif
+	)]
 	IEnumerator IEnumerable.GetEnumerator() => _iterator;
 
+	[ExcludeFromCodeCoverage(
+#if NET5_0_OR_GREATER
+	Justification = "The iterator is tested by the foreach test, and that should be enough"
+#endif
+	)]
 	private readonly struct SingleItemIterator : IEnumerator<TItem>
 	{
 		private readonly SingleItemCollectionForItem<TItem> _collection;
@@ -51,7 +69,7 @@ public sealed class SingleItemCollectionForItem<TItem> : ISingleItemCollection<T
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			// Method intentionally left empty.
 		}
 
 		public bool MoveNext()
