@@ -33,7 +33,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -48,7 +48,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -85,7 +85,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -117,7 +117,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> Formattable(string formatString)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);
@@ -129,7 +129,7 @@ public sealed class UseJsonConverters : IUseJsonConverters
 	public Func<IJsonConverter> Formattable(string formatString, IFormatProvider formatProvider)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);

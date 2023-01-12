@@ -23,7 +23,7 @@ public readonly partial struct XmlAttribute
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.NullOrWhiteSpace(Name, message: "The attribute was is an illegal state, it contains no Name"
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, parameterName: nameof(Name)
 #endif
 		);

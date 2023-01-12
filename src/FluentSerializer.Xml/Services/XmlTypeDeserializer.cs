@@ -28,7 +28,7 @@ public sealed class XmlTypeDeserializer
 	public XmlTypeDeserializer(in IClassMapCollection classMapCollection)
 	{
 		Guard.Against.Null(classMapCollection
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classMapCollection)
 #endif
 		);
@@ -43,12 +43,12 @@ public sealed class XmlTypeDeserializer
 		where TModel : new()
 	{
 		Guard.Against.Null(dataObject
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(dataObject)
 #endif
 		);
 		Guard.Against.Null(coreContext
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(coreContext)
 #endif
 		);
@@ -66,17 +66,17 @@ public sealed class XmlTypeDeserializer
 	public object? DeserializeFromElement(in IXmlElement dataObject, in Type classType, in ISerializerCoreContext<IXmlNode> coreContext)
 	{
 		Guard.Against.Null(dataObject
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(dataObject)
 #endif
 		);
 		Guard.Against.Null(classType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classType)
 #endif
 		);
 		Guard.Against.Null(coreContext
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(coreContext)
 #endif
 		);

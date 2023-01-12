@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Extensions;
@@ -39,6 +40,13 @@ public static class StringExtensions
 #endif
 	public static bool HasCharactersAtOffset(in this ReadOnlySpan<char> text, in int offset, in ReadOnlySpan<char> characters) =>
 		text[offset..(offset + characters.Length)].Equals(characters, StringComparison.OrdinalIgnoreCase);
+
+#if NETSTANDARD2_0
+	/// <inheritdoc cref="HasCharactersAtOffset(in ReadOnlySpan{char}, in int, in ReadOnlySpan{char})"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining), ExcludeFromCodeCoverage]
+	public static bool HasCharactersAtOffset(this ReadOnlySpan<char> text, in int offset, in string characters) =>
+		HasCharactersAtOffset(text, in offset, characters.AsSpan());
+#endif
 
 	/// <summary>
 	/// Check if the <paramref name="text"/> contains these characters at the current <paramref name="offset"/>

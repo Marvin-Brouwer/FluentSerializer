@@ -24,7 +24,7 @@ public readonly partial struct XmlFragment
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.Null(_innerElement, message: "The fragment was is an illegal state, it contains no Element"
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, parameterName: nameof(_innerElement)
 #endif
 		);

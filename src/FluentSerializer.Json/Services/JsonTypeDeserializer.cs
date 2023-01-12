@@ -26,7 +26,7 @@ public sealed class JsonTypeDeserializer
 	public JsonTypeDeserializer(in IClassMapCollection classMapCollection)
 	{
 		Guard.Against.Null(classMapCollection
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classMapCollection)
 #endif
 		);
@@ -41,12 +41,12 @@ public sealed class JsonTypeDeserializer
 		where TModel : new()
 	{
 		Guard.Against.Null(dataObject
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(dataObject)
 #endif
 		);
 		Guard.Against.Null(coreContext
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(coreContext)
 #endif
 		);
@@ -64,17 +64,17 @@ public sealed class JsonTypeDeserializer
 	public object? DeserializeFromNode(in IJsonNode dataObject, in Type classType, in ISerializerCoreContext<IJsonNode> coreContext)
 	{
 		Guard.Against.Null(dataObject
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(dataObject)
 #endif
 		);
 		Guard.Against.Null(classType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classType)
 #endif
 		);
 		Guard.Against.Null(coreContext
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(coreContext)
 #endif
 		);

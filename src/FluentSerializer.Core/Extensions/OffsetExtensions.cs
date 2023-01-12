@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.Extensions;
@@ -17,6 +18,12 @@ public static class OffsetExtensions
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 	public static void AdjustForToken(ref this int offset, in ReadOnlySpan<char> token) => offset.Increment(token.Length);
+
+#if NETSTANDARD2_0
+	/// <inheritdoc cref="AdjustForToken(ref int, in ReadOnlySpan{char})"/>
+	[MethodImpl(MethodImplOptions.AggressiveInlining), ExcludeFromCodeCoverage]
+	public static void AdjustForToken(ref this int offset, in string token) => AdjustForToken(ref offset, token.AsSpan());
+#endif
 
 	/// <summary>
 	/// Adjust the offset by the length of the provided token

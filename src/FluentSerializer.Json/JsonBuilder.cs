@@ -77,7 +77,7 @@ public static class JsonBuilder
 	public static IJsonComment Comment(in string value)
 	{
 		Guard.Against.NullOrEmpty(value
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(value)
 #endif
 		);
@@ -91,7 +91,7 @@ public static class JsonBuilder
 	public static IJsonComment MultilineComment(in string value)
 	{
 		Guard.Against.NullOrEmpty(value
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(value)
 #endif
 		);

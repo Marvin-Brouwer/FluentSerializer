@@ -27,7 +27,7 @@ public readonly partial struct XmlElement
 		const char spacer = ' ';
 
 		Guard.Against.NullOrWhiteSpace(Name, message: "The element was is an illegal state, it contains no Name"
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, parameterName: nameof(Name)
 #endif
 		);

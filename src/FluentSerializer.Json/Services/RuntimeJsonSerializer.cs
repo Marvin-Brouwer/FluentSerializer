@@ -34,12 +34,12 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 		in IClassMapCollection classMapCollection)
 	{
 		Guard.Against.Null(configuration
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(configuration)
 #endif
 		);
 		Guard.Against.Null(classMapCollection
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classMapCollection)
 #endif
 		);
@@ -76,7 +76,7 @@ public sealed class RuntimeJsonSerializer : IAdvancedJsonSerializer
 	{
 		if (string.IsNullOrEmpty(stringData)) return default;
 
-		var jObject = JsonParser.Parse(in stringData);
+		var jObject = JsonParser.Parse(in stringData!);
 		return Deserialize<TModel>(jObject);
 	}
 

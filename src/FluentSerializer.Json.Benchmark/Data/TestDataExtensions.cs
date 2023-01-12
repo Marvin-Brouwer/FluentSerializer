@@ -57,7 +57,7 @@ public static class TestDataExtensions
 			: new List<IJsonProperty>
 			{
 				Property("firstName", StringValue(person.FirstName)),
-				Property("middleName", StringValue(person.MiddleName)),
+				Property("middleName", StringValue(person.MiddleName!)),
 				Property("lastName", StringValue(person.LastName))
 			};
 

@@ -37,7 +37,7 @@ public static class UseJsonExtensions
 	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters, in string formatString)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);
@@ -53,7 +53,7 @@ public static class UseJsonExtensions
 	public static IConfigurationStack<IConverter> UseFormattable(this IConfigurationStack<IConverter> converters, in string formatString, CultureInfo formatProvder)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);

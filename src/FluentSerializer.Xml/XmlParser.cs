@@ -19,7 +19,7 @@ public static class XmlParser
 	public static IXmlElement Parse(in string value)
 	{
 		Guard.Against.NullOrWhiteSpace(value
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(value)
 #endif
 		);

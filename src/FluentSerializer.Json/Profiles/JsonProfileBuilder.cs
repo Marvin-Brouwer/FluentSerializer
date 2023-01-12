@@ -24,12 +24,12 @@ public sealed class JsonProfileBuilder<TModel> : IJsonProfileBuilder<TModel>
 	public JsonProfileBuilder(in Func<INamingStrategy> defaultNamingStrategy, in List<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(defaultNamingStrategy
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(defaultNamingStrategy)
 #endif
 		);
 		Guard.Against.Null(propertyMap
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyMap)
 #endif
 		);

@@ -28,7 +28,7 @@ public sealed class JsonTypeSerializer
 	public JsonTypeSerializer(in IClassMapCollection classMapCollection)
 	{
 		Guard.Against.Null(classMapCollection
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classMapCollection)
 #endif
 		);
@@ -44,17 +44,17 @@ public sealed class JsonTypeSerializer
 	public IJsonNode? SerializeToNode(in object dataModel, in Type classType, in ISerializerCoreContext coreContext)
 	{
 		Guard.Against.Null(dataModel
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(dataModel)
 #endif
 		);
 		Guard.Against.Null(classType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classType)
 #endif
 		);
 		Guard.Against.Null(coreContext
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(coreContext)
 #endif
 		);

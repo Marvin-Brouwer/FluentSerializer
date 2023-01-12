@@ -22,12 +22,12 @@ public class TimeSpanByFormatConverter : SimpleTypeConverter<TimeSpan>
 	public TimeSpanByFormatConverter(in string format, in CultureInfo cultureInfo, in TimeSpanStyles timeSpanStyles)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
 		Guard.Against.Null(cultureInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(cultureInfo)
 #endif
 		);
