@@ -2,6 +2,10 @@
 
 ## @next
 
+-
+
+## 2.0.2
+
 - [#146](https://github.com/Marvin-Brouwer/FluentSerializer/issues/146) Added `net7` support
 
 ## v2.0.1
