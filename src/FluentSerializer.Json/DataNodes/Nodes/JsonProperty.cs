@@ -52,6 +52,6 @@ public readonly partial struct JsonProperty : IJsonProperty
 
 		Name = name;
 
-		_children = new SingleItemCollection<IJsonNode>(value ?? new JsonValue(null));
+		_children = SingleItemCollection.ForItem<IJsonNode>(value ?? new JsonValue(null));
 	}
 }

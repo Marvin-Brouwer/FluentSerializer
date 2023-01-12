@@ -69,14 +69,14 @@ public readonly partial struct JsonProperty
 			offset++;
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ObjectStartCharacter))
 			{
-				children = new SingleItemCollection<IJsonNode>(
+				children = SingleItemCollection.ForItem<IJsonNode>(
 					new JsonObject(in text, ref offset)
 				);
 				return;
 			}
 			if (text.HasCharacterAtOffset(in offset, JsonCharacterConstants.ArrayStartCharacter))
 			{
-				children = new SingleItemCollection<IJsonNode>(
+				children = SingleItemCollection.ForItem<IJsonNode>(
 					new JsonArray(in text, ref offset)
 				);
 				return;
@@ -93,6 +93,6 @@ public readonly partial struct JsonProperty
 		}
 
 		var jsonValue = new JsonValue(in text, ref offset);
-		children = new SingleItemCollection<IJsonNode>(jsonValue);
+		children = SingleItemCollection.ForItem<IJsonNode>(jsonValue);
 	}
 }
