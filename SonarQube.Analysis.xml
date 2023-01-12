@@ -9,17 +9,9 @@
 	<!--
 		**/GlobalSuppressions.cs:
 		Ignore these completely, this is not code
-
-		FluentSerializer.Json.Converter.DefaultJson/**/*.cs:
-		Temporary exclusion, should be re-added in #232
-
-		FluentSerializer.Xml.Converter.DefaultXml/**/*.cs:
-		Temporary exclusion, should be re-added in #232
 	 -->
 	<Property Name="sonar.exclusions">
-		**/GlobalSuppressions.cs,
-		FluentSerializer.Json.Converter.DefaultJson/**/*.cs,
-		FluentSerializer.Xml.Converter.DefaultXml/**/*.cs
+		**/GlobalSuppressions.cs
 	</Property>
 
 	<!-- Because of defaults './' points to './src', hence the '../' -->
