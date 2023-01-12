@@ -24,12 +24,12 @@ public static class TypeExtensions
 	public static bool EqualsTopLevel(this Type type, in Type typeToEqual)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);
 		Guard.Against.Null(typeToEqual
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(typeToEqual)
 #endif
 		);
@@ -54,12 +54,12 @@ public static class TypeExtensions
 	public static bool Implements(this Type type, Type interfaceType)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);
 		Guard.Against.Null(interfaceType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(interfaceType)
 #endif
 		);
@@ -75,7 +75,7 @@ public static class TypeExtensions
 	public static bool IsEnumerable(this Type type)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);
@@ -88,7 +88,7 @@ public static class TypeExtensions
 	public static bool IsNullable(this PropertyInfo property)
 	{
 		Guard.Against.Null(property
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(property)
 #endif
 		);
@@ -100,7 +100,7 @@ public static class TypeExtensions
 	public static bool IsNullable(this FieldInfo field)
 	{
 		Guard.Against.Null(field
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(field)
 #endif
 		);
@@ -112,7 +112,7 @@ public static class TypeExtensions
 	public static bool IsNullable(this ParameterInfo parameter)
 	{
 		Guard.Against.Null(parameter
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(parameter)
 #endif
 		);
@@ -126,7 +126,7 @@ public static class TypeExtensions
 	public static bool IsNullable(this Type type)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);

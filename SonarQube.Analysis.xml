@@ -9,9 +9,13 @@
 	<!--
 		**/GlobalSuppressions.cs:
 		Ignore these completely, this is not code
+
+		FluentSerializer.Core/Dirty/BackwardsCompatibility/**/*.cs:
+		Backwards compatibility code doesn't need quality checks or coverage metrics
 	 -->
 	<Property Name="sonar.exclusions">
-		**/GlobalSuppressions.cs
+		**/GlobalSuppressions.cs,
+		FluentSerializer.Core/Dirty/BackwardsCompatibility/**/*.cs
 	</Property>
 
 	<!-- Because of defaults './' points to './src', hence the '../' -->

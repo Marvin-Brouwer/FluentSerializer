@@ -1,6 +1,8 @@
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text;
 
+using Microsoft.Extensions.ObjectPool;
+
 using System;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -29,6 +31,8 @@ public sealed partial class DataNodeHashingHelperTests
 			throw new NotSupportedException("The equals will be tested through the Comparer");
 
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true) =>
+			throw new NotSupportedException("Out of test scope");
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) =>
 			throw new NotSupportedException("Out of test scope");
 	}
 }

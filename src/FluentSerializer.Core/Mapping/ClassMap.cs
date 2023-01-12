@@ -34,17 +34,17 @@ public sealed class ClassMap : IClassMap
 		in IReadOnlyCollection<IPropertyMap> propertyMap)
 	{
 		Guard.Against.Null(classType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classType)
 #endif
 		);
 		Guard.Against.Null(namingStrategy
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(namingStrategy)
 #endif
 		);
 		Guard.Against.Null(propertyMap
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyMap)
 #endif
 		);

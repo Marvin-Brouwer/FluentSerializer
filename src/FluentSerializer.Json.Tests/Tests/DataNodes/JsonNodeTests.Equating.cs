@@ -4,6 +4,8 @@ using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Text;
 using FluentSerializer.Json.DataNodes;
 
+using Microsoft.Extensions.ObjectPool;
+
 using System;
 
 namespace FluentSerializer.Json.Tests.Tests.DataNodes;
@@ -65,11 +67,13 @@ internal static class JsonNodeTests
 
 #pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true) => throw new NotSupportedException("Out of test scope");
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) => throw new NotSupportedException("Out of test scope");
 
 		public bool Equals(IDataNode? other) => throw new NotSupportedException("Out of test scope");
 		public bool Equals(IJsonNode? other) => throw new NotSupportedException("Out of test scope");
 
 		public HashCode GetNodeHash() => new();
+
 #pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
 	}
 }

@@ -2,6 +2,10 @@ using FluentAssertions;
 using FluentAssertions.Collections;
 using FluentAssertions.Execution;
 
+#if NETSTANDARD2_0
+using FluentSerializer.Core.Dirty.BackwardsCompatibility.NetFramework;
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -47,12 +51,10 @@ public sealed class ValueTypeCollectionAssertions<T> : GenericCollectionAssertio
 	{
 		var indexes = FindIndexes(value);
 
-		var stringBuilder = new StringBuilder(64)
+		return new StringBuilder(64)
 			.Append("\tindexes: [")
 			.AppendJoin(',', indexes)
 			.AppendFormat(CultureInfo.InvariantCulture, "]; value: {0};", value);
-
-		return stringBuilder;
 	}
 
 	private IEnumerable<int> FindIndexes(T value) =>

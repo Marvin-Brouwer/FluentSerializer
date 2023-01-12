@@ -19,19 +19,7 @@ public interface IDataNode : IEquatable<IDataNode?>
 	/// <summary>
 	/// Serialize this <see cref="IDataNode"/> to string
 	/// </summary>
-	public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0)
-	{
-		var stringBuilder = stringBuilders.Get();
-		try
-		{
-			stringBuilder = AppendTo(ref stringBuilder, format, indent, writeNull);
-			return stringBuilder.ToString();
-		}
-		finally
-		{
-			stringBuilders.Return(stringBuilder);
-		}
-	}
+	string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0);
 
 	/// <summary>
 	/// Append the serialized value of this <see cref="IDataNode"/> to an <see cref="ITextWriter"/>

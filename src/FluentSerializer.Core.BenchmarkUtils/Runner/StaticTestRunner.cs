@@ -204,7 +204,11 @@ public abstract class StaticTestRunner
 		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{osName}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
 		var directory = markdownSummaryFile.Directory!;
 
+#if NETSTANDARD2_0
+		FixFileNames(markdownSummaryFile, string.Join(Path.PathSeparator.ToString(), directory.FullName, readableFileName));
+#else
 		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
+#endif
 	}
 
 	private static string GetOsName()
@@ -272,7 +276,11 @@ public abstract class StaticTestRunner
 		var runtimeVersion = GetRuntimeVersion();
 		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-github.md";
 		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
+#if NETSTANDARD2_0
+		var fullPath = string.Join(Path.PathSeparator.ToString(), parentDirectory.FullName, readableFileName);
+#else
 		var fullPath = Path.Join(parentDirectory.FullName, readableFileName);
+#endif
 
 		FixFileNames(markdownSummaryFile, fullPath);
 		return fullPath;
@@ -299,7 +307,12 @@ public abstract class StaticTestRunner
 
 	private static FileInfo? FindFileName(string pattern, ManualConfig config)
 	{
-		var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
+#if NETSTANDARD2_0
+		var resultsDirPath = string.Join(Path.PathSeparator.ToString(), config.ArtifactsPath, "results");
+#else
+		var resultsDirPath = Path.Join(config.ArtifactsPath, "results");
+#endif
+		var resultsDir = new DirectoryInfo(resultsDirPath);
 		var markdownSummaryFile = resultsDir
 			.GetFiles(pattern)
 #if NET5_0_OR_GREATER
@@ -349,8 +362,12 @@ public abstract class StaticTestRunner
 			Verb = "runas"
 		};
 
+#if NETSTANDARD2_0
+		startInfo.Arguments = string.Join(" ", arguments);
+#else
 		foreach (var argument in arguments)
 			startInfo.ArgumentList.Add(argument);
+#endif
 
 		Process.Start(startInfo);
 		Environment.Exit(0);

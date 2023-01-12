@@ -24,7 +24,15 @@ public readonly struct CustomNamingStrategy : INamingStrategy
 	}
 
 	/// <inheritdoc />
-	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => _name;
+	public ReadOnlySpan<char> GetName(in PropertyInfo propertyInfo, in Type propertyType, in INamingContext namingContext) => _name
+#if NETSTANDARD2_0
+		.AsSpan()
+#endif
+	;
 	/// <inheritdoc />
-	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => _name;
+	public ReadOnlySpan<char> GetName(in Type classType, in INamingContext namingContext) => _name
+#if NETSTANDARD2_0
+		.AsSpan()
+#endif
+	;
 }

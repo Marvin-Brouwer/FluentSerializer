@@ -53,8 +53,13 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 		}
 	}
 
+#if NETSTANDARD2_0
+	private string GetDirectory() => string.Join(Path.PathSeparator.ToString(), Path.GetTempPath(), GetType().Assembly.GetName().Name);
+	private string GetFilePath(string directory, int dataCount) => string.Join(Path.PathSeparator.ToString(), directory, GetStringFileName(dataCount));
+#else
 	private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
 	private string GetFilePath(string directory, int dataCount) => Path.Join(directory, GetStringFileName(dataCount));
+#endif
 
 	private static void WriteStringContent(TData data, string filePath)
 	{
@@ -64,7 +69,12 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 
 		data.AppendTo(ref stringBuilder, true, 0, false);
 		Console.Write('.');
+#if NETSTANDARD2_0
+		var stringSpan = stringBuilder.AsSpan().ToArray();
+		bufferedStream.Write(stringSpan, 0, stringSpan.Length);
+#else
 		bufferedStream.Write(stringBuilder.AsSpan());
+#endif
 
 		Console.Write('.');
 		bufferedStream.Flush();

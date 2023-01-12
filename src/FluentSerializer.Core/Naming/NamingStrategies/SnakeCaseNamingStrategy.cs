@@ -22,11 +22,20 @@ public sealed class SnakeCaseNamingStrategy : AbstractSpanNamingStrategy
 	{
 		Span<char> characterSpan = stackalloc char[name.Length * 2];
 
+#if NETSTANDARD2_0
+		ConvertCasing(name.AsSpan(), ref characterSpan);
+#else
 		ConvertCasing(name, ref characterSpan);
+#endif
 
 		var newName = characterSpan.ToString();
 		Guard.Against.InvalidName(newName);
+
+#if NETSTANDARD2_0
+		return newName.AsSpan();
+#else
 		return newName;
+#endif
 	}
 
 	/// <inheritdoc />

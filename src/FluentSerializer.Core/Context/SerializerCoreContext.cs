@@ -49,7 +49,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 	{
 		const string propertyTag = "P:";
 		Guard.Against.Null(propertyInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyInfo)
 #endif
 		);
@@ -62,7 +62,7 @@ public class SerializerCoreContext : ISerializerCoreContext
 	{
 		const string typeTag = "T:";
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);
@@ -122,7 +122,7 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 	{
 		const string propertyTag = "P:";
 		Guard.Against.Null(propertyInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyInfo)
 #endif
 		);
@@ -135,7 +135,7 @@ public sealed class SerializerCoreContext<TSerialContainer> : SerializerCoreCont
 	{
 		const string typeTag = "T:";
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);

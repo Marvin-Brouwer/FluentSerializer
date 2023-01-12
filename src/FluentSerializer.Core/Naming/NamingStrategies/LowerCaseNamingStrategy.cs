@@ -25,11 +25,20 @@ public readonly struct LowerCaseNamingStrategy : INamingStrategy
 	private ReadOnlySpan<char> GetName(string name)
 	{
 		var genericIndex = name.IndexOf(NamingConstants.GenericTypeMarker);
-		if (genericIndex == -1) return name.ToLowerInvariant();
+		if (genericIndex == -1)
+#if NETSTANDARD2_0
+			return name.ToLowerInvariant().AsSpan();
+#else
+			return name.ToLowerInvariant();
+#endif
 
 		Span<char> nameSpan = stackalloc char[genericIndex];
 		name.AsSpan()[..genericIndex].ToLowerInvariant(nameSpan);
 
+#if NETSTANDARD2_0
+		return nameSpan.ToString().AsSpan();
+#else
 		return nameSpan.ToString();
+#endif
 	}
 }

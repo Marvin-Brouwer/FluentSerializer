@@ -10,6 +10,8 @@ using FluentSerializer.Core.SerializerException;
 using FluentSerializer.Core.Services;
 using FluentSerializer.Core.Text;
 
+using Microsoft.Extensions.ObjectPool;
+
 using Moq;
 
 using System;
@@ -231,6 +233,8 @@ public sealed class PropertyMapTests
 			stringBuilder
 				.Append(ToString())
 				.AppendLineEnding();
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) =>
+			DataNodeExtensions.WriteTo(this, in stringBuilders, in format, in writeNull, in indent);
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
 		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);
@@ -243,6 +247,8 @@ public sealed class PropertyMapTests
 			stringBuilder
 				.Append(ToString())
 				.AppendLineEnding();
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) =>
+			DataNodeExtensions.WriteTo(this, in stringBuilders, in format, in writeNull, in indent);
 
 		public bool Equals(IDataNode? other) => ReferenceEquals(this, other);
 		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);
