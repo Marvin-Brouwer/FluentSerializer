@@ -1,5 +1,6 @@
 #if NETSTANDARD2_0
 using FluentSerializer.Core.Dirty.BackwardsCompatibility.NetFramework;
+
 #endif
 using Ardalis.GuardClauses;
 

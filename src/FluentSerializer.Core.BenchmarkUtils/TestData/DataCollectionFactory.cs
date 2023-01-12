@@ -54,8 +54,8 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 	}
 
 #if NETSTANDARD2_0
-	private string GetDirectory() => string.Join(Path.PathSeparator.ToString(), Path.GetTempPath(), GetType().Assembly.GetName().Name);
-	private string GetFilePath(string directory, int dataCount) => string.Join(Path.PathSeparator.ToString(), directory, GetStringFileName(dataCount));
+	private string GetDirectory() => string.Join(Path.DirectorySeparatorChar.ToString(), Path.GetTempPath(), GetType().Assembly.GetName().Name);
+	private string GetFilePath(string directory, int dataCount) => string.Join(Path.DirectorySeparatorChar.ToString(), directory, GetStringFileName(dataCount));
 #else
 	private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
 	private string GetFilePath(string directory, int dataCount) => Path.Join(directory, GetStringFileName(dataCount));
