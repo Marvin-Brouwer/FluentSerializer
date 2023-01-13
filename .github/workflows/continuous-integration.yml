@@ -20,6 +20,8 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-color
 
 jobs:
   ci:
@@ -46,7 +48,7 @@ jobs:
       libraryName: "Core"
       reportPrefix: "core"
       jobTypePrimary: "VeryLong"
-      jobTypeSecondary: "Medium"
+      jobTypeSecondary: "Long"
   benchmark-json:
     name: "Benchmark JSON serializer"
     needs: [stryker]

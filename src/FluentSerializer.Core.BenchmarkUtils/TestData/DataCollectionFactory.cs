@@ -12,10 +12,16 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 {
 	private const int BogusSeed = 98123600;
 
-#if (RELEASE)
-	protected virtual int[] ItemCount => new[] { 20, 200, 2000, 20000 };
-#else
+#if DEBUG
 	protected virtual int[] ItemCount => new[] { 10, 20 };
+#else
+	// The benchmark runner on Ubuntu server can easily handle 20.000 items.
+	// However, when running that on Windows server, the pipeline gets canceled
+	// At the end of the line 10.000 still means the data composition looks like: 10,000/114,454/342,972
+	// That a total of 467,426 unique items, which is a redicilous dataset.
+	// The file generated is large enough for Visual Studio Code to disable color formatting.
+
+	protected virtual int[] ItemCount => new[] { 20, 200, 2000, 10_000 };
 #endif
 
 	public void GenerateTestCaseFiles()

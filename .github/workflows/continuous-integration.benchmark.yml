@@ -14,7 +14,7 @@ on:
       jobTypeSecondary:
         type: string
         required: false
-        default: "Short"
+        default: "Medium"
 
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
@@ -38,16 +38,14 @@ jobs:
           {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
-        # ---
-        # Temporarily removed `windows-latest`, because of provisioning issues
-        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
         os: [
-          # { name: windows-latest, displayName: windows, rid: "win-x64" },
+          { name: windows-latest, displayName: windows, rid: "win-x64" },
           { name: ubuntu-latest, displayName: linux, rid: "linux-x64" }
         ]
         # Add a windows-only netframework benchmark, since that's only available on windows.
         include:
-          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "Short" }
+          # netframework only supports windows
+          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
             os: { name: windows-latest, displayName: windows, rid: "win-x64" }
     runs-on: ${{ matrix.os.name }}
     ###

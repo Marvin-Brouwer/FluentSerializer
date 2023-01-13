@@ -23,7 +23,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
-using System.Reflection.Metadata;
 
 #if (DEBUG)
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -164,7 +163,7 @@ public abstract class StaticTestRunner
 
 		BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
 
-		var osDisplayNameParam = Array.Find(arguments, parameter => parameter.StartsWith("-os-displayName=", StringComparison.Ordinal));
+		var osDisplayNameParam = Array.Find(arguments, parameter => parameter.StartsWith("--os-displayName=", StringComparison.Ordinal));
 		var osDisplayName = osDisplayNameParam?.Split('=')[1];
 		FixConsoleArtifactFileName(dataType, config, jobDate, in osDisplayName);
 		var gitHubSummaryFileName = FixGitHubSummaryFileName(dataType, config);
