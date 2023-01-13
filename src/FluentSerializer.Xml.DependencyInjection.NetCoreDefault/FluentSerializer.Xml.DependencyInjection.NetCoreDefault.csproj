@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -35,7 +35,12 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
+	<!-- https://github.com/dotnet/msbuild/issues/4303#issuecomment-896963155 -->
+	<Target Name="GetTargetPath" Returns="@(_FakeOutputPath)" Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<ItemGroup>
+			<_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)\$(AssemblyName).dll" />
+		</ItemGroup>
+	</Target>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="ReflectionAnalyzers" Version="0.3.1">
