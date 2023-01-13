@@ -17,9 +17,13 @@
 
 Currently, these versions are supported with security updates:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| > 1.0.0 | :white_check_mark: |
+| Version   | Supported           |
+| --------: | ------------------- |
+| > `3.0.0` | :heavy_check_mark:  |
+| < `2.*.*` | :heavy_check_mark:* |
+
+> __*__ The libraries lower than version `3` are still available for security support.
+> However, minor security flaws or functional improvements may be rejected in favor of upgrading.
 
 ## Reporting a Vulnerability
 
