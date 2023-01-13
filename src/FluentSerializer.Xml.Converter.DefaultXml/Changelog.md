@@ -2,6 +2,10 @@
 
 ## @next
 
+-
+
+## v2.0.3
+
 - [#8](https://github.com/Marvin-Brouwer/FluentSerializer/issues/8) Added `netframework` backwards compatibility
 
 ## v2.0.2
