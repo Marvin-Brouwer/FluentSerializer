@@ -257,7 +257,11 @@ Here are some links to some more advanced topics:
   
 If you want to help out the project, you are very welcome to.  
 Please read our [Contribution guidelines](/docs/Contributing.md#readme) and [contributor covenant's code of conduct](https://www.contributor-covenant.org) before starting.
-For maintainers we have a separate [Maintenance guide](/docs/Maintaining.md#readme).  
+For maintainers we have an additional [Maintenance guide](/docs/Maintaining.md#readme).  
+
+> **Note**
+> Because of backwards compatibility, you will need to install additional runtimes if you want to debug the solution locally.  
+> See [Contribution guidelines - Technical prerequisites](/docs/Contributing.md#technical-prerequisites) for more detail.
 
 ### Release management
 

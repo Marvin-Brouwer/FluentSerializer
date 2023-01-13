@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace FluentSerializer.Core.DataNodes;
@@ -8,11 +7,6 @@ namespace FluentSerializer.Core.DataNodes;
 /// <summary>
 /// Simple helper to calculate HashCodes on <see cref="IDataNode"/>s
 /// </summary>
-/// <remarks>
-/// Temporarily excluded from coverage due to coverage reports not picking up on this test.
-/// See: https://github.com/Marvin-Brouwer/FluentSerializer/issues/237
-/// </remarks>
-[ExcludeFromCodeCoverage]
 public static class DataNodeHashingHelper
 {
 	/// <summary>

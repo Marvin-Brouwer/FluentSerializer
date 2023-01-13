@@ -25,7 +25,7 @@ public readonly struct ClassMapCollection : IClassMapCollection
 	public IClassMap? GetClassMapFor(in Type type, in SerializerDirection direction)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);
@@ -50,7 +50,7 @@ public readonly struct ClassMapCollection : IClassMapCollection
 	public IClassMap? GetClassMapFor(in Type type)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);

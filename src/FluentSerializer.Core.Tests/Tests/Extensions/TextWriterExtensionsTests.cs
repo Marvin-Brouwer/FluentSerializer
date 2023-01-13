@@ -6,6 +6,8 @@ using FluentSerializer.Core.Extensions;
 using FluentSerializer.Core.TestUtils.Helpers;
 using FluentSerializer.Core.Text;
 
+using Microsoft.Extensions.ObjectPool;
+
 using Moq;
 
 using System;
@@ -130,6 +132,8 @@ public sealed class TextWriterExtensionsTests
 				.Append($"{nameof(format)}={format};")
 				.Append($"{nameof(indent)}={indent};")
 				.Append($"{nameof(writeNull)}={writeNull};");
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) =>
+			DataNodeExtensions.WriteTo(this, in stringBuilders, in format, in writeNull, in indent);
 
 		public bool Equals(IDataNode? other) => false;
 		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Name);

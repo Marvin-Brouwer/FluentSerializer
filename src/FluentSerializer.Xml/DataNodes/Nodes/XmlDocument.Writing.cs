@@ -37,7 +37,7 @@ public readonly partial struct XmlDocument
 	public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true)
 	{
 		Guard.Against.Null(RootElement, message: "The document was is an illegal state, it contains no RootElement"
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, parameterName: nameof(RootElement)
 #endif
 		);

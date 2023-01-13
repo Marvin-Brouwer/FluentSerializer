@@ -12,10 +12,16 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 {
 	private const int BogusSeed = 98123600;
 
-#if (RELEASE)
-	protected virtual int[] ItemCount => new[] { 20, 200, 2000, 20000 };
-#else
+#if DEBUG
 	protected virtual int[] ItemCount => new[] { 10, 20 };
+#else
+	// The benchmark runner on Ubuntu server can easily handle 20.000 items.
+	// However, when running that on Windows server, the pipeline gets canceled
+	// At the end of the line 10.000 still means the data composition looks like: 10,000/114,454/342,972
+	// That a total of 467,426 unique items, which is a redicilous dataset.
+	// The file generated is large enough for Visual Studio Code to disable color formatting.
+
+	protected virtual int[] ItemCount => new[] { 20, 200, 2000, 10_000 };
 #endif
 
 	public void GenerateTestCaseFiles()
@@ -53,8 +59,13 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 		}
 	}
 
+#if NETSTANDARD2_0
+	private string GetDirectory() => string.Join(Path.DirectorySeparatorChar.ToString(), Path.GetTempPath(), GetType().Assembly.GetName().Name);
+	private string GetFilePath(string directory, int dataCount) => string.Join(Path.DirectorySeparatorChar.ToString(), directory, GetStringFileName(dataCount));
+#else
 	private string GetDirectory() => Path.Join(Path.GetTempPath(), GetType().Assembly.GetName().Name);
 	private string GetFilePath(string directory, int dataCount) => Path.Join(directory, GetStringFileName(dataCount));
+#endif
 
 	private static void WriteStringContent(TData data, string filePath)
 	{
@@ -64,7 +75,12 @@ public abstract class DataCollectionFactory<TData> where TData : IDataNode
 
 		data.AppendTo(ref stringBuilder, true, 0, false);
 		Console.Write('.');
+#if NETSTANDARD2_0
+		var stringSpan = stringBuilder.AsSpan().ToArray();
+		bufferedStream.Write(stringSpan, 0, stringSpan.Length);
+#else
 		bufferedStream.Write(stringBuilder.AsSpan());
+#endif
 
 		Console.Write('.');
 		bufferedStream.Flush();

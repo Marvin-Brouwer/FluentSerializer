@@ -1,3 +1,6 @@
+#if NETSTANDARD2_0
+using FluentSerializer.Core.Dirty.BackwardsCompatibility.NetFramework;
+#endif
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting.Converters;
 using FluentSerializer.Core.DataNodes;
@@ -42,8 +45,8 @@ public sealed class EnumConverter : EnumConverterBase, IJsonConverter
 		if (objectToDeserialize is not IDataValue data) return default;
 		if (string.IsNullOrWhiteSpace(data.Value)) return default;
 
-		var value = data.Value.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
-			? data.Value[1..^1]
+		var value = data.Value!.StartsWith(JsonCharacterConstants.PropertyWrapCharacter)
+			? data.Value![1..^1]
 			: data.Value;
 		return ConvertToEnum(value, context.PropertyType);
 	}

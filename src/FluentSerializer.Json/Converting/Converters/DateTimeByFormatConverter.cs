@@ -1,5 +1,8 @@
 using Ardalis.GuardClauses;
 
+#if NETSTANDARD2_0
+using FluentSerializer.Core.Dirty.BackwardsCompatibility.NetFramework;
+#endif
 using FluentSerializer.Json.Converting.Converters.Base;
 using FluentSerializer.Json.DataNodes;
 
@@ -23,12 +26,12 @@ public class DateTimeByFormatConverter : SimpleTypeConverter<DateTime>
 	public DateTimeByFormatConverter(in string format, in CultureInfo cultureInfo, in DateTimeStyles dateTimeStyle)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
 		Guard.Against.Null(cultureInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(cultureInfo)
 #endif
 		);

@@ -23,12 +23,12 @@ public class NamingContext : INamingContext
 	public INamingStrategy? FindNamingStrategy(in Type classType, in PropertyInfo propertyInfo)
 	{
 		Guard.Against.Null(classType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classType)
 #endif
 		);
 		Guard.Against.Null(propertyInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyInfo)
 #endif
 		);
@@ -43,12 +43,12 @@ public class NamingContext : INamingContext
 	public static INamingStrategy? FindNamingStrategy(in IPropertyMapCollection propertyMapping, in PropertyInfo propertyInfo)
 	{
 		Guard.Against.Null(propertyMapping
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyMapping)
 #endif
 		);
 		Guard.Against.Null(propertyInfo
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(propertyInfo)
 #endif
 		);
@@ -60,7 +60,7 @@ public class NamingContext : INamingContext
 	public INamingStrategy? FindNamingStrategy(in Type type)
 	{
 		Guard.Against.Null(type
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(type)
 #endif
 		);

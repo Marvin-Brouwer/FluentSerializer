@@ -14,7 +14,10 @@ on:
       jobTypeSecondary:
         type: string
         required: false
-        default: "Short"
+        default: "Medium"
+
+env:
+  DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
 
 defaults:
   run:
@@ -24,24 +27,26 @@ defaults:
 
 jobs:
   benchmark:
-    name: "${{ matrix.version.framework }} ${{ matrix.os.displayName }}"
+    name: "${{ matrix.version.displayName }} - ${{ matrix.os.displayName }}"
     strategy:
       fail-fast: true
       matrix:
         # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
         version: [
-          {tag: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
-          {tag: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
-          {tag: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+          {displayName: "net 7.0", sdkVersion: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {displayName: "net 6.0", sdkVersion: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
+          {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
-        # ---
-        # Temporarily removed `windows-latest`, because of provisioning issues
-        # https://github.com/Marvin-Brouwer/FluentSerializer/issues/244
         os: [
-          # { name: windows-latest, displayName: windows, rid: "win-x64" },
+          { name: windows-latest, displayName: windows, rid: "win-x64" },
           { name: ubuntu-latest, displayName: linux, rid: "linux-x64" }
         ]
+        # Add a windows-only netframework benchmark, since that's only available on windows.
+        include:
+          # netframework only supports windows
+          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
+            os: { name: windows-latest, displayName: windows, rid: "win-x64" }
     runs-on: ${{ matrix.os.name }}
     ###
     # 🗃 Setup WSL
@@ -67,7 +72,7 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.tag }}
+        dotnet-version: ${{ matrix.version.sdkVersion }}
     ###
     # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #
@@ -81,8 +86,10 @@ jobs:
         --configuration "Release"
         --framework ${{ matrix.version.framework }}
         --runtime ${{ matrix.os.rid }}
-        --verbosity "detailed"
+        --no-self-contained
+        --verbosity ${{ env.DOTNET_VERBOSITY }}
         --
+        --os-displayName=${{ matrix.os.displayName }}
         --jobType=${{ matrix.version.jobType }}
         --quick-exit
 

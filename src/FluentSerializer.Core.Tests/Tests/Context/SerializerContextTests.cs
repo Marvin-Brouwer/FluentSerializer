@@ -10,6 +10,8 @@ using FluentSerializer.Core.Services;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Core.Text;
 
+using Microsoft.Extensions.ObjectPool;
+
 using Moq;
 
 using System;
@@ -211,6 +213,9 @@ public sealed class SerializerContextTests
 
 		public string Name => throw new NotSupportedException("Out of test scope");
 		public ITextWriter AppendTo(ref ITextWriter stringBuilder, in bool format = true, in int indent = 0, in bool writeNull = true) =>
+			throw new NotSupportedException("Out of test scope");
+
+		public string WriteTo(in ObjectPool<ITextWriter> stringBuilders, in bool format = true, in bool writeNull = true, in int indent = 0) =>
 			throw new NotSupportedException("Out of test scope");
 	}
 

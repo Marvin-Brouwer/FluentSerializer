@@ -70,7 +70,11 @@ internal sealed class SystemStringBuilder : ITextWriter
 	{
 		if (value.IsEmpty) return this;
 
+#if NETSTANDARD2_0
+		StringBuilder.Append(value.ToString());
+#else
 		StringBuilder.Append(value);
+#endif
 		return this;
 	}
 
@@ -115,7 +119,11 @@ internal sealed class SystemStringBuilder : ITextWriter
 	private byte[] GetBytes()
 	{
 		var bytes = new char[StringBuilder.Length];
+#if NETSTANDARD2_0
+		StringBuilder.CopyTo(0, bytes, 0, StringBuilder.Length);
+#else
 		StringBuilder.CopyTo(0, bytes, StringBuilder.Length);
+#endif
 
 		return TextConfiguration.Encoding.GetBytes(bytes);
 	}

@@ -37,12 +37,12 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 		in IClassMapCollection classMapCollection)
 	{
 		Guard.Against.Null(configuration
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(configuration)
 #endif
 		);
 		Guard.Against.Null(classMapCollection
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(classMapCollection)
 #endif
 		);
@@ -82,7 +82,7 @@ public sealed class RuntimeXmlSerializer : IAdvancedXmlSerializer
 	{
 		if (string.IsNullOrWhiteSpace(stringData)) return default;
 
-		var rootElement = XmlParser.Parse(in stringData);
+		var rootElement = XmlParser.Parse(in stringData!);
 		return Deserialize<TModel>(in rootElement);
 	}
 

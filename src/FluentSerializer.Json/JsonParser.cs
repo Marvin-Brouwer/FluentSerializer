@@ -22,7 +22,7 @@ public static class JsonParser
 	public static IJsonObject Parse(in string value)
 	{
 		Guard.Against.NullOrWhiteSpace(value
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(value)
 #endif
 		);

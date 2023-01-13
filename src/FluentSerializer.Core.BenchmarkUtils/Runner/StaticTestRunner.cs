@@ -131,10 +131,6 @@ public abstract class StaticTestRunner
 #endif
 	}
 
-#if (!NET6_0_OR_GREATER)
-	[System.Security.Permissions.PrincipalPermission(
-		System.Security.Permissions.SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-#endif
 	public static void Run(Assembly assembly, in string[] arguments, string dataType, IOrderer? orderer = null)
 	{
 		RequireElevatedPermissions(in arguments);
@@ -167,7 +163,9 @@ public abstract class StaticTestRunner
 
 		BenchmarkSwitcher.FromAssembly(assembly).RunAllJoined(config);
 
-		FixConsoleArtifactFileName(dataType, config, jobDate);
+		var osDisplayNameParam = Array.Find(arguments, parameter => parameter.StartsWith("--os-displayName=", StringComparison.Ordinal));
+		var osDisplayName = osDisplayNameParam?.Split('=')[1];
+		FixConsoleArtifactFileName(dataType, config, jobDate, in osDisplayName);
 		var gitHubSummaryFileName = FixGitHubSummaryFileName(dataType, config);
 		if (gitHubSummaryFileName is not null) WrapGitHubFileSummary(gitHubSummaryFileName);
 
@@ -181,7 +179,7 @@ public abstract class StaticTestRunner
 	/// <summary>
 	/// Manually fix file names, the markdown exporter doesn't allow for inheritance so we'll fix it ourselves;
 	/// </summary>
-	private static void FixConsoleArtifactFileName(string dataType, ManualConfig config, DateTime jobDate)
+	private static void FixConsoleArtifactFileName(string dataType, ManualConfig config, DateTime jobDate, in string? osDisplayName)
 	{
 		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.WriteLine();
@@ -199,24 +197,30 @@ public abstract class StaticTestRunner
 			return;
 		}
 
-		var osName = GetOsName();
+		var osName = GetOsName(in osDisplayName);
 		var runtimeVersion = GetRuntimeVersion();
 		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-{osName}-{jobDate:yyyy_MM_dd-HH_mm_ss}.md";
 		var directory = markdownSummaryFile.Directory!;
 
+#if NETSTANDARD2_0
+		FixFileNames(markdownSummaryFile, string.Join(Path.DirectorySeparatorChar.ToString(), directory.FullName, readableFileName));
+#else
 		FixFileNames(markdownSummaryFile, Path.Join(directory.FullName, readableFileName));
+#endif
 	}
 
-	private static string GetOsName()
+	private static string GetOsName(in string? osDisplayName)
 	{
+		if (!string.IsNullOrWhiteSpace(osDisplayName)) return osDisplayName!;
+
 #if NET5_0_OR_GREATER
 		var runtimeIdentifier = RuntimeInformation.RuntimeIdentifier;
 #else
-		var runtimeIdentifier = (string?)AppContext.GetData("RUNTIME_IDENTIFIER");
-		if (runtimeIdentifier is null) return "unknown";
+		var runtimeIdentifier = Environment.OSVersion.Platform.ToString();
+		if (string.IsNullOrEmpty(runtimeIdentifier)) return "unknown";
 #endif
 
-		return runtimeIdentifier
+		return runtimeIdentifier!
 			.Split('-')[0]
 			.Split('.')[0]
 			.ToLowerInvariant();
@@ -272,7 +276,11 @@ public abstract class StaticTestRunner
 		var runtimeVersion = GetRuntimeVersion();
 		var readableFileName = $"{dataType}-benchmark-{runtimeVersion}-github.md";
 		var parentDirectory = markdownSummaryFile.Directory!.Parent!;
+#if NETSTANDARD2_0
+		var fullPath = string.Join(Path.DirectorySeparatorChar.ToString(), parentDirectory.FullName, readableFileName);
+#else
 		var fullPath = Path.Join(parentDirectory.FullName, readableFileName);
+#endif
 
 		FixFileNames(markdownSummaryFile, fullPath);
 		return fullPath;
@@ -299,7 +307,12 @@ public abstract class StaticTestRunner
 
 	private static FileInfo? FindFileName(string pattern, ManualConfig config)
 	{
-		var resultsDir = new DirectoryInfo(Path.Join(config.ArtifactsPath, "results"));
+#if NETSTANDARD2_0
+		var resultsDirPath = string.Join(Path.DirectorySeparatorChar.ToString(), config.ArtifactsPath, "results");
+#else
+		var resultsDirPath = Path.Join(config.ArtifactsPath, "results");
+#endif
+		var resultsDir = new DirectoryInfo(resultsDirPath);
 		var markdownSummaryFile = resultsDir
 			.GetFiles(pattern)
 #if NET5_0_OR_GREATER
@@ -349,8 +362,12 @@ public abstract class StaticTestRunner
 			Verb = "runas"
 		};
 
+#if NETSTANDARD2_0
+		startInfo.Arguments = string.Join(" ", arguments);
+#else
 		foreach (var argument in arguments)
 			startInfo.ArgumentList.Add(argument);
+#endif
 
 		Process.Start(startInfo);
 		Environment.Exit(0);

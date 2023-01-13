@@ -28,6 +28,20 @@ Please take a moment to review this document in order to make the contribution p
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open  source project.
 In return, they should reciprocate that respect in addressing your issue or assessing patches and features.
 
+## Technical prerequisites
+
+[net48-download]: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48
+[net481-download]: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481
+[netcore31-download]: https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+
+Because of the backwards compatibility you're required to have the following sdk's installed locally:
+
+- [`.NET Framework 4.8 SDK`][net48-download] / [`.NET Framework 4.8.1 SDK`][net481-download]
+- [`.NET Core 3.1 Runtime`][netcore31-download]
+
+Both of these are out of support, so you will need to enable them in the `Visual Studio Installer`.  
+Or, install them from [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/download/dotnet) if you're not using Visual Studio.
+
 ## Using the issue tracker  
   
 The issue tracker is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests), but please respect the following restrictions:  

@@ -43,17 +43,17 @@ public sealed class PropertyMap : IPropertyMap
 		in Func<IConverter>? customConverter)
 	{
 		Guard.Against.Null(containerType
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(containerType)
 #endif
 		);
 		Guard.Against.Null(property
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(property)
 #endif
 		);
 		Guard.Against.Null(namingStrategy
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(namingStrategy)
 #endif
 		);
@@ -74,7 +74,7 @@ public sealed class PropertyMap : IPropertyMap
 		where TDataNode : IDataNode
 	{
 		Guard.Against.Null(currentSerializer
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(currentSerializer)
 #endif
 		);

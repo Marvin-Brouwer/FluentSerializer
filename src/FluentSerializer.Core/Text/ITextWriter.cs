@@ -22,8 +22,11 @@ public interface ITextWriter
 	ITextWriter Append(in char value, in int repeat);
 	/// <inheritdoc cref="System.Text.StringBuilder.Append(string?)"/>
 	ITextWriter Append(in string? value);
+
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
 	/// <inheritdoc cref="System.Text.StringBuilder.Append(ReadOnlySpan{char})"/>
 	ITextWriter Append(in ReadOnlySpan<char> value);
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
 	/// <summary>
 	/// Append a new line using <see cref="ITextConfiguration.NewLine"/>
 	/// </summary>

@@ -36,7 +36,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<SimpleTypeConverter<DateTime>> DateTime(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -51,7 +51,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<SimpleTypeConverter<DateTimeOffset>> DateTimeOffset(string format, CultureInfo? culture = null, DateTimeStyles style = DateTimeStyles.AdjustToUniversal)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -88,7 +88,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<SimpleTypeConverter<TimeSpan>> TimeSpan(string format, CultureInfo? culture = null, TimeSpanStyles style = TimeSpanStyles.None)
 	{
 		Guard.Against.NullOrWhiteSpace(format
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(format)
 #endif
 		);
@@ -124,7 +124,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<IXmlConverter> Formattable(string formatString)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);
@@ -136,7 +136,7 @@ public sealed class UseXmlConverters : IUseXmlConverters
 	public Func<IXmlConverter> Formattable(string formatString, IFormatProvider formatProvider)
 	{
 		Guard.Against.NullOrWhiteSpace(formatString
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(formatString)
 #endif
 		);

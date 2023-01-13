@@ -54,7 +54,7 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	public IConfiguredSerializerFactory<TSerializer, TConfiguration, TSerializerProfile> WithConfiguration(in TConfiguration configuration, in ObjectPoolProvider? poolProvider = null)
 	{
 		Guard.Against.Null(configuration
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(configuration)
 #endif
 		);
@@ -69,7 +69,7 @@ public abstract class BaseSerializerFactory<TSerializer, TConfiguration, TSerial
 	public IConfiguredSerializerFactory<TSerializer, TConfiguration, TSerializerProfile> WithConfiguration(in Action<TConfiguration> configurationSetup, in ObjectPoolProvider? poolProvider = null)
 	{
 		Guard.Against.Null(configurationSetup
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(configurationSetup)
 #endif
 		);

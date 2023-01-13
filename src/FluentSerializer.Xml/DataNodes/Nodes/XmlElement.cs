@@ -96,7 +96,7 @@ public readonly partial struct XmlElement : IXmlElement
 	public IXmlAttribute? GetChildAttribute(in string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(name)
 #endif
 		);
@@ -124,7 +124,7 @@ public readonly partial struct XmlElement : IXmlElement
 	public IXmlElement? GetChildElement(in string name)
 	{
 		Guard.Against.NullOrWhiteSpace(name
-#if NETSTANDARD2_1
+#if NETSTANDARD
 			, nameof(name)
 #endif
 		);

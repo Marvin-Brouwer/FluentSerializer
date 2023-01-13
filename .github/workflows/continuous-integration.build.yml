@@ -2,17 +2,21 @@ name: "Continuous integration - Build"
 on:
   workflow_call:
 
+env:
+  DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
+
 jobs:
   build:
-    name: "Build ${{ matrix.version.framework }}"
+    name: "Build ${{ matrix.version.displayName }}"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         version: [
-          {tag: "7.0.x", framework: "net7.0"},
-          {tag: "6.0.x", framework: "net6.0"},
-          {tag: "3.1.x", framework: "netstandard2.1"}
+          {displayName: "net 7.0", sdkVersion: "7.0.x", framework: "net7.0"},
+          {displayName: "net 6.0",sdkVersion: "6.0.x", framework: "net6.0"},
+          {displayName: "netstandard 2.1",sdkVersion: "3.1.x", framework: "netstandard2.1"},
+          {displayName: "netstandard 2.0",sdkVersion: "3.1.x", framework: "netstandard2.0"}
         ]
     steps:
     ###
@@ -30,21 +34,21 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.tag }}
+        dotnet-version: ${{ matrix.version.sdkVersion }}
     ###
     # 🛠 Build
     ###
     - name: 🛠 Build
       run: |-
-        dotnet build --nologo --configuration "Release"
+        dotnet build --nologo --configuration "Release" --verbosity ${{ env.DOTNET_VERBOSITY }}
     ###
-    # 🗃 Publish 'library-binaries-${{ matrix.version }}' artifacts
+    # 🗃 Publish 'library-binaries-${{ matrix.version.framework }}' artifacts
     ###
-    - name: 🗃 Publish 'library-binaries-${{ matrix.version.tag }}' artifacts
+    - name: 🗃 Publish 'library-binaries-${{ matrix.version.framework }}' artifacts
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: library-binaries-${{ matrix.version.tag }}
+        name: library-binaries-${{ matrix.version.framework }}
         path: |
           ./src/**/bin/Release/${{ matrix.version.framework }}/*.*
           !./src/*.Tests
