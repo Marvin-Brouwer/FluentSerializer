@@ -20,7 +20,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
 		<PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.3" />
 		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
