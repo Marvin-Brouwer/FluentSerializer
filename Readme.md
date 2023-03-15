@@ -14,6 +14,8 @@
 [license-shield]: https://img.shields.io/badge/license-Apache--2.0-blue.svg?style=flat-square
 [repo-stars-url]: https://github.com/Marvin-Brouwer/FluentSerializer/stargazers
 [repo-stars-shield]: https://img.shields.io/github/stars/Marvin-Brouwer/FluentSerializer.svg?color=brightgreen&style=flat-square
+[discord-url]: /https://discord.gg/NHmUZ5qm
+[discord-shield]: https://img.shields.io/discord/958295823001722890?label=discord&logo=discord&style=flat-square
 
 <h1 align="center">
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
@@ -27,7 +29,7 @@
 [![XML][package-shield-i-xml]][package-url-xml] [![XML Nuget][package-shield-v-xml]![XML Downloads][package-shield-d-xml]][package-url-xml]  
 [![JSON][package-shield-i-json]![JSON Nuget][package-shield-v-json]![JSON Downloads][package-shield-d-Json]][package-url-json]  
 
-[![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url]
+[![Stars][repo-stars-shield]][repo-stars-url] [![License][license-shield]][license-url] [![Discord][discord-shield]][discord-url]
 
 </h3>
 
