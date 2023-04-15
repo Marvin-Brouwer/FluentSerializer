@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using FluentSerializer.Core.Configuration;
 using FluentSerializer.Core.Converting;
 using FluentSerializer.Core.Converting.Converters;
@@ -85,5 +87,25 @@ public sealed class UseJsonExtensionsTests
 				stack => stack.Use(It.IsAny<Func<IJsonConverter>>(), It.IsAny<bool>()),
 				Times.Exactly(3)
 			);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "JSON")]
+	public void UseFormattable_NullOrEmpty_Throws()
+	{
+		// Arrange
+		var configurationStackMock = new Mock<IConfigurationStack<IConverter>>(MockBehavior.Loose);
+
+		// Act
+		var result1 = () => configurationStackMock.Object.UseFormattable(string.Empty);
+		var result2 = () => configurationStackMock.Object.UseFormattable((string)null!);
+		var result3 = () => configurationStackMock.Object.UseFormattable(string.Empty, CultureInfo.InvariantCulture);
+		var result4 = () => configurationStackMock.Object.UseFormattable(null!, CultureInfo.InvariantCulture);
+
+		// Assert
+		result1.Should().ThrowExactly<ArgumentException>();
+		result2.Should().ThrowExactly<ArgumentNullException>();
+		result3.Should().ThrowExactly<ArgumentException>();
+		result4.Should().ThrowExactly<ArgumentNullException>();
 	}
 }

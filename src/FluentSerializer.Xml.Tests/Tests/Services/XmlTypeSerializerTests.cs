@@ -29,15 +29,16 @@ public sealed class XmlTypeSerializerTests
 {
 	private const SerializerDirection TestDirection = SerializerDirection.Serialize;
 
+	private readonly Mock<IAdvancedXmlSerializer> _serializerMock;
 	private readonly ISerializerCoreContext<IXmlNode> _coreContextStub;
 	private readonly Mock<IClassMap> _classMapMock;
 	private readonly Mock<IClassMapCollection> _classMapCollectionMock;
 
 	public XmlTypeSerializerTests()
 	{
-		var serializerMock = new Mock<IAdvancedXmlSerializer>()
+		_serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(XmlSerializerConfiguration.Default);
-		_coreContextStub = new SerializerCoreContext<IXmlNode>(serializerMock.Object);
+		_coreContextStub = new SerializerCoreContext<IXmlNode>(_serializerMock.Object);
 		_classMapMock = new Mock<IClassMap>()
 			.WithDefaults()
 			.WithoutPropertyMaps();
@@ -229,6 +230,88 @@ public sealed class XmlTypeSerializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToElement_ElementPropertyMapping_NullValue_ReturnsValue()
+	{
+		// Arrange
+		var expectedNoNull = Element(nameof(TestClass));
+		var expectedNull = Element(nameof(TestClass),
+			Element(nameof(TestClass.WrappedReference))
+		);
+		var input = new TestClass
+		{
+			WrappedReference = null
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlElement);
+		var targetProperty = type.GetProperty(nameof(TestClass.WrappedReference))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = false
+			});
+		var resultNoNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = true
+			});
+		var resultNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+
+		// Assert
+		resultNoNull.Should().BeEquivalentTo(expectedNoNull);
+		resultNull.Should().BeEquivalentTo(expectedNull);
+	}
+
+	/// <summary>
+	/// Is this correct? <br />
+	/// Do we want to throw on illegal null values on serializing? <br />
+	/// Maybe add a setting for this? <br />
+	/// <see href="https://github.com/Marvin-Brouwer/FluentSerializer/discussions/288"/>
+	/// </summary>
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToElement_ElementPropertyMapping_IllegalNullValue_DoesntThrow()
+	{
+		// Arrange
+		var input = new TestClass
+		{
+			Value = null!
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlElement);
+		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
+
+		// Assert
+		result.Should().NotThrow();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void SerializeToAttribute_AttributePropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -261,6 +344,88 @@ public sealed class XmlTypeSerializerTests
 
 	[Fact,
 		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToAttribute_AttributePropertyMapping_NullValue_ReturnsValue()
+	{
+		// Arrange
+		var expectedNoNull = Element(nameof(TestClass));
+		var expectedNull = Element(nameof(TestClass),
+			Attribute(nameof(TestClass.WrappedReference), null)
+		);
+		var input = new TestClass
+		{
+			WrappedReference = null
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlAttribute);
+		var targetProperty = type.GetProperty(nameof(TestClass.WrappedReference))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = false
+			});
+		var resultNoNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = true
+			});
+		var resultNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+
+		// Assert
+		resultNoNull.Should().BeEquivalentTo(expectedNoNull);
+		resultNull.Should().BeEquivalentTo(expectedNull);
+	}
+
+	/// <summary>
+	/// Is this correct? <br />
+	/// Do we want to throw on illegal null values on serializing? <br />
+	/// Maybe add a setting for this? <br />
+	/// <see href="https://github.com/Marvin-Brouwer/FluentSerializer/discussions/288"/>
+	/// </summary>
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToAttribute_AttributePropertyMapping_IllegalNullValue_DoesntThrow()
+	{
+		// Arrange
+		var input = new TestClass
+		{
+			Value = null!
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlAttribute);
+		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
+
+		// Assert
+		result.Should().NotThrow();
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
 	public void SerializeToText_TextPropertyMapping_ReturnsValue()
 	{
 		// Arrange
@@ -289,6 +454,88 @@ public sealed class XmlTypeSerializerTests
 
 		// Assert
 		result.Should().BeEquivalentTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToText_TextPropertyMapping_NullValue_ReturnsValue()
+	{
+		// Arrange
+		var expectedNoNull = Element(nameof(TestClass));
+		var expectedNull = Element(nameof(TestClass),
+			Text(null)
+		);
+		var input = new TestClass
+		{
+			WrappedReference = null
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlText);
+		var targetProperty = type.GetProperty(nameof(TestClass.WrappedReference))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = false
+			});
+		var resultNoNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+		_serializerMock
+			.UseConfig(new XmlSerializerConfiguration
+			{
+				WriteNull = true
+			});
+		var resultNull = sut.SerializeToElement(input, type, _coreContextStub);
+
+
+		// Assert
+		resultNoNull.Should().BeEquivalentTo(expectedNoNull);
+		resultNull.Should().BeEquivalentTo(expectedNull);
+	}
+
+	/// <summary>
+	/// Is this correct? <br />
+	/// Do we want to throw on illegal null values on serializing? <br />
+	/// Maybe add a setting for this? <br />
+	/// <see href="https://github.com/Marvin-Brouwer/FluentSerializer/discussions/288"/>
+	/// </summary>
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void SerializeToText_TextPropertyMapping_IllegalNullValue_DoesntThrow()
+	{
+		// Arrange
+		var input = new TestClass
+		{
+			Value = null!
+		};
+
+		var type = typeof(TestClass);
+		var containerType = typeof(IXmlText);
+		var targetProperty = type.GetProperty(nameof(TestClass.Value))!;
+
+		_classMapMock
+			.WithClassType(type)
+			.WithBasicProppertyMapping(TestDirection, containerType, targetProperty);
+		_classMapCollectionMock
+			.WithClassMap(_classMapMock);
+
+		var sut = new XmlTypeSerializer(_classMapCollectionMock.Object);
+
+		// Act
+		var result = () => sut.SerializeToElement(input, type, _coreContextStub);
+
+		// Assert
+		result.Should().NotThrow();
 	}
 
 	[Theory,

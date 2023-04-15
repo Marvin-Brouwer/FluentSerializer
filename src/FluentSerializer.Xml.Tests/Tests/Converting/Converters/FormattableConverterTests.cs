@@ -2,6 +2,7 @@ using FluentAssertions;
 
 using FluentSerializer.Core.Context;
 using FluentSerializer.Core.Converting;
+using FluentSerializer.Core.Naming;
 using FluentSerializer.Core.Tests.ObjectMother;
 using FluentSerializer.Xml.Configuration;
 using FluentSerializer.Xml.Converting.Converters;
@@ -36,7 +37,9 @@ public sealed class FormattableConverterTests
 		var serializerMock = new Mock<IAdvancedXmlSerializer>()
 			.UseConfig(XmlSerializerConfiguration.Default);
 		_contextMock = new Mock<ISerializerContext<IXmlNode>>()
-			.SetupDefault(serializerMock);
+			.SetupDefault(serializerMock)
+			// Use a Names.Equal to prevent PropertyInfo resolving to a null reference
+			.WithNamingStrategy(Names.Equal(nameof(FormattableConverterTests)));
 	}
 
 	public static IEnumerable<object[]> GenerateFormattibleData()
@@ -73,15 +76,21 @@ public sealed class FormattableConverterTests
 	public void Serialize_Formattible_ReturnsString(object input, string expectedValue)
 	{
 		// Arrange
-		var expected = Text(expectedValue);
+		var expectedAttribute = Attribute(nameof(FormattableConverterTests), expectedValue);
+		var expectedElement = Element(nameof(FormattableConverterTests), Text(expectedValue));
+		var expectedText = Text(expectedValue);
 
 		// Act
 		var canConvert = _sut.CanConvert(input.GetType());
-		var result = _sut.As<IConverter<IXmlText, IXmlNode>>().Serialize(input, _contextMock.Object);
+		var resultAttribute = _sut.As<IConverter<IXmlAttribute, IXmlNode>>().Serialize(input, _contextMock.Object);
+		var resultElement = _sut.As<IConverter<IXmlElement, IXmlNode>>().Serialize(input, _contextMock.Object);
+		var resultText = _sut.As<IConverter<IXmlText, IXmlNode>>().Serialize(input, _contextMock.Object);
 
 		// Assert
 		canConvert.Should().BeTrue();
-		result.Should().BeEquivalentTo(expected);
+		resultAttribute.Should().BeEquivalentTo(expectedAttribute);
+		resultElement.Should().BeEquivalentTo(expectedElement);
+		resultText.Should().BeEquivalentTo(expectedText);
 	}
 	#endregion
 
