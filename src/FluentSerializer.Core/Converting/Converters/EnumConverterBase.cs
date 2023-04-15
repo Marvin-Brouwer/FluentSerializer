@@ -175,13 +175,16 @@ public abstract class EnumConverterBase
 		}
 	}
 
-
+#if !NET5_0_OR_GREATER
 #pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
+#endif
 	/// <summary>
 	/// Wrapper around <see cref="Enum.TryParse(Type,string,bool,out object)"/>
 	/// </summary>
 	protected virtual object? ConvertToEnum(in string? currentValue, in Type targetType)
+#if !NET5_0_OR_GREATER
 #pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
+#endif
 	{
 		if (currentValue is null) return default;
 
