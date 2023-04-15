@@ -39,6 +39,7 @@ public sealed class WrappedCollectionConverterTests
 {
 	private const string ListName = "list";
 	private const string ListItemName = "ListItem";
+	private const string ListItemNameFallback = "listItem";
 
 	private readonly WrappedCollectionConverter _sut;
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
@@ -124,6 +125,62 @@ public sealed class WrappedCollectionConverterTests
 			Element(ListItemName, Text("2"))
 		);
 		var input = new List<IXmlElement> {
+			Element(ListItemName, Text("1")),
+			Element(ListItemName, Text("2"))
+		};
+
+		_serializerMock
+			.WithSerializeToElement();
+
+		// Act
+		var canConvert = _sut.CanConvert(input.GetType());
+		var result = _sut.Serialize(input, _contextMock.Object);
+
+		// Assert
+		canConvert.Should().BeTrue();
+		result.Should().BeEquivalentTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Serialize_FallbackNaming_ListOfIXmlElement()
+	{
+		// Arrange
+		var expected = Element(ListName,
+			Element(ListItemNameFallback, Text("1")),
+			Element(ListItemNameFallback, Text("2"))
+		);
+		var input = new List<IXmlElement> {
+			Element(ListItemNameFallback, Text("1")),
+			Element(ListItemNameFallback, Text("2"))
+		};
+
+		_serializerMock
+			.WithSerializeToElement();
+		_contextMock
+			.WithFindNamingStrategy(null!);
+
+		// Act
+		var canConvert = _sut.CanConvert(input.GetType());
+		var result = _sut.Serialize(input, _contextMock.Object);
+
+		// Assert
+		canConvert.Should().BeTrue();
+		result.Should().BeEquivalentTo(expected);
+	}
+
+	[Fact,
+		Trait("Category", "UnitTest"), Trait("DataFormat", "XML")]
+	public void Serialize_IncludesNullItem_ListOfIXmlElement()
+	{
+		// Arrange
+		var expected = Element(ListName,
+			Element(ListItemName, Text("1")),
+			Element(ListItemName, Text("2"))
+		);
+		var input = new List<IXmlElement> {
+			// Make sure the first one's null so the type fallback gets coverage
+			null!,
 			Element(ListItemName, Text("1")),
 			Element(ListItemName, Text("2"))
 		};

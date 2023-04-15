@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -10,7 +10,7 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>..\..\docs\logo\NuGetIcon.xml.ico</ApplicationIcon>
 		<PackageIcon>NuGetIcon.xml.png</PackageIcon>
-        <PackageReadmeFile>Readme.NuGet.md</PackageReadmeFile>
+		<PackageReadmeFile>Readme.NuGet.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Company>N/A</Company>
 		<Copyright>Apache-2.0</Copyright>
@@ -26,9 +26,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="StrykerOutput\**" />
-	  <EmbeddedResource Remove="StrykerOutput\**" />
-	  <None Remove="StrykerOutput\**" />
+		<Compile Remove="StrykerOutput\**" />
+		<EmbeddedResource Remove="StrykerOutput\**" />
+		<None Remove="StrykerOutput\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,12 +57,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="ReflectionAnalyzers" Version="0.3.1">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.54.0.64047">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.55.0.65544">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
