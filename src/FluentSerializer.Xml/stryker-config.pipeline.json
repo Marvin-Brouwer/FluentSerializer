@@ -11,6 +11,7 @@
 			"../FluentSerializer.UseCase.OpenAir/FluentSerializer.UseCase.OpenAir.csproj"
 		],
 		"reporters": [
+			"progress",
 			"dashboard",
 			"cleartext"
 		],
