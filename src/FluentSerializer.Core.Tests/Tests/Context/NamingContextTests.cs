@@ -85,17 +85,17 @@ public sealed class NamingContextTests
 		result.Should().BeNull();
 	}
 
-	[Theory,
-		InlineData(null, null),
-		InlineData(typeof(TestClass), null),
+	[Fact,
 		Trait("Category", "UnitTest")]
-	public void FindNamingStrategy_ForProperty_ValueNull_Throws(Type type, PropertyInfo property)
+	public void FindNamingStrategy_ForProperty_ValueNull_Throws()
 	{
 		// Act
-		var result = () => _sut.FindNamingStrategy(in type, in property);
+		var resultType = () => _sut.FindNamingStrategy(null!, null!);
+		var resultPropertyInfo = () => _sut.FindNamingStrategy(typeof(TestClass), null!);
 
 		// Assert
-		result.Should().ThrowExactly<ArgumentNullException>();
+		resultType.Should().ThrowExactly<ArgumentNullException>();
+		resultPropertyInfo.Should().ThrowExactly<ArgumentNullException>();
 	}
 
 	[Fact,
@@ -144,11 +144,12 @@ public sealed class NamingContextTests
 		// Arrange
 		var propertyMapping = (IPropertyMapCollection)null!;
 		var propertyMappingMock = new Mock<IPropertyMapCollection>(MockBehavior.Strict);
-		var property = (PropertyInfo)null!;
+		var type = typeof(TestClass);
+		var property = type.GetProperty(nameof(TestClass.Id))!;
 
 		// Act
 		var result1 = () => NamingContext.FindNamingStrategy(in propertyMapping, in property);
-		var result2 = () => NamingContext.FindNamingStrategy(propertyMappingMock.Object, in property);
+		var result2 = () => NamingContext.FindNamingStrategy(propertyMappingMock.Object, null);
 
 		// Assert
 		result1.Should().ThrowExactly<ArgumentNullException>();
