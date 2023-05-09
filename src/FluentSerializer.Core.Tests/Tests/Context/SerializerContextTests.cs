@@ -116,6 +116,25 @@ public sealed class SerializerContextTests
 
 	#region ISerializerCoreContext
 
+	[Theory,
+		InlineData(true), InlineData(false),
+		Trait("Category", "UnitTest")]
+	public void Constructor_ClassConversion_ReturnsType(bool nullable)
+	{
+		// Arrange
+		var type = typeof(TestClass);
+		var inputType = nullable ? type.GetProperty(nameof(TestClass.Nullable))!.PropertyType : type;
+		var property = type.GetProperty(nameof(TestClass.Id))!;
+
+		var sut = new SerializerContext<TestClass>(
+			_typedCoreContext,
+			property, property.PropertyType, inputType,
+			Names.Use.CamelCase(), _classMapMock.Object.PropertyMapCollection, _classMapCollectionMock.Object);
+
+		// Assert
+		sut.ClassType.Should().Be(type);
+	}
+
 	[Fact,
 		Trait("Category", "UnitTest")]
 	public void WithPathSegment_Class_ReturnsExpectedPath()
@@ -207,6 +226,7 @@ public sealed class SerializerContextTests
 	private sealed class TestClass : IDataNode
 	{
 		public int Id { get; init; } = default!;
+		public static TestClass? Nullable => default!;
 
 		public bool Equals(IDataNode? other) => false;
 		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Id);
