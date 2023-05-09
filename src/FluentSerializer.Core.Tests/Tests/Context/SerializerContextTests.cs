@@ -226,7 +226,7 @@ public sealed class SerializerContextTests
 	private sealed class TestClass : IDataNode
 	{
 		public int Id { get; init; } = default!;
-		public static TestClass? Nullable { get; }
+		public static TestClass? Nullable => default!;
 
 		public bool Equals(IDataNode? other) => false;
 		public HashCode GetNodeHash() => DataNodeHashingHelper.GetHashCodeForAll(Id);

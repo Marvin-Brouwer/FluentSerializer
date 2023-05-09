@@ -149,7 +149,7 @@ public sealed class NamingContextTests
 
 		// Act
 		var result1 = () => NamingContext.FindNamingStrategy(in propertyMapping, in property);
-		var result2 = () => NamingContext.FindNamingStrategy(propertyMappingMock.Object, null);
+		var result2 = () => NamingContext.FindNamingStrategy(propertyMappingMock.Object, null!);
 
 		// Assert
 		result1.Should().ThrowExactly<ArgumentNullException>();
