@@ -27,7 +27,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.5.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="4.6.0" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.1.0.70676">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
