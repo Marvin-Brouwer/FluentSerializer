@@ -16,6 +16,11 @@
 		<AnalysisLevel>latest-recommended</AnalysisLevel>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<!-- https://github.com/dependabot/dependabot-core/issues/1618#issuecomment-665863295 -->
+		<CodeAnalysisVersion>4.5.0</CodeAnalysisVersion>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
 		<PackageReference Include="Moq" Version="4.18.4" />
@@ -25,12 +30,12 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="$(CodeAnalysisVersion)" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(CodeAnalysisVersion)" />
 		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
