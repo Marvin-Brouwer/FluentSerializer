@@ -32,7 +32,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="GitHubActionsTestLogger" Version="2.3.2" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
 		<PackageReference Include="Moq" Version="4.18.4" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.3.0.71466">
 		  <PrivateAssets>all</PrivateAssets>
