@@ -40,7 +40,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
 		<PackageReference Include="Moq" Version="4.18.4" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.3.0.71466">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.5.0.73987">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
