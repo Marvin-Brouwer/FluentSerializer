@@ -46,7 +46,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.3.0.71466">
+	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.6.0.74858">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

@@ -33,7 +33,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="$(CodeAnalysisVersion)" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.3.0.71466">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.6.0.74858">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
