@@ -17,7 +17,7 @@
 
 	<PropertyGroup>
 		<!-- https://github.com/dependabot/dependabot-core/issues/1618#issuecomment-665863295 -->
-		<CodeAnalysisVersion>4.6.0</CodeAnalysisVersion>
+		<CodeAnalysisVersion>4.7.0</CodeAnalysisVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
