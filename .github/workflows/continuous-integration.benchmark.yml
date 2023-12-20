@@ -124,7 +124,7 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
       if: ${{ !cancelled() && success() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
         path: ${{github.workspace}}/benchmark-results

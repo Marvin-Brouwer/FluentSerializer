@@ -46,7 +46,7 @@ jobs:
     ###
     - name: 🗃 Publish 'library-binaries-${{ matrix.version.framework }}' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: library-binaries-${{ matrix.version.framework }}
         path: |
