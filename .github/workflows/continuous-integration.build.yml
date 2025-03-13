@@ -45,7 +45,7 @@ jobs:
     ###
     - name: 🛠 Build
       run: |-
-        dotnet build --nologo --configuration "Release" --verbosity ${{ env.DOTNET_VERBOSITY }}
+        dotnet build --nologo --configuration "Release" --verbosity ${{ env.DOTNET_VERBOSITY }} --framework ${{ matrix.version.framework }}
     ###
     # 🗃 Publish 'library-binaries-${{ matrix.version.framework }}' artifacts
     ###
