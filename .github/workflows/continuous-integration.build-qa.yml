@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+env:
+  #https://github.com/dotnet/core/issues/4749#issuecomment-1332612225
+  CLR_OPENSSL_VERSION_OVERRIDE: 3
+
 jobs:
   build-test:
     name: "QA"
@@ -35,12 +39,14 @@ jobs:
     # 🧰 Setup .Net tools
     #
     # Register tools necessary to run the `test` pipeline-job
+    # https://github.com/dotnet/core/issues/4749#issuecomment-634879902
     ###
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-reportgenerator-globaltool
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
+        ln -s /usr/lib/libssl.so.47.0.6 /usr/lib/libssl.so.1.0.0
     ###
     # 🧰 Setup SonarCloud scanner
     #

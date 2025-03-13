@@ -10,6 +10,8 @@ permissions:
 
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  #https://github.com/dotnet/core/issues/4749#issuecomment-1332612225
+  CLR_OPENSSL_VERSION_OVERRIDE: 3
 
 jobs:
   stryker:
@@ -40,10 +42,12 @@ jobs:
     # 🧰 Setup .Net tools
     #
     # Register tools necessary to run the `test` pipeline-job
+    # https://github.com/dotnet/core/issues/4749#issuecomment-634879902
     ###
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-stryker
+        ln -s /usr/lib/libssl.so.47.0.6 /usr/lib/libssl.so.1.0.0
     ###
     # 🛠 Build & Run
     #

@@ -25,6 +25,8 @@ env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
   TERM: xterm-color
+  #https://github.com/dotnet/core/issues/4749#issuecomment-1332612225
+  CLR_OPENSSL_VERSION_OVERRIDE: 3
 
 jobs:
   ci:

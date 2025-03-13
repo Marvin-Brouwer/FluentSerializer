@@ -7,6 +7,8 @@ permissions:
 
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
+  #https://github.com/dotnet/core/issues/4749#issuecomment-1332612225
+  CLR_OPENSSL_VERSION_OVERRIDE: 3
 
 jobs:
   build:
