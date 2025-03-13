@@ -3,6 +3,7 @@ name: "Scheduled SonarCloud"
 on:
   schedule:
     - cron: '0 06 */7 * *'
+  workflow_dispatch:
 
 jobs:
   build-test:

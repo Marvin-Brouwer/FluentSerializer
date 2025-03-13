@@ -3,6 +3,7 @@ name: "Scheduled GitHub CodeQL"
 on:
   schedule:
     - cron: '0 06 * * 0'
+  workflow_dispatch:
 
 jobs:
   analyze:
