@@ -19,7 +19,7 @@ jobs:
       matrix:
         version: [
           {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0"},
-          {displayName: "net 8.0",sdkVersion: "8.0.x", framework: "net8.0"},
+          {displayName: "net 8.0",sdkVersion: "9.0.x", framework: "net8.0"},
           {displayName: "netstandard 2.1",sdkVersion: "3.1.x", framework: "netstandard2.1"},
           {displayName: "netstandard 2.0",sdkVersion: "3.1.x", framework: "netstandard2.0"}
         ]
