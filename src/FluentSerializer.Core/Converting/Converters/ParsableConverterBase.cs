@@ -17,7 +17,10 @@ public abstract class ParsableConverterBase : IConverter
 	public SerializerDirection Direction { get; } = SerializerDirection.Deserialize;
 
 	/// <inheritdoc cref="IConverter.CanConvert(in Type)" />
-	public bool CanConvert(in Type targetType) => targetType.Implements(typeof(IParsable<>));
+	public bool CanConvert(in Type targetType) =>
+		// System.String is Parsable but doesn't have Parse(string, IFormatProvider)
+		targetType != typeof(string)
+		&& targetType.Implements(typeof(IParsable<>));
 
 	/// <inheritdoc />
 	public Guid ConverterId { get; } = typeof(IParsable<>).GUID;

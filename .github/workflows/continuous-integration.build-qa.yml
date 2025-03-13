@@ -30,7 +30,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-quality: 'preview'
-        dotnet-version: 7.0.x
+        dotnet-version: 9.0.x
     ###
     # 🧰 Setup .Net tools
     #

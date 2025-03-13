@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<LangVersion Condition="'$(TargetFramework)' == 'net6'">10</LangVersion>
@@ -17,7 +17,7 @@
 
 	<PropertyGroup>
 		<!-- https://github.com/dependabot/dependabot-core/issues/1618#issuecomment-665863295 -->
-		<CodeAnalysisVersion>4.7.0</CodeAnalysisVersion>
+		<CodeAnalysisVersion>4.13.0</CodeAnalysisVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -48,7 +48,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.12.0.78982">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -68,12 +68,12 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="$(CodeAnalysisVersion)" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(CodeAnalysisVersion)" />
-		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
