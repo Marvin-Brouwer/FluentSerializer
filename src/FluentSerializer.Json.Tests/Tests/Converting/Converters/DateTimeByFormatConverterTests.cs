@@ -43,7 +43,7 @@ public sealed class DateTimeByFormatConverterTests
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
 		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
+		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
 		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
 	}
 
@@ -81,7 +81,7 @@ public sealed class DateTimeByFormatConverterTests
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
 		// Arrange
-		var expected = Value(expectedValue);
+		var expected = Value(expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
 		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
 
 		// Act

@@ -45,7 +45,7 @@ public sealed class DefaultDateTimeOffsetConverterTests
 	{
 		yield return new object[] { true, "2096-04-20 04:20:00 +0", CultureInfo.InvariantCulture };
 		yield return new object[] { false, "4/20/2096 +0", new CultureInfo("en-US") };
-		yield return new object[] { true, "4/20/2096 4:20 AM +0", new CultureInfo("en-US") };
+		yield return new object[] { true, "4/20/2096 4:20 AM +0", new CultureInfo("en-US") };
 		yield return new object[] { true, "20-04-2096 04:20 +0", new CultureInfo("nl-NL") };
 	}
 

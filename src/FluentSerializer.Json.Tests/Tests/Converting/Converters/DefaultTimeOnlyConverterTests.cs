@@ -42,7 +42,7 @@ public sealed class DefaultTimeOnlyConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "\"04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { "\"4:20 AM\"", new CultureInfo("en-US") };
+		yield return new object[] { "\"4:20 AM\"", new CultureInfo("en-US") };
 		yield return new object[] { "\"04:20\"", new CultureInfo("nl-NL") };
 	}
 

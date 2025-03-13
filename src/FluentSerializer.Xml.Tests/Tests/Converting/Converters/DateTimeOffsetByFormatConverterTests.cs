@@ -44,7 +44,7 @@ public sealed class DateTimeOffsetByFormatConverterTests
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss zzz", "2096-04-20 04:20:00 +00:00", CultureInfo.InvariantCulture };
 		yield return new object[] { "M/d/yyyy zzz", "4/20/2096 +00:00", new CultureInfo("en-US") };
-		yield return new object[] { "M/d/yyyy h:mm tt zzz", "4/20/2096 4:20 AM +00:00", new CultureInfo("en-US") };
+		yield return new object[] { "M/d/yyyy h:mm tt zzz", "4/20/2096 4:20 AM +00:00", new CultureInfo("en-US") };
 		yield return new object[] { "dd-MM-yyyy HH:mm zzz", "20-04-2096 04:20 +00:00", new CultureInfo("nl-NL") };
 	}
 
@@ -82,8 +82,8 @@ public sealed class DateTimeOffsetByFormatConverterTests
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
 		// Arrange
-		var expectedText = Text(expectedValue);
-		var expectedAttribute = Attribute(nameof(DateTimeOffsetValue), expectedValue);
+		var expectedText = Text(expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
+		var expectedAttribute = Attribute(nameof(DateTimeOffsetValue), expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
 		var expectedElement = Element(nameof(DateTimeOffsetValue), expectedText);
 
 		var sut = new DateTimeOffsetByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);

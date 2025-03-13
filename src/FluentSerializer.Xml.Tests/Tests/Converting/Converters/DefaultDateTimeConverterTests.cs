@@ -45,7 +45,7 @@ public sealed class DefaultDateTimeConverterTests
 	{
 		yield return new object[] { true, "2096-04-20 04:20:00", CultureInfo.InvariantCulture };
 		yield return new object[] { false, "4/20/2096", new CultureInfo("en-US") };
-		yield return new object[] { true, "4/20/2096 4:20 AM", new CultureInfo("en-US") };
+		yield return new object[] { true, "4/20/2096 4:20 AM", new CultureInfo("en-US") };
 		yield return new object[] { true, "20-04-2096 04:20", new CultureInfo("nl-NL") };
 	}
 
