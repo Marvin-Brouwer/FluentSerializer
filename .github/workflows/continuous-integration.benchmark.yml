@@ -16,6 +16,9 @@ on:
         required: false
         default: "Medium"
 
+permissions:
+  contents: read
+
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
 

@@ -21,6 +21,9 @@ on:
         - FluentSerializer.Xml.DependencyInjection.NetCoreDefault
         - FluentSerializer.Xml.Converter.DefaultXml
 
+permissions:
+  contents: read
+
 jobs:
   dotnet-push:
     name: "Push to NuGet.org"

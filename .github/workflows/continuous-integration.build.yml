@@ -2,6 +2,9 @@ name: "Continuous integration - Build"
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
 
