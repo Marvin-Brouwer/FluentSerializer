@@ -34,8 +34,15 @@ jobs:
     #
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
     ###
+    - name: '🧰 Cache: Fix Old SSL Requirement 1.0'
+      id: cache-ssl-downgrade-1-0
+      uses: actions/cache@v4
+      if: ${{ matrix.version.oldSSL }}
+      with:
+        path: /usr/local/lib/openssl-1.0.2u
+        key: ${{ runner.os }}-cache-ssl-downgrade-1-0
     - name: '🧰 Cache: Fix Old SSL Requirement 1.1'
-      id: cache-ssl-downgrade-main
+      id: cache-ssl-downgrade-1-1
       uses: actions/cache@v4
       if: ${{ matrix.version.oldSSL }}
       with:
@@ -46,6 +53,16 @@ jobs:
     #
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
     ###
+    - name: 🧰 Fix Old SSL Requirement 1.0
+      run: |-
+        if [ ! -d "	openssl-1.0.2u" ]; then
+          wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz
+          tar -xzvf openssl-1.0.2u.tar.gz
+        fi
+        cd openssl-1.0.2u
+        ./config
+        make
+        sudo make install
     - name: 🧰 Fix Old SSL Requirement 1.1
       if: ${{ matrix.version.oldSSL }}
       run: |-
