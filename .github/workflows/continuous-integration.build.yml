@@ -35,7 +35,7 @@ jobs:
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
     ###
     - name: '🧰 Cache: Fix Old SSL Requirement 1.1'
-      id: cache-ssl-downgrade
+      id: cache-ssl-downgrade-main
       uses: actions/cache@v4
       if: ${{ matrix.version.oldSSL }}
       with:
