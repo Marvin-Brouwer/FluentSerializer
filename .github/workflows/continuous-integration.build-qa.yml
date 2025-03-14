@@ -26,18 +26,39 @@ jobs:
     #
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
     ###
-    - name: '🧰 Cache: Fix Old SSL Requirement'
+    - name: '🧰 Cache: Fix Old SSL Requirement 1.0'
+      id: cache-ssl-downgrade
+      uses: actions/cache@v4
+      with:
+        path: /usr/local/lib/openssl-1.0.2u
+        key: ${{ runner.os }}-cache-ssl-downgrade-1-0
+    - name: '🧰 Cache: Fix Old SSL Requirement 1.1'
       id: cache-ssl-downgrade
       uses: actions/cache@v4
       with:
         path: /usr/local/lib/openssl-1.1.1c
-        key: ${{ runner.os }}-cache-ssl-downgrade
+        key: ${{ runner.os }}-cache-ssl-downgrade-1-1
     ###
     # 🧰 Fix Old SSL Requirement
     #
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
     ###
-    - name: 🧰 Fix Old SSL Requirement
+    - name: 🧰 Fix Old SSL Requirement 1.0
+      run: |-
+        if [ ! -d "	openssl-1.0.2u" ]; then
+          wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz
+          tar -xzvf openssl-1.0.2u.tar.gz
+        fi
+        cd openssl-1.0.2u
+        ./config
+        make
+        sudo make install
+    ###
+    # 🧰 Fix Old SSL Requirement
+    #
+    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
+    ###
+    - name: 🧰 Fix Old SSL Requirement 1.1
       run: |-
         if [ ! -d "openssl-1.1.1c" ]; then
           wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
@@ -90,6 +111,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        LD_LIBRARY_PATH: "/usr/local/lib"
       run: >-
         [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
 
@@ -106,6 +128,8 @@ jobs:
     # 🛠 Build
     ###
     - name: 🛠 Build
+      env:
+        LD_LIBRARY_PATH: "/usr/local/lib"
       run: |-
         dotnet build --nologo --configuration "Release"
     ###
@@ -195,6 +219,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        LD_LIBRARY_PATH: "/usr/local/lib"
       run: >-
         $branchName = "${{ github.ref }}".Replace("refs/heads/", "");
 
@@ -209,6 +234,7 @@ jobs:
       id: sonarcloud-quality-gate-check
       uses: sonarsource/sonarqube-quality-gate-action@master
       env:
-       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        LD_LIBRARY_PATH: "/usr/local/lib"
       with:
         scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
