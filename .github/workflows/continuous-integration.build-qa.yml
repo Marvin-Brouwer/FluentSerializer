@@ -53,11 +53,12 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     # https://community.sonarsource.com/t/no-usable-version-of-the-libssl-was-found/40941/5
+    # https://community.sonarsource.com/t/sonarcloud-support-for-net-core-3-0-100-preview5/10167/8
     - name: 🧰 Install .Net SDKs - SonarCloud
       uses: actions/setup-dotnet@v3
       with:
         dotnet-quality: 'preview'
-        dotnet-version: 2.0.0
+        dotnet-version: 2.2.103
     - name: 🧰 Install .Net SDKs < 5.0
       uses: actions/setup-dotnet@v3
       with:
