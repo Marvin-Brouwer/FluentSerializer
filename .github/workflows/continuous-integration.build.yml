@@ -30,6 +30,18 @@ jobs:
       with:
         lfs: true
     ###
+    # 🧰 Cache: Fix Old SSL Requirement
+    #
+    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
+    ###
+    - name: '🧰 Cache: Fix Old SSL Requirement'
+      id: cache-ssl-downgrade
+      uses: actions/cache@v4
+      if: ${{ matrix.version.oldSSL }}
+      with:
+        path: /usr/local/lib/openssl-1.1.1c
+        key: ${{ runner.os }}-cache-ssl-downgrade
+    ###
     # 🧰 Fix Old SSL Requirement
     #
     # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
@@ -37,8 +49,10 @@ jobs:
     - name: 🧰 Fix Old SSL Requirement
       if: ${{ matrix.version.oldSSL }}
       run: |-
-        wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
-        tar -xzvf openssl-1.1.1c.tar.gz
+        if [ ! -d "openssl-1.1.1c" ]; then
+          wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
+          tar -xzvf openssl-1.1.1c.tar.gz
+        fi
         cd openssl-1.1.1c
         ./config
         make
