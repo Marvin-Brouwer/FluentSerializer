@@ -82,8 +82,8 @@ public sealed class DateTimeByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
-		// https://github.com/dotnet/runtime/issues/95620
-		if (!Environment.OSVersion.Platform.Equals(OSPlatform.Windows)) expectedValue = expectedValue.Replace(" ", " ");
+		// https://github.com/dotnet/runtime/issues/113478
+		// Fix does not apply here
 
 		// Arrange
 		var expectedText = Text(expectedValue);
