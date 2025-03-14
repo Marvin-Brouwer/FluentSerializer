@@ -22,15 +22,47 @@ jobs:
         lfs: true
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
     ###
+    # 🧰 Cache: Fix Old SSL Requirement
+    #
+    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
+    ###
+    - name: '🧰 Cache: Fix Old SSL Requirement'
+      id: cache-ssl-downgrade
+      uses: actions/cache@v4
+      with:
+        path: /usr/local/lib/openssl-1.1.1c
+        key: ${{ runner.os }}-cache-ssl-downgrade
+    ###
+    # 🧰 Fix Old SSL Requirement
+    #
+    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
+    ###
+    - name: 🧰 Fix Old SSL Requirement
+      run: |-
+        if [ ! -d "openssl-1.1.1c" ]; then
+          wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
+          tar -xzvf openssl-1.1.1c.tar.gz
+        fi
+        cd openssl-1.1.1c
+        ./config
+        make
+        sudo make install
+    ###
     # 🧰 Install .Net SDKs
     #
     # Configure the pipeline to use the correct .Net sdk versions
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDKs >= 5.0
       uses: actions/setup-dotnet@v3
       with:
         dotnet-quality: 'preview'
         dotnet-version: 9.0.x
+    - name: 🧰 Install .Net SDKs < 5.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-quality: 'preview'
+        dotnet-version: 3.1.x
+        packageType: sdk
     ###
     # 🧰 Setup .Net tools
     #
