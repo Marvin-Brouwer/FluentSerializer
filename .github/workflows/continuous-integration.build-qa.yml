@@ -80,27 +80,23 @@ jobs:
         dotnet tool install --global dotnet-coverage
         dotnet tool install --global coverlet.console
     ###
-    # 🧰 Setup SonarCloud scanner
+    # 🧰 Setup SonarCube-Cloud scanner
     #
     # Installs and initializes the SonarCloud scanner
     ###
-    - name: 🧰 Setup SonarCloud scanner
-      shell: pwsh
+    - name: 🧰 Setup SonarCube-Cloud scanner
+      uses: SonarSource/sonarqube-scan-action@5
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: >-
-        [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
-
-        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
-
-        ./.sonar/scanner/dotnet-sonarscanner begin
-        /k:"Marvin-Brouwer_FluentSerializer"
-        /o:"marvin-brouwer"
-        /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-        /d:sonar.host.url="https://sonarcloud.io"
-        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
-        /d:sonar.verbose=${{ secrets.ACTIONS_STEP_DEBUG || false }}
+    - name: 🧰 Configure SonarCube-Cloud action
+      uses: SonarSource/sonarqube-scan-action@5
+      with:
+        args: >
+          -Dsonar.organization=marvin-brouwer
+          -Dsonar.projectKey="Marvin-Brouwer_FluentSerializer"
+          -Dsonar.properties="${{github.workspace}}/SonarQube.Analysis.xml"
+          -Dsonar.verbose=${{ secrets.ACTIONS_STEP_DEBUG || false }}
     ###
     # 🛠 Build
     ###
