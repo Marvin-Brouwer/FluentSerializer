@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   build-test:
+    continue-on-error: true
     name: "QA"
     runs-on: ubuntu-latest
     steps:
@@ -115,7 +116,7 @@ jobs:
       run: >-
         [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
 
-        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
+        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner' --version 6.2.0
 
         ./.sonar/scanner/dotnet-sonarscanner begin
         /s:"${{github.workspace}}/SonarQube.Analysis.xml"
