@@ -1,3 +1,4 @@
+#if NET8_0_OR_GREATER
 using FluentAssertions;
 using FluentAssertions.Collections;
 
@@ -50,3 +51,4 @@ public static class AssertionExtensions
 		return new NodeAssertions(assertions);
 	}
 }
+#endif

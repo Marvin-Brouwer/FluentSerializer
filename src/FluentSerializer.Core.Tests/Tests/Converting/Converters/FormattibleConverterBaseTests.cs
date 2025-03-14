@@ -20,7 +20,7 @@ public sealed class FormattibleConverterBaseTests
 {
 	public FormattibleConverterBaseTests()
 	{
-		Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL");
+		Thread.CurrentThread.CurrentCulture = new CultureInfo("nl-NL", useUserOverride: false);
 	}
 
 	public static IEnumerable<object[]> GenerateFormattableData()
@@ -40,15 +40,15 @@ public sealed class FormattibleConverterBaseTests
 		yield return new object[] { new DateOnly(1991, 11, 28), null!, "28-11-1991" };
 		yield return new object[] { new TimeOnly(12, 00, 00), null!, "12:00" };
 		yield return new object[] { 6.9, null!, "6,9" };
-		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("nl-NL"), "28-11-1991" };
-		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("nl-NL"), "12:00" };
-		yield return new object[] { 6.9, new CultureInfo("nl-NL"), "6,9" };
-		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("en-GB"), "28/11/1991" };
-		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("en-GB"), "12:00" };
-		yield return new object[] { 6.9, new CultureInfo("en-GB"), "6.9" };
-		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("de-DE"), "28.11.1991" };
-		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("de-DE"), "12:00" };
-		yield return new object[] { 6.9, new CultureInfo("de-DE"), "6,9" };
+		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("nl-NL", useUserOverride: false), "28-11-1991" };
+		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("nl-NL", useUserOverride: false), "12:00" };
+		yield return new object[] { 6.9, new CultureInfo("nl-NL", useUserOverride: false), "6,9" };
+		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("en-GB", useUserOverride: false), "28/11/1991" };
+		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("en-GB", useUserOverride: false), "12:00" };
+		yield return new object[] { 6.9, new CultureInfo("en-GB", useUserOverride: false), "6.9" };
+		yield return new object[] { new DateOnly(1991, 11, 28), new CultureInfo("de-DE", useUserOverride: false), "28.11.1991" };
+		yield return new object[] { new TimeOnly(12, 00, 00), new CultureInfo("de-DE", useUserOverride: false), "12:00" };
+		yield return new object[] { 6.9, new CultureInfo("de-DE", useUserOverride: false), "6,9" };
 	}
 
 	#region ConvertToString

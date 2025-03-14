@@ -1,3 +1,4 @@
+#if NET8_0_OR_GREATER
 using Ardalis.GuardClauses;
 
 using FluentAssertions;
@@ -6,6 +7,8 @@ using FluentAssertions.Primitives;
 
 using FluentSerializer.Core.DataNodes;
 using FluentSerializer.Core.Extensions;
+
+using System.Text.Json;
 
 namespace FluentSerializer.Core.TestUtils.Assertions;
 
@@ -18,16 +21,27 @@ public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAsse
 
 	protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
+	/// <summary>
+	/// Compare the equality of two <see cref="IDataNode"/>s.
+	/// </summary>
+	/// <param name="format">Format the output for humans</param>
+	/// <param name="escape">Escape ASCI characters when outputting the error</param>
+	/// <returns></returns>
 	public AndConstraint<NodeAssertions> BeEquatableTo(
-		IDataNode expectation, bool format = false, string because = "", params object[] becauseArgs)
+		IDataNode expectation, bool format = false, bool escape = false, string because = "", params object[] becauseArgs)
 	{
 		Execute.Assertion
 			.BecauseOf(because, becauseArgs)
 			.Given(() => Subject.Equals(expectation))
 			.ForCondition(result => result)
 			.FailWith("Expected result to be {0}, but found {1}.",
-				_ => expectation.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0),
-				_ => Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0)
+				// We serialize the output here, because we had some issues with escape characters 
+				_ => escape
+					? JsonSerializer.Serialize(expectation.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0))
+					: expectation.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0),
+				_ => escape
+					? JsonSerializer.Serialize(Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0))
+					: Subject.WriteTo(Helpers.TestStringBuilderPool.Default, format, true, 0)
 			);
 
 		return new AndConstraint<NodeAssertions>(this);
@@ -60,3 +74,4 @@ public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAsse
 		}
 	}
 }
+#endif

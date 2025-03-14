@@ -43,9 +43,9 @@ public sealed class DateTimeByFormatConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "2096-04-20 04:20:00", CultureInfo.InvariantCulture };
-		yield return new object[] { "d", "4/20/2096", new CultureInfo("en-US") };
-		yield return new object[] { "g", "4/20/2096 4:20 AM", new CultureInfo("en-US") };
-		yield return new object[] { "g", "20-04-2096 04:20", new CultureInfo("nl-NL") };
+		yield return new object[] { "d", "4/20/2096", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "g", "4/20/2096 4:20 AM", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "g", "20-04-2096 04:20", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Initialization
@@ -96,9 +96,9 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Assert
 		canConvert.Should().BeTrue();
-		textResult.Should().BeEquatableTo(expectedText);
-		attributeResult.Should().BeEquatableTo(expectedAttribute);
-		elementResult.Should().BeEquatableTo(expectedElement);
+		textResult.Should().BeEquatableTo(expectedText, true, true);
+		attributeResult.Should().BeEquatableTo(expectedAttribute, true, true);
+		elementResult.Should().BeEquatableTo(expectedElement, true, true);
 	}
 	#endregion
 

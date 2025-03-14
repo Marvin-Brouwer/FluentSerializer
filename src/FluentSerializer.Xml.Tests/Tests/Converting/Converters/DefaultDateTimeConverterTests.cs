@@ -44,17 +44,17 @@ public sealed class DefaultDateTimeConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { true, "2096-04-20 04:20:00", CultureInfo.InvariantCulture };
-		yield return new object[] { false, "4/20/2096", new CultureInfo("en-US") };
-		yield return new object[] { true, "4/20/2096 4:20 AM", new CultureInfo("en-US") };
-		yield return new object[] { true, "20-04-2096 04:20", new CultureInfo("nl-NL") };
+		yield return new object[] { false, "4/20/2096", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { true, "4/20/2096 4:20 AM", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { true, "20-04-2096 04:20", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	public static IEnumerable<object[]> GenerateCultureOptions()
 	{
 		yield return new object[] { CultureInfo.InvariantCulture };
-		yield return new object[] { new CultureInfo("en") };
-		yield return new object[] { new CultureInfo("en-US") };
-		yield return new object[] { new CultureInfo("nl-NL") };
+		yield return new object[] { new CultureInfo("en", useUserOverride: false) };
+		yield return new object[] { new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Serialize

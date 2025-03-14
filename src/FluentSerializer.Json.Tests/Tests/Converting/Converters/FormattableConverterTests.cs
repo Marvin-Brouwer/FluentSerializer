@@ -30,7 +30,7 @@ public sealed class FormattableConverterTests
 
 	public FormattableConverterTests()
 	{
-		_sut = new FormattableConverter(null, new CultureInfo("nl-NL"));
+		_sut = new FormattableConverter(null, new CultureInfo("nl-NL", useUserOverride: false));
 
 		var serializerMock = new Mock<IAdvancedJsonSerializer>()
 			.UseConfig(JsonSerializerConfiguration.Default);
