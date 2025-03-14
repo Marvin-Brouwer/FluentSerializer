@@ -13,6 +13,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -80,8 +81,11 @@ public sealed class DateTimeByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
+		// https://github.com/dotnet/runtime/issues/95620
+		if (Environment.OSVersion.Platform.Equals(OSPlatform.Windows)) expectedValue = expectedValue.Replace(" ", " ");
+
 		// Arrange
-		var expected = Value(expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
+		var expected = Value(expectedValue);
 		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
 
 		// Act

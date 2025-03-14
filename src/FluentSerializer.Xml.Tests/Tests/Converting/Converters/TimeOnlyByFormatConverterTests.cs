@@ -9,11 +9,15 @@ using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.Extensions;
 
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+
 using Moq;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -79,9 +83,12 @@ public sealed class TimeOnlyByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
+		// https://github.com/dotnet/runtime/issues/95620
+		if (Environment.OSVersion.Platform.Equals(OSPlatform.Windows)) expectedValue = expectedValue.Replace(" ", " ");
+
 		// Arrange
-		var expectedText = Text(expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
-		var expectedAttribute = Attribute(nameof(TimeOnlyValue), expectedValue.Replace(" ", " ")); // https://github.com/dotnet/runtime/issues/95620
+		var expectedText = Text(expectedValue); 
+		var expectedAttribute = Attribute(nameof(TimeOnlyValue), expectedValue);
 		var expectedElement = Element(nameof(TimeOnlyValue), expectedText);
 
 		var sut = new TimeOnlyByFormatConverter(pattern, cultureInfo, DateTimeStyles.AllowWhiteSpaces);
