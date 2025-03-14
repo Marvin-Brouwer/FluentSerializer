@@ -84,7 +84,7 @@ public sealed class TimeOnlyByFormatConverterTests
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
 		// https://github.com/dotnet/runtime/issues/95620
-		if (Environment.OSVersion.Platform.Equals(OSPlatform.Windows)) expectedValue = expectedValue.Replace(" ", " ");
+		if (!Environment.OSVersion.Platform.Equals(OSPlatform.Windows)) expectedValue = expectedValue.Replace(" ", " ");
 
 		// Arrange
 		var expectedText = Text(expectedValue); 
