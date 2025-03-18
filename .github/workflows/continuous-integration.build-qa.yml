@@ -90,7 +90,6 @@ jobs:
     - name: 🧰 Install .Net SDKs >= 5.0
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-quality: 'preview'
         dotnet-version: 9.0.x
     ###
     # 🧰 Setup .Net tools
@@ -115,6 +114,10 @@ jobs:
         LD_LIBRARY_PATH: "/usr/local/lib"
       run: >-
         [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
+
+        dotnet dev-certs https --clean
+
+        dotnet dev-certs https --trust
 
         dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner' --version 6.2.0
 
