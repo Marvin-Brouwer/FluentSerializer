@@ -7,6 +7,7 @@ permissions:
 
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
+  DOTNET_SDK_VERSION: "9.0.x"
 
 jobs:
   build:
@@ -16,10 +17,10 @@ jobs:
       fail-fast: true
       matrix:
         version: [
-          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", oldSSL: false},
-          {displayName: "net 8.0",sdkVersion: "9.0.x", framework: "net8.0", oldSSL: false},
-          {displayName: "netstandard 2.1",sdkVersion: "9.0.x", framework: "netstandard2.1", oldSSL: true},
-          {displayName: "netstandard 2.0",sdkVersion: "9.0.x", framework: "netstandard2.0", oldSSL: true}
+          {displayName: "net 9.0", framework: "net9.0"},
+          {displayName: "net 8.0", framework: "net8.0"},
+          {displayName: "netstandard 2.1", framework: "netstandard2.1"},
+          {displayName: "netstandard 2.0", framework: "netstandard2.0"}
         ]
     steps:
     ###
@@ -30,51 +31,6 @@ jobs:
       with:
         lfs: true
     ###
-    # 🧰 Cache: Fix Old SSL Requirement
-    #
-    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
-    ###
-    - name: '🧰 Cache: Fix Old SSL Requirement 1.0'
-      id: cache-ssl-downgrade-1-0
-      uses: actions/cache@v4
-      if: ${{ matrix.version.oldSSL }}
-      with:
-        path: /usr/local/lib/openssl-1.0.2u
-        key: ${{ runner.os }}-cache-ssl-downgrade-1-0
-    - name: '🧰 Cache: Fix Old SSL Requirement 1.1'
-      id: cache-ssl-downgrade-1-1
-      uses: actions/cache@v4
-      if: ${{ matrix.version.oldSSL }}
-      with:
-        path: /usr/local/lib/openssl-1.1.1c
-        key: ${{ runner.os }}-cache-ssl-downgrade-1-1
-    ###
-    # 🧰 Fix Old SSL Requirement
-    #
-    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
-    ###
-    - name: 🧰 Fix Old SSL Requirement 1.0
-      run: |-
-        if [ ! -d "	openssl-1.0.2u" ]; then
-          wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz
-          tar -xzvf openssl-1.0.2u.tar.gz
-        fi
-        cd openssl-1.0.2u
-        ./config
-        make
-        sudo make install
-    - name: 🧰 Fix Old SSL Requirement 1.1
-      if: ${{ matrix.version.oldSSL }}
-      run: |-
-        if [ ! -d "openssl-1.1.1c" ]; then
-          wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
-          tar -xzvf openssl-1.1.1c.tar.gz
-        fi
-        cd openssl-1.1.1c
-        ./config
-        make
-        sudo make install
-    ###
     # 🧰 Install .Net SDKs
     #
     # Configure the pipeline to use the correct .Net sdk versions
@@ -82,7 +38,7 @@ jobs:
     - name: 🧰 Install .Net SDKs
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.sdkVersion }}
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🛠 Build
     ###
