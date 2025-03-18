@@ -45,7 +45,7 @@ jobs:
 
   benchmark-core:
     name: "Benchmark Core libraries"
-    # needs: [stryker]
+    needs: [stryker]
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
