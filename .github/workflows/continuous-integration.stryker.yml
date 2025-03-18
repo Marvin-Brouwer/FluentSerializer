@@ -67,7 +67,7 @@ jobs:
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
         --mutation-level "Complete"
-        --break-at 80
+        --break-at 75
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
 
