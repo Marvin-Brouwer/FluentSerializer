@@ -18,8 +18,8 @@ jobs:
         version: [
           {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", oldSSL: false},
           {displayName: "net 8.0",sdkVersion: "9.0.x", framework: "net8.0", oldSSL: false},
-          {displayName: "netstandard 2.1",sdkVersion: "3.1.x", framework: "netstandard2.1", oldSSL: true},
-          {displayName: "netstandard 2.0",sdkVersion: "3.1.x", framework: "netstandard2.0", oldSSL: true}
+          {displayName: "netstandard 2.1",sdkVersion: "9.0.x", framework: "netstandard2.1", oldSSL: true},
+          {displayName: "netstandard 2.0",sdkVersion: "9.0.x", framework: "netstandard2.0", oldSSL: true}
         ]
     steps:
     ###
