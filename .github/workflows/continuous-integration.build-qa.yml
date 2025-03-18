@@ -56,7 +56,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        LD_LIBRARY_PATH: "/usr/local/lib"
       run: >-
         [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
 
@@ -77,8 +76,6 @@ jobs:
     # 🛠 Build
     ###
     - name: 🛠 Build
-      env:
-        LD_LIBRARY_PATH: "/usr/local/lib"
       run: |-
         dotnet build --nologo --configuration "Release"
     ###
@@ -168,7 +165,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        LD_LIBRARY_PATH: "/usr/local/lib"
       run: >-
         $branchName = "${{ github.ref }}".Replace("refs/heads/", "");
 
@@ -184,6 +180,5 @@ jobs:
       uses: sonarsource/sonarqube-quality-gate-action@master
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        LD_LIBRARY_PATH: "/usr/local/lib"
       with:
         scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt
