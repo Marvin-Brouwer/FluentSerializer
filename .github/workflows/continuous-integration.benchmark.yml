@@ -40,8 +40,8 @@ jobs:
       matrix:
         # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
         version:  [
-          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
-          {displayName: "net 8.0", sdkVersion: "9.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
+          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {displayName: "net 8.0", sdkVersion: "9.0.x", framework: "net8.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
           {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
