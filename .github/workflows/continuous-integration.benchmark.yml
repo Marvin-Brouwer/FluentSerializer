@@ -38,9 +38,8 @@ jobs:
       matrix:
         # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
         version:  [
-          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true, oldSSL: false },
-          {displayName: "net 8.0", sdkVersion: "8.0.x", framework: "net8.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}", oldSSL: false },
-          {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}", oldSSL: true }
+          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {displayName: "net 8.0", sdkVersion: "8.0.x", framework: "net8.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
         os: [
@@ -50,8 +49,14 @@ jobs:
         # Add a windows-only netframework benchmark, since that's only available on windows.
         include:
           # netframework only supports windows
-          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}", oldSSL: false }
+          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
             os: { name: windows-latest, displayName: windows, rid: "win-x64" }
+          # new ubuntu can't run netcore3.1 because of OpenSSL update, we tried all the fixes, none of them worked
+          - version: {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+            os: { name: windows-latest, displayName: windows, rid: "win-x64" }
+          - version: {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+            os: { name: ubuntu-20.04, displayName: linux, rid: "linux-x64" }
+
     runs-on: ${{ matrix.os.name }}
     ###
     # 🗃 Setup WSL
@@ -69,58 +74,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         lfs: true
-    ###
-    # 🧰 Cache: Fix Old SSL Requirement
-    #
-    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
-    ###
-    - name: '🧰 Cache: Fix Old SSL Requirement 1.0'
-      id: cache-ssl-downgrade-1-0
-      uses: actions/cache@v4
-      if: ${{ matrix.version.oldSSL && matrix.os.displayName == 'linux' }}
-      with:
-        path: /usr/local/lib/openssl-1.0.2u
-        key: ${{ runner.os }}-cache-ssl-downgrade-1-0
-    - name: '🧰 Cache: Fix Old SSL Requirement 1.1'
-      id: cache-ssl-downgrade-1-1
-      uses: actions/cache@v4
-      if: ${{ matrix.version.oldSSL && matrix.os.displayName == 'linux' }}
-      with:
-        path: /usr/local/lib/openssl-1.1.1c
-        key: ${{ runner.os }}-cache-ssl-downgrade-1-1
-    ###
-    # 🧰 Fix Old SSL Requirement
-    #
-    # https://github.com/dotnet/core/issues/4749#issuecomment-1200245422
-    ###
-    # - name: 🧰 Fix Old SSL Requirement 1.0
-    #   if: ${{ matrix.version.oldSSL && matrix.os.displayName == 'linux' }}
-    #   run: |-
-    #     if [ ! -d "	openssl-1.0.2u" ]; then
-    #       wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz
-    #       tar -xzvf openssl-1.0.2u.tar.gz
-    #     fi
-    #     cd openssl-1.0.2u
-    #     ./config
-    #     make
-    #     sudo make install
-    # - name: 🧰 Fix Old SSL Requirement 1.1
-    #   if: ${{ matrix.version.oldSSL && matrix.os.displayName == 'linux' }}
-    #   run: |-
-    #     if [ ! -d "openssl-1.1.1c" ]; then
-    #       wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
-    #       tar -xzvf openssl-1.1.1c.tar.gz
-    #     fi
-    #     cd openssl-1.1.1c
-    #     ./config
-    #     make
-    #     sudo make install
-        # add deb http://security.ubuntu.com/ubuntu bionic-security main >> /etc/apt/sources.list
-    - name: 🧰 Fix Old SSL Requirement
-      if: ${{ matrix.version.oldSSL && matrix.os.displayName == 'linux' }}
-      run: |-
-        sudo apt update
-        sudo apt install libssl-dev libsrtp2-dev -y
     ###
     # 🧰 Install .Net SDKs
     #
