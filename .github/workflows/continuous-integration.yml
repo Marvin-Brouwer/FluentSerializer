@@ -25,8 +25,6 @@ env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
   TERM: xterm-color
-  #https://github.com/dotnet/core/issues/4749#issuecomment-1332612225
-  CLR_OPENSSL_VERSION_OVERRIDE: 3
   DOTNET_SDK_VERSION: "9.0.x"
 
 jobs:
@@ -34,16 +32,22 @@ jobs:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
+    with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
   ci-qa:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build-qa.yml
     secrets: inherit
+    with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
 
   stryker:
     name: "Stryker"
     needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
+    with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
 
   benchmark-core:
     name: "Benchmark Core libraries"
@@ -51,6 +55,7 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Core"
       reportPrefix: "core"
       jobTypePrimary: "VeryLong"
@@ -61,6 +66,7 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Json"
       reportPrefix: "json-serializer"
       jobTypePrimary: "Default"
@@ -70,6 +76,7 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
+      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Xml"
       reportPrefix: "xml-serializer"
       jobTypePrimary: "Default"
