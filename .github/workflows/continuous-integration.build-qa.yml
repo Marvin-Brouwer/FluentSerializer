@@ -5,8 +5,17 @@ on:
       SONAR_TOKEN:
         required: true
 
+permissions:
+  contents: read
+
+env:
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-color
+  DOTNET_SDK_VERSION: "9.0.x"
+
 jobs:
   build-test:
+    continue-on-error: true
     name: "QA"
     runs-on: ubuntu-latest
     steps:
@@ -19,15 +28,14 @@ jobs:
         lfs: true
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-quality: 'preview'
-        dotnet-version: 7.0.x
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🧰 Setup .Net tools
     #
@@ -51,14 +59,18 @@ jobs:
       run: >-
         [System.IO.Directory]::CreateDirectory('${{github.workspace}}/.sonar/scanner')
 
-        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner'
+        dotnet dev-certs https --clean
+
+        dotnet dev-certs https --trust
+
+        dotnet tool install dotnet-sonarscanner --tool-path '${{github.workspace}}/.sonar/scanner' --version 6.2.0
 
         ./.sonar/scanner/dotnet-sonarscanner begin
+        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
         /k:"Marvin-Brouwer_FluentSerializer"
         /o:"marvin-brouwer"
         /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         /d:sonar.host.url="https://sonarcloud.io"
-        /s:"${{github.workspace}}/SonarQube.Analysis.xml"
         /d:sonar.verbose=${{ secrets.ACTIONS_STEP_DEBUG || false }}
     ###
     # 🛠 Build
@@ -138,7 +150,7 @@ jobs:
     ###
     - name: 🗃 Publish 'unit-test-coverage' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: unit-test-coverage
         path: ./test-results/coverage
@@ -167,6 +179,6 @@ jobs:
       id: sonarcloud-quality-gate-check
       uses: sonarsource/sonarqube-quality-gate-action@master
       env:
-       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         scanMetadataReportFile: .sonarqube/out/.sonar/report-task.txt

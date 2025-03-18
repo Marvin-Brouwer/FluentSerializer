@@ -14,6 +14,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -43,9 +44,9 @@ public sealed class DateTimeOffsetByFormatConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss zzz", "2096-04-20 04:20:00 +00:00", CultureInfo.InvariantCulture };
-		yield return new object[] { "M/d/yyyy zzz", "4/20/2096 +00:00", new CultureInfo("en-US") };
-		yield return new object[] { "M/d/yyyy h:mm tt zzz", "4/20/2096 4:20 AM +00:00", new CultureInfo("en-US") };
-		yield return new object[] { "dd-MM-yyyy HH:mm zzz", "20-04-2096 04:20 +00:00", new CultureInfo("nl-NL") };
+		yield return new object[] { "M/d/yyyy zzz", "4/20/2096 +00:00", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "M/d/yyyy h:mm tt zzz", "4/20/2096 4:20 AM +00:00", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "dd-MM-yyyy HH:mm zzz", "20-04-2096 04:20 +00:00", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Initialization
@@ -81,9 +82,12 @@ public sealed class DateTimeOffsetByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
+		// https://github.com/dotnet/runtime/issues/113478
+		expectedValue = expectedValue.Replace(" ", " ");
+
 		// Arrange
 		var expectedText = Text(expectedValue);
-		var expectedAttribute = Attribute(nameof(DateTimeOffsetValue), expectedValue);
+		var expectedAttribute = Attribute(nameof(DateTimeOffsetValue), expectedValue); 
 		var expectedElement = Element(nameof(DateTimeOffsetValue), expectedText);
 
 		var sut = new DateTimeOffsetByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
@@ -96,9 +100,9 @@ public sealed class DateTimeOffsetByFormatConverterTests
 
 		// Assert
 		canConvert.Should().BeTrue();
-		textResult.Should().BeEquatableTo(expectedText);
-		attributeResult.Should().BeEquatableTo(expectedAttribute);
-		elementResult.Should().BeEquatableTo(expectedElement);
+		textResult.Should().BeEquatableTo(expectedText, true, true);
+		attributeResult.Should().BeEquatableTo(expectedAttribute, true, true);
+		elementResult.Should().BeEquatableTo(expectedElement, true, true);
 	}
 	#endregion
 

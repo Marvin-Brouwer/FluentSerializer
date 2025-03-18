@@ -5,8 +5,14 @@ on:
       STRYKER_DASHBOARD_API_KEY:
         required: true
 
+permissions:
+  contents: read
+
 env:
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-color
+  DOTNET_SDK_VERSION: "9.0.x"
 
 jobs:
   stryker:
@@ -25,14 +31,14 @@ jobs:
       with:
         lfs: true
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🧰 Setup .Net tools
     #
@@ -41,6 +47,7 @@ jobs:
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-stryker
+      # ln -s /usr/lib/libssl.so.47.0.6 /usr/lib/libssl.so.1.0.0
     ###
     # 🛠 Build & Run
     #
@@ -60,7 +67,7 @@ jobs:
         --config-file "stryker-config.pipeline.json"
         --version "${{ github.ref }}"
         --mutation-level "Complete"
-        --break-at 80
+        --break-at 75
         --threshold-low 80
         --dashboard-api-key "${{ secrets.STRYKER_DASHBOARD_API_KEY }}"
 

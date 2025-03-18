@@ -17,13 +17,13 @@ namespace FluentSerializer.Core.TestUtils.Assertions;
 public sealed class ValueTypeCollectionAssertions<T> : GenericCollectionAssertions<T>
 	where T : struct
 {
-	public ValueTypeCollectionAssertions(IEnumerable<T> instance) : base(instance) { }
+	public ValueTypeCollectionAssertions(IEnumerable<T> instance, AssertionChain assertionChain) : base(instance, assertionChain) { }
 
 	protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
 	public AndConstraint<GenericCollectionAssertions<T>> AllBeUnique()
 	{
-		Execute.Assertion
+		CurrentAssertionChain
 			.Given(() => Subject.Distinct().Count())
 			.ForCondition(result => result.Equals(Subject.Count()))
 			.FailWith(

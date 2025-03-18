@@ -43,16 +43,16 @@ public sealed class DefaultDateOnlyConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "2096-04-20", CultureInfo.InvariantCulture };
-		yield return new object[] { "4/20/2096", new CultureInfo("en-US") };
-		yield return new object[] { "20-04-2096", new CultureInfo("nl-NL") };
+		yield return new object[] { "4/20/2096", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "20-04-2096", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	public static IEnumerable<object[]> GenerateCultureOptions()
 	{
 		yield return new object[] { CultureInfo.InvariantCulture };
-		yield return new object[] { new CultureInfo("en") };
-		yield return new object[] { new CultureInfo("en-US") };
-		yield return new object[] { new CultureInfo("nl-NL") };
+		yield return new object[] { new CultureInfo("en", useUserOverride: false) };
+		yield return new object[] { new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Serialize

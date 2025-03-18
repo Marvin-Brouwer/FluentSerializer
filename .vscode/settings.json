@@ -15,7 +15,7 @@
 		"editor.trimAutoWhitespace": false,
 		"editor.renderWhitespace": "all"
 	},
-	"[yaml]": {
+	"[yaml|yml]": {
 		"editor.insertSpaces": true,
 		"editor.detectIndentation": true,
 		"editor.renderWhitespace": "all",

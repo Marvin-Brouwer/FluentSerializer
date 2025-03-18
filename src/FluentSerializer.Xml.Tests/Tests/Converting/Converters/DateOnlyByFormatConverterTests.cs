@@ -42,8 +42,8 @@ public sealed class DateOnlyByFormatConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd", "2096-04-20", CultureInfo.InvariantCulture };
-		yield return new object[] { "M/d/yyyy", "4/20/2096", new CultureInfo("en-US") };
-		yield return new object[] { "dd-MM-yyyy", "20-04-2096", new CultureInfo("nl-NL") };
+		yield return new object[] { "M/d/yyyy", "4/20/2096", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "dd-MM-yyyy", "20-04-2096", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Initialization

@@ -13,6 +13,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -42,9 +43,9 @@ public sealed class DateTimeByFormatConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "yyyy-MM-dd HH:mm:ss", "\"2096-04-20 04:20:00\"", CultureInfo.InvariantCulture };
-		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US") };
-		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL") };
+		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Initialization
@@ -80,6 +81,9 @@ public sealed class DateTimeByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
+		// https://github.com/dotnet/runtime/issues/113478
+		if (Environment.OSVersion.VersionString.Contains("Windows")) expectedValue = expectedValue.Replace(" ", " ");
+
 		// Arrange
 		var expected = Value(expectedValue);
 		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
@@ -90,7 +94,7 @@ public sealed class DateTimeByFormatConverterTests
 
 		// Assert
 		canConvert.Should().BeTrue();
-		result.Should().BeEquatableTo(expected);
+		result.Should().BeEquatableTo(expected, true, true);
 	}
 	#endregion
 

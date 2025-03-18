@@ -16,12 +16,16 @@ concurrency:
   group: ci-${{ github.ref }}${{ github.event_name == 'workflow_dispatch' && '[dispatch]' || '' }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
   TERM: xterm-color
+  DOTNET_SDK_VERSION: "9.0.x"
 
 jobs:
   ci:

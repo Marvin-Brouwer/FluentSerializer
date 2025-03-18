@@ -2,8 +2,15 @@ name: "Continuous integration - Build"
 on:
   workflow_call:
 
+permissions:
+  contents: read
+
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-color
+  DOTNET_SDK_VERSION: "9.0.x"
+
 
 jobs:
   build:
@@ -13,10 +20,10 @@ jobs:
       fail-fast: true
       matrix:
         version: [
-          {displayName: "net 7.0", sdkVersion: "7.0.x", framework: "net7.0"},
-          {displayName: "net 6.0",sdkVersion: "6.0.x", framework: "net6.0"},
-          {displayName: "netstandard 2.1",sdkVersion: "3.1.x", framework: "netstandard2.1"},
-          {displayName: "netstandard 2.0",sdkVersion: "3.1.x", framework: "netstandard2.0"}
+          {displayName: "net 9.0", framework: "net9.0"},
+          {displayName: "net 8.0", framework: "net8.0"},
+          {displayName: "netstandard 2.1", framework: "netstandard2.1"},
+          {displayName: "netstandard 2.0", framework: "netstandard2.0"}
         ]
     steps:
     ###
@@ -27,14 +34,14 @@ jobs:
       with:
         lfs: true
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.sdkVersion }}
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🛠 Build
     ###
@@ -46,7 +53,7 @@ jobs:
     ###
     - name: 🗃 Publish 'library-binaries-${{ matrix.version.framework }}' artifacts
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: library-binaries-${{ matrix.version.framework }}
         path: |

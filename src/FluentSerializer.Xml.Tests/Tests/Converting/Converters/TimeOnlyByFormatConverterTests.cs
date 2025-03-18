@@ -9,11 +9,15 @@ using FluentSerializer.Xml.DataNodes;
 using FluentSerializer.Xml.Services;
 using FluentSerializer.Xml.Tests.Extensions;
 
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+
 using Moq;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Xunit;
 
@@ -42,8 +46,8 @@ public sealed class TimeOnlyByFormatConverterTests
 	public static IEnumerable<object[]> GenerateConvertibleData()
 	{
 		yield return new object[] { "HH:mm:ss", "04:20:00", CultureInfo.InvariantCulture };
-		yield return new object[] { "h:mm tt", "4:20 AM", new CultureInfo("en-US") };
-		yield return new object[] { "HH:mm", "04:20", new CultureInfo("nl-NL") };
+		yield return new object[] { "h:mm tt", "4:20 AM", new CultureInfo("en-US", useUserOverride: false) };
+		yield return new object[] { "HH:mm", "04:20", new CultureInfo("nl-NL", useUserOverride: false) };
 	}
 
 	#region Initialization
@@ -79,8 +83,11 @@ public sealed class TimeOnlyByFormatConverterTests
 		MemberData(nameof(GenerateConvertibleData))]
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
+		// https://github.com/dotnet/runtime/issues/113478
+		expectedValue = expectedValue.Replace(" ", " ");
+
 		// Arrange
-		var expectedText = Text(expectedValue);
+		var expectedText = Text(expectedValue); 
 		var expectedAttribute = Attribute(nameof(TimeOnlyValue), expectedValue);
 		var expectedElement = Element(nameof(TimeOnlyValue), expectedText);
 
@@ -94,9 +101,9 @@ public sealed class TimeOnlyByFormatConverterTests
 
 		// Assert
 		canConvert.Should().BeTrue();
-		textResult.Should().BeEquatableTo(expectedText);
-		attributeResult.Should().BeEquatableTo(expectedAttribute);
-		elementResult.Should().BeEquatableTo(expectedElement);
+		textResult.Should().BeEquatableTo(expectedText, true, true);
+		attributeResult.Should().BeEquatableTo(expectedAttribute, true, true);
+		elementResult.Should().BeEquatableTo(expectedElement, true, true);
 	}
 	#endregion
 

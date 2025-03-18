@@ -16,8 +16,13 @@ on:
         required: false
         default: "Medium"
 
+permissions:
+  contents: read
+
 env:
   DOTNET_VERBOSITY: "${{ (secrets.ACTIONS_STEP_DEBUG == true) && 'detailed' || 'minimal' }}"
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+  TERM: xterm-color
 
 defaults:
   run:
@@ -32,10 +37,9 @@ jobs:
       fail-fast: true
       matrix:
         # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
-        version: [
-          {displayName: "net 7.0", sdkVersion: "7.0.x", framework: "net7.0", report: "net_7_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
-          {displayName: "net 6.0", sdkVersion: "6.0.x", framework: "net6.0", report: "net_6_0", jobType: "${{ inputs.jobTypeSecondary }}" },
-          {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+        version:  [
+          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", report: "net_9_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {displayName: "net 8.0", sdkVersion: "8.0.x", framework: "net8.0", report: "net_8_0", jobType: "${{ inputs.jobTypeSecondary }}" },
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
         os: [
@@ -44,6 +48,11 @@ jobs:
         ]
         # Add a windows-only netframework benchmark, since that's only available on windows.
         include:
+          # new ubuntu can't run netcore3.1 because of OpenSSL update, we tried all the fixes, none of them worked
+          - version: {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+            os: { name: windows-latest, displayName: windows, rid: "win-x64" }
+          - version: {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+            os: { name: ubuntu-20.04, displayName: linux, rid: "linux-x64" }
           # netframework only supports windows
           - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
             os: { name: windows-latest, displayName: windows, rid: "win-x64" }
@@ -68,11 +77,20 @@ jobs:
     # 🧰 Install .Net SDKs
     #
     # Configure the pipeline to use the correct .Net sdk versions
+    # Because we build the project multi-targeted, we need to install SDKs in the CSPROJ for it to compile.
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK 9
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.sdkVersion }}
+        dotnet-version: 9.0.x
+    - name: 🧰 Install .Net SDK 8
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: 🧰 Install .Net SDK 3
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 3.1.x
     ###
     # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #
@@ -124,8 +142,8 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
       if: ${{ !cancelled() && success() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: benchmark-results
+        name: benchmark-results-${{inputs.reportPrefix}}-${{matrix.version.framework}}-${{matrix.os.name}}
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20

@@ -3,6 +3,10 @@ name: "Scheduled GitHub CodeQL"
 on:
   schedule:
     - cron: '0 06 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   analyze:
@@ -41,7 +45,7 @@ jobs:
     - name: 🧰 Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 9.0.x
     ###
     # 🗃 Restore dependencies
     #
