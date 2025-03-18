@@ -44,7 +44,7 @@ jobs:
     - name: 🧰 Setup .NET tools
       run: |-
         dotnet tool install --global dotnet-stryker
-        ln -s /usr/lib/libssl.so.47.0.6 /usr/lib/libssl.so.1.0.0
+      # ln -s /usr/lib/libssl.so.47.0.6 /usr/lib/libssl.so.1.0.0
     ###
     # 🛠 Build & Run
     #
