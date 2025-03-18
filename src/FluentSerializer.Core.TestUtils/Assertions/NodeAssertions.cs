@@ -17,7 +17,7 @@ namespace FluentSerializer.Core.TestUtils.Assertions;
 /// </summary>
 public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAssertions>
 {
-	public NodeAssertions(IDataNode instance) : base(instance) { }
+	public NodeAssertions(IDataNode instance, AssertionChain assertionChain) : base(instance, assertionChain) { }
 
 	protected override string Identifier => Subject?.ToString() ?? string.Empty;
 
@@ -30,7 +30,7 @@ public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAsse
 	public AndConstraint<NodeAssertions> BeEquatableTo(
 		IDataNode expectation, bool format = false, bool escape = false, string because = "", params object[] becauseArgs)
 	{
-		Execute.Assertion
+		CurrentAssertionChain
 			.BecauseOf(because, becauseArgs)
 			.Given(() => Subject.Equals(expectation))
 			.ForCondition(result => result)
@@ -53,7 +53,7 @@ public sealed class NodeAssertions : ReferenceTypeAssertions<IDataNode, NodeAsse
 	/// </summary>
 	public AndConstraint<NodeAssertions> HaveInvalidName()
 	{
-		Execute.Assertion
+		CurrentAssertionChain
 			.Given(() => !HasValidName(Subject.Name))
 			.ForCondition(result => result)
 			.FailWith($"Expected node '{Subject.Name}' to have an invalid name");

@@ -83,7 +83,7 @@ public sealed class DateTimeByFormatConverterTests
 	public void SerializePattern_ReturnsString(string pattern, string expectedValue, CultureInfo cultureInfo)
 	{
 		// https://github.com/dotnet/runtime/issues/113478
-		// Fix does not apply here
+		if (Environment.OSVersion.VersionString.Contains("Windows")) expectedValue = expectedValue.Replace(" ", " ");
 
 		// Arrange
 		var expectedText = Text(expectedValue);

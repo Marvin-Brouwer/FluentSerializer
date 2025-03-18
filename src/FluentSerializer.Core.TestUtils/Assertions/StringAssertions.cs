@@ -9,13 +9,13 @@ namespace FluentSerializer.Core.TestUtils.Assertions;
 /// <inheritdoc cref="AssertionExtensions.Should{T}(IComparable{T})"/>
 public sealed class StringAssertions : ReferenceTypeAssertions<string, StringAssertions>
 {
-	public StringAssertions(string instance) : base(instance) { }
+	public StringAssertions(string instance, AssertionChain assertionChain) : base(instance, assertionChain) { }
 
 	protected override string Identifier => Subject;
 
 	public AndConstraint<StringAssertions> BeEquatableTo(string expectation)
 	{
-		Execute.Assertion
+		CurrentAssertionChain
 			.Given(() => Subject.Equals(expectation, StringComparison.Ordinal))
 			.ForCondition(result => result)
 			.FailWith("Expected result to be \n{0}, but found \n{1}",

@@ -25,6 +25,11 @@
 		<AnalysisLevel>latest-recommended</AnalysisLevel>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<!-- https://github.com/dependabot/dependabot-core/issues/1618#issuecomment-665863295 -->
+		<CodeAnalysisVersion>4.13.0</CodeAnalysisVersion>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\docs\logo\NuGetIcon.xml.png" Visible="false">
 			<Pack>True</Pack>
@@ -42,7 +47,7 @@
 		</ItemGroup>
 	</Target>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
 		<PackageReference Include="ReflectionAnalyzers" Version="0.3.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
