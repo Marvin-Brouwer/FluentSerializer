@@ -39,7 +39,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk version
     ###
     - name: 🧰 Install .Net SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
