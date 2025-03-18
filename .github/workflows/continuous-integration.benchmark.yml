@@ -2,9 +2,6 @@ name: "Continuous integration - Benchmark"
 on:
   workflow_call:
     inputs:
-      dotnetSdkVersion:
-        type: string
-        required: true
       libraryName:
         type: string
         required: true
@@ -80,7 +77,7 @@ jobs:
     - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ inputs.dotnetSdkVersion }}
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #

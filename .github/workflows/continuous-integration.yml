@@ -19,8 +19,6 @@ concurrency:
 permissions:
   contents: read
 
-
-
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -39,25 +37,21 @@ jobs:
       run: |
         echo "DOTNET_SDK_VERSION=${{ env.DOTNET_SDK_VERSION }}" >> "$GITHUB_ENV"
   ci:
+    needs: [configure]
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
     secrets: inherit
-    with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
   ci-qa:
+    needs: [configure]
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build-qa.yml
     secrets: inherit
-    with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
 
   stryker:
     name: "Stryker"
     needs: [ci, ci-qa]
     uses: ./.github/workflows/continuous-integration.stryker.yml
     secrets: inherit
-    with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
 
   benchmark-core:
     name: "Benchmark Core libraries"
@@ -65,7 +59,6 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Core"
       reportPrefix: "core"
       jobTypePrimary: "VeryLong"
@@ -76,7 +69,6 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Json"
       reportPrefix: "json-serializer"
       jobTypePrimary: "Default"
@@ -86,7 +78,6 @@ jobs:
     uses: ./.github/workflows/continuous-integration.benchmark.yml
     secrets: inherit
     with:
-      dotnetSdkVersion:  '${{ env.DOTNET_SDK_VERSION }}'
       libraryName: "Xml"
       reportPrefix: "xml-serializer"
       jobTypePrimary: "Default"
