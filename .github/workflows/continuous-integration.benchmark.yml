@@ -38,9 +38,9 @@ jobs:
       matrix:
         # Benchmark for all applicable frameworks, only report the latest and only run the latest on primary setting
         version: [
-          {displayName: "net 9.0", sdkVersion: "9.0.x", framework: "net9.0", report: "net_9_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
-          {displayName: "net 8.0", sdkVersion: "8.0.x", framework: "net8.0", report: "net_8_0", jobType: "${{ inputs.jobTypeSecondary }}" },
-          {displayName: "netcoreapp 3.1", sdkVersion: "3.1.x", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
+          {displayName: "net 9.0", framework: "net9.0", report: "net_9_0", jobType: "${{ inputs.jobTypePrimary }}", reportSummary: true },
+          {displayName: "net 8.0", framework: "net8.0", report: "net_8_0", jobType: "${{ inputs.jobTypeSecondary }}" },
+          {displayName: "netcoreapp 3.1", framework: "netcoreapp3.1", report: "netcoreapp_3_1", jobType: "${{ inputs.jobTypeSecondary }}" }
         ]
         # Benchmark for windows and linux, since this library probably is more applicable to server hosted solutions.
         os: [
@@ -50,7 +50,7 @@ jobs:
         # Add a windows-only netframework benchmark, since that's only available on windows.
         include:
           # netframework only supports windows
-          - version: {displayName: "netframework 4.8", sdkVersion: "3.1.x", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
+          - version: {displayName: "netframework 4.8", framework: "net48", report: "netframework_4_8", jobType: "${{ inputs.jobTypeSecondary }}" }
             os: { name: windows-latest, displayName: windows, rid: "win-x64" }
     runs-on: ${{ matrix.os.name }}
     ###
@@ -70,14 +70,14 @@ jobs:
       with:
         lfs: true
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{ matrix.version.sdkVersion }}
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # ⏱ Benchmark FluentSerializer.${{ matrix.library.name }}
     #

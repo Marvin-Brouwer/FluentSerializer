@@ -22,29 +22,15 @@ jobs:
       with:
         lfs: true
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    # https://community.sonarsource.com/t/no-usable-version-of-the-libssl-was-found/40941/5
-    # https://community.sonarsource.com/t/sonarcloud-support-for-net-core-3-0-100-preview5/10167/8
-    - name: 🧰 Install .Net SDKs - SonarCloud
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-quality: 'preview'
-        dotnet-version: 2.2.103
-    - name: 🧰 Install .Net SDKs < 5.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-quality: 'preview'
-        dotnet-version: 3.1.x
-        packageType: sdk
-    - name: 🧰 Install .Net SDKs >= 5.0
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 9.0.x
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🧰 Setup .Net tools
     #

@@ -28,14 +28,14 @@ jobs:
       with:
         lfs: true
     ###
-    # 🧰 Install .Net SDKs
+    # 🧰 Install .Net SDK
     #
-    # Configure the pipeline to use the correct .Net sdk versions
+    # Configure the pipeline to use the correct .Net sdk version
     ###
-    - name: 🧰 Install .Net SDKs
+    - name: 🧰 Install .Net SDK
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     ###
     # 🧰 Setup .Net tools
     #
