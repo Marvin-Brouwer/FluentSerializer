@@ -144,6 +144,6 @@ jobs:
       if: ${{ !cancelled() && success() }}
       uses: actions/upload-artifact@v4
       with:
-        name: benchmark-results-${{matrix.version.framework}}-${{matrix.os.name}}
+        name: benchmark-results-${{inputs.reportPrefix}}-${{matrix.version.framework}}-${{matrix.os.name}}
         path: ${{github.workspace}}/benchmark-results
         retention-days: 20
