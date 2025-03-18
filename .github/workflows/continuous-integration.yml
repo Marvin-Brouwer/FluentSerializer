@@ -19,6 +19,8 @@ concurrency:
 permissions:
   contents: read
 
+
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -28,6 +30,14 @@ env:
   DOTNET_SDK_VERSION: "9.0.x"
 
 jobs:
+  configure:
+    name: "Configure Pipeline"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure transient env variables
+      id: configure_env
+      run: |
+        echo "DOTNET_SDK_VERSION=${{ env.DOTNET_SDK_VERSION }}" >> "$GITHUB_ENV"
   ci:
     name: "CI"
     uses: ./.github/workflows/continuous-integration.build.yml
