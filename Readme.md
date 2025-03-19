@@ -17,6 +17,13 @@
 [discord-url]: https://discord.gg/fkw3Tmyu
 [discord-shield]: https://img.shields.io/discord/958295823001722890?label=discord&logo=discord&style=flat-square
 
+> [!IMPORTANT]  
+> We are looking for **you**!  
+> This library has been in a state of disrepair for a while because the pipelines broke.  
+> This is not an excuse, the reason is that maintaining a library takes significant time, and, we find it hard to find this time when nobody uses the library.
+>
+> If you are a user of this library, please [leave a message here](https://github.com/Marvin-Brouwer/FluentSerializer/discussions/401) to let us know. So, we know for whom we're keeping this running.  
+
 <h1 align="center">
 	<a href="https://github.com/Marvin-Brouwer/FluentSerializer#readme">
 	<img alt="Fluent Serializer banner"
