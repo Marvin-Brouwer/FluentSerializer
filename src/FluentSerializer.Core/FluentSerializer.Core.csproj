@@ -86,7 +86,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="System.Memory" Version="4.6.1" />
+		<PackageReference Include="System.Memory" Version="4.6.2" />
 		<PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="$(CodeAnalysisVersion)" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
