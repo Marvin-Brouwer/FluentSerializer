@@ -142,7 +142,7 @@ jobs:
     ###
     - name: 🗃 Publish 'benchmark-results' artifacts
       if: ${{ !cancelled() && success() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: benchmark-results-${{inputs.reportPrefix}}-${{matrix.version.framework}}-${{matrix.os.name}}
         path: ${{github.workspace}}/benchmark-results
