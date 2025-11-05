@@ -27,7 +27,7 @@
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
 		<PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.14.0" />
-		<PackageReference Include="Bogus" Version="35.6.2" />
+		<PackageReference Include="Bogus" Version="35.6.3" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
