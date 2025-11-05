@@ -80,15 +80,15 @@ jobs:
     # Because we build the project multi-targeted, we need to install SDKs in the CSPROJ for it to compile.
     ###
     - name: 🧰 Install .Net SDK 9
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 9.0.x
     - name: 🧰 Install .Net SDK 8
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
     - name: 🧰 Install .Net SDK 3
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 3.1.x
     ###
