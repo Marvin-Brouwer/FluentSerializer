@@ -22,7 +22,7 @@ jobs:
     # Checkout repository
     ###
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         lfs: true
 
@@ -32,7 +32,7 @@ jobs:
     # Initializes the CodeQL tools for scanning.
     ###
     - name: 🧰 Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         config-file: '${{github.workspace}}/.github/codeql/codeql-config.yml'
         languages: 'csharp'
@@ -43,7 +43,7 @@ jobs:
     # Configure the pipeline to use the correct .Net sdk versions
     ###
     - name: 🧰 Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 9.0.x
     ###
@@ -64,4 +64,4 @@ jobs:
     # 🔬 Perform CodeQL Analysis
     ###
     - name: 🔬 Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4

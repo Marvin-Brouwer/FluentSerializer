@@ -27,25 +27,25 @@
 	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
 		<PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.14.0" />
-		<PackageReference Include="Bogus" Version="35.6.2" />
+		<PackageReference Include="Bogus" Version="35.6.3" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.Compilers" Version="$(CodeAnalysisVersion)" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' == 'net'">
-		<PackageReference Include="System.Security.Permissions" Version="9.0.3" />
+		<PackageReference Include="System.Security.Permissions" Version="9.0.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference Include="System.Security.Permissions" Version="9.0.3" />
+		<PackageReference Include="System.Security.Permissions" Version="9.0.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-		<PackageReference Include="System.Security.Permissions" Version="9.0.3" />
+		<PackageReference Include="System.Security.Permissions" Version="9.0.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`))' == 'netstandard'">
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="$(CodeAnalysisVersion)" />
