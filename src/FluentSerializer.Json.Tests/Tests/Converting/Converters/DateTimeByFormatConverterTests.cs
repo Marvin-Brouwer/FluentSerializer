@@ -46,6 +46,7 @@ public sealed class DateTimeByFormatConverterTests
 		yield return new object[] { "d", "\"4/20/2096\"", new CultureInfo("en-US", useUserOverride: false) };
 		yield return new object[] { "g", "\"4/20/2096 4:20 AM\"", new CultureInfo("en-US", useUserOverride: false) };
 		yield return new object[] { "g", "\"20-04-2096 04:20\"", new CultureInfo("nl-NL", useUserOverride: false) };
+		yield return new object[] { "O", "\"2096-04-20T04:20:00.0000000Z\"", CultureInfo.InvariantCulture };
 	}
 
 	#region Initialization

@@ -28,8 +28,8 @@ namespace FluentSerializer.Xml.Tests.Tests.Converting.Converters;
 /// </summary>
 public sealed class DateTimeByFormatConverterTests
 {
-	private static readonly DateTime DateTimeValue = DateTime.Parse(
-		"2096-04-20T04:20:00Z", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+	private static readonly DateTime DateTimeValue = DateTime.ParseExact(
+		"2096-04-20T04:20:00.0000000Z", "O", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
 
 	private readonly Mock<ISerializerContext<IXmlNode>> _contextMock;
 
@@ -47,6 +47,7 @@ public sealed class DateTimeByFormatConverterTests
 		yield return new object[] { "d", "4/20/2096", new CultureInfo("en-US", useUserOverride: false) };
 		yield return new object[] { "g", "4/20/2096 4:20 AM", new CultureInfo("en-US", useUserOverride: false) };
 		yield return new object[] { "g", "20-04-2096 04:20", new CultureInfo("nl-NL", useUserOverride: false) };
+		yield return new object[] { "O", "2096-04-20T04:20:00.0000000Z", CultureInfo.InvariantCulture };
 	}
 
 	#region Initialization
@@ -118,7 +119,7 @@ public sealed class DateTimeByFormatConverterTests
 		var attributeInput = Attribute(nameof(DateTimeValue), inputValue);
 		var elementInput = Element(nameof(DateTimeValue), textInput);
 
-		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.None);
+		var sut = new DateTimeByFormatConverter(pattern, cultureInfo, DateTimeStyles.AssumeUniversal);
 
 		_contextMock
 			.WithPropertyType(DateTimeValue.GetType());
