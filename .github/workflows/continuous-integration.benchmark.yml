@@ -65,7 +65,7 @@ jobs:
     steps:
     - name: 🗃 Setup WSL
       if: runner.os == 'Windows'
-      uses: Vampire/setup-wsl@v6
+      uses: Vampire/setup-wsl@v7
     ###
     # Checkout repository
     ###
